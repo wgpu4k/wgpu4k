@@ -1,24 +1,9 @@
-import io.ygdrasil.ParsingMethod
-import klang.domain.*
 import org.jetbrains.kotlin.de.undercouch.gradle.tasks.download.Download
-import org.jetbrains.kotlin.util.capitalizeDecapitalize.toLowerCaseAsciiOnly
-import java.net.URL
 
-buildscript {
-	dependencies {
-		classpath("io.ygdrasil:klang:0.0.0") {
-			isChanging = true
-		}
-		classpath("io.ygdrasil:klang-gradle-plugin:0.0.0") {
-			isChanging = true
-		}
-	}
-}
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
 	alias(libs.plugins.kotest)
-	alias(libs.plugins.klang)
 }
 
 kotlin {
@@ -26,36 +11,20 @@ kotlin {
 		binaries.executable()
 		browser()
 		nodejs()
-		//generateTypeScriptDefinitions()
 	}
 	jvm()
-
-    /*androidTarget {
-        publishLibraryVariants("release")
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "1.8"
-            }
-        }
-    }
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-    linuxX64()*/
 
     sourceSets {
 		val jvmMain by getting {
 			dependencies {
-				implementation(kotlin("stdlib-common"))
 				api(libs.jna)
-				api("$group:sdl2-4k:$version")
-				api("$group:sdl2-binaries:$version")
 				implementation("dev.krud:shapeshift:0.8.0")
 			}
 		}
 
         val commonMain by getting {
             dependencies {
+				implementation(kotlin("stdlib-common"))
 				implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
 				implementation(kotlin("reflect"))
             }
@@ -74,64 +43,6 @@ kotlin {
 		}
     }
 }
-
-/*android {
-    namespace = "org.jetbrains.kotlinx.multiplatform.library.template"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-}*/
-
-
-val headerUrl =
-	URL("https://github.com/gfx-rs/wgpu-native/releases/download/${libs.versions.wgpu.get()}/wgpu-macos-x86_64-release.zip")
-
-klang {
-
-	parsingMethod = ParsingMethod.Libclang
-
-	download(headerUrl)
-		.let(::unpack)
-		.let {
-			parse(fileToParse = "wgpu.h", at = it) {
-				// Hardfixes until Callback are fixed
-				(findTypeAliasByName("WGPURequestDeviceCallback") ?: error("WGPURequestAdapterCallback should exist"))
-					.let { callback ->
-						(((callback.typeRef as? ResolvedTypeRef)?.type as? FunctionPointerType)
-							?: error("should be resolved"))
-							.let { function ->
-								val arguments = function.arguments.toMutableList()
-								arguments[0] = typeOf("int").unchecked()
-								arguments[2] = typeOf("char *").unchecked()
-								arguments[3] = typeOf("void *").unchecked()
-								function.arguments = arguments.toList()
-							}
-					}
-				(findTypeAliasByName("WGPURequestAdapterCallback") ?: error("WGPURequestAdapterCallback should exist"))
-					.let { callback ->
-						(((callback.typeRef as? ResolvedTypeRef)?.type as? FunctionPointerType)
-							?: error("should be resolved"))
-							.let { function ->
-								val arguments = function.arguments.toMutableList()
-								arguments[0] = typeOf("int").unchecked()
-								arguments[2] = typeOf("char *").unchecked()
-								arguments[3] = typeOf("void *").unchecked()
-								function.arguments = arguments.toList()
-							}
-					}
-				declarations.filterIsInstance<NativeEnumeration>()
-					.forEach { enumeration ->
-						enumeration.values = enumeration.values.map { (name, value) ->
-							name.removePrefix("${enumeration.name}_").toLowerCaseAsciiOnly() to value
-						}
-					}
-			}
-		}
-
-	generateBinding("io.ygdrasil.wgpu.internal.jvm", "WGPU")
-}
-
 
 val resourcesDirectory = project.file("src").resolve("jvmMain").resolve("resources")
 val zipBuildDirectory = project.file("build").resolve("zip")
