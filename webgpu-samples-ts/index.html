@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>WebGPU Samples</title>
+    <meta
+            name="description"
+            content="The WebGPU Samples are a set of samples demonstrating the use of the WebGPU API."
+    />
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link
+            href="https://fonts.googleapis.com/css?family=Inconsolata&display=swap"
+            rel="stylesheet"
+    />
+    <link
+            rel="icon"
+            type="image/x-icon"
+            href="favicon.ico"
+    />
+
+    <link href="css/styles.css" rel="stylesheet">
+
+</head>
+<script src="kotlin-libs/kotlin-kotlin-stdlib.js"></script>
+<script src="kotlin-libs/kotlin-kotlinx-atomicfu-runtime.js"></script>
+<script src="kotlin-libs/kotlin_org_jetbrains_kotlin_kotlin_dom_api_compat.js"></script>
+<script src="kotlin-libs/kotlinx-atomicfu.js"></script>
+<script src="kotlin-libs/kotlinx-coroutines-core.js"></script>
+<script src="kotlin-libs/korge-root-korlibs-concurrent.js"></script>
+<script src="kotlin-libs/korge-root-korlibs-crypto.js"></script>
+<script src="kotlin-libs/korge-root-korlibs-datastructure.js"></script>
+<script src="kotlin-libs/korge-root-korlibs-inject.js"></script>
+<script src="kotlin-libs/korge-root-korlibs-logger.js"></script>
+<script src="kotlin-libs/korge-root-korlibs-math-core.js"></script>
+<script src="kotlin-libs/korge-root-korlibs-memory.js"></script>
+<script src="kotlin-libs/korge-root-korlibs-platform.js"></script>
+<script src="kotlin-libs/korge-root-korlibs-time.js"></script>
+<script src="kotlin-libs/korge-root-korlibs-util.js"></script>
+<script src="kotlin-libs/korge-root-korge-foundation.js"></script>
+<script src="kotlin-libs/wgpu-wgpu4k.js"></script>
+<script src="kotlin-libs/wgpu-examples-common.js"></script>
+<script src="kotlin-libs/wgpu-examples-web-js.js"></script>
+<script src="kotlin-libs/wgpu-webgpu-samples-ts.js"></script>
+
+<script defer type="module" src="main.js"></script>
+<body>
+<div class="wrapper">
+    <nav class="panel container">
+        <h1>
+            <a href="./">WebGPU Samples</a>
+        </h1>
+        <input type="checkbox" id="menuToggle">
+        <label class="expand" for="menuToggle"></label>
+        <div class="panelContents">
+            <a href="https://github.com/webgpu/webgpu-samples">
+                Github
+            </a>
+            <hr>
+            <div id="samplelist"></div>
+            <hr>
+            <h3 style="margin-bottom: 5px">Other Pages</h3>
+            <ul class="exampleList">
+                <li>
+                    <a
+                            rel="noreferrer"
+                            target="_blank"
+                            href="./workload-simulator.html"
+                    >
+                        Workload Simulator ↗️
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div id="intro">
+            <p>
+                The WebGPU Samples are a set of samples and demos demonstrating the use
+                of the <a href="//webgpu.dev">WebGPU API</a>. Please see the current
+                implementation status and how to run WebGPU in your browser at
+                <a href="//webgpu.io">webgpu.io</a>.
+            </p>
+        </div>
+        <div id="sample" style="display: none;">
+            <div class="sampleInfo">
+                <h1 id="title"></h1>
+                <a id="src" target="_blank" rel="noreferrer" href="">See it on Github!</a>
+                <p id="description"></p>
+            </div>
+            <div class="sampleContainer"></div>
+        </div>
+        <nav id="code" class="sourceFileNav">
+            <div>
+                <ul id="codeTabs"></ul>
+            </div>
+        </nav>
+        <div id="sources"></div>
+    </main>
+</div>
+</body>
+</html>

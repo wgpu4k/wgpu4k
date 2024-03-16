@@ -1,0 +1,14 @@
+{
+  "name": "webgpu-ts",
+  "version": "1.0.0",
+  "description": "simple project to get webgpu TS types",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@webgpu/types": "^0.1.40"
+  }
+}
