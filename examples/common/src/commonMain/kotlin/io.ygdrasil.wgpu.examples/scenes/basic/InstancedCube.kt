@@ -87,7 +87,7 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 				),
 				depthStencil = RenderPipelineDescriptor.DepthStencilState(
 					depthWriteEnabled = true,
-					depthCompare = "less",
+					depthCompare = CompareFunction.less,
 					format = TextureFormat.depth24plus
 				)
 			)

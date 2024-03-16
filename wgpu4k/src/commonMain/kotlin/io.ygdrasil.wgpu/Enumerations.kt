@@ -192,17 +192,16 @@ public enum class BufferMapState(
 
 public enum class CompareFunction(
 	public val `value`: Int,
+	public val stringValue: String,
 ) {
-	undefined(0),
-	never(1),
-	less(2),
-	lessequal(3),
-	greater(4),
-	greaterequal(5),
-	equal(6),
-	notequal(7),
-	always(8),
-	force32(2_147_483_647),
+	never(1, "never"),
+	less(2, "less"),
+	lessequal(3, "less-equal"),
+	greater(4, "greater"),
+	greaterequal(5, "greater-equal"),
+	equal(6, "equal"),
+	notequal(7, "not-equal"),
+	always(8, "always"),
 	;
 
 	public infix fun or(other: Int): Int = value or other

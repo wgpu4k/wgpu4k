@@ -157,7 +157,7 @@ private fun RenderPipelineDescriptor.DepthStencilState.convert(): GPUDepthStenci
 	object : GPUDepthStencilState {
 		override var format: String = this@convert.format.name
 		override var depthWriteEnabled: Boolean? = this@convert.depthWriteEnabled ?: undefined
-		override var depthCompare: String? = this@convert.depthCompare ?: undefined
+		override var depthCompare: String? = this@convert.depthCompare?.stringValue ?: undefined
 		override var stencilFront: GPUStencilFaceState? = this@convert.stencilFront?.convert() ?: undefined
 		override var stencilBack: GPUStencilFaceState? = this@convert.stencilBack?.convert() ?: undefined
 		override var stencilReadMask: GPUStencilValue? = this@convert.stencilReadMask ?: undefined

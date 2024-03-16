@@ -13,11 +13,9 @@ actual class Device(internal val handler: WGPUDeviceImpl) : AutoCloseable {
 		wgpuDeviceCreateCommandEncoder(handler, descriptor?.convert())
 			?.let(::CommandEncoder) ?: error("fail to create command encoder")
 
-
 	actual fun createShaderModule(descriptor: ShaderModuleDescriptor): ShaderModule =
 		wgpuDeviceCreateShaderModule(handler, descriptor.convert())
 			?.let(::ShaderModule) ?: error("fail to create shader module")
-
 
 	actual fun createPipelineLayout(descriptor: PipelineLayoutDescriptor): PipelineLayout =
 		wgpuDeviceCreatePipelineLayout(handler, descriptor.convert())
@@ -131,7 +129,7 @@ private fun RenderPipelineDescriptor.convert(): WGPURenderPipelineDescriptor = W
 	}
 
 
-//	it.depthStencil = this@convert.depthStencil?.convert()
+	it.depthStencil = this@convert.depthStencil?.convert()
 	it.fragment = fragment?.convert()
 
 	it.multisample = WGPUMultisampleState().also { wgpuMultisampleState ->
@@ -141,6 +139,19 @@ private fun RenderPipelineDescriptor.convert(): WGPURenderPipelineDescriptor = W
 			if (it) 1 else 0
 		}
 	}
+}
+
+private fun RenderPipelineDescriptor.DepthStencilState.convert(): WGPUDepthStencilState.ByReference = WGPUDepthStencilState.ByReference().also {
+	it.format = format.value
+	it.depthWriteEnabled = depthWriteEnabled?.toInt()
+    it.depthCompare = depthCompare?.value
+    it.stencilFront = stencilFront?.convert() ?: null
+    it.stencilBack = stencilBack?.convert() ?: null
+    it.stencilReadMask = stencilReadMask
+    it.stencilWriteMask = stencilWriteMask
+    it.depthBias = depthBias
+    it.depthBiasSlopeScale = depthBiasSlopeScale
+    it.depthBiasClamp = depthBiasClamp
 }
 
 private fun RenderPipelineDescriptor.FragmentState.convert(): WGPUFragmentState.ByReference =

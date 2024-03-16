@@ -14,6 +14,11 @@ internal fun Long.toNativeLong(): NativeLong = let(::NativeLong)
 internal fun Int.toNativeLong(): NativeLong = toLong()
 	.let(::NativeLong)
 
+internal fun Boolean.toInt() = when(this) {
+	true -> 1
+	false -> 0
+}
+
 class EnumerationTransformer<T : EnumerationWithValue> : MappingTransformer<T, Int> {
 	override fun transform(context: MappingTransformerContext<out T>): Int? {
 		return context.originalValue?.value

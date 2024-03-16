@@ -2777,61 +2777,61 @@ public open class WGPUDepthStencilState : Structure {
 	 * mapped from WGPUTextureFormat
 	 */
 	@JvmField
-	public var format: Int = 0
+	public var format: Int? = null
 
 	/**
 	 * mapped from WGPUBool
 	 */
 	@JvmField
-	public var depthWriteEnabled: WGPUBool = 0
+	public var depthWriteEnabled: WGPUBool? = null
 
 	/**
 	 * mapped from WGPUCompareFunction
 	 */
 	@JvmField
-	public var depthCompare: Int = 0
+	public var depthCompare: Int? = null
 
 	/**
 	 * mapped from WGPUStencilFaceState
 	 */
 	@JvmField
-	public var stencilFront: WGPUStencilFaceState = WGPUStencilFaceState()
+	public var stencilFront: WGPUStencilFaceState? = null
 
 	/**
 	 * mapped from WGPUStencilFaceState
 	 */
 	@JvmField
-	public var stencilBack: WGPUStencilFaceState = WGPUStencilFaceState()
+	public var stencilBack: WGPUStencilFaceState? = null
 
 	/**
 	 * mapped from uint32_t
 	 */
 	@JvmField
-	public var stencilReadMask: Int = 0
+	public var stencilReadMask: Int? = null
 
 	/**
 	 * mapped from uint32_t
 	 */
 	@JvmField
-	public var stencilWriteMask: Int = 0
+	public var stencilWriteMask: Int? = null
 
 	/**
 	 * mapped from int32_t
 	 */
 	@JvmField
-	public var depthBias: Int = 0
+	public var depthBias: Int? = null
 
 	/**
 	 * mapped from float
 	 */
 	@JvmField
-	public var depthBiasSlopeScale: Float = 0.0f
+	public var depthBiasSlopeScale: Float? = null
 
 	/**
 	 * mapped from float
 	 */
 	@JvmField
-	public var depthBiasClamp: Float = 0.0f
+	public var depthBiasClamp: Float? = null
 
 	public constructor(pointer: Pointer?) : super(pointer)
 
@@ -3662,7 +3662,7 @@ public open class WGPURenderPipelineDescriptor : Structure {
 	 * Declared([a8(nextInChain):[*:b1]i4(format)i4(depthWriteEnabled)i4(depthCompare)[i4(compare)i4(failOp)i4(depthFailOp)i4(passOp)](stencilFront)[i4(compare)i4(failOp)i4(depthFailOp)i4(passOp)](stencilBack)i4(stencilReadMask)i4(stencilWriteMask)i4(depthBias)f4(depthBiasSlopeScale)f4(depthBiasClamp)](WGPUDepthStencilState)))*
 	 */
 	@JvmField
-	public var depthStencil: Pointer? = null
+	public var depthStencil: WGPUDepthStencilState.ByReference? = null
 
 	/**
 	 * mapped from WGPUMultisampleState
