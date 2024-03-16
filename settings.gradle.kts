@@ -1,4 +1,4 @@
-rootProject.name = "wgpu"
+rootProject.name = "wgpu4k"
 
 pluginManagement {
 	repositories {

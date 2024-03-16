@@ -30,8 +30,6 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 
 	val modelMatrix = Matrix4.scale(1000, 1000, 1000)
 
-	val autoClosableContext = AutoClosableContext()
-
 	override fun Application.initialiaze() = with(autoClosableContext) {
 
 		// Create a vertex buffer from the cube data.
@@ -187,9 +185,9 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 			colorAttachments = arrayOf(
 				RenderPassDescriptor.ColorAttachment(
 					view = dummyTexture.createView().bind(), // Assigned later
-					loadOp = "clear",
+					loadOp = LoadOp.clear,
 					clearValue = arrayOf(0.5, 0.5, 0.5, 1.0),
-					storeOp = "store",
+					storeOp = StoreOp.store,
 				)
 			),
 			depthStencilAttachment = RenderPassDescriptor.RenderPassDepthStencilAttachment(

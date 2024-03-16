@@ -30,8 +30,8 @@ data class RenderPassDescriptor(
 
 	data class ColorAttachment(
 		var view: TextureView,
-		var loadOp: String, /* "load" | "clear" */
-		var storeOp: String, /* "store" | "discard" */
+		var loadOp: LoadOp,
+		var storeOp: StoreOp,
 		var depthSlice: GPUIntegerCoordinate? = null,
 		var resolveTarget: TextureView? = null,
 		var clearValue: Array<Number>? = null,

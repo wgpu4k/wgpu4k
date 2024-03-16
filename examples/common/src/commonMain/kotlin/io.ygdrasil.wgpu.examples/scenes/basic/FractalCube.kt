@@ -29,8 +29,6 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 	lateinit var verticesBuffer: Buffer
 	lateinit var cubeTexture: Texture
 
-	val autoClosableContext = AutoClosableContext()
-
 	override fun Application.initialiaze() = with(autoClosableContext) {
 
 		renderingContext.configure(
@@ -173,9 +171,9 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 			colorAttachments = arrayOf(
 				RenderPassDescriptor.ColorAttachment(
 					view = dummyTexture.createView().bind(), // Assigned later
-					loadOp = "clear",
+					loadOp = LoadOp.clear,
 					clearValue = arrayOf(0.5, 0.5, 0.5, 1.0),
-					storeOp = "store",
+					storeOp = StoreOp.store,
 				)
 			),
 			depthStencilAttachment = RenderPassDescriptor.RenderPassDepthStencilAttachment(

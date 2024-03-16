@@ -15,7 +15,6 @@ actual class Device(val handler: GPUDevice) : AutoCloseable {
 				null -> handler.createCommandEncoder()
 				else -> handler.createCommandEncoder(descriptor.convert())
 			}
-
 		)
 	}
 

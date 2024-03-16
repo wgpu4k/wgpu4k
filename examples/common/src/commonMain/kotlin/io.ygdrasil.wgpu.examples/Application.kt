@@ -38,6 +38,8 @@ abstract class Application(
 
 	abstract class Scene {
 
+		val autoClosableContext = AutoClosableContext()
+
 		abstract fun Application.initialiaze()
 
 		abstract fun Application.render()
@@ -90,6 +92,9 @@ abstract class Application(
 }
 
 val availableScenes = listOf(
+	HelloTriangleMSAAScene(),
+	HelloTriangleScene(),
+	SimpleTriangleScene(),
 	RotatingCubeScene(),
 
 

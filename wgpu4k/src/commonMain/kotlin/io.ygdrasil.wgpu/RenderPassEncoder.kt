@@ -10,9 +10,9 @@ expect class RenderPassEncoder: AutoCloseable {
 
 	fun draw(
 		vertexCount: GPUSize32,
-		instanceCount: GPUSize32? = null,
-		firstVertex: GPUSize32? = null,
-		firstInstance: GPUSize32? = null
+		instanceCount: GPUSize32 = 1,
+		firstVertex: GPUSize32 = 0,
+		firstInstance: GPUSize32 = 0
 	)
 
 	fun setBindGroup(index: Int, bindGroup: BindGroup)

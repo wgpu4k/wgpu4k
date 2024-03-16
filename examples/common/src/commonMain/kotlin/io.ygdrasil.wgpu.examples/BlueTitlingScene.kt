@@ -1,6 +1,8 @@
 package io.ygdrasil.wgpu.examples
 
+import io.ygdrasil.wgpu.LoadOp
 import io.ygdrasil.wgpu.RenderPassDescriptor
+import io.ygdrasil.wgpu.StoreOp
 
 class TitlingManager() {
 	fun nextFrame() {
@@ -48,9 +50,9 @@ class BlueTitlingScene : Application.Scene() {
 				colorAttachments = arrayOf(
 					RenderPassDescriptor.ColorAttachment(
 						view = view,
-						loadOp = "clear",
+						loadOp = LoadOp.clear,
 						clearValue = arrayOf(0, 0, titlingManager.value / 255.0, 1.0),
-						storeOp = "store"
+						storeOp = StoreOp.store
 					)
 				)
 			)

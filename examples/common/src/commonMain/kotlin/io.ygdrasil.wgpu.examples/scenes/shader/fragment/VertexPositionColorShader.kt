@@ -1,6 +1,6 @@
-package io.ygdrasil.wgpu.examples.scenes.shader
+package io.ygdrasil.wgpu.examples.scenes.shader.fragment
 
-const val fragmentVertexPositionColorShader = """
+const val vertexPositionColorShader = """
 @fragment
 fn main(
   @location(0) fragUV: vec2<f32>,

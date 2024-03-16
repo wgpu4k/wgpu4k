@@ -68,8 +68,8 @@ override var maxDrawCount: GPUSize64?*/
 private fun RenderPassDescriptor.ColorAttachment.convert(): WGPURenderPassColorAttachment.ByReference =
 	WGPURenderPassColorAttachment.ByReference().also {
 		it.view = view.handler
-		it.loadOp = WGPULoadOp.WGPULoadOp_Clear.value
-		it.storeOp = WGPUStoreOp.WGPUStoreOp_Store.value
+		it.loadOp = loadOp.value
+		it.storeOp = storeOp.value
 		it.resolveTarget = resolveTarget?.handler
 		it.clearValue = clearValue?.let { clearValue ->
 			WGPUColor().apply {

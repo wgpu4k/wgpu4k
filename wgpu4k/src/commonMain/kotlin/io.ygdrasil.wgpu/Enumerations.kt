@@ -473,11 +473,8 @@ public enum class IndexFormat(
 public enum class LoadOp(
 	public val `value`: Int,
 ) {
-	undefined(0),
 	clear(1),
-	load(2),
-	force32(2_147_483_647),
-	;
+	load(2);
 
 	public infix fun or(other: Int): Int = value or other
 
@@ -753,10 +750,8 @@ public enum class StorageTextureAccess(
 public enum class StoreOp(
 	public val `value`: Int,
 ) {
-	undefined(0),
 	store(1),
 	discard(2),
-	force32(2_147_483_647),
 	;
 
 	public infix fun or(other: Int): Int = value or other

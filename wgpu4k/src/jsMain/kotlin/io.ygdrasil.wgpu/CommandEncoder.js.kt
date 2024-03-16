@@ -74,8 +74,8 @@ private fun RenderPassDescriptor.RenderPassDepthStencilAttachment.convert(): GPU
 private fun RenderPassDescriptor.ColorAttachment.convert(): GPURenderPassColorAttachment =
 	object : GPURenderPassColorAttachment {
 		override var view: GPUTextureView = this@convert.view.handler
-		override var loadOp: String = this@convert.loadOp
-		override var storeOp: String = this@convert.storeOp
+		override var loadOp: String = this@convert.loadOp.name
+		override var storeOp: String = this@convert.storeOp.name
 		override var depthSlice: GPUIntegerCoordinate? = this@convert.depthSlice ?: undefined
 		override var resolveTarget: GPUTextureView? = this@convert.resolveTarget?.handler ?: undefined
 		override var clearValue: Array<Number>? = this@convert.clearValue ?: undefined

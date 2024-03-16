@@ -11,7 +11,7 @@ import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeUVOffset
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeVertexArray
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeVertexCount
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeVertexSize
-import io.ygdrasil.wgpu.examples.scenes.shader.fragmentVertexPositionColorShader
+import io.ygdrasil.wgpu.examples.scenes.shader.fragment.vertexPositionColorShader
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.basicVertexShader
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
@@ -31,8 +31,6 @@ class TwoCubesScene : Application.Scene(), AutoCloseable {
 	lateinit var uniformBindGroup1: BindGroup
 	lateinit var uniformBindGroup2: BindGroup
 	lateinit var verticesBuffer: Buffer
-
-	val autoClosableContext = AutoClosableContext()
 
 	override fun Application.initialiaze() = with(autoClosableContext) {
 
@@ -78,7 +76,7 @@ class TwoCubesScene : Application.Scene(), AutoCloseable {
 				fragment = RenderPipelineDescriptor.FragmentState(
 					module = device.createShaderModule(
 						ShaderModuleDescriptor(
-							code = fragmentVertexPositionColorShader
+							code = vertexPositionColorShader
 						)
 					).bind(), // bind to autoClosableContext to release it later
 					targets = arrayOf(
@@ -149,9 +147,9 @@ class TwoCubesScene : Application.Scene(), AutoCloseable {
 			colorAttachments = arrayOf(
 				RenderPassDescriptor.ColorAttachment(
 					view = dummyTexture.createView().bind(), // Assigned later
-					loadOp = "clear",
+					loadOp = LoadOp.clear,
 					clearValue = arrayOf(0.5, 0.5, 0.5, 1.0),
-					storeOp = "store",
+					storeOp = StoreOp.store,
 				)
 			),
 			depthStencilAttachment = RenderPassDescriptor.RenderPassDepthStencilAttachment(

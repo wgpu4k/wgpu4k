@@ -20,8 +20,8 @@ data class BindGroupDescriptor(
 	sealed interface BindGroupResource
 	data class BufferBinding(
 		var buffer: Buffer,
-		var offset: GPUSize64? = null,
-		var size: GPUSize64? = buffer.size
+		var offset: GPUSize64 = 0,
+		var size: GPUSize64 = buffer.size
 	) : BindGroupResource
 
 	data class SamplerBinding(

@@ -1,6 +1,6 @@
-package io.ygdrasil.wgpu.examples.scenes.shader
+package io.ygdrasil.wgpu.examples.scenes.shader.fragment
 
-const val fragmentSampleTextureMixColorShader = """
+const val sampleTextureMixColorShader = """
 @group(0) @binding(1) var mySampler: sampler;
 @group(0) @binding(2) var myTexture: texture_2d<f32>;
 

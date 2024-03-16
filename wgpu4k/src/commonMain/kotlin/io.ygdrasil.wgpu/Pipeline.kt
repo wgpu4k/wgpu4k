@@ -30,7 +30,7 @@ data class RenderPipelineDescriptor(
 
 	data class VertexState(
 		var module: ShaderModule,
-		var entryPoint: String? = null,
+		var entryPoint: String = "main",
 		var constants: Map<String, GPUPipelineConstantValue>? = null,
 		var buffers: Array<VertexBufferLayout>? = null,
 	) {

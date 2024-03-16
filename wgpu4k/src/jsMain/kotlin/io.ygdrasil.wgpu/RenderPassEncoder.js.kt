@@ -17,23 +17,16 @@ actual class RenderPassEncoder(private val handler: GPURenderPassEncoder) : Auto
 
 	actual fun draw(
 		vertexCount: GPUSize32,
-		instanceCount: GPUSize32?,
-		firstVertex: GPUSize32?,
-		firstInstance: GPUSize32?
+		instanceCount: GPUSize32,
+		firstVertex: GPUSize32,
+		firstInstance: GPUSize32
 	) {
-		when {
-			instanceCount == null -> handler.draw(vertexCount)
-			firstVertex == null -> handler.draw(vertexCount, instanceCount ?: error(""))
-			firstInstance == null -> handler.draw(vertexCount, instanceCount ?: error(""), firstVertex ?: error(""))
-			instanceCount != null && firstVertex != null && firstInstance != null -> handler.draw(
-				vertexCount,
-				instanceCount,
-				firstVertex,
-				firstInstance
-			)
-
-			else -> error("illegal state")
-		}
+		handler.draw(
+			vertexCount,
+			instanceCount,
+			firstVertex,
+			firstInstance
+		)
 	}
 
 	actual fun setBindGroup(index: Int, bindGroup: BindGroup) {

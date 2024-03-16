@@ -59,9 +59,9 @@ class SimpleTriangleScene : Application.Scene() {
 				colorAttachments = arrayOf(
 					RenderPassDescriptor.ColorAttachment(
 						view = view,
-						loadOp = "clear",
+						loadOp = LoadOp.clear,
 						clearValue = arrayOf(0, 1.0, 0, 1.0),
-						storeOp = "store"
+						storeOp = StoreOp.store
 					)
 				)
 			)
