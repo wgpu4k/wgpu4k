@@ -78,14 +78,14 @@ private fun BindGroupDescriptor.convert(): GPUBindGroupDescriptor = object : GPU
 private fun BindGroupDescriptor.BindGroupEntry.convert(): GPUBindGroupEntry = object : GPUBindGroupEntry {
 	override var binding: GPUIndex32 = this@convert.binding
 	override var resource: dynamic = when (val localResource = this@convert.resource) {
-			is SamplerBinding -> localResource.sampler.handler
-			is BufferBinding -> object : GPUBufferBinding {
+			is BindGroupDescriptor.SamplerBinding -> localResource.sampler.handler
+			is BindGroupDescriptor.BufferBinding -> object : GPUBufferBinding {
 				override var buffer: GPUBuffer = localResource.buffer.handler
 				override var offset: GPUSize64? = localResource.offset ?: undefined
 				override var size: GPUSize64? = localResource.size ?: undefined
 			}
 
-			is TextureViewBinding -> it.view.handler
+			is BindGroupDescriptor.TextureViewBinding -> localResource.view.handler
 			else -> null
 		}
 }
