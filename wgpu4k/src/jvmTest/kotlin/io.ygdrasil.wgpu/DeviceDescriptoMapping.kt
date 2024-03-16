@@ -22,9 +22,9 @@ class DeviceDescriptoMapping : FreeSpec({
 		val result: WGPUTextureDescriptor = textureDescriptorMapper.map(descriptor)
 
 		result.apply {
-			size.width shouldBe 100
-			size.height shouldBe 150
-			size.depthOrArrayLayers shouldBe 5
+			size?.width shouldBe 100
+			size?.height shouldBe 150
+			size?.depthOrArrayLayers shouldBe 5
 			format shouldBe TextureFormat.depth24plus.value
 			usage shouldBe TextureUsage.renderattachment.value
 

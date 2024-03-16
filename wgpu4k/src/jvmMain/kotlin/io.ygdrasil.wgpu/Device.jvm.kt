@@ -54,7 +54,7 @@ actual class Device(internal val handler: WGPUDeviceImpl) : AutoCloseable {
 
 }
 
-private val textureDescriptorMapper = mapper<TextureDescriptor, WGPUTextureDescriptor> {
+internal val textureDescriptorMapper = mapper<TextureDescriptor, WGPUTextureDescriptor> {
 	TextureDescriptor::format mappedTo WGPUTextureDescriptor::format withTransformer EnumerationTransformer()
 	TextureDescriptor::dimension mappedTo WGPUTextureDescriptor::dimension withTransformer EnumerationTransformer()
 	TextureDescriptor::size mappedTo WGPUTextureDescriptor::size withTransformer GPUExtent3DDictStrictTransformer()
