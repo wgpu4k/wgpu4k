@@ -4,6 +4,8 @@ import com.sun.jna.Memory
 import com.sun.jna.NativeLong
 import com.sun.jna.Pointer
 import io.ygdrasil.wgpu.internal.jvm.*
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 
 actual class Queue(internal val handler: WGPUQueue) {
 
@@ -27,7 +29,7 @@ actual class Queue(internal val handler: WGPUQueue) {
 			buffer.handler,
 			bufferOffset,
 			data.toBuffer(dataOffset),
-			size.toNativeLong()
+			(size * Float.SIZE_BYTES).toNativeLong()
 		)
 	}
 
@@ -47,7 +49,7 @@ actual class Queue(internal val handler: WGPUQueue) {
 	}
 
 
-	private fun FloatArray.toBuffer(dataOffset: GPUSize64): Pointer? {
+	private fun FloatArray.toBuffer(dataOffset: GPUSize64): Pointer {
 		//Multiply by 4 because of 4 bytes per float
 		return Memory(size * 4L).apply {
 			write(0L, this@toBuffer, dataOffset.toInt(), size)
