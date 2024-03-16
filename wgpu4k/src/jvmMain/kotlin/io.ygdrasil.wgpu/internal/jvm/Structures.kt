@@ -3302,7 +3302,7 @@ public open class WGPUColorTargetState : Structure {
 	 * Declared([[i4(operation)i4(srcFactor)i4(dstFactor)](color)[i4(operation)i4(srcFactor)i4(dstFactor)](alpha)](WGPUBlendState)))*
 	 */
 	@JvmField
-	public var blend: Pointer? = null
+	public var blend: WGPUBlendState.ByReference? = null
 
 	/**
 	 * mapped from WGPUColorWriteMaskFlags

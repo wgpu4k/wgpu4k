@@ -134,7 +134,7 @@ private fun RenderPipelineDescriptor.convert(): WGPURenderPipelineDescriptor = W
 
 	it.multisample = WGPUMultisampleState().also { wgpuMultisampleState ->
 		wgpuMultisampleState.count = multisample?.count
-		wgpuMultisampleState.mask = multisample?.mask
+		wgpuMultisampleState.mask = multisample?.mask?.toInt()
 		wgpuMultisampleState.alphaToCoverageEnabled = multisample?.alphaToCoverageEnabled?.let {
 			if (it) 1 else 0
 		}
@@ -147,8 +147,8 @@ private fun RenderPipelineDescriptor.DepthStencilState.convert(): WGPUDepthStenc
     it.depthCompare = depthCompare?.value
     it.stencilFront = stencilFront?.convert()
     it.stencilBack = stencilBack?.convert()
-    it.stencilReadMask = stencilReadMask
-    it.stencilWriteMask = stencilWriteMask
+    it.stencilReadMask = stencilReadMask.toInt()
+    it.stencilWriteMask = stencilWriteMask.toInt()
     it.depthBias = depthBias
     it.depthBiasSlopeScale = depthBiasSlopeScale
     it.depthBiasClamp = depthBiasClamp
@@ -172,12 +172,20 @@ private fun RenderPipelineDescriptor.FragmentState.convert(): WGPUFragmentState.
 private fun RenderPipelineDescriptor.FragmentState.ColorTargetState.convert(): WGPUColorTargetState.ByReference =
 	WGPUColorTargetState.ByReference().also {
 		it.format = format.value
-		it.blend = blend?.convert()
+		it.blend = blend.convert()
 		it.writeMask = writeMask?.value
 	}
 
-private fun RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.convert(): Pointer? {
-	TODO("Not yet implemented")
+private fun RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.convert(): WGPUBlendState.ByReference = WGPUBlendState.ByReference().also {
+	it.color = color.convert()
+	it.alpha = color.convert()
+}
+
+private fun RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent.convert(): WGPUBlendComponent = WGPUBlendComponent().also {
+	it.operation = operation.value
+	it.srcFactor = srcFactor.value
+	it.dstFactor = dstFactor.value
+
 }
 
 private fun PipelineLayoutDescriptor.convert(): WGPUPipelineLayoutDescriptor = WGPUPipelineLayoutDescriptor().also {

@@ -206,9 +206,9 @@ private fun RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.c
 
 private fun RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent.convert(): GPUBlendComponent =
 	object : GPUBlendComponent {
-		override var operation: String? = this@convert.operation ?: undefined
-		override var srcFactor: String? = this@convert.srcFactor ?: undefined
-		override var dstFactor: String? = this@convert.dstFactor ?: undefined
+		override var operation: String? = this@convert.operation.stringValue
+		override var srcFactor: String? = this@convert.srcFactor.stringValue
+		override var dstFactor: String? = this@convert.dstFactor.stringValue
 	}
 
 /*** PipelineLayoutDescriptor ***/

@@ -24,7 +24,7 @@ typealias GPUMapModeFlags = Number
 
 typealias GPUPipelineConstantValue = Number
 
-typealias GPUSampleMask = Int
+typealias GPUSampleMask = Long
 
 typealias GPUShaderStageFlags = Number
 
@@ -38,7 +38,7 @@ typealias GPUSize64 = Long
 
 typealias GPUSize64Out = Long
 
-typealias GPUStencilValue = Int
+typealias GPUStencilValue = Long
 
 typealias GPUTextureUsageFlags = Int
 

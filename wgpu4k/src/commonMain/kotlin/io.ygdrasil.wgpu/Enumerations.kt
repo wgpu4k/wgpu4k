@@ -73,21 +73,21 @@ public enum class BackendType(
 
 public enum class BlendFactor(
 	public val `value`: Int,
+	public val stringValue: String,
 ) {
-	zero(0),
-	one(1),
-	src(2),
-	oneminussrc(3),
-	srcalpha(4),
-	oneminussrcalpha(5),
-	dst(6),
-	oneminusdst(7),
-	dstalpha(8),
-	oneminusdstalpha(9),
-	srcalphasaturated(10),
-	constant(11),
-	oneminusconstant(12),
-	force32(2_147_483_647),
+	zero(0, "zero"),
+	one(1, "one"),
+	src(2, "src"),
+	oneminussrc(3, "one-minus-src"),
+	srcalpha(4, "src-alpha"),
+	oneminussrcalpha(5, "one-minus-src-alpha"),
+	dst(6, "dst"),
+	oneminusdst(7, "one-minus-dst"),
+	dstalpha(8, "dst-alpha"),
+	oneminusdstalpha(9, "one-minus-dst-alpha"),
+	srcalphasaturated(10, "src-alpha-saturated"),
+	constant(11, "constant"),
+	oneminusconstant(12, "one-minus-constant"),
 	;
 
 	public infix fun or(other: Int): Int = value or other
@@ -103,13 +103,13 @@ public enum class BlendFactor(
 
 public enum class BlendOperation(
 	public val `value`: Int,
+	public val stringValue: String,
 ) {
-	add(0),
-	subtract(1),
-	reversesubtract(2),
-	min(3),
-	max(4),
-	force32(2_147_483_647),
+	add(0, "add"),
+	subtract(1, "subtract"),
+	reversesubtract(2, "reverse-subtract"),
+	min(3, "min"),
+	max(4, "max"),
 	;
 
 	public infix fun or(other: Int): Int = value or other
@@ -555,7 +555,6 @@ public enum class PrimitiveTopology(
 	linestrip(2, "line-strip"),
 	trianglelist(3, "triangle-list"),
 	trianglestrip(4, "triangle-strip"),
-	force32(2_147_483_647, "force32"),
 	;
 
 	public infix fun or(other: Int): Int = value or other
@@ -1096,7 +1095,6 @@ public enum class ColorWriteMask(
 	blue(4),
 	alpha(8),
 	all(15),
-	force32(2_147_483_647),
 	;
 
 	public infix fun or(other: Int): Int = value or other
