@@ -47,6 +47,7 @@ abstract class Application(
 	}
 
 	fun changeScene(nextScene: Scene) {
+		println("switch to scene ${nextScene::class.simpleName}")
 		with(nextScene) {
 			try {
 				configureRenderingContext()
@@ -92,17 +93,12 @@ abstract class Application(
 }
 
 val availableScenes = listOf(
+	TwoCubesScene(),
 	HelloTriangleMSAAScene(),
 	HelloTriangleScene(),
-	SimpleTriangleScene(),
 	RotatingCubeScene(),
-
-
-	BlueTitlingScene(),
 	CubemapScene(),
 	FractalCubeScene(),
 	InstancedCubeScene(),
 	TexturedCubeScene(),
-	TwoCubesScene(),
-	SimpleTriangleScene(),
 )

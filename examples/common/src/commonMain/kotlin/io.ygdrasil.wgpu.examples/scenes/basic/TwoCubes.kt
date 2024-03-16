@@ -41,7 +41,7 @@ class TwoCubesScene : Application.Scene(), AutoCloseable {
 				usage = BufferUsage.vertex.value,
 				mappedAtCreation = true
 			)
-		)
+		).bind()
 
 		// Util method to use getMappedRange
 		verticesBuffer.map(cubeVertexArray)
