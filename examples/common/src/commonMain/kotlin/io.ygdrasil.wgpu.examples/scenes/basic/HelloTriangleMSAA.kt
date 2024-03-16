@@ -64,6 +64,7 @@ class HelloTriangleMSAAScene : Application.Scene() {
                 colorAttachments = arrayOf(
                     RenderPassDescriptor.ColorAttachment(
                         view = textureView,
+                        resolveTarget = renderingContext.getCurrentTexture().createView().bind(),
                         loadOp = LoadOp.clear,
                         clearValue = arrayOf(0, 0, 0, 1.0),
                         storeOp = StoreOp.discard
