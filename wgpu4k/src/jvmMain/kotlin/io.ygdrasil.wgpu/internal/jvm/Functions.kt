@@ -5,7 +5,7 @@ import com.sun.jna.NativeLong
 import com.sun.jna.Pointer
 
 public val libWGPULibrary: WGPULibrary by lazy {
-	klang.internal.NativeLoad<io.ygdrasil.wgpu.internal.jvm.WGPULibrary>("WGPU")
+	NativeLoad<WGPULibrary>("WGPU")
 }
 
 public interface WGPULibrary : Library {
