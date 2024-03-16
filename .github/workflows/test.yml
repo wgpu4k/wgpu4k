@@ -36,7 +36,7 @@ jobs:
       - name: Build & test
         run: |
           gradle wrapper
-          ./gradlew test
+          ./gradlew build test
       - name: Bundle the build report
         if: failure()
         run: find . -type d -name 'reports' | zip -@ -r build-reports.zip
