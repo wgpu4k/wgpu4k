@@ -702,16 +702,16 @@ public enum class SamplerBindingType(
 
 public enum class StencilOperation(
 	public val `value`: Int,
+	public val `stringValue`: String,
 ) {
-	keep(0),
-	zero(1),
-	replace(2),
-	invert(3),
-	incrementclamp(4),
-	decrementclamp(5),
-	incrementwrap(6),
-	decrementwrap(7),
-	force32(2_147_483_647),
+	keep(0, "keep"),
+	zero(1, "zero"),
+	replace(2, "replace"),
+	invert(3, "invert"),
+	incrementclamp(4, "increment-clamp"),
+	decrementclamp(5, "decrement-clamp"),
+	incrementwrap(6, "increment-wrap"),
+	decrementwrap(7, "decrement-wrap")
 	;
 
 	public infix fun or(other: Int): Int = value or other

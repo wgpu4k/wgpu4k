@@ -145,13 +145,20 @@ private fun RenderPipelineDescriptor.DepthStencilState.convert(): WGPUDepthStenc
 	it.format = format.value
 	it.depthWriteEnabled = depthWriteEnabled?.toInt()
     it.depthCompare = depthCompare?.value
-    it.stencilFront = stencilFront?.convert() ?: null
-    it.stencilBack = stencilBack?.convert() ?: null
+    it.stencilFront = stencilFront?.convert()
+    it.stencilBack = stencilBack?.convert()
     it.stencilReadMask = stencilReadMask
     it.stencilWriteMask = stencilWriteMask
     it.depthBias = depthBias
     it.depthBiasSlopeScale = depthBiasSlopeScale
     it.depthBiasClamp = depthBiasClamp
+}
+
+private fun RenderPipelineDescriptor.DepthStencilState.StencilFaceState.convert(): WGPUStencilFaceState = WGPUStencilFaceState().also {
+	it.compare = compare?.value
+	it.failOp = failOp?.value
+	it.depthFailOp = depthFailOp?.value
+	it.passOp = passOp?.value
 }
 
 private fun RenderPipelineDescriptor.FragmentState.convert(): WGPUFragmentState.ByReference =

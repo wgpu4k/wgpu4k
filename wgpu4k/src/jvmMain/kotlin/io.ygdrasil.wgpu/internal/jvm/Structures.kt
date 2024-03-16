@@ -1844,25 +1844,25 @@ public open class WGPUStencilFaceState : Structure {
 	 * mapped from WGPUCompareFunction
 	 */
 	@JvmField
-	public var compare: Int = 0
+	public var compare: Int? = null
 
 	/**
 	 * mapped from WGPUStencilOperation
 	 */
 	@JvmField
-	public var failOp: Int = 0
+	public var failOp: Int? = null
 
 	/**
 	 * mapped from WGPUStencilOperation
 	 */
 	@JvmField
-	public var depthFailOp: Int = 0
+	public var depthFailOp: Int? = null
 
 	/**
 	 * mapped from WGPUStencilOperation
 	 */
 	@JvmField
-	public var passOp: Int = 0
+	public var passOp: Int? = null
 
 	public constructor(pointer: Pointer?) : super(pointer)
 

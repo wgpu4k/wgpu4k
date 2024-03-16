@@ -169,10 +169,10 @@ private fun RenderPipelineDescriptor.DepthStencilState.convert(): GPUDepthStenci
 
 private fun RenderPipelineDescriptor.DepthStencilState.StencilFaceState.convert(): GPUStencilFaceState =
 	object : GPUStencilFaceState {
-		override var compare: String? = this@convert.compare ?: undefined
-		override var failOp: String? = this@convert.failOp ?: undefined
-		override var depthFailOp: String? = this@convert.depthFailOp ?: undefined
-		override var passOp: String? = this@convert.passOp ?: undefined
+		override var compare: String? = this@convert.compare?.stringValue ?: undefined
+		override var failOp: String? = this@convert.failOp?.stringValue ?: undefined
+		override var depthFailOp: String? = this@convert.depthFailOp?.stringValue ?: undefined
+		override var passOp: String? = this@convert.passOp?.stringValue ?: undefined
 	}
 
 private fun RenderPipelineDescriptor.MultisampleState.convert(): GPUMultisampleState =
