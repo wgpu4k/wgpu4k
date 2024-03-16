@@ -1,7 +1,6 @@
 package io.ygdrasil.wgpu
 
 import com.sun.jna.Pointer
-import io.ygdrasil.libsdl.SDL_Window
 import io.ygdrasil.wgpu.internal.jvm.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -36,11 +35,6 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
 		wgpuInstanceRequestAdapter(handler, options, handleRequestAdapter, null)
 
 		return adapterState.value?.let { Adapter(it) }
-	}
-
-	// TODO remove
-	fun getSurface(window: SDL_Window): WGPUSurface? {
-		return SDL_GetWGPUSurface(handler, window)
 	}
 
 	fun getSurfaceFromMetalLayer(layer: Pointer): WGPUSurface? {
