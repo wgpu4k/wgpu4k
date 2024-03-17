@@ -1,4 +1,4 @@
-import {io} from "../../out/kotlin-libs/wgpu-webgpu-samples-ts";
+import {io} from "../../out/kotlin-libs/wgpu4k-webgpu-samples-ts";
 import Application = io.ygdrasil.wgpu.examples.Application;
 import RenderingContext = io.ygdrasil.wgpu.RenderingContext;
 import Device = io.ygdrasil.wgpu.Device;

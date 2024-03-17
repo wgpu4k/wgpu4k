@@ -1,4 +1,4 @@
-import {io} from "../../out/kotlin-libs/wgpu-webgpu-samples-ts";
+import {io} from "../../out/kotlin-libs/wgpu4k-webgpu-samples-ts";
 import RotatingCubeScene = io.ygdrasil.wgpu.examples.scenes.basic.RotatingCubeScene;
 import jsApplication = io.ygdrasil.wgpu.examples.jsApplication;
 
