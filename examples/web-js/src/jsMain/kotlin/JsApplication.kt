@@ -18,10 +18,10 @@ external fun setInterval(render: () -> Unit, updateInterval: Int)
 val UPDATE_INTERVAL = (1000.0 / 60.0).toInt()
 
 @JsExport
-fun jsApplication(canvas: HTMLCanvasElement): Promise<Application> {
+fun jsApplication(canvas: HTMLCanvasElement, baseImagePaths: String = "./assets/img/"): Promise<Application> {
 	return MainScope().promise {
 
-		val assetManager = getAssetManager()
+		val assetManager = getAssetManager(baseImagePaths)
 
 		val devicePixelRatio = window.devicePixelRatio
 		canvas.width = (canvas.clientWidth * devicePixelRatio).toInt()
@@ -73,14 +73,14 @@ fun jsApplication(canvas: HTMLCanvasElement): Promise<Application> {
 
 }
 
-suspend fun getAssetManager(): AssetManager {
-	val Di3d: ImageBitmapHolder = getImage("./assets/img/Di-3d.png")
-	val cubemapPosx = getImage("./assets/img/cubemap/posx.jpg")
-	val cubemapNegx = getImage("./assets/img/cubemap/negx.jpg")
-	val cubemapPosy = getImage("./assets/img/cubemap/posy.jpg")
-	val cubemapNegy = getImage("./assets/img/cubemap/negy.jpg")
-	val cubemapPosz = getImage("./assets/img/cubemap/posz.jpg")
-	val cubemapNegz = getImage("./assets/img/cubemap/negz.jpg")
+suspend fun getAssetManager(baseImagePaths: String): AssetManager {
+	val Di3d: ImageBitmapHolder = getImage("${baseImagePaths}Di-3d.png")
+	val cubemapPosx = getImage("${baseImagePaths}cubemap/posx.jpg")
+	val cubemapNegx = getImage("${baseImagePaths}cubemap/negx.jpg")
+	val cubemapPosy = getImage("${baseImagePaths}cubemap/posy.jpg")
+	val cubemapNegy = getImage("${baseImagePaths}cubemap/negy.jpg")
+	val cubemapPosz = getImage("${baseImagePaths}cubemap/posz.jpg")
+	val cubemapNegz = getImage("${baseImagePaths}cubemap/negz.jpg")
 
 	return object : AssetManager {
 		override val Di3d: ImageBitmapHolder = Di3d

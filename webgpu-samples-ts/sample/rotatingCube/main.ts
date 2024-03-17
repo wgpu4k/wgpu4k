@@ -3,6 +3,6 @@ import RotatingCubeScene = io.ygdrasil.wgpu.examples.scenes.basic.RotatingCubeSc
 import jsApplication = io.ygdrasil.wgpu.examples.jsApplication;
 
 const canvas = document.querySelector('canvas') as HTMLCanvasElement;
-const application = await jsApplication(canvas)
+const application = await jsApplication(canvas, '../../assets/img/')
 application.changeScene(new RotatingCubeScene())
 application.run()
