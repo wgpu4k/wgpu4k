@@ -12,20 +12,20 @@ data class RenderPassDescriptor(
 	var depthStencilAttachment: RenderPassDepthStencilAttachment? = null,
 	var occlusionQuerySet: GPUQuerySet? = null,
 	var timestampWrites: GPURenderPassTimestampWrites? = null,
-	var maxDrawCount: GPUSize64? = null,
+	var maxDrawCount: GPUSize64 = 50000000,
 	var label: String? = null
 ) {
 
 	data class RenderPassDepthStencilAttachment(
 		var view: TextureView,
 		var depthClearValue: Float? = null,
-		var depthLoadOp: LoadOp? = null, /* "load" | "clear" */
-		var depthStoreOp: StoreOp? = null, /* "store" | "discard" */
-		var depthReadOnly: Boolean? = null,
-		var stencilClearValue: GPUStencilValue? = null,
-		var stencilLoadOp: LoadOp? = null, /* "load" | "clear" */
-		var stencilStoreOp: StoreOp? = null, /* "store" | "discard" */
-		var stencilReadOnly: Boolean? = null
+		var depthLoadOp: LoadOp? = null,
+		var depthStoreOp: StoreOp? = null,
+		var depthReadOnly: Boolean = false,
+		var stencilClearValue: GPUStencilValue = 0,
+		var stencilLoadOp: LoadOp? = null,
+		var stencilStoreOp: StoreOp? = null,
+		var stencilReadOnly: Boolean = false
 	)
 
 	data class ColorAttachment(
@@ -34,6 +34,6 @@ data class RenderPassDescriptor(
 		var storeOp: StoreOp,
 		var depthSlice: GPUIntegerCoordinate? = null,
 		var resolveTarget: TextureView? = null,
-		var clearValue: Array<Number>? = null,
+		var clearValue: Array<Number> = arrayOf(0, 0, 0, 0),
 	)
 }

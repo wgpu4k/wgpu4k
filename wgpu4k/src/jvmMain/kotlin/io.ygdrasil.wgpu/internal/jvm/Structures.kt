@@ -1459,49 +1459,49 @@ public open class WGPURenderPassDepthStencilAttachment : Structure {
 	 * mapped from WGPULoadOp
 	 */
 	@JvmField
-	public var depthLoadOp: Int = 0
+	public var depthLoadOp: Int? = null
 
 	/**
 	 * mapped from WGPUStoreOp
 	 */
 	@JvmField
-	public var depthStoreOp: Int = 0
+	public var depthStoreOp: Int? = null
 
 	/**
 	 * mapped from float
 	 */
 	@JvmField
-	public var depthClearValue: Float = 0.0f
+	public var depthClearValue: Float? = null
 
 	/**
 	 * mapped from WGPUBool
 	 */
 	@JvmField
-	public var depthReadOnly: WGPUBool = 0
+	public var depthReadOnly: WGPUBool? = null
 
 	/**
 	 * mapped from WGPULoadOp
 	 */
 	@JvmField
-	public var stencilLoadOp: Int = 0
+	public var stencilLoadOp: Int? = null
 
 	/**
 	 * mapped from WGPUStoreOp
 	 */
 	@JvmField
-	public var stencilStoreOp: Int = 0
+	public var stencilStoreOp: Int? = null
 
 	/**
 	 * mapped from uint32_t
 	 */
 	@JvmField
-	public var stencilClearValue: Int = 0
+	public var stencilClearValue: Int? = null
 
 	/**
 	 * mapped from WGPUBool
 	 */
 	@JvmField
-	public var stencilReadOnly: WGPUBool = 0
+	public var stencilReadOnly: WGPUBool? = null
 
 	public constructor(pointer: Pointer?) : super(pointer)
 
@@ -3463,7 +3463,7 @@ public open class WGPURenderPassDescriptor : Structure {
 	 * mapped from size_t
 	 */
 	@JvmField
-	public var colorAttachmentCount: NativeLong = com.sun.jna.NativeLong(0)
+	public var colorAttachmentCount: NativeLong? = null
 
 	/**
 	 * mapped from (typedef Optional[const WGPURenderPassColorAttachment] =
@@ -3477,13 +3477,13 @@ public open class WGPURenderPassDescriptor : Structure {
 	 * Declared([a8(view):[*:b1]i4(depthLoadOp)i4(depthStoreOp)f4(depthClearValue)i4(depthReadOnly)i4(stencilLoadOp)i4(stencilStoreOp)i4(stencilClearValue)i4(stencilReadOnly)](WGPURenderPassDepthStencilAttachment)))*
 	 */
 	@JvmField
-	public var depthStencilAttachment: Pointer? = null
+	public var depthStencilAttachment: WGPURenderPassDepthStencilAttachment.ByReference? = null
 
 	/**
 	 * mapped from WGPUQuerySet
 	 */
 	@JvmField
-	public var occlusionQuerySet: WGPUQuerySet = WGPUQuerySetImpl()
+	public var occlusionQuerySet: WGPUQuerySet? = null
 
 	/**
 	 * mapped from (typedef Optional[const WGPURenderPassTimestampWrites] =
@@ -3491,6 +3491,11 @@ public open class WGPURenderPassDescriptor : Structure {
 	 */
 	@JvmField
 	public var timestampWrites: Pointer? = null
+
+	override fun write() {
+		colorAttachmentCount = colorAttachments?.size?.toNativeLong()
+		super.write()
+	}
 
 	public constructor(pointer: Pointer?) : super(pointer)
 

@@ -4,7 +4,7 @@ package io.ygdrasil.wgpu
 
 expect class CommandEncoder : AutoCloseable {
 
-	fun beginRenderPass(renderPassDescriptor: RenderPassDescriptor): RenderPassEncoder
+	fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder
 
 	fun finish(): CommandBuffer
 

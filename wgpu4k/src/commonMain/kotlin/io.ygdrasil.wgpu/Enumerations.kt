@@ -470,8 +470,8 @@ public enum class IndexFormat(
 }
 
 public enum class LoadOp(
-	public val `value`: Int,
-) {
+	public override val `value`: Int,
+) : EnumerationWithValue{
 	clear(1),
 	load(2);
 
@@ -746,8 +746,8 @@ public enum class StorageTextureAccess(
 }
 
 public enum class StoreOp(
-	public val `value`: Int,
-) {
+	public override val `value`: Int,
+) : EnumerationWithValue{
 	store(1),
 	discard(2),
 	;

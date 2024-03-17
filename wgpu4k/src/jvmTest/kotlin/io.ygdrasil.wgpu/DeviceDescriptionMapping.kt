@@ -3,6 +3,7 @@ package io.ygdrasil.wgpu
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.ygdrasil.wgpu.internal.jvm.WGPUTextureDescriptor
+import io.ygdrasil.wgpu.mapper.textureDescriptorMapper
 
 class DeviceDescriptionMapping : FreeSpec({
 

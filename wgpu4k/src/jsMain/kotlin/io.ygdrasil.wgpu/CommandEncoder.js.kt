@@ -6,8 +6,8 @@ import io.ygdrasil.wgpu.internal.js.*
 
 @JsExport
 actual class CommandEncoder(private val handler: GPUCommandEncoder) : AutoCloseable {
-	actual fun beginRenderPass(renderPassDescriptor: RenderPassDescriptor): RenderPassEncoder {
-		return RenderPassEncoder(handler.beginRenderPass(renderPassDescriptor.convert()))
+	actual fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder {
+		return RenderPassEncoder(handler.beginRenderPass(descriptor.convert()))
 	}
 
 	actual fun finish(): CommandBuffer {

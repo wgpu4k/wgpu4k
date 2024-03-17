@@ -166,8 +166,8 @@ class RotatingCubeScene : Application.Scene(), AutoCloseable {
 
 		renderPassDescriptor.colorAttachments[0].view = renderingContext
 			.getCurrentTexture()
-			.bind()
 			.createView()
+			.bind()
 
 		val encoder = device.createCommandEncoder()
 			.bind()
