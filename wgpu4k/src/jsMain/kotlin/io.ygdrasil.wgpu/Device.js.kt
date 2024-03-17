@@ -56,16 +56,16 @@ actual class Device(val handler: GPUDevice) : AutoCloseable {
 
 private fun SamplerDescriptor.convert(): GPUSamplerDescriptor = object : GPUSamplerDescriptor {
 	override var label: String? = this@convert.label ?: undefined
-	override var addressModeU: String? = this@convert.addressModeU ?: undefined
-	override var addressModeV: String? = this@convert.addressModeV ?: undefined
-	override var addressModeW: String? = this@convert.addressModeW ?: undefined
-	override var magFilter: String? = this@convert.magFilter ?: undefined
-	override var minFilter: String? = this@convert.minFilter ?: undefined
-	override var mipmapFilter: String? = this@convert.mipmapFilter ?: undefined
-	override var lodMinClamp: Number? = this@convert.lodMinClamp ?: undefined
-	override var lodMaxClamp: Number? = this@convert.lodMaxClamp ?: undefined
-	override var compare: String? = this@convert.compare ?: undefined
-	override var maxAnisotropy: Number? = this@convert.maxAnisotropy ?: undefined
+	override var addressModeU: String? = this@convert.addressModeU.stringValue
+	override var addressModeV: String? = this@convert.addressModeV.stringValue
+	override var addressModeW: String? = this@convert.addressModeW.stringValue
+	override var magFilter: String? = this@convert.magFilter.name
+	override var minFilter: String? = this@convert.minFilter.name
+	override var mipmapFilter: String? = this@convert.mipmapFilter.name
+	override var lodMinClamp: Number? = this@convert.lodMinClamp
+	override var lodMaxClamp: Number? = this@convert.lodMaxClamp
+	override var compare: String? = this@convert.compare?.stringValue ?: undefined
+	override var maxAnisotropy: Number? = this@convert.maxAnisotropy
 }
 
 private fun BindGroupDescriptor.convert(): GPUBindGroupDescriptor = object : GPUBindGroupDescriptor {

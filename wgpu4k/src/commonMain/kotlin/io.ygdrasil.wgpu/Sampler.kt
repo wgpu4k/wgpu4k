@@ -11,6 +11,8 @@ expect class Sampler : AutoCloseable {
 }
 
 /**
+ * A GPUSamplerDescriptor specifies the options to use to create a GPUSampler.
+ *
  * @see <a href="https://www.w3.org/TR/webgpu/#GPUSamplerDescriptor">W3C specifications</a>
  */
 class SamplerDescriptor(
