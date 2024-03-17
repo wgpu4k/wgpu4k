@@ -1141,19 +1141,19 @@ public open class WGPUOrigin3D : Structure {
 	 * mapped from uint32_t
 	 */
 	@JvmField
-	public var x: Int = 0
+	public var x: Int? = null
 
 	/**
 	 * mapped from uint32_t
 	 */
 	@JvmField
-	public var y: Int = 0
+	public var y: Int? = null
 
 	/**
 	 * mapped from uint32_t
 	 */
 	@JvmField
-	public var z: Int = 0
+	public var z: Int? = null
 
 	public constructor(pointer: Pointer?) : super(pointer)
 

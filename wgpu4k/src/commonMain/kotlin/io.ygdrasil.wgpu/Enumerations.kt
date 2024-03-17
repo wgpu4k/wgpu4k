@@ -26,12 +26,12 @@ public enum class AdapterType(
 }
 
 public enum class AddressMode(
-	public val `value`: Int,
-) {
-	repeat(0),
-	mirrorrepeat(1),
-	clamptoedge(2),
-	force32(2_147_483_647),
+	public override val `value`: Int,
+	public val stringValue: String,
+) : EnumerationWithValue {
+	repeat(0, "repeat"),
+	mirrorrepeat(1, "mirror-repeat"),
+	clamptoedge(2, "clamp-to-edge"),
 	;
 
 	public infix fun or(other: Int): Int = value or other
@@ -412,11 +412,10 @@ public enum class FeatureName(
 }
 
 public enum class FilterMode(
-	public val `value`: Int,
-) {
+	public override val `value`: Int,
+) : EnumerationWithValue {
 	nearest(0),
 	linear(1),
-	force32(2_147_483_647),
 	;
 
 	public infix fun or(other: Int): Int = value or other
@@ -487,11 +486,10 @@ public enum class LoadOp(
 }
 
 public enum class MipmapFilterMode(
-	public val `value`: Int,
-) {
+	public override val `value`: Int,
+) : EnumerationWithValue {
 	nearest(0),
 	linear(1),
-	force32(2_147_483_647),
 	;
 
 	public infix fun or(other: Int): Int = value or other

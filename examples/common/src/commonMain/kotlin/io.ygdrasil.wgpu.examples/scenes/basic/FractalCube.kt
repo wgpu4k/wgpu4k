@@ -4,7 +4,6 @@ package io.ygdrasil.wgpu.examples.scenes.basic
 
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.Application
-import io.ygdrasil.wgpu.examples.AutoClosableContext
 import io.ygdrasil.wgpu.examples.autoClosableContext
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubePositionOffset
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeUVOffset
@@ -135,8 +134,8 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 		// Create a sampler with linear filtering for smooth interpolation.
 		val sampler = device.createSampler(
 			SamplerDescriptor(
-				magFilter = "linear",
-				minFilter = "linear",
+				magFilter = FilterMode.linear,
+				minFilter = FilterMode.linear,
 			)
 		)
 
