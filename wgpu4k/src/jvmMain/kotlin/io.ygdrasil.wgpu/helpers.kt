@@ -2,6 +2,7 @@ package io.ygdrasil.wgpu
 
 import com.sun.jna.NativeLong
 import com.sun.jna.Structure
+import dev.krud.shapeshift.ShapeShift
 import dev.krud.shapeshift.ShapeShiftBuilder
 import dev.krud.shapeshift.dsl.KotlinDslMappingDefinitionBuilder
 import dev.krud.shapeshift.enums.AutoMappingStrategy
@@ -37,12 +38,22 @@ class GPUExtent3DDictStrictTransformer : MappingTransformer<GPUExtent3DDictStric
 }
 
 class BindGroupLayoutTransformer : MappingTransformer<BindGroupLayout, WGPUBindGroupLayout> {
-	override fun transform(context: MappingTransformerContext<out BindGroupLayout>): WGPUBindGroupLayout? =
-		context.originalValue?.handler
+	override fun transform(context: MappingTransformerContext<out BindGroupLayout>): WGPUBindGroupLayout? = context.originalValue?.handler
+}
+
+class BooleanToIntTransformer : MappingTransformer<Boolean, Int> {
+	override fun transform(context: MappingTransformerContext<out Boolean>): Int? = context.originalValue?.toInt()
+}
+
+class LongToIntTransformer : MappingTransformer<Long, Int> {
+	override fun transform(context: MappingTransformerContext<out Long>): Int? = context.originalValue?.toInt()
 }
 
 inline fun <reified From : Any, reified To : Any> mapper(block: KotlinDslMappingDefinitionBuilder<From, To>.() -> Unit) =
-	ShapeShiftBuilder().withMapping<From, To> {
+	ShapeShiftBuilder()
+		.withTransformer(EnumerationTransformer())
+		.withTransformer(BooleanToIntTransformer())
+		.withMapping<From, To> {
 		autoMap(AutoMappingStrategy.BY_NAME)
 		block()
 	}.build()

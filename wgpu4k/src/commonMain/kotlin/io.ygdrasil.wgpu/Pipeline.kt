@@ -32,13 +32,12 @@ data class RenderPipelineDescriptor(
         var module: ShaderModule,
         var entryPoint: String = "main",
         var constants: Map<String, GPUPipelineConstantValue>? = null,
-        var buffers: Array<VertexBufferLayout>? = null,
+        var buffers: Array<VertexBufferLayout> = arrayOf(),
     ) {
         data class VertexBufferLayout(
             var arrayStride: GPUSize64,
             var attributes: Array<VertexAttribute> = arrayOf(),
-            var stepMode: VertexStepMode? = null,
-            /* "vertex" | "instance" */
+            var stepMode: VertexStepMode = VertexStepMode.vertex,
         ) {
             data class VertexAttribute(
                 var format: VertexFormat,
@@ -63,8 +62,8 @@ data class RenderPipelineDescriptor(
         var depthWriteEnabled: Boolean? = null,
         var depthCompare: CompareFunction? = null,
 
-        var stencilFront: StencilFaceState? = StencilFaceState(),
-        var stencilBack: StencilFaceState? = StencilFaceState(),
+        var stencilFront: StencilFaceState = StencilFaceState(),
+        var stencilBack: StencilFaceState = StencilFaceState(),
         var stencilReadMask: GPUStencilValue = 0xFFFFFFFF,
         var stencilWriteMask: GPUStencilValue = 0xFFFFFFFF,
         var depthBias: GPUDepthBias = 0,
@@ -88,13 +87,13 @@ data class RenderPipelineDescriptor(
 
     data class FragmentState(
         var module: ShaderModule,
-        var targets: Array<ColorTargetState?> = arrayOf(),
-        var entryPoint: String? = null
+        var targets: Array<ColorTargetState> = arrayOf(),
+        var entryPoint: String = "main"
     ) {
 
         data class ColorTargetState(
             var format: TextureFormat,
-            var writeMask: ColorWriteMask? = ColorWriteMask.all,
+            var writeMask: ColorWriteMask = ColorWriteMask.all,
             var blend: BlendState = BlendState()
         ) {
             data class BlendState(

@@ -5,6 +5,7 @@ import com.sun.jna.Pointer
 import com.sun.jna.PointerType
 import com.sun.jna.Structure
 import com.sun.jna.ptr.PointerByReference
+import io.ygdrasil.wgpu.toNativeLong
 
 public class WGPUAdapterImpl : PointerType {
 	public constructor() : super()
@@ -2669,13 +2670,13 @@ public open class WGPUBlendState : Structure {
 	 * mapped from WGPUBlendComponent
 	 */
 	@JvmField
-	public var color: WGPUBlendComponent = WGPUBlendComponent()
+	public var color: WGPUBlendComponent? = null
 
 	/**
 	 * mapped from WGPUBlendComponent
 	 */
 	@JvmField
-	public var alpha: WGPUBlendComponent = WGPUBlendComponent()
+	public var alpha: WGPUBlendComponent? = null
 
 	public constructor(pointer: Pointer?) : super(pointer)
 
@@ -3201,7 +3202,7 @@ public open class WGPUTextureDescriptor : Structure {
 	) : WGPUTextureDescriptor(pointer), Structure.ByValue
 }
 
-@Structure.FieldOrder("arrayStride", "stepMode", "attributeCount", "attributes")
+@Structure.FieldOrder("arrayStride", "stepMode", "attributeCount", "attributesPtr")
 public open class WGPUVertexBufferLayout : Structure {
 	/**
 	 * mapped from uint64_t
@@ -3219,14 +3220,23 @@ public open class WGPUVertexBufferLayout : Structure {
 	 * mapped from size_t
 	 */
 	@JvmField
-	public var attributeCount: NativeLong = com.sun.jna.NativeLong(0)
+	public var attributeCount: NativeLong? = null
 
 	/**
 	 * mapped from (typedef Optional[const WGPUVertexAttribute] =
 	 * Declared([i4(format)x4j8(offset)i4(shaderLocation)x4](WGPUVertexAttribute)))*
 	 */
 	@JvmField
-	public var attributes: Array<WGPUVertexAttribute.ByReference>? = arrayOf(WGPUVertexAttribute.ByReference())
+	public var attributesPtr: Pointer? = null
+
+	public val attributes: Array<WGPUVertexAttribute.ByReference>? = null
+
+	override fun write() {
+		attributes?.forEach { it.write() }
+		attributesPtr = attributes?.firstOrNull()?.pointer
+		attributeCount = attributes?.size?.toNativeLong()
+		super.write()
+	}
 
 	public constructor(pointer: Pointer?) : super(pointer)
 
@@ -3536,14 +3546,20 @@ public open class WGPUVertexState : Structure {
 	 * mapped from size_t
 	 */
 	@JvmField
-	public var bufferCount: NativeLong = com.sun.jna.NativeLong(0)
+	public var bufferCount: NativeLong? = null
 
 	/**
 	 * mapped from (typedef Optional[const WGPUVertexBufferLayout] =
 	 * Declared([j8(arrayStride)i4(stepMode)x4j8(attributeCount)a8(attributes):[*:b1]](WGPUVertexBufferLayout)))*
 	 */
 	@JvmField
-	public var buffers: Array<WGPUVertexBufferLayout.ByReference>? = arrayOf(WGPUVertexBufferLayout.ByReference())
+	public var buffers: Array<WGPUVertexBufferLayout.ByReference> = arrayOf(WGPUVertexBufferLayout.ByReference())
+
+	override fun write() {
+		bufferCount = buffers.size.toNativeLong()
+		super.write()
+	}
+
 
 	public constructor(pointer: Pointer?) : super(pointer)
 
@@ -3599,7 +3615,7 @@ public open class WGPUFragmentState : Structure {
 	 * mapped from size_t
 	 */
 	@JvmField
-	public var targetCount: NativeLong = com.sun.jna.NativeLong(0)
+	public var targetCount: NativeLong? = null
 
 	/**
 	 * mapped from (typedef Optional[const WGPUColorTargetState] =
@@ -3607,6 +3623,11 @@ public open class WGPUFragmentState : Structure {
 	 */
 	@JvmField
 	public var targets: Array<WGPUColorTargetState.ByReference>? = null
+
+	override fun write() {
+		targetCount = targets?.size?.toNativeLong()
+		super.write()
+	}
 
 	public constructor(pointer: Pointer?) : super(pointer)
 

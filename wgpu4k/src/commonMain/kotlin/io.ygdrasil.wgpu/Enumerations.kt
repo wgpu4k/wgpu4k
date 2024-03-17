@@ -72,9 +72,9 @@ public enum class BackendType(
 }
 
 public enum class BlendFactor(
-	public val `value`: Int,
+	public override val `value`: Int,
 	public val stringValue: String,
-) {
+) : EnumerationWithValue {
 	zero(0, "zero"),
 	one(1, "one"),
 	src(2, "src"),
@@ -102,9 +102,9 @@ public enum class BlendFactor(
 }
 
 public enum class BlendOperation(
-	public val `value`: Int,
+	public override val `value`: Int,
 	public val stringValue: String,
-) {
+) : EnumerationWithValue {
 	add(0, "add"),
 	subtract(1, "subtract"),
 	reversesubtract(2, "reverse-subtract"),
@@ -191,9 +191,9 @@ public enum class BufferMapState(
 }
 
 public enum class CompareFunction(
-	public val `value`: Int,
+	public override val `value`: Int,
 	public val stringValue: String,
-) {
+) :EnumerationWithValue {
 	never(1, "never"),
 	less(2, "less"),
 	lessequal(3, "less-equal"),
@@ -301,8 +301,8 @@ public enum class CreatePipelineAsyncStatus(
 }
 
 public enum class CullMode(
-	public val `value`: Int,
-) {
+	public override val `value`: Int,
+) : EnumerationWithValue {
 	none(0),
 	front(1),
 	back(2),
@@ -431,8 +431,8 @@ public enum class FilterMode(
 }
 
 public enum class FrontFace(
-	public val `value`: Int,
-) {
+	public override val `value`: Int,
+) : EnumerationWithValue {
 	ccw(0),
 	cw(1),
 	force32(2_147_483_647),
@@ -450,8 +450,8 @@ public enum class FrontFace(
 }
 
 public enum class IndexFormat(
-	public val `value`: Int,
-) {
+	public override val `value`: Int,
+) : EnumerationWithValue{
 	undefined(0),
 	uint16(1),
 	uint32(2),
@@ -547,9 +547,9 @@ public enum class PresentMode(
 }
 
 public enum class PrimitiveTopology(
-	public val `value`: Int,
+	public override val `value`: Int,
 	public val stringValue: String,
-) {
+) : EnumerationWithValue {
 	pointlist(0, "point-list"),
 	linelist(1, "line-list"),
 	linestrip(2, "line-strip"),
@@ -700,9 +700,9 @@ public enum class SamplerBindingType(
 }
 
 public enum class StencilOperation(
-	public val `value`: Int,
+	public override val `value`: Int,
 	public val `stringValue`: String,
-) {
+) : EnumerationWithValue {
 	keep(0, "keep"),
 	zero(1, "zero"),
 	replace(2, "replace"),
@@ -992,8 +992,8 @@ public enum class TextureViewDimension(
 }
 
 public enum class VertexFormat(
-	public val `value`: Int,
-) {
+	public override val `value`: Int,
+) : EnumerationWithValue{
 	undefined(0),
 	uint8x2(1),
 	uint8x4(2),
@@ -1039,8 +1039,8 @@ public enum class VertexFormat(
 }
 
 public enum class VertexStepMode(
-	public val `value`: Int,
-) {
+	public override val `value`: Int,
+) : EnumerationWithValue{
 	vertex(0),
 	instance(1),
 	vertexbuffernotused(2),
@@ -1087,8 +1087,8 @@ public enum class BufferUsage(
 }
 
 public enum class ColorWriteMask(
-	public val `value`: Int,
-) {
+	public override val `value`: Int,
+) : EnumerationWithValue {
 	none(0),
 	red(1),
 	green(2),

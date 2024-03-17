@@ -4,6 +4,7 @@ import com.sun.jna.NativeLong
 import com.sun.jna.Pointer
 import dev.krud.shapeshift.transformer.base.MappingTransformer
 import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.mapper.renderPipelineDescriptorMapper
 
 actual class Device(internal val handler: WGPUDeviceImpl) : AutoCloseable {
 
@@ -22,7 +23,7 @@ actual class Device(internal val handler: WGPUDeviceImpl) : AutoCloseable {
 			?.let(::PipelineLayout) ?: error("fail to create pipeline layout")
 
 	actual fun createRenderPipeline(descriptor: RenderPipelineDescriptor): RenderPipeline =
-		descriptor.convert()
+			descriptor.let<Any, WGPURenderPipelineDescriptor>(renderPipelineDescriptorMapper::map)
 			.let { wgpuDeviceCreateRenderPipeline(handler, it) }
 			?.let(::RenderPipeline) ?: error("fail to create render pipeline")
 
@@ -84,108 +85,6 @@ private fun BufferDescriptor.convert(): WGPUBufferDescriptor = WGPUBufferDescrip
 	it.usage = usage
 	it.size = size
 	it.mappedAtCreation = mappedAtCreation?.toInt()
-}
-
-private fun RenderPipelineDescriptor.VertexState.VertexBufferLayout.convert(): WGPUVertexBufferLayout.ByReference =
-	WGPUVertexBufferLayout.ByReference().also {
-		it.arrayStride = arrayStride
-		it.attributeCount = attributes.size.toNativeLong()
-		it.attributes = WGPUVertexAttribute.ByReference()
-			.toArray(attributes.size)
-			.let { it as Array<WGPUVertexAttribute.ByReference> }
-			.also {
-				it.forEachIndexed { index, structure -> structure.updateFrom(attributes[index]) }
-			}
-
-		it.stepMode = stepMode?.value
-	}
-
-private fun WGPUVertexAttribute.ByReference.updateFrom(vertexAttribute: RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute) {
-	format = vertexAttribute.format.value
-	offset = vertexAttribute.offset
-	shaderLocation = vertexAttribute.shaderLocation
-}
-
-private fun RenderPipelineDescriptor.convert(): WGPURenderPipelineDescriptor = WGPURenderPipelineDescriptor().also {
-	it.vertex = WGPUVertexState().also { wGPUVertexState ->
-		wGPUVertexState.module = vertex.module.handler
-		wGPUVertexState.entryPoint = vertex.entryPoint ?: "main"
-		wGPUVertexState.bufferCount = (vertex.buffers?.size ?: 0).toNativeLong()
-		wGPUVertexState.buffers = if (wGPUVertexState.bufferCount.toLong() == 0L) {
-			arrayOf(WGPUVertexBufferLayout.ByReference())
-		} else {
-			vertex.buffers?.map { it.convert() }?.toTypedArray()
-		}
-	}
-	it.layout = layout?.handler
-	it.label = label
-	it.primitive = WGPUPrimitiveState().also { wgpuPrimitiveState ->
-		wgpuPrimitiveState.topology = primitive?.topology?.value
-		wgpuPrimitiveState.stripIndexFormat = primitive?.stripIndexFormat?.value
-		wgpuPrimitiveState.frontFace = primitive?.frontFace?.value
-		wgpuPrimitiveState.cullMode = primitive?.cullMode?.value
-		// TODO find how to map this
-		//wgpuPrimitiveState.unclippedDepth = primitive.unclippedDepth
-	}
-
-
-	it.depthStencil = this@convert.depthStencil?.convert()
-	it.fragment = fragment?.convert()
-
-	it.multisample = WGPUMultisampleState().also { wgpuMultisampleState ->
-		wgpuMultisampleState.count = multisample?.count
-		wgpuMultisampleState.mask = multisample?.mask?.toInt()
-		wgpuMultisampleState.alphaToCoverageEnabled = multisample?.alphaToCoverageEnabled?.let {
-			if (it) 1 else 0
-		}
-	}
-}
-
-private fun RenderPipelineDescriptor.DepthStencilState.convert(): WGPUDepthStencilState.ByReference = WGPUDepthStencilState.ByReference().also {
-	it.format = format.value
-	it.depthWriteEnabled = depthWriteEnabled?.toInt()
-    it.depthCompare = depthCompare?.value
-    it.stencilFront = stencilFront?.convert()
-    it.stencilBack = stencilBack?.convert()
-    it.stencilReadMask = stencilReadMask.toInt()
-    it.stencilWriteMask = stencilWriteMask.toInt()
-    it.depthBias = depthBias
-    it.depthBiasSlopeScale = depthBiasSlopeScale
-    it.depthBiasClamp = depthBiasClamp
-}
-
-private fun RenderPipelineDescriptor.DepthStencilState.StencilFaceState.convert(): WGPUStencilFaceState = WGPUStencilFaceState().also {
-	it.compare = compare?.value
-	it.failOp = failOp?.value
-	it.depthFailOp = depthFailOp?.value
-	it.passOp = passOp?.value
-}
-
-private fun RenderPipelineDescriptor.FragmentState.convert(): WGPUFragmentState.ByReference =
-	WGPUFragmentState.ByReference().also {
-		it.module = module.handler
-		it.entryPoint = entryPoint ?: "main"
-		it.targetCount = targets.filterNotNull().size.toLong().let { NativeLong(it) }
-		it.targets = targets.filterNotNull().map { it.convert() }.toTypedArray()
-	}
-
-private fun RenderPipelineDescriptor.FragmentState.ColorTargetState.convert(): WGPUColorTargetState.ByReference =
-	WGPUColorTargetState.ByReference().also {
-		it.format = format.value
-		it.blend = blend.convert()
-		it.writeMask = writeMask?.value
-	}
-
-private fun RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.convert(): WGPUBlendState.ByReference = WGPUBlendState.ByReference().also {
-	it.color = color.convert()
-	it.alpha = color.convert()
-}
-
-private fun RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent.convert(): WGPUBlendComponent = WGPUBlendComponent().also {
-	it.operation = operation.value
-	it.srcFactor = srcFactor.value
-	it.dstFactor = dstFactor.value
-
 }
 
 private fun PipelineLayoutDescriptor.convert(): WGPUPipelineLayoutDescriptor = WGPUPipelineLayoutDescriptor().also {

@@ -4,8 +4,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.ygdrasil.wgpu.internal.jvm.WGPUTextureDescriptor
 
-
-class DeviceDescriptoMapping : FreeSpec({
+class DeviceDescriptionMapping : FreeSpec({
 
 
 	"test texture descriptor mapping" {
