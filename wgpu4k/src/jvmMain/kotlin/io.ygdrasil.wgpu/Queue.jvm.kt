@@ -4,8 +4,7 @@ import com.sun.jna.Memory
 import com.sun.jna.NativeLong
 import com.sun.jna.Pointer
 import io.ygdrasil.wgpu.internal.jvm.*
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
+import java.awt.image.BufferedImage
 
 actual class Queue(internal val handler: WGPUQueue) {
 
@@ -63,11 +62,9 @@ private fun ImageCopyTextureTagged.convert(): WGPUImageCopyTexture = WGPUImageCo
 }
 
 
-actual class ImageBitmapHolder(val data: Any) : DrawableHolder {
-	actual val width: Int
-		get() = TODO("Not yet implemented")
-	actual val height: Int
-		get() = TODO("Not yet implemented")
+actual class ImageBitmapHolder(bufferedImage: BufferedImage) : DrawableHolder {
+	actual val width: Int = bufferedImage.width
+	actual val height: Int = bufferedImage.height
 }
 
 actual sealed interface DrawableHolder

@@ -2894,7 +2894,7 @@ public open class WGPUImageCopyTexture : Structure {
 	 * mapped from WGPUTexture
 	 */
 	@JvmField
-	public var texture: WGPUTexture = WGPUTextureImpl()
+	public var texture: WGPUTexture? = null
 
 	/**
 	 * mapped from uint32_t

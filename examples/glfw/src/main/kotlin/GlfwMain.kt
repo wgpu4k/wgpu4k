@@ -17,6 +17,7 @@ import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
 import org.lwjgl.system.MemoryUtil.NULL
 import org.rococoa.ID
 import org.rococoa.Rococoa
+import javax.imageio.ImageIO
 import kotlin.system.exitProcess
 
 val callback = object : WGPULogCallback {
@@ -65,9 +66,12 @@ suspend fun main() {
 
 	renderingContext.computeSurfaceCapabilities(adapter)
 
+	fun bitmapFrom(path: String): ImageBitmapHolder =
+		ImageBitmapHolder(ImageIO.read(Application::class.java.getResourceAsStream(path)))
+
 	val assetManager = object : AssetManager {
 		override val Di3d: ImageBitmapHolder
-			get() = TODO("Not yet implemented")
+			get() = bitmapFrom("/assets/img/Di-3d.png")
 		override val cubemapPosx: ImageBitmapHolder
 			get() = TODO("Not yet implemented")
 		override val cubemapNegx: ImageBitmapHolder
