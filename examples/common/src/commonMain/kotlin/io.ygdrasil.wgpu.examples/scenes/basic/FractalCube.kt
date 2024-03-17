@@ -37,8 +37,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 
 				// Specify we want both RENDER_ATTACHMENT and COPY_SRC since we
 				// will copy out of the swapchain texture.
-				usage = TextureUsage.renderattachment or TextureUsage.copysrc,
-				alphaMode = CompositeAlphaMode.premultiplied
+				usage = TextureUsage.renderattachment or TextureUsage.copysrc
 			)
 		)
 

@@ -1,6 +1,5 @@
 package io.ygdrasil.wgpu
 
-import com.sun.jna.NativeLong
 import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.mapper.renderPassDescriptorMapper
 
@@ -25,9 +24,9 @@ actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : AutoClos
 	) {
 		wgpuCommandEncoderCopyTextureToTexture(
 			handler,
-			source.convert(),
-			destination.convert(),
-			copySize.convert()
+			source.convert().also { it.write() },
+			destination.convert().also { it.write() },
+			copySize.convert().also { it.write() }
 		)
 	}
 
@@ -51,6 +50,6 @@ private fun ImageCopyTexture.convert(): WGPUImageCopyTexture = WGPUImageCopyText
 			it.x = x
 			it.y = y
 		}
-	}
+	} ?: it.origin
 	it.aspect = aspect?.value
 }

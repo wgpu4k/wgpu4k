@@ -30,7 +30,7 @@ val callback = object : WGPULogCallback {
 }
 
 suspend fun main() {
-	wgpuSetLogLevel(4)
+	wgpuSetLogLevel(1)
 	wgpuSetLogCallback(callback, null)
 
 	var width = 640

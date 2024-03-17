@@ -8,8 +8,13 @@ import io.ygdrasil.wgpu.mapper.textureViewDescriptorMapper
 
 
 actual class Texture(internal val handler: WGPUTexture) : AutoCloseable {
+
+    init {
+        check(handler != null) { "handler should not be null" }
+    }
+
     actual fun createView(descriptor: TextureViewDescriptor?): TextureView =
-        textureViewDescriptorMapper.map<Any, WGPUTextureViewDescriptor>(descriptor ?: TextureViewDescriptor())
+        descriptor?.let { textureViewDescriptorMapper.map<Any, WGPUTextureViewDescriptor>(it) }
             .let { wgpuTextureCreateView(handler, it) }
             ?.let { TextureView(it) }
             ?: error("fail to create texture view")

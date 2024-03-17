@@ -26,7 +26,6 @@ fun jsApplication(canvas: HTMLCanvasElement): Promise<Application> {
 		val devicePixelRatio = window.devicePixelRatio
 		canvas.width = (canvas.clientWidth * devicePixelRatio).toInt()
 		canvas.height = (canvas.clientHeight * devicePixelRatio).toInt()
-		println("${canvas.width} ${canvas.height}")
 		val adapter = requestAdapter() ?: error("No appropriate Adapter found.")
 		val device = adapter.requestDevice() ?: error("No appropriate Device found.")
 		val renderingContext = canvas.getRenderingContext() ?: error("fail to get context")

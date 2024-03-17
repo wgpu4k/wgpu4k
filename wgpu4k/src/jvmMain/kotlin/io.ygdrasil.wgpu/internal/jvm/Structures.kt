@@ -2906,7 +2906,7 @@ public open class WGPUImageCopyTexture : Structure {
 	 * mapped from WGPUOrigin3D
 	 */
 	@JvmField
-	public var origin: WGPUOrigin3D? = null
+	public var origin: WGPUOrigin3D = WGPUOrigin3D()
 
 	/**
 	 * mapped from WGPUTextureAspect
