@@ -37,7 +37,7 @@ suspend fun main() {
 	glfwInit()
 	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
-	val windowHandle: Long = glfwCreateWindow(width, height, "LWJGL Demo", NULL, NULL)
+	val windowHandle: Long = glfwCreateWindow(width, height, "GLFW+WebGPU", NULL, NULL)
 	glfwMakeContextCurrent(windowHandle)
 	glfwSwapInterval(1)
 

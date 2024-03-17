@@ -36,6 +36,9 @@ internal val colorAttachmentMapper =
         RenderPassDescriptor.ColorAttachment::view mappedTo WGPURenderPassColorAttachment.ByReference::view withTransformer MappingTransformer {
             it.originalValue?.handler
         }
+        RenderPassDescriptor.ColorAttachment::resolveTarget mappedTo WGPURenderPassColorAttachment.ByReference::resolveTarget withTransformer MappingTransformer {
+            it.originalValue?.handler
+        }
         RenderPassDescriptor.ColorAttachment::loadOp mappedTo WGPURenderPassColorAttachment.ByReference::loadOp withTransformer EnumerationTransformer()
         RenderPassDescriptor.ColorAttachment::storeOp mappedTo WGPURenderPassColorAttachment.ByReference::storeOp withTransformer EnumerationTransformer()
         RenderPassDescriptor.ColorAttachment::clearValue mappedTo WGPURenderPassColorAttachment.ByReference::clearValue withTransformer MappingTransformer {

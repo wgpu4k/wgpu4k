@@ -3512,7 +3512,7 @@ public open class WGPURenderPassDescriptor : Structure {
 
 @Structure.FieldOrder(
 	"nextInChain", "module", "entryPoint", "constantCount", "constants",
-	"bufferCount", "buffers"
+	"bufferCount", "buffersPtr"
 )
 public open class WGPUVertexState : Structure {
 	/**
@@ -3558,10 +3558,14 @@ public open class WGPUVertexState : Structure {
 	 * Declared([j8(arrayStride)i4(stepMode)x4j8(attributeCount)a8(attributes):[*:b1]](WGPUVertexBufferLayout)))*
 	 */
 	@JvmField
-	public var buffers: Array<WGPUVertexBufferLayout.ByReference> = arrayOf(WGPUVertexBufferLayout.ByReference())
+	public var buffersPtr: Pointer? = null
+
+	public var buffers: Array<WGPUVertexBufferLayout.ByReference>? = null
 
 	override fun write() {
-		bufferCount = buffers.size.toNativeLong()
+		buffers?.forEach { it.write() }
+		buffersPtr = buffers?.firstOrNull()?.pointer
+		bufferCount = buffers?.size?.toNativeLong()
 		super.write()
 	}
 
