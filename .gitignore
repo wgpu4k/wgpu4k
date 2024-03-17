@@ -20,7 +20,7 @@ gradle-app.setting
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 /.idea/
-/toolkit/*.log
+*.log
 
 # Ignore native libraries
 *.dll
