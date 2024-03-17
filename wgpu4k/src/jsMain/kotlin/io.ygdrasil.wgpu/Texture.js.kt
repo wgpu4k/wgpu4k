@@ -24,10 +24,10 @@ actual class Texture(internal val handler: GPUTexture) : AutoCloseable {
 private fun TextureViewDescriptor.convert(): GPUTextureViewDescriptor = object : GPUTextureViewDescriptor {
 	override var label: String? = this@convert.label ?: undefined
 	override var format: String? = this@convert.format ?: undefined
-	override var dimension: String? = this@convert.dimension ?: undefined
+	override var dimension: String? = this@convert.dimension?.stringValue ?: undefined
 	override var aspect: String? = this@convert.aspect ?: undefined
 	override var baseMipLevel: GPUIntegerCoordinate? = this@convert.baseMipLevel ?: undefined
-	override var mipLevelCount: GPUIntegerCoordinate? = this@convert.mipLevelCount ?: undefined
+	override var mipLevelCount: GPUIntegerCoordinate? = this@convert.mipLevelCount
 	override var baseArrayLayer: GPUIntegerCoordinate? = this@convert.baseArrayLayer ?: undefined
-	override var arrayLayerCount: GPUIntegerCoordinate? = this@convert.baseArrayLayer ?: undefined
+	override var arrayLayerCount: GPUIntegerCoordinate? = this@convert.arrayLayerCount
 }

@@ -966,16 +966,15 @@ public enum class TextureSampleType(
 }
 
 public enum class TextureViewDimension(
-	public val `value`: Int,
-) {
-	undefined(0),
-	`_1d`(1),
-	`_2d`(2),
-	`_2darray`(3),
-	cube(4),
-	cubearray(5),
-	`_3d`(6),
-	force32(2_147_483_647),
+	public override val `value`: Int,
+	public val stringValue: String,
+) : EnumerationWithValue {
+	`_1d`(1, "1d"),
+	`_2d`(2, "2d"),
+	`_2darray`(3, "2d-array"),
+	cube(4, "cube"),
+	cubearray(5, "cube-array"),
+	`_3d`(6, "3d"),
 	;
 
 	public infix fun or(other: Int): Int = value or other

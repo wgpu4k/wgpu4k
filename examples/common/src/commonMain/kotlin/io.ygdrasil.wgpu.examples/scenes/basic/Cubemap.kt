@@ -171,7 +171,8 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 						resource = BindGroupDescriptor.TextureViewBinding(
 							view = cubemapTexture.createView(
 								TextureViewDescriptor(
-									dimension = "cube"
+									dimension = TextureViewDimension.cube,
+									arrayLayerCount = 6
 								)
 							)
 						)
