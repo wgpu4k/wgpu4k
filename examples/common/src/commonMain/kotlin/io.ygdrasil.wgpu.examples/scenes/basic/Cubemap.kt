@@ -26,7 +26,6 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 	lateinit var uniformBuffer: Buffer
 	lateinit var uniformBindGroup: BindGroup
 	lateinit var verticesBuffer: Buffer
-	lateinit var cubemapTexture: Texture
 
 	val modelMatrix = Matrix4.scale(1000, 1000, 1000)
 
@@ -104,17 +103,22 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 		).bind()
 
 		val imageBitmaps = listOf(
-			cubemapPosx,
+			Di3d,
+			Di3d,
+			Di3d,
+			Di3d,
+			Di3d,
+			Di3d
+			/*cubemapPosx,
 			cubemapNegx,
 			cubemapPosy,
 			cubemapNegy,
 			cubemapPosz,
-			cubemapNegz,
+			cubemapNegz,*/
 		)
 
 		val cubemapTexture = device.createTexture(
 			TextureDescriptor(
-				dimension = TextureDimension._2d,
 				// Create a 2d array texture.
 				// Assume each image has the same size.
 				size = GPUExtent3DDictStrict(imageBitmaps[0].width, imageBitmaps[0].height, 6),
@@ -122,8 +126,6 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 				usage = TextureUsage.texturebinding or TextureUsage.copydst or TextureUsage.renderattachment,
 			)
 		).bind()
-		this@CubemapScene.cubemapTexture = cubemapTexture
-
 
 		imageBitmaps.forEachIndexed { index, imageBitmap ->
 			device.queue.copyExternalImageToTexture(
