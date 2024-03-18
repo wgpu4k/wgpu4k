@@ -3,7 +3,6 @@
 package io.ygdrasil.wgpu.internal.js
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.GPUOrigin3DDict
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.ArrayBufferView
 import org.khronos.webgl.Uint32Array
@@ -240,7 +239,7 @@ external interface GPUImageCopyExternalImage {
 external interface GPUImageCopyTexture {
     var texture: GPUTexture
     var mipLevel: GPUIntegerCoordinate
-    var origin: GPUOrigin3DDict
+    var origin: Array<GPUIntegerCoordinate>
     var aspect: String
 }
 

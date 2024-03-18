@@ -53,4 +53,6 @@ data class GPUOrigin3DDict(
 	var x: GPUIntegerCoordinate = 0,
 	var y: GPUIntegerCoordinate = 0,
 	var z: GPUIntegerCoordinate = 0
-)
+) {
+	fun toArray() = arrayOf(x, y, z)
+}

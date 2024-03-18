@@ -45,9 +45,9 @@ actual class Queue(private val handler: GPUQueue) {
 private fun ImageCopyTextureTagged.convert(): GPUImageCopyTextureTagged = object : GPUImageCopyTextureTagged {
 	override var texture: GPUTexture = this@convert.texture.handler
 	override var mipLevel: GPUIntegerCoordinate = this@convert.mipLevel
-	override var origin: GPUOrigin3DDict = this@convert.origin
+	override var origin: Array<GPUIntegerCoordinate> = this@convert.origin.toArray()
 	override var aspect: String = this@convert.aspect.stringValue
-	override var colorSpace: String = this@convert.colorSpace.name
+	override var colorSpace: String = this@convert.colorSpace.value
 	override var premultipliedAlpha: Boolean = this@convert.premultipliedAlpha
 }
 
