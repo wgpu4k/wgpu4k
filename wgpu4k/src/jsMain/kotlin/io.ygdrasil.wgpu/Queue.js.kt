@@ -44,17 +44,17 @@ actual class Queue(private val handler: GPUQueue) {
 
 private fun ImageCopyTextureTagged.convert(): GPUImageCopyTextureTagged = object : GPUImageCopyTextureTagged {
 	override var texture: GPUTexture = this@convert.texture.handler
-	override var mipLevel: GPUIntegerCoordinate? = this@convert.mipLevel ?: undefined
-	override var origin: dynamic = this@convert.origin?.setJsCompliant() ?: undefined
-	override var aspect: String? = this@convert.aspect ?: undefined
-	override var colorSpace: Any? = this@convert.colorSpace ?: undefined
-	override var premultipliedAlpha: Boolean? = this@convert.premultipliedAlpha ?: undefined
+	override var mipLevel: GPUIntegerCoordinate = this@convert.mipLevel
+	override var origin: GPUOrigin3DDict = this@convert.origin
+	override var aspect: String = this@convert.aspect.stringValue
+	override var colorSpace: String = this@convert.colorSpace.name
+	override var premultipliedAlpha: Boolean = this@convert.premultipliedAlpha
 }
 
 private fun ImageCopyExternalImage.convert(): GPUImageCopyExternalImage = object : GPUImageCopyExternalImage {
 	override var source: dynamic = this@convert.source.convert()
-	override var origin: dynamic = this@convert.origin ?: undefined
-	override var flipY: Boolean? = this@convert.flipY ?: undefined
+	override var origin: Array<GPUIntegerCoordinate> = this@convert.origin.toList().toTypedArray()
+	override var flipY: Boolean = this@convert.flipY
 }
 
 private fun DrawableHolder.convert(): dynamic = let { holder ->

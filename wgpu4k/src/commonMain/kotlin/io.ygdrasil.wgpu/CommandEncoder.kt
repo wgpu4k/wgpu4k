@@ -17,7 +17,7 @@ expect class CommandEncoder : AutoCloseable {
 
 data class ImageCopyTexture(
 	var texture: Texture,
-	var mipLevel: GPUIntegerCoordinate? = null,
-	var origin: GPUIntegerCoordinates? = null,
-	var aspect: TextureAspect? = null,
+	var mipLevel: GPUIntegerCoordinate = 0,
+	var origin: GPUIntegerCoordinates = 0 to 0,
+	var aspect: TextureAspect = TextureAspect.all,
 )

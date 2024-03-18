@@ -1,8 +1,9 @@
 package io.ygdrasil.wgpu.examples
 
 import io.ygdrasil.wgpu.ImageBitmapHolder
+import kotlin.js.JsExport
 
-
+@JsExport
 interface AssetManager {
 
 	val Di3d: ImageBitmapHolder

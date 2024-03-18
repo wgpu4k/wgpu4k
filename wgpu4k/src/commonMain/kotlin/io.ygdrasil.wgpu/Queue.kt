@@ -23,20 +23,23 @@ expect class ImageBitmapHolder : DrawableHolder {
 data class ImageCopyExternalImage(
 	var source: DrawableHolder,
 	/* ImageBitmap | ImageData | HTMLImageElement | HTMLVideoElement | VideoFrame | HTMLCanvasElement | OffscreenCanvas */
-	var origin: GPUIntegerCoordinates? = null,
+	var origin: GPUIntegerCoordinates = 0 to 0,
 	/* Iterable<GPUIntegerCoordinate>? | GPUOrigin2DDictStrict? */
-	var flipY: Boolean? = null
+	var flipY: Boolean = false
 
 )
 
 data class ImageCopyTextureTagged(
-	var colorSpace: Any? = null,
-	var premultipliedAlpha: Boolean? = null,
+	var colorSpace: PredefinedColorSpace = PredefinedColorSpace.srgb,
+	var premultipliedAlpha: Boolean = false,
 	var texture: Texture,
-	var mipLevel: GPUIntegerCoordinate? = null,
-	var origin: GPUExtent3DDictStrict? = null,
-	/* Iterable<GPUIntegerCoordinate>? | GPUOrigin3DDict? */
-	var aspect: String? = null,
-	/* "all" | "stencil-only" | "depth-only" */
+	var mipLevel: GPUIntegerCoordinate = 0,
+	var origin: GPUOrigin3DDict = GPUOrigin3DDict(),
+	var aspect: TextureAspect = TextureAspect.all,
 
 )
+
+enum class PredefinedColorSpace(val value: String) {
+	srgb("srgb"),
+	displayp3("display-p3")
+}

@@ -3,6 +3,7 @@
 package io.ygdrasil.wgpu.internal.js
 
 import io.ygdrasil.wgpu.*
+import io.ygdrasil.wgpu.GPUOrigin3DDict
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.ArrayBufferView
 import org.khronos.webgl.Uint32Array
@@ -229,37 +230,23 @@ external interface GPUImageCopyBuffer : GPUImageDataLayout {
 }
 
 external interface GPUImageCopyExternalImage {
-    var source: dynamic /* ImageBitmap | ImageData | HTMLImageElement | HTMLVideoElement | VideoFrame | HTMLCanvasElement | OffscreenCanvas */
-        get() = definedExternally
-        set(value) = definedExternally
-    var origin: dynamic /* Iterable<GPUIntegerCoordinate>? | GPUOrigin2DDictStrict? */
-        get() = definedExternally
-        set(value) = definedExternally
-    var flipY: Boolean?
-        get() = definedExternally
-        set(value) = definedExternally
+    var source: Any
+
+    /* ImageBitmap | ImageData | HTMLImageElement | HTMLVideoElement | VideoFrame | HTMLCanvasElement | OffscreenCanvas */
+    var origin: Array<GPUIntegerCoordinate> /* Iterable<GPUIntegerCoordinate>? | GPUOrigin2DDictStrict? */
+    var flipY: Boolean
 }
 
 external interface GPUImageCopyTexture {
     var texture: GPUTexture
-    var mipLevel: GPUIntegerCoordinate?
-        get() = definedExternally
-        set(value) = definedExternally
-    var origin: dynamic /* Iterable<GPUIntegerCoordinate>? | GPUOrigin3DDict? */
-        get() = definedExternally
-        set(value) = definedExternally
-    var aspect: String? /* "all" | "stencil-only" | "depth-only" */
-        get() = definedExternally
-        set(value) = definedExternally
+    var mipLevel: GPUIntegerCoordinate
+    var origin: GPUOrigin3DDict
+    var aspect: String
 }
 
 external interface GPUImageCopyTextureTagged : GPUImageCopyTexture {
-    var colorSpace: Any?
-        get() = definedExternally
-        set(value) = definedExternally
-    var premultipliedAlpha: Boolean?
-        get() = definedExternally
-        set(value) = definedExternally
+    var colorSpace: String
+    var premultipliedAlpha: Boolean
 }
 
 external interface GPUImageDataLayout {

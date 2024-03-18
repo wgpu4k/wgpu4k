@@ -785,13 +785,12 @@ public enum class SurfaceGetCurrentTextureStatus(
 }
 
 public enum class TextureAspect(
-	public val `value`: Int,
+	public override val `value`: Int,
 	public val stringValue: String,
-) {
+) : EnumerationWithValue {
 	all(0, "all"),
 	stencilonly(1, "stencil-only"),
 	depthonly(2, "depth-only"),
-	force32(2_147_483_647, "force32"),
 	;
 
 	public infix fun or(other: Int): Int = value or other

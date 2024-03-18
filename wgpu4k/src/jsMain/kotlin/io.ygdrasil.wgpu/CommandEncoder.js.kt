@@ -29,9 +29,9 @@ actual class CommandEncoder(private val handler: GPUCommandEncoder) : AutoClosea
 
 private fun ImageCopyTexture.convert(): GPUImageCopyTexture = object : GPUImageCopyTexture {
 	override var texture: GPUTexture = this@convert.texture.handler
-	override var mipLevel: GPUIntegerCoordinate? = this@convert.mipLevel ?: undefined
-	override var origin: dynamic = this@convert.origin?.toList()?.toTypedArray() ?: undefined
-	override var aspect: String? = this@convert.aspect?.stringValue ?: undefined
+	override var mipLevel: GPUIntegerCoordinate = this@convert.mipLevel
+	override var origin: dynamic = this@convert.origin.toList().toTypedArray()
+	override var aspect: String = this@convert.aspect.stringValue
 }
 
 
@@ -46,29 +46,20 @@ private fun RenderPassDescriptor.convert(): GPURenderPassDescriptor = object : G
 	override var occlusionQuerySet: GPUQuerySet?
 	override var timestampWrites: GPURenderPassTimestampWrites?
 	*/
-	override var maxDrawCount: GPUSize64? = this@convert.maxDrawCount ?: undefined
+	override var maxDrawCount: GPUSize64? = this@convert.maxDrawCount
 }
 
 private fun RenderPassDescriptor.RenderPassDepthStencilAttachment.convert(): GPURenderPassDepthStencilAttachment =
 	object : GPURenderPassDepthStencilAttachment {
 		override var view: GPUTextureView = this@convert.view.handler
 		override var depthClearValue: Number? = this@convert.depthClearValue ?: undefined
-
-		/* "load" | "clear" */
 		override var depthLoadOp: String? = this@convert.depthLoadOp?.name ?: undefined
-
-		/* "store" | "discard" */
 		override var depthStoreOp: String? = this@convert.depthStoreOp?.name ?: undefined
-		override var depthReadOnly: Boolean? = this@convert.depthReadOnly ?: undefined
-		override var stencilClearValue: GPUStencilValue? = this@convert.stencilClearValue ?: undefined
-
-		/* "load" | "clear" */
+		override var depthReadOnly: Boolean? = this@convert.depthReadOnly
+		override var stencilClearValue: GPUStencilValue? = this@convert.stencilClearValue
 		override var stencilLoadOp: String? = this@convert.stencilLoadOp?.name ?: undefined
-
-		/* "store" | "discard" */
 		override var stencilStoreOp: String? = this@convert.stencilStoreOp?.name ?: undefined
-		override var stencilReadOnly: Boolean? = this@convert.stencilReadOnly ?: undefined
-
+		override var stencilReadOnly: Boolean? = this@convert.stencilReadOnly
 	}
 
 private fun RenderPassDescriptor.ColorAttachment.convert(): GPURenderPassColorAttachment =
@@ -78,5 +69,5 @@ private fun RenderPassDescriptor.ColorAttachment.convert(): GPURenderPassColorAt
 		override var storeOp: String = this@convert.storeOp.name
 		override var depthSlice: GPUIntegerCoordinate? = this@convert.depthSlice ?: undefined
 		override var resolveTarget: GPUTextureView? = this@convert.resolveTarget?.handler ?: undefined
-		override var clearValue: Array<Number>? = this@convert.clearValue ?: undefined
+		override var clearValue: Array<Number>? = this@convert.clearValue
 	}

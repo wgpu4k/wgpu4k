@@ -1,6 +1,7 @@
 package io.ygdrasil.wgpu.mapper
 
 import dev.krud.shapeshift.transformer.base.MappingTransformer
+import io.ygdrasil.wgpu.EnumerationTransformer
 import io.ygdrasil.wgpu.ImageCopyTextureTagged
 import io.ygdrasil.wgpu.internal.jvm.WGPUImageCopyTexture
 import io.ygdrasil.wgpu.internal.jvm.WGPUOrigin3D
@@ -19,4 +20,5 @@ internal val imageCopyTextureTaggedMapper = mapper<ImageCopyTextureTagged, WGPUI
             }
         }
     }
+    ImageCopyTextureTagged::aspect mappedTo WGPUImageCopyTexture::aspect withTransformer EnumerationTransformer()
 }

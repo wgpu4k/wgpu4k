@@ -45,6 +45,12 @@ typealias GPUTextureUsageFlags = Int
 @JsExport
 data class GPUExtent3DDictStrict(
 	var width: Int,
-	var height: Int? = null,
-	var depthOrArrayLayers: Int? = null
+	var height: Int = 1,
+	var depthOrArrayLayers: Int = 1
+)
+
+data class GPUOrigin3DDict(
+	var x: GPUIntegerCoordinate = 0,
+	var y: GPUIntegerCoordinate = 0,
+	var z: GPUIntegerCoordinate = 0
 )
