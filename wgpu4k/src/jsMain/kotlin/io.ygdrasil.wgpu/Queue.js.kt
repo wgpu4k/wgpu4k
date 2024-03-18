@@ -1,9 +1,6 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUImageCopyExternalImage
-import io.ygdrasil.wgpu.internal.js.GPUImageCopyTextureTagged
-import io.ygdrasil.wgpu.internal.js.GPUQueue
-import io.ygdrasil.wgpu.internal.js.GPUTexture
+import io.ygdrasil.wgpu.internal.js.*
 import org.khronos.webgl.Float32Array
 import org.w3c.dom.ImageBitmap
 
@@ -34,11 +31,19 @@ actual class Queue(private val handler: GPUQueue) {
 		destination: ImageCopyTextureTagged,
 		copySize: GPUIntegerCoordinates
 	) {
-		handler.copyExternalImageToTexture(
+		actualCopyExternalImageToTexture(
 			source.convert(),
 			destination.convert(),
 			copySize.toList().toTypedArray()
 		)
+	}
+
+	private fun actualCopyExternalImageToTexture(
+		source: GPUImageCopyExternalImage,
+		destination: GPUImageCopyTextureTagged,
+		copySize: Array<GPUIntegerCoordinate>
+	) {
+		handler.copyExternalImageToTexture(source, destination, copySize)
 	}
 }
 
@@ -53,7 +58,10 @@ private fun ImageCopyTextureTagged.convert(): GPUImageCopyTextureTagged = object
 
 private fun ImageCopyExternalImage.convert(): GPUImageCopyExternalImage = object : GPUImageCopyExternalImage {
 	override var source: dynamic = this@convert.source.convert()
-	override var origin: Array<GPUIntegerCoordinate> = this@convert.origin.toList().toTypedArray()
+	override var origin: GPUOrigin2DDictStrict = object : GPUOrigin2DDictStrict {
+		override var x: GPUIntegerCoordinate = this@convert.origin.first
+		override var y: GPUIntegerCoordinate = this@convert.origin.second
+	}
 	override var flipY: Boolean = this@convert.flipY
 }
 

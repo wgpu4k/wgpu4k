@@ -232,7 +232,7 @@ external interface GPUImageCopyExternalImage {
     var source: Any
 
     /* ImageBitmap | ImageData | HTMLImageElement | HTMLVideoElement | VideoFrame | HTMLCanvasElement | OffscreenCanvas */
-    var origin: Array<GPUIntegerCoordinate> /* Iterable<GPUIntegerCoordinate>? | GPUOrigin2DDictStrict? */
+    var origin: GPUOrigin2DDictStrict /* Iterable<GPUIntegerCoordinate>? | GPUOrigin2DDictStrict? */
     var flipY: Boolean
 }
 
@@ -279,12 +279,8 @@ external interface GPUObjectDescriptorBase {
 }
 
 external interface GPUOrigin2DDict {
-    var x: GPUIntegerCoordinate?
-        get() = definedExternally
-        set(value) = definedExternally
-    var y: GPUIntegerCoordinate?
-        get() = definedExternally
-        set(value) = definedExternally
+    var x: GPUIntegerCoordinate
+    var y: GPUIntegerCoordinate
 }
 
 external interface GPUOrigin3DDict {

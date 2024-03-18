@@ -28,7 +28,6 @@ abstract class Application(
 		)
 	}
 
-
 	var frame = 0
 		private set
 
