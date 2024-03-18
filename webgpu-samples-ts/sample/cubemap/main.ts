@@ -1,32 +1,23 @@
-import {mat4, vec3} from 'wgpu-matrix';
-
-import {
-    cubeVertexArray,
-    cubeVertexSize,
-    cubeUVOffset,
-    cubePositionOffset,
-    cubeVertexCount,
-} from '../../meshes/cube';
+import {cubePositionOffset, cubeUVOffset, cubeVertexArray, cubeVertexCount, cubeVertexSize,} from '../../meshes/cube';
 
 import basicVertWGSL from '../../shaders/basic.vert.wgsl';
 import sampleCubemapWGSL from './sampleCubemap.frag.wgsl';
+import {io} from "../../out/kotlin-libs/wgpu4k-webgpu-samples-ts";
+import jsApplication = io.ygdrasil.wgpu.examples.jsApplication;
+import CubemapScene = io.ygdrasil.wgpu.examples.scenes.basic.CubemapScene;
 
 const canvas = document.querySelector('canvas') as HTMLCanvasElement;
-const adapter = await navigator.gpu.requestAdapter();
-const device = await adapter.requestDevice();
+const application = await jsApplication(canvas, '../../assets/img/')
+const scene = new CubemapScene();
+application.changeScene(scene)
+
+
+const device = application.device.handler;
 
 const context = canvas.getContext('webgpu') as GPUCanvasContext;
 
-const devicePixelRatio = window.devicePixelRatio;
-canvas.width = canvas.clientWidth * devicePixelRatio;
-canvas.height = canvas.clientHeight * devicePixelRatio;
 const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
 
-context.configure({
-    device,
-    format: presentationFormat,
-    alphaMode: 'premultiplied',
-});
 
 // Create a vertex buffer from the cube data.
 const verticesBuffer = device.createBuffer({
@@ -139,10 +130,7 @@ let cubemapTexture: GPUTexture;
 }
 
 const uniformBufferSize = 4 * 16; // 4x4 matrix
-const uniformBuffer = device.createBuffer({
-    size: uniformBufferSize,
-    usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
-});
+const uniformBuffer = (scene.uniformBuffer as any).handler_1;
 
 const sampler = device.createSampler({
     magFilter: 'linear',
@@ -190,45 +178,20 @@ const renderPassDescriptor: GPURenderPassDescriptor = {
     },
 };
 
-const aspect = canvas.width / canvas.height;
-const projectionMatrix = mat4.perspective((2 * Math.PI) / 5, aspect, 1, 3000);
-
-const modelMatrix = mat4.scaling(vec3.fromValues(1000, 1000, 1000));
-const modelViewProjectionMatrix = mat4.create() as Float32Array;
-const viewMatrix = mat4.identity();
-
-const tmpMat4 = mat4.create();
-
-// Comppute camera movement:
-// It rotates around Y axis with a slight pitch movement.
-function updateTransformationMatrix() {
-    const now = Date.now() / 800;
-
-    mat4.rotate(
-        viewMatrix,
-        vec3.fromValues(1, 0, 0),
-        (Math.PI / 10) * Math.sin(now),
-        tmpMat4
-    );
-    mat4.rotate(tmpMat4, vec3.fromValues(0, 1, 0), now * 0.2, tmpMat4);
-
-    mat4.multiply(tmpMat4, modelMatrix, modelViewProjectionMatrix);
-    mat4.multiply(
-        projectionMatrix,
-        modelViewProjectionMatrix,
-        modelViewProjectionMatrix
-    );
-}
 
 function frame() {
-    updateTransformationMatrix();
-    device.queue.writeBuffer(
-        uniformBuffer,
+    application.frame += 10;
+    const transformationMatrix = scene.getTransformationMatrix(
+        application.frame / 100.0,
+        scene.projectionMatrix
+    )
+    application.device.queue.writeBuffer(
+        scene.uniformBuffer,
         0,
-        modelViewProjectionMatrix.buffer,
-        modelViewProjectionMatrix.byteOffset,
-        modelViewProjectionMatrix.byteLength
-    );
+        transformationMatrix,
+        0,
+        transformationMatrix.length
+    )
 
     renderPassDescriptor.colorAttachments[0].view = context
         .getCurrentTexture()

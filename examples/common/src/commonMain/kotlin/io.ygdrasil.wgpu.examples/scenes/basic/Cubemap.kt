@@ -248,7 +248,7 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 		autoClosableContext.close()
 	}
 
-	private fun getTransformationMatrix(angle: Double, projectionMatrix: Matrix4): FloatArray {
+	fun getTransformationMatrix(angle: Double, projectionMatrix: Matrix4): FloatArray {
 
 		var viewMatrix = Matrix4.IDENTITY
 		viewMatrix *= Matrix4.rotation(
