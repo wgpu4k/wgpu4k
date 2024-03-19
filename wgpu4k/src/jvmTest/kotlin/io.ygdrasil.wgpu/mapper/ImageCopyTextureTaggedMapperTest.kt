@@ -3,7 +3,7 @@ package io.ygdrasil.wgpu.mapper
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import io.ygdrasil.wgpu.GPUExtent3DDictStrict
+import io.ygdrasil.wgpu.GPUOrigin3DDict
 import io.ygdrasil.wgpu.ImageCopyTextureTagged
 import io.ygdrasil.wgpu.Texture
 import io.ygdrasil.wgpu.internal.jvm.WGPUImageCopyTexture
@@ -15,7 +15,7 @@ class ImageCopyTextureTaggedMapperTest : FreeSpec({
         // Given
         val imageCopyTextureTagged = ImageCopyTextureTagged(
             texture = Texture(WGPUTexture()),
-            origin = GPUExtent3DDictStrict(0, 0, 0)
+            origin = GPUOrigin3DDict(0, 0, 0)
         )
 
         // When
