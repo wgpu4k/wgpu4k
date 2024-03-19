@@ -62,8 +62,8 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
 		val surfaceDescriptor = WGPUWindowSurfaceDescriptor()
 		surfaceDescriptor.nextInChain.let { metalLayerDescriptor ->
 			metalLayerDescriptor.chain.sType = WGPUSType.WGPUSType_SurfaceDescriptorFromWindowsHWND.value
-			metalLayerDescriptor.hinstance = display
-			metalLayerDescriptor.hwnd = window
+			metalLayerDescriptor.hinstance = hinstance
+			metalLayerDescriptor.hwnd = hwnd
 		}
 
 		return wgpuInstanceCreateSurface(handler, surfaceDescriptor)

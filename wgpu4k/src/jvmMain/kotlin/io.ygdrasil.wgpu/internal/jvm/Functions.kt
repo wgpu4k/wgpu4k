@@ -717,6 +717,8 @@ public interface WGPULibrary : Library {
 		WGPUSurface?
 	public fun wgpuInstanceCreateSurface(instance: WGPUInstance, descriptor: WGPUXlibWindowSurfaceDescriptor):
 			WGPUSurface?
+	public fun wgpuInstanceCreateSurface(instance: WGPUInstance, descriptor: WGPUWindowSurfaceDescriptor):
+			WGPUSurface?
 
 	/**
 	 * @param instance mapped from WGPUInstance
@@ -2451,6 +2453,9 @@ public fun wgpuInstanceCreateSurface(instance: WGPUInstance, descriptor: WGPUDar
 	WGPUSurface? = libWGPULibrary.wgpuInstanceCreateSurface(instance, descriptor)
 
 public fun wgpuInstanceCreateSurface(instance: WGPUInstance, descriptor: WGPUXlibWindowSurfaceDescriptor):
+		WGPUSurface? = libWGPULibrary.wgpuInstanceCreateSurface(instance, descriptor)
+
+public fun wgpuInstanceCreateSurface(instance: WGPUInstance, descriptor: WGPUWindowSurfaceDescriptor):
 		WGPUSurface? = libWGPULibrary.wgpuInstanceCreateSurface(instance, descriptor)
 
 /**
