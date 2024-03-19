@@ -1,6 +1,7 @@
 package io.ygdrasil.wgpu.examples
 
 import com.sun.jna.Pointer
+import com.sun.jna.platform.win32.Kernel32
 import darwin.CAMetalLayer
 import darwin.NSWindow
 import io.ygdrasil.wgpu.ImageBitmapHolder
@@ -14,6 +15,7 @@ import io.ygdrasil.wgpu.internal.jvm.wgpuSetLogLevel
 import kotlinx.coroutines.Dispatchers
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
+import org.lwjgl.glfw.GLFWNativeWin32.glfwGetWin32Window
 import org.lwjgl.glfw.GLFWNativeX11.glfwGetX11Display
 import org.lwjgl.glfw.GLFWNativeX11.glfwGetX11Window
 import org.lwjgl.system.MemoryUtil.NULL
@@ -21,6 +23,7 @@ import org.rococoa.ID
 import org.rococoa.Rococoa
 import javax.imageio.ImageIO
 import kotlin.system.exitProcess
+
 
 val callback = object : WGPULogCallback {
 	override fun invoke(level: Int, message: String, param3: Pointer?) {
@@ -164,7 +167,12 @@ fun WGPU.getSurface(window: Long): WGPUSurface = when (Platform.os) {
 		val x11_window = glfwGetX11Window(window)
 		getSurfaceFromXlibWindow(Pointer(display), x11_window) ?: error("fail to get surface on Linux")
 	}
-	Os.Window -> TODO()
+	Os.Window -> {
+		val hwnd = glfwGetWin32Window(window)
+		val hinstance = Kernel32.INSTANCE.GetModuleHandle(null)
+
+		TODO()
+	}
 	Os.MacOs -> {
 		val nsWindowPtr = glfwGetCocoaWindow(window)
 		val nswindow = Rococoa.wrap(ID.fromLong(nsWindowPtr), NSWindow::class.java)

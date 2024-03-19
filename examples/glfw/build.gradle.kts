@@ -33,6 +33,7 @@ val lwjglVersion = "3.3.3"
 dependencies {
 
 	implementation(project(":examples:common"))
+	implementation(libs.jnaPlatform)
 
 	implementation(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
 	implementation("org.lwjgl", "lwjgl")
