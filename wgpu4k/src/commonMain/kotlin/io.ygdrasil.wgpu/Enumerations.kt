@@ -262,7 +262,7 @@ public enum class CompositeAlphaMode(
 	auto(0),
 	opaque(1),
 	premultiplied(2),
-	unpremultiplied(3),
+	postmultiplied(3),
 	inherit(4),
 	;
 
@@ -821,13 +821,15 @@ public enum class TextureDimension(
 		public fun of(`value`: Int): TextureDimension? = entries.find {
 			it.value == value
 		}
+		public fun of(`value`: String): TextureDimension? = entries.find {
+			it.stringValue == value
+		}
 	}
 }
 
 public enum class TextureFormat(
 	public override val value: Int,
 ) : EnumerationWithValue {
-	undefined(0),
 	r8unorm(1),
 	r8snorm(2),
 	r8uint(3),
@@ -923,7 +925,6 @@ public enum class TextureFormat(
 	astc12x10unormsrgb(93),
 	astc12x12unorm(94),
 	astc12x12unormsrgb(95),
-	force32(2_147_483_647),
 	;
 
 	public infix fun or(other: Int): Int = value or other

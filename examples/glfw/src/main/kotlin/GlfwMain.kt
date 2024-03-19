@@ -7,7 +7,6 @@ import io.ygdrasil.wgpu.ImageBitmapHolder
 import io.ygdrasil.wgpu.RenderingContext
 import io.ygdrasil.wgpu.WGPU
 import io.ygdrasil.wgpu.WGPU.Companion.createInstance
-import io.ygdrasil.wgpu.imageBitmapHolder
 import io.ygdrasil.wgpu.internal.jvm.WGPULogCallback
 import io.ygdrasil.wgpu.internal.jvm.WGPUSurface
 import io.ygdrasil.wgpu.internal.jvm.wgpuSetLogCallback
@@ -68,21 +67,21 @@ suspend fun main() {
 	renderingContext.computeSurfaceCapabilities(adapter)
 
 	fun bitmapFrom(path: String): ImageBitmapHolder =
-		imageBitmapHolder(ImageIO.read(Application::class.java.getResourceAsStream(path)))
+		ImageBitmapHolder(ImageIO.read(Application::class.java.getResourceAsStream(path)))
 
 	val assetManager = object : AssetManager {
 		override val Di3d: ImageBitmapHolder
 			get() = bitmapFrom("/assets/img/Di-3d.png")
 		override val cubemapPosx: ImageBitmapHolder
-			get() = bitmapFrom("/assets/img/cubemap/posx.jpg")
+			get() = bitmapFrom("/assets/img/cubemap/posx.png")
 		override val cubemapNegx: ImageBitmapHolder
-			get() = bitmapFrom("/assets/img/cubemap/negx.jpg")
+			get() = bitmapFrom("/assets/img/cubemap/negx.png")
 		override val cubemapPosy: ImageBitmapHolder
-			get() = bitmapFrom("/assets/img/cubemap/posy.jpg")
+			get() = bitmapFrom("/assets/img/cubemap/posy.png")
 		override val cubemapNegy: ImageBitmapHolder
-			get() = bitmapFrom("/assets/img/cubemap/negy.jpg")
+			get() = bitmapFrom("/assets/img/cubemap/negy.png")
 		override val cubemapPosz: ImageBitmapHolder
-			get() = bitmapFrom("/assets/img/cubemap/posz.jpg")
+			get() = bitmapFrom("/assets/img/cubemap/posz.png")
 		override val cubemapNegz: ImageBitmapHolder
 			get() = bitmapFrom("/assets/img/cubemap/negz.jpg")
 

@@ -28,6 +28,7 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 	lateinit var verticesBuffer: Buffer
 
 	val modelMatrix = Matrix4.scale(1000, 1000, 1000)
+	val depthLayer = 6
 
 	override fun Application.initialiaze() = with(autoClosableContext) {
 
@@ -103,25 +104,19 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 		).bind()
 
 		val imageBitmaps = listOf(
-			Di3d,
-			Di3d,
-			Di3d,
-			Di3d,
-			Di3d,
-			Di3d
-			/*cubemapPosx,
+			cubemapPosx,
 			cubemapNegx,
 			cubemapPosy,
 			cubemapNegy,
 			cubemapPosz,
-			cubemapNegz,*/
+			cubemapNegz,
 		)
 
 		val cubemapTexture = device.createTexture(
 			TextureDescriptor(
 				// Create a 2d array texture.
 				// Assume each image has the same size.
-				size = GPUExtent3DDictStrict(imageBitmaps[0].width, imageBitmaps[0].height, 6),
+				size = GPUExtent3DDictStrict(imageBitmaps[0].width, imageBitmaps[0].height, depthLayer),
 				format = TextureFormat.rgba8unorm,
 				usage = TextureUsage.texturebinding or TextureUsage.copydst or TextureUsage.renderattachment,
 			)
@@ -134,7 +129,6 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 				imageBitmap.width to imageBitmap.height
 			)
 		}
-
 
 		val uniformBufferSize = 4L * 16L; // 4x4 matrix
 		uniformBuffer = device.createBuffer(
@@ -176,7 +170,7 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 							view = cubemapTexture.createView(
 								TextureViewDescriptor(
 									dimension = TextureViewDimension.cube,
-									arrayLayerCount = 6
+									arrayLayerCount = depthLayer
 								)
 							)
 						)
@@ -206,6 +200,7 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 		val aspect = renderingContext.width / renderingContext.height.toDouble()
 		val fox = Angle.fromRadians((2 * PI) / 5)
 		projectionMatrix = Matrix4.perspective(fox, aspect, 1.0, 3000.0)
+
 
 	}
 

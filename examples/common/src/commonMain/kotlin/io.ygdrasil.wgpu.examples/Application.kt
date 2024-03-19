@@ -57,6 +57,8 @@ abstract class Application(
 				throw e
 			}
 		}
+		// TODO make it stable
+		//if (this::currentScene.isInitialized) currentScene.autoClosableContext.close()
 		currentScene = nextScene
 	}
 
@@ -86,6 +88,7 @@ abstract class Application(
 		renderingContext.configure(
 			CanvasConfiguration(
 				device = device
+
 			)
 		)
 	}
