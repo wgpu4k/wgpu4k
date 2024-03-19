@@ -58,6 +58,17 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
 		return wgpuInstanceCreateSurface(handler, surfaceDescriptor)
 	}
 
+	fun getSurfaceFromWindows(hinstance: Pointer, hwnd: Pointer): WGPUSurface? {
+		val surfaceDescriptor = WGPUWindowSurfaceDescriptor()
+		surfaceDescriptor.nextInChain.let { metalLayerDescriptor ->
+			metalLayerDescriptor.chain.sType = WGPUSType.WGPUSType_SurfaceDescriptorFromWindowsHWND.value
+			metalLayerDescriptor.hinstance = display
+			metalLayerDescriptor.hwnd = window
+		}
+
+		return wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+	}
+
 	companion object {
 		fun createInstance() = wgpuCreateInstance(null)
 			?.let { WGPU(it) }

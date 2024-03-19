@@ -168,10 +168,9 @@ fun WGPU.getSurface(window: Long): WGPUSurface = when (Platform.os) {
 		getSurfaceFromXlibWindow(Pointer(display), x11_window) ?: error("fail to get surface on Linux")
 	}
 	Os.Window -> {
-		val hwnd = glfwGetWin32Window(window)
-		val hinstance = Kernel32.INSTANCE.GetModuleHandle(null)
-
-		TODO()
+		val hwnd = glfwGetWin32Window(window).let { Pointer(it) }
+		val hinstance = Kernel32.INSTANCE.GetModuleHandle(null).let { it.pointer }
+		getSurfaceFromWindows(hinstance, hwnd) ?: error("fail to get surface on Windows")
 	}
 	Os.MacOs -> {
 		val nsWindowPtr = glfwGetCocoaWindow(window)
