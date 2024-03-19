@@ -2059,6 +2059,35 @@ public open class WGPUSurfaceConfiguration : Structure {
 }
 
 @Structure.FieldOrder("nextInChain", "label")
+public open class WGPUXlibWindowSurfaceDescriptor : Structure {
+	/**
+	 * mapped from (typedef Optional[const WGPUChainedStruct] =
+	 * Declared([a8(next):[*:b1]i4(sType)x4](WGPUChainedStruct)))*
+	 */
+	@JvmField
+	public var nextInChain: WGPUSurfaceDescriptorFromXlibWindow.ByReference =
+		WGPUSurfaceDescriptorFromXlibWindow.ByReference()
+
+	/**
+	 * mapped from (Char(layout = b1))*
+	 */
+	@JvmField
+	public var label: String? = null
+
+	public constructor(pointer: Pointer?) : super(pointer)
+
+	public constructor()
+
+	public class ByReference(
+		pointer: Pointer? = null,
+	) : WGPUSurfaceDescriptor(pointer), Structure.ByReference
+
+	public class ByValue(
+		pointer: Pointer? = null,
+	) : WGPUSurfaceDescriptor(pointer), Structure.ByValue
+}
+
+@Structure.FieldOrder("nextInChain", "label")
 public open class WGPUDarwinSurfaceDescriptor : Structure {
 	/**
 	 * mapped from (typedef Optional[const WGPUChainedStruct] =

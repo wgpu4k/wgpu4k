@@ -14,6 +14,8 @@ import io.ygdrasil.wgpu.internal.jvm.wgpuSetLogLevel
 import kotlinx.coroutines.Dispatchers
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
+import org.lwjgl.glfw.GLFWNativeX11.glfwGetX11Display
+import org.lwjgl.glfw.GLFWNativeX11.glfwGetX11Window
 import org.lwjgl.system.MemoryUtil.NULL
 import org.rococoa.ID
 import org.rococoa.Rococoa
@@ -157,7 +159,11 @@ suspend fun main() {
 }
 
 fun WGPU.getSurface(window: Long): WGPUSurface = when (Platform.os) {
-	Os.Linux -> TODO()
+	Os.Linux -> {
+		val display = glfwGetX11Display()
+		val x11_window = glfwGetX11Window(window)
+		getSurfaceFromXlibWindow(Pointer(display), x11_window) ?: error("fail to get surface on Linux")
+	}
 	Os.Window -> TODO()
 	Os.MacOs -> {
 		val nsWindowPtr = glfwGetCocoaWindow(window)
