@@ -43,9 +43,12 @@ dependencies {
 }
 
 
+val isOnMac = arrayOf("Mac OS X", "Darwin").any { System.getProperty("os.name").startsWith(it) }
 
 application {
 	mainClass.set("io.ygdrasil.wgpu.examples.GlfwMainKt")
-	applicationDefaultJvmArgs += "-XstartOnFirstThread"
+	if (isOnMac) {
+		applicationDefaultJvmArgs += "-XstartOnFirstThread"
+	}
 	applicationDefaultJvmArgs += "--add-opens=java.base/java.lang=ALL-UNNAMED"
 }
