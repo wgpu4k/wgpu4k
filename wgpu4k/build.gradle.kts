@@ -60,7 +60,7 @@ val fileToDownload = listOf(
 	),
 	NativeLibrary(
 		"wgpu-windows-x86_64-release.zip",
-		resourcesDirectory.resolve("win32").resolve("libWGPU.dll"),
+		resourcesDirectory.resolve("win32-x86-64").resolve("WGPU.dll"),
 		"wgpu_native.dll"
 	),
 ).forEach { (fileName, target, zipFilename) ->
