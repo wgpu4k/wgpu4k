@@ -5,7 +5,7 @@ import io.ygdrasil.wgpu.internal.jvm.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
-class WGPU(private val handler: WGPUInstance, val backend: WGPUBackendType? = null) : AutoCloseable {
+class WGPU(private val handler: WGPUInstance) : AutoCloseable {
 	override fun close() {
 		wgpuInstanceRelease(handler)
 	}
@@ -19,7 +19,6 @@ class WGPU(private val handler: WGPUInstance, val backend: WGPUBackendType? = nu
 		val options = WGPURequestAdapterOptions().also {
 			it.compatibleSurface = renderingContext.handler
 			it.powerPreference = powerPreference.value
-			it.backendType = backend?.value
 		}
 
 		val adapterState = MutableStateFlow<WGPUAdapterImpl?>(null)
@@ -72,7 +71,19 @@ class WGPU(private val handler: WGPUInstance, val backend: WGPUBackendType? = nu
 	}
 
 	companion object {
-		fun createInstance(backend: WGPUBackendType? = null) = wgpuCreateInstance(null)
-			?.let { WGPU(it, backend) }
+		fun createInstance(backend: WGPUBackendType? = null) = wgpuCreateInstance(getDescriptor(backend))
+			?.let { WGPU(it) }
+
+		private fun getDescriptor(backend: WGPUBackendType?): WGPUInstanceDescriptor? {
+			if (backend == null) return null
+
+			val descriptor = WGPUInstanceDescriptor()
+			descriptor.nextInChain = WGPUInstanceExtras.ByReference().also {
+				it.chain.sType = WGPUNativeSType.WGPUSType_InstanceExtras.value
+				it.backends = backend.value
+			}
+
+			return descriptor
+		}
 	}
 }
