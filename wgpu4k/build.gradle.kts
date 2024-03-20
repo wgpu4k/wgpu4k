@@ -63,6 +63,16 @@ val fileToDownload = listOf(
 		resourcesDirectory.resolve("win32-x86-64").resolve("WGPU.dll"),
 		"wgpu_native.dll"
 	),
+	NativeLibrary(
+		"wgpu-linux-x86_64-release.zip",
+		resourcesDirectory.resolve("linux-x86-64").resolve("libWGPU.so"),
+		"libwgpu_native.so"
+	),
+	NativeLibrary(
+		"wgpu-linux-aarch64-release.zip",
+		resourcesDirectory.resolve("linux-aarch64").resolve("libWGPU.so"),
+		"libwgpu_native.so"
+	),
 ).forEach { (fileName, target, zipFilename) ->
 	val zipFile = zipBuildDirectory.resolve(fileName)
 	val downloadTask = downloadInto(fileName, zipFile)
