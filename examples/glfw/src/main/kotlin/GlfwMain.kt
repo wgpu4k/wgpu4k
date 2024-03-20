@@ -42,7 +42,6 @@ suspend fun main() {
 	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
 	val windowHandle: Long = glfwCreateWindow(width, height, "GLFW+WebGPU", NULL, NULL)
-	glfwSwapInterval(1)
 
 	val glfwDispatcher = GlfwCoroutineDispatcher() // a custom coroutine dispatcher, in which Compose will run
 
@@ -109,7 +108,6 @@ suspend fun main() {
 
 		application.configureRenderingContext()
 		application.renderFrame()
-		glfwSwapBuffers(windowHandle)
 	}
 
 
@@ -117,10 +115,7 @@ suspend fun main() {
 		width = windowWidth
 		height = windowHeight
 
-
-		glfwSwapInterval(0)
 		render()
-		glfwSwapInterval(1)
 	}
 
 	glfwSetKeyCallback(windowHandle) { _, key, scancode, action, mods ->
