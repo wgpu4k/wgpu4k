@@ -165,7 +165,7 @@ fun WGPU.getSurface(window: Long): WGPUSurface = when (Platform.os) {
 	Os.Linux -> {
 		val display = glfwGetX11Display()
 		val x11_window = glfwGetX11Window(window)
-		getSurfaceFromXlibWindow(Pointer(display), x11_window) ?: error("fail to get surface on Linux")
+		getSurfaceFromX11Window(Pointer(display), x11_window) ?: error("fail to get surface on Linux")
 	}
 	Os.Window -> {
 		val hwnd = glfwGetWin32Window(window)
