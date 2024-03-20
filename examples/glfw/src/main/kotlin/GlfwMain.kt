@@ -41,6 +41,8 @@ suspend fun main() {
 	glfwInit()
 	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
+	// Disable context creation, else vulkan backend crashes because swap already exists
+	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API)
 	val windowHandle: Long = glfwCreateWindow(width, height, "GLFW+WebGPU", NULL, NULL)
 
 	val glfwDispatcher = GlfwCoroutineDispatcher() // a custom coroutine dispatcher, in which Compose will run
