@@ -860,7 +860,7 @@ public open class WGPUInstanceDescriptor : Structure {
 	 * Declared([a8(next):[*:b1]i4(sType)x4](WGPUChainedStruct)))*
 	 */
 	@JvmField
-	public var nextInChain: Structure.ByReference? = null
+	public var nextInChain: WGPUInstanceExtras.ByReference? = null
 
 	public constructor(pointer: Pointer?) : super(pointer)
 
