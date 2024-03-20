@@ -53,7 +53,6 @@ public enum class WGPUBackendType(
 	WGPUBackendType_Vulkan(6),
 	WGPUBackendType_OpenGL(7),
 	WGPUBackendType_OpenGLES(8),
-	WGPUBackendType_Force32(2_147_483_647),
 	;
 
 	public infix fun or(other: Int): Int = value or other

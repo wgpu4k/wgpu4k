@@ -29,8 +29,6 @@ val callback = object : WGPULogCallback {
 	override fun invoke(level: Int, message: String, param3: Pointer?) {
 		println("{$level} $message")
 	}
-
-
 }
 
 suspend fun main() {
@@ -44,7 +42,6 @@ suspend fun main() {
 	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
 	val windowHandle: Long = glfwCreateWindow(width, height, "GLFW+WebGPU", NULL, NULL)
-	glfwMakeContextCurrent(windowHandle)
 	glfwSwapInterval(1)
 
 	val glfwDispatcher = GlfwCoroutineDispatcher() // a custom coroutine dispatcher, in which Compose will run

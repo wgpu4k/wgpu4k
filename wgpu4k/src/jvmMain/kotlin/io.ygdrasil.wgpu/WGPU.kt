@@ -5,10 +5,11 @@ import io.ygdrasil.wgpu.internal.jvm.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
-class WGPU(private val handler: WGPUInstance) : AutoCloseable {
+class WGPU(private val handler: WGPUInstance, val backend: WGPUBackendType? = null) : AutoCloseable {
 	override fun close() {
 		wgpuInstanceRelease(handler)
 	}
+
 
 	suspend fun requestAdapter(
 		renderingContext: RenderingContext,
@@ -18,6 +19,7 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
 		val options = WGPURequestAdapterOptions().also {
 			it.compatibleSurface = renderingContext.handler
 			it.powerPreference = powerPreference.value
+			it.backendType = backend?.value
 		}
 
 		val adapterState = MutableStateFlow<WGPUAdapterImpl?>(null)
@@ -70,7 +72,7 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
 	}
 
 	companion object {
-		fun createInstance() = wgpuCreateInstance(null)
-			?.let { WGPU(it) }
+		fun createInstance(backend: WGPUBackendType? = null) = wgpuCreateInstance(null)
+			?.let { WGPU(it, backend) }
 	}
 }
