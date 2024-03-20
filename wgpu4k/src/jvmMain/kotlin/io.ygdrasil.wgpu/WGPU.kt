@@ -71,10 +71,10 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
 	}
 
 	companion object {
-		fun createInstance(backend: WGPUBackendType? = null) = wgpuCreateInstance(getDescriptor(backend))
+		fun createInstance(backend: WGPUInstanceBackend? = null) = wgpuCreateInstance(getDescriptor(backend))
 			?.let { WGPU(it) }
 
-		private fun getDescriptor(backend: WGPUBackendType?): WGPUInstanceDescriptor? {
+		private fun getDescriptor(backend: WGPUInstanceBackend?): WGPUInstanceDescriptor? {
 			if (backend == null) return null
 
 			val descriptor = WGPUInstanceDescriptor()
@@ -84,6 +84,26 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
 			}
 
 			return descriptor
+		}
+	}
+}
+
+enum class WGPUInstanceBackend(val value: Int) {
+
+	Vulkan(1 shl 1),
+	GL(1 shl 5),
+	Metal(1 shl 2),
+	DX12(1 shl 3),
+	DX11(1 shl 4),
+	BrowserWebGPU(1 shl 6),
+	Primary(Vulkan.value or Metal.value or DX12.value or BrowserWebGPU.value),
+	Secondary(GL.value or DX11.value),
+	None(0x00000000),
+	Force32(0x7FFFFFFF);
+
+	companion object {
+		fun fromValue(value: Int): WGPUInstanceBackend? {
+			return values().firstOrNull { it.value == value }
 		}
 	}
 }
