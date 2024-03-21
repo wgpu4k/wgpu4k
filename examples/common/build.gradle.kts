@@ -14,7 +14,7 @@ kotlin {
 	sourceSets {
 		val commonMain by getting {
 			dependencies {
-				api(project(":wgpu4k"))
+				api(projects.wgpu4k)
 				api(libs.coroutines)
 				api("com.soywiz.korge:korge-foundation:5.4.0")
 			}
@@ -22,7 +22,7 @@ kotlin {
 
 		val jvmMain by getting {
 			dependencies {
-				api(project(":librococoa"))
+				api(projects.librococoa)
 			}
 		}
 	}

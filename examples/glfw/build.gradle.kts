@@ -32,7 +32,7 @@ val lwjglNatives = Pair(
 val lwjglVersion = "3.3.3"
 dependencies {
 
-	implementation(project(":examples:common"))
+	implementation(projects.examples.common)
 	implementation(libs.jnaPlatform)
 
 	implementation(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))

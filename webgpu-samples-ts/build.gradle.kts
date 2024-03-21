@@ -13,7 +13,7 @@ kotlin {
 	sourceSets {
 		val commonMain by getting {
 			dependencies {
-				implementation(project(":examples:web-js"))
+				implementation(projects.examples.webJs)
 			}
 		}
 

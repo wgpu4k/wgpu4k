@@ -1,4 +1,5 @@
-rootProject.name = "wgpu4k"
+rootProject.name = "wgpu4k-root"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
 	repositories {
