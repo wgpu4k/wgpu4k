@@ -28,6 +28,16 @@ abstract class Application(
 		)
 	}
 
+	/*val renderingTexture by lazy {
+		device.createTexture(
+			TextureDescriptor(
+				size = GPUExtent3DDictStrict(512, 512),
+				format = TextureFormat.rgba8unorm,
+				usage = TextureUsage.renderattachment.value,
+			)
+		)
+	}*/
+
 	var frame = 0
 		private set
 
@@ -42,6 +52,14 @@ abstract class Application(
 		abstract fun Application.initialiaze()
 
 		abstract fun Application.render()
+
+		open fun Application.configureRenderingContext() {
+			renderingContext.configure(
+				CanvasConfiguration(
+					device = device
+				)
+			)
+		}
 
 	}
 
@@ -84,17 +102,10 @@ abstract class Application(
 
 	abstract fun run()
 
-	fun configureRenderingContext() {
-		renderingContext.configure(
-			CanvasConfiguration(
-				device = device
-
-			)
-		)
-	}
 }
 
 val availableScenes = listOf(
+	FractalCubeScene(),
 	HelloTriangleScene(),
 	HelloTriangleMSAAScene(),
 	HelloTriangleRotatingScene(),

@@ -45,11 +45,11 @@ private fun ImageCopyTexture.convert(): WGPUImageCopyTexture = WGPUImageCopyText
 
 	it.texture = texture.handler
 	it.mipLevel = mipLevel
-	it.origin = origin?.let { (x, y) ->
+	it.origin = origin.let { (x, y) ->
 		WGPUOrigin3D().also {
 			it.x = x
 			it.y = y
 		}
-	} ?: it.origin
-	it.aspect = aspect?.value
+	}
+	it.aspect = aspect.value
 }

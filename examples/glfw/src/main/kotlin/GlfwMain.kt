@@ -108,7 +108,9 @@ suspend fun main() {
 
 	fun render() {
 
-		application.configureRenderingContext()
+		with(application.currentScene) {
+			application.configureRenderingContext()
+		}
 		application.renderFrame()
 	}
 

@@ -28,8 +28,8 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 	lateinit var verticesBuffer: Buffer
 	lateinit var cubeTexture: Texture
 
-	override fun Application.initialiaze() = with(autoClosableContext) {
 
+	override fun Application.configureRenderingContext() {
 		renderingContext.configure(
 			CanvasConfiguration(
 				device,
@@ -40,6 +40,11 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 				usage = TextureUsage.renderattachment or TextureUsage.copysrc
 			)
 		)
+	}
+
+	override fun Application.initialiaze() = with(autoClosableContext) {
+
+
 
 		// Create a vertex buffer from the cube data.
 		verticesBuffer = device.createBuffer(
@@ -220,8 +225,8 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 		renderPassEncoder.end()
 
 		encoder.copyTextureToTexture(
-			ImageCopyTexture(texture = swapChainTexture),
-			ImageCopyTexture(texture = cubeTexture),
+			source = ImageCopyTexture(texture = swapChainTexture),
+			destination = ImageCopyTexture(texture = cubeTexture),
 			renderingContext.width to renderingContext.height
 		)
 
