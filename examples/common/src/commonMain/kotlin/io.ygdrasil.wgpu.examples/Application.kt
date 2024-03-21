@@ -28,16 +28,6 @@ abstract class Application(
 		)
 	}
 
-	/*val renderingTexture by lazy {
-		device.createTexture(
-			TextureDescriptor(
-				size = GPUExtent3DDictStrict(512, 512),
-				format = TextureFormat.rgba8unorm,
-				usage = TextureUsage.renderattachment.value,
-			)
-		)
-	}*/
-
 	var frame = 0
 		private set
 
@@ -105,7 +95,6 @@ abstract class Application(
 }
 
 val availableScenes = listOf(
-	FractalCubeScene(),
 	HelloTriangleScene(),
 	HelloTriangleMSAAScene(),
 	HelloTriangleRotatingScene(),

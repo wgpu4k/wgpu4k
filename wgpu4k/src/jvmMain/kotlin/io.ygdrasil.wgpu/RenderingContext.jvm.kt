@@ -46,7 +46,7 @@ actual class RenderingContext(
 
 	private fun CanvasConfiguration.convert(): WGPUSurfaceConfiguration = WGPUSurfaceConfiguration().also {
 		it.device = device.handler
-		it.usage = usage ?: WGPUTextureUsage.WGPUTextureUsage_RenderAttachment.value
+		it.usage = usage
 		it.format = format?.value ?: textureFormat.value
 		it.presentMode = WGPUPresentMode.WGPUPresentMode_Fifo.value
 		it.alphaMode = alphaMode?.value ?: surfaceCapabilities.alphaModes?.getInt(0) ?: error("")

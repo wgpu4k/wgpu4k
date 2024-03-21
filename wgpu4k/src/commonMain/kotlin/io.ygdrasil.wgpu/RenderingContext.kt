@@ -29,7 +29,7 @@ expect class RenderingContext: AutoCloseable {
 data class CanvasConfiguration(
 	var device: Device,
 	var format: TextureFormat? = null,
-	var usage: GPUTextureUsageFlags? = null,
+	var usage: GPUTextureUsageFlags = TextureUsage.renderattachment.value,
 	var viewFormats: Array<String?>? = null,
 	var colorSpace: Any? = null,
 	var alphaMode: CompositeAlphaMode? = null

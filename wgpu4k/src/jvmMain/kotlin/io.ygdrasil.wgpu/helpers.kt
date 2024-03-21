@@ -2,7 +2,6 @@ package io.ygdrasil.wgpu
 
 import com.sun.jna.NativeLong
 import com.sun.jna.Structure
-import dev.krud.shapeshift.ShapeShift
 import dev.krud.shapeshift.ShapeShiftBuilder
 import dev.krud.shapeshift.dsl.KotlinDslMappingDefinitionBuilder
 import dev.krud.shapeshift.enums.AutoMappingStrategy
@@ -32,7 +31,7 @@ class GPUExtent3DDictStrictTransformer : MappingTransformer<GPUExtent3DDictStric
 			WGPUExtent3D().apply {
 				width = it.width
 				height = it.height
-				depthOrArrayLayers = it.depthOrArrayLayers ?: 1
+				depthOrArrayLayers = it.depthOrArrayLayers
 			}
 		}
 }
