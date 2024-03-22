@@ -10,6 +10,7 @@ import kotlin.math.ceil
 
 class ParticlesScene : Application.Scene() {
 
+    // Constants
     val numParticles = 50000
     val particlePositionOffset = 0
     val particleColorOffset = 4 * 4
@@ -19,6 +20,10 @@ class ParticlesScene : Application.Scene() {
             3 * 4 + // velocity
             1 * 4 + // padding
             0
+
+    //Variables
+    var simulate = true
+    var deltaTime = 0.04
 
     lateinit var renderPipeline: RenderPipeline
 
@@ -330,25 +335,18 @@ class ParticlesScene : Application.Scene() {
         //////////////////////////////////////////////////////////////////////////////
         // Simulation compute pipeline
         //////////////////////////////////////////////////////////////////////////////
+
+        val simulationUBOBufferSize = 1 * 4 + // deltaTime
+                3 * 4 + // padding
+                4 * 4 + // seed
+                0
+        val simulationUBOBuffer = device.createBuffer(
+            BufferDescriptor(
+                size = simulationUBOBufferSize.toLong(),
+                usage = BufferUsage.uniform or BufferUsage.copydst,
+            )
+        )
         /*
-        val simulationParams = {
-  simulate= true,
-  deltaTime= 0.04,
-};
-
-val simulationUBOBufferSize =
-  1 * 4 + // deltaTime
-  3 * 4 + // padding
-  4 * 4 + // seed
-  0;
-val simulationUBOBuffer = device.createBuffer({
-  size= simulationUBOBufferSize,
-  usage= GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
-});
-
-val gui = new GUI();
-gui.add(simulationParams, "simulate");
-gui.add(simulationParams, "deltaTime");
 
 val computePipeline = device.createComputePipeline({
   layout= "auto",
