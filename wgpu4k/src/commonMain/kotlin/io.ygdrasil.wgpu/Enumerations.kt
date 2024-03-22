@@ -1041,7 +1041,6 @@ public enum class VertexStepMode(
 	vertex(0),
 	instance(1),
 	vertexbuffernotused(2),
-	force32(2_147_483_647),
 	;
 
 	public infix fun or(other: Int): Int = value or other
