@@ -3,6 +3,7 @@ package io.ygdrasil.wgpu.examples.scenes.graphics.techniques
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.Application
 import io.ygdrasil.wgpu.examples.autoClosableContext
+import io.ygdrasil.wgpu.examples.scenes.shader.compute.probabilityMap
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.particlesShader
 
 
@@ -219,56 +220,61 @@ class ParticlesScene : Application.Scene() {
         // the alpha channel. The mip levels 1..N are generated to hold spawn
         // probabilities up to the top 1x1 mip level.
         //////////////////////////////////////////////////////////////////////////////
+        val probabilityMapImportLevelPipeline = device.createComputePipeline(
+            ComputePipelineDescriptor(
+                compute = ComputePipelineDescriptor.ProgrammableStage(
+                    module = device.createShaderModule(ShaderModuleDescriptor(code = probabilityMap)).bind(),
+                    entryPoint = "import_level",
+                ),
+            )
+        ).bind()
 
+
+        val probabilityMapExportLevelPipeline = device.createComputePipeline(
+            ComputePipelineDescriptor(
+                compute = ComputePipelineDescriptor.ProgrammableStage(
+                    module = device.createShaderModule(ShaderModuleDescriptor(code = probabilityMap)).bind(),
+                    entryPoint = "export_level",
+                ),
+            )
+        ).bind()
+
+        val probabilityMapUBOBufferSize = 1 * 4 + // stride
+                3 * 4 + // padding
+                0
         /*
         {
-  const probabilityMapImportLevelPipeline = device.createComputePipeline({
-    layout: 'auto',
-    compute: {
-      module: device.createShaderModule({ code: probabilityMapWGSL }),
-      entryPoint: 'import_level',
-    },
-  });
-  const probabilityMapExportLevelPipeline = device.createComputePipeline({
-    layout: 'auto',
-    compute: {
-      module: device.createShaderModule({ code: probabilityMapWGSL }),
-      entryPoint: 'export_level',
-    },
-  });
 
-  const probabilityMapUBOBufferSize =
-    1 * 4 + // stride
-    3 * 4 + // padding
-    0;
-  const probabilityMapUBOBuffer = device.createBuffer({
+
+
+  val probabilityMapUBOBuffer = device.createBuffer({
     size: probabilityMapUBOBufferSize,
     usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
   });
-  const buffer_a = device.createBuffer({
+  val buffer_a = device.createBuffer({
     size: textureWidth * textureHeight * 4,
     usage: GPUBufferUsage.STORAGE,
   });
-  const buffer_b = device.createBuffer({
+  val buffer_b = device.createBuffer({
     size: textureWidth * textureHeight * 4,
     usage: GPUBufferUsage.STORAGE,
   });
   device.queue.writeBuffer(
     probabilityMapUBOBuffer,
     0,
-    new Int32Array([textureWidth])
+    new Int32Array(arrayOf(textureWidth))
   );
-  const commandEncoder = device.createCommandEncoder();
+  val commandEncoder = device.createCommandEncoder();
   for (let level = 0; level < numMipLevels; level++) {
-    const levelWidth = textureWidth >> level;
-    const levelHeight = textureHeight >> level;
-    const pipeline =
+    val levelWidth = textureWidth >> level;
+    val levelHeight = textureHeight >> level;
+    val pipeline =
       level == 0
         ? probabilityMapImportLevelPipeline.getBindGroupLayout(0)
         : probabilityMapExportLevelPipeline.getBindGroupLayout(0);
-    const probabilityMapBindGroup = device.createBindGroup({
+    val probabilityMapBindGroup = device.createBindGroup({
       layout: pipeline,
-      entries: [
+      entries: arrayOf(
         {
           // ubo
           binding: 0,
@@ -288,29 +294,29 @@ class ParticlesScene : Application.Scene() {
           // tex_in / tex_out
           binding: 3,
           resource: texture.createView({
-            format: 'rgba8unorm',
-            dimension: '2d',
+            format: "rgba8unorm",
+            dimension: "2d",
             baseMipLevel: level,
             mipLevelCount: 1,
           }),
         },
-      ],
+      ),
     });
     if (level == 0) {
-      const passEncoder = commandEncoder.beginComputePass();
+      val passEncoder = commandEncoder.beginComputePass();
       passEncoder.setPipeline(probabilityMapImportLevelPipeline);
       passEncoder.setBindGroup(0, probabilityMapBindGroup);
       passEncoder.dispatchWorkgroups(Math.ceil(levelWidth / 64), levelHeight);
       passEncoder.end();
     } else {
-      const passEncoder = commandEncoder.beginComputePass();
+      val passEncoder = commandEncoder.beginComputePass();
       passEncoder.setPipeline(probabilityMapExportLevelPipeline);
       passEncoder.setBindGroup(0, probabilityMapBindGroup);
       passEncoder.dispatchWorkgroups(Math.ceil(levelWidth / 64), levelHeight);
       passEncoder.end();
     }
   }
-  device.queue.submit([commandEncoder.finish()]);
+  device.queue.submit(arrayOf(commandEncoder.finish()));
 }
 
          */
@@ -318,37 +324,37 @@ class ParticlesScene : Application.Scene() {
         // Simulation compute pipeline
         //////////////////////////////////////////////////////////////////////////////
         /*
-        const simulationParams = {
+        val simulationParams = {
   simulate: true,
   deltaTime: 0.04,
 };
 
-const simulationUBOBufferSize =
+val simulationUBOBufferSize =
   1 * 4 + // deltaTime
   3 * 4 + // padding
   4 * 4 + // seed
   0;
-const simulationUBOBuffer = device.createBuffer({
+val simulationUBOBuffer = device.createBuffer({
   size: simulationUBOBufferSize,
   usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
 });
 
-const gui = new GUI();
-gui.add(simulationParams, 'simulate');
-gui.add(simulationParams, 'deltaTime');
+val gui = new GUI();
+gui.add(simulationParams, "simulate");
+gui.add(simulationParams, "deltaTime");
 
-const computePipeline = device.createComputePipeline({
-  layout: 'auto',
+val computePipeline = device.createComputePipeline({
+  layout: "auto",
   compute: {
     module: device.createShaderModule({
       code: particleWGSL,
     }),
-    entryPoint: 'simulate',
+    entryPoint: "simulate",
   },
 });
-const computeBindGroup = device.createBindGroup({
+val computeBindGroup = device.createBindGroup({
   layout: computePipeline.getBindGroupLayout(0),
-  entries: [
+  entries: arrayOf(
     {
       binding: 0,
       resource: {
@@ -367,13 +373,13 @@ const computeBindGroup = device.createBindGroup({
       binding: 2,
       resource: texture.createView(),
     },
-  ],
+  ),
 });
 
-const aspect = canvas.width / canvas.height;
-const projection = mat4.perspective((2 * Math.PI) / 5, aspect, 1, 100.0);
-const view = mat4.create();
-const mvp = mat4.create();
+val aspect = canvas.width / canvas.height;
+val projection = mat4.perspective((2 * Math.PI) / 5, aspect, 1, 100.0);
+val view = mat4.create();
+val mvp = mat4.create();
          */
     }
 
@@ -383,7 +389,7 @@ const mvp = mat4.create();
         device.queue.writeBuffer(
     simulationUBOBuffer,
     0,
-    new Float32Array([
+    new Float32Array(arrayOf(
       simulationParams.simulate ? simulationParams.deltaTime : 0.0,
       0.0,
       0.0,
@@ -392,7 +398,7 @@ const mvp = mat4.create();
       Math.random() * 100, // seed.xy
       1 + Math.random(),
       1 + Math.random(), // seed.zw
-    ])
+    ))
   );
 
   mat4.identity(view);
@@ -404,7 +410,7 @@ const mvp = mat4.create();
   device.queue.writeBuffer(
     uniformBuffer,
     0,
-    new Float32Array([
+    new Float32Array(arrayOf(
       // modelViewProjectionMatrix
       mvp[0], mvp[1], mvp[2], mvp[3],
       mvp[4], mvp[5], mvp[6], mvp[7],
@@ -418,22 +424,22 @@ const mvp = mat4.create();
       view[1], view[5], view[9], // up
 
       0, // padding
-    ])
+    ))
   );
-  const swapChainTexture = context.getCurrentTexture();
+  val swapChainTexture = context.getCurrentTexture();
   // prettier-ignore
   renderPassDescriptor.colorAttachments[0].view = swapChainTexture.createView();
 
-  const commandEncoder = device.createCommandEncoder();
+  val commandEncoder = device.createCommandEncoder();
   {
-    const passEncoder = commandEncoder.beginComputePass();
+    val passEncoder = commandEncoder.beginComputePass();
     passEncoder.setPipeline(computePipeline);
     passEncoder.setBindGroup(0, computeBindGroup);
     passEncoder.dispatchWorkgroups(Math.ceil(numParticles / 64));
     passEncoder.end();
   }
   {
-    const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
+    val passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
     passEncoder.setPipeline(renderPipeline);
     passEncoder.setBindGroup(0, uniformBindGroup);
     passEncoder.setVertexBuffer(0, particlesBuffer);
@@ -442,7 +448,7 @@ const mvp = mat4.create();
     passEncoder.end();
   }
 
-  device.queue.submit([commandEncoder.finish()]);
+  device.queue.submit(arrayOf(commandEncoder.finish()));
          */
 
         // Clear the canvas with a render pass

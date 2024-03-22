@@ -20,6 +20,8 @@ expect class Device: AutoCloseable {
 	fun createBindGroup(descriptor: BindGroupDescriptor): BindGroup
 
 	fun createSampler(descriptor: SamplerDescriptor = SamplerDescriptor()): Sampler
+
+	fun createComputePipeline(descriptor: ComputePipelineDescriptor): ComputePipeline
 }
 
 // TODO

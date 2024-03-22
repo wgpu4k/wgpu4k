@@ -49,9 +49,19 @@ actual class Device(val handler: GPUDevice) : AutoCloseable {
 			.let { handler.createSampler(it) }
 			.let(::Sampler)
 
+	actual fun createComputePipeline(descriptor: ComputePipelineDescriptor): ComputePipeline =
+		descriptor.convert()
+			.let { handler.createComputePipeline(it) }
+			.let(::ComputePipeline)
+
+
 	override fun close() {
 		// Nothing on JS
 	}
+}
+
+private fun ComputePipelineDescriptor.convert(): GPUComputePipelineDescriptor {
+	TODO()
 }
 
 private fun SamplerDescriptor.convert(): GPUSamplerDescriptor = object : GPUSamplerDescriptor {
