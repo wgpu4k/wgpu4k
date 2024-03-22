@@ -4,7 +4,21 @@ expect class Queue {
 
 	fun submit(commandsBuffer: Array<CommandBuffer> = arrayOf())
 
-	fun writeBuffer(buffer: Buffer, bufferOffset: GPUSize64, data: FloatArray, dataOffset: GPUSize64, size: GPUSize64)
+	fun writeBuffer(
+		buffer: Buffer,
+		bufferOffset: GPUSize64,
+		data: FloatArray,
+		dataOffset: GPUSize64 = 0,
+		size: GPUSize64 = data.size.toLong()
+	)
+
+	fun writeBuffer(
+		buffer: Buffer,
+		bufferOffset: GPUSize64,
+		data: IntArray,
+		dataOffset: GPUSize64 = 0,
+		size: GPUSize64 = data.size.toLong()
+	)
 
 	fun copyExternalImageToTexture(
 		source: ImageCopyExternalImage,

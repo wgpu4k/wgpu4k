@@ -2,6 +2,7 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.*
 import org.khronos.webgl.Float32Array
+import org.khronos.webgl.Int32Array
 import org.w3c.dom.ImageBitmap
 
 @JsExport
@@ -10,6 +11,7 @@ actual class Queue(private val handler: GPUQueue) {
 		handler.submit(commandsBuffer.map { it.handler }.toTypedArray())
 	}
 
+	@JsName("writeBufferF32")
 	actual fun writeBuffer(
 		buffer: Buffer,
 		bufferOffset: GPUSize64,
@@ -21,6 +23,23 @@ actual class Queue(private val handler: GPUQueue) {
 			buffer.handler,
 			bufferOffset,
 			data.unsafeCast<Float32Array>(),
+			dataOffset,
+			size
+		)
+	}
+
+	@JsName("writeBufferI32")
+	actual fun writeBuffer(
+		buffer: Buffer,
+		bufferOffset: GPUSize64,
+		data: IntArray,
+		dataOffset: GPUSize64,
+		size: GPUSize64
+	) {
+		handler.writeBuffer(
+			buffer.handler,
+			bufferOffset,
+			data.unsafeCast<Int32Array>(),
 			dataOffset,
 			size
 		)

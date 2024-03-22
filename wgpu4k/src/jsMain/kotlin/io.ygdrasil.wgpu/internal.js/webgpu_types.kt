@@ -623,9 +623,20 @@ external interface GPUVertexState : GPUProgrammableStage {
 }
 
 external interface GPUBindingCommandsMixin {
-    fun setBindGroup(index: GPUIndex32, bindGroup: GPUBindGroup?, dynamicOffsets: Iterable<GPUBufferDynamicOffset> = definedExternally): Nothing?
-    fun setBindGroup(index: GPUIndex32, bindGroup: GPUBindGroup?): Nothing?
-    fun setBindGroup(index: GPUIndex32, bindGroup: GPUBindGroup?, dynamicOffsetsData: Uint32Array, dynamicOffsetsDataStart: GPUSize64, dynamicOffsetsDataLength: GPUSize32): Nothing?
+    fun setBindGroup(
+        index: GPUIndex32,
+        bindGroup: GPUBindGroup?,
+        dynamicOffsets: Array<GPUBufferDynamicOffset> = definedExternally
+    )
+
+    fun setBindGroup(index: GPUIndex32, bindGroup: GPUBindGroup?)
+    fun setBindGroup(
+        index: GPUIndex32,
+        bindGroup: GPUBindGroup?,
+        dynamicOffsetsData: Uint32Array,
+        dynamicOffsetsDataStart: GPUSize64,
+        dynamicOffsetsDataLength: GPUSize32
+    )
 }
 
 external interface GPUCommandsMixin
@@ -759,7 +770,7 @@ external interface GPUCommandBuffer : GPUObjectBase {
 external interface GPUCommandEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin {
     var __brand: String /* "GPUCommandEncoder" */
     fun beginRenderPass(descriptor: GPURenderPassDescriptor): GPURenderPassEncoder
-    fun beginComputePass(descriptor: GPUComputePassDescriptor = definedExternally): GPUComputePassEncoder
+    fun beginComputePass(descriptor: GPUComputePassDescriptor? = definedExternally): GPUComputePassEncoder
     fun copyBufferToBuffer(source: GPUBuffer, sourceOffset: GPUSize64, destination: GPUBuffer, destinationOffset: GPUSize64, size: GPUSize64): Nothing?
 	fun copyBufferToTexture(
 		source: GPUImageCopyBuffer,
@@ -812,10 +823,15 @@ external interface GPUCompilationMessage {
 @Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
 external interface GPUComputePassEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin, GPUBindingCommandsMixin {
     var __brand: String /* "GPUComputePassEncoder" */
-    fun setPipeline(pipeline: GPUComputePipeline): Nothing?
-    fun dispatchWorkgroups(workgroupCountX: GPUSize32, workgroupCountY: GPUSize32 = definedExternally, workgroupCountZ: GPUSize32 = definedExternally): Nothing?
-    fun dispatchWorkgroupsIndirect(indirectBuffer: GPUBuffer, indirectOffset: GPUSize64): Nothing?
-    fun end(): Nothing?
+    fun setPipeline(pipeline: GPUComputePipeline)
+    fun dispatchWorkgroups(
+        workgroupCountX: GPUSize32,
+        workgroupCountY: GPUSize32 = definedExternally,
+        workgroupCountZ: GPUSize32 = definedExternally
+    )
+
+    fun dispatchWorkgroupsIndirect(indirectBuffer: GPUBuffer, indirectOffset: GPUSize64)
+    fun end()
 
     companion object {
         var prototype: GPUComputePassEncoder

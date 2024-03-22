@@ -5,6 +5,7 @@ import io.ygdrasil.wgpu.examples.Application
 import io.ygdrasil.wgpu.examples.autoClosableContext
 import io.ygdrasil.wgpu.examples.scenes.shader.compute.probabilityMap
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.particlesShader
+import kotlin.math.ceil
 
 
 class ParticlesScene : Application.Scene() {
@@ -242,91 +243,97 @@ class ParticlesScene : Application.Scene() {
         val probabilityMapUBOBufferSize = 1 * 4 + // stride
                 3 * 4 + // padding
                 0
-        /*
-        {
+
+        val probabilityMapUBOBuffer = device.createBuffer(
+            BufferDescriptor(
+                size = probabilityMapUBOBufferSize.toLong(),
+                usage = BufferUsage.uniform or BufferUsage.copydst,
+            )
+        )
+        val buffer_a = device.createBuffer(
+            BufferDescriptor(
+                size = textureWidth * textureHeight * 4L,
+                usage = BufferUsage.storage.value,
+            )
+        )
+        val buffer_b = device.createBuffer(
+            BufferDescriptor(
+                size = textureWidth * textureHeight * 4L,
+                usage = BufferUsage.storage.value,
+            )
+        )
+        device.queue.writeBuffer(
+            probabilityMapUBOBuffer,
+            0,
+            IntArray(1) { textureWidth }
+        )
+
+        val commandEncoder = device.createCommandEncoder()
+        (0 until numMipLevels).forEach { level ->
+            val levelWidth = textureWidth shr level
+            val levelHeight = textureHeight shr level
+            val pipeline = if (level == 0) probabilityMapImportLevelPipeline.getBindGroupLayout(0)
+            else probabilityMapExportLevelPipeline.getBindGroupLayout(0)
+            val probabilityMapBindGroup = device.createBindGroup(
+                BindGroupDescriptor(
+                    layout = pipeline,
+                    entries = arrayOf(
+                        BindGroupDescriptor.BindGroupEntry(
+                            // ubo
+                            binding = 0,
+                            resource = BindGroupDescriptor.BufferBinding(buffer = probabilityMapUBOBuffer),
+                        ),
+                        BindGroupDescriptor.BindGroupEntry(
+                            // buf_in
+                            binding = 1,
+                            resource = BindGroupDescriptor.BufferBinding(if (level and 1 != 0) buffer_a else buffer_b)
+                        ),
+                        BindGroupDescriptor.BindGroupEntry(
+                            // buf_out
+                            binding = 2,
+                            resource = BindGroupDescriptor.BufferBinding(if (level and 1 != 0) buffer_b else buffer_a)
+                        ),
+                        BindGroupDescriptor.BindGroupEntry(
+                            // tex_in / tex_out
+                            binding = 3,
+                            resource = BindGroupDescriptor.TextureViewBinding(
+                                view = texture.createView(
+                                    TextureViewDescriptor(
+                                        format = TextureFormat.rgba8unorm,
+                                        dimension = TextureViewDimension._2d,
+                                        baseMipLevel = level,
+                                        mipLevelCount = 1,
+                                    )
+                                ).bind()
+                            ),
+                        ),
+                    ),
+                )
+            )
 
 
-
-  val probabilityMapUBOBuffer = device.createBuffer({
-    size: probabilityMapUBOBufferSize,
-    usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
-  });
-  val buffer_a = device.createBuffer({
-    size: textureWidth * textureHeight * 4,
-    usage: GPUBufferUsage.STORAGE,
-  });
-  val buffer_b = device.createBuffer({
-    size: textureWidth * textureHeight * 4,
-    usage: GPUBufferUsage.STORAGE,
-  });
-  device.queue.writeBuffer(
-    probabilityMapUBOBuffer,
-    0,
-    new Int32Array(arrayOf(textureWidth))
-  );
-  val commandEncoder = device.createCommandEncoder();
-  for (let level = 0; level < numMipLevels; level++) {
-    val levelWidth = textureWidth >> level;
-    val levelHeight = textureHeight >> level;
-    val pipeline =
-      level == 0
-        ? probabilityMapImportLevelPipeline.getBindGroupLayout(0)
-        : probabilityMapExportLevelPipeline.getBindGroupLayout(0);
-    val probabilityMapBindGroup = device.createBindGroup({
-      layout: pipeline,
-      entries: arrayOf(
-        {
-          // ubo
-          binding: 0,
-          resource: { buffer: probabilityMapUBOBuffer },
-        },
-        {
-          // buf_in
-          binding: 1,
-          resource: { buffer: level & 1 ? buffer_a : buffer_b },
-        },
-        {
-          // buf_out
-          binding: 2,
-          resource: { buffer: level & 1 ? buffer_b : buffer_a },
-        },
-        {
-          // tex_in / tex_out
-          binding: 3,
-          resource: texture.createView({
-            format: "rgba8unorm",
-            dimension: "2d",
-            baseMipLevel: level,
-            mipLevelCount: 1,
-          }),
-        },
-      ),
-    });
-    if (level == 0) {
-      val passEncoder = commandEncoder.beginComputePass();
-      passEncoder.setPipeline(probabilityMapImportLevelPipeline);
-      passEncoder.setBindGroup(0, probabilityMapBindGroup);
-      passEncoder.dispatchWorkgroups(Math.ceil(levelWidth / 64), levelHeight);
-      passEncoder.end();
-    } else {
-      val passEncoder = commandEncoder.beginComputePass();
-      passEncoder.setPipeline(probabilityMapExportLevelPipeline);
-      passEncoder.setBindGroup(0, probabilityMapBindGroup);
-      passEncoder.dispatchWorkgroups(Math.ceil(levelWidth / 64), levelHeight);
-      passEncoder.end();
-    }
-  }
-  device.queue.submit(arrayOf(commandEncoder.finish()));
-}
-
-         */
+            if (level == 0) {
+                val passEncoder = commandEncoder.beginComputePass()
+                passEncoder.setPipeline(probabilityMapImportLevelPipeline)
+                passEncoder.setBindGroup(0, probabilityMapBindGroup)
+                passEncoder.dispatchWorkgroups(ceil(levelWidth / 64.0).toInt(), levelHeight, 0)
+                passEncoder.end()
+            } else {
+                val passEncoder = commandEncoder.beginComputePass()
+                passEncoder.setPipeline(probabilityMapExportLevelPipeline);
+                passEncoder.setBindGroup(0, probabilityMapBindGroup);
+                passEncoder.dispatchWorkgroups(ceil(levelWidth / 64.0).toInt(), levelHeight, 0)
+                passEncoder.end()
+            }
+        }
+        device.queue.submit(arrayOf(commandEncoder.finish()));
         //////////////////////////////////////////////////////////////////////////////
         // Simulation compute pipeline
         //////////////////////////////////////////////////////////////////////////////
         /*
         val simulationParams = {
-  simulate: true,
-  deltaTime: 0.04,
+  simulate= true,
+  deltaTime= 0.04,
 };
 
 val simulationUBOBufferSize =
@@ -335,8 +342,8 @@ val simulationUBOBufferSize =
   4 * 4 + // seed
   0;
 val simulationUBOBuffer = device.createBuffer({
-  size: simulationUBOBufferSize,
-  usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+  size= simulationUBOBufferSize,
+  usage= GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
 });
 
 val gui = new GUI();
@@ -344,34 +351,34 @@ gui.add(simulationParams, "simulate");
 gui.add(simulationParams, "deltaTime");
 
 val computePipeline = device.createComputePipeline({
-  layout: "auto",
-  compute: {
-    module: device.createShaderModule({
-      code: particleWGSL,
+  layout= "auto",
+  compute= {
+    module= device.createShaderModule({
+      code= particleWGSL,
     }),
-    entryPoint: "simulate",
+    entryPoint= "simulate",
   },
 });
 val computeBindGroup = device.createBindGroup({
-  layout: computePipeline.getBindGroupLayout(0),
-  entries: arrayOf(
+  layout= computePipeline.getBindGroupLayout(0),
+  entries= arrayOf(
     {
-      binding: 0,
-      resource: {
-        buffer: simulationUBOBuffer,
+      binding= 0,
+      resource= {
+        buffer= simulationUBOBuffer,
       },
     },
     {
-      binding: 1,
-      resource: {
-        buffer: particlesBuffer,
-        offset: 0,
-        size: numParticles * particleInstanceByteSize,
+      binding= 1,
+      resource= {
+        buffer= particlesBuffer,
+        offset= 0,
+        size= numParticles * particleInstanceByteSize,
       },
     },
     {
-      binding: 2,
-      resource: texture.createView(),
+      binding= 2,
+      resource= texture.createView(),
     },
   ),
 });
