@@ -1,8 +1,5 @@
 package io.ygdrasil.wgpu
 
-import com.sun.jna.NativeLong
-import com.sun.jna.Pointer
-import dev.krud.shapeshift.transformer.base.MappingTransformer
 import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.mapper.bindGroupDescriptorMapper
 import io.ygdrasil.wgpu.mapper.renderPipelineDescriptorMapper
@@ -49,6 +46,10 @@ actual class Device(internal val handler: WGPUDeviceImpl) : AutoCloseable {
         samplerDescriptorMapper.map<Any, WGPUSamplerDescriptor>(descriptor)
             .let { wgpuDeviceCreateSampler(handler, it) }
             ?.let(::Sampler) ?: error("fail to create texture")
+
+    actual fun createComputePipeline(descriptor: ComputePipelineDescriptor): ComputePipeline {
+        TODO()
+    }
 
     override fun close() {
         wgpuDeviceRelease(handler)

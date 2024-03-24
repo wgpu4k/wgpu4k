@@ -1,6 +1,7 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.mapper.computePassDescriptorMapper
 import io.ygdrasil.wgpu.mapper.renderPassDescriptorMapper
 
 actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : AutoCloseable {
@@ -41,6 +42,13 @@ actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : AutoClos
 			copySize
 		)
 	}
+
+	actual fun beginComputePass(descriptor: ComputePassDescriptor?): ComputePassEncoder =
+		descriptor?.let { computePassDescriptorMapper.map<ComputePassDescriptor, WGPUComputePassDescriptor>(descriptor) }
+			.let { wgpuCommandEncoderBeginComputePass(handler, it) }
+			?.let { ComputePassEncoder(it) }
+			?: error("fail to get ComputePassEncoder")
+
 
 
 	override fun close() {

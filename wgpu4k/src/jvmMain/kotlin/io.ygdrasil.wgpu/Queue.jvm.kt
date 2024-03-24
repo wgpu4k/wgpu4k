@@ -42,6 +42,22 @@ actual class Queue(internal val handler: WGPUQueue) {
         )
     }
 
+    actual fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
+        data: IntArray,
+        dataOffset: GPUSize64,
+        size: GPUSize64
+    ) {
+        wgpuQueueWriteBuffer(
+            handler,
+            buffer.handler,
+            bufferOffset,
+            data.toBuffer(dataOffset),
+            (size * Float.SIZE_BYTES).toNativeLong()
+        )
+    }
+
     actual fun copyExternalImageToTexture(
         source: ImageCopyExternalImage,
         destination: ImageCopyTextureTagged,
@@ -96,6 +112,12 @@ actual class Queue(internal val handler: WGPUQueue) {
         }
     }
 
+    private fun IntArray.toBuffer(dataOffset: GPUSize64): Pointer {
+        //Multiply by 4 because of 4 bytes per float
+        return Memory(size * 4L).apply {
+            write(0L, this@toBuffer, dataOffset.toInt(), size)
+        }
+    }
 }
 
 actual class ImageBitmapHolder(val bufferedImage: BufferedImage) : DrawableHolder {
