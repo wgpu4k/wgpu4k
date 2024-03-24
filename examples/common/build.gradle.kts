@@ -12,6 +12,13 @@ kotlin {
 
 
 	sourceSets {
+
+		all {
+			languageSettings.optIn("kotlin.ExperimentalStdlibApi")
+			languageSettings.optIn("kotlin.ExperimentalUnsignedTypes")
+			languageSettings.optIn("kotlin.js.ExperimentalJsExport")
+		}
+
 		val commonMain by getting {
 			dependencies {
 				api(projects.wgpu4k)

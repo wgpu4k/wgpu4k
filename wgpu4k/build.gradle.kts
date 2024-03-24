@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.de.undercouch.gradle.tasks.download.Download
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon
 
 
 plugins {
@@ -15,6 +16,13 @@ kotlin {
 	jvm()
 
     sourceSets {
+
+		all {
+			languageSettings.optIn("kotlin.ExperimentalStdlibApi")
+			languageSettings.optIn("kotlin.ExperimentalUnsignedTypes")
+			languageSettings.optIn("kotlin.js.ExperimentalJsExport")
+		}
+
 		val jvmMain by getting {
 			dependencies {
 				api(libs.jna)
@@ -42,6 +50,12 @@ kotlin {
 
 		}
     }
+}
+
+tasks.withType<KotlinCompileCommon>().configureEach {
+	kotlinOptions {
+		freeCompilerArgs += "-Xexpect-actual-classes"
+	}
 }
 
 val resourcesDirectory = project.file("src").resolve("jvmMain").resolve("resources")
@@ -82,7 +96,6 @@ val fileToDownload = listOf(
 		dependsOn(unzipTask)
 	}
 }
-
 
 fun downloadInto(fileName: String, target: File): Task {
 	val url = "$baseUrl$fileName"
