@@ -332,7 +332,7 @@ external interface GPUProgrammableStage {
     var entryPoint: String?
         get() = definedExternally
         set(value) = definedExternally
-    var constants: Record<String, GPUPipelineConstantValue>?
+    var constants: Map<String, GPUPipelineConstantValue>?
         get() = definedExternally
         set(value) = definedExternally
 }

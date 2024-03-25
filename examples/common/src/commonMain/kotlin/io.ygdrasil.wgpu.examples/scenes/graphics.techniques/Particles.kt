@@ -5,7 +5,11 @@ import io.ygdrasil.wgpu.examples.Application
 import io.ygdrasil.wgpu.examples.autoClosableContext
 import io.ygdrasil.wgpu.examples.scenes.shader.compute.probabilityMap
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.particlesShader
+import korlibs.math.geom.Angle
+import korlibs.math.geom.Matrix4
+import kotlin.math.PI
 import kotlin.math.ceil
+import kotlin.random.Random
 
 
 class ParticlesScene : Application.Scene() {
@@ -23,22 +27,34 @@ class ParticlesScene : Application.Scene() {
 
     //Variables
     var simulate = true
-    var deltaTime = 0.04
+    var deltaTime = 0.04f
+    var rng = Random(0)
 
+    lateinit var simulationUBOBuffer: Buffer
+    lateinit var uniformBuffer: Buffer
     lateinit var renderPipeline: RenderPipeline
+    lateinit var projectionMatrix: Matrix4
+    lateinit var view: Matrix4
+    lateinit var renderPassDescriptor: RenderPassDescriptor
+    lateinit var computePipeline: ComputePipeline
+    lateinit var computeBindGroup: BindGroup
+    lateinit var uniformBindGroup: BindGroup
+    lateinit var particlesBuffer: Buffer
+    lateinit var quadVertexBuffer: Buffer
 
     override fun Application.initialiaze() = with(autoClosableContext) {
 
-        val particlesBuffer = device.createBuffer(
+        particlesBuffer = device.createBuffer(
             BufferDescriptor(
                 size = (numParticles * particleInstanceByteSize).toLong(),
                 usage = BufferUsage.vertex or BufferUsage.storage,
             )
         ).bind()
 
-        val renderPipeline = device.createRenderPipeline(
+        renderPipeline = device.createRenderPipeline(
             RenderPipelineDescriptor(
                 vertex = RenderPipelineDescriptor.VertexState(
+                    entryPoint = "vs_main",
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
                             code = particlesShader,
@@ -81,6 +97,7 @@ class ParticlesScene : Application.Scene() {
                     ),
                 ),
                 fragment = RenderPipelineDescriptor.FragmentState(
+                    entryPoint = "fs_main",
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
                             code = particlesShader,
@@ -130,14 +147,14 @@ class ParticlesScene : Application.Scene() {
                 3 * 4 + // up : vec3f
                 4 + // padding
                 0;
-        val uniformBuffer = device.createBuffer(
+        uniformBuffer = device.createBuffer(
             BufferDescriptor(
                 size = uniformBufferSize.toLong(),
                 usage = BufferUsage.uniform or BufferUsage.copydst,
             )
         ).bind();
 
-        val uniformBindGroup = device.createBindGroup(
+        uniformBindGroup = device.createBindGroup(
             BindGroupDescriptor(
                 layout = renderPipeline.getBindGroupLayout(0),
                 entries = arrayOf(
@@ -151,7 +168,7 @@ class ParticlesScene : Application.Scene() {
             )
         ).bind()
 
-        val renderPassDescriptor = RenderPassDescriptor(
+        renderPassDescriptor = RenderPassDescriptor(
             colorAttachments = arrayOf(
                 RenderPassDescriptor.ColorAttachment(
                     view = dummyTexture.createView().bind(), // Assigned later
@@ -172,7 +189,7 @@ class ParticlesScene : Application.Scene() {
         //////////////////////////////////////////////////////////////////////////////
         // Quad vertex buffer
         //////////////////////////////////////////////////////////////////////////////
-        val quadVertexBuffer = device.createBuffer(
+        quadVertexBuffer = device.createBuffer(
             BufferDescriptor(
                 size = 6 * 2 * 4, // 6x vec2f
                 usage = BufferUsage.vertex.value,
@@ -321,13 +338,13 @@ class ParticlesScene : Application.Scene() {
                 val passEncoder = commandEncoder.beginComputePass()
                 passEncoder.setPipeline(probabilityMapImportLevelPipeline)
                 passEncoder.setBindGroup(0, probabilityMapBindGroup)
-                passEncoder.dispatchWorkgroups(ceil(levelWidth / 64.0).toInt(), levelHeight, 0)
+                passEncoder.dispatchWorkgroups(ceil(levelWidth / 64.0).toInt(), levelHeight)
                 passEncoder.end()
             } else {
                 val passEncoder = commandEncoder.beginComputePass()
                 passEncoder.setPipeline(probabilityMapExportLevelPipeline);
                 passEncoder.setBindGroup(0, probabilityMapBindGroup);
-                passEncoder.dispatchWorkgroups(ceil(levelWidth / 64.0).toInt(), levelHeight, 0)
+                passEncoder.dispatchWorkgroups(ceil(levelWidth / 64.0).toInt(), levelHeight)
                 passEncoder.end()
             }
         }
@@ -340,150 +357,128 @@ class ParticlesScene : Application.Scene() {
                 3 * 4 + // padding
                 4 * 4 + // seed
                 0
-        val simulationUBOBuffer = device.createBuffer(
+        simulationUBOBuffer = device.createBuffer(
             BufferDescriptor(
                 size = simulationUBOBufferSize.toLong(),
                 usage = BufferUsage.uniform or BufferUsage.copydst,
             )
         )
-        /*
 
-val computePipeline = device.createComputePipeline({
-  layout= "auto",
-  compute= {
-    module= device.createShaderModule({
-      code= particleWGSL,
-    }),
-    entryPoint= "simulate",
-  },
-});
-val computeBindGroup = device.createBindGroup({
-  layout= computePipeline.getBindGroupLayout(0),
-  entries= arrayOf(
-    {
-      binding= 0,
-      resource= {
-        buffer= simulationUBOBuffer,
-      },
-    },
-    {
-      binding= 1,
-      resource= {
-        buffer= particlesBuffer,
-        offset= 0,
-        size= numParticles * particleInstanceByteSize,
-      },
-    },
-    {
-      binding= 2,
-      resource= texture.createView(),
-    },
-  ),
-});
+        computePipeline = device.createComputePipeline(
+            ComputePipelineDescriptor(
+                compute = ComputePipelineDescriptor.ProgrammableStage(
+                    module = device.createShaderModule(
+                        ShaderModuleDescriptor(
+                            code = particlesShader,
+                        )
+                    ),
+                    entryPoint = "simulate",
+                ),
+            )
+        )
 
-val aspect = canvas.width / canvas.height;
-val projection = mat4.perspective((2 * Math.PI) / 5, aspect, 1, 100.0);
-val view = mat4.create();
-val mvp = mat4.create();
-         */
+        computeBindGroup = device.createBindGroup(
+            BindGroupDescriptor(
+                layout = computePipeline.getBindGroupLayout(0),
+                entries = arrayOf(
+                    BindGroupDescriptor.BindGroupEntry(
+                        binding = 0,
+                        resource = BindGroupDescriptor.BufferBinding(
+                            buffer = simulationUBOBuffer,
+                        ),
+                    ),
+                    BindGroupDescriptor.BindGroupEntry(
+                        binding = 1,
+                        resource = BindGroupDescriptor.BufferBinding(
+                            buffer = particlesBuffer,
+                            offset = 0,
+                            size = (numParticles * particleInstanceByteSize).toLong(),
+                        ),
+                    ),
+                    BindGroupDescriptor.BindGroupEntry(
+                        binding = 2,
+                        resource = BindGroupDescriptor.TextureViewBinding(texture.createView()),
+                    ),
+                ),
+            )
+        )
+
+        val aspect = renderingContext.width / renderingContext.height.toDouble()
+        val fox = Angle.fromRadians((2 * PI) / 5)
+        projectionMatrix = Matrix4.perspective(fox, aspect, 1.0, 100.0)
+
+        view = Matrix4.IDENTITY
+            .translated(0, 0, -3)
+            .rotated(Angle.fromRadians(PI * -0.2), 1, 0, 0)
     }
 
     override fun Application.render() = autoClosableContext {
 
-        /*
         device.queue.writeBuffer(
-    simulationUBOBuffer,
-    0,
-    new Float32Array(arrayOf(
-      simulationParams.simulate ? simulationParams.deltaTime : 0.0,
-      0.0,
-      0.0,
-      0.0, // padding
-      Math.random() * 100,
-      Math.random() * 100, // seed.xy
-      1 + Math.random(),
-      1 + Math.random(), // seed.zw
-    ))
-  );
-
-  mat4.identity(view);
-  mat4.translate(view, vec3.fromValues(0, 0, -3), view);
-  mat4.rotateX(view, Math.PI * -0.2, view);
-  mat4.multiply(projection, view, mvp);
-
-  // prettier-ignore
-  device.queue.writeBuffer(
-    uniformBuffer,
-    0,
-    new Float32Array(arrayOf(
-      // modelViewProjectionMatrix
-      mvp[0], mvp[1], mvp[2], mvp[3],
-      mvp[4], mvp[5], mvp[6], mvp[7],
-      mvp[8], mvp[9], mvp[10], mvp[11],
-      mvp[12], mvp[13], mvp[14], mvp[15],
-
-      view[0], view[4], view[8], // right
-
-      0, // padding
-
-      view[1], view[5], view[9], // up
-
-      0, // padding
-    ))
-  );
-  val swapChainTexture = context.getCurrentTexture();
-  // prettier-ignore
-  renderPassDescriptor.colorAttachments[0].view = swapChainTexture.createView();
-
-  val commandEncoder = device.createCommandEncoder();
-  {
-    val passEncoder = commandEncoder.beginComputePass();
-    passEncoder.setPipeline(computePipeline);
-    passEncoder.setBindGroup(0, computeBindGroup);
-    passEncoder.dispatchWorkgroups(Math.ceil(numParticles / 64));
-    passEncoder.end();
-  }
-  {
-    val passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
-    passEncoder.setPipeline(renderPipeline);
-    passEncoder.setBindGroup(0, uniformBindGroup);
-    passEncoder.setVertexBuffer(0, particlesBuffer);
-    passEncoder.setVertexBuffer(1, quadVertexBuffer);
-    passEncoder.draw(6, numParticles, 0, 0);
-    passEncoder.end();
-  }
-
-  device.queue.submit(arrayOf(commandEncoder.finish()));
-         */
-
-        // Clear the canvas with a render pass
-        val encoder = device.createCommandEncoder()
-            .bind()
-
-        val texture = renderingContext.getCurrentTexture()
-            .bind()
-
-        val renderPassEncoder = encoder.beginRenderPass(
-            RenderPassDescriptor(
-                colorAttachments = arrayOf(
-                    RenderPassDescriptor.ColorAttachment(
-                        view = texture.createView().bind(),
-                        loadOp = LoadOp.clear,
-                        clearValue = arrayOf(0, 0, 0, 1.0),
-                        storeOp = StoreOp.store
-                    )
-                )
+            simulationUBOBuffer,
+            0,
+            floatArrayOf(
+                if (simulate) deltaTime else 0.0f,
+                0.0f,
+                0.0f,
+                0.0f, // padding
+                rng.nextFloat() * 100f,
+                rng.nextFloat() * 100f, // seed.xy
+                1f + rng.nextFloat(),
+                1f + rng.nextFloat(), // seed.zw
             )
-        ).bind()
+        )
 
-        renderPassEncoder.setPipeline(renderPipeline)
-        renderPassEncoder.draw(3)
-        renderPassEncoder.end()
+        val view = Matrix4.IDENTITY
+            .translated(.0, .0, -2.5)
+            .rotated(Angle.fromRadians(PI * -0.1), 1, 0, 0)
 
-        val commandBuffer = encoder.finish()
-            .bind()
+        val mvp = (projectionMatrix * view).copyToColumns()
 
-        device.queue.submit(arrayOf(commandBuffer))
+        device.queue.writeBuffer(
+            uniformBuffer,
+            0,
+            floatArrayOf(
+                // modelViewProjectionMatrix
+                mvp[0], mvp[1], mvp[2], mvp[3],
+                mvp[4], mvp[5], mvp[6], mvp[7],
+                mvp[8], mvp[9], mvp[10], mvp[11],
+                mvp[12], mvp[13], mvp[14], mvp[15],
+
+                view.v00, view.v01, view.v02, // right
+
+                0f, // padding
+
+                view.v10, view.v11, view.v12, // up
+
+                0f, // padding
+            )
+        )
+
+
+        val swapChainTexture = renderingContext.getCurrentTexture()
+
+        renderPassDescriptor.colorAttachments[0].view = swapChainTexture.createView()
+
+        val commandEncoder = device.createCommandEncoder()
+
+        commandEncoder.beginComputePass().apply {
+            setPipeline(computePipeline)
+            setBindGroup(0, computeBindGroup)
+            dispatchWorkgroups(ceil(numParticles / 64.0).toInt())
+            end()
+        }
+
+        commandEncoder.beginRenderPass(renderPassDescriptor).apply {
+            setPipeline(renderPipeline)
+            setBindGroup(0, uniformBindGroup)
+            setVertexBuffer(0, particlesBuffer)
+            setVertexBuffer(1, quadVertexBuffer)
+            draw(6, numParticles, 0, 0)
+            end()
+        }
+
+        device.queue.submit(arrayOf(commandEncoder.finish()))
 
         renderingContext.present()
     }

@@ -60,8 +60,20 @@ actual class Device(val handler: GPUDevice) : AutoCloseable {
 	}
 }
 
-private fun ComputePipelineDescriptor.convert(): GPUComputePipelineDescriptor {
+private fun ComputePipelineDescriptor.convert(): GPUComputePipelineDescriptor = object : GPUComputePipelineDescriptor {
+	override var compute: GPUProgrammableStage = this@convert.compute.convert()
+	override var layout: dynamic = this@convert.layout?.convert() ?: "auto"
+}
+
+private fun PipelineLayout.convert(): dynamic {
 	TODO()
+}
+
+private fun ComputePipelineDescriptor.ProgrammableStage.convert(): GPUProgrammableStage =
+	object : GPUProgrammableStage {
+		override var module: GPUShaderModule = this@convert.module.handler
+		override var entryPoint: String? = this@convert.entryPoint ?: undefined
+		override var constants: Map<String, GPUPipelineConstantValue>? = undefined//this@convert.constants
 }
 
 private fun SamplerDescriptor.convert(): GPUSamplerDescriptor = object : GPUSamplerDescriptor {
