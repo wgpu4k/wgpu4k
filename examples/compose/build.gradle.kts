@@ -43,7 +43,7 @@ compose.desktop {
 
 		nativeDistributions {
 			targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-			packageName = "compose"
+			packageName = "wgpu-X-compose"
 			packageVersion = "1.0.0"
 		}
 	}
