@@ -4,7 +4,6 @@ package io.ygdrasil.wgpu.examples
 
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.scenes.basic.*
-import io.ygdrasil.wgpu.examples.scenes.graphics.techniques.ParticlesScene
 import kotlin.js.JsExport
 
 @JsExport
@@ -96,7 +95,6 @@ abstract class Application(
 }
 
 val availableScenes = listOf(
-	ParticlesScene(),
 	HelloTriangleScene(),
 	HelloTriangleMSAAScene(),
 	HelloTriangleRotatingScene(),
@@ -106,4 +104,6 @@ val availableScenes = listOf(
 	FractalCubeScene(),
 	InstancedCubeScene(),
 	TexturedCubeScene(),
+	// Not working
+	//ParticlesScene(),
 )
