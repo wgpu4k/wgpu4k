@@ -14,4 +14,6 @@ interface AssetManager {
 	val cubemapNegy: ImageBitmapHolder
 	val cubemapPosz: ImageBitmapHolder
 	val cubemapNegz: ImageBitmapHolder
+
+	val webgpu4kotlin: ImageBitmapHolder
 }

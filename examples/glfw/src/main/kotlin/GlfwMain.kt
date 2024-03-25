@@ -86,7 +86,9 @@ suspend fun main() {
 		override val cubemapPosz: ImageBitmapHolder
 			get() = bitmapFrom("/assets/img/cubemap/posz.png")
 		override val cubemapNegz: ImageBitmapHolder
-			get() = bitmapFrom("/assets/img/cubemap/negz.jpg")
+			get() = bitmapFrom("/assets/img/cubemap/negz.png")
+		override val webgpu4kotlin: ImageBitmapHolder
+			get() = bitmapFrom("/assets/img/webgpu4kotlin.png")
 
 	}
 

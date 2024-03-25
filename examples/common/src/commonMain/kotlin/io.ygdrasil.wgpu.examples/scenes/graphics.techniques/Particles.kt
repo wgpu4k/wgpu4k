@@ -27,7 +27,7 @@ class ParticlesScene : Application.Scene() {
 
     //Variables
     var simulate = true
-    var deltaTime = 0.04f
+    var deltaTime = 0.05f
     var rng = Random(0)
 
     lateinit var simulationUBOBuffer: Buffer
@@ -210,15 +210,15 @@ class ParticlesScene : Application.Scene() {
         var textureHeight = 1
         var numMipLevels = 1
 
-        val imageBitmap = Di3d
+        val imageBitmap = webgpu4kotlin
 
         // Calculate number of mip levels required to generate the probability map
         while (
             textureWidth < imageBitmap.width ||
             textureHeight < imageBitmap.height
         ) {
-            textureWidth *= 2;
-            textureHeight *= 2;
+            textureWidth *= 2
+            textureHeight *= 2
             numMipLevels++
         }
         val texture = device.createTexture(
@@ -408,8 +408,8 @@ class ParticlesScene : Application.Scene() {
         projectionMatrix = Matrix4.perspective(fox, aspect, 1.0, 100.0)
 
         view = Matrix4.IDENTITY
-            .translated(0, 0, -3)
-            .rotated(Angle.fromRadians(PI * -0.2), 1, 0, 0)
+            .translated(0.0, 0.0, -2.5)
+            .rotated(Angle.fromRadians(PI * -0.1), 1, 0, 0)
     }
 
     override fun Application.render() = autoClosableContext {
@@ -428,10 +428,6 @@ class ParticlesScene : Application.Scene() {
                 1f + rng.nextFloat(), // seed.zw
             )
         )
-
-        val view = Matrix4.IDENTITY
-            .translated(.0, .0, -2.5)
-            .rotated(Angle.fromRadians(PI * -0.1), 1, 0, 0)
 
         val mvp = (projectionMatrix * view).copyToColumns()
 

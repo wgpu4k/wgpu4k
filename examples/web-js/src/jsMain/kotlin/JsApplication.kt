@@ -81,6 +81,7 @@ suspend fun getAssetManager(baseImagePaths: String): AssetManager {
 	val cubemapNegy = getImage("${baseImagePaths}cubemap/negy.jpg")
 	val cubemapPosz = getImage("${baseImagePaths}cubemap/posz.jpg")
 	val cubemapNegz = getImage("${baseImagePaths}cubemap/negz.jpg")
+	val webgpu4kotlin = getImage("${baseImagePaths}webgpu4kotlin.png")
 
 	return object : AssetManager {
 		override val Di3d: ImageBitmapHolder = Di3d
@@ -90,6 +91,7 @@ suspend fun getAssetManager(baseImagePaths: String): AssetManager {
 		override val cubemapNegy: ImageBitmapHolder = cubemapNegy
 		override val cubemapPosz: ImageBitmapHolder = cubemapPosz
 		override val cubemapNegz: ImageBitmapHolder = cubemapNegz
+		override val webgpu4kotlin: ImageBitmapHolder = webgpu4kotlin
 	}
 }
 
