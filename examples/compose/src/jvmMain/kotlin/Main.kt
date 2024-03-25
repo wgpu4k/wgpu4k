@@ -149,6 +149,8 @@ suspend fun runApp(window: ComposeWindow) {
 				get() = TODO("Not yet implemented")
 			override val cubemapNegz: ImageBitmapHolder
 				get() = TODO("Not yet implemented")
+			override val webgpu4kotlin: ImageBitmapHolder
+				get() = TODO("Not yet implemented")
 
 		}
 
