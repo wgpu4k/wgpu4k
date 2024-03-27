@@ -23,6 +23,16 @@ kotlin {
 			languageSettings.optIn("kotlin.js.ExperimentalJsExport")
 		}
 
+		val kotlinWrappersVersion = "1.0.0-pre.721"
+
+		val jsMain by getting {
+			dependencies {
+				implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:$kotlinWrappersVersion"))
+				implementation("org.jetbrains.kotlin-wrappers:kotlin-js")
+				implementation("org.jetbrains.kotlin-wrappers:kotlin-web")
+			}
+		}
+
 		val jvmMain by getting {
 			dependencies {
 				api(libs.jna)

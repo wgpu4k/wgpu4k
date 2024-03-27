@@ -3,12 +3,15 @@
 package io.ygdrasil.wgpu.internal.js
 
 import io.ygdrasil.wgpu.*
+import js.collections.ReadonlySet
+import js.objects.Record
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.ArrayBufferView
 import org.khronos.webgl.Uint32Array
 import org.w3c.dom.EventInit
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventTarget
+import web.errors.DOMException
 import kotlin.js.Promise
 
 external interface GPUOrigin2DDictStrict : GPUOrigin2DDict
