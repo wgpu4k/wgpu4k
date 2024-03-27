@@ -8,6 +8,7 @@ plugins {
 }
 
 kotlin {
+
 	js {
 		binaries.executable()
 		browser()
@@ -134,3 +135,4 @@ fun unzipTask(
 }.get()
 
 data class NativeLibrary(val remoteFile: String, val targetFile: File, val zipFileName: String)
+

@@ -3569,7 +3569,7 @@ public open class WGPURenderPassDescriptor : Structure {
 }
 
 @Structure.FieldOrder(
-	"nextInChain", "module", "entryPoint", "constantCount", "constants",
+	"nextInChain", "module", "entryPoint", "constantCount", "constantsPtr",
 	"bufferCount", "buffersPtr"
 )
 public open class WGPUVertexState : Structure {
@@ -3596,14 +3596,16 @@ public open class WGPUVertexState : Structure {
 	 * mapped from size_t
 	 */
 	@JvmField
-	public var constantCount: NativeLong = com.sun.jna.NativeLong(0)
+	public var constantCount: NativeLong? = null
 
 	/**
 	 * mapped from (typedef Optional[const WGPUConstantEntry] =
 	 * Declared([a8(nextInChain):[*:b1]a8(key):[*:b1]d8(value)](WGPUConstantEntry)))*
 	 */
 	@JvmField
-	public var constants: Array<WGPUConstantEntry.ByReference>? = arrayOf(WGPUConstantEntry.ByReference())
+	public var constantsPtr: Pointer? = null
+
+	public var constants: Array<WGPUConstantEntry.ByReference>? = null
 
 	/**
 	 * mapped from size_t
@@ -3624,6 +3626,9 @@ public open class WGPUVertexState : Structure {
 		buffers?.forEach { it.write() }
 		buffersPtr = buffers?.firstOrNull()?.pointer
 		bufferCount = buffers?.size?.toNativeLong()
+		constants?.forEach { it.write() }
+		constantsPtr = constants?.firstOrNull()?.pointer
+		constantCount = constants?.size?.toNativeLong()
 		super.write()
 	}
 
