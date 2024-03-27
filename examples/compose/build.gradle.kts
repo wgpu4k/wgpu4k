@@ -57,7 +57,7 @@ dependencies {
 
 compose.desktop {
 	application {
-		mainClass = "GlfwMainKT"
+        mainClass = "MainKt"
 
 		jvmArgs += "--add-opens=java.base/java.lang=ALL-UNNAMED"
 

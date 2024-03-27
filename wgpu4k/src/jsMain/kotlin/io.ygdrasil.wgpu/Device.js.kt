@@ -199,16 +199,16 @@ private fun RenderPipelineDescriptor.DepthStencilState.StencilFaceState.convert(
 
 private fun RenderPipelineDescriptor.MultisampleState.convert(): GPUMultisampleState =
 	object : GPUMultisampleState {
-		override var count: dynamic = this@convert.count ?: undefined
-		override var mask: dynamic = this@convert.mask ?: undefined
-		override var alphaToCoverageEnabled: dynamic = this@convert.alphaToCoverageEnabled ?: undefined
+		override var count: dynamic = this@convert.count
+		override var mask: dynamic = this@convert.mask
+		override var alphaToCoverageEnabled: dynamic = this@convert.alphaToCoverageEnabled
 	}
 
 private fun RenderPipelineDescriptor.FragmentState.convert(): GPUFragmentState =
 	object : GPUFragmentState {
 		override var targets: Array<GPUColorTargetState?> = this@convert.targets.map { it?.convert() }.toTypedArray()
 		override var module: GPUShaderModule = this@convert.module.handler
-		override var entryPoint: String? = this@convert.entryPoint ?: undefined
+		override var entryPoint: String? = this@convert.entryPoint
 		// TODO not sure how to map this
 		//override var constants: Record<String, GPUPipelineConstantValue>? = TODO("Not yet implemented")
 	}
@@ -216,8 +216,8 @@ private fun RenderPipelineDescriptor.FragmentState.convert(): GPUFragmentState =
 private fun RenderPipelineDescriptor.FragmentState.ColorTargetState.convert(): GPUColorTargetState =
 	object : GPUColorTargetState {
 		override var format: String = this@convert.format.name
-		override var blend: GPUBlendState? = this@convert.blend?.convert() ?: undefined
-		override var writeMask: GPUColorWriteFlags? = this@convert.writeMask?.value ?: undefined
+		override var blend: GPUBlendState? = this@convert.blend?.convert()
+		override var writeMask: GPUColorWriteFlags? = this@convert.writeMask?.value
 	}
 
 private fun RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.convert(): GPUBlendState =

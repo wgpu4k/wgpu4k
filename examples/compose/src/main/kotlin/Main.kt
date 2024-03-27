@@ -90,7 +90,7 @@ fun main() {
 
 	application {
 		val windowState = rememberWindowState(
-			width = 775.dp,
+			width = 900.dp,
 			height = 1500.dp,
 			position = WindowPosition(0.dp, 0.dp)
 		)
