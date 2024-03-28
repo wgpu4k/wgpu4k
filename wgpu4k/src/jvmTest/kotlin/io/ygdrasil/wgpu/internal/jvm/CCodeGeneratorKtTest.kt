@@ -40,6 +40,7 @@ class CCodeGeneratorKtTest : FreeSpec({
     "log native" {
         shouldLogNative = true
         logNative { "createRenderPipelineDescriptor" to listOf(descriptor, 1) }
+        // TODO find how to test standard out
     }
 
     "log" {
