@@ -9,34 +9,41 @@ import io.ygdrasil.wgpu.TextureFormat
 
 class CCodeGeneratorKtTest : FreeSpec({
 
+    val descriptor = WGPURenderPipelineDescriptor().apply {
+        label = "render_pipeline"
+        layout = WGPUPipelineLayout(Pointer(1))
+
+        vertex = WGPUVertexState()
+        vertex?.entryPoint = "vs_main"
+        vertex?.module = WGPUShaderModuleImpl(Pointer(1))
+
+        primitive = WGPUPrimitiveState()
+        primitive?.topology = PrimitiveTopology.trianglelist.value
+
+        multisample = WGPUMultisampleState()
+        multisample?.count = 1
+        multisample?.mask = 0xFFFFFFF
+
+        fragment = WGPUFragmentState.ByReference()
+        fragment?.module = WGPUShaderModuleImpl(Pointer(1))
+        fragment?.entryPoint = "fs_main"
+        fragment?.targets = arrayOf(
+            WGPUColorTargetState.ByReference().apply {
+                format = TextureFormat.depth24plus.value
+                writeMask = ColorWriteMask.all.value
+            }
+        )
+
+        write()
+    }
+
+    "log native" {
+        shouldLogNative = true
+        logNative { "createRenderPipelineDescriptor" to listOf(descriptor, 1) }
+    }
+
     "log" {
-        WGPURenderPipelineDescriptor().apply {
-            label = "render_pipeline"
-            layout = WGPUPipelineLayout(Pointer(1))
-
-            vertex = WGPUVertexState()
-            vertex?.entryPoint = "vs_main"
-            vertex?.module = WGPUShaderModuleImpl(Pointer(1))
-
-            primitive = WGPUPrimitiveState()
-            primitive?.topology = PrimitiveTopology.trianglelist.value
-
-            multisample = WGPUMultisampleState()
-            multisample?.count = 1
-            multisample?.mask = 0xFFFFFFF
-
-            fragment = WGPUFragmentState.ByReference()
-            fragment?.module = WGPUShaderModuleImpl(Pointer(1))
-            fragment?.entryPoint = "fs_main"
-            fragment?.targets = arrayOf(
-                WGPUColorTargetState.ByReference().apply {
-                    format = TextureFormat.depth24plus.value
-                    writeMask = ColorWriteMask.all.value
-                }
-            )
-
-            write()
-        }.log() shouldBe """
+        descriptor.log() shouldBe """
              |&(const WGPURenderPipelineDescriptor){
              |    .nextInChain = NULL,
              |    .label = "render_pipeline",

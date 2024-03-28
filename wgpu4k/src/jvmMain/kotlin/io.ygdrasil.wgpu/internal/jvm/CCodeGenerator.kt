@@ -6,8 +6,37 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.superclasses
 
+var shouldLogNative = false
 
-fun Structure.log(indentation: UInt = 0u, isPointer: Boolean = true): String {
+internal fun logNative(block: () -> Pair<String, List<Any>>) {
+    if (shouldLogNative) {
+        val log = StringBuilder()
+        val (functionName, arguments) = block()
+
+        arguments.forEachIndexed { index, any ->
+            (any as? Structure)?.let { structure ->
+                log.append((structure::class as KClass<Any>).getName())
+                log.append(" $functionName$index = ")
+                log.append(structure.log())
+                log.append(";\n")
+            }
+        }
+        log.append("$functionName(")
+        arguments.mapIndexed { index, any ->
+            if (any is Structure) {
+                "$functionName$index"
+            } else {
+                any.toString()
+            }
+        }.joinToString(" ,")
+            .let(log::append)
+        log.append(");")
+        println(log)
+    }
+}
+
+
+internal fun Structure.log(indentation: UInt = 0u, isPointer: Boolean = true): String {
 
     val fieldOrder = (this::class as KClass<Any>).getFieldOrder()
     val memberProperties = (this::class as KClass<Any>).memberProperties
