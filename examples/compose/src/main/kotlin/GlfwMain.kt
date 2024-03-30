@@ -20,6 +20,7 @@ import org.rococoa.Rococoa
 import javax.imageio.ImageIO
 import kotlin.system.exitProcess
 
+var oneFrame = false
 
 val callback = object : WGPULogCallback {
     override fun invoke(level: Int, message: String, param3: Pointer?) {
@@ -28,8 +29,9 @@ val callback = object : WGPULogCallback {
 }
 
 suspend fun main() {
+    oneFrame = true
     shouldLogNative = true
-    wgpuSetLogLevel(1)
+    wgpuSetLogLevel(0)
     wgpuSetLogCallback(callback, null)
 
     var width = 640
@@ -99,7 +101,9 @@ suspend fun main() {
         override fun run() {
             glfwDispatcher.dispatch(Dispatchers.Main) {
                 renderFrame()
-                run()
+                if (!oneFrame) {
+                    run()
+                }
             }
         }
 
