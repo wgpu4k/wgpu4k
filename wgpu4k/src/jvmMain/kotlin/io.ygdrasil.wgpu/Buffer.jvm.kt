@@ -14,10 +14,12 @@ actual class Buffer(internal val handler: WGPUBuffer) : AutoCloseable {
 	}
 
 	actual fun unmap() {
+		logNative { "wgpuBufferUnmap" to listOf() }
 		wgpuBufferUnmap(handler)
 	}
 
 	actual fun map(buffer: FloatArray) {
+		logNative { "wgpuBufferGetMappedRange" to  listOf(NativeLong(0), (buffer.size * Float.SIZE_BYTES).toNativeLong()) }
 		(wgpuBufferGetMappedRange(handler, NativeLong(0), (buffer.size * Float.SIZE_BYTES).toNativeLong())
 			?: error("fail to get mapped range"))
 			.write(0L, buffer, 0, buffer.size)

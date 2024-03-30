@@ -8,7 +8,7 @@ import kotlin.reflect.full.superclasses
 
 var shouldLogNative = false
 
-internal fun logNative(block: () -> Pair<String, List<Any>>) {
+internal fun logNative(block: () -> Pair<String, List<Any?>>) {
     if (shouldLogNative) {
         val log = StringBuilder()
         val (functionName, arguments) = block()
@@ -26,7 +26,7 @@ internal fun logNative(block: () -> Pair<String, List<Any>>) {
             if (any is Structure) {
                 "$functionName$index"
             } else {
-                any.toString()
+                any?.toString() ?: "NULL"
             }
         }.joinToString(" ,")
             .let(log::append)

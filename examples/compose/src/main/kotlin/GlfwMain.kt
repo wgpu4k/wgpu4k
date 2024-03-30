@@ -7,10 +7,7 @@ import io.ygdrasil.wgpu.RenderingContext
 import io.ygdrasil.wgpu.WGPU
 import io.ygdrasil.wgpu.WGPU.Companion.createInstance
 import io.ygdrasil.wgpu.examples.*
-import io.ygdrasil.wgpu.internal.jvm.WGPULogCallback
-import io.ygdrasil.wgpu.internal.jvm.WGPUSurface
-import io.ygdrasil.wgpu.internal.jvm.wgpuSetLogCallback
-import io.ygdrasil.wgpu.internal.jvm.wgpuSetLogLevel
+import io.ygdrasil.wgpu.internal.jvm.*
 import kotlinx.coroutines.Dispatchers
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
@@ -31,6 +28,7 @@ val callback = object : WGPULogCallback {
 }
 
 suspend fun main() {
+    shouldLogNative = true
     wgpuSetLogLevel(1)
     wgpuSetLogCallback(callback, null)
 
