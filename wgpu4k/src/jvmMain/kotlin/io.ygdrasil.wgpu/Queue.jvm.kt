@@ -33,6 +33,7 @@ actual class Queue(internal val handler: WGPUQueue) {
         dataOffset: GPUSize64,
         size: GPUSize64
     ) {
+        logNative { "wgpuQueueWriteBuffer" to listOf(buffer.handler, bufferOffset, data.toBuffer(dataOffset), (size * Float.SIZE_BYTES).toNativeLong()) }
         wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
