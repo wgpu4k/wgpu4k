@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage
 actual class Queue(internal val handler: WGPUQueue) {
 
     actual fun submit(commandsBuffer: Array<CommandBuffer>) {
+        logNative { "wgpuQueueSubmit" to listOf(NativeLong(commandsBuffer.size.toLong()), commandsBuffer.map { it.handler }.toTypedArray()) }
         if (commandsBuffer.isNotEmpty()) {
             wgpuQueueSubmit(
                 handler,
