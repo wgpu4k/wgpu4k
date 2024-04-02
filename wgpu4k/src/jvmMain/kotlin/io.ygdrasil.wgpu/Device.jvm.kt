@@ -30,6 +30,7 @@ actual class Device(internal val handler: WGPUDeviceImpl) : AutoCloseable {
 
     actual fun createRenderPipeline(descriptor: RenderPipelineDescriptor): RenderPipeline =
             renderPipelineDescriptorMapper.map<Any, WGPURenderPipelineDescriptor>(descriptor)
+                    .also { it.write() }
                     .also { logNative { "wgpuDeviceCreateRenderPipeline" to listOf(it) } }
                     .let { wgpuDeviceCreateRenderPipeline(handler, it) }
                     ?.let(::RenderPipeline) ?: error("fail to create render pipeline")

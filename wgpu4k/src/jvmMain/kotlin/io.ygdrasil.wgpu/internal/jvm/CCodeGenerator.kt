@@ -15,8 +15,9 @@ internal fun logNative(block: () -> Pair<String, List<Any?>>) {
 
         arguments.forEachIndexed { index, any ->
             (any as? Structure)?.let { structure ->
+                log.append("const")
                 log.append((structure::class as KClass<Any>).getName())
-                log.append(" $functionName$index = ")
+                log.append(" *$functionName$index = ")
                 log.append(structure.log())
                 log.append(";\n")
             }
@@ -46,7 +47,10 @@ internal fun Structure.log(indentation: UInt = 0u, isPointer: Boolean = true): S
     log.append(if (isPointer) "&" else "")
     log.append("(const ${(this::class as KClass<Any>).getName()}){\n")
 
-    fieldOrder.value.forEach { name ->
+    val fieldOrderValues = fieldOrder.value
+            .flatMap { if (it.endsWith("Ptr")) listOf(it, it.removeSuffix("Ptr")) else listOf(it) }
+
+    fieldOrderValues.forEach { name ->
         val property = memberProperties.find { it.name == name } ?: error("fail to find property")
         val value = property.get(this)
 
