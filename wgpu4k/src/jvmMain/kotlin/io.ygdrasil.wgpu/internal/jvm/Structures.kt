@@ -3657,7 +3657,7 @@ open class WGPUVertexState : Structure {
 
 @Structure.FieldOrder(
 	"nextInChain", "module", "entryPoint", "constantCount", "constants",
-	"targetCount", "targets"
+	"targetCount", "targetsPtr"
 )
 open class WGPUFragmentState : Structure {
 	/**
@@ -3683,7 +3683,7 @@ open class WGPUFragmentState : Structure {
 	 * mapped from size_t
 	 */
 	@JvmField
-	var constantCount: NativeLong = NativeLong(0)
+	var constantCount: NativeLong? = null
 
 	/**
 	 * mapped from (typedef Optional[const WGPUConstantEntry] =
@@ -3703,9 +3703,13 @@ open class WGPUFragmentState : Structure {
 	 * Declared([a8(nextInChain):[*:b1]i4(format)x4a8(blend):[*:b1]i4(writeMask)x4](WGPUColorTargetState)))*
 	 */
 	@JvmField
+	var targetsPtr: Pointer? = null
+
 	var targets: Array<WGPUColorTargetState.ByReference>? = null
 
 	override fun write() {
+		targets?.forEach { it.write() }
+		targetsPtr = targets?.firstOrNull()?.pointer
 		targetCount = targets?.size?.toNativeLong()
 		super.write()
 	}
