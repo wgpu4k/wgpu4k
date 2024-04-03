@@ -52,6 +52,7 @@ actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : AutoClos
 
 
     override fun close() {
+        logNative { "wgpuCommandEncoderRelease" to listOf(handler) }
         wgpuCommandEncoderRelease(handler)
     }
 

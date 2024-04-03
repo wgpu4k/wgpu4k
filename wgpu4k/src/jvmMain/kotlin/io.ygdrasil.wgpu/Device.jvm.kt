@@ -64,6 +64,7 @@ actual class Device(internal val handler: WGPUDeviceImpl) : AutoCloseable {
     }
 
     override fun close() {
+        logNative { "wgpuDeviceRelease" to listOf(handler) }
         wgpuDeviceRelease(handler)
     }
 

@@ -1,6 +1,7 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.jvm.WGPUComputePassEncoder
+import io.ygdrasil.wgpu.internal.jvm.logNative
 import io.ygdrasil.wgpu.internal.jvm.wgpuComputePassEncoderEnd
 import io.ygdrasil.wgpu.internal.jvm.wgpuComputePassEncoderRelease
 
@@ -37,10 +38,12 @@ actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : 
     }
 
     actual fun end() {
+        logNative { "wgpuComputePassEncoderEnd" to listOf(handler) }
         wgpuComputePassEncoderEnd(handler)
     }
 
     override fun close() {
+        logNative { "wgpuComputePassEncoderRelease" to listOf(handler) }
         wgpuComputePassEncoderRelease(handler)
     }
 }

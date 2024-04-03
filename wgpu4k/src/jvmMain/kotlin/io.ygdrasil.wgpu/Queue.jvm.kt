@@ -11,7 +11,13 @@ import java.awt.image.BufferedImage
 actual class Queue(internal val handler: WGPUQueue) {
 
     actual fun submit(commandsBuffer: Array<CommandBuffer>) {
-        logNative { "wgpuQueueSubmit" to listOf(NativeLong(commandsBuffer.size.toLong()), commandsBuffer.map { it.handler }.toTypedArray()) }
+        logNative {
+            "wgpuQueueSubmit" to listOf(
+                handler,
+                NativeLong(commandsBuffer.size.toLong()),
+                commandsBuffer.map { it.handler }.toTypedArray()
+            )
+        }
         if (commandsBuffer.isNotEmpty()) {
             wgpuQueueSubmit(
                 handler,
@@ -34,7 +40,15 @@ actual class Queue(internal val handler: WGPUQueue) {
         dataOffset: GPUSize64,
         size: GPUSize64
     ) {
-        logNative { "wgpuQueueWriteBuffer" to listOf(buffer.handler, bufferOffset, data.toBuffer(dataOffset), (size * Float.SIZE_BYTES).toNativeLong()) }
+        logNative {
+            "wgpuQueueWriteBuffer" to listOf(
+                handler,
+                buffer.handler,
+                bufferOffset,
+                data.toBuffer(dataOffset),
+                (size * Float.SIZE_BYTES).toNativeLong()
+            )
+        }
         wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
@@ -51,6 +65,15 @@ actual class Queue(internal val handler: WGPUQueue) {
         dataOffset: GPUSize64,
         size: GPUSize64
     ) {
+        logNative {
+            "wgpuQueueWriteBuffer" to listOf(
+                handler,
+                buffer.handler,
+                bufferOffset,
+                data.toBuffer(dataOffset),
+                (size * Float.SIZE_BYTES).toNativeLong()
+            )
+        }
         wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
