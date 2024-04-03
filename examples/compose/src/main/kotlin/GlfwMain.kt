@@ -24,7 +24,7 @@ var oneFrame = false
 
 val callback = object : WGPULogCallback {
     override fun invoke(level: Int, message: String, param3: Pointer?) {
-        println("{$level} $message")
+        println("LOG {$level} $message")
     }
 }
 

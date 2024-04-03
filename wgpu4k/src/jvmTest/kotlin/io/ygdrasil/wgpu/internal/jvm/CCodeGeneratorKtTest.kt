@@ -56,8 +56,10 @@ class CCodeGeneratorKtTest : FreeSpec({
              |            .entryPoint = "vs_main",
              |            .constantCount = NULL,
              |            .constantsPtr = NULL,
+             |            .constants = NULL,
              |            .bufferCount = NULL,
              |            .buffersPtr = NULL,
+             |            .buffers = NULL,
              |        },
              |    .primitive = 
              |        (const WGPUPrimitiveState){

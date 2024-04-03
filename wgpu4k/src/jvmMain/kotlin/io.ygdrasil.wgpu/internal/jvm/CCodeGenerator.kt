@@ -8,6 +8,7 @@ import kotlin.reflect.full.superclasses
 
 var shouldLogNative = false
 
+
 internal fun logNative(block: () -> Pair<String, List<Any?>>) {
     if (shouldLogNative) {
         val log = StringBuilder()
@@ -37,6 +38,9 @@ internal fun logNative(block: () -> Pair<String, List<Any?>>) {
 }
 
 
+private val reference: MutableMap<Any, String> = mutableMapOf()
+private val countInstances: MutableMap<KClass<out Any>, Int> = mutableMapOf()
+
 internal fun Structure.log(indentation: UInt = 0u, isPointer: Boolean = true): String {
 
     val fieldOrder = (this::class as KClass<Any>).getFieldOrder()
@@ -48,7 +52,7 @@ internal fun Structure.log(indentation: UInt = 0u, isPointer: Boolean = true): S
     log.append("(const ${(this::class as KClass<Any>).getName()}){\n")
 
     val fieldOrderValues = fieldOrder.value
-            .flatMap { if (it.endsWith("Ptr")) listOf(it, it.removeSuffix("Ptr")) else listOf(it) }
+        .flatMap { if (it.endsWith("Ptr")) listOf(it, it.removeSuffix("Ptr")) else listOf(it) }
 
     fieldOrderValues.forEach { name ->
         val property = memberProperties.find { it.name == name } ?: error("fail to find property")
@@ -77,8 +81,11 @@ internal fun Structure.log(indentation: UInt = 0u, isPointer: Boolean = true): S
                 log.append("}")
             } else if (value is String) {
                 log.append("\"${value}\"")
-            } else {
+            } else if (value is Number) {
                 log.append("${value}")
+            } else {
+                log.append(findInstanceOf(value))
+
             }
             log.append(",\n")
         }
@@ -87,6 +94,13 @@ internal fun Structure.log(indentation: UInt = 0u, isPointer: Boolean = true): S
     log.addIndentation(indentation)
     log.append("}")
     return log.toString()
+}
+
+fun findInstanceOf(value: Any) = reference.getOrPut(value) {
+    val simpleName = value::class.simpleName ?: error("fail to get name")
+    val index = countInstances.getOrElse(value::class) { 0 }
+    countInstances[value::class] = index + 1
+    "$simpleName${countInstances[value::class]}"
 }
 
 private fun KClass<*>.getName(): String? {

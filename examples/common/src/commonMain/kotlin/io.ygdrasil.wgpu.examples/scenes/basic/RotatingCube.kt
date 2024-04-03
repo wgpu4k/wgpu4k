@@ -36,7 +36,7 @@ class RotatingCubeScene : Application.Scene(), AutoCloseable {
 				usage = BufferUsage.vertex.value,
 				mappedAtCreation = true
 			)
-		)
+		).bind()
 
 		// Util method to use getMappedRange
 		verticesBuffer.map(cubeVertexArray)
@@ -124,7 +124,7 @@ class RotatingCubeScene : Application.Scene(), AutoCloseable {
 					)
 				)
 			)
-		)
+		).bind()
 
 		renderPassDescriptor = RenderPassDescriptor(
 			colorAttachments = arrayOf(
