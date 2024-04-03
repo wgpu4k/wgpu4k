@@ -55,6 +55,7 @@ actual class Device(internal val handler: WGPUDeviceImpl) : AutoCloseable {
     actual fun createBindGroup(descriptor: BindGroupDescriptor): BindGroup =
         bindGroupDescriptorMapper.map<Any, WGPUBindGroupDescriptor>(descriptor)
             .also { logUnitNative { "wgpuDeviceCreateBindGroup" to listOf(handler, it) } }
+            .also { it.write() }
             .let { wgpuDeviceCreateBindGroup(handler, it) }
             ?.let(::BindGroup) ?: error("fail to create bind group")
 
