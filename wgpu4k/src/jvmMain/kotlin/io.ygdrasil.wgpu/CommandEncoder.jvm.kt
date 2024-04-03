@@ -7,14 +7,14 @@ import io.ygdrasil.wgpu.mapper.renderPassDescriptorMapper
 actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : AutoCloseable {
     actual fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder =
             renderPassDescriptorMapper.map<RenderPassDescriptor, WGPURenderPassDescriptor>(descriptor)
-                    .also { logNative { "wgpuCommandEncoderBeginRenderPass" to listOf(it) } }
+                .also { logUnitNative { "wgpuCommandEncoderBeginRenderPass" to listOf(it) } }
                     .let { wgpuCommandEncoderBeginRenderPass(handler, it) }
                     ?.let { RenderPassEncoder(it) }
                     ?: error("fail to get RenderPassEncoder")
 
     actual fun finish(): CommandBuffer =
             WGPUCommandBufferDescriptor()
-                    .also { logNative { "wgpuCommandEncoderFinish" to listOf(it) } }
+                .also { logUnitNative { "wgpuCommandEncoderFinish" to listOf(it) } }
                     .let { wgpuCommandEncoderFinish(handler, it) }
                     ?.let { CommandBuffer(it) }
                     ?: error("fail to get CommandBuffer")
@@ -52,7 +52,7 @@ actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : AutoClos
 
 
     override fun close() {
-        logNative { "wgpuCommandEncoderRelease" to listOf(handler) }
+        logUnitNative { "wgpuCommandEncoderRelease" to listOf(handler) }
         wgpuCommandEncoderRelease(handler)
     }
 

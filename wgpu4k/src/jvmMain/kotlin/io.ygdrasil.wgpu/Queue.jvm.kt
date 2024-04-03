@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage
 actual class Queue(internal val handler: WGPUQueue) {
 
     actual fun submit(commandsBuffer: Array<CommandBuffer>) {
-        logNative {
+        logUnitNative {
             "wgpuQueueSubmit" to listOf(
                 handler,
                 NativeLong(commandsBuffer.size.toLong()),
@@ -40,7 +40,7 @@ actual class Queue(internal val handler: WGPUQueue) {
         dataOffset: GPUSize64,
         size: GPUSize64
     ) {
-        logNative {
+        logUnitNative {
             "wgpuQueueWriteBuffer" to listOf(
                 handler,
                 buffer.handler,
@@ -65,7 +65,7 @@ actual class Queue(internal val handler: WGPUQueue) {
         dataOffset: GPUSize64,
         size: GPUSize64
     ) {
-        logNative {
+        logUnitNative {
             "wgpuQueueWriteBuffer" to listOf(
                 handler,
                 buffer.handler,

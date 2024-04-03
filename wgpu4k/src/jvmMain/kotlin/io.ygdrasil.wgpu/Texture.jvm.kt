@@ -35,13 +35,13 @@ actual class Texture(internal val handler: WGPUTexture) : AutoCloseable {
 
     actual fun createView(descriptor: TextureViewDescriptor?): TextureView =
         descriptor?.let { textureViewDescriptorMapper.map<Any, WGPUTextureViewDescriptor>(it) }
-            .also { logNative { "wgpuTextureCreateView" to listOf(handler, it) } }
+            .also { logUnitNative { "wgpuTextureCreateView" to listOf(handler, it) } }
             .let { wgpuTextureCreateView(handler, it) }
             ?.let { TextureView(it) }
             ?: error("fail to create texture view")
 
     override fun close() {
-        logNative { "wgpuTextureRelease" to listOf(handler) }
+        logUnitNative { "wgpuTextureRelease" to listOf(handler) }
         wgpuTextureRelease(handler)
     }
 }

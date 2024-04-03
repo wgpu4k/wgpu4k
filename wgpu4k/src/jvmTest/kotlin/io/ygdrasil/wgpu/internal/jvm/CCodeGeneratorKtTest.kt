@@ -39,7 +39,13 @@ class CCodeGeneratorKtTest : FreeSpec({
 
     "log native" {
         shouldLogNative = true
-        logNative { "createRenderPipelineDescriptor" to listOf(descriptor, 1) }
+        logNative {
+            Triple(
+                "createRenderPipelineDescriptor",
+                listOf(descriptor, 1),
+                WGPURenderPipelineDescriptor::class
+            )
+        }
         // TODO find how to test standard out
     }
 

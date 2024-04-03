@@ -5,7 +5,7 @@ import io.ygdrasil.wgpu.internal.jvm.*
 
 actual class ShaderModule(internal val handler: WGPUShaderModule) : AutoCloseable {
 	override fun close() {
-		logNative { "wgpuShaderModuleRelease" to listOf(handler) }
+		logUnitNative { "wgpuShaderModuleRelease" to listOf(handler) }
 		wgpuShaderModuleRelease(handler)
 	}
 }

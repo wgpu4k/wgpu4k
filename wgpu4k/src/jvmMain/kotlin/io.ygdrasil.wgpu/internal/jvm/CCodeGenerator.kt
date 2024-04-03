@@ -10,10 +10,16 @@ import kotlin.reflect.full.superclasses
 
 var shouldLogNative = false
 
-internal fun logNative(block: () -> Pair<String, List<Any?>>) {
+internal fun registerNative(block: () -> Any?) {
+    if (shouldLogNative) {
+        block()?.let { findInstanceOf(it) }
+    }
+}
+
+internal fun logNative(block: () -> Triple<String, List<Any?>, KClass<out Any>?>) {
     if (shouldLogNative) {
         val log = StringBuilder()
-        val (functionName, arguments) = block()
+        val (functionName, arguments, returnType) = block()
 
         arguments.forEachIndexed { index, any ->
             (any as? Structure)?.let { structure ->
@@ -24,6 +30,11 @@ internal fun logNative(block: () -> Pair<String, List<Any?>>) {
                 log.append(";\n")
             }
         }
+
+        if (returnType != null) {
+            log.append("${returnType.simpleName} ${returnType.assignableName}${countInstances.getOrElse(returnType) { 0 }} = ")
+        }
+
         log.append("$functionName(")
         arguments.mapIndexed { index, any ->
             if (any is Structure) {
@@ -35,6 +46,15 @@ internal fun logNative(block: () -> Pair<String, List<Any?>>) {
             .let(log::append)
         log.append(");")
         println(log)
+    }
+
+}
+
+internal fun logUnitNative(block: () -> Pair<String, List<Any?>>) {
+    if (shouldLogNative) {
+        val (first, second) = block()
+        val tripleBlock: () -> Triple<String, List<Any?>, KClass<Any>?> = { Triple(first, second, null) }
+        logNative(tripleBlock)
     }
 }
 

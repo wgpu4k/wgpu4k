@@ -4,12 +4,12 @@ import io.ygdrasil.wgpu.internal.jvm.*
 
 actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) : AutoCloseable {
     actual fun end() {
-        logNative { "wgpuRenderPassEncoderEnd" to listOf() }
+        logUnitNative { "wgpuRenderPassEncoderEnd" to listOf() }
         wgpuRenderPassEncoderEnd(handler)
     }
 
     actual fun setPipeline(renderPipeline: RenderPipeline) {
-        logNative { "wgpuRenderPassEncoderSetPipeline" to listOf(renderPipeline.handler) }
+        logUnitNative { "wgpuRenderPassEncoderSetPipeline" to listOf(renderPipeline.handler) }
         wgpuRenderPassEncoderSetPipeline(handler, renderPipeline.handler)
     }
 
@@ -19,12 +19,19 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) : Aut
             firstVertex: GPUSize32,
             firstInstance: GPUSize32
     ) {
-        logNative { "wgpuRenderPassEncoderDraw" to listOf(vertexCount, instanceCount, firstVertex, firstInstance) }
+        logUnitNative { "wgpuRenderPassEncoderDraw" to listOf(vertexCount, instanceCount, firstVertex, firstInstance) }
         wgpuRenderPassEncoderDraw(handler, vertexCount, instanceCount, firstVertex, firstInstance)
     }
 
     actual fun setBindGroup(index: Int, bindGroup: BindGroup) {
-        logNative { "wgpuRenderPassEncoderSetBindGroup" to listOf(index, bindGroup.handler, 0L.toNativeLong(), null) }
+        logUnitNative {
+            "wgpuRenderPassEncoderSetBindGroup" to listOf(
+                index,
+                bindGroup.handler,
+                0L.toNativeLong(),
+                null
+            )
+        }
         wgpuRenderPassEncoderSetBindGroup(
                 handler,
                 index,
@@ -35,7 +42,7 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) : Aut
     }
 
     actual fun setVertexBuffer(slot: Int, buffer: Buffer) {
-        logNative {
+        logUnitNative {
             "wgpuRenderPassEncoderSetVertexBuffer" to listOf(slot,
                     buffer.handler,
                     0L,
@@ -51,7 +58,7 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) : Aut
     }
 
     override fun close() {
-        logNative { "wgpuRenderPassEncoderRelease" to listOf() }
+        logUnitNative { "wgpuRenderPassEncoderRelease" to listOf() }
         wgpuRenderPassEncoderRelease(handler)
     }
 
