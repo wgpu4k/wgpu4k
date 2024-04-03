@@ -24,7 +24,7 @@ internal val renderPipelineDescriptorMapper = mapper<RenderPipelineDescriptor, W
 }
 
 private val multisampleStateMapper = mapper<RenderPipelineDescriptor.MultisampleState, WGPUMultisampleState> {
-    RenderPipelineDescriptor.MultisampleState::mask mappedTo WGPUMultisampleState::mask withTransformer LongToIntTransformer()
+    RenderPipelineDescriptor.MultisampleState::mask mappedTo WGPUMultisampleState::mask withTransformer MappingTransformer { it.originalValue as Int? }
     RenderPipelineDescriptor.MultisampleState::alphaToCoverageEnabled mappedTo WGPUMultisampleState::alphaToCoverageEnabled withTransformer BooleanToIntTransformer()
 }
 

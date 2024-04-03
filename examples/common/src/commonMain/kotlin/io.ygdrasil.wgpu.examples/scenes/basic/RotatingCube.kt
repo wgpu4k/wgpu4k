@@ -91,7 +91,7 @@ class RotatingCubeScene : Application.Scene(), AutoCloseable {
 				),
 				multisample = RenderPipelineDescriptor.MultisampleState(
 					count = 1,
-					mask = 0xFFFFFFF
+					mask = 0xFFFFFFFu
 				)
 			)
 		).bind()

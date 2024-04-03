@@ -81,7 +81,7 @@ data class RenderPipelineDescriptor(
 
     data class MultisampleState(
         var count: GPUSize32 = 1,
-        var mask: GPUSampleMask = 0xFFFFFFFF,
+        var mask: GPUSampleMask = 0xFFFFFFFFu,
         var alphaToCoverageEnabled: Boolean = false
     )
 

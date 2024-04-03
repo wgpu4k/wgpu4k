@@ -24,7 +24,7 @@ typealias GPUMapModeFlags = Number
 
 typealias GPUPipelineConstantValue = Number
 
-typealias GPUSampleMask = Long
+typealias GPUSampleMask = UInt
 
 typealias GPUShaderStageFlags = Number
 

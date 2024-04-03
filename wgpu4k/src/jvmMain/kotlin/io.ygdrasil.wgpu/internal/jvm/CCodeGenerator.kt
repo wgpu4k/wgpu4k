@@ -17,7 +17,7 @@ internal fun logNative(block: () -> Pair<String, List<Any?>>) {
 
         arguments.forEachIndexed { index, any ->
             (any as? Structure)?.let { structure ->
-                log.append("const")
+                log.append("const ")
                 log.append((structure::class as KClass<Any>).getName())
                 log.append(" *$functionName$index = ")
                 log.append(structure.log())
