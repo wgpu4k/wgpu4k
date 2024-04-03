@@ -1,0 +1,17 @@
+package io.ygdrasil.wgpu.`internal`.jvm
+
+public val WGPU_ARRAY_LAYER_COUNT_UNDEFINED: Long = 4294967295L
+
+public val WGPU_COPY_STRIDE_UNDEFINED: Long = 4294967295L
+
+public val WGPU_LIMIT_U32_UNDEFINED: Long = 4294967295L
+
+public val WGPU_LIMIT_U64_UNDEFINED: Long = -1L
+
+public val WGPU_MIP_LEVEL_COUNT_UNDEFINED: Long = 4294967295L
+
+public val WGPU_QUERY_SET_INDEX_UNDEFINED: Long = 4294967295L
+
+public val WGPU_WHOLE_MAP_SIZE: Long = -1L
+
+public val WGPU_WHOLE_SIZE: Long = -1L
