@@ -48,10 +48,6 @@ class LongToIntTransformer : MappingTransformer<Long, Int> {
 	override fun transform(context: MappingTransformerContext<out Long>): Int? = context.originalValue?.toInt()
 }
 
-class UIntToIntTransformer : MappingTransformer<UInt, Int> {
-	override fun transform(context: MappingTransformerContext<out UInt>): Int? = context.originalValue?.toInt()
-}
-
 inline fun <reified From : Any, reified To : Any> mapper(block: KotlinDslMappingDefinitionBuilder<From, To>.() -> Unit) =
 	ShapeShiftBuilder()
 		.withTransformer(EnumerationTransformer())
