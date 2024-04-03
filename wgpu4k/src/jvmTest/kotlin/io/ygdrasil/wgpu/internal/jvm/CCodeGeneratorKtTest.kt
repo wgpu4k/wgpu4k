@@ -15,7 +15,7 @@ class CCodeGeneratorKtTest : FreeSpec({
 
         vertex = WGPUVertexState()
         vertex?.entryPoint = "vs_main"
-        vertex?.module = WGPUShaderModuleImpl(Pointer(1))
+        vertex?.module = WGPUShaderModuleImpl(Pointer(2))
 
         primitive = WGPUPrimitiveState()
         primitive?.topology = PrimitiveTopology.trianglelist.value
@@ -25,7 +25,7 @@ class CCodeGeneratorKtTest : FreeSpec({
         multisample?.mask = 0xFFFFFFF
 
         fragment = WGPUFragmentState.ByReference()
-        fragment?.module = WGPUShaderModuleImpl(Pointer(1))
+        fragment?.module = WGPUShaderModuleImpl(Pointer(3))
         fragment?.entryPoint = "fs_main"
         fragment?.targets = arrayOf(
             WGPUColorTargetState.ByReference().apply {
@@ -48,11 +48,11 @@ class CCodeGeneratorKtTest : FreeSpec({
              |&(const WGPURenderPipelineDescriptor){
              |    .nextInChain = NULL,
              |    .label = "render_pipeline",
-             |    .layout = native@0x1 (io.ygdrasil.wgpu.internal.jvm.WGPUPipelineLayoutImpl@1),
+             |    .layout = pipelineLayoutImpl1,
              |    .vertex = 
              |        (const WGPUVertexState){
              |            .nextInChain = NULL,
-             |            .module = native@0x1 (io.ygdrasil.wgpu.internal.jvm.WGPUShaderModuleImpl@1),
+             |            .module = shaderModuleImpl1,
              |            .entryPoint = "vs_main",
              |            .constantCount = NULL,
              |            .constantsPtr = NULL,
@@ -80,11 +80,12 @@ class CCodeGeneratorKtTest : FreeSpec({
              |    .fragment = 
              |        &(const WGPUFragmentState){
              |            .nextInChain = NULL,
-             |            .module = native@0x1 (io.ygdrasil.wgpu.internal.jvm.WGPUShaderModuleImpl@1),
+             |            .module = shaderModuleImpl2,
              |            .entryPoint = "fs_main",
              |            .constantCount = 0,
              |            .constants = NULL,
              |            .targetCount = 1,
+             |            .targetsPtr = Memory of 32 bytes,
              |            .targets = 
              |                (const WGPUColorTargetState[]){
              |                    (const WGPUColorTargetState){

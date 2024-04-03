@@ -1,13 +1,14 @@
 package io.ygdrasil.wgpu.internal.jvm
 
+import com.sun.jna.Memory
 import com.sun.jna.Structure
 import com.sun.jna.Structure.FieldOrder
 import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.superclasses
 
-var shouldLogNative = false
 
+var shouldLogNative = false
 
 internal fun logNative(block: () -> Pair<String, List<Any?>>) {
     if (shouldLogNative) {
@@ -38,7 +39,7 @@ internal fun logNative(block: () -> Pair<String, List<Any?>>) {
 }
 
 
-private val reference: MutableMap<Any, String> = mutableMapOf()
+private val reference: MutableMap<Any, String> = hashMapOf()
 private val countInstances: MutableMap<KClass<out Any>, Int> = mutableMapOf()
 
 internal fun Structure.log(indentation: UInt = 0u, isPointer: Boolean = true): String {
@@ -83,6 +84,8 @@ internal fun Structure.log(indentation: UInt = 0u, isPointer: Boolean = true): S
                 log.append("\"${value}\"")
             } else if (value is Number) {
                 log.append("${value}")
+            } else if (value is Memory) {
+                log.append("Memory of ${value.size()} bytes")
             } else {
                 log.append(findInstanceOf(value))
 
@@ -96,11 +99,19 @@ internal fun Structure.log(indentation: UInt = 0u, isPointer: Boolean = true): S
     return log.toString()
 }
 
-fun findInstanceOf(value: Any) = reference.getOrPut(value) {
-    val simpleName = value::class.simpleName ?: error("fail to get name")
+private fun findInstanceOf(value: Any) = reference.getOrPut(value) {
+    val simpleName = value::class.assignableName
     val index = countInstances.getOrElse(value::class) { 0 }
     countInstances[value::class] = index + 1
     "$simpleName${countInstances[value::class]}"
+}
+
+private val KClass<out Any>.assignableName: String
+    get() = simpleName?.removePrefix("WGPU")?.lowercaseOnFirstCharacter() ?: error("fail to get name")
+
+private fun String.lowercaseOnFirstCharacter(): String = when {
+    isNotEmpty() -> first().lowercase() + substring(1)
+    else -> this
 }
 
 private fun KClass<*>.getName(): String? {
