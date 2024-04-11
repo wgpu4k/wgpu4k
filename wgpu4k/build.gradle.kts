@@ -1,10 +1,36 @@
-import de.undercouch.gradle.tasks.download.Download
+import org.jetbrains.kotlin.de.undercouch.gradle.tasks.download.Download
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon
+import io.github.krakowski.jextract.JextractTask
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
 	alias(libs.plugins.kotest)
-	alias(libs.plugins.download)
+	id("io.github.krakowski.jextract") version "0.5.0" apply false
+	//java
 }
+
+java {
+	toolchain {
+		languageVersion.set(JavaLanguageVersion.of(22))
+	}
+}
+
+// You need to use a JDK version with jextract from here
+// https://jdk.java.net/jextract/
+val jextract = tasks.withType<JextractTask> {
+	header("${project.projectDir}/../webgpu-headers/webgpu.h") {
+
+		// The package under which all source files will be generated
+		targetPackage = "io.ygdrasil.wgpu.internal.jvm.panama"
+
+		outputDir = project.objects.directoryProperty()
+			.convention(project.layout.projectDirectory.dir("src/jvmMain"))
+	}
+}
+
+
 
 kotlin {
 
@@ -13,7 +39,9 @@ kotlin {
 		browser()
 		nodejs()
 	}
-	jvm()
+	jvm {
+		withJava()
+	}
 
     sourceSets {
 
@@ -35,6 +63,7 @@ kotlin {
 
 		val jvmMain by getting {
 			dependencies {
+				kotlin.srcDirs("src/jvmMain/kotlin", "src/jvmMain/java")
 				api(libs.jna)
 				implementation(libs.shapeshift)
 			}
@@ -60,10 +89,15 @@ kotlin {
 
 		}
     }
+    compilerOptions {
+        allWarningsAsErrors = true
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
+ }
 
-	compilerOptions {
-		allWarningsAsErrors = true
-		freeCompilerArgs.add("-Xexpect-actual-classes")
+tasks {
+	withType<JavaCompile> {
+		options.compilerArgs.add("--enable-preview")
 	}
 }
 

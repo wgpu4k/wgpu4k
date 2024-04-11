@@ -4,9 +4,15 @@ import com.sun.jna.Memory
 import com.sun.jna.NativeLong
 import com.sun.jna.Pointer
 import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
 import io.ygdrasil.wgpu.mapper.imageCopyTextureTaggedMapper
+//import java.awt.image.BufferedImage
+import java.lang.foreign.MemorySegment
+
 
 actual class Queue(internal val handler: WGPUQueue) {
+
+    internal val temp: MemorySegment = MemorySegment.ofAddress(Pointer.nativeValue(handler.pointer))
 
     actual fun submit(commandsBuffer: Array<CommandBuffer>) {
         logUnitNative {
@@ -17,12 +23,18 @@ actual class Queue(internal val handler: WGPUQueue) {
             )
         }
         if (commandsBuffer.isNotEmpty()) {
-            wgpuQueueSubmit(
+            webgpu_h.wgpuQueueSubmit(
+                temp,
+                0L,
+                MemorySegment.ofAddress(Pointer.nativeValue(commandsBuffer.first().handler.pointer))
+            )
+            /*wgpuQueueSubmit(
                 handler,
                 NativeLong(commandsBuffer.size.toLong()),
                 commandsBuffer.map { it.handler }.toTypedArray()
-            )
+            )*/
         } else {
+
             wgpuQueueSubmit(
                 handler,
                 NativeLong(0L),
@@ -95,6 +107,22 @@ actual class Queue(internal val handler: WGPUQueue) {
 
         val bytePerPixel = destination.texture.format.getBytesPerPixel()
 
+        val data = Memory((image.width * bytePerPixel * image.height).toLong())
+
+        var white = true
+        (0 until image.width).forEach { x ->
+            (0 until image.height).forEach { y ->
+                val rgb: Int = 0//image.bufferedImage.getRGB(x, y)
+                val red = (rgb shr 16) and 0xFF
+                val green = (rgb shr 8) and 0xFF
+                val blue = (rgb) and 0xFF
+                val alpha = (rgb shr 24) and 0xFF
+                val pixel = byteArrayOf(red.toByte(), green.toByte(), blue.toByte(), alpha.toByte())
+                data.write((x + y * image.width) * bytePerPixel.toLong(), pixel, 0, pixel.size)
+            }
+            white = !white
+        }
+
         wgpuQueueWriteTexture(
             handler,
             imageCopyTextureTaggedMapper.map(destination),
@@ -130,12 +158,10 @@ actual class Queue(internal val handler: WGPUQueue) {
     }
 }
 
+actual class ImageBitmapHolder(val bufferedImage: Any) : DrawableHolder {
 
-actual class ImageBitmapHolder(
-    val data: Memory,
-    actual val width: Int,
-    actual val height: Int
-) : DrawableHolder, AutoCloseable {
+    actual val width: Int = 0//bufferedImage.width
+    actual val height: Int = 0//bufferedImage.height
 
     override fun close() {
         data.dump()
@@ -143,3 +169,25 @@ actual class ImageBitmapHolder(
 }
 
 actual sealed interface DrawableHolder
+
+
+/*fun BufferedImage.convertTo32(): BufferedImage {
+    val w = width
+    val h = height
+
+    // Create a new BufferedImage of type ARGB
+    val outputImg = BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB)
+
+    // Get the graphics object from the new image
+    val g = outputImg.createGraphics()
+
+    // Draw the input image onto the new image
+    g.drawImage(this, 0, 0, null)
+
+
+    // Clean up
+    g.dispose()
+
+    // Return the new 32-bit image
+    return outputImg
+}*/
