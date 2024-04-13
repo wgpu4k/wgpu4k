@@ -52,6 +52,4 @@ class GenericAssetManager(
     override val cubemapNegz: ImageBitmapHolder,
 
     override val webgpu4kotlin: ImageBitmapHolder,
-) : AssetManager {
-
-}
+) : AssetManager
