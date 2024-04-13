@@ -8,6 +8,8 @@ import io.ygdrasil.wgpu.WGPU
 import io.ygdrasil.wgpu.WGPU.Companion.createInstance
 import io.ygdrasil.wgpu.examples.*
 import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.toImageBitmapHolder
+import korlibs.image.bitmap.Bitmap32
 import kotlinx.coroutines.Dispatchers
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
@@ -69,11 +71,13 @@ suspend fun main() {
     renderingContext.computeSurfaceCapabilities(adapter)
 
     fun bitmapFrom(path: String): ImageBitmapHolder =
-        ImageBitmapHolder(ImageIO.read(Application::class.java.getResourceAsStream(path)))
+        ImageIO.read(Application::class.java.getResourceAsStream(path)).toImageBitmapHolder()
 
     val assetManager = object : AssetManager {
         override val Di3d: ImageBitmapHolder
             get() = bitmapFrom("/assets/img/Di-3d.png")
+        override val Di3d2: Bitmap32
+            get() = TODO("Not yet implemented")
         override val cubemapPosx: ImageBitmapHolder
             get() = bitmapFrom("/assets/img/cubemap/posx.png")
         override val cubemapNegx: ImageBitmapHolder

@@ -12,7 +12,12 @@ import io.ygdrasil.wgpu.internal.jvm.WGPULogCallback
 import io.ygdrasil.wgpu.internal.jvm.WGPUSurface
 import io.ygdrasil.wgpu.internal.jvm.wgpuSetLogCallback
 import io.ygdrasil.wgpu.internal.jvm.wgpuSetLogLevel
+import io.ygdrasil.wgpu.toImageBitmapHolder
+import korlibs.image.bitmap.Bitmap32
+import korlibs.image.format.readBitmap
+import korlibs.io.file.std.resourcesVfs
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
 import org.lwjgl.glfw.GLFWNativeWin32.glfwGetWin32Window
@@ -70,11 +75,15 @@ suspend fun main() {
 	renderingContext.computeSurfaceCapabilities(adapter)
 
 	fun bitmapFrom(path: String): ImageBitmapHolder =
-		ImageBitmapHolder(ImageIO.read(Application::class.java.getResourceAsStream(path)))
+		ImageIO.read(Application::class.java.getResourceAsStream(path)).toImageBitmapHolder()
+	fun bitmapFrom2(path: String): Bitmap32 = runBlocking { resourcesVfs[path].readBitmap().toBMP32() }
+
 
 	val assetManager = object : AssetManager {
 		override val Di3d: ImageBitmapHolder
 			get() = bitmapFrom("/assets/img/Di-3d.png")
+		override val Di3d2: Bitmap32
+			get() = bitmapFrom2("assets/img/Di-3d.png")
 		override val cubemapPosx: ImageBitmapHolder
 			get() = bitmapFrom("/assets/img/cubemap/posx.png")
 		override val cubemapNegx: ImageBitmapHolder
