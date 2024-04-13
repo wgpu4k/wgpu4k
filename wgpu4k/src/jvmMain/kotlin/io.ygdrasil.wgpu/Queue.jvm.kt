@@ -5,7 +5,6 @@ import com.sun.jna.NativeLong
 import com.sun.jna.Pointer
 import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.mapper.imageCopyTextureTaggedMapper
-import java.awt.image.BufferedImage
 
 actual class Queue(internal val handler: WGPUQueue) {
 
@@ -87,12 +86,14 @@ actual class Queue(internal val handler: WGPUQueue) {
         destination: ImageCopyTextureTagged,
         copySize: GPUIntegerCoordinates
     ) {
+        assert(destination.texture.format == TextureFormat.rgba8unorm) {
+            error("rgba8unorm is the only supported texture format supported")
+        }
+
         val image = (source.source as? ImageBitmapHolder)
         if (image == null) error("ImageBitmapHolder required as source")
 
         val bytePerPixel = destination.texture.format.getBytesPerPixel()
-
-
 
         wgpuQueueWriteTexture(
             handler,
@@ -142,27 +143,3 @@ actual class ImageBitmapHolder(
 }
 
 actual sealed interface DrawableHolder
-
-fun BufferedImage.toImageBitmapHolder() = ImageBitmapHolder(
-        toMemory(),
-        width,
-        height,
-    )
-
-private fun BufferedImage.toMemory(): Memory {
-    val bytePerPixel = 4
-    val data = Memory((width * bytePerPixel * height).toLong())
-    (0 until width).forEach { x ->
-        (0 until height).forEach { y ->
-            val rgb: Int = getRGB(x, y)
-            val red = (rgb shr 16) and 0xFF
-            val green = (rgb shr 8) and 0xFF
-            val blue = (rgb) and 0xFF
-            val alpha = (rgb shr 24) and 0xFF
-            val pixel = byteArrayOf(red.toByte(), green.toByte(), blue.toByte(), alpha.toByte())
-            data.write((x + y * width) * bytePerPixel.toLong(), pixel, 0, pixel.size)
-        }
-    }
-
-    return data
-}

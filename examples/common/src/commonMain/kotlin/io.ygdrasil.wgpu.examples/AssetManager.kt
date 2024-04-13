@@ -9,7 +9,6 @@ import kotlin.js.JsExport
 interface AssetManager {
 
 	val Di3d: ImageBitmapHolder
-	val Di3d2: Bitmap32
 
 	val cubemapPosx: ImageBitmapHolder
 	val cubemapNegx: ImageBitmapHolder

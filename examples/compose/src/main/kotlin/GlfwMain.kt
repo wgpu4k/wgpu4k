@@ -7,10 +7,14 @@ import io.ygdrasil.wgpu.RenderingContext
 import io.ygdrasil.wgpu.WGPU
 import io.ygdrasil.wgpu.WGPU.Companion.createInstance
 import io.ygdrasil.wgpu.examples.*
+import io.ygdrasil.wgpu.examples.helper.korge.toImageBitmapHolder
 import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.toImageBitmapHolder
 import korlibs.image.bitmap.Bitmap32
+import korlibs.image.format.readBitmap
+import korlibs.io.file.std.resourcesVfs
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
 import org.lwjgl.glfw.GLFWNativeWin32.glfwGetWin32Window
@@ -71,27 +75,25 @@ suspend fun main() {
     renderingContext.computeSurfaceCapabilities(adapter)
 
     fun bitmapFrom(path: String): ImageBitmapHolder =
-        ImageIO.read(Application::class.java.getResourceAsStream(path)).toImageBitmapHolder()
+        runBlocking { resourcesVfs[path].readBitmap().toBMP32() }.toImageBitmapHolder()
 
     val assetManager = object : AssetManager {
         override val Di3d: ImageBitmapHolder
-            get() = bitmapFrom("/assets/img/Di-3d.png")
-        override val Di3d2: Bitmap32
-            get() = TODO("Not yet implemented")
+            get() = bitmapFrom("assets/img/Di-3d.png")
         override val cubemapPosx: ImageBitmapHolder
-            get() = bitmapFrom("/assets/img/cubemap/posx.png")
+            get() = bitmapFrom("assets/img/cubemap/posx.png")
         override val cubemapNegx: ImageBitmapHolder
-            get() = bitmapFrom("/assets/img/cubemap/negx.png")
+            get() = bitmapFrom("assets/img/cubemap/negx.png")
         override val cubemapPosy: ImageBitmapHolder
-            get() = bitmapFrom("/assets/img/cubemap/posy.png")
+            get() = bitmapFrom("assets/img/cubemap/posy.png")
         override val cubemapNegy: ImageBitmapHolder
-            get() = bitmapFrom("/assets/img/cubemap/negy.png")
+            get() = bitmapFrom("assets/img/cubemap/negy.png")
         override val cubemapPosz: ImageBitmapHolder
-            get() = bitmapFrom("/assets/img/cubemap/posz.png")
+            get() = bitmapFrom("assets/img/cubemap/posz.png")
         override val cubemapNegz: ImageBitmapHolder
-            get() = bitmapFrom("/assets/img/cubemap/negz.png")
+            get() = bitmapFrom("assets/img/cubemap/negz.png")
         override val webgpu4kotlin: ImageBitmapHolder
-            get() = bitmapFrom("/assets/img/webgpu4kotlin.png")
+            get() = bitmapFrom("assets/img/webgpu4kotlin.png")
 
     }
 
