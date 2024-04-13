@@ -1,6 +1,8 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.*
+import io.ygdrasil.wgpu.internal.js.GPUExtent3DDictStrict
+import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.Float32Array
 import org.khronos.webgl.Int32Array
 import org.w3c.dom.ImageBitmap
@@ -50,52 +52,43 @@ actual class Queue(private val handler: GPUQueue) {
 		destination: ImageCopyTextureTagged,
 		copySize: GPUIntegerCoordinates
 	) {
-		actualCopyExternalImageToTexture(
-			source.convert(),
-			destination.convert(),
-			copySize.toList().toTypedArray()
+		if(destination.texture.format != TextureFormat.rgba8unorm) {
+			error("rgba8unorm is the only supported texture format supported")
+		}
+
+		val image = (source.source as? ImageBitmapHolder)
+		if (image == null) error("ImageBitmapHolder required as source")
+
+		val bytePerPixel = destination.texture.format.getBytesPerPixel()
+
+		handler.writeTexture(
+			object : GPUImageCopyTexture {
+				override var texture: GPUTexture = destination.texture.handler
+				override var mipLevel: GPUIntegerCoordinate = destination.mipLevel
+				override var origin: Array<GPUIntegerCoordinate> = destination.origin.toArray()
+				override var aspect: String = destination.aspect.stringValue
+			},
+			image.data.unsafeCast<ArrayBuffer>(),
+			object : GPUImageDataLayout {
+				override var offset: GPUSize64? = 0
+				override var bytesPerRow: GPUSize32? = image.width * bytePerPixel
+				override var rowsPerImage: GPUSize32? = image.height
+			},
+			object : GPUExtent3DDictStrict {
+				override var width: GPUIntegerCoordinate = image.width
+				override var height: GPUIntegerCoordinate? = image.height
+				override var depthOrArrayLayers: GPUIntegerCoordinate? = 1
+			}
 		)
 	}
 
-	private fun actualCopyExternalImageToTexture(
-		source: GPUImageCopyExternalImage,
-		destination: GPUImageCopyTextureTagged,
-		copySize: Array<GPUIntegerCoordinate>
-	) {
-		handler.copyExternalImageToTexture(source, destination, copySize)
-	}
 }
 
-private fun ImageCopyTextureTagged.convert(): GPUImageCopyTextureTagged = object : GPUImageCopyTextureTagged {
-	override var texture: GPUTexture = this@convert.texture.handler
-	override var mipLevel: GPUIntegerCoordinate = this@convert.mipLevel
-	override var origin: Array<GPUIntegerCoordinate> = this@convert.origin.toArray()
-	override var aspect: String = this@convert.aspect.stringValue
-	override var colorSpace: String = this@convert.colorSpace.value
-	override var premultipliedAlpha: Boolean = this@convert.premultipliedAlpha
-}
 
-private fun ImageCopyExternalImage.convert(): GPUImageCopyExternalImage = object : GPUImageCopyExternalImage {
-	override var source: dynamic = this@convert.source.convert()
-	override var origin: GPUOrigin2DDictStrict = object : GPUOrigin2DDictStrict {
-		override var x: GPUIntegerCoordinate = this@convert.origin.first
-		override var y: GPUIntegerCoordinate = this@convert.origin.second
-	}
-	override var flipY: Boolean = this@convert.flipY
-}
+actual class ImageBitmapHolder(
+	actual val width: Int,
+	actual val height: Int,
+	val data: ByteArray
+) : DrawableHolder
 
-private fun DrawableHolder.convert(): dynamic = let { holder ->
-	when (holder) {
-		is ImageBitmapHolder -> holder.handler
-		else -> error("unreachable statement")
-	}
-}
-
-actual class ImageBitmapHolder(internal val handler: ImageBitmap) : DrawableHolder {
-	actual val width: Int
-		get() = handler.width
-	actual val height: Int
-		get() = handler.height
-
-}
 actual sealed interface DrawableHolder

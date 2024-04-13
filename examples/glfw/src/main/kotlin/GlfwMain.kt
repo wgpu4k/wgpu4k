@@ -77,7 +77,7 @@ suspend fun main() {
         runBlocking { resourcesVfs[path].readBitmap().toBMP32() }.toImageBitmapHolder()
 
 
-    val assetManager = object : AssetManager {
+    var assetManager: AssetManager = object : AssetManager {
         override val Di3d: ImageBitmapHolder
             get() = bitmapFrom("assets/img/Di-3d.png")
         override val cubemapPosx: ImageBitmapHolder
@@ -97,6 +97,8 @@ suspend fun main() {
 
     }
 
+
+    //assetManager = genericAssetManager()
 
     val application = object : Application(
         renderingContext,
