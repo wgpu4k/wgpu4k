@@ -2,7 +2,6 @@ import com.sun.jna.Pointer
 import com.sun.jna.platform.win32.Kernel32
 import darwin.CAMetalLayer
 import darwin.NSWindow
-import io.ygdrasil.wgpu.ImageBitmapHolder
 import io.ygdrasil.wgpu.RenderingContext
 import io.ygdrasil.wgpu.WGPU
 import io.ygdrasil.wgpu.WGPU.Companion.createInstance
@@ -17,7 +16,6 @@ import org.lwjgl.glfw.GLFWNativeX11.glfwGetX11Window
 import org.lwjgl.system.MemoryUtil.NULL
 import org.rococoa.ID
 import org.rococoa.Rococoa
-import javax.imageio.ImageIO
 import kotlin.system.exitProcess
 
 var oneFrame = false
@@ -68,28 +66,7 @@ suspend fun main() {
 
     renderingContext.computeSurfaceCapabilities(adapter)
 
-    fun bitmapFrom(path: String): ImageBitmapHolder =
-        ImageBitmapHolder(ImageIO.read(Application::class.java.getResourceAsStream(path)))
-
-    val assetManager = object : AssetManager {
-        override val Di3d: ImageBitmapHolder
-            get() = bitmapFrom("/assets/img/Di-3d.png")
-        override val cubemapPosx: ImageBitmapHolder
-            get() = bitmapFrom("/assets/img/cubemap/posx.png")
-        override val cubemapNegx: ImageBitmapHolder
-            get() = bitmapFrom("/assets/img/cubemap/negx.png")
-        override val cubemapPosy: ImageBitmapHolder
-            get() = bitmapFrom("/assets/img/cubemap/posy.png")
-        override val cubemapNegy: ImageBitmapHolder
-            get() = bitmapFrom("/assets/img/cubemap/negy.png")
-        override val cubemapPosz: ImageBitmapHolder
-            get() = bitmapFrom("/assets/img/cubemap/posz.png")
-        override val cubemapNegz: ImageBitmapHolder
-            get() = bitmapFrom("/assets/img/cubemap/negz.png")
-        override val webgpu4kotlin: ImageBitmapHolder
-            get() = bitmapFrom("/assets/img/webgpu4kotlin.png")
-
-    }
+    val assetManager = genericAssetManager()
 
     val application = object : Application(
         renderingContext,
