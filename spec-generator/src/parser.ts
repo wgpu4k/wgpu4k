@@ -4,8 +4,6 @@ import { readFileLines } from  "bikeshed-to-ts/src/reader.js";
 import { matchEndDFN, matchEndIDL, matchStartDFN, matchStartIDL } from  "bikeshed-to-ts/src/regex.js";
 import { IDLRootType, parse as parseIDL } from  "webidl2";
 
-////////////////////////////////////////////////////////////////////////////////
-
 async function parseBikeShedFile(filePath) {
     const exposed = new Set();
 
@@ -79,7 +77,6 @@ async function parseBikeShedFile(filePath) {
     return {
         dfn: dfnBlocks,
         idl: idlBlocks,
-        //ts: tsBlocks,
         exposed,
     };
 }

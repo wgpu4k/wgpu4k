@@ -28,3 +28,4 @@ gradle-app.setting
 *.so
 *.jar
 **/node_modules/
+/spec-generator/bin/
