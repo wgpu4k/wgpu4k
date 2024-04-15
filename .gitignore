@@ -27,3 +27,5 @@ gradle-app.setting
 *.dylib
 *.so
 *.jar
+**/node_modules/
+/spec-generator/bin/

@@ -1,3 +1,6 @@
 [submodule "webgpu-headers"]
 	path = webgpu-headers
 	url = https://github.com/webgpu-native/webgpu-headers
+[submodule "gpuweb"]
+	path = spec-generator/libs/gpuweb
+	url = https://github.com/gpuweb/gpuweb.git
