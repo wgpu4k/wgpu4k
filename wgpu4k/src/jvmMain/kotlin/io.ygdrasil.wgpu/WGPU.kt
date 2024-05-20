@@ -7,6 +7,8 @@ import io.ygdrasil.wgpu.internal.jvm.panama.WGPUChainedStruct
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPURequestAdapterOptions
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptor
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptorFromMetalLayer
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptorFromWindowsHWND
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptorFromXlibWindow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import java.io.InputStream
@@ -66,25 +68,31 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 	}
 
 	fun getSurfaceFromX11Window(display: MemorySegment, window: Long): MemorySegment? = confined { arena ->
-		val surfaceDescriptor = WGPUXlibWindowSurfaceDescriptor()
-		surfaceDescriptor.nextInChain.let { x11SurfaceDescriptor ->
-			x11SurfaceDescriptor.chain.sType = io.ygdrasil.wgpu.internal.jvm.WGPUSType.WGPUSType_SurfaceDescriptorFromXlibWindow.value
-			x11SurfaceDescriptor.display = display.toPointer()
-			x11SurfaceDescriptor.window = window
-		}
+		WGPUSurfaceDescriptor.allocate(arena).let { surfaceDescriptor ->
+			WGPUSurfaceDescriptor.nextInChain(surfaceDescriptor, WGPUSurfaceDescriptorFromXlibWindow.allocate(arena).also { nextInChain ->
+				WGPUSurfaceDescriptorFromXlibWindow.chain(nextInChain, WGPUChainedStruct.allocate(arena).also { chain ->
+					WGPUChainedStruct.sType(chain, webgpu_h.WGPUSType_SurfaceDescriptorFromXlibWindow())
+				})
+				WGPUSurfaceDescriptorFromXlibWindow.display(nextInChain, display)
+				WGPUSurfaceDescriptorFromXlibWindow.window(nextInChain, window)
+			})
 
-		wgpuInstanceCreateSurface(handler2, surfaceDescriptor)?.pointer?.toMemory()
+			webgpu_h.wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+		}
 	}
 
 	fun getSurfaceFromWindows(hinstance: MemorySegment, hwnd: MemorySegment): MemorySegment? = confined { arena ->
-		val surfaceDescriptor = WGPUWindowSurfaceDescriptor()
-		surfaceDescriptor.nextInChain.let { windowSurfaceDescriptor ->
-			windowSurfaceDescriptor.chain.sType = io.ygdrasil.wgpu.internal.jvm.WGPUSType.WGPUSType_SurfaceDescriptorFromWindowsHWND.value
-			windowSurfaceDescriptor.hinstance = hinstance.toPointer()
-			windowSurfaceDescriptor.hwnd = hwnd.toPointer()
-		}
+		WGPUSurfaceDescriptor.allocate(arena).let { surfaceDescriptor ->
+			WGPUSurfaceDescriptor.nextInChain(surfaceDescriptor, WGPUSurfaceDescriptorFromWindowsHWND.allocate(arena).also { nextInChain ->
+				WGPUSurfaceDescriptorFromWindowsHWND.chain(nextInChain, WGPUChainedStruct.allocate(arena).also { chain ->
+					WGPUChainedStruct.sType(chain, webgpu_h.WGPUSType_SurfaceDescriptorFromWindowsHWND()))
+				})
+				WGPUSurfaceDescriptorFromWindowsHWND.hwnd(nextInChain, hwnd)
+				WGPUSurfaceDescriptorFromWindowsHWND.hinstance(nextInChain, hinstance)
+			})
 
-		wgpuInstanceCreateSurface(handler2, surfaceDescriptor)?.pointer?.toMemory()
+			webgpu_h.wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+		}
 	}
 
 	companion object {
