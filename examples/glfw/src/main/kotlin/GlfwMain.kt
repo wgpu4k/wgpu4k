@@ -55,7 +55,7 @@ suspend fun main() {
 	val wgpu = createInstance() ?: error("fail to wgpu instance")
 	val surface = wgpu.getSurface(windowHandle)
 
-	val renderingContext = RenderingContext(WGPUSurface(Pointer(surface.address()))) {
+	val renderingContext = RenderingContext(surface) {
 		val width = intArrayOf(1)
 		val height = intArrayOf(1)
 		glfwGetWindowSize(windowHandle, width, height)

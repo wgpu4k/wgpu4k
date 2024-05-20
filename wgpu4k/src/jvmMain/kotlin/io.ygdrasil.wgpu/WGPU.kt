@@ -43,7 +43,7 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 
 
 		val options = WGPURequestAdapterOptions.allocate(arena)
-		WGPURequestAdapterOptions.compatibleSurface(options, renderingContext.handler.pointer.toMemory())
+		WGPURequestAdapterOptions.compatibleSurface(options, renderingContext.handler2.pointer.toMemory())
 		WGPURequestAdapterOptions.powerPreference(options, powerPreference.value)
 
 		webgpu_h.wgpuInstanceRequestAdapter(handler, options, handleRequestAdapter, MemorySegment.NULL)
@@ -65,7 +65,7 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 		}
 	}
 
-	fun getSurfaceFromX11Window(display: MemorySegment, window: Long): MemorySegment? {
+	fun getSurfaceFromX11Window(display: MemorySegment, window: Long): MemorySegment? = confined { arena ->
 		val surfaceDescriptor = WGPUXlibWindowSurfaceDescriptor()
 		surfaceDescriptor.nextInChain.let { x11SurfaceDescriptor ->
 			x11SurfaceDescriptor.chain.sType = io.ygdrasil.wgpu.internal.jvm.WGPUSType.WGPUSType_SurfaceDescriptorFromXlibWindow.value
@@ -73,10 +73,10 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 			x11SurfaceDescriptor.window = window
 		}
 
-		return wgpuInstanceCreateSurface(handler2, surfaceDescriptor)?.pointer?.toMemory()
+		wgpuInstanceCreateSurface(handler2, surfaceDescriptor)?.pointer?.toMemory()
 	}
 
-	fun getSurfaceFromWindows(hinstance: MemorySegment, hwnd: MemorySegment): MemorySegment? {
+	fun getSurfaceFromWindows(hinstance: MemorySegment, hwnd: MemorySegment): MemorySegment? = confined { arena ->
 		val surfaceDescriptor = WGPUWindowSurfaceDescriptor()
 		surfaceDescriptor.nextInChain.let { windowSurfaceDescriptor ->
 			windowSurfaceDescriptor.chain.sType = io.ygdrasil.wgpu.internal.jvm.WGPUSType.WGPUSType_SurfaceDescriptorFromWindowsHWND.value
@@ -84,7 +84,7 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 			windowSurfaceDescriptor.hwnd = hwnd.toPointer()
 		}
 
-		return wgpuInstanceCreateSurface(handler2, surfaceDescriptor)?.pointer?.toMemory()
+		wgpuInstanceCreateSurface(handler2, surfaceDescriptor)?.pointer?.toMemory()
 	}
 
 	companion object {
