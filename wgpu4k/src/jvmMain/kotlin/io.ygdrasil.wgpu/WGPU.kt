@@ -6,7 +6,6 @@ import io.ygdrasil.wgpu.internal.jvm.panama.WGPUChainedStruct
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptor
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptorFromMetalLayer
 import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
-import io.ygdrasil.wgpu.internal.jvm.toMemory
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import java.lang.foreign.Arena
@@ -48,7 +47,7 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 	}
 
 	fun getSurfaceFromMetalLayer(layer: MemorySegment): MemorySegment = confined { arena ->
-		WGPUSurfaceDescriptor.allocate(arena).also { surfaceDescriptor ->
+		WGPUSurfaceDescriptor.allocate(arena).let { surfaceDescriptor ->
 			WGPUSurfaceDescriptor.nextInChain(surfaceDescriptor, WGPUSurfaceDescriptorFromMetalLayer.allocate(arena).also { nextInChain ->
 				WGPUSurfaceDescriptorFromMetalLayer.chain(nextInChain, WGPUChainedStruct.allocate(arena).also { chain ->
 					WGPUChainedStruct.sType(chain, webgpu_h.WGPUSType_SurfaceDescriptorFromMetalLayer())
@@ -59,18 +58,6 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 			webgpu_h.wgpuInstanceCreateSurface(handler, surfaceDescriptor)
 		}
 	}
-
-	fun getSurfaceFromMetalLayer2(layer: MemorySegment): MemorySegment? {
-		val surfaceDescriptor = io.ygdrasil.wgpu.internal.jvm.WGPUDarwinSurfaceDescriptor()
-		surfaceDescriptor.nextInChain.let { metalLayerDescriptor ->
-			metalLayerDescriptor.chain.sType = webgpu_h.WGPUSType_SurfaceDescriptorFromMetalLayer()
-			metalLayerDescriptor.layer = Pointer(layer.address())
-		}
-		surfaceDescriptor.write()
-
-		return webgpu_h.wgpuInstanceCreateSurface(handler, surfaceDescriptor.pointer.toMemory())
-	}
-
 
 	fun getSurfaceFromX11Window(display: Pointer, window: Long): io.ygdrasil.wgpu.internal.jvm.WGPUSurface? {
 		val surfaceDescriptor = io.ygdrasil.wgpu.internal.jvm.WGPUXlibWindowSurfaceDescriptor()

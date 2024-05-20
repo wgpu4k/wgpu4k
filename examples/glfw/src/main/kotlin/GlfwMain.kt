@@ -154,7 +154,7 @@ fun WGPU.getSurface(window: Long): MemorySegment = when (Platform.os) {
 		nswindow.contentView()?.setWantsLayer(true)
 		val layer = CAMetalLayer.layer()
 		nswindow.contentView()?.setLayer(layer.id().toLong().toPointer())
-		getSurfaceFromMetalLayer2(MemorySegment.ofAddress(layer.id().toLong())) ?: error("fail to get surface on MacOs")
+		getSurfaceFromMetalLayer(MemorySegment.ofAddress(layer.id().toLong())) ?: error("fail to get surface on MacOs")
 	}
 	else -> error("unsupported OS")
 }
