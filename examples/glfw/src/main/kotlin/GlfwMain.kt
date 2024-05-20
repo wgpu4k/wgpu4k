@@ -6,6 +6,7 @@ import darwin.NSWindow
 import io.ygdrasil.wgpu.RenderingContext
 import io.ygdrasil.wgpu.WGPU
 import io.ygdrasil.wgpu.WGPU.Companion.createInstance
+import io.ygdrasil.wgpu.WGPU.Companion.loadLibrary
 import io.ygdrasil.wgpu.internal.jvm.WGPULogCallback
 import io.ygdrasil.wgpu.internal.jvm.WGPUSurface
 import io.ygdrasil.wgpu.internal.jvm.wgpuSetLogCallback
@@ -48,7 +49,7 @@ suspend fun main() {
         glfwDispatcher.stop()
     }
 
-	System.load("/Users/chaos/IdeaProjects/wgpu4k/wgpu4k/src/jvmMain/resources/darwin-aarch64/libWGPU.dylib")
+	loadLibrary()
 
 	val wgpu = createInstance() ?: error("fail to wgpu instance")
 	val surface = wgpu.getSurface(windowHandle)
