@@ -4,8 +4,11 @@ import com.sun.jna.Pointer
 import io.ygdrasil.wgpu.internal.jvm.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import java.lang.foreign.MemorySegment
 
-actual class Adapter(internal val handler: WGPUAdapterImpl) : AutoCloseable {
+actual class Adapter(internal val handler: MemorySegment) : AutoCloseable {
+
+	val handler2 = WGPUAdapterImpl(handler.toPointer())
 
 	actual suspend fun requestDevice(): Device? {
 		val deviceState = MutableStateFlow<WGPUDeviceImpl?>(null)
@@ -21,12 +24,12 @@ actual class Adapter(internal val handler: WGPUAdapterImpl) : AutoCloseable {
 			}
 		}
 
-		wgpuAdapterRequestDevice(handler, null, handleRequestDevice, null)
+		wgpuAdapterRequestDevice(handler2, null, handleRequestDevice, null)
 
 		return deviceState.value?.let { Device(it) }
 	}
 
-	actual override fun close() {
-		wgpuAdapterRelease(handler)
+    actual override fun close() {
+		wgpuAdapterRelease(handler2)
 	}
 }

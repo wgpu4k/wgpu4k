@@ -11,3 +11,6 @@ fun <T> confined(block: (Arena) -> T) = Arena.ofConfined()
     }
 
 fun Pointer.toMemory() = MemorySegment.ofAddress(Pointer.nativeValue(this))
+
+
+internal fun MemorySegment.toPointer(): Pointer = Pointer(address())

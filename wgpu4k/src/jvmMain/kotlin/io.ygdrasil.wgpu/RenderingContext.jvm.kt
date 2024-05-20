@@ -30,7 +30,7 @@ actual class RenderingContext(
 	}
 
 	fun computeSurfaceCapabilities(adapter: Adapter) {
-		wgpuSurfaceGetCapabilities(handler, adapter.handler, surfaceCapabilities)
+		wgpuSurfaceGetCapabilities(handler, adapter.handler2, surfaceCapabilities)
 	}
 
 	actual fun configure(canvasConfiguration: CanvasConfiguration) {

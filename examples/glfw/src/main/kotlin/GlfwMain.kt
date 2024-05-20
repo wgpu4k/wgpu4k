@@ -1,20 +1,21 @@
 package io.ygdrasil.wgpu.examples
 
 import com.sun.jna.Pointer
+import com.sun.jna.platform.win32.Kernel32
 import darwin.CAMetalLayer
 import darwin.NSWindow
 import io.ygdrasil.wgpu.RenderingContext
 import io.ygdrasil.wgpu.WGPU
 import io.ygdrasil.wgpu.WGPU.Companion.createInstance
 import io.ygdrasil.wgpu.WGPU.Companion.loadLibrary
-import io.ygdrasil.wgpu.internal.jvm.WGPULogCallback
-import io.ygdrasil.wgpu.internal.jvm.WGPUSurface
-import io.ygdrasil.wgpu.internal.jvm.wgpuSetLogCallback
-import io.ygdrasil.wgpu.internal.jvm.wgpuSetLogLevel
+import io.ygdrasil.wgpu.internal.jvm.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
+import org.lwjgl.glfw.GLFWNativeWin32.glfwGetWin32Window
+import org.lwjgl.glfw.GLFWNativeX11.glfwGetX11Display
+import org.lwjgl.glfw.GLFWNativeX11.glfwGetX11Window
 import org.lwjgl.system.MemoryUtil.NULL
 import org.rococoa.ID
 import org.rococoa.Rococoa
@@ -139,26 +140,25 @@ suspend fun main() {
 }
 
 fun WGPU.getSurface(window: Long): MemorySegment = when (Platform.os) {
-	/*Os.Linux -> {
-		val display = glfwGetX11Display()
+	Os.Linux -> {
+		val display = glfwGetX11Display().let { MemorySegment.ofAddress(it) }
 		val x11_window = glfwGetX11Window(window)
-		getSurfaceFromX11Window(Pointer(display), x11_window) ?: error("fail to get surface on Linux")
+		getSurfaceFromX11Window(display, x11_window) ?: error("fail to get surface on Linux")
 	}
 	Os.Window -> {
-		val hwnd = glfwGetWin32Window(window)
-		val hinstance = Kernel32.INSTANCE.GetModuleHandle(null).pointer
-		getSurfaceFromWindows(hinstance, Pointer(hwnd)) ?: error("fail to get surface on Windows")
-	}*/
+		val hwnd = glfwGetWin32Window(window).let { MemorySegment.ofAddress(it) }
+		val hinstance = Kernel32.INSTANCE.GetModuleHandle(null).pointer.toMemory()
+		getSurfaceFromWindows(hinstance, hwnd) ?: error("fail to get surface on Windows")
+	}
 	Os.MacOs -> {
 		val nsWindowPtr = glfwGetCocoaWindow(window)
 		val nswindow = Rococoa.wrap(ID.fromLong(nsWindowPtr), NSWindow::class.java)
 		nswindow.contentView()?.setWantsLayer(true)
 		val layer = CAMetalLayer.layer()
 		nswindow.contentView()?.setLayer(layer.id().toLong().toPointer())
-		getSurfaceFromMetalLayer(MemorySegment.ofAddress(layer.id().toLong())) ?: error("fail to get surface on MacOs")
+		getSurfaceFromMetalLayer(MemorySegment.ofAddress(layer.id().toLong()))
 	}
-	else -> error("unsupported OS")
-}
+}.also { if( it == MemorySegment.NULL) error("fail to get surface") }
 
 private fun Long.toPointer(): Pointer = Pointer(this)
 
