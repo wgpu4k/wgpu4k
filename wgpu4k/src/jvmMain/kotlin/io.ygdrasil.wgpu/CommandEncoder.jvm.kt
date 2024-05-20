@@ -66,7 +66,7 @@ private fun Pair<Int, Int>.convert(): WGPUExtent3D = WGPUExtent3D().also {
 
 private fun ImageCopyTexture.convert(): WGPUImageCopyTexture = WGPUImageCopyTexture().also {
 
-    it.texture = texture.handler
+    it.texture = texture.handler2
     it.mipLevel = mipLevel
     it.origin = origin.let { (x, y) ->
         WGPUOrigin3D().also {

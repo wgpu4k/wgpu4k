@@ -9,7 +9,7 @@ import io.ygdrasil.wgpu.mapper
 
 internal val imageCopyTextureTaggedMapper = mapper<ImageCopyTextureTagged, WGPUImageCopyTexture> {
     ImageCopyTextureTagged::texture mappedTo WGPUImageCopyTexture::texture withTransformer MappingTransformer {
-        it.originalValue?.handler
+        it.originalValue?.handler2
     }
     ImageCopyTextureTagged::origin mappedTo WGPUImageCopyTexture::origin withTransformer MappingTransformer {
         it.originalValue?.let { (x, y, z) ->

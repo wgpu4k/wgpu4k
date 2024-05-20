@@ -62,7 +62,7 @@ actual class Device(internal val handler: WGPUDeviceImpl) : AutoCloseable {
     actual fun createTexture(descriptor: TextureDescriptor): Texture =
         textureDescriptorMapper.map<Any, WGPUTextureDescriptor>(descriptor)
             .also { logUnitNative { "wgpuDeviceCreateTexture" to listOf(handler, it) } }
-            .let { wgpuDeviceCreateTexture(handler, it) }
+            .let { wgpuDeviceCreateTexture(handler, it)?.pointer?.toMemory() }
             ?.let(::Texture) ?: error("fail to create texture")
 
     actual fun createSampler(descriptor: SamplerDescriptor): Sampler =
