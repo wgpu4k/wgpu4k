@@ -85,7 +85,7 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 		WGPUSurfaceDescriptor.allocate(arena).let { surfaceDescriptor ->
 			WGPUSurfaceDescriptor.nextInChain(surfaceDescriptor, WGPUSurfaceDescriptorFromWindowsHWND.allocate(arena).also { nextInChain ->
 				WGPUSurfaceDescriptorFromWindowsHWND.chain(nextInChain, WGPUChainedStruct.allocate(arena).also { chain ->
-					WGPUChainedStruct.sType(chain, webgpu_h.WGPUSType_SurfaceDescriptorFromWindowsHWND()))
+					WGPUChainedStruct.sType(chain, webgpu_h.WGPUSType_SurfaceDescriptorFromWindowsHWND())
 				})
 				WGPUSurfaceDescriptorFromWindowsHWND.hwnd(nextInChain, hwnd)
 				WGPUSurfaceDescriptorFromWindowsHWND.hinstance(nextInChain, hinstance)
