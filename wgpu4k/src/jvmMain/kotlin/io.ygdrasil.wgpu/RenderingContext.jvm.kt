@@ -58,7 +58,7 @@ actual class RenderingContext(
 	}
 
 	private fun CanvasConfiguration.convert(): io.ygdrasil.wgpu.internal.jvm.WGPUSurfaceConfiguration = io.ygdrasil.wgpu.internal.jvm.WGPUSurfaceConfiguration().also {
-		it.device = device.handler
+		it.device = device.handler2
 		it.usage = usage
 		it.format = format?.value ?: textureFormat.value
 		it.presentMode = io.ygdrasil.wgpu.internal.jvm.WGPUPresentMode.WGPUPresentMode_Fifo.value

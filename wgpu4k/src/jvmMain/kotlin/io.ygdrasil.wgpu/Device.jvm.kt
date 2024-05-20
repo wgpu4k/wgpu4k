@@ -5,27 +5,30 @@ import io.ygdrasil.wgpu.mapper.bindGroupDescriptorMapper
 import io.ygdrasil.wgpu.mapper.renderPipelineDescriptorMapper
 import io.ygdrasil.wgpu.mapper.samplerDescriptorMapper
 import io.ygdrasil.wgpu.mapper.textureDescriptorMapper
+import java.lang.foreign.MemorySegment
 
-actual class Device(internal val handler: WGPUDeviceImpl) : AutoCloseable {
+actual class Device(internal val handler: MemorySegment) : AutoCloseable {
 
-    actual val queue: Queue by lazy { Queue(wgpuDeviceGetQueue(handler) ?: error("fail to get device queue")) }
+    val handler2: WGPUDeviceImpl = WGPUDeviceImpl(handler.toPointer())
+
+    actual val queue: Queue by lazy { Queue(wgpuDeviceGetQueue(handler2) ?: error("fail to get device queue")) }
 
     actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder =
         descriptor?.convert()
-            .also { logUnitNative { "wgpuDeviceCreateCommandEncoder" to listOf(handler, it) } }
-            .let { wgpuDeviceCreateCommandEncoder(handler, it) }
+            .also { logUnitNative { "wgpuDeviceCreateCommandEncoder" to listOf(handler2, it) } }
+            .let { wgpuDeviceCreateCommandEncoder(handler2, it) }
             ?.let(::CommandEncoder) ?: error("fail to create command encoder")
 
     actual fun createShaderModule(descriptor: ShaderModuleDescriptor): ShaderModule =
         descriptor.convert()
-            .also { logUnitNative { "wgpuDeviceCreateShaderModule" to listOf(handler, it) } }
-            .let { wgpuDeviceCreateShaderModule(handler, it) }
+            .also { logUnitNative { "wgpuDeviceCreateShaderModule" to listOf(handler2, it) } }
+            .let { wgpuDeviceCreateShaderModule(handler2, it) }
             ?.let(::ShaderModule) ?: error("fail to create shader module")
 
     actual fun createPipelineLayout(descriptor: PipelineLayoutDescriptor): PipelineLayout =
         descriptor.convert()
-            .also { logUnitNative { "wgpuDeviceCreatePipelineLayout" to listOf(handler, it) } }
-            .let { wgpuDeviceCreatePipelineLayout(handler, it) }
+            .also { logUnitNative { "wgpuDeviceCreatePipelineLayout" to listOf(handler2, it) } }
+            .let { wgpuDeviceCreatePipelineLayout(handler2, it) }
             ?.let(::PipelineLayout) ?: error("fail to create pipeline layout")
 
     actual fun createRenderPipeline(descriptor: RenderPipelineDescriptor): RenderPipeline =
@@ -35,40 +38,40 @@ actual class Device(internal val handler: WGPUDeviceImpl) : AutoCloseable {
                 logNative {
                     Triple(
                         "wgpuDeviceCreateRenderPipeline",
-                        listOf(handler, it),
+                        listOf(handler2, it),
                         WGPURenderPipeline::class
                     )
                 }
             }
-            .let { wgpuDeviceCreateRenderPipeline(handler, it) }
+            .let { wgpuDeviceCreateRenderPipeline(handler2, it) }
             .also { registerNative { it } }
             ?.let(::RenderPipeline) ?: error("fail to create render pipeline")
 
     actual fun createBuffer(descriptor: BufferDescriptor): Buffer =
         descriptor.convert()
-            .also { logNative { Triple("wgpuDeviceCreateBuffer", listOf(handler, it), WGPUBuffer::class) } }
-            .let { wgpuDeviceCreateBuffer(handler, it) }
+            .also { logNative { Triple("wgpuDeviceCreateBuffer", listOf(handler2, it), WGPUBuffer::class) } }
+            .let { wgpuDeviceCreateBuffer(handler2, it) }
             .also { registerNative { it } }
             ?.let(::Buffer) ?: error("fail to create buffer")
 
 
     actual fun createBindGroup(descriptor: BindGroupDescriptor): BindGroup =
         bindGroupDescriptorMapper.map<Any, WGPUBindGroupDescriptor>(descriptor)
-            .also { logUnitNative { "wgpuDeviceCreateBindGroup" to listOf(handler, it) } }
+            .also { logUnitNative { "wgpuDeviceCreateBindGroup" to listOf(handler2, it) } }
             .also { it.write() }
-            .let { wgpuDeviceCreateBindGroup(handler, it) }
+            .let { wgpuDeviceCreateBindGroup(handler2, it) }
             ?.let(::BindGroup) ?: error("fail to create bind group")
 
     actual fun createTexture(descriptor: TextureDescriptor): Texture =
         textureDescriptorMapper.map<Any, WGPUTextureDescriptor>(descriptor)
-            .also { logUnitNative { "wgpuDeviceCreateTexture" to listOf(handler, it) } }
-            .let { wgpuDeviceCreateTexture(handler, it)?.pointer?.toMemory() }
+            .also { logUnitNative { "wgpuDeviceCreateTexture" to listOf(handler2, it) } }
+            .let { wgpuDeviceCreateTexture(handler2, it)?.pointer?.toMemory() }
             ?.let(::Texture) ?: error("fail to create texture")
 
     actual fun createSampler(descriptor: SamplerDescriptor): Sampler =
         samplerDescriptorMapper.map<Any, WGPUSamplerDescriptor>(descriptor)
-            .also { logUnitNative { "wgpuDeviceCreateSampler" to listOf(handler, it) } }
-            .let { wgpuDeviceCreateSampler(handler, it) }
+            .also { logUnitNative { "wgpuDeviceCreateSampler" to listOf(handler2, it) } }
+            .let { wgpuDeviceCreateSampler(handler2, it) }
             ?.let(::Sampler) ?: error("fail to create texture")
 
     actual fun createComputePipeline(descriptor: ComputePipelineDescriptor): ComputePipeline {
@@ -76,8 +79,8 @@ actual class Device(internal val handler: WGPUDeviceImpl) : AutoCloseable {
     }
 
     actual override fun close() {
-        logUnitNative { "wgpuDeviceRelease" to listOf(handler) }
-        wgpuDeviceRelease(handler)
+        logUnitNative { "wgpuDeviceRelease" to listOf(handler2) }
+        wgpuDeviceRelease(handler2)
     }
 
 }

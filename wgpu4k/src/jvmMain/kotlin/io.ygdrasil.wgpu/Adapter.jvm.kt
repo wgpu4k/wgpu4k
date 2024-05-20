@@ -1,35 +1,34 @@
 package io.ygdrasil.wgpu
 
-import com.sun.jna.Pointer
-import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.internal.jvm.WGPURequestDeviceStatus
+import io.ygdrasil.wgpu.internal.jvm.confined
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUAdapterRequestDeviceCallback
+import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import java.lang.foreign.MemorySegment
 
 actual class Adapter(internal val handler: MemorySegment) : AutoCloseable {
 
-	val handler2 = WGPUAdapterImpl(handler.toPointer())
+	actual suspend fun requestDevice(): Device? = confined { arena ->
+		val deviceState = MutableStateFlow<MemorySegment?>(null)
 
-	actual suspend fun requestDevice(): Device? {
-		val deviceState = MutableStateFlow<WGPUDeviceImpl?>(null)
+		val handleRequestAdapter = WGPUAdapterRequestDeviceCallback.allocate( { statusAsInt, device, message, param4 ->
+			if (statusAsInt == webgpu_h.WGPURequestDeviceStatus_Success()) {
+				deviceState.update { device }
+			} else {
 
-		val handleRequestDevice = object : WGPURequestDeviceCallback {
-			override fun invoke(statusAsInt: Int, device: WGPUDeviceImpl, message: String?, param4: Pointer?) {
-				val status = WGPURequestDeviceStatus.of(statusAsInt)
-				if (status == WGPURequestDeviceStatus.WGPURequestDeviceStatus_Success) {
-					deviceState.update { device }
-				} else {
-					println(" request_device status=%#.8x message=%s\n".format(status, message))
-				}
+				println("request_device status=${WGPURequestDeviceStatus.of(statusAsInt)} message=${message.getString(0)}")
 			}
-		}
+		}, arena)
 
-		wgpuAdapterRequestDevice(handler2, null, handleRequestDevice, null)
 
-		return deviceState.value?.let { Device(it) }
+		webgpu_h.wgpuAdapterRequestDevice(handler, MemorySegment.NULL, handleRequestAdapter, MemorySegment.NULL)
+
+		deviceState.value?.let { Device(it) }
 	}
 
     actual override fun close() {
-		wgpuAdapterRelease(handler2)
+		webgpu_h.wgpuAdapterRelease(handler)
 	}
 }
