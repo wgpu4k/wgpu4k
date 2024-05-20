@@ -1,85 +1,116 @@
 package io.ygdrasil.wgpu
 
 import com.sun.jna.Pointer
-import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.internal.jvm.confined
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUChainedStruct
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptor
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptorFromMetalLayer
+import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
+import io.ygdrasil.wgpu.internal.jvm.toMemory
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import java.lang.foreign.Arena
+import java.lang.foreign.MemorySegment
 
-class WGPU(private val handler: WGPUInstance) : AutoCloseable {
+class WGPU(private val handler: MemorySegment) : AutoCloseable {
+
+	val handler2: io.ygdrasil.wgpu.internal.jvm.WGPUInstanceImpl = io.ygdrasil.wgpu.internal.jvm.WGPUInstanceImpl(Pointer(handler.address()))
+
 	override fun close() {
-		wgpuInstanceRelease(handler)
+		webgpu_h.wgpuInstanceRelease(handler)
 	}
-
 
 	suspend fun requestAdapter(
 		renderingContext: RenderingContext,
-		powerPreference: WGPUPowerPreference = WGPUPowerPreference.WGPUPowerPreference_Undefined
+		powerPreference: io.ygdrasil.wgpu.internal.jvm.WGPUPowerPreference = io.ygdrasil.wgpu.internal.jvm.WGPUPowerPreference.WGPUPowerPreference_Undefined
 	): Adapter? {
 
-		val options = WGPURequestAdapterOptions().also {
+		val options = io.ygdrasil.wgpu.internal.jvm.WGPURequestAdapterOptions().also {
 			it.compatibleSurface = renderingContext.handler
 			it.powerPreference = powerPreference.value
 		}
 
-		val adapterState = MutableStateFlow<WGPUAdapterImpl?>(null)
+		val adapterState = MutableStateFlow<io.ygdrasil.wgpu.internal.jvm.WGPUAdapterImpl?>(null)
 
-		val handleRequestAdapter = object : WGPURequestAdapterCallback {
-			override fun invoke(statusAsInt: Int, adapter: WGPUAdapterImpl, message: String?, param4: Pointer?) {
-				val status = WGPURequestAdapterStatus.of(statusAsInt)
-				if (status == WGPURequestAdapterStatus.WGPURequestAdapterStatus_Success) {
+		val handleRequestAdapter = object : io.ygdrasil.wgpu.internal.jvm.WGPURequestAdapterCallback {
+			override fun invoke(statusAsInt: Int, adapter: io.ygdrasil.wgpu.internal.jvm.WGPUAdapterImpl, message: String?, param4: Pointer?) {
+				val status = io.ygdrasil.wgpu.internal.jvm.WGPURequestAdapterStatus.of(statusAsInt)
+				if (status == io.ygdrasil.wgpu.internal.jvm.WGPURequestAdapterStatus.WGPURequestAdapterStatus_Success) {
 					adapterState.update { adapter }
 				} else {
 					println("request_adapter status=%.8X message=%s\n".format(status, message))
 				}
 			}
 		}
-		wgpuInstanceRequestAdapter(handler, options, handleRequestAdapter, null)
+		io.ygdrasil.wgpu.internal.jvm.wgpuInstanceRequestAdapter(handler2, options, handleRequestAdapter, null)
 
 		return adapterState.value?.let { Adapter(it) }
 	}
 
-	fun getSurfaceFromMetalLayer(layer: Pointer): WGPUSurface? {
-		val surfaceDescriptor = WGPUDarwinSurfaceDescriptor()
-		surfaceDescriptor.nextInChain.let { metalLayerDescriptor ->
-			metalLayerDescriptor.chain.sType = WGPUSType.WGPUSType_SurfaceDescriptorFromMetalLayer.value
-			metalLayerDescriptor.layer = layer
-		}
+	fun getSurfaceFromMetalLayer(layer: MemorySegment): MemorySegment = confined { arena ->
+		WGPUSurfaceDescriptor.allocate(arena).also { surfaceDescriptor ->
+			WGPUSurfaceDescriptor.nextInChain(surfaceDescriptor, WGPUSurfaceDescriptorFromMetalLayer.allocate(arena).also { nextInChain ->
+				WGPUSurfaceDescriptorFromMetalLayer.chain(nextInChain, WGPUChainedStruct.allocate(arena).also { chain ->
+					WGPUChainedStruct.sType(chain, webgpu_h.WGPUSType_SurfaceDescriptorFromMetalLayer())
+				})
+				WGPUSurfaceDescriptorFromMetalLayer.layer(nextInChain, layer)
+			})
 
-		return wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+			webgpu_h.wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+		}
 	}
 
-	fun getSurfaceFromX11Window(display: Pointer, window: Long): WGPUSurface? {
-		val surfaceDescriptor = WGPUXlibWindowSurfaceDescriptor()
+	fun getSurfaceFromMetalLayer2(layer: MemorySegment): MemorySegment? {
+		val surfaceDescriptor = io.ygdrasil.wgpu.internal.jvm.WGPUDarwinSurfaceDescriptor()
+		surfaceDescriptor.nextInChain.let { metalLayerDescriptor ->
+			metalLayerDescriptor.chain.sType = webgpu_h.WGPUSType_SurfaceDescriptorFromMetalLayer()
+			metalLayerDescriptor.layer = Pointer(layer.address())
+		}
+		surfaceDescriptor.write()
+
+		return webgpu_h.wgpuInstanceCreateSurface(handler, surfaceDescriptor.pointer.toMemory())
+	}
+
+
+	fun getSurfaceFromX11Window(display: Pointer, window: Long): io.ygdrasil.wgpu.internal.jvm.WGPUSurface? {
+		val surfaceDescriptor = io.ygdrasil.wgpu.internal.jvm.WGPUXlibWindowSurfaceDescriptor()
 		surfaceDescriptor.nextInChain.let { x11SurfaceDescriptor ->
-			x11SurfaceDescriptor.chain.sType = WGPUSType.WGPUSType_SurfaceDescriptorFromXlibWindow.value
+			x11SurfaceDescriptor.chain.sType = io.ygdrasil.wgpu.internal.jvm.WGPUSType.WGPUSType_SurfaceDescriptorFromXlibWindow.value
 			x11SurfaceDescriptor.display = display
 			x11SurfaceDescriptor.window = window
 		}
 
-		return wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+		return io.ygdrasil.wgpu.internal.jvm.wgpuInstanceCreateSurface(handler2, surfaceDescriptor)
 	}
 
-	fun getSurfaceFromWindows(hinstance: Pointer, hwnd: Pointer): WGPUSurface? {
-		val surfaceDescriptor = WGPUWindowSurfaceDescriptor()
+	fun getSurfaceFromWindows(hinstance: Pointer, hwnd: Pointer): io.ygdrasil.wgpu.internal.jvm.WGPUSurface? {
+		val surfaceDescriptor = io.ygdrasil.wgpu.internal.jvm.WGPUWindowSurfaceDescriptor()
 		surfaceDescriptor.nextInChain.let { windowSurfaceDescriptor ->
-			windowSurfaceDescriptor.chain.sType = WGPUSType.WGPUSType_SurfaceDescriptorFromWindowsHWND.value
+			windowSurfaceDescriptor.chain.sType = io.ygdrasil.wgpu.internal.jvm.WGPUSType.WGPUSType_SurfaceDescriptorFromWindowsHWND.value
 			windowSurfaceDescriptor.hinstance = hinstance
 			windowSurfaceDescriptor.hwnd = hwnd
 		}
 
-		return wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+		return io.ygdrasil.wgpu.internal.jvm.wgpuInstanceCreateSurface(handler2, surfaceDescriptor)
 	}
 
 	companion object {
-		fun createInstance(backend: WGPUInstanceBackend? = null) = wgpuCreateInstance(getDescriptor(backend))
-			?.let { WGPU(it) }
+		fun createInstance(backend: WGPUInstanceBackend? = null): WGPU? {
+			val arena = Arena.ofConfined()
+			val descriptor = io.ygdrasil.wgpu.internal.jvm.panama.WGPUInstanceDescriptor.allocate(arena)
+			return webgpu_h.wgpuCreateInstance(descriptor)
+				?.let { WGPU(it) }
 
-		private fun getDescriptor(backend: WGPUInstanceBackend?): WGPUInstanceDescriptor? {
+			//return wgpuCreateInstance(getDescriptor(backend))
+			//	?.let { WGPU(it) }
+		}
+
+		private fun getDescriptor(backend: WGPUInstanceBackend?): io.ygdrasil.wgpu.internal.jvm.WGPUInstanceDescriptor? {
 			if (backend == null) return null
 
-			val descriptor = WGPUInstanceDescriptor()
-			descriptor.nextInChain = WGPUInstanceExtras.ByReference().also {
-				it.chain.sType = WGPUNativeSType.WGPUSType_InstanceExtras.value
+			val descriptor = io.ygdrasil.wgpu.internal.jvm.WGPUInstanceDescriptor()
+			descriptor.nextInChain = io.ygdrasil.wgpu.internal.jvm.WGPUInstanceExtras.ByReference().also {
+				it.chain.sType = io.ygdrasil.wgpu.internal.jvm.WGPUNativeSType.WGPUSType_InstanceExtras.value
 				it.backends = backend.value
 			}
 

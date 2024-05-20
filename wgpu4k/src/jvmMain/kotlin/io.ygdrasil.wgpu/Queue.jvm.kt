@@ -1,12 +1,11 @@
 package io.ygdrasil.wgpu
 
+//import java.awt.image.BufferedImage
 import com.sun.jna.Memory
 import com.sun.jna.NativeLong
 import com.sun.jna.Pointer
 import io.ygdrasil.wgpu.internal.jvm.*
-import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
 import io.ygdrasil.wgpu.mapper.imageCopyTextureTaggedMapper
-//import java.awt.image.BufferedImage
 import java.lang.foreign.MemorySegment
 
 
@@ -23,16 +22,16 @@ actual class Queue(internal val handler: WGPUQueue) {
             )
         }
         if (commandsBuffer.isNotEmpty()) {
-            webgpu_h.wgpuQueueSubmit(
+            /*webgpu_h.wgpuQueueSubmit(
                 temp,
-                0L,
+                commandsBuffer.size.toLong(),
                 MemorySegment.ofAddress(Pointer.nativeValue(commandsBuffer.first().handler.pointer))
-            )
-            /*wgpuQueueSubmit(
+            )*/
+            wgpuQueueSubmit(
                 handler,
                 NativeLong(commandsBuffer.size.toLong()),
                 commandsBuffer.map { it.handler }.toTypedArray()
-            )*/
+            )
         } else {
 
             wgpuQueueSubmit(
