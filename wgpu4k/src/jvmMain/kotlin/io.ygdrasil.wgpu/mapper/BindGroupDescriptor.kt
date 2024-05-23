@@ -6,6 +6,7 @@ import io.ygdrasil.wgpu.BindGroupLayoutTransformer
 import io.ygdrasil.wgpu.internal.jvm.WGPUBindGroupDescriptor
 import io.ygdrasil.wgpu.internal.jvm.WGPUBindGroupEntry
 import io.ygdrasil.wgpu.internal.jvm.WGPUSamplerImpl
+import io.ygdrasil.wgpu.internal.jvm.WGPUTextureViewImpl
 import io.ygdrasil.wgpu.internal.jvm.toPointer
 import io.ygdrasil.wgpu.mapper
 import io.ygdrasil.wgpu.toStructureArray
@@ -23,7 +24,7 @@ internal val bindGroupDescriptorMapper = mapper<BindGroupDescriptor, WGPUBindGro
                 }
 
                 is BindGroupDescriptor.SamplerBinding -> sampler = WGPUSamplerImpl(resource.sampler.handler.toPointer())
-                is BindGroupDescriptor.TextureViewBinding -> textureView = resource.view.handler
+                is BindGroupDescriptor.TextureViewBinding -> textureView = WGPUTextureViewImpl(resource.view.handler.toPointer())
             }
         }
     }

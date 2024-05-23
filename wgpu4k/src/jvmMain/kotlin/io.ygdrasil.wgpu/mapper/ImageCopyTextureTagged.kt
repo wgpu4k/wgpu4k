@@ -5,11 +5,13 @@ import io.ygdrasil.wgpu.EnumerationTransformer
 import io.ygdrasil.wgpu.ImageCopyTextureTagged
 import io.ygdrasil.wgpu.internal.jvm.WGPUImageCopyTexture
 import io.ygdrasil.wgpu.internal.jvm.WGPUOrigin3D
+import io.ygdrasil.wgpu.internal.jvm.WGPUTextureImpl
+import io.ygdrasil.wgpu.internal.jvm.toPointer
 import io.ygdrasil.wgpu.mapper
 
 internal val imageCopyTextureTaggedMapper = mapper<ImageCopyTextureTagged, WGPUImageCopyTexture> {
     ImageCopyTextureTagged::texture mappedTo WGPUImageCopyTexture::texture withTransformer MappingTransformer {
-        it.originalValue?.handler2
+        WGPUTextureImpl(it.originalValue?.handler?.toPointer())
     }
     ImageCopyTextureTagged::origin mappedTo WGPUImageCopyTexture::origin withTransformer MappingTransformer {
         it.originalValue?.let { (x, y, z) ->

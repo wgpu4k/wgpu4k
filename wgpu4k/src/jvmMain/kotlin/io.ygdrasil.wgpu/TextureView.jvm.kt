@@ -1,12 +1,10 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.WGPUTextureView
-import io.ygdrasil.wgpu.internal.jvm.logUnitNative
-import io.ygdrasil.wgpu.internal.jvm.wgpuTextureViewRelease
+import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
+import java.lang.foreign.MemorySegment
 
-actual class TextureView(internal val handler: WGPUTextureView) : AutoCloseable {
+actual class TextureView(internal val handler: MemorySegment) : AutoCloseable {
 	actual override fun close() {
-		logUnitNative { "wgpuTextureViewRelease" to listOf(handler) }
-		wgpuTextureViewRelease(handler)
+		webgpu_h.wgpuTextureViewRelease(handler)
 	}
 }

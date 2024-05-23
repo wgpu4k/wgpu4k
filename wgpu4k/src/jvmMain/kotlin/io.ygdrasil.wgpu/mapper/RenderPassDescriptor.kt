@@ -6,6 +6,8 @@ import io.ygdrasil.wgpu.internal.jvm.WGPUColor
 import io.ygdrasil.wgpu.internal.jvm.WGPURenderPassColorAttachment
 import io.ygdrasil.wgpu.internal.jvm.WGPURenderPassDepthStencilAttachment
 import io.ygdrasil.wgpu.internal.jvm.WGPURenderPassDescriptor
+import io.ygdrasil.wgpu.internal.jvm.WGPUTextureViewImpl
+import io.ygdrasil.wgpu.internal.jvm.toPointer
 
 internal val renderPassDescriptorMapper = mapper<RenderPassDescriptor, WGPURenderPassDescriptor> {
     RenderPassDescriptor::colorAttachments mappedTo WGPURenderPassDescriptor::colorAttachments withTransformer MappingTransformer<Array<RenderPassDescriptor.ColorAttachment>, Array<WGPURenderPassColorAttachment.ByReference>> {
@@ -25,7 +27,7 @@ internal val renderPassDepthStencilAttachmentMapper = mapper<RenderPassDescripto
     RenderPassDescriptor.RenderPassDepthStencilAttachment::stencilLoadOp mappedTo WGPURenderPassDepthStencilAttachment.ByReference::stencilLoadOp withTransformer EnumerationTransformer()
     RenderPassDescriptor.RenderPassDepthStencilAttachment::depthReadOnly mappedTo WGPURenderPassDepthStencilAttachment.ByReference::depthReadOnly withTransformer BooleanToIntTransformer()
     RenderPassDescriptor.RenderPassDepthStencilAttachment::view mappedTo WGPURenderPassDepthStencilAttachment.ByReference::view withTransformer MappingTransformer {
-        it.originalValue?.handler
+        WGPUTextureViewImpl(it.originalValue?.handler?.toPointer())
     }
     RenderPassDescriptor.RenderPassDepthStencilAttachment::stencilClearValue mappedTo WGPURenderPassDepthStencilAttachment.ByReference::stencilClearValue withTransformer LongToIntTransformer()
     RenderPassDescriptor.RenderPassDepthStencilAttachment::stencilReadOnly mappedTo WGPURenderPassDepthStencilAttachment.ByReference::stencilReadOnly withTransformer BooleanToIntTransformer()
@@ -34,10 +36,10 @@ internal val renderPassDepthStencilAttachmentMapper = mapper<RenderPassDescripto
 internal val colorAttachmentMapper =
     mapper<RenderPassDescriptor.ColorAttachment, WGPURenderPassColorAttachment.ByReference> {
         RenderPassDescriptor.ColorAttachment::view mappedTo WGPURenderPassColorAttachment.ByReference::view withTransformer MappingTransformer {
-            it.originalValue?.handler
+            WGPUTextureViewImpl(it.originalValue?.handler?.toPointer())
         }
         RenderPassDescriptor.ColorAttachment::resolveTarget mappedTo WGPURenderPassColorAttachment.ByReference::resolveTarget withTransformer MappingTransformer {
-            it.originalValue?.handler
+            WGPUTextureViewImpl(it.originalValue?.handler?.toPointer())
         }
         RenderPassDescriptor.ColorAttachment::loadOp mappedTo WGPURenderPassColorAttachment.ByReference::loadOp withTransformer EnumerationTransformer()
         RenderPassDescriptor.ColorAttachment::storeOp mappedTo WGPURenderPassColorAttachment.ByReference::storeOp withTransformer EnumerationTransformer()
