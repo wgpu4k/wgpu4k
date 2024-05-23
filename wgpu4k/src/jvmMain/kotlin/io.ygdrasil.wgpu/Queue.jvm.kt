@@ -2,42 +2,36 @@ package io.ygdrasil.wgpu
 
 //import java.awt.image.BufferedImage
 import com.sun.jna.Memory
-import com.sun.jna.NativeLong
 import com.sun.jna.Pointer
 import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
 import io.ygdrasil.wgpu.mapper.imageCopyTextureTaggedMapper
+import java.lang.foreign.MemoryLayout
 import java.lang.foreign.MemorySegment
+import java.lang.foreign.ValueLayout
 
 
-actual class Queue(internal val handler: WGPUQueue) {
+actual class Queue(internal val handler: MemorySegment) {
 
-    internal val temp: MemorySegment = MemorySegment.ofAddress(Pointer.nativeValue(handler.pointer))
+    val handler2: WGPUQueue = WGPUQueueImpl(handler.toPointer())
 
-    actual fun submit(commandsBuffer: Array<CommandBuffer>) {
-        logUnitNative {
-            "wgpuQueueSubmit" to listOf(
-                handler,
-                NativeLong(commandsBuffer.size.toLong()),
-                commandsBuffer.map { it.handler }.toTypedArray()
-            )
-        }
+    actual fun submit(commandsBuffer: Array<CommandBuffer>) = confined { arena ->
         if (commandsBuffer.isNotEmpty()) {
-            /*webgpu_h.wgpuQueueSubmit(
-                temp,
-                commandsBuffer.size.toLong(),
-                MemorySegment.ofAddress(Pointer.nativeValue(commandsBuffer.first().handler.pointer))
-            )*/
-            wgpuQueueSubmit(
+
+            val commands = arena.allocate(MemoryLayout.sequenceLayout(commandsBuffer.size.toLong(), ValueLayout.ADDRESS))
+            commandsBuffer.forEachIndexed { index, value -> commands.setAtIndex(ValueLayout.ADDRESS, index.toLong(), value.handler) }
+
+            webgpu_h.wgpuQueueSubmit(
                 handler,
-                NativeLong(commandsBuffer.size.toLong()),
-                commandsBuffer.map { it.handler }.toTypedArray()
+                commandsBuffer.size.toLong(),
+                commands
             )
         } else {
 
-            wgpuQueueSubmit(
+            webgpu_h.wgpuQueueSubmit(
                 handler,
-                NativeLong(0L),
-                null
+                0L,
+                MemorySegment.NULL
             )
         }
     }
@@ -51,7 +45,7 @@ actual class Queue(internal val handler: WGPUQueue) {
     ) {
         logUnitNative {
             "wgpuQueueWriteBuffer" to listOf(
-                handler,
+                handler2,
                 buffer.handler2,
                 bufferOffset,
                 data.toBuffer(dataOffset),
@@ -59,7 +53,7 @@ actual class Queue(internal val handler: WGPUQueue) {
             )
         }
         wgpuQueueWriteBuffer(
-            handler,
+            handler2,
             buffer.handler2,
             bufferOffset,
             data.toBuffer(dataOffset),
@@ -76,7 +70,7 @@ actual class Queue(internal val handler: WGPUQueue) {
     ) {
         logUnitNative {
             "wgpuQueueWriteBuffer" to listOf(
-                handler,
+                handler2,
                 buffer.handler2,
                 bufferOffset,
                 data.toBuffer(dataOffset),
@@ -84,7 +78,7 @@ actual class Queue(internal val handler: WGPUQueue) {
             )
         }
         wgpuQueueWriteBuffer(
-            handler,
+            handler2,
             buffer.handler2,
             bufferOffset,
             data.toBuffer(dataOffset),
@@ -123,7 +117,7 @@ actual class Queue(internal val handler: WGPUQueue) {
         }
 
         wgpuQueueWriteTexture(
-            handler,
+            handler2,
             imageCopyTextureTaggedMapper.map(destination),
             data,
             (image.width * bytePerPixel * image.height).toNativeLong(),

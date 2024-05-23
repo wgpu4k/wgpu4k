@@ -12,7 +12,7 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
 
     val handler2: WGPUDeviceImpl = WGPUDeviceImpl(handler.toPointer())
 
-    actual val queue: Queue by lazy { Queue(wgpuDeviceGetQueue(handler2) ?: error("fail to get device queue")) }
+    actual val queue: Queue by lazy { Queue(webgpu_h.wgpuDeviceGetQueue(handler) ?: error("fail to get device queue")) }
 
     actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder =
         descriptor?.convert()

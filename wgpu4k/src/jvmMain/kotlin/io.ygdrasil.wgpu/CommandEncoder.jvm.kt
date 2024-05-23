@@ -19,8 +19,8 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
 
     actual fun finish(): CommandBuffer =
             WGPUCommandBufferDescriptor()
-                .also { logUnitNative { "wgpuCommandEncoderFinish" to listOf(it) } }
-                    .let { wgpuCommandEncoderFinish(handler2, it) }
+                .also { it.write() }.pointer.toMemory()
+                    .let { webgpu_h.wgpuCommandEncoderFinish(handler, it) }
                     ?.let { CommandBuffer(it) }
                     ?: error("fail to get CommandBuffer")
 
