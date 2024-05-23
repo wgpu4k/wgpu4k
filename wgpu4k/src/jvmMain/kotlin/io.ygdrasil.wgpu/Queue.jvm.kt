@@ -125,7 +125,7 @@ actual class Queue(internal val handler: WGPUQueue) {
         wgpuQueueWriteTexture(
             handler,
             imageCopyTextureTaggedMapper.map(destination),
-            image.data,
+            data,
             (image.width * bytePerPixel * image.height).toNativeLong(),
             WGPUTextureDataLayout().apply {
                 offset = 0
@@ -162,9 +162,6 @@ actual class ImageBitmapHolder(val bufferedImage: Any) : DrawableHolder {
     actual val width: Int = 0//bufferedImage.width
     actual val height: Int = 0//bufferedImage.height
 
-    override fun close() {
-        data.dump()
-    }
 }
 
 actual sealed interface DrawableHolder

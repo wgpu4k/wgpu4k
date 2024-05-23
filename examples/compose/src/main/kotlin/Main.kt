@@ -13,7 +13,6 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import com.sun.jna.Pointer
 import darwin.NSWindow
 import io.ygdrasil.wgpu.ImageBitmapHolder
 import io.ygdrasil.wgpu.RenderingContext
@@ -121,7 +120,7 @@ suspend fun runApp(window: ComposeWindow) {
 	(WGPU.createInstance() ?: error("fail to wgpu instance")).use { instance ->
 
 
-		val surface = instance.getSurfaceFromMetalLayer(Pointer(layer.id().toLong())) ?: error("fail to get surface")
+		val surface = instance.getSurfaceFromMetalLayer(java.lang.foreign.MemorySegment.ofAddress(layer.id().toLong())) ?: error("fail to get surface")
 		val renderingContext = RenderingContext(surface) {
 			window.width to window.height
 		}

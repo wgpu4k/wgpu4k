@@ -7,14 +7,13 @@ import io.ygdrasil.wgpu.GPUOrigin3DDict
 import io.ygdrasil.wgpu.ImageCopyTextureTagged
 import io.ygdrasil.wgpu.Texture
 import io.ygdrasil.wgpu.internal.jvm.WGPUImageCopyTexture
-import io.ygdrasil.wgpu.internal.jvm.WGPUTexture
 
 class ImageCopyTextureTaggedMapperTest : FreeSpec({
 
     "test mapping" {
         // Given
         val imageCopyTextureTagged = ImageCopyTextureTagged(
-            texture = Texture(WGPUTexture()),
+            texture = Texture(java.lang.foreign.MemorySegment.NULL),
             origin = GPUOrigin3DDict(0, 0, 0)
         )
 
