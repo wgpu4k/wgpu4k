@@ -54,7 +54,7 @@ actual class Device(val handler: GPUDevice) : AutoCloseable {
 			.let(::ComputePipeline)
 
 
-	override fun close() {
+	actual override fun close() {
 		// Nothing on JS
 	}
 }

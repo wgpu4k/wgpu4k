@@ -19,7 +19,7 @@ suspend fun requestAdapter(options: GPURequestAdapterOptions? = null): Adapter? 
 }
 
 actual class Adapter(val handler: GPUAdapter) : AutoCloseable {
-	override fun close() {
+	actual override fun close() {
 		// Nothing to do on JS
 	}
 

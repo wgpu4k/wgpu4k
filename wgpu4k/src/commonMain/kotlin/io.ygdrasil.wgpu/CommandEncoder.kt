@@ -15,6 +15,8 @@ expect class CommandEncoder : AutoCloseable {
 	)
 
 	fun beginComputePass(descriptor: ComputePassDescriptor? = null): ComputePassEncoder
+
+	override fun close()
 }
 
 data class ImageCopyTexture(

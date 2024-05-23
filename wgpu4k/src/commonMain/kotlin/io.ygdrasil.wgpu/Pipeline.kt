@@ -6,6 +6,8 @@ expect class PipelineLayout
 
 expect class RenderPipeline : AutoCloseable {
     fun getBindGroupLayout(index: Int): BindGroupLayout
+
+    override fun close()
 }
 
 data class PipelineLayoutDescriptor(

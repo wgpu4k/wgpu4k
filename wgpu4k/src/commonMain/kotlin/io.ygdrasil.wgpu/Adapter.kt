@@ -6,4 +6,6 @@ package io.ygdrasil.wgpu
  */
 expect class Adapter: AutoCloseable {
 	suspend fun requestDevice(): Device?
+
+	override fun close()
 }

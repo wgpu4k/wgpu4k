@@ -25,7 +25,7 @@ actual class RenderingContext(private val handler: GPUCanvasContext) : AutoClose
 		return Texture(handler.getCurrentTexture())
 	}
 
-	override fun close() {
+	actual override fun close() {
 		// Nothing to do on js
 	}
 

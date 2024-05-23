@@ -21,6 +21,8 @@ expect class RenderingContext: AutoCloseable {
 	fun present()
 
 	fun configure(canvasConfiguration: CanvasConfiguration)
+
+	override fun close()
 }
 
 data class CanvasConfiguration(

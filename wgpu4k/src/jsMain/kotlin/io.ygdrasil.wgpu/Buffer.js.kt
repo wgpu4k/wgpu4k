@@ -27,7 +27,7 @@ actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
 			.set(buffer.toTypedArray(), 0)
 	}
 
-	override fun close() {
+	actual override fun close() {
 		//Nothing to do on JS
 	}
 }

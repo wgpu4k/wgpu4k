@@ -10,7 +10,7 @@ actual class ComputePipeline(internal val handler: GPUComputePipeline) : AutoClo
         handler.getBindGroupLayout(index)
             .let { BindGroupLayout(it) }
 
-    override fun close() {
+    actual override fun close() {
         // Nothing to do on js
     }
 

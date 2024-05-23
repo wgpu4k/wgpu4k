@@ -34,7 +34,7 @@ actual class Texture(internal val handler: GPUTexture) : AutoCloseable {
 		)
 	}
 
-    override fun close() {
+    actual override fun close() {
         // nothing to do
     }
 }

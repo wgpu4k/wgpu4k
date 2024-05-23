@@ -36,7 +36,7 @@ actual class RenderPassEncoder(private val handler: GPURenderPassEncoder) : Auto
 		handler.setVertexBuffer(slot, buffer.handler)
 	}
 
-	override fun close() {
+	actual override fun close() {
 		// Nothing to do
 	}
 }

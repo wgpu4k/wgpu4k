@@ -7,7 +7,7 @@ import io.ygdrasil.wgpu.internal.js.GPUTextureView
 @JsExport
 actual class TextureView(internal val handler: GPUTextureView) : AutoCloseable {
 
-	override fun close() {
+	actual override fun close() {
 		// Nothing to do
 	}
 }

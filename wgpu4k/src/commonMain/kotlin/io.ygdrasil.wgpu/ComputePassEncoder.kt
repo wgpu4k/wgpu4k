@@ -20,6 +20,7 @@ expect class ComputePassEncoder : AutoCloseable {
 
     fun end()
 
+    override fun close()
 }
 
 data class ComputePassDescriptor(

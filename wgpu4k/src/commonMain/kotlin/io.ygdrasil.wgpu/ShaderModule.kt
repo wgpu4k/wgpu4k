@@ -3,6 +3,8 @@
 package io.ygdrasil.wgpu
 
 expect class ShaderModule : AutoCloseable {
+
+	override fun close()
 }
 
 data class ShaderModuleDescriptor(

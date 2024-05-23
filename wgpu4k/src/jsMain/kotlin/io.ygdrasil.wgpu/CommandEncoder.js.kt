@@ -26,7 +26,7 @@ actual class CommandEncoder(private val handler: GPUCommandEncoder) : AutoClosea
 			.let { handler.beginComputePass(it ?: undefined) }
 			.let { ComputePassEncoder(it) }
 
-	override fun close() {
+	actual override fun close() {
 		// Nothing to do
 	}
 }
