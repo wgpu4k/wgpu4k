@@ -98,26 +98,10 @@ actual class Queue(internal val handler: MemorySegment) {
 
         val bytePerPixel = destination.texture.format.getBytesPerPixel()
 
-        val data = Memory((image.width * bytePerPixel * image.height).toLong())
-
-        var white = true
-        (0 until image.width).forEach { x ->
-            (0 until image.height).forEach { y ->
-                val rgb: Int = 0//image.bufferedImage.getRGB(x, y)
-                val red = (rgb shr 16) and 0xFF
-                val green = (rgb shr 8) and 0xFF
-                val blue = (rgb) and 0xFF
-                val alpha = (rgb shr 24) and 0xFF
-                val pixel = byteArrayOf(red.toByte(), green.toByte(), blue.toByte(), alpha.toByte())
-                data.write((x + y * image.width) * bytePerPixel.toLong(), pixel, 0, pixel.size)
-            }
-            white = !white
-        }
-
         wgpuQueueWriteTexture(
             handler2,
             imageCopyTextureTaggedMapper.map(destination),
-            data,
+            image.data,
             (image.width * bytePerPixel * image.height).toNativeLong(),
             WGPUTextureDataLayout().apply {
                 offset = 0
