@@ -3,12 +3,11 @@ package io.ygdrasil.wgpu
 import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
 import io.ygdrasil.wgpu.mapper.computePassDescriptorMapper
+import io.ygdrasil.wgpu.mapper.convert
 import io.ygdrasil.wgpu.mapper.renderPassDescriptorMapper
 import java.lang.foreign.MemorySegment
 
 actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable {
-
-    val handler2: WGPUCommandEncoder = WGPUCommandEncoderImpl(handler.toPointer())
 
     actual fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder =
         renderPassDescriptorMapper.map<RenderPassDescriptor, WGPURenderPassDescriptor>(descriptor)
@@ -28,21 +27,21 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
         source: ImageCopyTexture,
         destination: ImageCopyTexture,
         copySize: GPUIntegerCoordinates
-    ) {
+    ) = confined {
         actualCopyTextureToTexture(
-            source.convert(),
-            destination.convert(),
-            copySize.convert()
+            source.convert().also { it.write() }.pointer.toMemory(),
+            destination.convert().also { it.write() }.pointer.toMemory(),
+            copySize.convert().also { it.write() }.pointer.toMemory()
         )
     }
 
     fun actualCopyTextureToTexture(
-        source: WGPUImageCopyTexture,
-        destination: WGPUImageCopyTexture,
-        copySize: WGPUExtent3D
+        source: MemorySegment,
+        destination: MemorySegment,
+        copySize: MemorySegment
     ) {
-        wgpuCommandEncoderCopyTextureToTexture(
-            handler2,
+        webgpu_h.wgpuCommandEncoderCopyTextureToTexture(
+            handler,
             source,
             destination,
             copySize
@@ -63,21 +62,9 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
 
 }
 
-private fun Pair<Int, Int>.convert(): WGPUExtent3D = WGPUExtent3D().also {
+private fun GPUIntegerCoordinates.convert(): WGPUExtent3D = WGPUExtent3D().also {
     it.height = second
     it.width = first
     it.depthOrArrayLayers = 1
 }
 
-private fun ImageCopyTexture.convert(): WGPUImageCopyTexture = WGPUImageCopyTexture().also {
-
-    it.texture = WGPUTextureImpl(texture.handler.toPointer())
-    it.mipLevel = mipLevel
-    it.origin = origin.let { (x, y) ->
-        WGPUOrigin3D().also {
-            it.x = x
-            it.y = y
-        }
-    }
-    it.aspect = aspect.value
-}

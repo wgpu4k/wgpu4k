@@ -12,7 +12,6 @@ import io.ygdrasil.wgpu.internal.jvm.WGPUBindGroupLayoutImpl
 import io.ygdrasil.wgpu.internal.jvm.WGPUExtent3D
 import io.ygdrasil.wgpu.internal.jvm.toPointer
 
-internal fun Long.toNativeLong(): NativeLong = let(::NativeLong)
 internal fun Int.toNativeLong(): NativeLong = toLong()
 	.let(::NativeLong)
 
