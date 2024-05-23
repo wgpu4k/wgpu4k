@@ -1,35 +1,19 @@
 package io.ygdrasil.wgpu.`internal`.jvm
 
 import com.sun.jna.Callback
-import com.sun.jna.NativeLong
-import com.sun.jna.Pointer
 
 
 public typealias WGPUBool = Int
 
-public typealias WGPUAdapter = WGPUAdapterImpl
-
 public typealias WGPUBindGroupLayout = WGPUBindGroupLayoutImpl
 
 public typealias WGPUBuffer = WGPUBufferImpl
-
-public typealias WGPUCommandEncoder = WGPUCommandEncoderImpl
-
-public typealias WGPUComputePassEncoder = WGPUComputePassEncoderImpl
 
 public typealias WGPUDevice = WGPUDeviceImpl
 
 public typealias WGPUPipelineLayout = WGPUPipelineLayoutImpl
 
 public typealias WGPUQuerySet = WGPUQuerySetImpl
-
-public typealias WGPUQueue = WGPUQueueImpl
-
-public typealias WGPURenderBundleEncoder = WGPURenderBundleEncoderImpl
-
-public typealias WGPURenderPassEncoder = WGPURenderPassEncoderImpl
-
-public typealias WGPURenderPipeline = WGPURenderPipelineImpl
 
 public typealias WGPUSampler = WGPUSamplerImpl
 
@@ -60,13 +44,3 @@ public interface WGPUDeviceLostCallback : Callback {
 public typealias WGPUInstanceBackendFlags = Int
 
 public typealias WGPUInstanceFlags = Int
-
-public typealias WGPUSubmissionIndex = NativeLong
-
-public interface WGPULogCallback2 : Callback {
-	public operator fun invoke(
-		level: Int,
-		message: String,
-		param3: Pointer?,
-	)
-}
