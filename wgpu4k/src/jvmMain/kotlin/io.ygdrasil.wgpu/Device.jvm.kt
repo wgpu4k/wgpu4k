@@ -21,8 +21,7 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
 
     actual fun createShaderModule(descriptor: ShaderModuleDescriptor): ShaderModule =
         descriptor.convert()
-            .also { logUnitNative { "wgpuDeviceCreateShaderModule" to listOf(handler2, it) } }
-            .let { wgpuDeviceCreateShaderModule(handler2, it) }
+            .let { webgpu_h.wgpuDeviceCreateShaderModule(handler, it) }
             ?.let(::ShaderModule) ?: error("fail to create shader module")
 
     actual fun createPipelineLayout(descriptor: PipelineLayoutDescriptor): PipelineLayout =

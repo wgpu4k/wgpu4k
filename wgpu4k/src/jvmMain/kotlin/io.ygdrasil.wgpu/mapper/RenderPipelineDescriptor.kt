@@ -36,7 +36,7 @@ private val primitiveStateMapper = mapper<RenderPipelineDescriptor.PrimitiveStat
 }
 
 private val fragmentMapper = mapper<RenderPipelineDescriptor.FragmentState, WGPUFragmentState.ByReference> {
-    RenderPipelineDescriptor.FragmentState::module mappedTo WGPUFragmentState.ByReference::module withTransformer MappingTransformer { it.originalValue?.handler }
+    RenderPipelineDescriptor.FragmentState::module mappedTo WGPUFragmentState.ByReference::module withTransformer MappingTransformer { WGPUShaderModuleImpl(it.originalValue?.handler?.toPointer()) }
     RenderPipelineDescriptor.FragmentState::targets mappedTo WGPUFragmentState.ByReference::targets withTransformer MappingTransformer<Array<RenderPipelineDescriptor.FragmentState.ColorTargetState>, Array<WGPUColorTargetState.ByReference>> {
         it.originalValue?.toStructureArray { colorTarget ->
             colorTargetStateMapper.map(colorTarget, this)
@@ -104,7 +104,7 @@ private val stencilFaceStateMapper =
     }
 
 private val vertexStateMapper = mapper<RenderPipelineDescriptor.VertexState, WGPUVertexState> {
-    RenderPipelineDescriptor.VertexState::module mappedTo WGPUVertexState::module withTransformer MappingTransformer { it.originalValue?.handler }
+    RenderPipelineDescriptor.VertexState::module mappedTo WGPUVertexState::module withTransformer MappingTransformer { WGPUShaderModuleImpl(it.originalValue?.handler?.toPointer()) }
     RenderPipelineDescriptor.VertexState::buffers mappedTo WGPUVertexState::buffers withTransformer MappingTransformer<Array<RenderPipelineDescriptor.VertexState.VertexBufferLayout>, Array<WGPUVertexBufferLayout.ByReference>> {
         it.originalValue?.toStructureArray { colorTarget ->
             vertexBufferLayoutMapper.map(colorTarget, this)

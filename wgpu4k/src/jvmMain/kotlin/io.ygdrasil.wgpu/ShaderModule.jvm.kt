@@ -2,16 +2,17 @@ package io.ygdrasil.wgpu
 
 import com.sun.jna.NativeLong
 import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
+import java.lang.foreign.MemorySegment
 
-actual class ShaderModule(internal val handler: WGPUShaderModule) : AutoCloseable {
+actual class ShaderModule(internal val handler: MemorySegment) : AutoCloseable {
 	actual override fun close() {
-		logUnitNative { "wgpuShaderModuleRelease" to listOf(handler) }
-		wgpuShaderModuleRelease(handler)
+		webgpu_h.wgpuShaderModuleRelease(handler)
 	}
 }
 
 
-internal fun ShaderModuleDescriptor.convert(): WGPUShaderModuleDescriptor = WGPUShaderModuleDescriptor().also {
+internal fun ShaderModuleDescriptor.convert() = WGPUShaderModuleDescriptor().also {
 	it.label = label
 	it.nextInChain = WGPUShaderModuleWGSLDescriptor.ByReference().also {
 		it.code = code
@@ -23,7 +24,7 @@ internal fun ShaderModuleDescriptor.convert(): WGPUShaderModuleDescriptor = WGPU
 	it.hints =
 		compilationHints?.map { it.convert() }?.toTypedArray() ?: arrayOf(WGPUShaderModuleCompilationHint.ByReference())
 
-}
+}.also { it.write() }.pointer.toMemory()
 
 private fun ShaderModuleDescriptor.CompilationHint.convert() = WGPUShaderModuleCompilationHint.ByReference().also {
 	TODO("no yet implemented")
