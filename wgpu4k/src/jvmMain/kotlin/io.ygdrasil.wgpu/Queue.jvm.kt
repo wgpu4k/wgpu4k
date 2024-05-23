@@ -1,17 +1,14 @@
 package io.ygdrasil.wgpu
 
-import com.sun.jna.Memory
-import com.sun.jna.Pointer
 import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
-import io.ygdrasil.wgpu.mapper.imageCopyTextureTaggedMapper
+import io.ygdrasil.wgpu.mapper.map
+import java.lang.foreign.Arena
 import java.lang.foreign.MemoryLayout
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.ValueLayout
 
 actual class Queue(internal val handler: MemorySegment) {
-
-    val handler2: WGPUQueue = WGPUQueueImpl(handler.toPointer())
 
     actual fun submit(commandsBuffer: Array<CommandBuffer>) = confined { arena ->
         if (commandsBuffer.isNotEmpty()) {
@@ -40,22 +37,13 @@ actual class Queue(internal val handler: MemorySegment) {
         data: FloatArray,
         dataOffset: GPUSize64,
         size: GPUSize64
-    ) {
-        logUnitNative {
-            "wgpuQueueWriteBuffer" to listOf(
-                handler2,
-                buffer.handler2,
-                bufferOffset,
-                data.toBuffer(dataOffset),
-                (size * Float.SIZE_BYTES).toNativeLong()
-            )
-        }
-        wgpuQueueWriteBuffer(
-            handler2,
-            buffer.handler2,
+    ) = confined { arena ->
+        webgpu_h.wgpuQueueWriteBuffer(
+            handler,
+            buffer.handler,
             bufferOffset,
-            data.toBuffer(dataOffset),
-            (size * Float.SIZE_BYTES).toNativeLong()
+            data.toBuffer(dataOffset, arena),
+            (size * Float.SIZE_BYTES).toLong()
         )
     }
 
@@ -65,22 +53,13 @@ actual class Queue(internal val handler: MemorySegment) {
         data: IntArray,
         dataOffset: GPUSize64,
         size: GPUSize64
-    ) {
-        logUnitNative {
-            "wgpuQueueWriteBuffer" to listOf(
-                handler2,
-                buffer.handler2,
-                bufferOffset,
-                data.toBuffer(dataOffset),
-                (size * Float.SIZE_BYTES).toNativeLong()
-            )
-        }
-        wgpuQueueWriteBuffer(
-            handler2,
-            buffer.handler2,
+    ) = confined { arena ->
+        webgpu_h.wgpuQueueWriteBuffer(
+            handler,
+            buffer.handler,
             bufferOffset,
-            data.toBuffer(dataOffset),
-            (size * Float.SIZE_BYTES).toNativeLong()
+            data.toBuffer(dataOffset, arena),
+            (size * Float.SIZE_BYTES).toLong()
         )
     }
 
@@ -88,7 +67,7 @@ actual class Queue(internal val handler: MemorySegment) {
         source: ImageCopyExternalImage,
         destination: ImageCopyTextureTagged,
         copySize: GPUIntegerCoordinates
-    ) {
+    ) = confined { arena ->
         assert(destination.texture.format == TextureFormat.rgba8unorm) {
             error("rgba8unorm is the only supported texture format supported")
         }
@@ -98,72 +77,47 @@ actual class Queue(internal val handler: MemorySegment) {
 
         val bytePerPixel = destination.texture.format.getBytesPerPixel()
 
-        wgpuQueueWriteTexture(
-            handler2,
-            imageCopyTextureTaggedMapper.map(destination),
+        webgpu_h.wgpuQueueWriteTexture(
+            handler,
+            arena.map(destination),
             image.data,
-            (image.width * bytePerPixel * image.height).toNativeLong(),
+            (image.width * bytePerPixel * image.height).toLong(),
             WGPUTextureDataLayout().apply {
                 offset = 0
                 bytesPerRow = image.width * bytePerPixel
                 rowsPerImage = image.height
-            },
+            }.also { it.write() }.pointer.toMemory(),
             WGPUExtent3D().also {
                 it.width = image.width
                 it.height = image.height
                 it.depthOrArrayLayers = 1
-            }
+            }.also { it.write() }.pointer.toMemory()
         )
 
     }
 
 
-    private fun FloatArray.toBuffer(dataOffset: GPUSize64): Pointer {
-        //Multiply by 4 because of 4 bytes per float
-        return Memory(size * 4L).apply {
-            write(0L, this@toBuffer, dataOffset.toInt(), size)
-        }
+    private fun FloatArray.toBuffer(dataOffset: GPUSize64, arena: Arena): MemorySegment {
+        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
+        return arena.allocateFrom(ValueLayout.JAVA_FLOAT, *this)
     }
 
-    private fun IntArray.toBuffer(dataOffset: GPUSize64): Pointer {
-        //Multiply by 4 because of 4 bytes per float
-        return Memory(size * 4L).apply {
-            write(0L, this@toBuffer, dataOffset.toInt(), size)
-        }
+    private fun IntArray.toBuffer(dataOffset: GPUSize64, arena: Arena): MemorySegment {
+        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
+        return arena.allocateFrom(ValueLayout.JAVA_INT, *this)
     }
 }
 
 actual class ImageBitmapHolder(
-    val data: Memory,
+    val arena: Arena,
+    val data: MemorySegment,
     actual val width: Int,
     actual val height: Int
 ) : DrawableHolder, AutoCloseable {
 
     override fun close() {
-        data.dump()
+        arena.close()
     }
 }
 
 actual sealed interface DrawableHolder
-
-
-/*fun BufferedImage.convertTo32(): BufferedImage {
-    val w = width
-    val h = height
-
-    // Create a new BufferedImage of type ARGB
-    val outputImg = BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB)
-
-    // Get the graphics object from the new image
-    val g = outputImg.createGraphics()
-
-    // Draw the input image onto the new image
-    g.drawImage(this, 0, 0, null)
-
-
-    // Clean up
-    g.dispose()
-
-    // Return the new 32-bit image
-    return outputImg
-}*/

@@ -8,7 +8,7 @@ import io.ygdrasil.wgpu.RenderPassDescriptor
 import io.ygdrasil.wgpu.StoreOp
 import io.ygdrasil.wgpu.TextureView
 import io.ygdrasil.wgpu.internal.jvm.WGPURenderPassDescriptor
-import io.ygdrasil.wgpu.internal.jvm.WGPUTextureView
+import java.lang.foreign.MemorySegment
 
 class RenderPassDescriptorMappingTest: FreeSpec( {
 
@@ -18,14 +18,14 @@ class RenderPassDescriptorMappingTest: FreeSpec( {
         val renderPassDescriptor = RenderPassDescriptor(
             colorAttachments = arrayOf(
                 RenderPassDescriptor.ColorAttachment(
-                    view = TextureView(WGPUTextureView()),
+                    view = TextureView(MemorySegment.NULL),
                     loadOp = LoadOp.clear,
                     clearValue = arrayOf(0.5, 0.6, 0.7, 1.0),
                     storeOp = StoreOp.store,
                 )
             ),
             depthStencilAttachment = RenderPassDescriptor.RenderPassDepthStencilAttachment(
-                view = TextureView(WGPUTextureView()),
+                view = TextureView(MemorySegment.NULL),
                 depthClearValue = 1.0f,
                 depthLoadOp = LoadOp.clear,
                 depthStoreOp = StoreOp.store

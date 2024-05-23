@@ -35,11 +35,11 @@ expect class ImageBitmapHolder : DrawableHolder {
 }
 
 data class ImageCopyExternalImage(
-	var source: DrawableHolder,
+	val source: DrawableHolder,
 	/* ImageBitmap | ImageData | HTMLImageElement | HTMLVideoElement | VideoFrame | HTMLCanvasElement | OffscreenCanvas */
-	var origin: GPUIntegerCoordinates = 0 to 0,
+	val origin: GPUIntegerCoordinates = 0 to 0,
 	/* Iterable<GPUIntegerCoordinate>? | GPUOrigin2DDictStrict? */
-	var flipY: Boolean = false
+	val flipY: Boolean = false
 
 )
 

@@ -5,7 +5,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.internal.jvm.WGPURenderPipelineDescriptor
-import io.ygdrasil.wgpu.internal.jvm.WGPUShaderModule
+import java.lang.foreign.MemorySegment
 
 class PipelineDescriptorMappingTest : FreeSpec({
 
@@ -17,7 +17,7 @@ class PipelineDescriptorMappingTest : FreeSpec({
         // Given
         val descriptor = RenderPipelineDescriptor(
             vertex = RenderPipelineDescriptor.VertexState(
-                module = ShaderModule(WGPUShaderModule()), // bind to autoClosableContext to release it later
+                module = ShaderModule(MemorySegment.NULL), // bind to autoClosableContext to release it later
                 buffers = arrayOf(
                     RenderPipelineDescriptor.VertexState.VertexBufferLayout(
                         arrayStride = cubeVertexSize,
@@ -37,7 +37,7 @@ class PipelineDescriptorMappingTest : FreeSpec({
                 )
             ),
             fragment = RenderPipelineDescriptor.FragmentState(
-                module = ShaderModule(WGPUShaderModule()),
+                module = ShaderModule(MemorySegment.NULL),
                 targets = arrayOf(
                     RenderPipelineDescriptor.FragmentState.ColorTargetState(
                         format = TextureFormat.rgba8unorm
