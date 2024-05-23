@@ -1,6 +1,5 @@
 package io.ygdrasil.wgpu
 
-//import java.awt.image.BufferedImage
 import com.sun.jna.Memory
 import com.sun.jna.Pointer
 import io.ygdrasil.wgpu.internal.jvm.*
@@ -9,7 +8,6 @@ import io.ygdrasil.wgpu.mapper.imageCopyTextureTaggedMapper
 import java.lang.foreign.MemoryLayout
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.ValueLayout
-
 
 actual class Queue(internal val handler: MemorySegment) {
 

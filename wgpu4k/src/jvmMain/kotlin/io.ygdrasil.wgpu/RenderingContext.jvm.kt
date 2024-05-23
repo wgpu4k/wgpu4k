@@ -1,11 +1,13 @@
 package io.ygdrasil.wgpu
 
 
+import io.ygdrasil.wgpu.internal.jvm.WGPUDeviceImpl
 import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceCapabilities
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceTexture
 import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
 import io.ygdrasil.wgpu.internal.jvm.toMemory
+import io.ygdrasil.wgpu.internal.jvm.toPointer
 import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.ValueLayout
@@ -55,7 +57,7 @@ actual class RenderingContext(
 	}
 
 	private fun CanvasConfiguration.convert(): io.ygdrasil.wgpu.internal.jvm.WGPUSurfaceConfiguration = io.ygdrasil.wgpu.internal.jvm.WGPUSurfaceConfiguration().also {
-		it.device = device.handler2
+		it.device = WGPUDeviceImpl(device.handler.toPointer())
 		it.usage = usage
 		it.format = format?.value ?: textureFormat.value
 		it.presentMode = io.ygdrasil.wgpu.internal.jvm.WGPUPresentMode.WGPUPresentMode_Fifo.value

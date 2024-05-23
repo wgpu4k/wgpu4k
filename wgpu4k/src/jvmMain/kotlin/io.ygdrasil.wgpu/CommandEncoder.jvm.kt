@@ -11,54 +11,54 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
     val handler2: WGPUCommandEncoder = WGPUCommandEncoderImpl(handler.toPointer())
 
     actual fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder =
-            renderPassDescriptorMapper.map<RenderPassDescriptor, WGPURenderPassDescriptor>(descriptor)
-                .also { it.write() }.pointer.toMemory()
-                    .let { webgpu_h.wgpuCommandEncoderBeginRenderPass(handler, it) }
-                    ?.let { RenderPassEncoder(it) }
-                    ?: error("fail to get RenderPassEncoder")
+        renderPassDescriptorMapper.map<RenderPassDescriptor, WGPURenderPassDescriptor>(descriptor)
+            .also { it.write() }.pointer.toMemory()
+            .let { webgpu_h.wgpuCommandEncoderBeginRenderPass(handler, it) }
+            ?.let { RenderPassEncoder(it) }
+            ?: error("fail to get RenderPassEncoder")
 
     actual fun finish(): CommandBuffer =
-            WGPUCommandBufferDescriptor()
-                .also { it.write() }.pointer.toMemory()
-                    .let { webgpu_h.wgpuCommandEncoderFinish(handler, it) }
-                    ?.let { CommandBuffer(it) }
-                    ?: error("fail to get CommandBuffer")
+        WGPUCommandBufferDescriptor()
+            .also { it.write() }.pointer.toMemory()
+            .let { webgpu_h.wgpuCommandEncoderFinish(handler, it) }
+            ?.let { CommandBuffer(it) }
+            ?: error("fail to get CommandBuffer")
 
     actual fun copyTextureToTexture(
-            source: ImageCopyTexture,
-            destination: ImageCopyTexture,
-            copySize: GPUIntegerCoordinates
+        source: ImageCopyTexture,
+        destination: ImageCopyTexture,
+        copySize: GPUIntegerCoordinates
     ) {
         actualCopyTextureToTexture(
-                source.convert(),
-                destination.convert(),
-                copySize.convert()
+            source.convert(),
+            destination.convert(),
+            copySize.convert()
         )
     }
 
     fun actualCopyTextureToTexture(
-            source: WGPUImageCopyTexture,
-            destination: WGPUImageCopyTexture,
-            copySize: WGPUExtent3D
+        source: WGPUImageCopyTexture,
+        destination: WGPUImageCopyTexture,
+        copySize: WGPUExtent3D
     ) {
         wgpuCommandEncoderCopyTextureToTexture(
-                handler2,
-                source,
-                destination,
-                copySize
+            handler2,
+            source,
+            destination,
+            copySize
         )
     }
 
     actual fun beginComputePass(descriptor: ComputePassDescriptor?): ComputePassEncoder =
-            descriptor?.let { computePassDescriptorMapper.map<ComputePassDescriptor, WGPUComputePassDescriptor>(descriptor) }
-                    .let { wgpuCommandEncoderBeginComputePass(handler2, it) }
-                    ?.let { ComputePassEncoder(it) }
-                    ?: error("fail to get ComputePassEncoder")
+        descriptor?.let { computePassDescriptorMapper.map<ComputePassDescriptor, WGPUComputePassDescriptor>(descriptor) }
+            .also { it?.write() }?.pointer?.toMemory()
+            .let { webgpu_h.wgpuCommandEncoderBeginComputePass(handler, it ?: MemorySegment.NULL) }
+            ?.let { ComputePassEncoder(it) }
+            ?: error("fail to get ComputePassEncoder")
 
 
     actual override fun close() {
-        logUnitNative { "wgpuCommandEncoderRelease" to listOf(handler2) }
-        wgpuCommandEncoderRelease(handler2)
+        webgpu_h.wgpuCommandEncoderRelease(handler)
     }
 
 }
