@@ -6,7 +6,6 @@ import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceCapabilities
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceTexture
 import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
 import io.ygdrasil.wgpu.internal.jvm.toMemory
-import io.ygdrasil.wgpu.internal.jvm.toPointer
 import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.ValueLayout
@@ -15,8 +14,6 @@ actual class RenderingContext(
 	internal val handler: MemorySegment,
 	private val sizeProvider: () -> Pair<Int, Int>
 ) : AutoCloseable {
-
-	val handler2: io.ygdrasil.wgpu.internal.jvm.WGPUSurface = io.ygdrasil.wgpu.internal.jvm.WGPUSurfaceImpl(handler.toPointer())
 
 	private val surfaceCapabilities = WGPUSurfaceCapabilities.allocate(Arena.global())
 	actual val width: Int

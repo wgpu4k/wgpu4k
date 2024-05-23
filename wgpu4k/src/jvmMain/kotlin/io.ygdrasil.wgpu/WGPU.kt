@@ -42,7 +42,7 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 
 
 		val options = WGPURequestAdapterOptions.allocate(arena)
-		WGPURequestAdapterOptions.compatibleSurface(options, renderingContext.handler2.pointer.toMemory())
+		WGPURequestAdapterOptions.compatibleSurface(options, renderingContext.handler)
 		WGPURequestAdapterOptions.powerPreference(options, powerPreference.value)
 
 		webgpu_h.wgpuInstanceRequestAdapter(handler, options, handleRequestAdapter, MemorySegment.NULL)
