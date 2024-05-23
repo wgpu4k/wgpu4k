@@ -35,7 +35,7 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) : Aut
         wgpuRenderPassEncoderSetBindGroup(
                 handler,
                 index,
-                bindGroup.handler,
+                WGPUBindGroupImpl(bindGroup.handler.toPointer()),
                 0L.toNativeLong(),
                 null
         )
@@ -44,14 +44,14 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) : Aut
     actual fun setVertexBuffer(slot: Int, buffer: Buffer) {
         logUnitNative {
             "wgpuRenderPassEncoderSetVertexBuffer" to listOf(slot,
-                    buffer.handler,
+                    buffer.handler2,
                     0L,
                     buffer.size)
         }
         wgpuRenderPassEncoderSetVertexBuffer(
                 handler,
                 slot,
-                buffer.handler,
+                buffer.handler2,
                 0L,
                 buffer.size
         )

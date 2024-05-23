@@ -2,20 +2,23 @@ package io.ygdrasil.wgpu
 
 import com.sun.jna.NativeLong
 import io.ygdrasil.wgpu.internal.jvm.*
+import java.lang.foreign.MemorySegment
 
-actual class Buffer(internal val handler: WGPUBuffer) : AutoCloseable {
+actual class Buffer(internal val handler: MemorySegment) : AutoCloseable {
+
+	val handler2: WGPUBuffer = WGPUBufferImpl(handler.toPointer())
 
 	actual val size: GPUSize64
-		get() = wgpuBufferGetSize(handler)
+		get() = wgpuBufferGetSize(handler2)
 
 	actual fun getMappedRange(offset: GPUSize64?, size: GPUSize64?): ByteArray {
-		wgpuBufferGetMappedRange(handler, offset?.toNativeLong(), size?.toNativeLong())
+		wgpuBufferGetMappedRange(handler2, offset?.toNativeLong(), size?.toNativeLong())
 		TODO()
 	}
 
 	actual fun unmap() {
 		logUnitNative { "wgpuBufferUnmap" to listOf() }
-		wgpuBufferUnmap(handler)
+		wgpuBufferUnmap(handler2)
 	}
 
 	actual fun map(buffer: FloatArray) {
@@ -25,14 +28,14 @@ actual class Buffer(internal val handler: WGPUBuffer) : AutoCloseable {
 				(buffer.size * Float.SIZE_BYTES).toNativeLong()
 			)
 		}
-		(wgpuBufferGetMappedRange(handler, NativeLong(0), (buffer.size * Float.SIZE_BYTES).toNativeLong())
+		(wgpuBufferGetMappedRange(handler2, NativeLong(0), (buffer.size * Float.SIZE_BYTES).toNativeLong())
 			?: error("fail to get mapped range"))
 			.write(0L, buffer, 0, buffer.size)
 	}
 
 	actual override fun close() {
-		logUnitNative { "wgpuBufferRelease" to listOf(handler) }
-		wgpuBufferRelease(handler)
+		logUnitNative { "wgpuBufferRelease" to listOf(handler2) }
+		wgpuBufferRelease(handler2)
 	}
 
 }

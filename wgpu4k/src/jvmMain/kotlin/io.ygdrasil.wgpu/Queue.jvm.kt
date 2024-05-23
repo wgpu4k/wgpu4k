@@ -52,7 +52,7 @@ actual class Queue(internal val handler: WGPUQueue) {
         logUnitNative {
             "wgpuQueueWriteBuffer" to listOf(
                 handler,
-                buffer.handler,
+                buffer.handler2,
                 bufferOffset,
                 data.toBuffer(dataOffset),
                 (size * Float.SIZE_BYTES).toNativeLong()
@@ -60,7 +60,7 @@ actual class Queue(internal val handler: WGPUQueue) {
         }
         wgpuQueueWriteBuffer(
             handler,
-            buffer.handler,
+            buffer.handler2,
             bufferOffset,
             data.toBuffer(dataOffset),
             (size * Float.SIZE_BYTES).toNativeLong()
@@ -77,7 +77,7 @@ actual class Queue(internal val handler: WGPUQueue) {
         logUnitNative {
             "wgpuQueueWriteBuffer" to listOf(
                 handler,
-                buffer.handler,
+                buffer.handler2,
                 bufferOffset,
                 data.toBuffer(dataOffset),
                 (size * Float.SIZE_BYTES).toNativeLong()
@@ -85,7 +85,7 @@ actual class Queue(internal val handler: WGPUQueue) {
         }
         wgpuQueueWriteBuffer(
             handler,
-            buffer.handler,
+            buffer.handler2,
             bufferOffset,
             data.toBuffer(dataOffset),
             (size * Float.SIZE_BYTES).toNativeLong()

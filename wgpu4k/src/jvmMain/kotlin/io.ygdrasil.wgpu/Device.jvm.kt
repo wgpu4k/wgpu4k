@@ -37,17 +37,14 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
 
     actual fun createBuffer(descriptor: BufferDescriptor): Buffer =
         descriptor.convert()
-            .also { logNative { Triple("wgpuDeviceCreateBuffer", listOf(handler2, it), WGPUBuffer::class) } }
-            .let { wgpuDeviceCreateBuffer(handler2, it) }
-            .also { registerNative { it } }
+            .let { webgpu_h.wgpuDeviceCreateBuffer(handler, it) }
             ?.let(::Buffer) ?: error("fail to create buffer")
 
 
     actual fun createBindGroup(descriptor: BindGroupDescriptor): BindGroup =
         bindGroupDescriptorMapper.map<Any, WGPUBindGroupDescriptor>(descriptor)
-            .also { logUnitNative { "wgpuDeviceCreateBindGroup" to listOf(handler2, it) } }
-            .also { it.write() }
-            .let { wgpuDeviceCreateBindGroup(handler2, it) }
+            .also { it.write() }.pointer.toMemory()
+            .let { webgpu_h.wgpuDeviceCreateBindGroup(handler, it) }
             ?.let(::BindGroup) ?: error("fail to create bind group")
 
     actual fun createTexture(descriptor: TextureDescriptor): Texture =
@@ -73,11 +70,11 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
 
 }
 
-private fun BufferDescriptor.convert(): WGPUBufferDescriptor = WGPUBufferDescriptor().also {
+private fun BufferDescriptor.convert() = WGPUBufferDescriptor().also {
     it.usage = usage
     it.size = size
     it.mappedAtCreation = mappedAtCreation?.toInt()
-}.also { it.write() }
+}.also { it.write() }.pointer.toMemory()
 
 private fun PipelineLayoutDescriptor.convert() = WGPUPipelineLayoutDescriptor().also {
     it.label = label

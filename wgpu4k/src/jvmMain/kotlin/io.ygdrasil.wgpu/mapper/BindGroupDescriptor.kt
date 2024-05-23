@@ -17,7 +17,7 @@ internal val bindGroupDescriptorMapper = mapper<BindGroupDescriptor, WGPUBindGro
                 is BindGroupDescriptor.BufferBinding -> {
                     size = resource.size
                     offset = resource.offset
-                    buffer = resource.buffer.handler
+                    buffer = resource.buffer.handler2
                 }
 
                 is BindGroupDescriptor.SamplerBinding -> sampler = resource.sampler.handler
