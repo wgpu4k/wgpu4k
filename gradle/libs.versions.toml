@@ -2,9 +2,9 @@
 kotest = "5.7.2"
 klang = "0.0.0"
 jna = "5.13.0"
-kotlin = "1.9.23"
+kotlin = "2.0.0"
 wgpu = "v0.19.3.1"
-compose = "1.6.1"
+compose = "1.6.10"
 coroutines = "1.6.0"
 
 
@@ -16,6 +16,7 @@ jnaPlatform = { module = "net.java.dev.jna:jna-platform", version.ref = "jna" }
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 
 [plugins]
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 klang = { id = "io.ygdrasil.klang-plugin", version.ref = "klang" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm" }

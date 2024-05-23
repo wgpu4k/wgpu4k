@@ -2,12 +2,8 @@
 
 package io.ygdrasil.wgpu.examples
 
-import io.ygdrasil.wgpu.ImageBitmapHolder
 import io.ygdrasil.wgpu.getRenderingContext
 import io.ygdrasil.wgpu.requestAdapter
-import korlibs.image.bitmap.Bitmap32
-import korlibs.image.format.readBitmap
-import korlibs.io.file.std.resourcesVfs
 import kotlinx.browser.window
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.promise
@@ -19,7 +15,6 @@ external fun setInterval(render: () -> Unit, updateInterval: Int)
 // ~60 Frame per second
 val UPDATE_INTERVAL = (1000.0 / 60.0).toInt()
 
-@JsExport
 fun jsApplication(canvas: HTMLCanvasElement): Promise<Application> {
 
 	return MainScope().promise {

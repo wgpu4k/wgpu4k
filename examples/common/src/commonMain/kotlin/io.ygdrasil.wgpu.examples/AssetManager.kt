@@ -1,13 +1,10 @@
 package io.ygdrasil.wgpu.examples
 
 import io.ygdrasil.wgpu.ImageBitmapHolder
-import korlibs.image.bitmap.Bitmap
 import korlibs.image.bitmap.Bitmap32
 import korlibs.image.format.readBitmap
 import korlibs.io.file.std.resourcesVfs
-import kotlin.js.JsExport
 
-@JsExport
 interface AssetManager {
 
     val Di3d: ImageBitmapHolder

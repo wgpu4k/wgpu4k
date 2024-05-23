@@ -14,10 +14,8 @@ import io.ygdrasil.wgpu.examples.scenes.shader.fragment.vertexPositionColorShade
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.basicVertexShader
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
-import kotlin.js.JsExport
 import kotlin.math.PI
 
-@JsExport
 class RotatingCubeScene : Application.Scene(), AutoCloseable {
 
 	lateinit var renderPipeline: RenderPipeline
