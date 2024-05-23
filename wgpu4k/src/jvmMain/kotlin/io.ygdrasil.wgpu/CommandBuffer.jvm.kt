@@ -5,7 +5,7 @@ import io.ygdrasil.wgpu.internal.jvm.logUnitNative
 import io.ygdrasil.wgpu.internal.jvm.wgpuCommandBufferRelease
 
 actual class CommandBuffer(internal val handler: WGPUCommandBuffer) : AutoCloseable {
-	override fun close() {
+	actual override fun close() {
 		logUnitNative { "wgpuCommandBufferRelease" to listOf(handler) }
 		wgpuCommandBufferRelease(handler)
 	}

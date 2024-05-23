@@ -34,4 +34,8 @@ kotlin {
 			}
 		}
 	}
+
+	compilerOptions {
+		allWarningsAsErrors = true
+	}
 }

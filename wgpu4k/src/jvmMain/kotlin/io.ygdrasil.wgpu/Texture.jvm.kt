@@ -36,7 +36,7 @@ actual class Texture(internal val handler: WGPUTexture) : AutoCloseable {
             ?.let { TextureView(it) }
             ?: error("fail to create texture view")
 
-    override fun close() {
+    actual override fun close() {
         logUnitNative { "wgpuTextureRelease" to listOf(handler) }
         wgpuTextureRelease(handler)
     }

@@ -35,6 +35,10 @@ kotlin {
         }
 
     }
+
+    compilerOptions {
+        allWarningsAsErrors = true
+    }
 }
 
 fun getCommonProject() = projects.examples.common.identityPath.path

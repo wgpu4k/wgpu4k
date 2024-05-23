@@ -98,7 +98,7 @@ internal fun Structure.log(indentation: UInt = 0u, isPointer: Boolean = true): S
                     .filterIsInstance<Structure>()
                     .forEach {
                         @Suppress("KotlinConstantConditions")
-                        log.append(it.log(indentation + 3u, value is Structure.ByReference))
+                        log.append(it.log(indentation + 3u, (value as? Structure.ByReference) != null))
                     }
 
 

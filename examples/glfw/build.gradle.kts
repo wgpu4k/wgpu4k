@@ -52,3 +52,9 @@ application {
 	}
 	applicationDefaultJvmArgs += "--add-opens=java.base/java.lang=ALL-UNNAMED"
 }
+
+kotlin {
+	compilerOptions {
+		allWarningsAsErrors = true
+	}
+}

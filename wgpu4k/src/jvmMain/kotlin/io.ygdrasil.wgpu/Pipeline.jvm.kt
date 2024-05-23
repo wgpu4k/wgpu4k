@@ -13,7 +13,7 @@ actual class RenderPipeline(internal val handler: WGPURenderPipeline) : AutoClos
 	}
 
 
-	override fun close() {
+	actual override fun close() {
 		logUnitNative { "wgpuRenderPipelineRelease" to listOf(handler) }
 		wgpuRenderPipelineRelease(handler)
 	}

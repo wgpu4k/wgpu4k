@@ -75,7 +75,7 @@ actual class Device(internal val handler: WGPUDeviceImpl) : AutoCloseable {
         TODO()
     }
 
-    override fun close() {
+    actual override fun close() {
         logUnitNative { "wgpuDeviceRelease" to listOf(handler) }
         wgpuDeviceRelease(handler)
     }

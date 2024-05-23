@@ -51,7 +51,7 @@ actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : AutoClos
                     ?: error("fail to get ComputePassEncoder")
 
 
-    override fun close() {
+    actual override fun close() {
         logUnitNative { "wgpuCommandEncoderRelease" to listOf(handler) }
         wgpuCommandEncoderRelease(handler)
     }

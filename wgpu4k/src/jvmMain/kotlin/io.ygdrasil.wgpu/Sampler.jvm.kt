@@ -6,7 +6,7 @@ import io.ygdrasil.wgpu.internal.jvm.wgpuSamplerRelease
 
 actual class Sampler(internal val handler: WGPUSampler?) : AutoCloseable {
 
-	override fun close() {
+	actual override fun close() {
 		logUnitNative { "wgpuSamplerRelease" to listOf(handler) }
 		wgpuSamplerRelease(handler)
 	}
