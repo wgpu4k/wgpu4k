@@ -1,6 +1,5 @@
 package io.ygdrasil.wgpu
 
-import com.sun.jna.Pointer
 import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.internal.jvm.panama.*
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUChainedStruct
@@ -20,8 +19,6 @@ import java.nio.file.StandardCopyOption
 
 
 class WGPU(private val handler: MemorySegment) : AutoCloseable {
-
-	val handler2: io.ygdrasil.wgpu.internal.jvm.WGPUInstanceImpl = io.ygdrasil.wgpu.internal.jvm.WGPUInstanceImpl(Pointer(handler.address()))
 
 	override fun close() {
 		webgpu_h.wgpuInstanceRelease(handler)
