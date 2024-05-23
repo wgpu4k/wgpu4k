@@ -11,7 +11,6 @@ actual class ShaderModule(internal val handler: MemorySegment) : AutoCloseable {
 	}
 }
 
-
 internal fun ShaderModuleDescriptor.convert() = WGPUShaderModuleDescriptor().also {
 	it.label = label
 	it.nextInChain = WGPUShaderModuleWGSLDescriptor.ByReference().also {
