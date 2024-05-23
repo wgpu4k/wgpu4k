@@ -2,10 +2,11 @@
 
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
-import java.lang.invoke.*;
 import java.lang.foreign.*;
-import java.util.*;
-import java.util.stream.*;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import static java.lang.foreign.ValueLayout.*;
 
@@ -5203,6 +5204,27 @@ public class webgpu_h {
            throw new AssertionError("should not reach here", ex$);
         }
     }
+    //
+    private static class wgpuSetLogCallback {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
+                webgpu_h.C_POINTER,
+                webgpu_h.C_POINTER
+        );
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
+                webgpu_h.findOrThrow("wgpuSetLogCallback"),
+                DESC);
+    }
+
+    private static class wgpuSetLogLevel {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
+                webgpu_h.C_INT
+        );
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
+                webgpu_h.findOrThrow("wgpuSetLogLevel"),
+                DESC);
+    }
 
     private static class wgpuBindGroupSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
@@ -5250,6 +5272,31 @@ public class webgpu_h {
            throw new AssertionError("should not reach here", ex$);
         }
     }
+
+    public static void wgpuSetLogLevel(int logLevel) {
+        var mh$ = wgpuSetLogLevel.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("wgpuSetLogLevel", logLevel);
+            }
+            mh$.invokeExact(logLevel);
+        } catch (Throwable ex$) {
+            throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
+    public static void wgpuSetLogCallback(MemorySegment callback, MemorySegment data) {
+        var mh$ = wgpuSetLogCallback.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("wgpuSetLogCallback", callback, data);
+            }
+            mh$.invokeExact(callback, data);
+        } catch (Throwable ex$) {
+            throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
 
     private static class wgpuBindGroupReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(

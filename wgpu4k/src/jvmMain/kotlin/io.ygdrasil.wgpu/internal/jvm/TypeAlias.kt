@@ -63,7 +63,7 @@ public typealias WGPUInstanceFlags = Int
 
 public typealias WGPUSubmissionIndex = NativeLong
 
-public interface WGPULogCallback : Callback {
+public interface WGPULogCallback2 : Callback {
 	public operator fun invoke(
 		level: Int,
 		message: String,

@@ -5,8 +5,11 @@ import darwin.NSWindow
 import io.ygdrasil.wgpu.RenderingContext
 import io.ygdrasil.wgpu.WGPU
 import io.ygdrasil.wgpu.WGPU.Companion.createInstance
+import io.ygdrasil.wgpu.WGPU.Companion.loadLibrary
 import io.ygdrasil.wgpu.examples.*
 import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPULogCallback
+import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
 import kotlinx.coroutines.Dispatchers
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
@@ -16,21 +19,22 @@ import org.lwjgl.glfw.GLFWNativeX11.glfwGetX11Window
 import org.lwjgl.system.MemoryUtil.NULL
 import org.rococoa.ID
 import org.rococoa.Rococoa
+import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 import kotlin.system.exitProcess
 
 var oneFrame = false
 
-val callback = object : WGPULogCallback {
-    override fun invoke(level: Int, message: String, param3: Pointer?) {
-        println("LOG {$level} $message")
-    }
-}
+val callback = WGPULogCallback.allocate( { level, message, data ->
+    println("LOG {$level} ${message.getString(0)}")
+}, Arena.global())
+
 
 suspend fun main() {
     oneFrame = true
-    wgpuSetLogLevel(0)
-    wgpuSetLogCallback(callback, null)
+    loadLibrary()
+    webgpu_h.wgpuSetLogLevel(0)
+    webgpu_h.wgpuSetLogCallback(callback, MemorySegment.NULL)
 
     var width = 640
     var height = 480

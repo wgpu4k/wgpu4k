@@ -9,6 +9,8 @@ import io.ygdrasil.wgpu.WGPU
 import io.ygdrasil.wgpu.WGPU.Companion.createInstance
 import io.ygdrasil.wgpu.WGPU.Companion.loadLibrary
 import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPULogCallback
+import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.lwjgl.glfw.GLFW.*
@@ -19,19 +21,18 @@ import org.lwjgl.glfw.GLFWNativeX11.glfwGetX11Window
 import org.lwjgl.system.MemoryUtil.NULL
 import org.rococoa.ID
 import org.rococoa.Rococoa
+import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 import kotlin.system.exitProcess
 
-
-val callback = object : WGPULogCallback {
-    override fun invoke(level: Int, message: String, param3: Pointer?) {
-        println("LOG {$level} $message")
-    }
-}
+val callback = WGPULogCallback.allocate( { level, message, data ->
+    println("LOG {$level} ${message.getString(0)}")
+}, Arena.global())
 
 suspend fun main() {
-    wgpuSetLogLevel(1)
-    wgpuSetLogCallback(callback, null)
+    loadLibrary()
+    webgpu_h.wgpuSetLogLevel(1)
+    webgpu_h.wgpuSetLogCallback(callback, MemorySegment.NULL)
 
     var width = 640
     var height = 480
@@ -48,8 +49,6 @@ suspend fun main() {
     glfwSetWindowCloseCallback(windowHandle) {
         glfwDispatcher.stop()
     }
-
-	loadLibrary()
 
 	val wgpu = createInstance() ?: error("fail to wgpu instance")
 	val surface = wgpu.getSurface(windowHandle)

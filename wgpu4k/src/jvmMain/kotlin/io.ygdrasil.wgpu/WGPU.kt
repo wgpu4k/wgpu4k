@@ -26,7 +26,7 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 
 	fun requestAdapter(
 		renderingContext: RenderingContext,
-		powerPreference:WGPUPowerPreference = io.ygdrasil.wgpu.internal.jvm.WGPUPowerPreference.WGPUPowerPreference_Undefined
+		powerPreference:WGPUPowerPreference = WGPUPowerPreference.WGPUPowerPreference_Undefined
 	): Adapter? = confined { arena ->
 
 		val adapterState = MutableStateFlow<MemorySegment?>(null)
