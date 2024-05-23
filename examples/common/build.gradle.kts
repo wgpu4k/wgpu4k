@@ -23,8 +23,8 @@ kotlin {
 			dependencies {
 				api(projects.wgpu4k)
 				api(libs.coroutines)
-				api("com.soywiz.korge:korge-foundation:5.4.0")
-				api("com.soywiz.korge:korge-core:5.4.0")
+				api(libs.korge.foundation)
+				api(libs.korge.core)
 			}
 		}
 

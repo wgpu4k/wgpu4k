@@ -36,14 +36,14 @@ kotlin {
 		val jvmMain by getting {
 			dependencies {
 				api(libs.jna)
-				implementation("dev.krud:shapeshift:0.8.0")
+				implementation(libs.shapeshift)
 			}
 		}
 
         val commonMain by getting {
             dependencies {
 				implementation(kotlin("stdlib-common"))
-				implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+				implementation(libs.coroutines)
 				implementation(kotlin("reflect"))
             }
         }
