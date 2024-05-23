@@ -6,7 +6,7 @@ import org.rococoa.cocoa.CGFloat
 /// <i>native declaration : :72</i>
 abstract class NSTextView : NSText() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSTextView
+		fun alloc(): NSTextView
 	}
 
 	abstract override fun init(): NSTextView

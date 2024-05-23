@@ -8,7 +8,7 @@ import org.rococoa.cocoa.foundation.NSSize
 /// <i>native declaration : :31</i>
 abstract class NSDrawer : NSObject() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSDrawer?
+		fun alloc(): NSDrawer?
 	}
 	/**
 	 * *native declaration : :57*<br></br>

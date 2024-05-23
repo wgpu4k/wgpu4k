@@ -13,7 +13,7 @@ abstract class NSFileManager : NSObject() {
 		 * defaultManager()`<br></br>
 		 * *native declaration : :16*
 		 */
-		open fun defaultManager(): NSFileManager?
+		fun defaultManager(): NSFileManager?
 	}
 
 	/**

@@ -10,14 +10,14 @@ abstract class NSNotification : NSObject(), NSCopying {
 		 * Conversion Error : /// Original signature : `notificationWithName(NSString*, null)`<br></br>
 		 * + (null)notificationWithName:(NSString*)aName object:(null)anObject; (Argument anObject cannot be converted)
 		 */
-		open fun notificationWithName_object(notificationName: String?, `object`: org.rococoa.ID?): NSNotification?
+		fun notificationWithName_object(notificationName: String?, `object`: org.rococoa.ID?): NSNotification?
 
 		/**
 		 * *from NSNotificationCreation native declaration : :23*<br></br>
 		 * Conversion Error : /// Original signature : `notificationWithName(NSString*, null, NSDictionary*)`<br></br>
 		 * + (null)notificationWithName:(NSString*)aName object:(null)anObject userInfo:(NSDictionary*)aUserInfo; (Argument anObject cannot be converted)
 		 */
-		open fun alloc(): NSNotification?
+		fun alloc(): NSNotification?
 	}
 
 	/**

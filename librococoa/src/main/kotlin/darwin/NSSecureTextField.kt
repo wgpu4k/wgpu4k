@@ -5,7 +5,7 @@ import org.rococoa.cocoa.foundation.NSRect
 
 abstract class NSSecureTextField : NSTextField() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSSecureTextField
+		fun alloc(): NSSecureTextField
 	}
 
 	@Override

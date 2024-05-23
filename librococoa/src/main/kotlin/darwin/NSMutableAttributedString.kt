@@ -6,7 +6,7 @@ import org.rococoa.cocoa.foundation.NSUInteger
 
 abstract class NSMutableAttributedString : NSAttributedString() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSMutableAttributedString
+		fun alloc(): NSMutableAttributedString
 	}
 
 	/**

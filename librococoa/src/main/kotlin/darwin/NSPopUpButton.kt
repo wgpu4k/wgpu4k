@@ -7,7 +7,7 @@ import org.rococoa.cocoa.foundation.NSRect
 /// <i>native declaration : :10</i>
 abstract class NSPopUpButton : NSButton() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSPopUpButton
+		fun alloc(): NSPopUpButton
 	}
 
 	abstract fun initWithFrame_pullsDown(frameRect: NSRect?, flag: Boolean): NSPopUpButton?

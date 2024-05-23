@@ -12,7 +12,7 @@ import org.rococoa.cocoa.foundation.NSInteger
  */
 abstract class NSComboBoxCell : NSTextFieldCell() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSComboBoxCell
+		fun alloc(): NSComboBoxCell
 	}
 
 	@Override

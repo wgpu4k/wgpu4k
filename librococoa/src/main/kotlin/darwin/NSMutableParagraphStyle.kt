@@ -7,7 +7,7 @@ import org.rococoa.cocoa.foundation.NSInteger
 /// <i>native declaration : :150</i>
 abstract class NSMutableParagraphStyle : NSParagraphStyle() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSMutableParagraphStyle
+		fun alloc(): NSMutableParagraphStyle
 	}
 
 	abstract fun init(): NSMutableParagraphStyle?

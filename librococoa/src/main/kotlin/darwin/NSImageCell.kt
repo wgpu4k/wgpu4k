@@ -5,7 +5,7 @@ import org.rococoa.cocoa.foundation.NSUInteger
 
 abstract class NSImageCell : NSCell(), NSCopying {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSImageCell
+		fun alloc(): NSImageCell
 	}
 
 	abstract fun init(): NSImageCell?

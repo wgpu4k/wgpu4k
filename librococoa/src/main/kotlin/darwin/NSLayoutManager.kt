@@ -8,7 +8,7 @@ import java.nio.IntBuffer
 /// <i>native declaration : :71</i>
 abstract class NSLayoutManager : NSObject() {
 	interface Delegate {
-		open fun layoutManager_didCompleteLayoutForTextContainer_atEnd(
+		fun layoutManager_didCompleteLayoutForTextContainer_atEnd(
 			layoutManager: NSLayoutManager?,
 			textContainer: NSObject?,
 			finished: Boolean
@@ -16,7 +16,7 @@ abstract class NSLayoutManager : NSObject() {
 	}
 
 	interface _Class : ObjCClass {
-		open fun alloc(): NSLayoutManager
+		fun alloc(): NSLayoutManager
 	}
 
 	/**

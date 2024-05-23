@@ -22,6 +22,12 @@ dependencies {
 	implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.20.0")
 }
 
+kotlin {
+	compilerOptions {
+		allWarningsAsErrors = true
+		freeCompilerArgs.add("-Xexpect-actual-classes")
+	}
+}
 
 abstract class DownloadTask : DefaultTask() {
 	@TaskAction

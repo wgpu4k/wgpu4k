@@ -8,7 +8,7 @@ import org.rococoa.cocoa.foundation.NSSize
 /// <i>native declaration : :10</i>
 abstract class NSToolbarItem : NSObject(), NSCopying, NSValidatedUserInterfaceItem {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSToolbarItem
+		fun alloc(): NSToolbarItem
 	}
 
 	/**

@@ -8,7 +8,7 @@ import org.rococoa.cocoa.foundation.NSUInteger
 /// <i>native declaration : :8</i>
 abstract class NSTextField : NSControl() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSTextField
+		fun alloc(): NSTextField
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import org.rococoa.cocoa.foundation.NSUInteger
 
 abstract class NSButtonCell : NSActionCell() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSButtonCell
+		fun alloc(): NSButtonCell
 	}
 
 	abstract fun init(): NSButtonCell?

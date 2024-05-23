@@ -10,7 +10,7 @@ import org.rococoa.Rococoa
  */
 abstract class NSAppleScript : NSObject() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSAppleScript
+		fun alloc(): NSAppleScript
 	}
 
 	/**

@@ -8,13 +8,13 @@ import org.rococoa.cocoa.foundation.NSRect
 /// <i>native declaration : :16</i>
 abstract class NSComboBox : NSTextField() {
 	interface DataSource {
-		open fun numberOfItemsInComboBox(combo: NSComboBox?): NSInteger?
+		fun numberOfItemsInComboBox(combo: NSComboBox?): NSInteger?
 
-		open fun comboBox_objectValueForItemAtIndex(sender: NSComboBox?, row: NSInteger?): NSObject?
+		fun comboBox_objectValueForItemAtIndex(sender: NSComboBox?, row: NSInteger?): NSObject?
 	}
 
 	interface _Class : ObjCClass {
-		open fun alloc(): NSComboBox
+		fun alloc(): NSComboBox
 	}
 
 	@Override

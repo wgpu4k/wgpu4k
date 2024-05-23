@@ -5,7 +5,7 @@ import org.rococoa.ObjCClass
 /// <i>native declaration : :18</i>
 abstract class NSTabViewItem : NSObject() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSTabViewItem
+		fun alloc(): NSTabViewItem
 	}
 
 	/**

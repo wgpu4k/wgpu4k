@@ -23,7 +23,7 @@ abstract class NSApplication : NSObject() {
 		 * @param filename The name of the file to open.
 		 * @return YES if the file was successfully opened or NO if it was not.
 		 */
-		open fun application_openFile(app: NSApplication?, filename: String?): Boolean
+		fun application_openFile(app: NSApplication?, filename: String?): Boolean
 
 		/**
 		 * Tells the delegate to open a temporary file.
@@ -42,7 +42,7 @@ abstract class NSApplication : NSObject() {
 		 * @param filename The name of the temporary file to open.
 		 * @return YES if the file was successfully opened or NO if it was not.
 		 */
-		open fun application_openTempFile(app: NSApplication?, filename: String?): Boolean
+		fun application_openTempFile(app: NSApplication?, filename: String?): Boolean
 
 		/**
 		 * Invoked immediately before opening an untitled file.
@@ -54,7 +54,7 @@ abstract class NSApplication : NSObject() {
 		 * @param sender The application object associated with the delegate.
 		 * @return YES if the application should open a new untitled file or NO if it should not.
 		 */
-		open fun applicationShouldOpenUntitledFile(sender: NSApplication?): Boolean
+		fun applicationShouldOpenUntitledFile(sender: NSApplication?): Boolean
 
 		/**
 		 * Tells the delegate to open an untitled file.
@@ -65,7 +65,7 @@ abstract class NSApplication : NSObject() {
 		 * @param sender The application object associated with the delegate.
 		 * @return YES if the file was successfully opened or NO if it was not.
 		 */
-		open fun applicationOpenUntitledFile(sender: NSApplication?): Boolean
+		fun applicationOpenUntitledFile(sender: NSApplication?): Boolean
 
 		/**
 		 * Sent by the application to the delegate prior to default behavior to reopen (rapp) AppleEvents.
@@ -99,7 +99,7 @@ abstract class NSApplication : NSObject() {
 		 * @return YES if you want the application to perform its normal tasks or NO if you want the application to do
 		 * nothing.
 		 */
-		open fun applicationShouldHandleReopen_hasVisibleWindows(
+		fun applicationShouldHandleReopen_hasVisibleWindows(
 			app: NSApplication?,
 			visibleWindowsFound: Boolean
 		): Boolean
@@ -151,7 +151,7 @@ abstract class NSApplication : NSObject() {
 		 * should terminate. For compatibility reasons, a return value of NO is equivalent to NSTerminateCancel, and a
 		 * return value of YES is equivalent to NSTerminateNow.
 		 */
-		open fun applicationShouldTerminate(app: NSApplication?): NSUInteger?
+		fun applicationShouldTerminate(app: NSApplication?): NSUInteger?
 
 		fun applicationWillTerminate(notification: NSNotification?) {
 			if (log.isDebugEnabled()) {
@@ -176,7 +176,7 @@ abstract class NSApplication : NSObject() {
 		 * @return NO if the application should not be terminated when its last window is closed; otherwise, YES to
 		 * terminate the application.
 		 */
-		open fun applicationShouldTerminateAfterLastWindowClosed(app: NSApplication?): Boolean
+		fun applicationShouldTerminateAfterLastWindowClosed(app: NSApplication?): Boolean
 
 		/**
 		 * Sent by the default notification center immediately before the application becomes active.
@@ -237,7 +237,7 @@ abstract class NSApplication : NSObject() {
 		 *
 		 * @return The shared application object.
 		 */
-		open fun sharedApplication(): NSApplication
+		fun sharedApplication(): NSApplication
 	}
 
 	abstract fun windows(): NSArray?

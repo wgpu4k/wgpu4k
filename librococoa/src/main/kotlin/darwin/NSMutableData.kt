@@ -10,13 +10,13 @@ abstract class NSMutableData : NSData() {
 		 * Original signature : `dataWithCapacity(NSUInteger)`<br></br>
 		 * *from NSMutableDataCreation native declaration : :104*
 		 */
-		open fun dataWithCapacity(aNumItems: NSUInteger?): NSMutableData?
+		fun dataWithCapacity(aNumItems: NSUInteger?): NSMutableData?
 
 		/**
 		 * Original signature : `dataWithLength(NSUInteger)`<br></br>
 		 * *from NSMutableDataCreation native declaration : :105*
 		 */
-		open fun dataWithLength(length: NSUInteger?): NSMutableData?
+		fun dataWithLength(length: NSUInteger?): NSMutableData?
 	}
 
 	/**

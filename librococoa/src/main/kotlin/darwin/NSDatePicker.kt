@@ -4,7 +4,7 @@ import org.rococoa.ObjCClass
 
 abstract class NSDatePicker : NSControl() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSDatePicker?
+		fun alloc(): NSDatePicker?
 	}
 
 	abstract fun dateValue(): NSDate?

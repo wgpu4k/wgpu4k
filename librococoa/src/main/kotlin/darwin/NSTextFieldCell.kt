@@ -5,7 +5,7 @@ import org.rococoa.ObjCClass
 /// <i>native declaration : :21</i>
 abstract class NSTextFieldCell : NSActionCell() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSTextFieldCell
+		fun alloc(): NSTextFieldCell
 	}
 
 	abstract fun init(): NSTextFieldCell?

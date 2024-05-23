@@ -13,54 +13,54 @@ abstract class NSImage : NSObject(), NSCopying {
 		 * is saved when archived<br></br>
 		 * *native declaration : :73*
 		 */
-		open fun imageNamed(name: String?): NSImage?
+		fun imageNamed(name: String?): NSImage?
 
-		open fun imageWithSystemSymbolName_accessibilityDescription(symbolName: String?, description: String?): NSImage?
+		fun imageWithSystemSymbolName_accessibilityDescription(symbolName: String?, description: String?): NSImage?
 
 		/**
 		 * These return union of all the types registered with NSImageRep.<br></br> Original signature : `NSArray*
 		 * imageUnfilteredFileTypes()`<br></br>
 		 * *native declaration : :138*
 		 */
-		open fun imageUnfilteredFileTypes(): NSArray?
+		fun imageUnfilteredFileTypes(): NSArray?
 
 		/**
 		 * Original signature : `NSArray* imageUnfilteredPasteboardTypes()`<br></br>
 		 * *native declaration : :139*
 		 */
-		open fun imageUnfilteredPasteboardTypes(): NSArray?
+		fun imageUnfilteredPasteboardTypes(): NSArray?
 
 		/**
 		 * Original signature : `NSArray* imageFileTypes()`<br></br>
 		 * *native declaration : :140*
 		 */
-		open fun imageFileTypes(): NSArray?
+		fun imageFileTypes(): NSArray?
 
 		/**
 		 * Original signature : `NSArray* imagePasteboardTypes()`<br></br>
 		 * *native declaration : :141*
 		 */
-		open fun imagePasteboardTypes(): NSArray?
+		fun imagePasteboardTypes(): NSArray?
 
 		/**
 		 * Original signature : `NSArray* imageTypes()`<br></br>
 		 * *native declaration : :144*
 		 */
-		open fun imageTypes(): NSArray?
+		fun imageTypes(): NSArray?
 
 		/**
 		 * Original signature : `NSArray* imageUnfilteredTypes()`<br></br>
 		 * *native declaration : :145*
 		 */
-		open fun imageUnfilteredTypes(): NSArray?
+		fun imageUnfilteredTypes(): NSArray?
 
 		/**
 		 * Original signature : `BOOL canInitWithPasteboard(NSPasteboard*)`<br></br>
 		 * *native declaration : :148*
 		 */
-		open fun canInitWithPasteboard(pasteBoard: NSPasteboard?): Boolean
+		fun canInitWithPasteboard(pasteBoard: NSPasteboard?): Boolean
 
-		open fun alloc(): NSImage
+		fun alloc(): NSImage
 	}
 
 	/**

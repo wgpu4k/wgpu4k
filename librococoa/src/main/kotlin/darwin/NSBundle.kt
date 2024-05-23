@@ -10,61 +10,61 @@ abstract class NSBundle : NSObject() {
 		 * Original signature : `NSBundle* mainBundle)`<br></br>
 		 * *native declaration : :24*
 		 */
-		open fun mainBundle(): NSBundle?
+		fun mainBundle(): NSBundle?
 
 		/**
 		 * Original signature : `NSBundle* bundleWithPath(String*)`<br></br>
 		 * *native declaration : :25*
 		 */
-		open fun bundleWithPath(path1: String?): NSBundle?
+		fun bundleWithPath(path1: String?): NSBundle?
 
 		/**
 		 * Original signature : `NSBundle* bundleWithIdentifier(String*)`<br></br>
 		 * *native declaration : :29*
 		 */
-		open fun bundleWithIdentifier(identifier1: String?): NSBundle?
+		fun bundleWithIdentifier(identifier1: String?): NSBundle?
 
 		/**
 		 * Original signature : `NSArray* allBundles)`<br></br>
 		 * *native declaration : :31*
 		 */
-		open fun allBundles(): NSArray?
+		fun allBundles(): NSArray?
 
 		/**
 		 * Original signature : `NSArray* allFrameworks)`<br></br>
 		 * *native declaration : :32*
 		 */
-		open fun allFrameworks(): NSArray?
+		fun allFrameworks(): NSArray?
 
 		/**
 		 * In the following methods, bundlePath is an absolute path to a bundle, and may not be nil; subpath is a relative path to a subdirectory inside the relevant global or localized resource directory, and should be nil if the resource file in question is not in a subdirectory.<br></br>
 		 * Original signature : `String* pathForResource(String*, String*, String*)`<br></br>
 		 * *native declaration : :62*
 		 */
-		open fun pathForResource_ofType_inDirectory(name1: String?, ext2: String?, bundlePath3: String?): String?
+		fun pathForResource_ofType_inDirectory(name1: String?, ext2: String?, bundlePath3: String?): String?
 
 		/**
 		 * Original signature : `NSArray* pathsForResourcesOfType(String*, String*)`<br></br>
 		 * *native declaration : :67*
 		 */
-		open fun pathsForResourcesOfType_inDirectory(ext1: String?, bundlePath2: String?): NSArray?
+		fun pathsForResourcesOfType_inDirectory(ext1: String?, bundlePath2: String?): NSArray?
 
 		/**
 		 * Original signature : `NSArray* preferredLocalizationsFromArray(NSArray*)`<br></br>
 		 * *native declaration : :85*
 		 */
-		open fun preferredLocalizationsFromArray(localizationsArray1: NSArray?): NSArray?
+		fun preferredLocalizationsFromArray(localizationsArray1: NSArray?): NSArray?
 
 		/**
 		 * Original signature : `NSArray* preferredLocalizationsFromArray(NSArray*, NSArray*)`<br></br>
 		 * *native declaration : :87*
 		 */
-		open fun preferredLocalizationsFromArray_forPreferences(
+		fun preferredLocalizationsFromArray_forPreferences(
 			localizationsArray1: NSArray?,
 			preferencesArray2: NSArray?
 		): NSArray?
 
-		open fun loadNibNamed_owner(nibName: String?, owner: org.rococoa.ID?): Boolean
+		fun loadNibNamed_owner(nibName: String?, owner: org.rococoa.ID?): Boolean
 	}
 
 	/**

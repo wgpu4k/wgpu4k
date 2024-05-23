@@ -5,7 +5,7 @@ import org.rococoa.cocoa.foundation.NSRect
 
 abstract class NSLevelIndicator : NSControl() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSLevelIndicator
+		fun alloc(): NSLevelIndicator
 	}
 
 	abstract override fun initWithFrame(frameRect: NSRect?): NSLevelIndicator

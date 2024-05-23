@@ -14,21 +14,21 @@ abstract class NSCell : NSObject(), NSCopying {
 		 * Original signature : `BOOL prefersTrackingUntilMouseUp()`<br></br>
 		 * *native declaration : :175*
 		 */
-		open fun prefersTrackingUntilMouseUp(): Boolean
+		fun prefersTrackingUntilMouseUp(): Boolean
 
 		/**
 		 * Original signature : `NSMenu* defaultMenu()`<br></br>
 		 * *native declaration : :280*
 		 */
-		open fun defaultMenu(): NSMenu?
+		fun defaultMenu(): NSMenu?
 
 		/**
 		 * Original signature : `defaultFocusRingType()`<br></br>
 		 * *from NSKeyboardUI native declaration : :323*
 		 */
-		open fun defaultFocusRingType(): com.sun.jna.Pointer?
+		fun defaultFocusRingType(): com.sun.jna.Pointer?
 
-		open fun alloc(): NSCell?
+		fun alloc(): NSCell?
 	}
 
 	/**

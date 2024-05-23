@@ -16,7 +16,7 @@ abstract class NSAppleEventDescriptor : NSObject() {
 		 * Original signature : `+(NSAppleEventDescriptor*)nullDescriptor`<br></br>
 		 * *native declaration : line 18*
 		 */
-		open fun nullDescriptor(): NSAppleEventDescriptor?
+		fun nullDescriptor(): NSAppleEventDescriptor?
 		/**
 		 * *native declaration : line 22*<br></br>
 		 * Conversion Error : /// Original signature : `+(NSAppleEventDescriptor*)descriptorWithDescriptorType:() bytes:(const void*) length:(NSUInteger)`<br></br>
@@ -31,7 +31,7 @@ abstract class NSAppleEventDescriptor : NSObject() {
 		 * Original signature : `+(NSAppleEventDescriptor*)descriptorWithBoolean:(Boolean)`<br></br>
 		 * *native declaration : line 28*
 		 */
-		open fun descriptorWithBoolean(boolean_: Boolean): NSAppleEventDescriptor?
+		fun descriptorWithBoolean(boolean_: Boolean): NSAppleEventDescriptor?
 		/**
 		 * *native declaration : line 29*<br></br>
 		 * Conversion Error : /// Original signature : `+(NSAppleEventDescriptor*)descriptorWithEnumCode:()`<br></br>
@@ -41,7 +41,7 @@ abstract class NSAppleEventDescriptor : NSObject() {
 		 * Original signature : `+(NSAppleEventDescriptor*)descriptorWithInt32:(SInt32)`<br></br>
 		 * *native declaration : line 30*
 		 */
-		open fun descriptorWithInt32(signedInt: Int): NSAppleEventDescriptor?
+		fun descriptorWithInt32(signedInt: Int): NSAppleEventDescriptor?
 		/**
 		 * *native declaration : line 31*<br></br>
 		 * Conversion Error : /// Original signature : `+(NSAppleEventDescriptor*)descriptorWithTypeCode:()`<br></br>
@@ -51,7 +51,7 @@ abstract class NSAppleEventDescriptor : NSObject() {
 		 * Original signature : `+(NSAppleEventDescriptor*)descriptorWithString:(NSString*)`<br></br>
 		 * *native declaration : line 36*
 		 */
-		open fun descriptorWithString(string: String?): NSAppleEventDescriptor?
+		fun descriptorWithString(string: String?): NSAppleEventDescriptor?
 		/**
 		 * *native declaration : line 40*<br></br>
 		 * Conversion Error : / **<br></br>
@@ -64,15 +64,15 @@ abstract class NSAppleEventDescriptor : NSObject() {
 		 * Original signature : `+(NSAppleEventDescriptor*)listDescriptor`<br></br>
 		 * *native declaration : line 41*
 		 */
-		open fun listDescriptor(): NSAppleEventDescriptor?
+		fun listDescriptor(): NSAppleEventDescriptor?
 
 		/**
 		 * Original signature : `+(NSAppleEventDescriptor*)recordDescriptor`<br></br>
 		 * *native declaration : line 42*
 		 */
-		open fun recordDescriptor(): NSAppleEventDescriptor?
+		fun recordDescriptor(): NSAppleEventDescriptor?
 
-		open fun alloc(): NSAppleEventDescriptor
+		fun alloc(): NSAppleEventDescriptor
 	}
 
 	/**

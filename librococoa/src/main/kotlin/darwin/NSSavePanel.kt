@@ -11,7 +11,7 @@ abstract class NSSavePanel : NSPanel() {
 		 * Original signature : `NSSavePanel* savePanel()`<br></br>
 		 * *native declaration : /System/Library/Frameworks/AppKit.framework/Headers/NSSavePanel.h:67*
 		 */
-		open fun savePanel(): NSSavePanel?
+		fun savePanel(): NSSavePanel?
 	}
 
 	/**

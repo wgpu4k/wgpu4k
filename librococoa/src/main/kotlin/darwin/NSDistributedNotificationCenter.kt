@@ -9,13 +9,13 @@ abstract class NSDistributedNotificationCenter : NSNotificationCenter() {
 		 * Original signature : `NSDistributedNotificationCenter* notificationCenterForType(NSString*)`<br></br>
 		 * *native declaration : :29*
 		 */
-		open fun notificationCenterForType(notificationCenterType: String?): NSDistributedNotificationCenter?
+		fun notificationCenterForType(notificationCenterType: String?): NSDistributedNotificationCenter?
 
 		/**
 		 * Original signature : `defaultCenter()`<br></br>
 		 * *native declaration : :32*
 		 */
-		open fun defaultCenter(): NSDistributedNotificationCenter?
+		fun defaultCenter(): NSDistributedNotificationCenter?
 	}
 
 	/**

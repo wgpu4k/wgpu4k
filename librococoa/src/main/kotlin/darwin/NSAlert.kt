@@ -7,21 +7,21 @@ import org.rococoa.cocoa.foundation.NSError
 /// <i>native declaration : :20</i>
 abstract class NSAlert : NSObject() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSAlert
+		fun alloc(): NSAlert
 
 		/**
 		 * Given an NSError, create an NSAlert that can be used to present the error to the user. The error's localized description, recovery suggestion, and recovery options will be used to set the alert's message text, informative text, and button titles, respectively.<br></br>
 		 * Original signature : `NSAlert* alertWithError(NSError*)`<br></br>
 		 * *native declaration : :60*
 		 */
-		open fun alertWithError(error: NSError?): NSAlert?
+		fun alertWithError(error: NSError?): NSAlert?
 
 		/**
 		 * the following class method is for use by apps migrating from the C-based API.  Note that this returns an NSAlert that is equivalent to the one created in NSRunAlertPanel, so the layout, button return values, and key equivalents are the same as for the C-based API.<br></br>
 		 * Original signature : `NSAlert* alertWithMessageText(NSString*, NSString*, NSString*, NSString*, NSString*, null)`<br></br>
 		 * *native declaration : :65*
 		 */
-		open fun alertWithMessageText_defaultButton_alternateButton_otherButton_informativeTextWithFormat(
+		fun alertWithMessageText_defaultButton_alternateButton_otherButton_informativeTextWithFormat(
 			message: String?, defaultButton: String?, alternateButton: String?, otherButton: String?, format: String?
 		): NSAlert?
 	}
