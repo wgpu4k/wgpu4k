@@ -9,8 +9,8 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) : Aut
     }
 
     actual fun setPipeline(renderPipeline: RenderPipeline) {
-        logUnitNative { "wgpuRenderPassEncoderSetPipeline" to listOf(renderPipeline.handler) }
-        wgpuRenderPassEncoderSetPipeline(handler, renderPipeline.handler)
+        logUnitNative { "wgpuRenderPassEncoderSetPipeline" to listOf(renderPipeline.handler2) }
+        wgpuRenderPassEncoderSetPipeline(handler, renderPipeline.handler2)
     }
 
     actual fun draw(

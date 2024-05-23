@@ -26,24 +26,13 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
 
     actual fun createPipelineLayout(descriptor: PipelineLayoutDescriptor): PipelineLayout =
         descriptor.convert()
-            .also { logUnitNative { "wgpuDeviceCreatePipelineLayout" to listOf(handler2, it) } }
-            .let { wgpuDeviceCreatePipelineLayout(handler2, it) }
+            .let { webgpu_h.wgpuDeviceCreatePipelineLayout(handler, it) }
             ?.let(::PipelineLayout) ?: error("fail to create pipeline layout")
 
     actual fun createRenderPipeline(descriptor: RenderPipelineDescriptor): RenderPipeline =
         renderPipelineDescriptorMapper.map<Any, WGPURenderPipelineDescriptor>(descriptor)
-            .also { it.write() }
-            .also {
-                logNative {
-                    Triple(
-                        "wgpuDeviceCreateRenderPipeline",
-                        listOf(handler2, it),
-                        WGPURenderPipeline::class
-                    )
-                }
-            }
-            .let { wgpuDeviceCreateRenderPipeline(handler2, it) }
-            .also { registerNative { it } }
+            .also { it.write() }.pointer.toMemory()
+            .let {  webgpu_h.wgpuDeviceCreateRenderPipeline(handler, it) }
             ?.let(::RenderPipeline) ?: error("fail to create render pipeline")
 
     actual fun createBuffer(descriptor: BufferDescriptor): Buffer =
@@ -90,12 +79,12 @@ private fun BufferDescriptor.convert(): WGPUBufferDescriptor = WGPUBufferDescrip
     it.mappedAtCreation = mappedAtCreation?.toInt()
 }.also { it.write() }
 
-private fun PipelineLayoutDescriptor.convert(): WGPUPipelineLayoutDescriptor = WGPUPipelineLayoutDescriptor().also {
+private fun PipelineLayoutDescriptor.convert() = WGPUPipelineLayoutDescriptor().also {
     it.label = label
     // TODO find how to map this
     //it.bindGroupLayoutCount = bindGroupLayouts.size.toLong().let { NativeLong(it) }
     //it.bindGroupLayouts = bindGroupLayouts.map { it.convert() }.toTypedArray()
-}.also { it.write() }
+}.also { it.write() }.pointer.toMemory()
 
 private fun CommandEncoderDescriptor.convert() = WGPUCommandEncoderDescriptor().also {
     it.label = label

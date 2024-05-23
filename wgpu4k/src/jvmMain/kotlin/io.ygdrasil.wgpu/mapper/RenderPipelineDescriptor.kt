@@ -5,7 +5,7 @@ import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.internal.jvm.*
 
 internal val renderPipelineDescriptorMapper = mapper<RenderPipelineDescriptor, WGPURenderPipelineDescriptor> {
-    RenderPipelineDescriptor::layout mappedTo WGPURenderPipelineDescriptor::layout withTransformer MappingTransformer { it.originalValue?.handler }
+    RenderPipelineDescriptor::layout mappedTo WGPURenderPipelineDescriptor::layout withTransformer MappingTransformer { WGPUPipelineLayoutImpl(it.originalValue?.handler?.toPointer()) }
     RenderPipelineDescriptor::fragment mappedTo WGPURenderPipelineDescriptor::fragment withTransformer MappingTransformer {
         it.originalValue?.let(fragmentMapper::map)
     }
