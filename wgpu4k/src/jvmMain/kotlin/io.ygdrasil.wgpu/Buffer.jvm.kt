@@ -2,6 +2,7 @@ package io.ygdrasil.wgpu
 
 import com.sun.jna.NativeLong
 import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
 import java.lang.foreign.MemorySegment
 
 actual class Buffer(internal val handler: MemorySegment) : AutoCloseable {
@@ -9,16 +10,15 @@ actual class Buffer(internal val handler: MemorySegment) : AutoCloseable {
 	val handler2: WGPUBuffer = WGPUBufferImpl(handler.toPointer())
 
 	actual val size: GPUSize64
-		get() = wgpuBufferGetSize(handler2)
+		get() = webgpu_h.wgpuBufferGetSize(handler)
 
 	actual fun getMappedRange(offset: GPUSize64?, size: GPUSize64?): ByteArray {
-		wgpuBufferGetMappedRange(handler2, offset?.toNativeLong(), size?.toNativeLong())
+		webgpu_h.wgpuBufferGetMappedRange(handler, offset ?: 0, size ?: 0)
 		TODO()
 	}
 
 	actual fun unmap() {
-		logUnitNative { "wgpuBufferUnmap" to listOf() }
-		wgpuBufferUnmap(handler2)
+		webgpu_h.wgpuBufferUnmap(handler)
 	}
 
 	actual fun map(buffer: FloatArray) {
@@ -34,8 +34,7 @@ actual class Buffer(internal val handler: MemorySegment) : AutoCloseable {
 	}
 
 	actual override fun close() {
-		logUnitNative { "wgpuBufferRelease" to listOf(handler2) }
-		wgpuBufferRelease(handler2)
+		webgpu_h.wgpuBufferRelease(handler)
 	}
 
 }
