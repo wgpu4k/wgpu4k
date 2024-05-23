@@ -16,13 +16,13 @@ abstract class NSPrintPanel : NSObject(), ObjCObject {
 		 * Original signature : `+(NSPrintPanel*)printPanel`<br></br>
 		 * *native declaration : NSPrintPanel.h:102*
 		 */
-		open fun printPanel(): NSPrintPanel?
+		fun printPanel(): NSPrintPanel?
 
 		/// <i>native declaration : NSPrintPanel.h</i>
-		open fun alloc(): NSPrintPanel?
+		fun alloc(): NSPrintPanel?
 
 		/// <i>native declaration : NSPrintPanel.h</i>
-		open fun new_(): NSPrintPanel?
+		fun new_(): NSPrintPanel?
 	}
 
 	/**

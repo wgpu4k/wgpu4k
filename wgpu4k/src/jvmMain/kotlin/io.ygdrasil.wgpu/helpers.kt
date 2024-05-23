@@ -62,6 +62,7 @@ inline fun <T : Any, reified B : Structure> Array<T>.toStructureArray(updateFrom
 	val instance = (B::class.constructors.find { it.parameters.isEmpty() }?.call()
 		?: B::class.constructors.find { it.parameters.size == 1 }?.call(null))
 		?: error("fail to find suitable constructor of type ${B::class}")
+	@Suppress("UNCHECKED_CAST")
 	return when (isNotEmpty()) {
 		true -> (instance.toArray(size) as Array<B>)
 			.also { forEachIndexed { index, original -> it[index].updateFrom(original) } }

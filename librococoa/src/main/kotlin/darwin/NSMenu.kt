@@ -11,13 +11,13 @@ abstract class NSMenu : NSObject(), NSCopying {
 		 * Original signature : `void popUpContextMenu(NSMenu*, NSEvent*, NSView*)`<br></br>
 		 * *native declaration : :44*
 		 */
-		open fun popUpContextMenu_withEvent_forView(menu: NSMenu?, event: NSEvent?, view: NSView?)
+		fun popUpContextMenu_withEvent_forView(menu: NSMenu?, event: NSEvent?, view: NSView?)
 
 		/**
 		 * Original signature : `void popUpContextMenu(NSMenu*, NSEvent*, NSView*, NSFont*)`<br></br>
 		 * *native declaration : :46*
 		 */
-		open fun popUpContextMenu_withEvent_forView_withFont(
+		fun popUpContextMenu_withEvent_forView_withFont(
 			menu: NSMenu?,
 			event: NSEvent?,
 			view: NSView?,
@@ -28,19 +28,19 @@ abstract class NSMenu : NSObject(), NSCopying {
 		 * Original signature : `void setMenuBarVisible(BOOL)`<br></br>
 		 * *native declaration : :50*
 		 */
-		open fun setMenuBarVisible(visible: Boolean)
+		fun setMenuBarVisible(visible: Boolean)
 
 		/**
 		 * Original signature : `BOOL menuBarVisible()`<br></br>
 		 * *native declaration : :51*
 		 */
-		open fun menuBarVisible(): Boolean
+		fun menuBarVisible(): Boolean
 
-		open fun alloc(): NSMenu
+		fun alloc(): NSMenu
 	}
 
 	interface Validation {
-		open fun validateMenuItem(item: NSMenuItem?): Boolean
+		fun validateMenuItem(item: NSMenuItem?): Boolean
 	}
 
 	interface Delegate {
@@ -52,9 +52,9 @@ abstract class NSMenu : NSObject(), NSCopying {
 		 * and menu:updateItem:atIndex:shouldCancel: is not called. If you can populate the menu quickly,
 		 * you can implement menuNeedsUpdate: instead of numberOfItemsInMenu: and menu:updateItem:atIndex:shouldCancel:.
 		 */
-		open fun numberOfItemsInMenu(menu: NSMenu?): NSInteger?
+		fun numberOfItemsInMenu(menu: NSMenu?): NSInteger?
 
-		open fun menu_updateItem_atIndex_shouldCancel(
+		fun menu_updateItem_atIndex_shouldCancel(
 			menu: NSMenu?,
 			item: NSMenuItem?,
 			index: NSInteger?,

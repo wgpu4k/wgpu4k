@@ -1,5 +1,5 @@
 package darwin
 
 interface NSUserInterfaceValidations {
-	open fun validateUserInterfaceItem(item: NSValidatedUserInterfaceItem?): Boolean
+	fun validateUserInterfaceItem(item: NSValidatedUserInterfaceItem?): Boolean
 }

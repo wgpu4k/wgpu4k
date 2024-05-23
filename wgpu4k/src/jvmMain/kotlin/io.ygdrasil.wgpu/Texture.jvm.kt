@@ -6,10 +6,6 @@ import io.ygdrasil.wgpu.mapper.textureViewDescriptorMapper
 
 actual class Texture(internal val handler: WGPUTexture) : AutoCloseable {
 
-    init {
-        check(handler != null) { "handler should not be null" }
-    }
-
     actual val width: GPUIntegerCoordinateOut
         get() = wgpuTextureGetWidth(handler)
     actual val height: GPUIntegerCoordinateOut

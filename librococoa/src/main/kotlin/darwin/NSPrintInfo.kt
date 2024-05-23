@@ -37,37 +37,37 @@ abstract class NSPrintInfo : NSObject() {
 		 * Original signature : `+(void)setSharedPrintInfo:(NSPrintInfo*)`<br></br>
 		 * *native declaration : /System/Library/Frameworks/framework/Headers/AppKitDefines.h:66*
 		 */
-		open fun setSharedPrintInfo(printInfo: NSPrintInfo?)
+		fun setSharedPrintInfo(printInfo: NSPrintInfo?)
 
 		/**
 		 * Original signature : `+(NSPrintInfo*)sharedPrintInfo`<br></br>
 		 * *native declaration : /System/Library/Frameworks/framework/Headers/AppKitDefines.h:67*
 		 */
-		open fun sharedPrintInfo(): NSPrintInfo?
+		fun sharedPrintInfo(): NSPrintInfo?
 
 		/**
 		 * Return the default printer, if one has been selected by the user, nil otherwise.<br></br>
 		 * Original signature : `+(NSPrinter*)defaultPrinter`<br></br>
 		 * *native declaration : /System/Library/Frameworks/framework/Headers/AppKitDefines.h:127*
 		 */
-		open fun defaultPrinter(): com.sun.jna.Pointer?
+		fun defaultPrinter(): com.sun.jna.Pointer?
 
 		/**
 		 * A method that was deprecated in Mac OS 10.2.  +[NSPrintInfo setDefaultPrinter:] does nothing.<br></br>
 		 * Original signature : `+(void)setDefaultPrinter:(NSPrinter*)`<br></br>
 		 * *native declaration : /System/Library/Frameworks/framework/Headers/AppKitDefines.h:130*
 		 */
-		open fun setDefaultPrinter(printer: com.sun.jna.Pointer?)
+		fun setDefaultPrinter(printer: com.sun.jna.Pointer?)
 
 		/**
 		 * A method that was deprecated in Mac OS 10.2.  NSPrintInfo's implementation of this method recognizes only a small fixed set of paper names, and does not take the details of any particular printer into account.  You should use -[NSPrinter pageSizeForPaper:] instead.<br></br>
 		 * Original signature : `+(id)sizeForPaperName:(NSString*)`<br></br>
 		 * *native declaration : /System/Library/Frameworks/framework/Headers/AppKitDefines.h:133*
 		 */
-		open fun sizeForPaperName(name: String?): NSObject?
+		fun sizeForPaperName(name: String?): NSObject?
 
 		/// <i>native declaration : /System/Library/Frameworks/framework/Headers/AppKitDefines.h</i>
-		open fun alloc(): NSPrintInfo
+		fun alloc(): NSPrintInfo
 	}
 
 	/**

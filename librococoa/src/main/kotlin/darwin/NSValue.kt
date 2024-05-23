@@ -6,7 +6,7 @@ import org.rococoa.cocoa.foundation.NSSize
 /// <i>native declaration : /Users/dkocher/null:10</i>
 abstract class NSValue : NSObject() {
 	interface _Class : ObjCClass {
-		open fun valueWithSize(size: NSSize?): NSValue?
+		fun valueWithSize(size: NSSize?): NSValue?
 	}
 
 	/**

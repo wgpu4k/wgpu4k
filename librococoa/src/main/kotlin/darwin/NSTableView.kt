@@ -9,42 +9,42 @@ import org.rococoa.cocoa.foundation.NSUInteger
 /// <i>native declaration : :69</i>
 abstract class NSTableView : NSControl() {
 	interface DataSource {
-		open fun numberOfRowsInTableView(view: NSTableView?): NSInteger?
+		fun numberOfRowsInTableView(view: NSTableView?): NSInteger?
 
-		open fun tableView_objectValueForTableColumn_row(
+		fun tableView_objectValueForTableColumn_row(
 			view: NSTableView?,
 			tableColumn: NSTableColumn?,
 			row: NSInteger?
 		): NSObject?
 
-		open fun tableView_setObjectValue_forTableColumn_row(
+		fun tableView_setObjectValue_forTableColumn_row(
 			view: NSTableView?,
 			value: NSObject?,
 			tableColumn: NSTableColumn?,
 			row: NSInteger?
 		)
 
-		open fun tableView_writeRowsWithIndexes_toPasteboard(
+		fun tableView_writeRowsWithIndexes_toPasteboard(
 			view: NSTableView?,
 			rowIndexes: NSIndexSet?,
 			pboard: NSPasteboard?
 		): Boolean
 
-		open fun tableView_validateDrop_proposedRow_proposedDropOperation(
+		fun tableView_validateDrop_proposedRow_proposedDropOperation(
 			view: NSTableView?,
 			info: NSDraggingInfo?,
 			row: NSInteger?,
 			operation: NSUInteger?
 		): NSUInteger?
 
-		open fun tableView_acceptDrop_row_dropOperation(
+		fun tableView_acceptDrop_row_dropOperation(
 			view: NSTableView?,
 			draggingInfo: NSDraggingInfo?,
 			row: NSInteger?,
 			operation: NSUInteger?
 		): Boolean
 
-		open fun tableView_namesOfPromisedFilesDroppedAtDestination_forDraggedRowsWithIndexes(
+		fun tableView_namesOfPromisedFilesDroppedAtDestination_forDraggedRowsWithIndexes(
 			view: NSTableView?,
 			dropDestination: NSURL?,
 			rowIndexes: NSIndexSet?
@@ -52,7 +52,7 @@ abstract class NSTableView : NSControl() {
 	}
 
 	interface Delegate {
-		open fun tableView_willDisplayCell_forTableColumn_row(
+		fun tableView_willDisplayCell_forTableColumn_row(
 			view: NSTableView?,
 			cell: NSTextFieldCell?,
 			tableColumn: NSTableColumn?,

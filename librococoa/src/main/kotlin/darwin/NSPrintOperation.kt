@@ -15,7 +15,7 @@ abstract class NSPrintOperation : NSObject() {
 		 * Original signature : `+(NSPrintOperation*)printOperationWithView:(NSView*) printInfo:(NSPrintInfo*)`<br></br>
 		 * *native declaration : /System/Library/Frameworks/framework/Headers/AppKitDefines.h:90*
 		 */
-		open fun printOperationWithView_printInfo(view: NSView?, printInfo: NSPrintInfo?): NSPrintOperation?
+		fun printOperationWithView_printInfo(view: NSView?, printInfo: NSPrintInfo?): NSPrintOperation?
 		/**
 		 * *native declaration : /System/Library/Frameworks/framework/Headers/AppKitDefines.h:91*<br></br>
 		 * Conversion Error : /// Original signature : `+(NSPrintOperation*)PDFOperationWithView:(NSView*) insideRect:() toData:(NSMutableData*) printInfo:(NSPrintInfo*)`<br></br>
@@ -41,7 +41,7 @@ abstract class NSPrintOperation : NSObject() {
 		 * Original signature : `+(NSPrintOperation*)printOperationWithView:(NSView*)`<br></br>
 		 * *native declaration : /System/Library/Frameworks/framework/Headers/AppKitDefines.h:98*
 		 */
-		open fun printOperationWithView(view: NSView?): NSPrintOperation?
+		fun printOperationWithView(view: NSView?): NSPrintOperation?
 		/**
 		 * *native declaration : /System/Library/Frameworks/framework/Headers/AppKitDefines.h:99*<br></br>
 		 * Conversion Error : /// Original signature : `+(NSPrintOperation*)PDFOperationWithView:(NSView*) insideRect:() toData:(NSMutableData*)`<br></br>
@@ -57,16 +57,16 @@ abstract class NSPrintOperation : NSObject() {
 		 * Original signature : `+(NSPrintOperation*)currentOperation`<br></br>
 		 * *native declaration : /System/Library/Frameworks/framework/Headers/AppKitDefines.h:104*
 		 */
-		open fun currentOperation(): NSPrintOperation?
+		fun currentOperation(): NSPrintOperation?
 
 		/**
 		 * Original signature : `+(void)setCurrentOperation:(NSPrintOperation*)`<br></br>
 		 * *native declaration : /System/Library/Frameworks/framework/Headers/AppKitDefines.h:105*
 		 */
-		open fun setCurrentOperation(operation: NSPrintOperation?)
+		fun setCurrentOperation(operation: NSPrintOperation?)
 
 		/// <i>native declaration : /System/Library/Frameworks/framework/Headers/AppKitDefines.h</i>
-		open fun alloc(): NSPrintOperation?
+		fun alloc(): NSPrintOperation?
 	}
 
 	/**

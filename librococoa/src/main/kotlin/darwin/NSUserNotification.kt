@@ -4,7 +4,7 @@ import org.rococoa.ObjCClass
 
 abstract class NSUserNotification : NSObject() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSUserNotification
+		fun alloc(): NSUserNotification
 	}
 
 	abstract fun init(): NSUserNotification?

@@ -5,7 +5,7 @@ import org.rococoa.cocoa.foundation.NSInteger
 
 abstract class NSTitlebarAccessoryViewController : NSResponder() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSTitlebarAccessoryViewController
+		fun alloc(): NSTitlebarAccessoryViewController
 	}
 
 	abstract fun init(): NSTitlebarAccessoryViewController

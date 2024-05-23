@@ -1,6 +1,5 @@
 package io.ygdrasil.wgpu
 
-@OptIn(ExperimentalStdlibApi::class)
 expect class Device: AutoCloseable {
 
 	val queue: Queue

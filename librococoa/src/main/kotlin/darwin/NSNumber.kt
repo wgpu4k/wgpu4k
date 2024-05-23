@@ -11,91 +11,91 @@ abstract class NSNumber : NSValue() {
 		 * Original signature : `NSNumber* numberWithChar(char)`<br></br>
 		 * *from NSNumberCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSValue.h:87*
 		 */
-		open fun numberWithChar(value: Byte): NSNumber?
+		fun numberWithChar(value: Byte): NSNumber?
 
 		/**
 		 * Original signature : `NSNumber* numberWithUnsignedChar(unsigned char)`<br></br>
 		 * *from NSNumberCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSValue.h:88*
 		 */
-		open fun numberWithUnsignedChar(value: Byte): NSNumber?
+		fun numberWithUnsignedChar(value: Byte): NSNumber?
 
 		/**
 		 * Original signature : `NSNumber* numberWithShort(short)`<br></br>
 		 * *from NSNumberCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSValue.h:89*
 		 */
-		open fun numberWithShort(value: Short): NSNumber?
+		fun numberWithShort(value: Short): NSNumber?
 
 		/**
 		 * Original signature : `NSNumber* numberWithUnsignedShort(unsigned short)`<br></br>
 		 * *from NSNumberCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSValue.h:90*
 		 */
-		open fun numberWithUnsignedShort(value: Short): NSNumber?
+		fun numberWithUnsignedShort(value: Short): NSNumber?
 
 		/**
 		 * Original signature : `NSNumber* numberWithInt(int)`<br></br>
 		 * *from NSNumberCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSValue.h:91*
 		 */
-		open fun numberWithInt(value: Int): NSNumber?
+		fun numberWithInt(value: Int): NSNumber?
 
 		/**
 		 * Original signature : `NSNumber* numberWithUnsignedInt(unsigned int)`<br></br>
 		 * *from NSNumberCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSValue.h:92*
 		 */
-		open fun numberWithUnsignedInt(value: Int): NSNumber?
+		fun numberWithUnsignedInt(value: Int): NSNumber?
 
 		/**
 		 * Original signature : `NSNumber* numberWithLong(long)`<br></br>
 		 * *from NSNumberCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSValue.h:93*
 		 */
-		open fun numberWithLong(value: com.sun.jna.NativeLong?): NSNumber?
+		fun numberWithLong(value: com.sun.jna.NativeLong?): NSNumber?
 
 		/**
 		 * Original signature : `NSNumber* numberWithUnsignedLong(unsigned long)`<br></br>
 		 * *from NSNumberCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSValue.h:94*
 		 */
-		open fun numberWithUnsignedLong(value: com.sun.jna.NativeLong?): NSNumber?
+		fun numberWithUnsignedLong(value: com.sun.jna.NativeLong?): NSNumber?
 
 		/**
 		 * Original signature : `NSNumber* numberWithLongLong(long long)`<br></br>
 		 * *from NSNumberCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSValue.h:95*
 		 */
-		open fun numberWithLongLong(value: Long): NSNumber?
+		fun numberWithLongLong(value: Long): NSNumber?
 
 		/**
 		 * Original signature : `NSNumber* numberWithUnsignedLongLong(unsigned long long)`<br></br>
 		 * *from NSNumberCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSValue.h:96*
 		 */
-		open fun numberWithUnsignedLongLong(value: Long): NSNumber?
+		fun numberWithUnsignedLongLong(value: Long): NSNumber?
 
 		/**
 		 * Original signature : `NSNumber* numberWithFloat(float)`<br></br>
 		 * *from NSNumberCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSValue.h:97*
 		 */
-		open fun numberWithFloat(value: Float): NSNumber?
+		fun numberWithFloat(value: Float): NSNumber?
 
 		/**
 		 * Original signature : `NSNumber* numberWithDouble(double)`<br></br>
 		 * *from NSNumberCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSValue.h:98*
 		 */
-		open fun numberWithDouble(value: Double): NSNumber?
+		fun numberWithDouble(value: Double): NSNumber?
 
 		/**
 		 * Original signature : `NSNumber* numberWithBool(BOOL)`<br></br>
 		 * *from NSNumberCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSValue.h:99*
 		 */
-		open fun numberWithBool(value: Boolean): NSNumber?
+		fun numberWithBool(value: Boolean): NSNumber?
 
 		/**
 		 * Original signature : `NSNumber* numberWithInteger(NSInteger)`<br></br>
 		 * *from NSNumberCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSValue.h:101*
 		 */
-		open fun numberWithInteger(value: NSNumber?): NSNumber?
+		fun numberWithInteger(value: NSNumber?): NSNumber?
 
 		/**
 		 * Original signature : `NSNumber* numberWithUnsignedInteger(NSUInteger)`<br></br>
 		 * *from NSNumberCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSValue.h:102*
 		 */
-		open fun numberWithUnsignedInteger(value: NSUInteger?): NSNumber?
+		fun numberWithUnsignedInteger(value: NSUInteger?): NSNumber?
 	}
 
 	/**

@@ -10,43 +10,43 @@ abstract class NSPasteboard : NSObject() {
 		 * Original signature : `NSPasteboard* generalPasteboard()`<br></br>
 		 * *native declaration : :65*
 		 */
-		open fun generalPasteboard(): NSPasteboard?
+		fun generalPasteboard(): NSPasteboard?
 
 		/**
 		 * Original signature : `NSPasteboard* pasteboardWithName(NSString*)`<br></br>
 		 * *native declaration : :66*
 		 */
-		open fun pasteboardWithName(name: String?): NSPasteboard?
+		fun pasteboardWithName(name: String?): NSPasteboard?
 
 		/**
 		 * Original signature : `NSPasteboard* pasteboardWithUniqueName()`<br></br>
 		 * *native declaration : :67*
 		 */
-		open fun pasteboardWithUniqueName(): NSPasteboard?
+		fun pasteboardWithUniqueName(): NSPasteboard?
 
 		/**
 		 * Original signature : `NSArray* typesFilterableTo(NSString*)`<br></br>
 		 * *native declaration : :69*
 		 */
-		open fun typesFilterableTo(type: String?): NSArray?
+		fun typesFilterableTo(type: String?): NSArray?
 
 		/**
 		 * Original signature : `NSPasteboard* pasteboardByFilteringFile(NSString*)`<br></br>
 		 * *native declaration : :71*
 		 */
-		open fun pasteboardByFilteringFile(filename: String?): NSPasteboard?
+		fun pasteboardByFilteringFile(filename: String?): NSPasteboard?
 
 		/**
 		 * Original signature : `NSPasteboard* pasteboardByFilteringData(NSData*, NSString*)`<br></br>
 		 * *native declaration : :72*
 		 */
-		open fun pasteboardByFilteringData_ofType(data: NSData?, type: String?): NSPasteboard?
+		fun pasteboardByFilteringData_ofType(data: NSData?, type: String?): NSPasteboard?
 
 		/**
 		 * Original signature : `NSPasteboard* pasteboardByFilteringTypesInPasteboard(NSPasteboard*)`<br></br>
 		 * *native declaration : :73*
 		 */
-		open fun pasteboardByFilteringTypesInPasteboard(pboard: NSPasteboard?): NSPasteboard?
+		fun pasteboardByFilteringTypesInPasteboard(pboard: NSPasteboard?): NSPasteboard?
 	}
 
 	/**

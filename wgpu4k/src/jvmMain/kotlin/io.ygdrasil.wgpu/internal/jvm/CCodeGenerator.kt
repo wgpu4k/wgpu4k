@@ -24,6 +24,7 @@ internal fun logNative(block: () -> Triple<String, List<Any?>, KClass<out Any>?>
         arguments.forEachIndexed { index, any ->
             (any as? Structure)?.let { structure ->
                 log.append("const ")
+                @Suppress("UNCHECKED_CAST")
                 log.append((structure::class as KClass<Any>).getName())
                 log.append(" *$functionName$index = ")
                 log.append(structure.log())
@@ -64,12 +65,13 @@ private val countInstances: MutableMap<KClass<out Any>, Int> = mutableMapOf()
 
 internal fun Structure.log(indentation: UInt = 0u, isPointer: Boolean = true): String {
 
-    val fieldOrder = (this::class as KClass<Any>).getFieldOrder()
-    val memberProperties = (this::class as KClass<Any>).memberProperties
+    @Suppress("UNCHECKED_CAST") val fieldOrder = (this::class as KClass<Any>).getFieldOrder()
+    @Suppress("UNCHECKED_CAST") val memberProperties = (this::class as KClass<Any>).memberProperties
 
     val log = StringBuilder()
     log.addIndentation(indentation)
     log.append(if (isPointer) "&" else "")
+    @Suppress("UNCHECKED_CAST")
     log.append("(const ${(this::class as KClass<Any>).getName()}){\n")
 
     val fieldOrderValues = fieldOrder.value
@@ -94,7 +96,10 @@ internal fun Structure.log(indentation: UInt = 0u, isPointer: Boolean = true): S
                 log.append("(const $arrayName[]){\n")
                 value
                     .filterIsInstance<Structure>()
-                    .forEach { log.append(it.log(indentation + 3u, value is Structure.ByReference)) }
+                    .forEach {
+                        @Suppress("KotlinConstantConditions")
+                        log.append(it.log(indentation + 3u, value is Structure.ByReference))
+                    }
 
 
                 log.append("\n")

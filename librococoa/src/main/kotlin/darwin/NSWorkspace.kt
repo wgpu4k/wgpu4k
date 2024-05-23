@@ -12,7 +12,7 @@ abstract class NSWorkspace : NSObject() {
 		 * Original signature : `NSWorkspace* sharedWorkspace)`<br></br>
 		 * *native declaration : :54*
 		 */
-		open fun sharedWorkspace(): NSWorkspace?
+		fun sharedWorkspace(): NSWorkspace?
 	}
 
 	/**

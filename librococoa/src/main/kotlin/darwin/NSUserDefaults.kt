@@ -10,15 +10,15 @@ abstract class NSUserDefaults : NSObject() {
 		 * Original signature : `NSUserDefaults* standardUserDefaults()`<br></br>
 		 * *native declaration : :20*
 		 */
-		open fun standardUserDefaults(): NSUserDefaults?
+		fun standardUserDefaults(): NSUserDefaults?
 
 		/**
 		 * Original signature : `void resetStandardUserDefaults()`<br></br>
 		 * *native declaration : :21*
 		 */
-		open fun resetStandardUserDefaults()
+		fun resetStandardUserDefaults()
 
-		open fun alloc(): NSUserDefaults
+		fun alloc(): NSUserDefaults
 	}
 
 	/**

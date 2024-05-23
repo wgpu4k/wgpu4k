@@ -18,7 +18,7 @@ object NSThread : NSObject() {
 		 *
 		 * @return
 		 */
-		open fun isMainThread(): Boolean
+		fun isMainThread(): Boolean
 	}
 
 	override fun respondsToSelector(sel: Selector?): Boolean {

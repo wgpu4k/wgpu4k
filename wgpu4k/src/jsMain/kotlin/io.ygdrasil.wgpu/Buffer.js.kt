@@ -5,12 +5,7 @@ package io.ygdrasil.wgpu
 import io.ygdrasil.wgpu.internal.js.GPUBuffer
 import org.khronos.webgl.Float32Array
 
-@JsExport
 actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
-
-	init {
-		check(handler != null) { "handler should not be null" }
-	}
 
 	actual val size: GPUSize64
 		get() = handler.size

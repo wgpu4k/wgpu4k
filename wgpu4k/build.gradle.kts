@@ -1,8 +1,7 @@
-import org.jetbrains.kotlin.de.undercouch.gradle.tasks.download.Download
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon
-
+import de.undercouch.gradle.tasks.download.Download
 
 plugins {
+	id("de.undercouch.download") version "5.6.0"
     alias(libs.plugins.kotlinMultiplatform)
 	alias(libs.plugins.kotest)
 }
@@ -61,11 +60,9 @@ kotlin {
 
 		}
     }
-}
 
-tasks.withType<KotlinCompileCommon>().configureEach {
-	kotlinOptions {
-		freeCompilerArgs += "-Xexpect-actual-classes"
+	compilerOptions {
+		freeCompilerArgs.add("-Xexpect-actual-classes")
 	}
 }
 
