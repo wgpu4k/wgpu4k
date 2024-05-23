@@ -19,4 +19,6 @@ expect class RenderPassEncoder: AutoCloseable {
 
 	fun setVertexBuffer(slot: Int, buffer: Buffer)
 
+	override fun close()
+
 }

@@ -12,9 +12,9 @@ abstract class NSMutableArray : NSArray() {
 		 * Original signature : `id arrayWithCapacity(NSUInteger)`<br></br>
 		 * *from NSMutableArrayCreation native declaration : :118*
 		 */
-		open fun arrayWithCapacity(numItems: NSUInteger?): NSMutableArray?
+		fun arrayWithCapacity(numItems: NSUInteger?): NSMutableArray?
 
-		open fun array(): NSMutableArray?
+		fun array(): NSMutableArray?
 	}
 
 	/**

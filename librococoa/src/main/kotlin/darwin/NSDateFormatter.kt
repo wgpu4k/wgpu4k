@@ -5,7 +5,7 @@ import org.rococoa.cocoa.foundation.NSUInteger
 
 abstract class NSDateFormatter : NSFormatter() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSDateFormatter
+		fun alloc(): NSDateFormatter
 	}
 
 	/**

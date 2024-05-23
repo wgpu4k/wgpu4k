@@ -1,10 +1,9 @@
-import org.jetbrains.kotlin.de.undercouch.gradle.tasks.download.Download
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon
-
+import de.undercouch.gradle.tasks.download.Download
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
 	alias(libs.plugins.kotest)
+	alias(libs.plugins.download)
 }
 
 kotlin {
@@ -37,14 +36,14 @@ kotlin {
 		val jvmMain by getting {
 			dependencies {
 				api(libs.jna)
-				implementation("dev.krud:shapeshift:0.8.0")
+				implementation(libs.shapeshift)
 			}
 		}
 
         val commonMain by getting {
             dependencies {
 				implementation(kotlin("stdlib-common"))
-				implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+				implementation(libs.coroutines)
 				implementation(kotlin("reflect"))
             }
         }
@@ -56,16 +55,15 @@ kotlin {
 
 		val jvmTest by getting {
 			dependencies {
-				implementation("org.opentest4j:opentest4j:1.3.0")
+				implementation(libs.kotest.runner.junit5)
 			}
 
 		}
     }
-}
 
-tasks.withType<KotlinCompileCommon>().configureEach {
-	kotlinOptions {
-		freeCompilerArgs += "-Xexpect-actual-classes"
+	compilerOptions {
+		allWarningsAsErrors = true
+		freeCompilerArgs.add("-Xexpect-actual-classes")
 	}
 }
 
@@ -136,3 +134,18 @@ fun unzipTask(
 
 data class NativeLibrary(val remoteFile: String, val targetFile: File, val zipFileName: String)
 
+tasks.named<Test>("jvmTest") {
+	useJUnitPlatform()
+	filter {
+		isFailOnNoMatchingTests = false
+	}
+	testLogging {
+		showExceptions = true
+		showStandardStreams = true
+		events = setOf(
+			org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED,
+			org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED
+		)
+		exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+	}
+}

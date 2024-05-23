@@ -31,7 +31,7 @@ abstract class NSString : NSObject(), NSCopying {
 	}
 
 	interface _Class : ObjCClass {
-		open fun alloc(): NSString
+		fun alloc(): NSString
 
 		/**
 		 * User-dependent encoding who value is derived from user's default language and potentially other factors. The use of this encoding might sometimes be needed when interpreting user documents with unknown encodings, in the absence of other hints.  This encoding should be used rarely, if at all. Note that some potential values here might result in unexpected encoding conversions of even fairly straightforward NSString content --- for instance, punctuation characters with a bidirectional encoding.<br></br>
@@ -39,67 +39,67 @@ abstract class NSString : NSObject(), NSCopying {
 		 * Should be rarely used<br></br>
 		 * *from NSStringExtensionMethods native declaration : :242*
 		 */
-		open fun defaultCStringEncoding(): NSUInteger?
+		fun defaultCStringEncoding(): NSUInteger?
 
 		/**
 		 * Original signature : `const NSStringEncoding* availableStringEncodings()`<br></br>
 		 * *from NSStringExtensionMethods native declaration : :244*
 		 */
-		open fun availableStringEncodings(): com.sun.jna.ptr.IntByReference?
+		fun availableStringEncodings(): com.sun.jna.ptr.IntByReference?
 
 		/**
 		 * Original signature : `NSString* localizedNameOfStringEncoding(NSStringEncoding)`<br></br>
 		 * *from NSStringExtensionMethods native declaration : :245*
 		 */
-		open fun localizedNameOfStringEncoding(encoding: NSUInteger?): NSString?
+		fun localizedNameOfStringEncoding(encoding: NSUInteger?): NSString?
 
 		/**
 		 * Original signature : `string()`<br></br>
 		 * *from NSStringExtensionMethods native declaration : :266*
 		 */
-		open fun string(): String?
+		fun string(): String?
 
 		/**
 		 * Original signature : `stringWithString(NSString*)`<br></br>
 		 * *from NSStringExtensionMethods native declaration : :267*
 		 */
-		open fun stringWithString(string: String?): NSString
+		fun stringWithString(string: String?): NSString
 
 		/**
 		 * Original signature : `stringWithCharacters(const unichar*, NSUInteger)`<br></br>
 		 * *from NSStringExtensionMethods native declaration : :268*
 		 */
-		open fun stringWithCharacters_length(characters: CharArray?, length: NSUInteger?): NSString?
+		fun stringWithCharacters_length(characters: CharArray?, length: NSUInteger?): NSString?
 
 		/**
 		 * Original signature : `stringWithUTF8String(const char*)`<br></br>
 		 * *from NSStringExtensionMethods native declaration : :269*
 		 */
-		open fun stringWithUTF8String(nullTerminatedCString: String?): NSString?
+		fun stringWithUTF8String(nullTerminatedCString: String?): NSString?
 
 		/**
 		 * Original signature : `stringWithFormat(NSString*, null)`<br></br>
 		 * *from NSStringExtensionMethods native declaration : :270*
 		 */
-		open fun stringWithFormat(format: NSString?, vararg varargs: NSObject?): NSString?
+		fun stringWithFormat(format: NSString?, vararg varargs: NSObject?): NSString?
 
 		/**
 		 * Original signature : `localizedStringWithFormat(NSString*, null)`<br></br>
 		 * *from NSStringExtensionMethods native declaration : :271*
 		 */
-		open fun localizedStringWithFormat(format: NSString?, vararg varargs: NSObject?): NSString?
+		fun localizedStringWithFormat(format: NSString?, vararg varargs: NSObject?): NSString?
 
 		/**
 		 * Original signature : `stringWithCString(const char*, NSStringEncoding)`<br></br>
 		 * *from NSStringExtensionMethods native declaration : :275*
 		 */
-		open fun stringWithCString_encoding(cString: String?, enc: NSUInteger?): NSString?
+		fun stringWithCString_encoding(cString: String?, enc: NSUInteger?): NSString?
 
 		/**
 		 * Original signature : `stringWithContentsOfURL(NSURL*, NSStringEncoding, NSError**)`<br></br>
 		 * *from NSStringExtensionMethods native declaration : :281*
 		 */
-		open fun stringWithContentsOfURL_encoding_error(
+		fun stringWithContentsOfURL_encoding_error(
 			url: NSURL?,
 			enc: NSUInteger?,
 			error: ObjCObjectByReference?
@@ -109,7 +109,7 @@ abstract class NSString : NSObject(), NSCopying {
 		 * Original signature : `stringWithContentsOfFile(NSString*, NSStringEncoding, NSError**)`<br></br>
 		 * *from NSStringExtensionMethods native declaration : :282*
 		 */
-		open fun stringWithContentsOfFile_encoding_error(
+		fun stringWithContentsOfFile_encoding_error(
 			path: NSString?,
 			enc: NSUInteger?,
 			error: ObjCObjectByReference?
@@ -119,7 +119,7 @@ abstract class NSString : NSObject(), NSCopying {
 		 * Original signature : `stringWithContentsOfURL(NSURL*, NSStringEncoding*, NSError**)`<br></br>
 		 * *from NSStringExtensionMethods native declaration : :288*
 		 */
-		open fun stringWithContentsOfURL_usedEncoding_error(
+		fun stringWithContentsOfURL_usedEncoding_error(
 			url: NSURL?,
 			enc: IntBuffer?,
 			error: ObjCObjectByReference?
@@ -129,7 +129,7 @@ abstract class NSString : NSObject(), NSCopying {
 		 * Original signature : `stringWithContentsOfFile(NSString*, NSStringEncoding*, NSError**)`<br></br>
 		 * *from NSStringExtensionMethods native declaration : :289*
 		 */
-		open fun stringWithContentsOfFile_usedEncoding_error(
+		fun stringWithContentsOfFile_usedEncoding_error(
 			path: NSString?,
 			enc: IntBuffer?,
 			error: ObjCObjectByReference?
@@ -139,25 +139,25 @@ abstract class NSString : NSObject(), NSCopying {
 		 * Original signature : `stringWithContentsOfFile(NSString*)`<br></br>
 		 * *from NSStringDeprecated native declaration : :358*
 		 */
-		open fun stringWithContentsOfFile(path: NSString?): NSString?
+		fun stringWithContentsOfFile(path: NSString?): NSString?
 
 		/**
 		 * Original signature : `stringWithContentsOfURL(NSURL*)`<br></br>
 		 * *from NSStringDeprecated native declaration : :359*
 		 */
-		open fun stringWithContentsOfURL(url: NSURL?): NSString?
+		fun stringWithContentsOfURL(url: NSURL?): NSString?
 
 		/**
 		 * Original signature : `stringWithCString(const char*, NSUInteger)`<br></br>
 		 * *from NSStringDeprecated native declaration : :364*
 		 */
-		open fun stringWithCString_length(bytes: String?, length: NSUInteger?): NSString?
+		fun stringWithCString_length(bytes: String?, length: NSUInteger?): NSString?
 
 		/**
 		 * Original signature : `stringWithCString(const char*)`<br></br>
 		 * *from NSStringDeprecated native declaration : :365*
 		 */
-		open fun stringWithCString(bytes: String?): NSString?
+		fun stringWithCString(bytes: String?): NSString?
 	}
 
 	/**

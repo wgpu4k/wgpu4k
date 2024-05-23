@@ -4,9 +4,7 @@ package io.ygdrasil.wgpu.examples
 
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.scenes.basic.*
-import kotlin.js.JsExport
 
-@JsExport
 abstract class Application(
 	val renderingContext: RenderingContext,
 	val device: Device,

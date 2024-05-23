@@ -5,84 +5,84 @@ import org.rococoa.ObjCClass
 abstract class NSLocale : NSObject() {
 	interface _Class : ObjCClass {
 		/// <i>native declaration : NSLocale.h</i>
-		open fun alloc(): NSLocale
+		fun alloc(): NSLocale
 
 		/**
 		 * Original signature : `NSArray* availableLocaleIdentifiers()`<br></br>
 		 * From category NSLocale<br></br>
 		 * *from NSLocaleGeneralInfo native declaration : /System/Library/Frameworks/framework/Headers/NSLocale.h:40*
 		 */
-		open fun availableLocaleIdentifiers(): NSArray?
+		fun availableLocaleIdentifiers(): NSArray?
 
 		/**
 		 * Original signature : `NSArray* ISOLanguageCodes()`<br></br>
 		 * From category NSLocale<br></br>
 		 * *from NSLocaleGeneralInfo native declaration : /System/Library/Frameworks/framework/Headers/NSLocale.h:41*
 		 */
-		open fun ISOLanguageCodes(): NSArray?
+		fun ISOLanguageCodes(): NSArray?
 
 		/**
 		 * Original signature : `NSArray* ISOCountryCodes()`<br></br>
 		 * From category NSLocale<br></br>
 		 * *from NSLocaleGeneralInfo native declaration : /System/Library/Frameworks/framework/Headers/NSLocale.h:42*
 		 */
-		open fun ISOCountryCodes(): NSArray?
+		fun ISOCountryCodes(): NSArray?
 
 		/**
 		 * Original signature : `NSArray* ISOCurrencyCodes()`<br></br>
 		 * From category NSLocale<br></br>
 		 * *from NSLocaleGeneralInfo native declaration : /System/Library/Frameworks/framework/Headers/NSLocale.h:43*
 		 */
-		open fun ISOCurrencyCodes(): NSArray?
+		fun ISOCurrencyCodes(): NSArray?
 
 		/**
 		 * Original signature : `NSArray* commonISOCurrencyCodes()`<br></br>
 		 * From category NSLocale<br></br>
 		 * *from NSLocaleGeneralInfo native declaration : /System/Library/Frameworks/framework/Headers/NSLocale.h:44*
 		 */
-		open fun commonISOCurrencyCodes(): NSArray?
+		fun commonISOCurrencyCodes(): NSArray?
 
 		/**
 		 * Original signature : `NSArray* preferredLanguages()`<br></br>
 		 * From category NSLocale<br></br>
 		 * *from NSLocaleGeneralInfo native declaration : /System/Library/Frameworks/framework/Headers/NSLocale.h:45*
 		 */
-		open fun preferredLanguages(): NSArray?
+		fun preferredLanguages(): NSArray?
 
 		/**
 		 * Original signature : `NSDictionary* componentsFromLocaleIdentifier(NSString*)`<br></br>
 		 * From category NSLocale<br></br>
 		 * *from NSLocaleGeneralInfo native declaration : /System/Library/Frameworks/framework/Headers/NSLocale.h:47*
 		 */
-		open fun componentsFromLocaleIdentifier(string: String?): NSDictionary?
+		fun componentsFromLocaleIdentifier(string: String?): NSDictionary?
 
 		/**
 		 * Original signature : `NSString* localeIdentifierFromComponents(NSDictionary*)`<br></br>
 		 * From category NSLocale<br></br>
 		 * *from NSLocaleGeneralInfo native declaration : /System/Library/Frameworks/framework/Headers/NSLocale.h:48*
 		 */
-		open fun localeIdentifierFromComponents(dict: NSDictionary?): String?
+		fun localeIdentifierFromComponents(dict: NSDictionary?): String?
 
 		/**
 		 * Original signature : `NSString* canonicalLocaleIdentifierFromString(NSString*)`<br></br>
 		 * From category NSLocale<br></br>
 		 * *from NSLocaleGeneralInfo native declaration : /System/Library/Frameworks/framework/Headers/NSLocale.h:50*
 		 */
-		open fun canonicalLocaleIdentifierFromString(string: String?): String?
+		fun canonicalLocaleIdentifierFromString(string: String?): String?
 
 		/**
 		 * Original signature : `systemLocale()`<br></br>
 		 * From category NSLocale<br></br>
 		 * *from NSLocaleCreation native declaration : /System/Library/Frameworks/framework/Headers/NSLocale.h:30*
 		 */
-		open fun systemLocale(): NSLocale?
+		fun systemLocale(): NSLocale?
 
 		/**
 		 * Original signature : `currentLocale()`<br></br>
 		 * From category NSLocale<br></br>
 		 * *from NSLocaleCreation native declaration : /System/Library/Frameworks/framework/Headers/NSLocale.h:31*
 		 */
-		open fun currentLocale(): NSLocale?
+		fun currentLocale(): NSLocale?
 	}
 
 	/**

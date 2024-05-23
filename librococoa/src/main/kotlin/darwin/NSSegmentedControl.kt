@@ -8,7 +8,7 @@ import org.rococoa.cocoa.foundation.NSInteger
 /// <i>native declaration : :26</i>
 abstract class NSSegmentedControl : NSControl() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSSegmentedControl
+		fun alloc(): NSSegmentedControl
 	}
 
 	abstract override fun init(): NSSegmentedControl

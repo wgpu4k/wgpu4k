@@ -2,6 +2,7 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
 	kotlin("jvm")
+	alias(libs.plugins.compose.compiler)
 	alias(libs.plugins.compose)
 }
 

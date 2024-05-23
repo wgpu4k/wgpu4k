@@ -5,7 +5,7 @@ import org.rococoa.cocoa.foundation.NSRect
 
 abstract class NSSearchField : NSTextField() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSSearchField
+		fun alloc(): NSSearchField
 	}
 
 	abstract override fun init(): NSSearchField

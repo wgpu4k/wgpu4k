@@ -2,7 +2,10 @@
 
 package io.ygdrasil.wgpu
 
-expect class TextureView: AutoCloseable
+expect class TextureView: AutoCloseable {
+
+	override fun close()
+}
 
 data class TextureViewDescriptor(
 	var label: String? = null,

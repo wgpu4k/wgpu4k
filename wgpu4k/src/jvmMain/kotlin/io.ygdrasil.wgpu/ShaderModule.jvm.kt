@@ -4,7 +4,7 @@ import com.sun.jna.NativeLong
 import io.ygdrasil.wgpu.internal.jvm.*
 
 actual class ShaderModule(internal val handler: WGPUShaderModule) : AutoCloseable {
-	override fun close() {
+	actual override fun close() {
 		logUnitNative { "wgpuShaderModuleRelease" to listOf(handler) }
 		wgpuShaderModuleRelease(handler)
 	}

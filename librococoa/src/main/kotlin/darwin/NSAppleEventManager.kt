@@ -17,7 +17,7 @@ abstract class NSAppleEventManager : NSObject() {
 		 * Original signature : `+(NSAppleEventManager*)sharedAppleEventManager`<br></br>
 		 * *native declaration : line 30*
 		 */
-		open fun sharedAppleEventManager(): NSAppleEventManager?
+		fun sharedAppleEventManager(): NSAppleEventManager?
 	}
 
 	/**

@@ -6,7 +6,7 @@ interface SheetCallback {
 	 *
 	 * @param returncode Selected button
 	 */
-	open fun callback(returncode: Int)
+	fun callback(returncode: Int)
 
 	companion object {
 		/**

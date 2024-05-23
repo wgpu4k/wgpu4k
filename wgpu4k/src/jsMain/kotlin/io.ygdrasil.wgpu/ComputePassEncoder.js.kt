@@ -34,7 +34,7 @@ actual class ComputePassEncoder(internal val handler: GPUComputePassEncoder) : A
 
     actual fun end() = handler.end()
 
-    override fun close() {
+    actual override fun close() {
         // Nothing to do on js
     }
 

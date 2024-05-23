@@ -2,8 +2,6 @@
 
 package io.ygdrasil.wgpu
 
-import kotlin.js.JsExport
-
 expect class RenderingContext: AutoCloseable {
 
 	val width: Int
@@ -23,9 +21,10 @@ expect class RenderingContext: AutoCloseable {
 	fun present()
 
 	fun configure(canvasConfiguration: CanvasConfiguration)
+
+	override fun close()
 }
 
-@JsExport
 data class CanvasConfiguration(
 	var device: Device,
 	var format: TextureFormat? = null,

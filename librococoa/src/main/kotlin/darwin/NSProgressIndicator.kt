@@ -7,7 +7,7 @@ import org.rococoa.cocoa.foundation.NSRect
 /// <i>native declaration : :42</i>
 abstract class NSProgressIndicator : NSView() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSProgressIndicator
+		fun alloc(): NSProgressIndicator
 	}
 
 	@Override

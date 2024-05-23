@@ -8,6 +8,8 @@ package io.ygdrasil.wgpu
  * @see <a href="https://www.w3.org/TR/webgpu/#gpusampler">W3C specifications</a>
  */
 expect class Sampler : AutoCloseable {
+
+	override fun close()
 }
 
 /**

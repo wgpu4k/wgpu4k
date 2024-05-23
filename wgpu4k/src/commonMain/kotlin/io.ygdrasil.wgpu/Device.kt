@@ -1,6 +1,5 @@
 package io.ygdrasil.wgpu
 
-@OptIn(ExperimentalStdlibApi::class)
 expect class Device: AutoCloseable {
 
 	val queue: Queue
@@ -22,6 +21,8 @@ expect class Device: AutoCloseable {
 	fun createSampler(descriptor: SamplerDescriptor = SamplerDescriptor()): Sampler
 
 	fun createComputePipeline(descriptor: ComputePipelineDescriptor): ComputePipeline
+
+	override fun close()
 }
 
 // TODO

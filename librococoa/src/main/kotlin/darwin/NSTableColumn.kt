@@ -7,7 +7,7 @@ import org.rococoa.cocoa.foundation.NSInteger
 /// <i>native declaration : :17</i>
 abstract class NSTableColumn : NSObject() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSTableColumn
+		fun alloc(): NSTableColumn
 	}
 
 	/**

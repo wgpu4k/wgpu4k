@@ -7,31 +7,31 @@ import org.rococoa.cocoa.foundation.NSUInteger
 /// <i>native declaration : :27</i>
 abstract class NSData : NSObject() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSData
+		fun alloc(): NSData
 
 		/**
 		 * Original signature : `data()`<br></br>
 		 * *from NSDataCreation native declaration : :53*
 		 */
-		open fun data(): NSData?
+		fun data(): NSData?
 
 		/**
 		 * Original signature : `dataWithBytes(const void*, NSUInteger)`<br></br>
 		 * *from NSDataCreation native declaration : :54*
 		 */
-		open fun dataWithBytes_length(bytes: com.sun.jna.Pointer?, length: NSUInteger?): NSData?
+		fun dataWithBytes_length(bytes: com.sun.jna.Pointer?, length: NSUInteger?): NSData?
 
 		/**
 		 * Original signature : `dataWithBytesNoCopy(void*, NSUInteger)`<br></br>
 		 * *from NSDataCreation native declaration : :55*
 		 */
-		open fun dataWithBytesNoCopy_length(bytes: com.sun.jna.Pointer?, length: NSUInteger?): NSData?
+		fun dataWithBytesNoCopy_length(bytes: com.sun.jna.Pointer?, length: NSUInteger?): NSData?
 
 		/**
 		 * Original signature : `dataWithBytesNoCopy(void*, NSUInteger, BOOL)`<br></br>
 		 * *from NSDataCreation native declaration : :57*
 		 */
-		open fun dataWithBytesNoCopy_length_freeWhenDone(
+		fun dataWithBytesNoCopy_length_freeWhenDone(
 			bytes: com.sun.jna.Pointer?,
 			length: NSUInteger?,
 			b: Byte
@@ -41,7 +41,7 @@ abstract class NSData : NSObject() {
 		 * Original signature : `dataWithContentsOfFile(NSString*, NSUInteger, NSError**)`<br></br>
 		 * *from NSDataCreation native declaration : :60*
 		 */
-		open fun dataWithContentsOfFile_options_error(
+		fun dataWithContentsOfFile_options_error(
 			path: String?,
 			readOptionsMask: Int,
 			errorPtr: ObjCObjectByReference?
@@ -51,7 +51,7 @@ abstract class NSData : NSObject() {
 		 * Original signature : `dataWithContentsOfURL(NSURL*, NSUInteger, NSError**)`<br></br>
 		 * *from NSDataCreation native declaration : :61*
 		 */
-		open fun dataWithContentsOfURL_options_error(
+		fun dataWithContentsOfURL_options_error(
 			url: NSURL?,
 			readOptionsMask: Int,
 			errorPtr: ObjCObjectByReference?
@@ -61,30 +61,30 @@ abstract class NSData : NSObject() {
 		 * Original signature : `dataWithContentsOfFile(NSString*)`<br></br>
 		 * *from NSDataCreation native declaration : :63*
 		 */
-		open fun dataWithContentsOfFile(path: String?): NSData?
+		fun dataWithContentsOfFile(path: String?): NSData?
 
 		/**
 		 * Original signature : `dataWithContentsOfURL(NSURL*)`<br></br>
 		 * *from NSDataCreation native declaration : :64*
 		 */
-		open fun dataWithContentsOfURL(url: NSURL?): NSData?
+		fun dataWithContentsOfURL(url: NSURL?): NSData?
 
 		/**
 		 * Original signature : `dataWithContentsOfMappedFile(NSString*)`<br></br>
 		 * *from NSDataCreation native declaration : :65*
 		 */
-		open fun dataWithContentsOfMappedFile(path: String?): NSData?
+		fun dataWithContentsOfMappedFile(path: String?): NSData?
 
 		/**
 		 * NSData+Base64
 		 */
-		open fun dataWithBase64EncodedString(string: String?): NSData?
+		fun dataWithBase64EncodedString(string: String?): NSData?
 
 		/**
 		 * Original signature : `dataWithData(NSData*)`<br></br>
 		 * *from NSDataCreation native declaration : :79*
 		 */
-		open fun dataWithData(data: NSData?): NSData?
+		fun dataWithData(data: NSData?): NSData?
 	}
 
 	/**

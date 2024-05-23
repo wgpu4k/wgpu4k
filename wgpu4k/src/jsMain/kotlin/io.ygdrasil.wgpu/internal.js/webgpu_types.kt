@@ -1,5 +1,3 @@
-@file:Suppress("INTERFACE_WITH_SUPERCLASS", "OVERRIDING_FINAL_MEMBER", "RETURN_TYPE_MISMATCH_ON_OVERRIDE", "CONFLICTING_OVERLOADS")
-
 package io.ygdrasil.wgpu.internal.js
 
 import io.ygdrasil.wgpu.*
@@ -267,6 +265,7 @@ external interface GPUMultisampleState {
     var count: GPUSize32?
         get() = definedExternally
         set(value) = definedExternally
+    @Suppress("INLINE_CLASS_IN_EXTERNAL_DECLARATION_WARNING")
     var mask: GPUSampleMask?
         get() = definedExternally
         set(value) = definedExternally
@@ -672,7 +671,7 @@ external interface NavigatorGPU {
     var gpu: GPU
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPU {
     var __brand: String /* "GPU" */
     fun requestAdapter(options: GPURequestAdapterOptions = definedExternally): Promise<GPUAdapter?>
@@ -684,7 +683,7 @@ external interface GPU {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUAdapter {
     var __brand: String /* "GPUAdapter" */
     var features: GPUSupportedFeatures
@@ -698,7 +697,7 @@ external interface GPUAdapter {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUAdapterInfo {
     var __brand: String /* "GPUAdapterInfo" */
     var vendor: String
@@ -711,7 +710,7 @@ external interface GPUAdapterInfo {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUBindGroup : GPUObjectBase {
     var __brand: String /* "GPUBindGroup" */
 
@@ -720,7 +719,7 @@ external interface GPUBindGroup : GPUObjectBase {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUBindGroupLayout : GPUObjectBase {
     var __brand: String /* "GPUBindGroupLayout" */
 
@@ -729,7 +728,7 @@ external interface GPUBindGroupLayout : GPUObjectBase {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUBuffer : GPUObjectBase {
     var __brand: String /* "GPUBuffer" */
     var size: GPUSize64Out
@@ -745,7 +744,7 @@ external interface GPUBuffer : GPUObjectBase {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUCanvasContext {
     var __brand: String /* "GPUCanvasContext" */
     var canvas: dynamic /* HTMLCanvasElement | OffscreenCanvas */
@@ -760,7 +759,7 @@ external interface GPUCanvasContext {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUCommandBuffer : GPUObjectBase {
     var __brand: String /* "GPUCommandBuffer" */
 
@@ -769,7 +768,7 @@ external interface GPUCommandBuffer : GPUObjectBase {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUCommandEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin {
     var __brand: String /* "GPUCommandEncoder" */
     fun beginRenderPass(descriptor: GPURenderPassDescriptor): GPURenderPassEncoder
@@ -798,7 +797,6 @@ external interface GPUCommandEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebug
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
 external interface GPUCompilationInfo {
     var __brand: String /* "GPUCompilationInfo" */
     var messages: Array<GPUCompilationMessage>
@@ -808,7 +806,7 @@ external interface GPUCompilationInfo {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUCompilationMessage {
     var __brand: String /* "GPUCompilationMessage" */
     var message: String
@@ -823,7 +821,7 @@ external interface GPUCompilationMessage {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUComputePassEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin, GPUBindingCommandsMixin {
     var __brand: String /* "GPUComputePassEncoder" */
     fun setPipeline(pipeline: GPUComputePipeline)
@@ -841,7 +839,7 @@ external interface GPUComputePassEncoder : GPUObjectBase, GPUCommandsMixin, GPUD
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUComputePipeline : GPUObjectBase, GPUPipelineBase {
     var __brand: String /* "GPUComputePipeline" */
 
@@ -850,8 +848,10 @@ external interface GPUComputePipeline : GPUObjectBase, GPUPipelineBase {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
-external interface GPUDevice : EventTarget, GPUObjectBase {
+
+open external class GPUDevice : EventTarget, GPUObjectBase {
+
+    override var label: String
     var __brand: String /* "GPUDevice" */
     var features: GPUSupportedFeatures
     var limits: GPUSupportedLimits
@@ -880,9 +880,10 @@ external interface GPUDevice : EventTarget, GPUObjectBase {
     companion object {
         var prototype: GPUDevice
     }
+
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUDeviceLostInfo {
     var __brand: String /* "GPUDeviceLostInfo" */
     var reason: String /* "unknown" | "destroyed" */
@@ -893,7 +894,7 @@ external interface GPUDeviceLostInfo {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUError {
     var message: String
 
@@ -902,7 +903,7 @@ external interface GPUError {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUExternalTexture : GPUObjectBase {
     var __brand: String /* "GPUExternalTexture" */
 
@@ -911,7 +912,7 @@ external interface GPUExternalTexture : GPUObjectBase {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUInternalError : GPUError {
     var __brand: String /* "GPUInternalError" */
 
@@ -920,7 +921,7 @@ external interface GPUInternalError : GPUError {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUOutOfMemoryError : GPUError {
     var __brand: String /* "GPUOutOfMemoryError" */
 
@@ -929,8 +930,8 @@ external interface GPUOutOfMemoryError : GPUError {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
-external interface GPUPipelineError : DOMException {
+
+open external class GPUPipelineError : DOMException {
     var __brand: String /* "GPUPipelineError" */
     var reason: String /* "validation" | "internal" */
 
@@ -939,7 +940,7 @@ external interface GPUPipelineError : DOMException {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUPipelineLayout : GPUObjectBase {
     var __brand: String /* "GPUPipelineLayout" */
 
@@ -948,7 +949,7 @@ external interface GPUPipelineLayout : GPUObjectBase {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUQuerySet : GPUObjectBase {
     var __brand: String /* "GPUQuerySet" */
     fun destroy(): Nothing?
@@ -960,7 +961,7 @@ external interface GPUQuerySet : GPUObjectBase {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUQueue : GPUObjectBase {
     var __brand: String /* "GPUQueue" */
     fun submit(commandBuffers: Array<GPUCommandBuffer>): Nothing?
@@ -993,7 +994,7 @@ external interface GPUQueue : GPUObjectBase {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPURenderBundle : GPUObjectBase {
     var __brand: String /* "GPURenderBundle" */
 
@@ -1002,7 +1003,7 @@ external interface GPURenderBundle : GPUObjectBase {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPURenderBundleEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin, GPUBindingCommandsMixin, GPURenderCommandsMixin {
     var __brand: String /* "GPURenderBundleEncoder" */
     fun finish(descriptor: GPURenderBundleDescriptor = definedExternally): GPURenderBundle
@@ -1012,7 +1013,7 @@ external interface GPURenderBundleEncoder : GPUObjectBase, GPUCommandsMixin, GPU
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPURenderPassEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin, GPUBindingCommandsMixin, GPURenderCommandsMixin {
     var __brand: String /* "GPURenderPassEncoder" */
     fun setViewport(x: Number, y: Number, width: Number, height: Number, minDepth: Number, maxDepth: Number): Nothing?
@@ -1030,7 +1031,7 @@ external interface GPURenderPassEncoder : GPUObjectBase, GPUCommandsMixin, GPUDe
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPURenderPipeline : GPUObjectBase, GPUPipelineBase {
     var __brand: String /* "GPURenderPipeline" */
 
@@ -1039,7 +1040,7 @@ external interface GPURenderPipeline : GPUObjectBase, GPUPipelineBase {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUSampler : GPUObjectBase {
     var __brand: String /* "GPUSampler" */
 
@@ -1048,7 +1049,7 @@ external interface GPUSampler : GPUObjectBase {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUShaderModule : GPUObjectBase {
     var __brand: String /* "GPUShaderModule" */
     fun getCompilationInfo(): Promise<GPUCompilationInfo>
@@ -1060,7 +1061,7 @@ external interface GPUShaderModule : GPUObjectBase {
 
 typealias GPUSupportedFeatures = ReadonlySet<String>
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUSupportedLimits {
     var __brand: String /* "GPUSupportedLimits" */
     var maxTextureDimension1D: Number
@@ -1101,7 +1102,7 @@ external interface GPUSupportedLimits {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUTexture : GPUObjectBase {
     var __brand: String /* "GPUTexture" */
     fun createView(descriptor: GPUTextureViewDescriptor = definedExternally): GPUTextureView
@@ -1120,7 +1121,7 @@ external interface GPUTexture : GPUObjectBase {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUTextureView : GPUObjectBase {
     var __brand: String /* "GPUTextureView" */
 
@@ -1129,8 +1130,8 @@ external interface GPUTextureView : GPUObjectBase {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
-external interface GPUUncapturedErrorEvent : Event {
+
+open external class GPUUncapturedErrorEvent : Event {
     var __brand: String /* "GPUUncapturedErrorEvent" */
     var error: GPUError
 
@@ -1139,7 +1140,7 @@ external interface GPUUncapturedErrorEvent : Event {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUValidationError : GPUError {
     var __brand: String /* "GPUValidationError" */
 
@@ -1152,7 +1153,7 @@ typealias WGSLLanguageFeatures = ReadonlySet<String>
 
 external interface WorkerNavigator : NavigatorGPU
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUBufferUsage {
     var __brand: String /* "GPUBufferUsage" */
     var MAP_READ: GPUFlagsConstant
@@ -1181,7 +1182,7 @@ external interface GPUBufferUsage {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUColorWrite {
     var __brand: String /* "GPUColorWrite" */
     var RED: GPUFlagsConstant
@@ -1200,7 +1201,7 @@ external interface GPUColorWrite {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUMapMode {
     var __brand: String /* "GPUMapMode" */
     var READ: GPUFlagsConstant
@@ -1213,7 +1214,7 @@ external interface GPUMapMode {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUShaderStage {
     var __brand: String /* "GPUShaderStage" */
     var VERTEX: GPUFlagsConstant
@@ -1228,7 +1229,7 @@ external interface GPUShaderStage {
     }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 external interface GPUTextureUsage {
     var __brand: String /* "GPUTextureUsage" */
     var COPY_SRC: GPUFlagsConstant

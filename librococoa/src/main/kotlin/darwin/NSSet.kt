@@ -10,7 +10,7 @@ abstract class NSSet : NSObject() {
 		 * Original signature : `set()`<br></br>
 		 * *from NSSetCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSSet.h:43*
 		 */
-		open fun set(): NSSet?
+		fun set(): NSSet?
 		/**
 		 * *from NSSetCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSSet.h:44*<br></br>
 		 * Conversion Error : /// Original signature : `setWithObject(null)`<br></br>
@@ -20,25 +20,25 @@ abstract class NSSet : NSObject() {
 		 * Original signature : `setWithObjects(id*, NSUInteger)`<br></br>
 		 * *from NSSetCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSSet.h:45*
 		 */
-		open fun setWithObjects_count(objects: NSObject?, cnt: NSUInteger?): NSSet?
+		fun setWithObjects_count(objects: NSObject?, cnt: NSUInteger?): NSSet?
 
 		/**
 		 * Original signature : `id setWithObjects(id, null)`<br></br>
 		 * *from NSSetCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSSet.h:46*
 		 */
-		open fun setWithObjects(firstObj: NSObject?, vararg varargs: NSObject?): NSSet?
+		fun setWithObjects(firstObj: NSObject?, vararg varargs: NSObject?): NSSet?
 
 		/**
 		 * Original signature : `id setWithSet(NSSet*)`<br></br>
 		 * *from NSSetCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSSet.h:47*
 		 */
-		open fun setWithSet(set: NSSet?): NSSet?
+		fun setWithSet(set: NSSet?): NSSet?
 
 		/**
 		 * Original signature : `id setWithArray(NSArray*)`<br></br>
 		 * *from NSSetCreation native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSSet.h:48*
 		 */
-		open fun setWithArray(array: NSArray?): NSSet?
+		fun setWithArray(array: NSArray?): NSSet?
 	}
 
 	/**

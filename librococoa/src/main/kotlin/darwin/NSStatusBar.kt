@@ -5,7 +5,7 @@ import org.rococoa.cocoa.CGFloat
 
 abstract class NSStatusBar : NSObject() {
 	interface _Class : ObjCClass {
-		open fun systemStatusBar(): NSStatusBar?
+		fun systemStatusBar(): NSStatusBar?
 	}
 
 	/**

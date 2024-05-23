@@ -10,7 +10,7 @@ abstract class NSUserNotificationCenter : NSObject() {
 		 * `+(NSUserNotificationCenter*)defaultUserNotificationCenter`<br></br>
 		 * *native declaration : line 8*
 		 */
-		open fun defaultUserNotificationCenter(): NSUserNotificationCenter?
+		fun defaultUserNotificationCenter(): NSUserNotificationCenter?
 	}
 
 	// Add a notification to the center for scheduling.
@@ -25,12 +25,12 @@ abstract class NSUserNotificationCenter : NSObject() {
 	abstract fun setDelegate(delegate: ID?)
 
 	interface Delegate {
-		open fun userNotificationCenter_didActivateNotification(
+		fun userNotificationCenter_didActivateNotification(
 			center: NSUserNotificationCenter?,
 			notification: NSUserNotification?
 		)
 
-		open fun userNotificationCenter_shouldPresentNotification(
+		fun userNotificationCenter_shouldPresentNotification(
 			center: NSUserNotificationCenter?,
 			notification: NSUserNotification?
 		): Boolean

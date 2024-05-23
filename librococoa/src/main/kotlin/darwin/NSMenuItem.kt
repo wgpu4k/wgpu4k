@@ -10,21 +10,21 @@ abstract class NSMenuItem : NSObject(), NSCopying, NSValidatedUserInterfaceItem 
 		 * Original signature : `void setUsesUserKeyEquivalents(BOOL)`<br></br>
 		 * *native declaration : :44*
 		 */
-		open fun setUsesUserKeyEquivalents(flag: Boolean)
+		fun setUsesUserKeyEquivalents(flag: Boolean)
 
 		/**
 		 * Original signature : `BOOL usesUserKeyEquivalents()`<br></br>
 		 * *native declaration : :45*
 		 */
-		open fun usesUserKeyEquivalents(): Boolean
+		fun usesUserKeyEquivalents(): Boolean
 
 		/**
 		 * Original signature : `NSMenuItem* separatorItem()`<br></br>
 		 * *native declaration : :47*
 		 */
-		open fun separatorItem(): NSMenuItem?
+		fun separatorItem(): NSMenuItem?
 
-		open fun alloc(): NSMenuItem
+		fun alloc(): NSMenuItem
 	}
 
 	/**

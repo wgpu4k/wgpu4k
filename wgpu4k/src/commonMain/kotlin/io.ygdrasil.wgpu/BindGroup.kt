@@ -3,6 +3,8 @@
 package io.ygdrasil.wgpu
 
 expect class BindGroup : AutoCloseable {
+
+	override fun close()
 }
 
 data class BindGroupDescriptor(

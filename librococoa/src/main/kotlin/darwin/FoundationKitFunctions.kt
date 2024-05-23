@@ -146,55 +146,55 @@ interface FoundationKitFunctions : Library {
 	 * Original signature : `BOOL NSEqualPoints(NSPoint, NSPoint)`<br></br>
 	 * *native declaration : /System/Library/Frameworks/ApplicationServices.framework/Headers/../Frameworks/CoreGraphics.framework/Headers/CGGeometry.h:447*
 	 */
-	open fun NSEqualPoints(aPoint: NSPoint?, bPoint: NSPoint?): Boolean
+	fun NSEqualPoints(aPoint: NSPoint?, bPoint: NSPoint?): Boolean
 
 	/**
 	 * Original signature : `BOOL NSEqualSizes(NSSize, NSSize)`<br></br>
 	 * *native declaration : /System/Library/Frameworks/ApplicationServices.framework/Headers/../Frameworks/framework/Headers/CGGeometry.h:448*
 	 */
-	open fun NSEqualSizes(aSize: NSSize?, bSize: NSSize?): Boolean
+	fun NSEqualSizes(aSize: NSSize?, bSize: NSSize?): Boolean
 
 	/**
 	 * Original signature : `BOOL NSEqualRects(NSRect, NSRect)`<br></br>
 	 * *native declaration : /System/Library/Frameworks/ApplicationServices.framework/Headers/../Frameworks/framework/Headers/CGGeometry.h:449*
 	 */
-	open fun NSEqualRects(aRect: NSRect?, bRect: NSRect?): Boolean
+	fun NSEqualRects(aRect: NSRect?, bRect: NSRect?): Boolean
 
 	/**
 	 * Original signature : `BOOL NSIsEmptyRect(NSRect)`<br></br>
 	 * *native declaration : /System/Library/Frameworks/ApplicationServices.framework/Headers/../Frameworks/framework/Headers/CGGeometry.h:450*
 	 */
-	open fun NSIsEmptyRect(aRect: NSRect?): Boolean
+	fun NSIsEmptyRect(aRect: NSRect?): Boolean
 
 	/**
 	 * Original signature : `NSRect NSInsetRect(NSRect, CGFloat, CGFloat)`<br></br>
 	 * *native declaration : /System/Library/Frameworks/ApplicationServices.framework/Headers/../Frameworks/framework/Headers/CGGeometry.h:452*
 	 */
-	open fun NSInsetRect(aRect: NSRect?, dX: org.rococoa.cocoa.CGFloat?, dY: org.rococoa.cocoa.CGFloat?): NSRect?
+	fun NSInsetRect(aRect: NSRect?, dX: org.rococoa.cocoa.CGFloat?, dY: org.rococoa.cocoa.CGFloat?): NSRect?
 
 	/**
 	 * Original signature : `NSRect NSIntegralRect(NSRect)`<br></br>
 	 * *native declaration : /System/Library/Frameworks/ApplicationServices.framework/Headers/../Frameworks/framework/Headers/CGGeometry.h:453*
 	 */
-	open fun NSIntegralRect(aRect: NSRect?): NSRect?
+	fun NSIntegralRect(aRect: NSRect?): NSRect?
 
 	/**
 	 * Original signature : `NSRect NSUnionRect(NSRect, NSRect)`<br></br>
 	 * *native declaration : /System/Library/Frameworks/ApplicationServices.framework/Headers/../Frameworks/framework/Headers/CGGeometry.h:454*
 	 */
-	open fun NSUnionRect(aRect: NSRect?, bRect: NSRect?): NSRect?
+	fun NSUnionRect(aRect: NSRect?, bRect: NSRect?): NSRect?
 
 	/**
 	 * Original signature : `NSRect NSIntersectionRect(NSRect, NSRect)`<br></br>
 	 * *native declaration : /System/Library/Frameworks/ApplicationServices.framework/Headers/../Frameworks/framework/Headers/CGGeometry.h:455*
 	 */
-	open fun NSIntersectionRect(aRect: NSRect?, bRect: NSRect?): NSRect?
+	fun NSIntersectionRect(aRect: NSRect?, bRect: NSRect?): NSRect?
 
 	/**
 	 * Original signature : `NSRect NSOffsetRect(NSRect, CGFloat, CGFloat)`<br></br>
 	 * *native declaration : /System/Library/Frameworks/ApplicationServices.framework/Headers/../Frameworks/framework/Headers/CGGeometry.h:456*
 	 */
-	open fun NSOffsetRect(aRect: NSRect?, dX: org.rococoa.cocoa.CGFloat?, dY: org.rococoa.cocoa.CGFloat?): NSRect?
+	fun NSOffsetRect(aRect: NSRect?, dX: org.rococoa.cocoa.CGFloat?, dY: org.rococoa.cocoa.CGFloat?): NSRect?
 
 	/**
 	 * Original signature : `void NSDivideRect(NSRect, NSRect*, NSRect*, CGFloat, NSRectEdge)`<br></br>
@@ -202,91 +202,91 @@ interface FoundationKitFunctions : Library {
 	 *
 	 * @param edge @see NSRectEdge
 	 */
-	open fun NSDivideRect(inRect: NSRect?, slice: NSRect?, rem: NSRect?, amount: org.rococoa.cocoa.CGFloat?, edge: Int)
+	fun NSDivideRect(inRect: NSRect?, slice: NSRect?, rem: NSRect?, amount: org.rococoa.cocoa.CGFloat?, edge: Int)
 
 	/**
 	 * Original signature : `BOOL NSPointInRect(NSPoint, NSRect)`<br></br>
 	 * *native declaration : /System/Library/Frameworks/ApplicationServices.framework/Headers/../Frameworks/framework/Headers/CGGeometry.h:458*
 	 */
-	open fun NSPointInRect(aPoint: NSPoint?, aRect: NSRect?): Boolean
+	fun NSPointInRect(aPoint: NSPoint?, aRect: NSRect?): Boolean
 
 	/**
 	 * Original signature : `BOOL NSMouseInRect(NSPoint, NSRect, BOOL)`<br></br>
 	 * *native declaration : /System/Library/Frameworks/ApplicationServices.framework/Headers/../Frameworks/framework/Headers/CGGeometry.h:459*
 	 */
-	open fun NSMouseInRect(aPoint: NSPoint?, aRect: NSRect?, flipped: Boolean): Boolean
+	fun NSMouseInRect(aPoint: NSPoint?, aRect: NSRect?, flipped: Boolean): Boolean
 
 	/**
 	 * Original signature : `BOOL NSContainsRect(NSRect, NSRect)`<br></br>
 	 * *native declaration : /System/Library/Frameworks/ApplicationServices.framework/Headers/../Frameworks/framework/Headers/CGGeometry.h:460*
 	 */
-	open fun NSContainsRect(aRect: NSRect?, bRect: NSRect?): Boolean
+	fun NSContainsRect(aRect: NSRect?, bRect: NSRect?): Boolean
 
 	/**
 	 * Original signature : `BOOL NSIntersectsRect(NSRect, NSRect)`<br></br>
 	 * *native declaration : /System/Library/Frameworks/ApplicationServices.framework/Headers/../Frameworks/framework/Headers/CGGeometry.h:461*
 	 */
-	open fun NSIntersectsRect(aRect: NSRect?, bRect: NSRect?): Boolean
+	fun NSIntersectsRect(aRect: NSRect?, bRect: NSRect?): Boolean
 
 	/**
 	 * Original signature : `NSString* NSStringFromPoint(NSPoint)`<br></br>
 	 * *native declaration : /System/Library/Frameworks/ApplicationServices.framework/Headers/../Frameworks/framework/Headers/CGGeometry.h:463*
 	 */
-	open fun NSStringFromPoint(aPoint: NSPoint?): String?
+	fun NSStringFromPoint(aPoint: NSPoint?): String?
 
 	/**
 	 * Original signature : `NSString* NSStringFromSize(NSSize)`<br></br>
 	 * *native declaration : /System/Library/Frameworks/ApplicationServices.framework/Headers/../Frameworks/framework/Headers/CGGeometry.h:464*
 	 */
-	open fun NSStringFromSize(aSize: NSSize?): String?
+	fun NSStringFromSize(aSize: NSSize?): String?
 
 	/**
 	 * Original signature : `NSString* NSStringFromRect(NSRect)`<br></br>
 	 * *native declaration : /System/Library/Frameworks/ApplicationServices.framework/Headers/../Frameworks/framework/Headers/CGGeometry.h:465*
 	 */
-	open fun NSStringFromRect(aRect: NSRect?): String?
+	fun NSStringFromRect(aRect: NSRect?): String?
 
 	/**
 	 * Original signature : `NSPoint NSPointFromString(NSString*)`<br></br>
 	 * *native declaration : /System/Library/Frameworks/ApplicationServices.framework/Headers/../Frameworks/framework/Headers/CGGeometry.h:466*
 	 */
-	open fun NSPointFromString(aString: String?): NSPoint?
+	fun NSPointFromString(aString: String?): NSPoint?
 
 	/**
 	 * Original signature : `NSSize NSSizeFromString(NSString*)`<br></br>
 	 * *native declaration : /System/Library/Frameworks/ApplicationServices.framework/Headers/../Frameworks/framework/Headers/CGGeometry.h:467*
 	 */
-	open fun NSSizeFromString(aString: String?): NSSize?
+	fun NSSizeFromString(aString: String?): NSSize?
 
 	/**
 	 * Original signature : `NSString* NSUserName()`<br></br>
 	 * *native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSPathUtilities.h:46*
 	 */
-	open fun NSUserName(): String?
+	fun NSUserName(): String?
 
 	/**
 	 * Original signature : `NSString* NSFullUserName()`<br></br>
 	 * *native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSPathUtilities.h:47*
 	 */
-	open fun NSFullUserName(): String?
+	fun NSFullUserName(): String?
 
 	/**
 	 * Original signature : `NSString* NSHomeDirectory()`<br></br>
 	 * *native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSPathUtilities.h:49*
 	 */
-	open fun NSHomeDirectory(): String?
+	fun NSHomeDirectory(): String?
 
 	/**
 	 * Original signature : `NSString* NSHomeDirectoryForUser(String*)`<br></br>
 	 * *native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSPathUtilities.h:50*
 	 */
-	open fun NSHomeDirectoryForUser(userName: String?): String?
+	fun NSHomeDirectoryForUser(userName: String?): String?
 
 	/**
 	 * Original signature : `NSString* NSTemporaryDirectory()`<br></br>
 	 * *native declaration : /System/Library/Frameworks/Foundation.framework/Headers/NSPathUtilities.h:52*
 	 */
-	open fun NSTemporaryDirectory(): String?
+	fun NSTemporaryDirectory(): String?
 
 	/**
 	 * Original signature : `NSArray* NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory,
@@ -296,16 +296,16 @@ interface FoundationKitFunctions : Library {
 	 * @param directory  @see NSSearchPathDirectory<br></br>
 	 * @param domainMask @see NSSearchPathDomainMask
 	 */
-	open fun NSSearchPathForDirectoriesInDomains(directory: Int, domainMask: Int, expandTilde: Boolean): NSArray?
+	fun NSSearchPathForDirectoriesInDomains(directory: Int, domainMask: Int, expandTilde: Boolean): NSArray?
 
 	/**
 	 * Logs an error message to the Apple System Log facility.
 	 *
 	 * @param format Statement
 	 */
-	open fun NSLog(format: String?, vararg args: String?)
+	fun NSLog(format: String?, vararg args: String?)
 
-	open fun CFStringCreateWithCharacters(allocator: CFAllocatorRef?, chars: CharArray?, index: CFIndex?): CFStringRef?
+	fun CFStringCreateWithCharacters(allocator: CFAllocatorRef?, chars: CharArray?, index: CFIndex?): CFStringRef?
 
 	/**
 	 * Releases a Core Foundation object. If the retain count of cf becomes zero the memory allocated to the object is
@@ -315,7 +315,7 @@ interface FoundationKitFunctions : Library {
 	 *
 	 * @param ref A CFType object to release. This value must not be NULL.
 	 */
-	open fun CFRelease(ref: CoreFoundation.CFTypeRef?)
+	fun CFRelease(ref: CoreFoundation.CFTypeRef?)
 
 	companion object {
 		val library: FoundationKitFunctions = Native.load(

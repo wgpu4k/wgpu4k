@@ -11,6 +11,8 @@ expect class Buffer : AutoCloseable {
 	fun unmap()
 
 	fun map(buffer: FloatArray)
+
+	override fun close()
 }
 
 data class BufferDescriptor(

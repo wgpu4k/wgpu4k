@@ -10,10 +10,8 @@ import io.ygdrasil.wgpu.examples.scenes.shader.fragment.sampleTextureMixColorSha
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.basicVertexShader
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
-import kotlin.js.JsExport
 import kotlin.math.PI
 
-@JsExport
 class TexturedCubeScene : Application.Scene(), AutoCloseable {
 
 	lateinit var renderPipeline: RenderPipeline

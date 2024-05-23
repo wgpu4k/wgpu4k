@@ -57,7 +57,7 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) : Aut
         )
     }
 
-    override fun close() {
+    actual override fun close() {
         logUnitNative { "wgpuRenderPassEncoderRelease" to listOf() }
         wgpuRenderPassEncoderRelease(handler)
     }

@@ -11,7 +11,7 @@ abstract class NSNotificationCenter : NSObject() {
 		 * Original signature : `defaultCenter()`<br></br>
 		 * *native declaration : :36*
 		 */
-		open fun defaultCenter(): NSNotificationCenter?
+		fun defaultCenter(): NSNotificationCenter?
 	}
 
 	fun addObserver(

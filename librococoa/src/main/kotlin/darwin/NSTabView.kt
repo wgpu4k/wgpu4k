@@ -6,7 +6,7 @@ import org.rococoa.cocoa.foundation.NSUInteger
 /// <i>native declaration : :23</i>
 abstract class NSTabView : NSView() {
 	interface Delegate {
-		open fun tabView_didSelectTabViewItem(tabView: NSTabView?, tabViewItem: NSTabViewItem?)
+		fun tabView_didSelectTabViewItem(tabView: NSTabView?, tabViewItem: NSTabViewItem?)
 	}
 
 	/**

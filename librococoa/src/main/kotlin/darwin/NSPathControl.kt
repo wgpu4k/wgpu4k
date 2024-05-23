@@ -6,7 +6,7 @@ import org.rococoa.cocoa.foundation.NSRect
 
 abstract class NSPathControl : NSControl() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSPathControl
+		fun alloc(): NSPathControl
 	}
 
 	@Override
@@ -19,7 +19,7 @@ abstract class NSPathControl : NSControl() {
 	abstract fun setDelegate(delegate: ID?)
 
 	interface Delegate {
-		open fun pathControl_willDisplayOpenPanel(control: NSPathControl?, panel: NSOpenPanel?)
+		fun pathControl_willDisplayOpenPanel(control: NSPathControl?, panel: NSOpenPanel?)
 	}
 
 	companion object {

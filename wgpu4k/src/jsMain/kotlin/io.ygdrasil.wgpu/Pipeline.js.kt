@@ -16,7 +16,7 @@ actual class RenderPipeline(internal var handler: GPURenderPipeline) : AutoClose
 		.let { BindGroupLayout(it) }
 
 
-	override fun close() {
+	actual override fun close() {
 		// Nothing to do on js
 	}
 

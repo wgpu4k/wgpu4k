@@ -5,7 +5,7 @@ import io.ygdrasil.wgpu.internal.jvm.logUnitNative
 import io.ygdrasil.wgpu.internal.jvm.wgpuTextureViewRelease
 
 actual class TextureView(internal val handler: WGPUTextureView) : AutoCloseable {
-	override fun close() {
+	actual override fun close() {
 		logUnitNative { "wgpuTextureViewRelease" to listOf(handler) }
 		wgpuTextureViewRelease(handler)
 	}

@@ -1,11 +1,14 @@
 [versions]
-kotest = "5.7.2"
+kotest = "5.9.0"
 klang = "0.0.0"
 jna = "5.13.0"
-kotlin = "1.9.23"
+kotlin = "2.0.0"
 wgpu = "v0.19.3.1"
-compose = "1.6.1"
-coroutines = "1.6.0"
+compose = "1.6.10"
+coroutines = "1.8.0"
+shapeshift = "0.8.0"
+korge = "5.4.0"
+download = "5.6.0"
 
 
 [libraries]
@@ -14,13 +17,19 @@ kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref =
 jna = { module = "net.java.dev.jna:jna", version.ref = "jna" }
 jnaPlatform = { module = "net.java.dev.jna:jna-platform", version.ref = "jna" }
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+shapeshift = { module = "dev.krud:shapeshift", version.ref = "shapeshift" }
+korge-foundation = { module = "com.soywiz.korge:korge-foundation", version.ref = "korge" }
+korge-core = { module = "com.soywiz.korge:korge-core", version.ref = "korge" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 
 [plugins]
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 klang = { id = "io.ygdrasil.klang-plugin", version.ref = "klang" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 kotest = { id = "io.kotest.multiplatform", version.ref = "kotest" }
+download = { id = "de.undercouch.download", version.ref = "download" }
 
 
 

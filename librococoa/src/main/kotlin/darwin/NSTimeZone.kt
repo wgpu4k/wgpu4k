@@ -9,45 +9,45 @@ abstract class NSTimeZone : NSObject() {
 		 * Original signature : `NSTimeZone* systemTimeZone()`<br></br>
 		 * *from NSExtendedTimeZone native declaration : :22*
 		 */
-		open fun systemTimeZone(): NSTimeZone?
+		fun systemTimeZone(): NSTimeZone?
 
 		/**
 		 * Original signature : `void resetSystemTimeZone()`<br></br>
 		 * *from NSExtendedTimeZone native declaration : :23*
 		 */
-		open fun resetSystemTimeZone()
+		fun resetSystemTimeZone()
 
 		/**
 		 * Original signature : `NSTimeZone* defaultTimeZone()`<br></br>
 		 * *from NSExtendedTimeZone native declaration : :25*
 		 */
-		open fun defaultTimeZone(): NSTimeZone?
+		fun defaultTimeZone(): NSTimeZone?
 
-		open fun timeZoneWithName(tzName: String?): NSTimeZone?
+		fun timeZoneWithName(tzName: String?): NSTimeZone?
 
 		/**
 		 * Original signature : `void setDefaultTimeZone(NSTimeZone*)`<br></br>
 		 * *from NSExtendedTimeZone native declaration : :26*
 		 */
-		open fun setDefaultTimeZone(aTimeZone: NSTimeZone?)
+		fun setDefaultTimeZone(aTimeZone: NSTimeZone?)
 
 		/**
 		 * Original signature : `NSTimeZone* localTimeZone()`<br></br>
 		 * *from NSExtendedTimeZone native declaration : :28*
 		 */
-		open fun localTimeZone(): NSTimeZone?
+		fun localTimeZone(): NSTimeZone?
 
 		/**
 		 * Original signature : `NSArray* knownTimeZoneNames()`<br></br>
 		 * *from NSExtendedTimeZone native declaration : :30*
 		 */
-		open fun knownTimeZoneNames(): NSArray?
+		fun knownTimeZoneNames(): NSArray?
 
 		/**
 		 * Original signature : `NSDictionary* abbreviationDictionary()`<br></br>
 		 * *from NSExtendedTimeZone native declaration : :32*
 		 */
-		open fun abbreviationDictionary(): NSDictionary?
+		fun abbreviationDictionary(): NSDictionary?
 	}
 
 	/**

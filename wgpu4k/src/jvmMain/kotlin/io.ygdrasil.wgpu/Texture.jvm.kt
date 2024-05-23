@@ -6,10 +6,6 @@ import io.ygdrasil.wgpu.mapper.textureViewDescriptorMapper
 
 actual class Texture(internal val handler: WGPUTexture) : AutoCloseable {
 
-    init {
-        check(handler != null) { "handler should not be null" }
-    }
-
     actual val width: GPUIntegerCoordinateOut
         get() = wgpuTextureGetWidth(handler)
     actual val height: GPUIntegerCoordinateOut
@@ -40,7 +36,7 @@ actual class Texture(internal val handler: WGPUTexture) : AutoCloseable {
             ?.let { TextureView(it) }
             ?: error("fail to create texture view")
 
-    override fun close() {
+    actual override fun close() {
         logUnitNative { "wgpuTextureRelease" to listOf(handler) }
         wgpuTextureRelease(handler)
     }

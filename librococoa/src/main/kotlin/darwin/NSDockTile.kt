@@ -6,10 +6,10 @@ import org.rococoa.cocoa.foundation.NSSize
 abstract class NSDockTile : NSObject() {
 	interface _Class : ObjCClass {
 		/// <i>native declaration : NSDockTile.h</i>
-		open fun alloc(): NSDockTile?
+		fun alloc(): NSDockTile?
 
 		/// <i>native declaration : NSDockTile.h</i>
-		open fun create(): NSDockTile?
+		fun create(): NSDockTile?
 	}
 
 	/**

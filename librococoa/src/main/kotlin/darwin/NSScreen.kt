@@ -17,20 +17,20 @@ abstract class NSScreen : NSObject() {
 		 * All screens; first one is "zero" screen<br></br>
 		 * *native declaration : /System/Library/Frameworks/AppKit.framework/Headers/NSGraphics.h:235*
 		 */
-		open fun screens(): NSArray?
+		fun screens(): NSArray?
 
 		/**
 		 * Original signature : `+(NSScreen*)mainScreen`<br></br>
 		 * Screen with key window<br></br>
 		 * *native declaration : /System/Library/Frameworks/AppKit.framework/Headers/NSGraphics.h:236*
 		 */
-		open fun mainScreen(): NSScreen?
+		fun mainScreen(): NSScreen?
 
 		/**
 		 * Original signature : `+(NSScreen*)deepestScreen`<br></br>
 		 * *native declaration : /System/Library/Frameworks/AppKit.framework/Headers/NSGraphics.h:237*
 		 */
-		open fun deepestScreen(): NSScreen?
+		fun deepestScreen(): NSScreen?
 	}
 
 	/**

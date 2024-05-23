@@ -4,7 +4,6 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPURenderPassEncoder
 
-@JsExport
 actual class RenderPassEncoder(private val handler: GPURenderPassEncoder) : AutoCloseable {
 
 	actual fun end() {
@@ -37,7 +36,7 @@ actual class RenderPassEncoder(private val handler: GPURenderPassEncoder) : Auto
 		handler.setVertexBuffer(slot, buffer.handler)
 	}
 
-	override fun close() {
+	actual override fun close() {
 		// Nothing to do
 	}
 }

@@ -5,7 +5,7 @@ import org.rococoa.cocoa.foundation.NSRect
 
 abstract class NSTokenField : NSTextField() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSTokenField
+		fun alloc(): NSTokenField
 	}
 
 	@Override

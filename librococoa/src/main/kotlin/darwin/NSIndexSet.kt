@@ -12,20 +12,20 @@ abstract class NSIndexSet : NSObject() {
 		 * Original signature : `indexSet()`<br></br>
 		 * *native declaration : :30*
 		 */
-		open fun indexSet(): NSIndexSet?
+		fun indexSet(): NSIndexSet?
 
 		/**
 		 * Original signature : `indexSetWithIndex(NSUInteger)`<br></br>
 		 * *native declaration : :31*
 		 */
-		open fun indexSetWithIndex(value: NSInteger?): NSIndexSet?
+		fun indexSetWithIndex(value: NSInteger?): NSIndexSet?
 
 		/**
 		 * *native declaration : :32*<br></br>
 		 * Conversion Error : /// Original signature : `indexSetWithIndexesInRange(null)`<br></br>
 		 * + (null)indexSetWithIndexesInRange:(null)range; (Argument range cannot be converted)
 		 */
-		open fun indexSetWithIndexesInRange(range: NSRange?): NSIndexSet?
+		fun indexSetWithIndexesInRange(range: NSRange?): NSIndexSet?
 	}
 
 	/**
@@ -153,6 +153,6 @@ abstract class NSIndexSet : NSObject() {
 		 * NSNotFound is set to LONG_MAX in NSObjCRuntime.h, which has different values on 32-bit and 64-bit
 		 */
 		val NSNotFound: NSUInteger =
-			if (Native.LONG_SIZE === 4) NSUInteger(Integer.MAX_VALUE.toLong()) else NSUInteger(Long.MAX_VALUE)
+			if (Native.LONG_SIZE == 4) NSUInteger(Integer.MAX_VALUE.toLong()) else NSUInteger(Long.MAX_VALUE)
 	}
 }

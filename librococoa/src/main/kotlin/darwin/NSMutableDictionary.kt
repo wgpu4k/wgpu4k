@@ -10,9 +10,9 @@ abstract class NSMutableDictionary : NSDictionary() {
 		 * Original signature : `id dictionaryWithCapacity(NSUInteger)`<br></br>
 		 * *from NSMutableDictionaryCreation native declaration : :80*
 		 */
-		open fun dictionaryWithCapacity(numItems: NSUInteger?): NSMutableDictionary?
+		fun dictionaryWithCapacity(numItems: NSUInteger?): NSMutableDictionary?
 
-		open fun dictionaryWithDictionary(dict: NSDictionary?): NSMutableDictionary?
+		fun dictionaryWithDictionary(dict: NSDictionary?): NSMutableDictionary?
 	}
 
 	/**

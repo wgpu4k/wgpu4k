@@ -4,7 +4,6 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.*
 
-@JsExport
 actual class Device(val handler: GPUDevice) : AutoCloseable {
 
 	actual val queue: Queue by lazy { Queue(handler.queue) }
@@ -55,7 +54,7 @@ actual class Device(val handler: GPUDevice) : AutoCloseable {
 			.let(::ComputePipeline)
 
 
-	override fun close() {
+	actual override fun close() {
 		// Nothing on JS
 	}
 }

@@ -13,40 +13,40 @@ abstract class NSAttributedString : NSObject() {
 		 * Original signature : `NSArray* textTypes()`<br></br>
 		 * *from NSAttributedStringKitAdditions native declaration : :183*
 		 */
-		open fun textTypes(): NSArray?
+		fun textTypes(): NSArray?
 
 		/**
 		 * Original signature : `NSArray* textUnfilteredTypes()`<br></br>
 		 * *from NSAttributedStringKitAdditions native declaration : :184*
 		 */
-		open fun textUnfilteredTypes(): NSArray?
+		fun textUnfilteredTypes(): NSArray?
 
 		/**
 		 * Methods that were deprecated in Mac OS 10.5. You can now use +textTypes and +textUnfilteredTypes to get arrays of Uniform Type Identifiers (UTIs).<br></br>
 		 * Original signature : `NSArray* textFileTypes()`<br></br>
 		 * *from NSDeprecatedKitAdditions native declaration : :249*
 		 */
-		open fun textFileTypes(): NSArray?
+		fun textFileTypes(): NSArray?
 
 		/**
 		 * Original signature : `NSArray* textPasteboardTypes()`<br></br>
 		 * *from NSDeprecatedKitAdditions native declaration : :250*
 		 */
-		open fun textPasteboardTypes(): NSArray?
+		fun textPasteboardTypes(): NSArray?
 
 		/**
 		 * Original signature : `NSArray* textUnfilteredFileTypes()`<br></br>
 		 * *from NSDeprecatedKitAdditions native declaration : :251*
 		 */
-		open fun textUnfilteredFileTypes(): NSArray?
+		fun textUnfilteredFileTypes(): NSArray?
 
 		/**
 		 * Original signature : `NSArray* textUnfilteredPasteboardTypes()`<br></br>
 		 * *from NSDeprecatedKitAdditions native declaration : :252*
 		 */
-		open fun textUnfilteredPasteboardTypes(): NSArray?
+		fun textUnfilteredPasteboardTypes(): NSArray?
 
-		open fun alloc(): NSAttributedString
+		fun alloc(): NSAttributedString
 	}
 
 	/**

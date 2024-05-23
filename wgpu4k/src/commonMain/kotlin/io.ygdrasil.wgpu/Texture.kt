@@ -14,6 +14,8 @@ expect class Texture: AutoCloseable {
     val usage: GPUFlagsConstant
 
 	fun createView(descriptor: TextureViewDescriptor? = null): TextureView
+
+    override fun close()
 }
 
 /**

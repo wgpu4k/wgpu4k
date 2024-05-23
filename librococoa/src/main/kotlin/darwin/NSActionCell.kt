@@ -5,7 +5,7 @@ import org.rococoa.ObjCClass
 /// <i>native declaration : :10</i>
 abstract class NSActionCell : NSCell() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSActionCell?
+		fun alloc(): NSActionCell?
 	}
 
 	/**

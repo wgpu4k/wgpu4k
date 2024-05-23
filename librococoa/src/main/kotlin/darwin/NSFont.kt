@@ -14,33 +14,33 @@ abstract class NSFont : NSObject(), NSCopying {
 		 * Original signature : `NSFont* fontWithName(NSString*, CGFloat)`<br></br>
 		 * *native declaration : :62*
 		 */
-		open fun fontWithName_size(fontName: String?, fontSize: CGFloat?): NSFont?
+		fun fontWithName_size(fontName: String?, fontSize: CGFloat?): NSFont?
 
 		/**
 		 * Original signature : `NSFont* fontWithName(NSString*, const CGFloat*)`<br></br>
 		 * *native declaration : :63*
 		 */
-		open fun fontWithName_matrix(fontName: String?, fontMatrix: Array<CGFloat?>?): NSFont?
+		fun fontWithName_matrix(fontName: String?, fontMatrix: Array<CGFloat?>?): NSFont?
 
 		/**
 		 * Original signature : `NSFont* fontWithName(NSString*, const CGFloat*)`<br></br>
 		 * *native declaration : :63*
 		 */
-		open fun fontWithName_matrix(fontName: String?, fontMatrix: CGFloat?): NSFont?
+		fun fontWithName_matrix(fontName: String?, fontMatrix: CGFloat?): NSFont?
 
 		/**
 		 * Instantiates an NSFont object matching fontDescriptor. If fontSize is greater than 0.0, it has precedence over NSFontSizeAttribute in fontDescriptor.<br></br>
 		 * Original signature : `NSFont* fontWithDescriptor(NSFontDescriptor*, CGFloat)`<br></br>
 		 * *native declaration : :67*
 		 */
-		open fun fontWithDescriptor_size(fontDescriptor: com.sun.jna.Pointer?, fontSize: CGFloat?): NSFont?
+		fun fontWithDescriptor_size(fontDescriptor: com.sun.jna.Pointer?, fontSize: CGFloat?): NSFont?
 
 		/**
 		 * Instantiates an NSFont object matching fontDescriptor. If textTransform is non-nil, it has precedence over NSFontMatrixAttribute in fontDescriptor.<br></br>
 		 * Original signature : `NSFont* fontWithDescriptor(NSFontDescriptor*, NSAffineTransform*)`<br></br>
 		 * *native declaration : :71*
 		 */
-		open fun fontWithDescriptor_textTransform(
+		fun fontWithDescriptor_textTransform(
 			fontDescriptor: com.sun.jna.Pointer?,
 			textTransform: com.sun.jna.Pointer?
 		): NSFont?
@@ -51,28 +51,28 @@ abstract class NSFont : NSObject(), NSCopying {
 		 * Aqua Application font<br></br>
 		 * *native declaration : :77*
 		 */
-		open fun userFontOfSize(fontSize: CGFloat?): NSFont?
+		fun userFontOfSize(fontSize: CGFloat?): NSFont?
 
 		/**
 		 * Original signature : `NSFont* userFixedPitchFontOfSize(CGFloat)`<br></br>
 		 * Aqua fixed-pitch font<br></br>
 		 * *native declaration : :78*
 		 */
-		open fun userFixedPitchFontOfSize(fontSize: CGFloat?): NSFont?
+		fun userFixedPitchFontOfSize(fontSize: CGFloat?): NSFont?
 
 		/**
 		 * Original signature : `void setUserFont(NSFont*)`<br></br>
 		 * set preference for Application font.<br></br>
 		 * *native declaration : :79*
 		 */
-		open fun setUserFont(aFont: NSFont?)
+		fun setUserFont(aFont: NSFont?)
 
 		/**
 		 * Original signature : `void setUserFixedPitchFont(NSFont*)`<br></br>
 		 * set preference for fixed-pitch.<br></br>
 		 * *native declaration : :80*
 		 */
-		open fun setUserFixedPitchFont(aFont: NSFont?)
+		fun setUserFixedPitchFont(aFont: NSFont?)
 
 		/**
 		 * UI font settings<br></br>
@@ -80,65 +80,65 @@ abstract class NSFont : NSObject(), NSCopying {
 		 * Aqua System font<br></br>
 		 * *native declaration : :84*
 		 */
-		open fun systemFontOfSize(fontSize: CGFloat?): NSFont?
+		fun systemFontOfSize(fontSize: CGFloat?): NSFont?
 
 		/**
 		 * Original signature : `NSFont* boldSystemFontOfSize(CGFloat)`<br></br>
 		 * Aqua System font (emphasized)<br></br>
 		 * *native declaration : :85*
 		 */
-		open fun boldSystemFontOfSize(fontSize: CGFloat?): NSFont?
+		fun boldSystemFontOfSize(fontSize: CGFloat?): NSFont?
 
-		open fun monospacedDigitSystemFontOfSize_weight(fontSize: CGFloat?, fontWeight: CGFloat?): NSFont?
+		fun monospacedDigitSystemFontOfSize_weight(fontSize: CGFloat?, fontWeight: CGFloat?): NSFont?
 
 		/**
 		 * Original signature : `NSFont* labelFontOfSize(CGFloat)`<br></br>
 		 * Aqua label font<br></br>
 		 * *native declaration : :86*
 		 */
-		open fun labelFontOfSize(fontSize: CGFloat?): NSFont?
+		fun labelFontOfSize(fontSize: CGFloat?): NSFont?
 
 		/**
 		 * Original signature : `NSFont* titleBarFontOfSize(CGFloat)`<br></br>
 		 * *native declaration : :88*
 		 */
-		open fun titleBarFontOfSize(fontSize: CGFloat?): NSFont?
+		fun titleBarFontOfSize(fontSize: CGFloat?): NSFont?
 
 		/**
 		 * Original signature : `NSFont* menuFontOfSize(CGFloat)`<br></br>
 		 * *native declaration : :89*
 		 */
-		open fun menuFontOfSize(fontSize: CGFloat?): NSFont?
+		fun menuFontOfSize(fontSize: CGFloat?): NSFont?
 
 		/**
 		 * Original signature : `NSFont* menuBarFontOfSize(CGFloat)`<br></br>
 		 * *native declaration : :91*
 		 */
-		open fun menuBarFontOfSize(fontSize: CGFloat?): NSFont?
+		fun menuBarFontOfSize(fontSize: CGFloat?): NSFont?
 
 		/**
 		 * Original signature : `NSFont* messageFontOfSize(CGFloat)`<br></br>
 		 * *native declaration : :93*
 		 */
-		open fun messageFontOfSize(fontSize: CGFloat?): NSFont?
+		fun messageFontOfSize(fontSize: CGFloat?): NSFont?
 
 		/**
 		 * Original signature : `NSFont* paletteFontOfSize(CGFloat)`<br></br>
 		 * *native declaration : :94*
 		 */
-		open fun paletteFontOfSize(fontSize: CGFloat?): NSFont?
+		fun paletteFontOfSize(fontSize: CGFloat?): NSFont?
 
 		/**
 		 * Original signature : `NSFont* toolTipsFontOfSize(CGFloat)`<br></br>
 		 * *native declaration : :95*
 		 */
-		open fun toolTipsFontOfSize(fontSize: CGFloat?): NSFont?
+		fun toolTipsFontOfSize(fontSize: CGFloat?): NSFont?
 
 		/**
 		 * Original signature : `NSFont* controlContentFontOfSize(CGFloat)`<br></br>
 		 * *native declaration : :96*
 		 */
-		open fun controlContentFontOfSize(fontSize: CGFloat?): NSFont?
+		fun controlContentFontOfSize(fontSize: CGFloat?): NSFont?
 
 		/**
 		 * UI font size settings<br></br>
@@ -146,21 +146,21 @@ abstract class NSFont : NSObject(), NSCopying {
 		 * size of the standard System font.<br></br>
 		 * *native declaration : :100*
 		 */
-		open fun systemFontSize(): CGFloat
+		fun systemFontSize(): CGFloat
 
 		/**
 		 * Original signature : `CGFloat smallSystemFontSize()`<br></br>
 		 * size of standard small System font.<br></br>
 		 * *native declaration : :101*
 		 */
-		open fun smallSystemFontSize(): CGFloat
+		fun smallSystemFontSize(): CGFloat
 
 		/**
 		 * Original signature : `CGFloat labelFontSize()`<br></br>
 		 * size of the standard Label Font.<br></br>
 		 * *native declaration : :102*
 		 */
-		open fun labelFontSize(): CGFloat
+		fun labelFontSize(): CGFloat
 		/**
 		 * *native declaration : :105*<br></br>
 		 * Conversion Error : /// Original signature : `CGFloat systemFontSizeForControlSize(null)`<br></br>
@@ -171,20 +171,20 @@ abstract class NSFont : NSObject(), NSCopying {
 		 * This is now automatically handled by Quartz.<br></br>
 		 * *from NSFontDeprecated native declaration : :211*
 		 */
-		open fun useFont(fontName: NSFont?)
+		fun useFont(fontName: NSFont?)
 
 		/**
 		 * Original signature : `NSArray* preferredFontNames()`<br></br>
 		 * NSFontCascadeListAttribute offers more powerful font substitution management<br></br>
 		 * *from NSFontDeprecated native declaration : :217*
 		 */
-		open fun preferredFontNames(): NSArray?
+		fun preferredFontNames(): NSArray?
 
 		/**
 		 * Original signature : `void setPreferredFontNames(NSArray*)`<br></br>
 		 * *from NSFontDeprecated native declaration : :218*
 		 */
-		open fun setPreferredFontNames(fontNameArray: String?)
+		fun setPreferredFontNames(fontNameArray: String?)
 	}
 
 	/**

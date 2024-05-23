@@ -42,7 +42,7 @@ actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : 
         wgpuComputePassEncoderEnd(handler)
     }
 
-    override fun close() {
+    actual override fun close() {
         logUnitNative { "wgpuComputePassEncoderRelease" to listOf(handler) }
         wgpuComputePassEncoderRelease(handler)
     }

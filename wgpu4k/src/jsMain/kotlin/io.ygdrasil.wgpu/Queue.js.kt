@@ -5,15 +5,12 @@ import io.ygdrasil.wgpu.internal.js.GPUExtent3DDictStrict
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.Float32Array
 import org.khronos.webgl.Int32Array
-import org.w3c.dom.ImageBitmap
 
-@JsExport
 actual class Queue(private val handler: GPUQueue) {
 	actual fun submit(commandsBuffer: Array<CommandBuffer>) {
 		handler.submit(commandsBuffer.map { it.handler }.toTypedArray())
 	}
 
-	@JsName("writeBufferF32")
 	actual fun writeBuffer(
 		buffer: Buffer,
 		bufferOffset: GPUSize64,

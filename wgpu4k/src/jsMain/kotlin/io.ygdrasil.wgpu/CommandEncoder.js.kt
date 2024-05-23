@@ -4,7 +4,6 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.*
 
-@JsExport
 actual class CommandEncoder(private val handler: GPUCommandEncoder) : AutoCloseable {
 	actual fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder {
 		return RenderPassEncoder(handler.beginRenderPass(descriptor.convert()))
@@ -27,7 +26,7 @@ actual class CommandEncoder(private val handler: GPUCommandEncoder) : AutoClosea
 			.let { handler.beginComputePass(it ?: undefined) }
 			.let { ComputePassEncoder(it) }
 
-	override fun close() {
+	actual override fun close() {
 		// Nothing to do
 	}
 }

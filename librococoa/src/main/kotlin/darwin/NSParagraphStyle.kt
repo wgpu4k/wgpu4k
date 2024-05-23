@@ -10,14 +10,14 @@ abstract class NSParagraphStyle : NSObject(), NSCopying {
 		 * Original signature : `NSParagraphStyle* defaultParagraphStyle()`<br></br>
 		 * *native declaration : :100*
 		 */
-		open fun defaultParagraphStyle(): NSParagraphStyle?
+		fun defaultParagraphStyle(): NSParagraphStyle?
 
 		/**
 		 * Original signature : `defaultWritingDirectionForLanguage(NSString*)`<br></br>
 		 * languageName is in ISO lang region format<br></br>
 		 * *native declaration : :103*
 		 */
-		open fun defaultWritingDirectionForLanguage(languageName: com.sun.jna.Pointer?): com.sun.jna.Pointer?
+		fun defaultWritingDirectionForLanguage(languageName: com.sun.jna.Pointer?): com.sun.jna.Pointer?
 	}
 
 	/**

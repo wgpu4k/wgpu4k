@@ -30,7 +30,7 @@ actual class Buffer(internal val handler: WGPUBuffer) : AutoCloseable {
 			.write(0L, buffer, 0, buffer.size)
 	}
 
-	override fun close() {
+	actual override fun close() {
 		logUnitNative { "wgpuBufferRelease" to listOf(handler) }
 		wgpuBufferRelease(handler)
 	}

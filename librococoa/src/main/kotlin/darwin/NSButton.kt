@@ -8,7 +8,7 @@ import java.nio.FloatBuffer
 /// <i>native declaration : :15</i>
 abstract class NSButton : NSControl() {
 	interface _Class : ObjCClass {
-		open fun alloc(): NSButton
+		fun alloc(): NSButton
 	}
 
 	@Override

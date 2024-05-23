@@ -11,7 +11,7 @@ abstract class NSOpenPanel : NSSavePanel() {
 		 * Original signature : `NSOpenPanel* openPanel()`<br></br>
 		 * *native declaration : :19*
 		 */
-		open fun openPanel(): NSOpenPanel?
+		fun openPanel(): NSOpenPanel?
 	}
 
 	/**

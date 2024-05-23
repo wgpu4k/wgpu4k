@@ -7,68 +7,68 @@ import org.rococoa.cocoa.foundation.NSUInteger
 /// <i>native declaration : :73</i>
 abstract class NSOutlineView : NSTableView() {
 	interface DataSource {
-		open fun outlineView_numberOfChildrenOfItem(view: NSOutlineView?, item: NSObject?): NSInteger?
+		fun outlineView_numberOfChildrenOfItem(view: NSOutlineView?, item: NSObject?): NSInteger?
 
-		open fun outlineView_child_ofItem(outlineView: NSOutlineView?, index: NSInteger?, item: NSObject?): NSObject?
+		fun outlineView_child_ofItem(outlineView: NSOutlineView?, index: NSInteger?, item: NSObject?): NSObject?
 
-		open fun outlineView_setObjectValue_forTableColumn_byItem(
+		fun outlineView_setObjectValue_forTableColumn_byItem(
 			outlineView: NSOutlineView?, value: NSObject?,
 			tableColumn: NSTableColumn?, item: NSObject?
 		)
 
-		open fun outlineView_objectValueForTableColumn_byItem(
+		fun outlineView_objectValueForTableColumn_byItem(
 			outlineView: NSOutlineView?,
 			tableColumn: NSTableColumn?,
 			item: NSObject?
 		): NSObject?
 
-		open fun outlineView_isItemExpandable(view: NSOutlineView?, item: NSObject?): Boolean
+		fun outlineView_isItemExpandable(view: NSOutlineView?, item: NSObject?): Boolean
 
-		open fun outlineView_validateDrop_proposedItem_proposedChildIndex(
+		fun outlineView_validateDrop_proposedItem_proposedChildIndex(
 			outlineView: NSOutlineView?,
 			info: NSDraggingInfo?,
 			item: NSObject?,
 			row: NSInteger?
 		): NSUInteger?
 
-		open fun outlineView_acceptDrop_item_childIndex(
+		fun outlineView_acceptDrop_item_childIndex(
 			outlineView: NSOutlineView?,
 			info: NSDraggingInfo?,
 			item: NSObject?,
 			row: NSInteger?
 		): Boolean
 
-		open fun outlineView_writeItems_toPasteboard(
+		fun outlineView_writeItems_toPasteboard(
 			outlineView: NSOutlineView?,
 			items: NSArray?,
 			pboard: NSPasteboard?
 		): Boolean
 
-		open fun outlineView_namesOfPromisedFilesDroppedAtDestination_forDraggedItems(
+		fun outlineView_namesOfPromisedFilesDroppedAtDestination_forDraggedItems(
 			dropDestination: NSURL?,
 			items: NSArray?
 		): NSArray?
 	}
 
 	interface Delegate {
-		open fun outlineView_willDisplayCell_forTableColumn_item(
+		fun outlineView_willDisplayCell_forTableColumn_item(
 			view: NSOutlineView?,
 			cell: NSTextFieldCell?,
 			tableColumn: NSTableColumn?,
 			item: NSObject?
 		)
 
-		open fun outlineView_shouldExpandItem(view: NSOutlineView?, item: NSObject?): Boolean
+		fun outlineView_shouldExpandItem(view: NSOutlineView?, item: NSObject?): Boolean
 
-		open fun outlineViewItemWillExpand(notification: NSNotification?)
+		fun outlineViewItemWillExpand(notification: NSNotification?)
 
-		open fun outlineViewItemDidExpand(notification: NSNotification?)
+		fun outlineViewItemDidExpand(notification: NSNotification?)
 
-		open fun outlineViewItemWillCollapse(notification: NSNotification?)
+		fun outlineViewItemWillCollapse(notification: NSNotification?)
 
-		open fun outlineViewItemDidCollapse(notification: NSNotification?)
+		fun outlineViewItemDidCollapse(notification: NSNotification?)
 
-		open fun outlineView_isGroupItem(view: NSOutlineView?, item: NSObject?): Boolean
+		fun outlineView_isGroupItem(view: NSOutlineView?, item: NSObject?): Boolean
 	}
 
 	/**
