@@ -49,14 +49,14 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
 
     actual fun createTexture(descriptor: TextureDescriptor): Texture =
         textureDescriptorMapper.map<Any, WGPUTextureDescriptor>(descriptor)
-            .also { logUnitNative { "wgpuDeviceCreateTexture" to listOf(handler2, it) } }
-            .let { wgpuDeviceCreateTexture(handler2, it)?.pointer?.toMemory() }
+            .also { it.write() }.pointer.toMemory()
+            .let { webgpu_h.wgpuDeviceCreateTexture(handler, it) }
             ?.let(::Texture) ?: error("fail to create texture")
 
     actual fun createSampler(descriptor: SamplerDescriptor): Sampler =
         samplerDescriptorMapper.map<Any, WGPUSamplerDescriptor>(descriptor)
-            .also { logUnitNative { "wgpuDeviceCreateSampler" to listOf(handler2, it) } }
-            .let { wgpuDeviceCreateSampler(handler2, it) }
+            .also { it.write() }.pointer.toMemory()
+            .let { webgpu_h.wgpuDeviceCreateSampler(handler, it) }
             ?.let(::Sampler) ?: error("fail to create texture")
 
     actual fun createComputePipeline(descriptor: ComputePipelineDescriptor): ComputePipeline {
@@ -64,8 +64,7 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
     }
 
     actual override fun close() {
-        logUnitNative { "wgpuDeviceRelease" to listOf(handler2) }
-        wgpuDeviceRelease(handler2)
+        webgpu_h.wgpuDeviceRelease(handler)
     }
 
 }
