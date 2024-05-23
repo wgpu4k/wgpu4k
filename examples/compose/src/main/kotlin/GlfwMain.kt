@@ -29,7 +29,6 @@ val callback = object : WGPULogCallback {
 
 suspend fun main() {
     oneFrame = true
-    shouldLogNative = true
     wgpuSetLogLevel(0)
     wgpuSetLogCallback(callback, null)
 
