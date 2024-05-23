@@ -1,6 +1,7 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
 import io.ygdrasil.wgpu.mapper.bindGroupDescriptorMapper
 import io.ygdrasil.wgpu.mapper.renderPipelineDescriptorMapper
 import io.ygdrasil.wgpu.mapper.samplerDescriptorMapper
@@ -15,8 +16,7 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
 
     actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder =
         descriptor?.convert()
-            .also { logUnitNative { "wgpuDeviceCreateCommandEncoder" to listOf(handler2, it) } }
-            .let { wgpuDeviceCreateCommandEncoder(handler2, it) }
+            .let { webgpu_h.wgpuDeviceCreateCommandEncoder(handler, it ?: MemorySegment.NULL) }
             ?.let(::CommandEncoder) ?: error("fail to create command encoder")
 
     actual fun createShaderModule(descriptor: ShaderModuleDescriptor): ShaderModule =
@@ -89,15 +89,15 @@ private fun BufferDescriptor.convert(): WGPUBufferDescriptor = WGPUBufferDescrip
     it.usage = usage
     it.size = size
     it.mappedAtCreation = mappedAtCreation?.toInt()
-}
+}.also { it.write() }
 
 private fun PipelineLayoutDescriptor.convert(): WGPUPipelineLayoutDescriptor = WGPUPipelineLayoutDescriptor().also {
     it.label = label
     // TODO find how to map this
     //it.bindGroupLayoutCount = bindGroupLayouts.size.toLong().let { NativeLong(it) }
     //it.bindGroupLayouts = bindGroupLayouts.map { it.convert() }.toTypedArray()
-}
+}.also { it.write() }
 
-private fun CommandEncoderDescriptor.convert(): WGPUCommandEncoderDescriptor = WGPUCommandEncoderDescriptor().also {
+private fun CommandEncoderDescriptor.convert() = WGPUCommandEncoderDescriptor().also {
     it.label = label
-}
+}.also { it.write() }.pointer.toMemory()

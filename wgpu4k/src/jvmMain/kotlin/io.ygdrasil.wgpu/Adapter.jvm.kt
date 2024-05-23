@@ -17,7 +17,6 @@ actual class Adapter(internal val handler: MemorySegment) : AutoCloseable {
 			if (statusAsInt == webgpu_h.WGPURequestDeviceStatus_Success()) {
 				deviceState.update { device }
 			} else {
-
 				println("request_device status=${WGPURequestDeviceStatus.of(statusAsInt)} message=${message.getString(0)}")
 			}
 		}, arena)
