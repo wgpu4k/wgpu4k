@@ -1,16 +1,18 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
+import java.lang.foreign.MemorySegment
 
-actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) : AutoCloseable {
+actual class RenderPassEncoder(private val handler: MemorySegment) : AutoCloseable {
+
+    val handler2: WGPURenderPassEncoder = WGPURenderPassEncoderImpl(handler.toPointer())
     actual fun end() {
-        logUnitNative { "wgpuRenderPassEncoderEnd" to listOf() }
-        wgpuRenderPassEncoderEnd(handler)
+        webgpu_h.wgpuRenderPassEncoderEnd(handler)
     }
 
     actual fun setPipeline(renderPipeline: RenderPipeline) {
-        logUnitNative { "wgpuRenderPassEncoderSetPipeline" to listOf(renderPipeline.handler2) }
-        wgpuRenderPassEncoderSetPipeline(handler, renderPipeline.handler2)
+        webgpu_h.wgpuRenderPassEncoderSetPipeline(handler, renderPipeline.handler)
     }
 
     actual fun draw(
@@ -20,7 +22,7 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) : Aut
             firstInstance: GPUSize32
     ) {
         logUnitNative { "wgpuRenderPassEncoderDraw" to listOf(vertexCount, instanceCount, firstVertex, firstInstance) }
-        wgpuRenderPassEncoderDraw(handler, vertexCount, instanceCount, firstVertex, firstInstance)
+        wgpuRenderPassEncoderDraw(handler2, vertexCount, instanceCount, firstVertex, firstInstance)
     }
 
     actual fun setBindGroup(index: Int, bindGroup: BindGroup) {
@@ -33,7 +35,7 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) : Aut
             )
         }
         wgpuRenderPassEncoderSetBindGroup(
-                handler,
+                handler2,
                 index,
                 WGPUBindGroupImpl(bindGroup.handler.toPointer()),
                 0L.toNativeLong(),
@@ -49,7 +51,7 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) : Aut
                     buffer.size)
         }
         wgpuRenderPassEncoderSetVertexBuffer(
-                handler,
+                handler2,
                 slot,
                 buffer.handler2,
                 0L,
@@ -58,8 +60,7 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) : Aut
     }
 
     actual override fun close() {
-        logUnitNative { "wgpuRenderPassEncoderRelease" to listOf() }
-        wgpuRenderPassEncoderRelease(handler)
+        webgpu_h.wgpuRenderPassEncoderRelease(handler)
     }
 
 }

@@ -8,7 +8,9 @@ import dev.krud.shapeshift.enums.AutoMappingStrategy
 import dev.krud.shapeshift.transformer.base.MappingTransformer
 import dev.krud.shapeshift.transformer.base.MappingTransformerContext
 import io.ygdrasil.wgpu.internal.jvm.WGPUBindGroupLayout
+import io.ygdrasil.wgpu.internal.jvm.WGPUBindGroupLayoutImpl
 import io.ygdrasil.wgpu.internal.jvm.WGPUExtent3D
+import io.ygdrasil.wgpu.internal.jvm.toPointer
 
 internal fun Long.toNativeLong(): NativeLong = let(::NativeLong)
 internal fun Int.toNativeLong(): NativeLong = toLong()
@@ -37,7 +39,7 @@ class GPUExtent3DDictStrictTransformer : MappingTransformer<GPUExtent3DDictStric
 }
 
 class BindGroupLayoutTransformer : MappingTransformer<BindGroupLayout, WGPUBindGroupLayout> {
-	override fun transform(context: MappingTransformerContext<out BindGroupLayout>): WGPUBindGroupLayout? = context.originalValue?.handler
+	override fun transform(context: MappingTransformerContext<out BindGroupLayout>): WGPUBindGroupLayout? = WGPUBindGroupLayoutImpl(context.originalValue?.handler?.toPointer())
 }
 
 class BooleanToIntTransformer : MappingTransformer<Boolean, Int> {

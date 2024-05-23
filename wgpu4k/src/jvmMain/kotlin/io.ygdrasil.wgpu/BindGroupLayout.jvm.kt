@@ -1,5 +1,5 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.WGPUBindGroupLayout
+import java.lang.foreign.MemorySegment
 
-actual class BindGroupLayout(internal val handler: WGPUBindGroupLayout)
+actual class BindGroupLayout(internal val handler: MemorySegment)
