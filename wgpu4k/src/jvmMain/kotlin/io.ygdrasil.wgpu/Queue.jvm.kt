@@ -149,11 +149,15 @@ actual class Queue(internal val handler: MemorySegment) {
     }
 }
 
-actual class ImageBitmapHolder(val bufferedImage: Any) : DrawableHolder {
+actual class ImageBitmapHolder(
+    val data: Memory,
+    actual val width: Int,
+    actual val height: Int
+) : DrawableHolder, AutoCloseable {
 
-    actual val width: Int = 0//bufferedImage.width
-    actual val height: Int = 0//bufferedImage.height
-
+    override fun close() {
+        data.dump()
+    }
 }
 
 actual sealed interface DrawableHolder
