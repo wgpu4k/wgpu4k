@@ -5,6 +5,7 @@ import io.ygdrasil.wgpu.BindGroupDescriptor
 import io.ygdrasil.wgpu.BindGroupLayoutTransformer
 import io.ygdrasil.wgpu.internal.jvm.WGPUBindGroupDescriptor
 import io.ygdrasil.wgpu.internal.jvm.WGPUBindGroupEntry
+import io.ygdrasil.wgpu.internal.jvm.WGPUBufferImpl
 import io.ygdrasil.wgpu.internal.jvm.WGPUSamplerImpl
 import io.ygdrasil.wgpu.internal.jvm.WGPUTextureViewImpl
 import io.ygdrasil.wgpu.internal.jvm.toPointer
@@ -20,7 +21,7 @@ internal val bindGroupDescriptorMapper = mapper<BindGroupDescriptor, WGPUBindGro
                 is BindGroupDescriptor.BufferBinding -> {
                     size = resource.size
                     offset = resource.offset
-                    buffer = resource.buffer.handler2
+                    buffer = WGPUBufferImpl(resource.buffer.handler.toPointer())
                 }
 
                 is BindGroupDescriptor.SamplerBinding -> sampler = WGPUSamplerImpl(resource.sampler.handler.toPointer())
