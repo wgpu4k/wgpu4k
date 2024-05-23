@@ -8,6 +8,7 @@ compose = "1.6.10"
 coroutines = "1.8.0"
 shapeshift = "0.8.0"
 korge = "5.4.0"
+download = "5.6.0"
 
 
 [libraries]
@@ -19,6 +20,7 @@ coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version
 shapeshift = { module = "dev.krud:shapeshift", version.ref = "shapeshift" }
 korge-foundation = { module = "com.soywiz.korge:korge-foundation", version.ref = "korge" }
 korge-core = { module = "com.soywiz.korge:korge-core", version.ref = "korge" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -27,6 +29,7 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 kotest = { id = "io.kotest.multiplatform", version.ref = "kotest" }
+download = { id = "de.undercouch.download", version.ref = "download" }
 
 
 

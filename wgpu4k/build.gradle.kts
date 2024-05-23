@@ -1,9 +1,9 @@
 import de.undercouch.gradle.tasks.download.Download
 
 plugins {
-	id("de.undercouch.download") version "5.6.0"
     alias(libs.plugins.kotlinMultiplatform)
 	alias(libs.plugins.kotest)
+	alias(libs.plugins.download)
 }
 
 kotlin {
@@ -55,7 +55,7 @@ kotlin {
 
 		val jvmTest by getting {
 			dependencies {
-				implementation("org.opentest4j:opentest4j:1.3.0")
+				implementation(libs.kotest.runner.junit5)
 			}
 
 		}
@@ -134,3 +134,18 @@ fun unzipTask(
 
 data class NativeLibrary(val remoteFile: String, val targetFile: File, val zipFileName: String)
 
+tasks.named<Test>("jvmTest") {
+	useJUnitPlatform()
+	filter {
+		isFailOnNoMatchingTests = false
+	}
+	testLogging {
+		showExceptions = true
+		showStandardStreams = true
+		events = setOf(
+			org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED,
+			org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED
+		)
+		exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+	}
+}
