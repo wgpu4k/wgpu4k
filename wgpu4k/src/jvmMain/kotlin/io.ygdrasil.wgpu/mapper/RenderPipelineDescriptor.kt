@@ -109,6 +109,7 @@ fun Structure.toMemory() = also { it.write() }.pointer.toMemory()
 internal fun Arena.map(input: RenderPipelineDescriptor) = WGPURenderPipelineDescriptor.allocate(this).also { output ->
     map(input.vertex, WGPURenderPipelineDescriptor.vertex(output))
     if (input.label != null) WGPURenderPipelineDescriptor.label(output, allocateFrom(input.label))
+    // TODO map this
     WGPURenderPipelineDescriptor.layout(output, MemorySegment.NULL)
     WGPURenderPipelineDescriptor.primitive(output, primitiveStateMapper.map<RenderPipelineDescriptor.PrimitiveState, io.ygdrasil.wgpu.internal.jvm.WGPUPrimitiveState>(input.primitive).toMemory())
     if (input.depthStencil != null) WGPURenderPipelineDescriptor.depthStencil(output, depthStencilStateMapper.map<RenderPipelineDescriptor.DepthStencilState, io.ygdrasil.wgpu.internal.jvm.WGPUDepthStencilState.ByReference>(input.depthStencil).toMemory())
