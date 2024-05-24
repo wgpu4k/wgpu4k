@@ -4,7 +4,6 @@ import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
 import io.ygdrasil.wgpu.mapper.map
 import java.lang.foreign.Arena
-import java.lang.foreign.MemoryLayout
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.ValueLayout
 
@@ -13,8 +12,7 @@ actual class Queue(internal val handler: MemorySegment) {
     actual fun submit(commandsBuffer: Array<CommandBuffer>) = confined { arena ->
         if (commandsBuffer.isNotEmpty()) {
 
-            val commands = arena.allocate(MemoryLayout.sequenceLayout(commandsBuffer.size.toLong(), ValueLayout.ADDRESS))
-            commandsBuffer.forEachIndexed { index, value -> commands.setAtIndex(ValueLayout.ADDRESS, index.toLong(), value.handler) }
+            val commands = commandsBuffer.map { it.handler }.toPointerArray(arena)
 
             webgpu_h.wgpuQueueSubmit(
                 handler,
@@ -43,7 +41,7 @@ actual class Queue(internal val handler: MemorySegment) {
             buffer.handler,
             bufferOffset,
             data.toBuffer(dataOffset, arena),
-            (size * Float.SIZE_BYTES).toLong()
+            (size * Float.SIZE_BYTES)
         )
     }
 
@@ -59,7 +57,7 @@ actual class Queue(internal val handler: MemorySegment) {
             buffer.handler,
             bufferOffset,
             data.toBuffer(dataOffset, arena),
-            (size * Float.SIZE_BYTES).toLong()
+            (size * Float.SIZE_BYTES)
         )
     }
 

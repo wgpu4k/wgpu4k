@@ -46,16 +46,15 @@ data class RenderPipelineDescriptor(
                 var offset: GPUSize64,
                 var shaderLocation: GPUIndex32,
             )
-
         }
     }
 
     data class PrimitiveState(
-        var topology: PrimitiveTopology = PrimitiveTopology.trianglelist,
-        var stripIndexFormat: IndexFormat? = null,
-        var frontFace: FrontFace = FrontFace.ccw,
-        var cullMode: CullMode = CullMode.none,
-        var unclippedDepth: Boolean = false,
+        val topology: PrimitiveTopology = PrimitiveTopology.trianglelist,
+        val stripIndexFormat: IndexFormat? = null,
+        val frontFace: FrontFace = FrontFace.ccw,
+        val cullMode: CullMode = CullMode.none,
+        val unclippedDepth: Boolean = false,
     )
 
     data class DepthStencilState(
@@ -81,9 +80,9 @@ data class RenderPipelineDescriptor(
 
 
     data class MultisampleState(
-        var count: GPUSize32 = 1,
-        var mask: GPUSampleMask = 0xFFFFFFFFu,
-        var alphaToCoverageEnabled: Boolean = false
+        val count: GPUSize32 = 1,
+        val mask: GPUSampleMask = 0xFFFFFFFFu,
+        val alphaToCoverageEnabled: Boolean = false
     )
 
     data class FragmentState(

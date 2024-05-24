@@ -3,8 +3,7 @@ package io.ygdrasil.wgpu.mapper
 import com.sun.jna.Structure
 import dev.krud.shapeshift.transformer.base.MappingTransformer
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPipelineDescriptor
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUVertexState
+import io.ygdrasil.wgpu.internal.jvm.panama.*
 import io.ygdrasil.wgpu.internal.jvm.toMemory
 import io.ygdrasil.wgpu.internal.jvm.toPointer
 import java.lang.foreign.Arena
@@ -111,12 +110,26 @@ internal fun Arena.map(input: RenderPipelineDescriptor) = WGPURenderPipelineDesc
     if (input.label != null) WGPURenderPipelineDescriptor.label(output, allocateFrom(input.label))
     // TODO map this
     WGPURenderPipelineDescriptor.layout(output, MemorySegment.NULL)
-    WGPURenderPipelineDescriptor.primitive(output, primitiveStateMapper.map<RenderPipelineDescriptor.PrimitiveState, io.ygdrasil.wgpu.internal.jvm.WGPUPrimitiveState>(input.primitive).toMemory())
+    map(input.primitive, WGPURenderPipelineDescriptor.primitive(output))
     if (input.depthStencil != null) WGPURenderPipelineDescriptor.depthStencil(output, depthStencilStateMapper.map<RenderPipelineDescriptor.DepthStencilState, io.ygdrasil.wgpu.internal.jvm.WGPUDepthStencilState.ByReference>(input.depthStencil).toMemory())
     if (input.fragment != null) WGPURenderPipelineDescriptor.fragment(output, fragmentMapper.map<RenderPipelineDescriptor.FragmentState, io.ygdrasil.wgpu.internal.jvm.WGPUFragmentState.ByReference>(input.fragment).toMemory())
-    WGPURenderPipelineDescriptor.multisample(output, multisampleStateMapper.map<RenderPipelineDescriptor.MultisampleState, io.ygdrasil.wgpu.internal.jvm.WGPUMultisampleState>(input.multisample).toMemory())
+    map(input.multisample, WGPURenderPipelineDescriptor.multisample(output))
 }
 
+
+private fun map(input: RenderPipelineDescriptor.MultisampleState, output: MemorySegment) {
+    WGPUMultisampleState.count(output, input.count)
+    WGPUMultisampleState.mask(output, input.mask.toInt())
+    WGPUMultisampleState.alphaToCoverageEnabled(output, input.alphaToCoverageEnabled.toInt())
+}
+
+private fun map(input: RenderPipelineDescriptor.PrimitiveState, output: MemorySegment) {
+    WGPUPrimitiveState.topology(output, input.topology.value)
+    if (input.stripIndexFormat != null) WGPUPrimitiveState.stripIndexFormat(output, input.stripIndexFormat.value)
+    WGPUPrimitiveState.frontFace(output, input.frontFace.value)
+    WGPUPrimitiveState.cullMode(output, input.cullMode.value)
+    //TODO check how to map unclippedDepth https://docs.rs/wgpu/latest/wgpu/struct.PrimitiveState.html
+}
 
 private fun Arena.map(input: RenderPipelineDescriptor.VertexState, output: MemorySegment) {
     WGPUVertexState.module(output, input.module.handler)
@@ -125,8 +138,37 @@ private fun Arena.map(input: RenderPipelineDescriptor.VertexState, output: Memor
     WGPUVertexState.constants(output, MemorySegment.NULL)
     WGPUVertexState.constantCount(output, 0L)
     // TODO map this
-    //WGPUVertexState.buffers(output, )
-    WGPUVertexState.bufferCount(output, input.buffers.size.toLong())
+    if (input.buffers.isNotEmpty()) {
+        val buffers = WGPUVertexBufferLayout.allocateArray(input.buffers.size.toLong(), this)
+        input.buffers.forEachIndexed { index, vertexBufferLayout ->
+            map(vertexBufferLayout, WGPUVertexBufferLayout.asSlice(buffers, index.toLong()))
+        }
+        WGPUVertexState.buffers(output, buffers)
+        WGPUVertexState.bufferCount(output, input.buffers.size.toLong())
+    }
+}
+
+private fun Arena.map(
+    input: RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute,
+    output: MemorySegment
+) {
+    WGPUVertexAttribute.format(output, input.format.value)
+    WGPUVertexAttribute.offset(output, input.offset)
+    WGPUVertexAttribute.shaderLocation(output, input.shaderLocation)
+}
+
+private fun Arena.map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout, output: MemorySegment) {
+    WGPUVertexBufferLayout.arrayStride(output, input.arrayStride)
+    if (input.attributes.isNotEmpty()) {
+        val buffers = WGPUVertexAttribute.allocateArray(input.attributes.size.toLong(), this)
+        input.attributes.forEachIndexed { index, vertexAttribute ->
+            map(vertexAttribute, WGPUVertexAttribute.asSlice(buffers, index.toLong()))
+        }
+        WGPUVertexBufferLayout.attributes(output, buffers)
+        WGPUVertexBufferLayout.attributeCount(output, input.attributes.size.toLong())
+
+    }
+    WGPUVertexBufferLayout.stepMode(output, input.stepMode.value)
 }
 
 internal val renderPipelineDescriptorMapper = mapper<RenderPipelineDescriptor, io.ygdrasil.wgpu.internal.jvm.WGPURenderPipelineDescriptor> {

@@ -8,9 +8,9 @@ import io.ygdrasil.wgpu.RenderingContext
 import io.ygdrasil.wgpu.WGPU
 import io.ygdrasil.wgpu.WGPU.Companion.createInstance
 import io.ygdrasil.wgpu.WGPU.Companion.loadLibrary
-import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPULogCallback
 import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
+import io.ygdrasil.wgpu.internal.jvm.toMemory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.lwjgl.glfw.GLFW.*
@@ -104,9 +104,9 @@ suspend fun main() {
 
     glfwSetKeyCallback(windowHandle) { _, key, scancode, action, mods ->
 
-        if ((key == GLFW_KEY_PAGE_UP || key == GLFW_KEY_PAGE_DOWN) && action == GLFW_PRESS) {
+        if ((key == GLFW_KEY_PAGE_UP || key == GLFW_KEY_PAGE_DOWN || key == GLFW_KEY_UP || key == GLFW_KEY_DOWN) && action == GLFW_PRESS) {
             val currentIndex = availableScenes.indexOf(application.currentScene)
-            val index = if (key == GLFW_KEY_PAGE_UP) {
+            val index = if (key == GLFW_KEY_PAGE_UP || key == GLFW_KEY_UP) {
                 currentIndex - 1
             } else {
                 currentIndex + 1

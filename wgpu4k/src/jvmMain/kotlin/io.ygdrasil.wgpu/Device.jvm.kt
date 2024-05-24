@@ -70,7 +70,7 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
 private fun BufferDescriptor.convert() = WGPUBufferDescriptor().also {
     it.usage = usage
     it.size = size
-    it.mappedAtCreation = mappedAtCreation?.toInt()
+    it.mappedAtCreation = mappedAtCreation.toInt()
 }.also { it.write() }.pointer.toMemory()
 
 private fun PipelineLayoutDescriptor.convert() = WGPUPipelineLayoutDescriptor().also {
