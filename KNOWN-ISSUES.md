@@ -16,3 +16,6 @@ Actual dependencies are :
     api-ms-win-crt-math-l1-1-0.dll
     api-ms-win-crt-runtime-l1-1-0.dll
     api-ms-win-crt-heap-l1-1-0.dll
+
+
+As a workaround, WGPU.dll must be placed on a folder listed on java.library.path

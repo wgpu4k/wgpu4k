@@ -94,9 +94,14 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 
 	companion object {
 		fun loadLibrary() {
-			val libraryPath = findLibraryPath()
-			val libraryFile = extractResourceToTemp(libraryPath)?.toFile() ?: error("fail to find webgpu library")
-			System.load(libraryFile.absolutePath)
+			when (Platform.os) {
+				Os.Windows -> System.loadLibrary("WGPU")
+				else -> {
+					val libraryPath = findLibraryPath()
+					val libraryFile = extractResourceToTemp(libraryPath)?.toFile() ?: error("fail to find webgpu library")
+					System.load(libraryFile.absolutePath)
+				}
+			}
 		}
 
 		private fun findLibraryPath(): String {
