@@ -3,7 +3,7 @@ package io.ygdrasil.wgpu
 import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
 import io.ygdrasil.wgpu.mapper.bindGroupDescriptorMapper
-import io.ygdrasil.wgpu.mapper.renderPipelineDescriptorMapper
+import io.ygdrasil.wgpu.mapper.map
 import io.ygdrasil.wgpu.mapper.samplerDescriptorMapper
 import io.ygdrasil.wgpu.mapper.textureDescriptorMapper
 import java.lang.foreign.MemorySegment
@@ -27,11 +27,11 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
             .let { webgpu_h.wgpuDeviceCreatePipelineLayout(handler, it) }
             ?.let(::PipelineLayout) ?: error("fail to create pipeline layout")
 
-    actual fun createRenderPipeline(descriptor: RenderPipelineDescriptor): RenderPipeline =
-        renderPipelineDescriptorMapper.map<Any, WGPURenderPipelineDescriptor>(descriptor)
-            .also { it.write() }.pointer.toMemory()
+    actual fun createRenderPipeline(descriptor: RenderPipelineDescriptor): RenderPipeline = confined { arena ->
+        arena.map(descriptor)
             .let {  webgpu_h.wgpuDeviceCreateRenderPipeline(handler, it) }
             ?.let(::RenderPipeline) ?: error("fail to create render pipeline")
+    }
 
     actual fun createBuffer(descriptor: BufferDescriptor): Buffer =
         descriptor.convert()

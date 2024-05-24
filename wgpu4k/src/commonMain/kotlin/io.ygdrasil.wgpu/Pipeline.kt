@@ -21,13 +21,13 @@ data class PipelineLayoutDescriptor(
 }
 
 data class RenderPipelineDescriptor(
-    var vertex: VertexState,
-    var label: String? = null,
-    var layout: PipelineLayout? = null,
-    var primitive: PrimitiveState = PrimitiveState(),
-    var depthStencil: DepthStencilState? = null,
-    var fragment: FragmentState? = null,
-    var multisample: MultisampleState = MultisampleState(),
+    val vertex: VertexState,
+    val label: String? = null,
+    val layout: PipelineLayout? = null,
+    val primitive: PrimitiveState = PrimitiveState(),
+    val depthStencil: DepthStencilState? = null,
+    val fragment: FragmentState? = null,
+    val multisample: MultisampleState = MultisampleState(),
 ) {
 
     data class VertexState(
@@ -49,7 +49,6 @@ data class RenderPipelineDescriptor(
 
         }
     }
-
 
     data class PrimitiveState(
         var topology: PrimitiveTopology = PrimitiveTopology.trianglelist,
