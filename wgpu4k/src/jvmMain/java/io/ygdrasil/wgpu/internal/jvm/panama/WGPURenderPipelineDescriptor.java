@@ -2,10 +2,12 @@
 
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
-import java.lang.foreign.*;
-import java.util.function.*;
+import org.jetbrains.annotations.NotNull;
 
-import static java.lang.foreign.MemoryLayout.PathElement.*;
+import java.lang.foreign.*;
+import java.util.function.Consumer;
+
+import static java.lang.foreign.MemoryLayout.PathElement.groupElement;
 
 /**
  * {@snippet lang=c :
@@ -207,7 +209,7 @@ public class WGPURenderPipelineDescriptor {
      * WGPUVertexState vertex
      * }
      */
-    public static MemorySegment vertex(MemorySegment struct) {
+    public static @NotNull MemorySegment vertex(MemorySegment struct) {
         return struct.asSlice(vertex$OFFSET, vertex$LAYOUT.byteSize());
     }
 

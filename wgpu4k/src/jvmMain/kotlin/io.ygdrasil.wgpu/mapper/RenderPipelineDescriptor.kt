@@ -148,7 +148,7 @@ private fun Arena.map(input: RenderPipelineDescriptor.VertexState, output: Memor
     }
 }
 
-private fun Arena.map(
+private fun map(
     input: RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute,
     output: MemorySegment
 ) {
@@ -169,25 +169,6 @@ private fun Arena.map(input: RenderPipelineDescriptor.VertexState.VertexBufferLa
 
     }
     WGPUVertexBufferLayout.stepMode(output, input.stepMode.value)
-}
-
-internal val renderPipelineDescriptorMapper = mapper<RenderPipelineDescriptor, io.ygdrasil.wgpu.internal.jvm.WGPURenderPipelineDescriptor> {
-    RenderPipelineDescriptor::layout mappedTo io.ygdrasil.wgpu.internal.jvm.WGPURenderPipelineDescriptor::layout withTransformer MappingTransformer { io.ygdrasil.wgpu.internal.jvm.WGPUPipelineLayoutImpl(it.originalValue?.handler?.toPointer()) }
-    RenderPipelineDescriptor::fragment mappedTo io.ygdrasil.wgpu.internal.jvm.WGPURenderPipelineDescriptor::fragment withTransformer MappingTransformer {
-        it.originalValue?.let(fragmentMapper::map)
-    }
-    RenderPipelineDescriptor::depthStencil mappedTo io.ygdrasil.wgpu.internal.jvm.WGPURenderPipelineDescriptor::depthStencil withTransformer MappingTransformer {
-        it.originalValue?.let(depthStencilStateMapper::map)
-    }
-    RenderPipelineDescriptor::vertex mappedTo io.ygdrasil.wgpu.internal.jvm.WGPURenderPipelineDescriptor::vertex withTransformer MappingTransformer {
-        it.originalValue?.let(vertexStateMapper::map)
-    }
-    RenderPipelineDescriptor::primitive mappedTo io.ygdrasil.wgpu.internal.jvm.WGPURenderPipelineDescriptor::primitive withTransformer MappingTransformer {
-        it.originalValue?.let(primitiveStateMapper::map)
-    }
-    RenderPipelineDescriptor::multisample mappedTo io.ygdrasil.wgpu.internal.jvm.WGPURenderPipelineDescriptor::multisample withTransformer MappingTransformer {
-        it.originalValue?.let(multisampleStateMapper::map)
-    }
 }
 
 private val multisampleStateMapper = mapper<RenderPipelineDescriptor.MultisampleState, io.ygdrasil.wgpu.internal.jvm.WGPUMultisampleState> {
@@ -269,25 +250,3 @@ private val stencilFaceStateMapper =
         RenderPipelineDescriptor.DepthStencilState.StencilFaceState::depthFailOp mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUStencilFaceState::depthFailOp withTransformer EnumerationTransformer()
         RenderPipelineDescriptor.DepthStencilState.StencilFaceState::passOp mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUStencilFaceState::passOp withTransformer EnumerationTransformer()
     }
-
-private val vertexStateMapper = mapper<RenderPipelineDescriptor.VertexState, io.ygdrasil.wgpu.internal.jvm.WGPUVertexState> {
-    RenderPipelineDescriptor.VertexState::module mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUVertexState::module withTransformer MappingTransformer { io.ygdrasil.wgpu.internal.jvm.WGPUShaderModuleImpl(it.originalValue?.handler?.toPointer()) }
-    RenderPipelineDescriptor.VertexState::buffers mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUVertexState::buffers withTransformer MappingTransformer<Array<RenderPipelineDescriptor.VertexState.VertexBufferLayout>, Array<io.ygdrasil.wgpu.internal.jvm.WGPUVertexBufferLayout.ByReference>> {
-        it.originalValue?.toStructureArray { colorTarget ->
-            vertexBufferLayoutMapper.map(colorTarget, this)
-        }
-    }
-}
-
-private val vertexBufferLayoutMapper = mapper<RenderPipelineDescriptor.VertexState.VertexBufferLayout, io.ygdrasil.wgpu.internal.jvm.WGPUVertexBufferLayout.ByReference> {
-    RenderPipelineDescriptor.VertexState.VertexBufferLayout::stepMode mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUVertexBufferLayout.ByReference::stepMode withTransformer EnumerationTransformer()
-    RenderPipelineDescriptor.VertexState.VertexBufferLayout::attributes mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUVertexBufferLayout.ByReference::attributes withTransformer MappingTransformer<Array<RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute>, Array<io.ygdrasil.wgpu.internal.jvm.WGPUVertexAttribute.ByReference>> {
-        it.originalValue?.toStructureArray { colorTarget ->
-            vertexAttributeMapper.map(colorTarget, this)
-        }
-    }
-}
-
-private val vertexAttributeMapper = mapper<RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute, io.ygdrasil.wgpu.internal.jvm.WGPUVertexAttribute.ByReference> {
-    RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute::format mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUVertexAttribute.ByReference::format withTransformer EnumerationTransformer()
-}
