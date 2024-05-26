@@ -2,14 +2,12 @@ package io.ygdrasil.wgpu
 
 
 
-import WGPUDeviceImpl
-import WGPUSurfaceConfiguration
 import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceCapabilities
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceConfiguration
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceTexture
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
-import io.ygdrasil.wgpu.internal.jvm.toMemory
-import io.ygdrasil.wgpu.internal.jvm.toPointer
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h.WGPUPresentMode_Fifo
 import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.ValueLayout
@@ -45,26 +43,22 @@ actual class RenderingContext(
 		wgpu_h.wgpuSurfaceGetCapabilities(handler, adapter.handler, surfaceCapabilities)
 	}
 
-	actual fun configure(canvasConfiguration: CanvasConfiguration) {
-
+	actual fun configure(canvasConfiguration: CanvasConfiguration) = confined { arena ->
 		if (WGPUSurfaceCapabilities.formats(surfaceCapabilities) == MemorySegment.NULL) error("call computeSurfaceCapabilities(adapter: Adapter) before configure")
-		val descriptor = canvasConfiguration.convert()
-		descriptor.write()
-
-		wgpu_h.wgpuSurfaceConfigure(handler, descriptor.pointer.toMemory())
+		wgpu_h.wgpuSurfaceConfigure(handler, arena.convert(canvasConfiguration))
 	}
 
     actual override fun close() {
 		wgpu_h.wgpuSurfaceRelease(handler)
 	}
 
-	private fun CanvasConfiguration.convert(): WGPUSurfaceConfiguration = WGPUSurfaceConfiguration().also {
-		it.device = WGPUDeviceImpl(device.handler.toPointer())
-		it.usage = usage
-		it.format = format?.value ?: textureFormat.value
-		it.presentMode = io.ygdrasil.wgpu.internal.jvm.WGPUPresentMode.WGPUPresentMode_Fifo.value
-		it.alphaMode = alphaMode?.value ?: WGPUSurfaceCapabilities.alphaModes(surfaceCapabilities).get(ValueLayout.JAVA_INT, 0)
-		it.width = width
-		it.height = height
+	private fun Arena.convert(input: CanvasConfiguration): MemorySegment = WGPUSurfaceConfiguration.allocate(this).also { output ->
+		WGPUSurfaceConfiguration.device(output, input.device.handler)
+		WGPUSurfaceConfiguration.usage(output, input.usage)
+		WGPUSurfaceConfiguration.format(output, input.format?.value ?: textureFormat.value)
+		WGPUSurfaceConfiguration.presentMode(output, WGPUPresentMode_Fifo())
+		WGPUSurfaceConfiguration.alphaMode(output, input.alphaMode?.value ?: WGPUSurfaceCapabilities.alphaModes(surfaceCapabilities).get(ValueLayout.JAVA_INT, 0))
+		WGPUSurfaceConfiguration.width(output, width)
+		WGPUSurfaceConfiguration.height(output, height)
 	}
 }

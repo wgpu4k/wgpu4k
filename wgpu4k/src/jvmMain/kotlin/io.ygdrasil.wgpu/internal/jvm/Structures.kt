@@ -4,7 +4,6 @@ import com.sun.jna.PointerType
 import com.sun.jna.Structure
 import com.sun.jna.ptr.PointerByReference
 import io.ygdrasil.wgpu.internal.jvm.WGPUBool
-import io.ygdrasil.wgpu.internal.jvm.WGPUTextureUsageFlags
 
 @Structure.FieldOrder("nextInChain", "label")
 open class WGPUCommandEncoderDescriptor : Structure {
@@ -160,84 +159,6 @@ class WGPUDeviceImpl : PointerType {
 	}
 }
 
-@Structure.FieldOrder(
-	"nextInChain", "device", "format", "usage", "viewFormatCount", "viewFormats",
-	"alphaMode", "width", "height", "presentMode"
-)
-open class WGPUSurfaceConfiguration : Structure {
-	/**
-	 * mapped from (typedef Optional[const WGPUChainedStruct] =
-	 * Declared([a8(next):[*:b1]i4(sType)x4](WGPUChainedStruct)))*
-	 */
-	@JvmField
-	var nextInChain: Pointer? = null
-
-	/**
-	 * mapped from WGPUDevice
-	 */
-	@JvmField
-	var device: WGPUDeviceImpl = WGPUDeviceImpl()
-
-	/**
-	 * mapped from WGPUTextureFormat
-	 */
-	@JvmField
-	var format: Int = 0
-
-	/**
-	 * mapped from WGPUTextureUsageFlags
-	 */
-	@JvmField
-	var usage: WGPUTextureUsageFlags = 0
-
-	/**
-	 * mapped from size_t
-	 */
-	@JvmField
-	var viewFormatCount: NativeLong = NativeLong(0)
-
-	/**
-	 * mapped from (typedef Optional[const WGPUTextureFormat] = Declared(i4))*
-	 */
-	@JvmField
-	var viewFormats: Pointer? = null
-
-	/**
-	 * mapped from WGPUCompositeAlphaMode
-	 */
-	@JvmField
-	var alphaMode: Int = 0
-
-	/**
-	 * mapped from uint32_t
-	 */
-	@JvmField
-	var width: Int = 0
-
-	/**
-	 * mapped from uint32_t
-	 */
-	@JvmField
-	var height: Int = 0
-
-	/**
-	 * mapped from WGPUPresentMode
-	 */
-	@JvmField
-	var presentMode: Int = 0
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	constructor()
-
-	class ByReference(
-		pointer: Pointer? = null,
-	) : WGPUSurfaceConfiguration(pointer), Structure.ByReference
-
-	class ByValue(
-		pointer: Pointer? = null,
-	) : WGPUSurfaceConfiguration(pointer), Structure.ByValue
-}
 
 @Structure.FieldOrder("chain", "desiredMaximumFrameLatency")
 open class WGPUSurfaceConfigurationExtras : Structure {
