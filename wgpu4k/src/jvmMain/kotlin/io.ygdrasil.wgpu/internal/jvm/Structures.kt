@@ -500,52 +500,6 @@ open class WGPUBufferBindingLayout : Structure {
 	) : WGPUBufferBindingLayout(pointer), Structure.ByValue
 }
 
-@Structure.FieldOrder("nextInChain", "label", "usage", "size", "mappedAtCreation")
-open class WGPUBufferDescriptor : Structure {
-	/**
-	 * mapped from (typedef Optional[const WGPUChainedStruct] =
-	 * Declared([a8(next):[*:b1]i4(sType)x4](WGPUChainedStruct)))*
-	 */
-	@JvmField
-	var nextInChain: Pointer? = null
-
-	/**
-	 * mapped from (Char(layout = b1))*
-	 */
-	@JvmField
-	var label: String? = null
-
-	/**
-	 * mapped from WGPUBufferUsageFlags
-	 */
-	@JvmField
-	var usage: WGPUBufferUsageFlags = 0
-
-	/**
-	 * mapped from uint64_t
-	 */
-	@JvmField
-	var size: Long = 0
-
-	/**
-	 * mapped from WGPUBool
-	 */
-	@JvmField
-	var mappedAtCreation: WGPUBool? = null
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	constructor()
-
-	class ByReference(
-		pointer: Pointer? = null,
-	) : WGPUBufferDescriptor(pointer), Structure.ByReference
-
-	class ByValue(
-		pointer: Pointer? = null,
-	) : WGPUBufferDescriptor(pointer), Structure.ByValue
-}
-
 @Structure.FieldOrder("r", "g", "b", "a")
 open class WGPUColor : Structure {
 	/**

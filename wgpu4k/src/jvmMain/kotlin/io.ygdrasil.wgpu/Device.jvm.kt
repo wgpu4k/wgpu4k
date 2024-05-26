@@ -33,11 +33,11 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
             ?.let(::RenderPipeline) ?: error("fail to create render pipeline")
     }
 
-    actual fun createBuffer(descriptor: BufferDescriptor): Buffer =
-        descriptor.convert()
+    actual fun createBuffer(descriptor: BufferDescriptor): Buffer = confined { arena ->
+        arena.map(descriptor)
             .let { webgpu_h.wgpuDeviceCreateBuffer(handler, it) }
             ?.let(::Buffer) ?: error("fail to create buffer")
-
+    }
 
     actual fun createBindGroup(descriptor: BindGroupDescriptor): BindGroup =
         bindGroupDescriptorMapper.map<Any, WGPUBindGroupDescriptor>(descriptor)
@@ -66,12 +66,6 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
     }
 
 }
-
-private fun BufferDescriptor.convert() = WGPUBufferDescriptor().also {
-    it.usage = usage
-    it.size = size
-    it.mappedAtCreation = mappedAtCreation.toInt()
-}.toMemory()
 
 private fun PipelineLayoutDescriptor.convert() = WGPUPipelineLayoutDescriptor().also {
     it.label = label

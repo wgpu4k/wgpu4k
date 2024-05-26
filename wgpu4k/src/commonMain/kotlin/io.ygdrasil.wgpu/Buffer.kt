@@ -17,6 +17,6 @@ expect class Buffer : AutoCloseable {
 
 data class BufferDescriptor(
 	var size: GPUSize64,
-	var usage: GPUBufferUsageFlags,
+	var usage: Set<BufferUsage>,
 	var mappedAtCreation: Boolean = false
 )

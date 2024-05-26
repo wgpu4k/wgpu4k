@@ -25,8 +25,6 @@ typealias WGPUTexture = WGPUTextureImpl
 
 typealias WGPUTextureView = WGPUTextureViewImpl
 
-typealias WGPUBufferUsageFlags = Int
-
 typealias WGPUShaderStageFlags = Int
 
 typealias WGPUTextureUsageFlags = Int

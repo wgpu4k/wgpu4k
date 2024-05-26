@@ -34,7 +34,7 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 		verticesBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = (cubeVertexArray.size * Float.SIZE_BYTES).toLong(),
-				usage = BufferUsage.vertex.value,
+				usage = setOf(BufferUsage.vertex),
 				mappedAtCreation = true
 			)
 		)
@@ -128,7 +128,7 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 			)
 		}
 
-		val uniformBufferSize = 4L * 16L; // 4x4 matrix
+		val uniformBufferSize = 4L * 16L // 4x4 matrix
 		uniformBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = uniformBufferSize,
