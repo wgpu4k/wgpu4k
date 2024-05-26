@@ -137,7 +137,7 @@ class ParticlesScene : Application.Scene() {
             TextureDescriptor(
                 size = GPUExtent3DDictStrict(renderingContext.width, renderingContext.height),
                 format = TextureFormat.depth24plus,
-                usage = TextureUsage.renderattachment.value,
+                usage = setOf(TextureUsage.renderattachment),
             )
         )
 
@@ -227,7 +227,12 @@ class ParticlesScene : Application.Scene() {
                 mipLevelCount = numMipLevels,
                 format = TextureFormat.rgba8unorm,
                 usage =
-                TextureUsage.texturebinding or TextureUsage.storagebinding or TextureUsage.copydst or TextureUsage.renderattachment,
+                setOf(
+                    TextureUsage.texturebinding,
+                    TextureUsage.storagebinding,
+                    TextureUsage.copydst,
+                    TextureUsage.renderattachment
+                ),
             )
         )
         device.queue.copyExternalImageToTexture(

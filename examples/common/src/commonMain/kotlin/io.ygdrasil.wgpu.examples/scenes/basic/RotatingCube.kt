@@ -98,7 +98,7 @@ class RotatingCubeScene : Application.Scene(), AutoCloseable {
 			TextureDescriptor(
 				size = GPUExtent3DDictStrict(renderingContext.width, renderingContext.height),
 				format = TextureFormat.depth24plus,
-				usage = TextureUsage.renderattachment.value,
+				usage = setOf(TextureUsage.renderattachment),
 			)
 		).bind()
 

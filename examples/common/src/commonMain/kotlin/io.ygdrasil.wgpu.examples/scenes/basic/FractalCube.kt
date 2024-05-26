@@ -111,7 +111,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 			TextureDescriptor(
 				size = GPUExtent3DDictStrict(renderingContext.width, renderingContext.height),
 				format = TextureFormat.depth24plus,
-				usage = TextureUsage.renderattachment.value,
+				usage = setOf(TextureUsage.renderattachment),
 			)
 		).bind()
 
@@ -129,7 +129,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 			TextureDescriptor(
 				size = GPUExtent3DDictStrict(renderingContext.width, renderingContext.height),
 				format = renderingContext.textureFormat,
-				usage = TextureUsage.texturebinding or TextureUsage.copydst,
+				usage = setOf(TextureUsage.texturebinding, TextureUsage.copydst),
 			)
 		)
 

@@ -97,7 +97,7 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 			TextureDescriptor(
 				size = GPUExtent3DDictStrict(renderingContext.width, renderingContext.height),
 				format = TextureFormat.depth24plus,
-				usage = TextureUsage.renderattachment.value,
+				usage = setOf(TextureUsage.renderattachment),
 			)
 		).bind()
 
@@ -116,7 +116,7 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 				// Assume each image has the same size.
 				size = GPUExtent3DDictStrict(imageBitmaps[0].width, imageBitmaps[0].height, depthLayer),
 				format = TextureFormat.rgba8unorm,
-				usage = TextureUsage.texturebinding or TextureUsage.copydst or TextureUsage.renderattachment,
+				usage = setOf(TextureUsage.texturebinding, TextureUsage.copydst, TextureUsage.renderattachment),
 			)
 		).bind()
 

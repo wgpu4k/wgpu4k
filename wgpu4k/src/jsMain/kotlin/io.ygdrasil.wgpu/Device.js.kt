@@ -117,8 +117,8 @@ private fun TextureDescriptor.convert(): GPUTextureDescriptor = object : GPUText
 	override var sampleCount: GPUSize32? = this@convert.sampleCount
 	override var dimension: String? = this@convert.dimension.stringValue
 	override var format: String = this@convert.format.name
-	override var usage: GPUTextureUsageFlags = this@convert.usage
-	override var viewFormats: Array<String?>? = this@convert.viewFormats ?: undefined
+	override var usage: GPUTextureUsageFlags = this@convert.usage.toFlagInt()
+	override var viewFormats: Array<String> = this@convert.viewFormats.map { it.name }.toTypedArray()
 }
 
 private fun BufferDescriptor.convert(): GPUBufferDescriptor = object : GPUBufferDescriptor {

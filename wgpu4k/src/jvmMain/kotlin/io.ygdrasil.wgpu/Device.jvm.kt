@@ -3,7 +3,6 @@ package io.ygdrasil.wgpu
 import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.mapper.map
-import io.ygdrasil.wgpu.mapper.textureDescriptorMapper
 import java.lang.foreign.MemorySegment
 
 actual class Device(internal val handler: MemorySegment) : AutoCloseable {
@@ -44,8 +43,7 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
     }
 
     actual fun createTexture(descriptor: TextureDescriptor): Texture = confined { arena ->
-        textureDescriptorMapper.map<Any, WGPUTextureDescriptor>(descriptor)
-            .toMemory()
+        arena.map(descriptor)
             .let { wgpu_h.wgpuDeviceCreateTexture(handler, it) }
             ?.let(::Texture) ?: error("fail to create texture")
     }

@@ -1067,8 +1067,8 @@ enum class ShaderStage(
 }
 
 enum class TextureUsage(
-    val `value`: Int,
-) {
+    override val `value`: Int,
+) : EnumerationWithValue {
     none(0),
     copysrc(1),
     copydst(2),
@@ -1077,10 +1077,6 @@ enum class TextureUsage(
     renderattachment(16),
 
     ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: TextureUsage): Int = value or other.value
 
     companion object {
         fun of(`value`: Int): TextureUsage? = entries.find {

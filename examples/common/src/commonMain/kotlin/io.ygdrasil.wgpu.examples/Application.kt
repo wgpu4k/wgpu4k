@@ -21,7 +21,7 @@ abstract class Application(
 			TextureDescriptor(
 				size = GPUExtent3DDictStrict(1, 1),
 				format = TextureFormat.depth24plus,
-				usage = TextureUsage.renderattachment.value,
+				usage = setOf(TextureUsage.renderattachment),
 			)
 		)
 	}
