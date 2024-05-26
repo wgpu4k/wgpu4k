@@ -12,7 +12,6 @@ import io.ygdrasil.wgpu.internal.jvm.panama.WGPUColor
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPassColorAttachment
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPassDepthStencilAttachment
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPassDescriptor
-import io.ygdrasil.wgpu.internal.jvm.toPointer
 import java.lang.foreign.MemorySegment
 
 class RenderPassDescriptorMappingTest : FreeSpec({
@@ -48,9 +47,6 @@ class RenderPassDescriptorMappingTest : FreeSpec({
             WGPURenderPassDescriptor.colorAttachments(result).let { colorAttachments ->
                 WGPURenderPassColorAttachment.asSlice(colorAttachments, 0).let { colorAttachment ->
                     WGPURenderPassColorAttachment.view(colorAttachment) shouldBe MemorySegment.NULL
-                    val test = WGPURenderPassColorAttachment2(colorAttachment.toPointer())
-                        .also { it.read() }
-                    print(test)
                     WGPURenderPassColorAttachment.clearValue(colorAttachment).let { color ->
                         WGPUColor.r(color) shouldBe 0.5
                         WGPUColor.g(color) shouldBe 0.6

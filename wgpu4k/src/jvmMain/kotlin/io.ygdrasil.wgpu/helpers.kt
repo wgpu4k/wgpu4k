@@ -7,10 +7,7 @@ import dev.krud.shapeshift.dsl.KotlinDslMappingDefinitionBuilder
 import dev.krud.shapeshift.enums.AutoMappingStrategy
 import dev.krud.shapeshift.transformer.base.MappingTransformer
 import dev.krud.shapeshift.transformer.base.MappingTransformerContext
-import io.ygdrasil.wgpu.internal.jvm.WGPUBindGroupLayout
-import io.ygdrasil.wgpu.internal.jvm.WGPUBindGroupLayoutImpl
 import io.ygdrasil.wgpu.internal.jvm.WGPUExtent3D
-import io.ygdrasil.wgpu.internal.jvm.toPointer
 
 internal fun Int.toNativeLong(): NativeLong = toLong()
 	.let(::NativeLong)
@@ -37,16 +34,8 @@ class GPUExtent3DDictStrictTransformer : MappingTransformer<GPUExtent3DDictStric
 		}
 }
 
-class BindGroupLayoutTransformer : MappingTransformer<BindGroupLayout, WGPUBindGroupLayout> {
-	override fun transform(context: MappingTransformerContext<out BindGroupLayout>): WGPUBindGroupLayout? = WGPUBindGroupLayoutImpl(context.originalValue?.handler?.toPointer())
-}
-
 class BooleanToIntTransformer : MappingTransformer<Boolean, Int> {
 	override fun transform(context: MappingTransformerContext<out Boolean>): Int? = context.originalValue?.toInt()
-}
-
-class LongToIntTransformer : MappingTransformer<Long, Int> {
-	override fun transform(context: MappingTransformerContext<out Long>): Int? = context.originalValue?.toInt()
 }
 
 inline fun <reified From : Any, reified To : Any> mapper(block: KotlinDslMappingDefinitionBuilder<From, To>.() -> Unit) =

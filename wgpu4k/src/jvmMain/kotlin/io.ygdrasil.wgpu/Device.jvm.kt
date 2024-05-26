@@ -2,7 +2,6 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
-import io.ygdrasil.wgpu.mapper.bindGroupDescriptorMapper
 import io.ygdrasil.wgpu.mapper.map
 import io.ygdrasil.wgpu.mapper.samplerDescriptorMapper
 import io.ygdrasil.wgpu.mapper.textureDescriptorMapper
@@ -39,23 +38,25 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
             ?.let(::Buffer) ?: error("fail to create buffer")
     }
 
-    actual fun createBindGroup(descriptor: BindGroupDescriptor): BindGroup =
-        bindGroupDescriptorMapper.map<Any, WGPUBindGroupDescriptor>(descriptor)
-            .toMemory()
+    actual fun createBindGroup(descriptor: BindGroupDescriptor): BindGroup = confined { arena ->
+        arena.map(descriptor)
             .let { wgpu_h.wgpuDeviceCreateBindGroup(handler, it) }
             ?.let(::BindGroup) ?: error("fail to create bind group")
+    }
 
-    actual fun createTexture(descriptor: TextureDescriptor): Texture =
+    actual fun createTexture(descriptor: TextureDescriptor): Texture = confined { arena ->
         textureDescriptorMapper.map<Any, WGPUTextureDescriptor>(descriptor)
             .toMemory()
             .let { wgpu_h.wgpuDeviceCreateTexture(handler, it) }
             ?.let(::Texture) ?: error("fail to create texture")
+    }
 
-    actual fun createSampler(descriptor: SamplerDescriptor): Sampler =
+    actual fun createSampler(descriptor: SamplerDescriptor): Sampler = confined { arena ->
         samplerDescriptorMapper.map<Any, WGPUSamplerDescriptor>(descriptor)
             .toMemory()
             .let { wgpu_h.wgpuDeviceCreateSampler(handler, it) }
             ?.let(::Sampler) ?: error("fail to create texture")
+    }
 
     actual fun createComputePipeline(descriptor: ComputePipelineDescriptor): ComputePipeline {
         TODO()

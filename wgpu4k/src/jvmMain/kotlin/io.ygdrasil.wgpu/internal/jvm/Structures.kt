@@ -31,18 +31,6 @@ class WGPUBindGroupImpl : PointerType {
 	}
 }
 
-class WGPUBindGroupLayoutImpl : PointerType {
-	constructor() : super()
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	class ByReference : PointerByReference {
-		constructor() : super()
-
-		constructor(pointer: Pointer?) : super(pointer)
-	}
-}
-
 class WGPUBufferImpl : PointerType {
 	constructor() : super()
 
@@ -200,18 +188,6 @@ class WGPURenderPassEncoderImpl : PointerType {
 }
 
 class WGPURenderPipelineImpl : PointerType {
-	constructor() : super()
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	class ByReference : PointerByReference {
-		constructor() : super()
-
-		constructor(pointer: Pointer?) : super(pointer)
-	}
-}
-
-class WGPUSamplerImpl : PointerType {
 	constructor() : super()
 
 	constructor(pointer: Pointer?) : super(pointer)
@@ -396,68 +372,6 @@ open class WGPUAdapterProperties : Structure {
 	class ByValue(
 		pointer: Pointer? = null,
 	) : WGPUAdapterProperties(pointer), Structure.ByValue
-}
-
-@Structure.FieldOrder(
-	"nextInChain", "binding", "buffer", "offset", "size", "sampler",
-	"textureView"
-)
-open class WGPUBindGroupEntry : Structure {
-
-	/**
-	 * mapped from (typedef Optional[const WGPUChainedStruct] =
-	 * Declared([a8(next):[*:b1]i4(sType)x4](WGPUChainedStruct)))*
-	 */
-	@JvmField
-	var nextInChain: Pointer? = null
-
-	/**
-	 * mapped from uint32_t
-	 */
-	@JvmField
-	var binding: Int? = null
-
-	/**
-	 * mapped from WGPUBuffer
-	 */
-	@JvmField
-	var buffer: WGPUBuffer? = null
-
-	/**
-	 * mapped from uint64_t
-	 */
-	@JvmField
-	var offset: Long? = null
-
-	/**
-	 * mapped from uint64_t
-	 */
-	@JvmField
-	var size: Long? = null
-
-	/**
-	 * mapped from WGPUSampler
-	 */
-	@JvmField
-	var sampler: WGPUSampler? = null
-
-	/**
-	 * mapped from WGPUTextureView
-	 */
-	@JvmField
-	var textureView: WGPUTextureView? = null
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	constructor()
-
-	class ByReference(
-		pointer: Pointer? = null,
-	) : WGPUBindGroupEntry(pointer), Structure.ByReference
-
-	class ByValue(
-		pointer: Pointer? = null,
-	) : WGPUBindGroupEntry(pointer), Structure.ByValue
 }
 
 @Structure.FieldOrder("nextInChain", "type", "hasDynamicOffset", "minBindingSize")
@@ -2259,62 +2173,6 @@ open class WGPUVertexAttribute : Structure {
 	class ByValue(
 		pointer: Pointer? = null,
 	) : WGPUVertexAttribute(pointer), Structure.ByValue
-}
-
-@Structure.FieldOrder("nextInChain", "label", "layout", "entryCount", "entriesPtr")
-open class WGPUBindGroupDescriptor : Structure {
-	/**
-	 * mapped from (typedef Optional[const WGPUChainedStruct] =
-	 * Declared([a8(next):[*:b1]i4(sType)x4](WGPUChainedStruct)))*
-	 */
-	@JvmField
-	var nextInChain: Pointer? = null
-
-	/**
-	 * mapped from (Char(layout = b1))*
-	 */
-	@JvmField
-	var label: String? = null
-
-	/**
-	 * mapped from WGPUBindGroupLayout
-	 */
-	@JvmField
-	var layout: WGPUBindGroupLayout? = null
-
-	/**
-	 * mapped from size_t
-	 */
-	@JvmField
-	var entryCount: NativeLong? = null
-
-	/**
-	 * mapped from (typedef Optional[const WGPUBindGroupEntry] =
-	 * Declared([a8(nextInChain):[*:b1]i4(binding)x4a8(buffer):[*:b1]j8(offset)j8(size)a8(sampler):[*:b1]a8(textureView):[*:b1]](WGPUBindGroupEntry)))*
-	 */
-	@JvmField
-	var entriesPtr: Pointer? = null
-
-	var entries: Array<WGPUBindGroupEntry.ByReference>? = null
-
-	override fun write() {
-		entries?.forEach { it.write() }
-		entryCount = NativeLong(entries?.size?.toLong() ?: 0L)
-		entriesPtr = entries?.getOrNull(0)?.pointer
-		super.write()
-	}
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	constructor()
-
-	class ByReference(
-		pointer: Pointer? = null,
-	) : WGPUBindGroupDescriptor(pointer), Structure.ByReference
-
-	class ByValue(
-		pointer: Pointer? = null,
-	) : WGPUBindGroupDescriptor(pointer), Structure.ByValue
 }
 
 @Structure.FieldOrder(
