@@ -99,12 +99,30 @@ class PipelineDescriptorMappingTest : FreeSpec({
             }
 
             WGPURenderPipelineDescriptor.fragment(result) shouldNotBe MemorySegment.NULL
-            WGPURenderPipelineDescriptor.fragment(result)?.also { fragment ->
+            WGPURenderPipelineDescriptor.fragment(result)?.let { fragment ->
                 WGPUFragmentState.module(fragment) shouldNotBe null
                 WGPUFragmentState.entryPoint(fragment).getString(0) shouldBe "main"
                 WGPUFragmentState.targetCount(fragment) shouldBe 1
+                WGPUFragmentState.targets(fragment).let { targets ->
+                    WGPUColorTargetState.asSlice(targets, 0).let { target ->
+                        WGPUColorTargetState.format(target) shouldBe TextureFormat.rgba8unorm.value
+                        WGPUColorTargetState.writeMask(target) shouldBe ColorWriteMask.all.value
+                        WGPUColorTargetState.blend(target).let { blend ->
+                            WGPUBlendState.color(blend).let { color ->
+                                WGPUBlendComponent.operation(color) shouldBe BlendOperation.add.value
+                                WGPUBlendComponent.srcFactor(color) shouldBe BlendFactor.one.value
+                                WGPUBlendComponent.dstFactor(color) shouldBe BlendFactor.zero.value
+                            }
+                            WGPUBlendState.alpha(blend).let { alpha ->
+                                WGPUBlendComponent.operation(alpha) shouldBe BlendOperation.add.value
+                                WGPUBlendComponent.srcFactor(alpha) shouldBe BlendFactor.one.value
+                                WGPUBlendComponent.dstFactor(alpha) shouldBe BlendFactor.zero.value
+                            }
+                        }
+                    }
+                }
 
-                WGPUFragmentState.targets(fragment).asSlice(0).also { target ->
+                WGPUFragmentState.targets(fragment).asSlice(0).let { target ->
                     WGPUColorTargetState.format(target) shouldBe TextureFormat.rgba8unorm.value
                 }
             }

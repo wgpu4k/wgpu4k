@@ -11,14 +11,14 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
 
     actual fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder =
         renderPassDescriptorMapper.map<RenderPassDescriptor, WGPURenderPassDescriptor>(descriptor)
-            .also { it.write() }.pointer.toMemory()
+            .toMemory()
             .let { webgpu_h.wgpuCommandEncoderBeginRenderPass(handler, it) }
             ?.let { RenderPassEncoder(it) }
             ?: error("fail to get RenderPassEncoder")
 
     actual fun finish(): CommandBuffer =
         WGPUCommandBufferDescriptor()
-            .also { it.write() }.pointer.toMemory()
+            .toMemory()
             .let { webgpu_h.wgpuCommandEncoderFinish(handler, it) }
             ?.let { CommandBuffer(it) }
             ?: error("fail to get CommandBuffer")
@@ -29,9 +29,9 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
         copySize: GPUIntegerCoordinates
     ) = confined {
         actualCopyTextureToTexture(
-            source.convert().also { it.write() }.pointer.toMemory(),
-            destination.convert().also { it.write() }.pointer.toMemory(),
-            copySize.convert().also { it.write() }.pointer.toMemory()
+            source.convert().toMemory(),
+            destination.convert().toMemory(),
+            copySize.convert().toMemory()
         )
     }
 

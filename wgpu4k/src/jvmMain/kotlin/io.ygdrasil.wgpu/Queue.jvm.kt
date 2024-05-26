@@ -84,12 +84,12 @@ actual class Queue(internal val handler: MemorySegment) {
                 offset = 0
                 bytesPerRow = image.width * bytePerPixel
                 rowsPerImage = image.height
-            }.also { it.write() }.pointer.toMemory(),
+            }.toMemory(),
             WGPUExtent3D().also {
                 it.width = image.width
                 it.height = image.height
                 it.depthOrArrayLayers = 1
-            }.also { it.write() }.pointer.toMemory()
+            }.toMemory()
         )
 
     }

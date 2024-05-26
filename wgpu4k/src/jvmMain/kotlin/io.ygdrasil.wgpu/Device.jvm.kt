@@ -41,19 +41,19 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
 
     actual fun createBindGroup(descriptor: BindGroupDescriptor): BindGroup =
         bindGroupDescriptorMapper.map<Any, WGPUBindGroupDescriptor>(descriptor)
-            .also { it.write() }.pointer.toMemory()
+            .toMemory()
             .let { webgpu_h.wgpuDeviceCreateBindGroup(handler, it) }
             ?.let(::BindGroup) ?: error("fail to create bind group")
 
     actual fun createTexture(descriptor: TextureDescriptor): Texture =
         textureDescriptorMapper.map<Any, WGPUTextureDescriptor>(descriptor)
-            .also { it.write() }.pointer.toMemory()
+            .toMemory()
             .let { webgpu_h.wgpuDeviceCreateTexture(handler, it) }
             ?.let(::Texture) ?: error("fail to create texture")
 
     actual fun createSampler(descriptor: SamplerDescriptor): Sampler =
         samplerDescriptorMapper.map<Any, WGPUSamplerDescriptor>(descriptor)
-            .also { it.write() }.pointer.toMemory()
+            .toMemory()
             .let { webgpu_h.wgpuDeviceCreateSampler(handler, it) }
             ?.let(::Sampler) ?: error("fail to create texture")
 
@@ -71,15 +71,15 @@ private fun BufferDescriptor.convert() = WGPUBufferDescriptor().also {
     it.usage = usage
     it.size = size
     it.mappedAtCreation = mappedAtCreation.toInt()
-}.also { it.write() }.pointer.toMemory()
+}.toMemory()
 
 private fun PipelineLayoutDescriptor.convert() = WGPUPipelineLayoutDescriptor().also {
     it.label = label
     // TODO find how to map this
     //it.bindGroupLayoutCount = bindGroupLayouts.size.toLong().let { NativeLong(it) }
     //it.bindGroupLayouts = bindGroupLayouts.map { it.convert() }.toTypedArray()
-}.also { it.write() }.pointer.toMemory()
+}.toMemory()
 
 private fun CommandEncoderDescriptor.convert() = WGPUCommandEncoderDescriptor().also {
     it.label = label
-}.also { it.write() }.pointer.toMemory()
+}.toMemory()

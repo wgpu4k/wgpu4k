@@ -23,7 +23,7 @@ internal fun ShaderModuleDescriptor.convert() = WGPUShaderModuleDescriptor().als
 	it.hints =
 		compilationHints?.map { it.convert() }?.toTypedArray() ?: arrayOf(WGPUShaderModuleCompilationHint.ByReference())
 
-}.also { it.write() }.pointer.toMemory()
+}.toMemory()
 
 private fun ShaderModuleDescriptor.CompilationHint.convert() = WGPUShaderModuleCompilationHint.ByReference().also {
 	TODO("no yet implemented")

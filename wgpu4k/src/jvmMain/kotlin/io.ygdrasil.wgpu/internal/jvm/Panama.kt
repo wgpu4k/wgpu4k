@@ -1,6 +1,7 @@
 package io.ygdrasil.wgpu.internal.jvm
 
 import com.sun.jna.Pointer
+import com.sun.jna.Structure
 import java.lang.foreign.Arena
 import java.lang.foreign.MemoryLayout
 import java.lang.foreign.MemorySegment
@@ -21,3 +22,5 @@ internal fun List<MemorySegment>.toPointerArray(arena: Arena): MemorySegment? {
     forEachIndexed { index, value -> commands.setAtIndex(ValueLayout.ADDRESS, index.toLong(), value) }
     return commands
 }
+
+fun Structure.toMemory() = also { it.write() }.pointer.toMemory()
