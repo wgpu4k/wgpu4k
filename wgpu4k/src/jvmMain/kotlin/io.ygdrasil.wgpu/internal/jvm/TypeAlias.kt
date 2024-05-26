@@ -20,6 +20,3 @@ typealias WGPUShaderStageFlags = Int
 
 typealias WGPUTextureUsageFlags = Int
 
-typealias WGPUInstanceBackendFlags = Int
-
-typealias WGPUInstanceFlags = Int

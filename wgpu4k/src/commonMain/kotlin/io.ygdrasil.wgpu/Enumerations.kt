@@ -472,13 +472,12 @@ enum class MipmapFilterMode(
 }
 
 enum class PowerPreference(
-    val `value`: Int,
-) {
-    undefined(0),
-    lowpower(1),
-    highperformance(2),
+    override val `value`: Int,
+     val stringValue: String?,
+) : EnumerationWithValue {
 
-    ;
+    lowPower(1, "low-power"),
+    highPerformance(2, "low-power");
 
     companion object {
         fun of(`value`: Int): PowerPreference? = entries.find {

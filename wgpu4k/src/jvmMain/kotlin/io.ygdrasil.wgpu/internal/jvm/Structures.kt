@@ -654,21 +654,6 @@ open class WGPUExtent3D : Structure {
 	) : WGPUExtent3D(pointer), Structure.ByValue
 }
 
-@Structure.FieldOrder("nextInChain")
-open class WGPUInstanceDescriptor : Structure {
-	/**
-	 * mapped from (typedef Optional[const WGPUChainedStruct] =
-	 * Declared([a8(next):[*:b1]i4(sType)x4](WGPUChainedStruct)))*
-	 */
-	@JvmField
-	var nextInChain: WGPUInstanceExtras.ByReference? = null
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	constructor()
-
-}
-
 @Structure.FieldOrder(
 	"maxTextureDimension1D", "maxTextureDimension2D", "maxTextureDimension3D",
 	"maxTextureArrayLayers", "maxBindGroups", "maxBindGroupsPlusVertexBuffers",
@@ -2283,61 +2268,4 @@ open class WGPUShaderModuleDescriptor : Structure {
 	class ByValue(
 		pointer: Pointer? = null,
 	) : WGPUShaderModuleDescriptor(pointer), Structure.ByValue
-}
-
-@Structure.FieldOrder(
-	"chain", "backends", "flags", "dx12ShaderCompiler", "gles3MinorVersion",
-	"dxilPath", "dxcPath"
-)
-open class WGPUInstanceExtras : Structure {
-	/**
-	 * mapped from WGPUChainedStruct
-	 */
-	@JvmField
-	var chain: WGPUChainedStruct = WGPUChainedStruct()
-
-	/**
-	 * mapped from WGPUInstanceBackendFlags
-	 */
-	@JvmField
-	var backends: WGPUInstanceBackendFlags = 0
-
-	/**
-	 * mapped from WGPUInstanceFlags
-	 */
-	@JvmField
-	var flags: WGPUInstanceFlags = 0
-
-	/**
-	 * mapped from WGPUDx12Compiler
-	 */
-	@JvmField
-	var dx12ShaderCompiler: Int = 0
-
-	/**
-	 * mapped from WGPUGles3MinorVersion
-	 */
-	@JvmField
-	var gles3MinorVersion: Int = 0
-
-	/**
-	 * mapped from (Char(layout = b1))*
-	 */
-	@JvmField
-	var dxilPath: String? = null
-
-	/**
-	 * mapped from (Char(layout = b1))*
-	 */
-	@JvmField
-	var dxcPath: String? = null
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	constructor()
-
-	class ByReference(
-		pointer: Pointer? = null,
-	) : WGPUInstanceExtras(pointer), Structure.ByReference
-
 }

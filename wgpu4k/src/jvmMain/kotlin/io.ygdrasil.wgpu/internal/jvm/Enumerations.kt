@@ -280,26 +280,7 @@ public enum class WGPUQueueWorkDoneStatus(
 	}
 }
 
-public enum class WGPURequestAdapterStatus(
-	public val `value`: Int,
-) {
-	WGPURequestAdapterStatus_Success(0),
-	WGPURequestAdapterStatus_Unavailable(1),
-	WGPURequestAdapterStatus_Error(2),
-	WGPURequestAdapterStatus_Unknown(3),
-	WGPURequestAdapterStatus_Force32(2_147_483_647),
-	;
 
-	public infix fun or(other: Int): Int = value or other
-
-	public infix fun or(other: WGPURequestAdapterStatus): Int = value or other.value
-
-	public companion object {
-		public fun of(`value`: Int): WGPURequestAdapterStatus? = entries.find {
-			it.value == value
-		}
-	}
-}
 
 public enum class WGPURequestDeviceStatus(
 	public val `value`: Int,
