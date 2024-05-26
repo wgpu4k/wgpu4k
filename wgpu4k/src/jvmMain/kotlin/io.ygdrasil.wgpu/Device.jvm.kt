@@ -1,8 +1,8 @@
 package io.ygdrasil.wgpu
 
-import WGPUCommandEncoderDescriptor
-import WGPUPipelineLayoutDescriptor
 import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUCommandEncoderDescriptor
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUPipelineLayoutDescriptor
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.mapper.map
 import java.lang.foreign.MemorySegment
@@ -12,8 +12,8 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
     actual val queue: Queue by lazy { Queue(wgpu_h.wgpuDeviceGetQueue(handler) ?: error("fail to get device queue")) }
 
     actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder =confined { arena ->
-        descriptor?.convert()
-            .let { wgpu_h.wgpuDeviceCreateCommandEncoder(handler, it ?: MemorySegment.NULL) }
+        WGPUCommandEncoderDescriptor.allocate(arena)
+            .let { wgpu_h.wgpuDeviceCreateCommandEncoder(handler, it) }
             ?.let(::CommandEncoder) ?: error("fail to create command encoder")
     }
 
@@ -24,7 +24,7 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
     }
 
     actual fun createPipelineLayout(descriptor: PipelineLayoutDescriptor): PipelineLayout = confined { arena ->
-        descriptor.convert()
+        WGPUPipelineLayoutDescriptor.allocate(arena)
             .let { wgpu_h.wgpuDeviceCreatePipelineLayout(handler, it) }
             ?.let(::PipelineLayout) ?: error("fail to create pipeline layout")
 }
@@ -68,14 +68,3 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
     }
 
 }
-
-private fun PipelineLayoutDescriptor.convert() = WGPUPipelineLayoutDescriptor().also {
-    it.label = label
-    // TODO find how to map this
-    //it.bindGroupLayoutCount = bindGroupLayouts.size.toLong().let { NativeLong(it) }
-    //it.bindGroupLayouts = bindGroupLayouts.map { it.convert() }.toTypedArray()
-}.toMemory()
-
-private fun CommandEncoderDescriptor.convert() = WGPUCommandEncoderDescriptor().also {
-    it.label = label
-}.toMemory()
