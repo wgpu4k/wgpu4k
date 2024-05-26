@@ -173,10 +173,16 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 			transformationMatrix.size.toLong()
 		)
 
-		renderPassDescriptor.colorAttachments[0].view = renderingContext
-			.getCurrentTexture()
-			.bind()
-			.createView()
+		renderPassDescriptor = renderPassDescriptor.copy(
+			colorAttachments = arrayOf(
+				renderPassDescriptor.colorAttachments[0].copy(
+					view = renderingContext.getCurrentTexture()
+						.bind()
+						.createView()
+				)
+			)
+		)
+
 
 		val encoder = device.createCommandEncoder()
 			.bind()

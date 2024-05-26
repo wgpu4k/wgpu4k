@@ -207,9 +207,15 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 
 		val swapChainTexture = renderingContext.getCurrentTexture()
 
-		renderPassDescriptor.colorAttachments[0].view = swapChainTexture
-			.bind()
-			.createView()
+		renderPassDescriptor = renderPassDescriptor.copy(
+			colorAttachments = arrayOf(
+				renderPassDescriptor.colorAttachments[0].copy(
+					view = swapChainTexture
+						.bind()
+						.createView()
+				)
+			)
+		)
 
 		val encoder = device.createCommandEncoder()
 			.bind()

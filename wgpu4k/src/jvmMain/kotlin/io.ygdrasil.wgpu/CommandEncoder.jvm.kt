@@ -4,17 +4,17 @@ import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
 import io.ygdrasil.wgpu.mapper.computePassDescriptorMapper
 import io.ygdrasil.wgpu.mapper.convert
-import io.ygdrasil.wgpu.mapper.renderPassDescriptorMapper
+import io.ygdrasil.wgpu.mapper.map
 import java.lang.foreign.MemorySegment
 
 actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable {
 
-    actual fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder =
-        renderPassDescriptorMapper.map<RenderPassDescriptor, WGPURenderPassDescriptor>(descriptor)
-            .toMemory()
+    actual fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder = confined { arena ->
+        arena.map(descriptor)
             .let { webgpu_h.wgpuCommandEncoderBeginRenderPass(handler, it) }
             ?.let { RenderPassEncoder(it) }
             ?: error("fail to get RenderPassEncoder")
+    }
 
     actual fun finish(): CommandBuffer =
         WGPUCommandBufferDescriptor()

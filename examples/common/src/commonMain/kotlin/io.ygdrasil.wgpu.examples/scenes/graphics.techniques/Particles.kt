@@ -451,10 +451,15 @@ class ParticlesScene : Application.Scene() {
             )
         )
 
-
-        val swapChainTexture = renderingContext.getCurrentTexture()
-
-        renderPassDescriptor.colorAttachments[0].view = swapChainTexture.createView()
+        renderPassDescriptor = renderPassDescriptor.copy(
+            colorAttachments = arrayOf(
+                renderPassDescriptor.colorAttachments[0].copy(
+                    view = renderingContext.getCurrentTexture()
+                        .bind()
+                        .createView()
+                )
+            )
+        )
 
         val commandEncoder = device.createCommandEncoder()
 
