@@ -94,7 +94,7 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 
 		val depthTexture = device.createTexture(
 			TextureDescriptor(
-				size = GPUExtent3DDictStrict(renderingContext.width, renderingContext.height),
+				size = Size3D(renderingContext.width, renderingContext.height),
 				format = TextureFormat.depth24plus,
 				usage = setOf(TextureUsage.renderattachment),
 			)

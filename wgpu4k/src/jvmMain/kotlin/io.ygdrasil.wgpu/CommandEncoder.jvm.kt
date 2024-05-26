@@ -1,6 +1,8 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.*
+
+import io.ygdrasil.wgpu.internal.jvm.confined
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUCommandBufferDescriptor
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.mapper.map
 import java.lang.foreign.MemorySegment
@@ -14,22 +16,22 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
             ?: error("fail to get RenderPassEncoder")
     }
 
-    actual fun finish(): CommandBuffer =
-        WGPUCommandBufferDescriptor()
-            .toMemory()
+    actual fun finish(): CommandBuffer = confined { arena ->
+        WGPUCommandBufferDescriptor.allocate(arena)
             .let { wgpu_h.wgpuCommandEncoderFinish(handler, it) }
             ?.let { CommandBuffer(it) }
             ?: error("fail to get CommandBuffer")
+    }
 
     actual fun copyTextureToTexture(
         source: ImageCopyTexture,
         destination: ImageCopyTexture,
-        copySize: GPUIntegerCoordinates
+        copySize: Size3D
     ) = confined { arena ->
         actualCopyTextureToTexture(
             arena.map(source),
             arena.map(destination),
-            copySize.convert().toMemory()
+            arena.map(copySize)
         )
     }
 
@@ -59,10 +61,3 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
     }
 
 }
-
-private fun GPUIntegerCoordinates.convert(): WGPUExtent3D = WGPUExtent3D().also {
-    it.height = second
-    it.width = first
-    it.depthOrArrayLayers = 1
-}
-

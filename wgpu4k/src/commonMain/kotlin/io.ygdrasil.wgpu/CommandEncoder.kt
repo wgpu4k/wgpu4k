@@ -11,7 +11,7 @@ expect class CommandEncoder : AutoCloseable {
 	fun copyTextureToTexture(
 		source: ImageCopyTexture,
 		destination: ImageCopyTexture,
-		copySize: GPUIntegerCoordinates
+		copySize: Size3D
 	)
 
 	fun beginComputePass(descriptor: ComputePassDescriptor? = null): ComputePassEncoder

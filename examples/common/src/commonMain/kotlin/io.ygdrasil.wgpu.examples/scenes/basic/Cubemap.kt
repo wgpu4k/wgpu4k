@@ -95,7 +95,7 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 
 		val depthTexture = device.createTexture(
 			TextureDescriptor(
-				size = GPUExtent3DDictStrict(renderingContext.width, renderingContext.height),
+				size = Size3D(renderingContext.width, renderingContext.height),
 				format = TextureFormat.depth24plus,
 				usage = setOf(TextureUsage.renderattachment),
 			)
@@ -114,7 +114,7 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 			TextureDescriptor(
 				// Create a 2d array texture.
 				// Assume each image has the same size.
-				size = GPUExtent3DDictStrict(imageBitmaps[0].width, imageBitmaps[0].height, depthLayer),
+				size = Size3D(imageBitmaps[0].width, imageBitmaps[0].height, depthLayer),
 				format = TextureFormat.rgba8unorm,
 				usage = setOf(TextureUsage.texturebinding, TextureUsage.copydst, TextureUsage.renderattachment),
 			)

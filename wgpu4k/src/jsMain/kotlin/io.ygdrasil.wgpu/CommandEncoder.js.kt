@@ -16,9 +16,9 @@ actual class CommandEncoder(private val handler: GPUCommandEncoder) : AutoClosea
 	actual fun copyTextureToTexture(
 		source: ImageCopyTexture,
 		destination: ImageCopyTexture,
-		copySize: GPUIntegerCoordinates
+		copySize: Size3D
 	) {
-		handler.copyTextureToTexture(source.convert(), destination.convert(), copySize.toList().toTypedArray())
+		handler.copyTextureToTexture(source.convert(), destination.convert(), copySize.toArray())
 	}
 
 	actual fun beginComputePass(descriptor: ComputePassDescriptor?): ComputePassEncoder =

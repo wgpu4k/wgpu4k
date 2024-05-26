@@ -19,7 +19,7 @@ class DeviceDescriptionMapping : FreeSpec({
         confined { arena ->
             val descriptor = TextureDescriptor(
                 label = "TextureDescriptor",
-                size = GPUExtent3DDictStrict(100, 150, 5),
+                size = Size3D(100, 150, 5),
                 format = TextureFormat.depth24plus,
                 usage = setOf(TextureUsage.renderattachment, TextureUsage.storagebinding),
                 viewFormats = arrayOf(TextureFormat.astc4x4unorm, TextureFormat.astc10x10unorm)

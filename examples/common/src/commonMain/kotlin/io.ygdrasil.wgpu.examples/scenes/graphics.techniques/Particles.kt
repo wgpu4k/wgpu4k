@@ -135,7 +135,7 @@ class ParticlesScene : Application.Scene() {
 
         val depthTexture = device.createTexture(
             TextureDescriptor(
-                size = GPUExtent3DDictStrict(renderingContext.width, renderingContext.height),
+                size = Size3D(renderingContext.width, renderingContext.height),
                 format = TextureFormat.depth24plus,
                 usage = setOf(TextureUsage.renderattachment),
             )
@@ -223,7 +223,7 @@ class ParticlesScene : Application.Scene() {
         }
         val texture = device.createTexture(
             TextureDescriptor(
-                size = GPUExtent3DDictStrict(imageBitmap.width, imageBitmap.height),
+                size = Size3D(imageBitmap.width, imageBitmap.height),
                 mipLevelCount = numMipLevels,
                 format = TextureFormat.rgba8unorm,
                 usage =

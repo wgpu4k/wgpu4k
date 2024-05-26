@@ -44,7 +44,7 @@ class HelloTriangleMSAAScene : Application.Scene() {
 
         val texture = device.createTexture(
             TextureDescriptor(
-                size = GPUExtent3DDictStrict(renderingContext.width, renderingContext.height),
+                size = Size3D(renderingContext.width, renderingContext.height),
                 sampleCount = sampleCount,
                 format = renderingContext.textureFormat,
                 usage = setOf(TextureUsage.renderattachment),
