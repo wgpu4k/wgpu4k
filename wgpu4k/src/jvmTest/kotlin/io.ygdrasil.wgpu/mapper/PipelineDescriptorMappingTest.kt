@@ -67,21 +67,22 @@ class PipelineDescriptorMappingTest : FreeSpec({
                 WGPUVertexState.module(vertex) shouldBe MemorySegment.NULL
                 WGPUVertexState.entryPoint(vertex).getString(0) shouldBe "main"
                 WGPUVertexState.bufferCount(vertex) shouldBe 1L
-                WGPUVertexState.buffers(vertex).asSlice(0).let { buffer ->
-                    WGPUVertexBufferLayout.arrayStride(buffer) shouldBe cubeVertexSize
-                    WGPUVertexBufferLayout.attributeCount(buffer) shouldBe 2
-                    WGPUVertexBufferLayout.attributes(vertex).also { attributes ->
-                        //TODO fix this test
-                        /*WGPUVertexAttribute.asSlice(attributes, 0).let { attribute ->
-                            WGPUVertexAttribute.shaderLocation(attribute) shouldBe 0
-                            WGPUVertexAttribute.offset(attribute) shouldBe cubePositionOffset
-                            WGPUVertexAttribute.format(attribute) shouldBe VertexFormat.float32x4.value
+                WGPUVertexState.buffers(vertex).let { buffers ->
+                    WGPUVertexBufferLayout.asSlice(buffers, 0).let { buffer ->
+                        WGPUVertexBufferLayout.arrayStride(buffer) shouldBe cubeVertexSize
+                        WGPUVertexBufferLayout.attributeCount(buffer) shouldBe 2
+                        WGPUVertexBufferLayout.attributes(buffer).also { attributes ->
+                            WGPUVertexAttribute.asSlice(attributes, 0).let { attribute ->
+                                WGPUVertexAttribute.format(attribute) shouldBe VertexFormat.float32x4.value
+                                WGPUVertexAttribute.offset(attribute) shouldBe cubePositionOffset
+                                WGPUVertexAttribute.shaderLocation(attribute) shouldBe 0
+                            }
+                            WGPUVertexAttribute.asSlice(attributes, 1).let { attribute ->
+                                WGPUVertexAttribute.shaderLocation(attribute) shouldBe 0
+                                WGPUVertexAttribute.offset(attribute) shouldBe cubeUVOffset
+                                WGPUVertexAttribute.format(attribute) shouldBe VertexFormat.float32x2.value
+                            }
                         }
-                        WGPUVertexAttribute.asSlice(attributes, 1).let { attribute ->
-                            WGPUVertexAttribute.shaderLocation(attribute) shouldBe 0
-                            WGPUVertexAttribute.offset(attribute) shouldBe cubeUVOffset
-                            WGPUVertexAttribute.format(attribute) shouldBe VertexFormat.float32x2.value
-                        }*/
                     }
                 }
             }

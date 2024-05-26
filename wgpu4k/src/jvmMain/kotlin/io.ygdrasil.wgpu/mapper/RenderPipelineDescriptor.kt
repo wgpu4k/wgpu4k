@@ -132,14 +132,15 @@ private fun map(input: RenderPipelineDescriptor.PrimitiveState, output: MemorySe
 }
 
 private fun Arena.map(input: RenderPipelineDescriptor.VertexState, output: MemorySegment) {
+    println("vertex $output")
     WGPUVertexState.module(output, input.module.handler)
     WGPUVertexState.entryPoint(output, allocateFrom(input.entryPoint))
     // TODO learn how to map this
     WGPUVertexState.constants(output, MemorySegment.NULL)
     WGPUVertexState.constantCount(output, 0L)
-    // TODO map this
     if (input.buffers.isNotEmpty()) {
         val buffers = WGPUVertexBufferLayout.allocateArray(input.buffers.size.toLong(), this)
+        println("buffers $buffers")
         input.buffers.forEachIndexed { index, vertexBufferLayout ->
             map(vertexBufferLayout, WGPUVertexBufferLayout.asSlice(buffers, index.toLong()))
         }
@@ -152,35 +153,25 @@ private fun map(
     input: RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute,
     output: MemorySegment
 ) {
+    println("attribute $output")
     WGPUVertexAttribute.format(output, input.format.value)
     WGPUVertexAttribute.offset(output, input.offset)
     WGPUVertexAttribute.shaderLocation(output, input.shaderLocation)
 }
 
 private fun Arena.map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout, output: MemorySegment) {
+    println("buffer $output")
     WGPUVertexBufferLayout.arrayStride(output, input.arrayStride)
     if (input.attributes.isNotEmpty()) {
-        val buffers = WGPUVertexAttribute.allocateArray(input.attributes.size.toLong(), this)
+        val attributes = WGPUVertexAttribute.allocateArray(input.attributes.size.toLong(), this)
+        println("attributes $attributes")
         input.attributes.forEachIndexed { index, vertexAttribute ->
-            map(vertexAttribute, WGPUVertexAttribute.asSlice(buffers, index.toLong()))
+            map(vertexAttribute, WGPUVertexAttribute.asSlice(attributes, index.toLong()))
         }
-        WGPUVertexBufferLayout.attributes(output, buffers)
+        WGPUVertexBufferLayout.attributes(output, attributes)
         WGPUVertexBufferLayout.attributeCount(output, input.attributes.size.toLong())
-
     }
     WGPUVertexBufferLayout.stepMode(output, input.stepMode.value)
-}
-
-private val multisampleStateMapper = mapper<RenderPipelineDescriptor.MultisampleState, io.ygdrasil.wgpu.internal.jvm.WGPUMultisampleState> {
-    RenderPipelineDescriptor.MultisampleState::mask mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUMultisampleState::mask withTransformer MappingTransformer { it.originalValue as Int? }
-    RenderPipelineDescriptor.MultisampleState::alphaToCoverageEnabled mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUMultisampleState::alphaToCoverageEnabled withTransformer BooleanToIntTransformer()
-}
-
-private val primitiveStateMapper = mapper<RenderPipelineDescriptor.PrimitiveState, io.ygdrasil.wgpu.internal.jvm.WGPUPrimitiveState> {
-    RenderPipelineDescriptor.PrimitiveState::frontFace mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUPrimitiveState::frontFace withTransformer EnumerationTransformer()
-    RenderPipelineDescriptor.PrimitiveState::cullMode mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUPrimitiveState::cullMode withTransformer EnumerationTransformer()
-    RenderPipelineDescriptor.PrimitiveState::topology mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUPrimitiveState::topology withTransformer EnumerationTransformer()
-    RenderPipelineDescriptor.PrimitiveState::stripIndexFormat mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUPrimitiveState::stripIndexFormat withTransformer EnumerationTransformer()
 }
 
 private val fragmentMapper = mapper<RenderPipelineDescriptor.FragmentState, io.ygdrasil.wgpu.internal.jvm.WGPUFragmentState.ByReference> {
