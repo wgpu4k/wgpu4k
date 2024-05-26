@@ -2,8 +2,12 @@
 
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
+import java.lang.invoke.*;
 import java.lang.foreign.*;
+import java.nio.ByteOrder;
+import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import static java.lang.foreign.ValueLayout.*;
 import static java.lang.foreign.MemoryLayout.PathElement.*;
@@ -26,11 +30,11 @@ public class WGPURequestAdapterOptions {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_POINTER.withName("compatibleSurface"),
-        webgpu_h.C_INT.withName("powerPreference"),
-        webgpu_h.C_INT.withName("backendType"),
-        webgpu_h.C_INT.withName("forceFallbackAdapter"),
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_POINTER.withName("compatibleSurface"),
+        wgpu_h.C_INT.withName("powerPreference"),
+        wgpu_h.C_INT.withName("backendType"),
+        wgpu_h.C_INT.withName("forceFallbackAdapter"),
         MemoryLayout.paddingLayout(4)
     ).withName("WGPURequestAdapterOptions");
 

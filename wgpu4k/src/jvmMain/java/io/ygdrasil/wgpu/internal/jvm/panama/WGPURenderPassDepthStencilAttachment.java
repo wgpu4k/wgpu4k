@@ -2,8 +2,12 @@
 
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
+import java.lang.invoke.*;
 import java.lang.foreign.*;
+import java.nio.ByteOrder;
+import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import static java.lang.foreign.ValueLayout.*;
 import static java.lang.foreign.MemoryLayout.PathElement.*;
@@ -30,15 +34,15 @@ public class WGPURenderPassDepthStencilAttachment {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("view"),
-        webgpu_h.C_INT.withName("depthLoadOp"),
-        webgpu_h.C_INT.withName("depthStoreOp"),
-        webgpu_h.C_FLOAT.withName("depthClearValue"),
-        webgpu_h.C_INT.withName("depthReadOnly"),
-        webgpu_h.C_INT.withName("stencilLoadOp"),
-        webgpu_h.C_INT.withName("stencilStoreOp"),
-        webgpu_h.C_INT.withName("stencilClearValue"),
-        webgpu_h.C_INT.withName("stencilReadOnly")
+        wgpu_h.C_POINTER.withName("view"),
+        wgpu_h.C_INT.withName("depthLoadOp"),
+        wgpu_h.C_INT.withName("depthStoreOp"),
+        wgpu_h.C_FLOAT.withName("depthClearValue"),
+        wgpu_h.C_INT.withName("depthReadOnly"),
+        wgpu_h.C_INT.withName("stencilLoadOp"),
+        wgpu_h.C_INT.withName("stencilStoreOp"),
+        wgpu_h.C_INT.withName("stencilClearValue"),
+        wgpu_h.C_INT.withName("stencilReadOnly")
     ).withName("WGPURenderPassDepthStencilAttachment");
 
     /**

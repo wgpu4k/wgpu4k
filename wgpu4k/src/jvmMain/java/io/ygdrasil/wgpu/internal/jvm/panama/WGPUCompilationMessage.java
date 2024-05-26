@@ -3,10 +3,11 @@
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
 import java.lang.foreign.*;
-import java.util.function.*;
+import java.util.function.Consumer;
 
-import static java.lang.foreign.ValueLayout.*;
-import static java.lang.foreign.MemoryLayout.PathElement.*;
+import static java.lang.foreign.MemoryLayout.PathElement.groupElement;
+import static java.lang.foreign.ValueLayout.OfInt;
+import static java.lang.foreign.ValueLayout.OfLong;
 
 /**
  * {@snippet lang=c :
@@ -31,17 +32,17 @@ public class WGPUCompilationMessage {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_POINTER.withName("message"),
-        webgpu_h.C_INT.withName("type"),
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_POINTER.withName("message"),
+        wgpu_h.C_INT.withName("type"),
         MemoryLayout.paddingLayout(4),
-        webgpu_h.C_LONG_LONG.withName("lineNum"),
-        webgpu_h.C_LONG_LONG.withName("linePos"),
-        webgpu_h.C_LONG_LONG.withName("offset"),
-        webgpu_h.C_LONG_LONG.withName("length"),
-        webgpu_h.C_LONG_LONG.withName("utf16LinePos"),
-        webgpu_h.C_LONG_LONG.withName("utf16Offset"),
-        webgpu_h.C_LONG_LONG.withName("utf16Length")
+        wgpu_h.C_LONG_LONG.withName("lineNum"),
+        wgpu_h.C_LONG_LONG.withName("linePos"),
+        wgpu_h.C_LONG_LONG.withName("offset"),
+        wgpu_h.C_LONG_LONG.withName("length"),
+        wgpu_h.C_LONG_LONG.withName("utf16LinePos"),
+        wgpu_h.C_LONG_LONG.withName("utf16Offset"),
+        wgpu_h.C_LONG_LONG.withName("utf16Length")
     ).withName("WGPUCompilationMessage");
 
     /**

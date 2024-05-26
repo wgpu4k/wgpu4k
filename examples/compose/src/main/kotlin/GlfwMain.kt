@@ -9,7 +9,7 @@ import io.ygdrasil.wgpu.WGPU.Companion.loadLibrary
 import io.ygdrasil.wgpu.examples.*
 import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPULogCallback
-import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import kotlinx.coroutines.Dispatchers
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
@@ -33,8 +33,8 @@ val callback = WGPULogCallback.allocate( { level, message, data ->
 suspend fun main() {
     oneFrame = true
     loadLibrary()
-    webgpu_h.wgpuSetLogLevel(0)
-    webgpu_h.wgpuSetLogCallback(callback, MemorySegment.NULL)
+    wgpu_h.wgpuSetLogLevel(0)
+    wgpu_h.wgpuSetLogCallback(callback, MemorySegment.NULL)
 
     var width = 640
     var height = 480

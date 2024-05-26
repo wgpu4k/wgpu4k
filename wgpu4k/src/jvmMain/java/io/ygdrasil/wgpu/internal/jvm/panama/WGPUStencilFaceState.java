@@ -2,8 +2,12 @@
 
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
+import java.lang.invoke.*;
 import java.lang.foreign.*;
+import java.nio.ByteOrder;
+import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import static java.lang.foreign.ValueLayout.*;
 import static java.lang.foreign.MemoryLayout.PathElement.*;
@@ -25,10 +29,10 @@ public class WGPUStencilFaceState {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_INT.withName("compare"),
-        webgpu_h.C_INT.withName("failOp"),
-        webgpu_h.C_INT.withName("depthFailOp"),
-        webgpu_h.C_INT.withName("passOp")
+        wgpu_h.C_INT.withName("compare"),
+        wgpu_h.C_INT.withName("failOp"),
+        wgpu_h.C_INT.withName("depthFailOp"),
+        wgpu_h.C_INT.withName("passOp")
     ).withName("WGPUStencilFaceState");
 
     /**

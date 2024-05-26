@@ -2,8 +2,12 @@
 
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
+import java.lang.invoke.*;
 import java.lang.foreign.*;
+import java.nio.ByteOrder;
+import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import static java.lang.foreign.ValueLayout.*;
 import static java.lang.foreign.MemoryLayout.PathElement.*;
@@ -31,16 +35,16 @@ public class WGPUTextureDescriptor {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_POINTER.withName("label"),
-        webgpu_h.C_INT.withName("usage"),
-        webgpu_h.C_INT.withName("dimension"),
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_POINTER.withName("label"),
+        wgpu_h.C_INT.withName("usage"),
+        wgpu_h.C_INT.withName("dimension"),
         WGPUExtent3D.layout().withName("size"),
-        webgpu_h.C_INT.withName("format"),
-        webgpu_h.C_INT.withName("mipLevelCount"),
-        webgpu_h.C_INT.withName("sampleCount"),
-        webgpu_h.C_LONG.withName("viewFormatCount"),
-        webgpu_h.C_POINTER.withName("viewFormats")
+        wgpu_h.C_INT.withName("format"),
+        wgpu_h.C_INT.withName("mipLevelCount"),
+        wgpu_h.C_INT.withName("sampleCount"),
+        wgpu_h.C_LONG.withName("viewFormatCount"),
+        wgpu_h.C_POINTER.withName("viewFormats")
     ).withName("WGPUTextureDescriptor");
 
     /**

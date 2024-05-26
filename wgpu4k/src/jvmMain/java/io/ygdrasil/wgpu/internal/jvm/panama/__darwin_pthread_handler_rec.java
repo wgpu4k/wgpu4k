@@ -2,11 +2,11 @@
 
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
-import java.lang.invoke.*;
 import java.lang.foreign.*;
-import java.util.function.*;
+import java.lang.invoke.MethodHandle;
+import java.util.function.Consumer;
 
-import static java.lang.foreign.MemoryLayout.PathElement.*;
+import static java.lang.foreign.MemoryLayout.PathElement.groupElement;
 
 /**
  * {@snippet lang=c :
@@ -24,9 +24,9 @@ public class __darwin_pthread_handler_rec {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("__routine"),
-        webgpu_h.C_POINTER.withName("__arg"),
-        webgpu_h.C_POINTER.withName("__next")
+        wgpu_h.C_POINTER.withName("__routine"),
+        wgpu_h.C_POINTER.withName("__arg"),
+        wgpu_h.C_POINTER.withName("__next")
     ).withName("__darwin_pthread_handler_rec");
 
     /**
@@ -55,7 +55,7 @@ public class __darwin_pthread_handler_rec {
         }
 
         private static final FunctionDescriptor $DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         /**
@@ -65,13 +65,13 @@ public class __darwin_pthread_handler_rec {
             return $DESC;
         }
 
-        private static final MethodHandle UP$MH = webgpu_h.upcallHandle(Function.class, "apply", $DESC);
+        private static final MethodHandle UP$MH = wgpu_h.upcallHandle(__routine.Function.class, "apply", $DESC);
 
         /**
          * Allocates a new upcall stub, whose implementation is defined by {@code fi}.
          * The lifetime of the returned segment is managed by {@code arena}
          */
-        public static MemorySegment allocate(Function fi, Arena arena) {
+        public static MemorySegment allocate(__routine.Function fi, Arena arena) {
             return Linker.nativeLinker().upcallStub(UP$MH.bindTo(fi), $DESC, arena);
         }
 

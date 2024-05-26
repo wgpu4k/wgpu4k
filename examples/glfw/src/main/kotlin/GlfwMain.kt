@@ -9,7 +9,7 @@ import io.ygdrasil.wgpu.WGPU
 import io.ygdrasil.wgpu.WGPU.Companion.createInstance
 import io.ygdrasil.wgpu.WGPU.Companion.loadLibrary
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPULogCallback
-import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.internal.jvm.toMemory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -31,8 +31,8 @@ val callback = WGPULogCallback.allocate( { level, message, data ->
 
 suspend fun main() {
     loadLibrary()
-    webgpu_h.wgpuSetLogLevel(1)
-    webgpu_h.wgpuSetLogCallback(callback, MemorySegment.NULL)
+    wgpu_h.wgpuSetLogLevel(1)
+    wgpu_h.wgpuSetLogCallback(callback, MemorySegment.NULL)
 
     var width = 640
     var height = 480

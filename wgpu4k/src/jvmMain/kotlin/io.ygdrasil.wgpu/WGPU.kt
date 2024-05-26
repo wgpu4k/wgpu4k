@@ -21,7 +21,7 @@ import java.nio.file.StandardCopyOption
 class WGPU(private val handler: MemorySegment) : AutoCloseable {
 
 	override fun close() {
-		webgpu_h.wgpuInstanceRelease(handler)
+		wgpu_h.wgpuInstanceRelease(handler)
 	}
 
 	fun requestAdapter(
@@ -31,8 +31,8 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 
 		val adapterState = MutableStateFlow<MemorySegment?>(null)
 
-		val handleRequestAdapter = WGPUAdapterRequestDeviceCallback.allocate( { statusAsInt, adapter, message, param4 ->
-			if (statusAsInt == webgpu_h.WGPURequestAdapterStatus_Success()) {
+		val handleRequestAdapter = WGPURequestAdapterCallback.allocate( { statusAsInt, adapter, message, param4 ->
+			if (statusAsInt == wgpu_h.WGPURequestAdapterStatus_Success()) {
 				adapterState.update { adapter }
 			} else {
 
@@ -45,7 +45,7 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 		WGPURequestAdapterOptions.compatibleSurface(options, renderingContext.handler)
 		WGPURequestAdapterOptions.powerPreference(options, powerPreference.value)
 
-		webgpu_h.wgpuInstanceRequestAdapter(handler, options, handleRequestAdapter, MemorySegment.NULL)
+		wgpu_h.wgpuInstanceRequestAdapter(handler, options, handleRequestAdapter, MemorySegment.NULL)
 
 
 		adapterState.value?.let { Adapter(it) }
@@ -55,12 +55,12 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 		WGPUSurfaceDescriptor.allocate(arena).let { surfaceDescriptor ->
 			WGPUSurfaceDescriptor.nextInChain(surfaceDescriptor, WGPUSurfaceDescriptorFromMetalLayer.allocate(arena).also { nextInChain ->
 				WGPUSurfaceDescriptorFromMetalLayer.chain(nextInChain, WGPUChainedStruct.allocate(arena).also { chain ->
-					WGPUChainedStruct.sType(chain, webgpu_h.WGPUSType_SurfaceDescriptorFromMetalLayer())
+					WGPUChainedStruct.sType(chain, wgpu_h.WGPUSType_SurfaceDescriptorFromMetalLayer())
 				})
 				WGPUSurfaceDescriptorFromMetalLayer.layer(nextInChain, layer)
 			})
 
-			webgpu_h.wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+			wgpu_h.wgpuInstanceCreateSurface(handler, surfaceDescriptor)
 		}
 	}
 
@@ -68,13 +68,13 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 		WGPUSurfaceDescriptor.allocate(arena).let { surfaceDescriptor ->
 			WGPUSurfaceDescriptor.nextInChain(surfaceDescriptor, WGPUSurfaceDescriptorFromXlibWindow.allocate(arena).also { nextInChain ->
 				WGPUSurfaceDescriptorFromXlibWindow.chain(nextInChain, WGPUChainedStruct.allocate(arena).also { chain ->
-					WGPUChainedStruct.sType(chain, webgpu_h.WGPUSType_SurfaceDescriptorFromXlibWindow())
+					WGPUChainedStruct.sType(chain, wgpu_h.WGPUSType_SurfaceDescriptorFromXlibWindow())
 				})
 				WGPUSurfaceDescriptorFromXlibWindow.display(nextInChain, display)
 				WGPUSurfaceDescriptorFromXlibWindow.window(nextInChain, window)
 			})
 
-			webgpu_h.wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+			wgpu_h.wgpuInstanceCreateSurface(handler, surfaceDescriptor)
 		}
 	}
 
@@ -82,13 +82,13 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 		WGPUSurfaceDescriptor.allocate(arena).let { surfaceDescriptor ->
 			WGPUSurfaceDescriptor.nextInChain(surfaceDescriptor, WGPUSurfaceDescriptorFromWindowsHWND.allocate(arena).also { nextInChain ->
 				WGPUSurfaceDescriptorFromWindowsHWND.chain(nextInChain, WGPUChainedStruct.allocate(arena).also { chain ->
-					WGPUChainedStruct.sType(chain, webgpu_h.WGPUSType_SurfaceDescriptorFromWindowsHWND())
+					WGPUChainedStruct.sType(chain, wgpu_h.WGPUSType_SurfaceDescriptorFromWindowsHWND())
 				})
 				WGPUSurfaceDescriptorFromWindowsHWND.hwnd(nextInChain, hwnd)
 				WGPUSurfaceDescriptorFromWindowsHWND.hinstance(nextInChain, hinstance)
 			})
 
-			webgpu_h.wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+			wgpu_h.wgpuInstanceCreateSurface(handler, surfaceDescriptor)
 		}
 	}
 
@@ -151,7 +151,7 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 		fun createInstance(backend: WGPUInstanceBackend? = null): WGPU? {
 			val arena = Arena.ofConfined()
 			val descriptor = io.ygdrasil.wgpu.internal.jvm.panama.WGPUInstanceDescriptor.allocate(arena)
-			return webgpu_h.wgpuCreateInstance(descriptor)
+			return wgpu_h.wgpuCreateInstance(descriptor)
 				?.let { WGPU(it) }
 
 			//return wgpuCreateInstance(getDescriptor(backend))

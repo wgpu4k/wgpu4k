@@ -3,10 +3,10 @@
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
 import java.lang.foreign.*;
-import java.util.function.*;
+import java.util.function.Consumer;
 
-import static java.lang.foreign.ValueLayout.*;
-import static java.lang.foreign.MemoryLayout.PathElement.*;
+import static java.lang.foreign.MemoryLayout.PathElement.groupElement;
+import static java.lang.foreign.ValueLayout.OfInt;
 
 /**
  * {@snippet lang=c :
@@ -30,17 +30,17 @@ public class WGPUAdapterProperties {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_INT.withName("vendorID"),
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_INT.withName("vendorID"),
         MemoryLayout.paddingLayout(4),
-        webgpu_h.C_POINTER.withName("vendorName"),
-        webgpu_h.C_POINTER.withName("architecture"),
-        webgpu_h.C_INT.withName("deviceID"),
+        wgpu_h.C_POINTER.withName("vendorName"),
+        wgpu_h.C_POINTER.withName("architecture"),
+        wgpu_h.C_INT.withName("deviceID"),
         MemoryLayout.paddingLayout(4),
-        webgpu_h.C_POINTER.withName("name"),
-        webgpu_h.C_POINTER.withName("driverDescription"),
-        webgpu_h.C_INT.withName("adapterType"),
-        webgpu_h.C_INT.withName("backendType")
+        wgpu_h.C_POINTER.withName("name"),
+        wgpu_h.C_POINTER.withName("driverDescription"),
+        wgpu_h.C_INT.withName("adapterType"),
+        wgpu_h.C_INT.withName("backendType")
     ).withName("WGPUAdapterProperties");
 
     /**

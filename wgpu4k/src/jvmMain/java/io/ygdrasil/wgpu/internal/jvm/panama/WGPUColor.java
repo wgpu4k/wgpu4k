@@ -3,10 +3,10 @@
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
 import java.lang.foreign.*;
-import java.util.function.*;
+import java.util.function.Consumer;
 
-import static java.lang.foreign.ValueLayout.*;
-import static java.lang.foreign.MemoryLayout.PathElement.*;
+import static java.lang.foreign.MemoryLayout.PathElement.groupElement;
+import static java.lang.foreign.ValueLayout.OfDouble;
 
 /**
  * {@snippet lang=c :
@@ -25,10 +25,10 @@ public class WGPUColor {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_DOUBLE.withName("r"),
-        webgpu_h.C_DOUBLE.withName("g"),
-        webgpu_h.C_DOUBLE.withName("b"),
-        webgpu_h.C_DOUBLE.withName("a")
+        wgpu_h.C_DOUBLE.withName("r"),
+        wgpu_h.C_DOUBLE.withName("g"),
+        wgpu_h.C_DOUBLE.withName("b"),
+        wgpu_h.C_DOUBLE.withName("a")
     ).withName("WGPUColor");
 
     /**

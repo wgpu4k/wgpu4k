@@ -3,10 +3,11 @@
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
 import java.lang.foreign.*;
-import java.util.function.*;
+import java.util.function.Consumer;
 
-import static java.lang.foreign.ValueLayout.*;
-import static java.lang.foreign.MemoryLayout.PathElement.*;
+import static java.lang.foreign.MemoryLayout.PathElement.groupElement;
+import static java.lang.foreign.ValueLayout.OfFloat;
+import static java.lang.foreign.ValueLayout.OfInt;
 
 /**
  * {@snippet lang=c :
@@ -32,17 +33,17 @@ public class WGPUDepthStencilState {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_INT.withName("format"),
-        webgpu_h.C_INT.withName("depthWriteEnabled"),
-        webgpu_h.C_INT.withName("depthCompare"),
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_INT.withName("format"),
+        wgpu_h.C_INT.withName("depthWriteEnabled"),
+        wgpu_h.C_INT.withName("depthCompare"),
         WGPUStencilFaceState.layout().withName("stencilFront"),
         WGPUStencilFaceState.layout().withName("stencilBack"),
-        webgpu_h.C_INT.withName("stencilReadMask"),
-        webgpu_h.C_INT.withName("stencilWriteMask"),
-        webgpu_h.C_INT.withName("depthBias"),
-        webgpu_h.C_FLOAT.withName("depthBiasSlopeScale"),
-        webgpu_h.C_FLOAT.withName("depthBiasClamp")
+        wgpu_h.C_INT.withName("stencilReadMask"),
+        wgpu_h.C_INT.withName("stencilWriteMask"),
+        wgpu_h.C_INT.withName("depthBias"),
+        wgpu_h.C_FLOAT.withName("depthBiasSlopeScale"),
+        wgpu_h.C_FLOAT.withName("depthBiasClamp")
     ).withName("WGPUDepthStencilState");
 
     /**

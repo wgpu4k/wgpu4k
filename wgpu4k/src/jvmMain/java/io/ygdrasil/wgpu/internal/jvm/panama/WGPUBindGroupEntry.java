@@ -3,10 +3,11 @@
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
 import java.lang.foreign.*;
-import java.util.function.*;
+import java.util.function.Consumer;
 
-import static java.lang.foreign.ValueLayout.*;
-import static java.lang.foreign.MemoryLayout.PathElement.*;
+import static java.lang.foreign.MemoryLayout.PathElement.groupElement;
+import static java.lang.foreign.ValueLayout.OfInt;
+import static java.lang.foreign.ValueLayout.OfLong;
 
 /**
  * {@snippet lang=c :
@@ -28,14 +29,14 @@ public class WGPUBindGroupEntry {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_INT.withName("binding"),
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_INT.withName("binding"),
         MemoryLayout.paddingLayout(4),
-        webgpu_h.C_POINTER.withName("buffer"),
-        webgpu_h.C_LONG_LONG.withName("offset"),
-        webgpu_h.C_LONG_LONG.withName("size"),
-        webgpu_h.C_POINTER.withName("sampler"),
-        webgpu_h.C_POINTER.withName("textureView")
+        wgpu_h.C_POINTER.withName("buffer"),
+        wgpu_h.C_LONG_LONG.withName("offset"),
+        wgpu_h.C_LONG_LONG.withName("size"),
+        wgpu_h.C_POINTER.withName("sampler"),
+        wgpu_h.C_POINTER.withName("textureView")
     ).withName("WGPUBindGroupEntry");
 
     /**

@@ -2,12 +2,13 @@
 
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
-import java.lang.invoke.*;
 import java.lang.foreign.*;
-import java.util.function.*;
+import java.lang.invoke.VarHandle;
+import java.util.function.Consumer;
 
-import static java.lang.foreign.ValueLayout.*;
-import static java.lang.foreign.MemoryLayout.PathElement.*;
+import static java.lang.foreign.MemoryLayout.PathElement.groupElement;
+import static java.lang.foreign.MemoryLayout.PathElement.sequenceElement;
+import static java.lang.foreign.ValueLayout.OfLong;
 
 /**
  * {@snippet lang=c :
@@ -25,9 +26,9 @@ public class _opaque_pthread_t {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_LONG.withName("__sig"),
-        webgpu_h.C_POINTER.withName("__cleanup_stack"),
-        MemoryLayout.sequenceLayout(8176, webgpu_h.C_CHAR).withName("__opaque")
+        wgpu_h.C_LONG.withName("__sig"),
+        wgpu_h.C_POINTER.withName("__cleanup_stack"),
+        MemoryLayout.sequenceLayout(8176, wgpu_h.C_CHAR).withName("__opaque")
     ).withName("_opaque_pthread_t");
 
     /**

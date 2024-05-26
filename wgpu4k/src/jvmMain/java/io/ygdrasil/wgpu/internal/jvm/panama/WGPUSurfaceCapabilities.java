@@ -2,8 +2,12 @@
 
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
+import java.lang.invoke.*;
 import java.lang.foreign.*;
+import java.nio.ByteOrder;
+import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import static java.lang.foreign.ValueLayout.*;
 import static java.lang.foreign.MemoryLayout.PathElement.*;
@@ -13,11 +17,11 @@ import static java.lang.foreign.MemoryLayout.PathElement.*;
  * struct WGPUSurfaceCapabilities {
  *     WGPUChainedStructOut *nextInChain;
  *     size_t formatCount;
- *     const WGPUTextureFormat *formats;
+ *     WGPUTextureFormat *formats;
  *     size_t presentModeCount;
- *     const WGPUPresentMode *presentModes;
+ *     WGPUPresentMode *presentModes;
  *     size_t alphaModeCount;
- *     const WGPUCompositeAlphaMode *alphaModes;
+ *     WGPUCompositeAlphaMode *alphaModes;
  * }
  * }
  */
@@ -28,13 +32,13 @@ public class WGPUSurfaceCapabilities {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_LONG.withName("formatCount"),
-        webgpu_h.C_POINTER.withName("formats"),
-        webgpu_h.C_LONG.withName("presentModeCount"),
-        webgpu_h.C_POINTER.withName("presentModes"),
-        webgpu_h.C_LONG.withName("alphaModeCount"),
-        webgpu_h.C_POINTER.withName("alphaModes")
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_LONG.withName("formatCount"),
+        wgpu_h.C_POINTER.withName("formats"),
+        wgpu_h.C_LONG.withName("presentModeCount"),
+        wgpu_h.C_POINTER.withName("presentModes"),
+        wgpu_h.C_LONG.withName("alphaModeCount"),
+        wgpu_h.C_POINTER.withName("alphaModes")
     ).withName("WGPUSurfaceCapabilities");
 
     /**
@@ -137,7 +141,7 @@ public class WGPUSurfaceCapabilities {
     /**
      * Layout for field:
      * {@snippet lang=c :
-     * const WGPUTextureFormat *formats
+     * WGPUTextureFormat *formats
      * }
      */
     public static final AddressLayout formats$layout() {
@@ -149,7 +153,7 @@ public class WGPUSurfaceCapabilities {
     /**
      * Offset for field:
      * {@snippet lang=c :
-     * const WGPUTextureFormat *formats
+     * WGPUTextureFormat *formats
      * }
      */
     public static final long formats$offset() {
@@ -159,7 +163,7 @@ public class WGPUSurfaceCapabilities {
     /**
      * Getter for field:
      * {@snippet lang=c :
-     * const WGPUTextureFormat *formats
+     * WGPUTextureFormat *formats
      * }
      */
     public static MemorySegment formats(MemorySegment struct) {
@@ -169,7 +173,7 @@ public class WGPUSurfaceCapabilities {
     /**
      * Setter for field:
      * {@snippet lang=c :
-     * const WGPUTextureFormat *formats
+     * WGPUTextureFormat *formats
      * }
      */
     public static void formats(MemorySegment struct, MemorySegment fieldValue) {
@@ -225,7 +229,7 @@ public class WGPUSurfaceCapabilities {
     /**
      * Layout for field:
      * {@snippet lang=c :
-     * const WGPUPresentMode *presentModes
+     * WGPUPresentMode *presentModes
      * }
      */
     public static final AddressLayout presentModes$layout() {
@@ -237,7 +241,7 @@ public class WGPUSurfaceCapabilities {
     /**
      * Offset for field:
      * {@snippet lang=c :
-     * const WGPUPresentMode *presentModes
+     * WGPUPresentMode *presentModes
      * }
      */
     public static final long presentModes$offset() {
@@ -247,7 +251,7 @@ public class WGPUSurfaceCapabilities {
     /**
      * Getter for field:
      * {@snippet lang=c :
-     * const WGPUPresentMode *presentModes
+     * WGPUPresentMode *presentModes
      * }
      */
     public static MemorySegment presentModes(MemorySegment struct) {
@@ -257,7 +261,7 @@ public class WGPUSurfaceCapabilities {
     /**
      * Setter for field:
      * {@snippet lang=c :
-     * const WGPUPresentMode *presentModes
+     * WGPUPresentMode *presentModes
      * }
      */
     public static void presentModes(MemorySegment struct, MemorySegment fieldValue) {
@@ -313,7 +317,7 @@ public class WGPUSurfaceCapabilities {
     /**
      * Layout for field:
      * {@snippet lang=c :
-     * const WGPUCompositeAlphaMode *alphaModes
+     * WGPUCompositeAlphaMode *alphaModes
      * }
      */
     public static final AddressLayout alphaModes$layout() {
@@ -325,7 +329,7 @@ public class WGPUSurfaceCapabilities {
     /**
      * Offset for field:
      * {@snippet lang=c :
-     * const WGPUCompositeAlphaMode *alphaModes
+     * WGPUCompositeAlphaMode *alphaModes
      * }
      */
     public static final long alphaModes$offset() {
@@ -335,7 +339,7 @@ public class WGPUSurfaceCapabilities {
     /**
      * Getter for field:
      * {@snippet lang=c :
-     * const WGPUCompositeAlphaMode *alphaModes
+     * WGPUCompositeAlphaMode *alphaModes
      * }
      */
     public static MemorySegment alphaModes(MemorySegment struct) {
@@ -345,7 +349,7 @@ public class WGPUSurfaceCapabilities {
     /**
      * Setter for field:
      * {@snippet lang=c :
-     * const WGPUCompositeAlphaMode *alphaModes
+     * WGPUCompositeAlphaMode *alphaModes
      * }
      */
     public static void alphaModes(MemorySegment struct, MemorySegment fieldValue) {

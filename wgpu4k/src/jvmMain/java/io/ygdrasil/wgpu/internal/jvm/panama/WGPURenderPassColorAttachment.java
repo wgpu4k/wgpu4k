@@ -2,8 +2,12 @@
 
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
+import java.lang.invoke.*;
 import java.lang.foreign.*;
+import java.nio.ByteOrder;
+import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import static java.lang.foreign.ValueLayout.*;
 import static java.lang.foreign.MemoryLayout.PathElement.*;
@@ -13,7 +17,6 @@ import static java.lang.foreign.MemoryLayout.PathElement.*;
  * struct WGPURenderPassColorAttachment {
  *     const WGPUChainedStruct *nextInChain;
  *     WGPUTextureView view;
- *     uint32_t depthSlice;
  *     WGPUTextureView resolveTarget;
  *     WGPULoadOp loadOp;
  *     WGPUStoreOp storeOp;
@@ -28,13 +31,11 @@ public class WGPURenderPassColorAttachment {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_POINTER.withName("view"),
-        webgpu_h.C_INT.withName("depthSlice"),
-        MemoryLayout.paddingLayout(4),
-        webgpu_h.C_POINTER.withName("resolveTarget"),
-        webgpu_h.C_INT.withName("loadOp"),
-        webgpu_h.C_INT.withName("storeOp"),
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_POINTER.withName("view"),
+        wgpu_h.C_POINTER.withName("resolveTarget"),
+        wgpu_h.C_INT.withName("loadOp"),
+        wgpu_h.C_INT.withName("storeOp"),
         WGPUColor.layout().withName("clearValue")
     ).withName("WGPURenderPassColorAttachment");
 
@@ -133,50 +134,6 @@ public class WGPURenderPassColorAttachment {
         struct.set(view$LAYOUT, view$OFFSET, fieldValue);
     }
 
-    private static final OfInt depthSlice$LAYOUT = (OfInt)$LAYOUT.select(groupElement("depthSlice"));
-
-    /**
-     * Layout for field:
-     * {@snippet lang=c :
-     * uint32_t depthSlice
-     * }
-     */
-    public static final OfInt depthSlice$layout() {
-        return depthSlice$LAYOUT;
-    }
-
-    private static final long depthSlice$OFFSET = 16;
-
-    /**
-     * Offset for field:
-     * {@snippet lang=c :
-     * uint32_t depthSlice
-     * }
-     */
-    public static final long depthSlice$offset() {
-        return depthSlice$OFFSET;
-    }
-
-    /**
-     * Getter for field:
-     * {@snippet lang=c :
-     * uint32_t depthSlice
-     * }
-     */
-    public static int depthSlice(MemorySegment struct) {
-        return struct.get(depthSlice$LAYOUT, depthSlice$OFFSET);
-    }
-
-    /**
-     * Setter for field:
-     * {@snippet lang=c :
-     * uint32_t depthSlice
-     * }
-     */
-    public static void depthSlice(MemorySegment struct, int fieldValue) {
-        struct.set(depthSlice$LAYOUT, depthSlice$OFFSET, fieldValue);
-    }
-
     private static final AddressLayout resolveTarget$LAYOUT = (AddressLayout)$LAYOUT.select(groupElement("resolveTarget"));
 
     /**
@@ -189,7 +146,7 @@ public class WGPURenderPassColorAttachment {
         return resolveTarget$LAYOUT;
     }
 
-    private static final long resolveTarget$OFFSET = 24;
+    private static final long resolveTarget$OFFSET = 16;
 
     /**
      * Offset for field:
@@ -233,7 +190,7 @@ public class WGPURenderPassColorAttachment {
         return loadOp$LAYOUT;
     }
 
-    private static final long loadOp$OFFSET = 32;
+    private static final long loadOp$OFFSET = 24;
 
     /**
      * Offset for field:
@@ -277,7 +234,7 @@ public class WGPURenderPassColorAttachment {
         return storeOp$LAYOUT;
     }
 
-    private static final long storeOp$OFFSET = 36;
+    private static final long storeOp$OFFSET = 28;
 
     /**
      * Offset for field:
@@ -321,7 +278,7 @@ public class WGPURenderPassColorAttachment {
         return clearValue$LAYOUT;
     }
 
-    private static final long clearValue$OFFSET = 40;
+    private static final long clearValue$OFFSET = 32;
 
     /**
      * Offset for field:

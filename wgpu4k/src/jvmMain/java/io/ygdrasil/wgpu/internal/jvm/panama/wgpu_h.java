@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
 
 import static java.lang.foreign.ValueLayout.*;
 
-public class webgpu_h {
+public class wgpu_h {
 
-    webgpu_h() {
+    wgpu_h() {
         // Should not be called directly
     }
 
@@ -56,16 +56,16 @@ public class webgpu_h {
     static final SymbolLookup SYMBOL_LOOKUP = SymbolLookup.loaderLookup()
             .or(Linker.nativeLinker().defaultLookup());
 
-    public static final OfBoolean C_BOOL = ValueLayout.JAVA_BOOLEAN;
-    public static final OfByte C_CHAR = ValueLayout.JAVA_BYTE;
-    public static final OfShort C_SHORT = ValueLayout.JAVA_SHORT;
-    public static final OfInt C_INT = ValueLayout.JAVA_INT;
-    public static final OfLong C_LONG_LONG = ValueLayout.JAVA_LONG;
-    public static final OfFloat C_FLOAT = ValueLayout.JAVA_FLOAT;
-    public static final OfDouble C_DOUBLE = ValueLayout.JAVA_DOUBLE;
+    public static final ValueLayout.OfBoolean C_BOOL = ValueLayout.JAVA_BOOLEAN;
+    public static final ValueLayout.OfByte C_CHAR = ValueLayout.JAVA_BYTE;
+    public static final ValueLayout.OfShort C_SHORT = ValueLayout.JAVA_SHORT;
+    public static final ValueLayout.OfInt C_INT = ValueLayout.JAVA_INT;
+    public static final ValueLayout.OfLong C_LONG_LONG = ValueLayout.JAVA_LONG;
+    public static final ValueLayout.OfFloat C_FLOAT = ValueLayout.JAVA_FLOAT;
+    public static final ValueLayout.OfDouble C_DOUBLE = ValueLayout.JAVA_DOUBLE;
     public static final AddressLayout C_POINTER = ValueLayout.ADDRESS
-            .withTargetLayout(MemoryLayout.sequenceLayout(Long.MAX_VALUE, JAVA_BYTE));
-    public static final OfLong C_LONG = ValueLayout.JAVA_LONG;
+            .withTargetLayout(MemoryLayout.sequenceLayout(java.lang.Long.MAX_VALUE, JAVA_BYTE));
+    public static final ValueLayout.OfLong C_LONG = ValueLayout.JAVA_LONG;
     private static final int __WORDSIZE = (int)64L;
     /**
      * {@snippet lang=c :
@@ -350,385 +350,385 @@ public class webgpu_h {
      * typedef signed char int8_t
      * }
      */
-    public static final OfByte int8_t = webgpu_h.C_CHAR;
+    public static final OfByte int8_t = wgpu_h.C_CHAR;
     /**
      * {@snippet lang=c :
      * typedef short int16_t
      * }
      */
-    public static final OfShort int16_t = webgpu_h.C_SHORT;
+    public static final OfShort int16_t = wgpu_h.C_SHORT;
     /**
      * {@snippet lang=c :
      * typedef int int32_t
      * }
      */
-    public static final OfInt int32_t = webgpu_h.C_INT;
+    public static final OfInt int32_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef long long int64_t
      * }
      */
-    public static final OfLong int64_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong int64_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef unsigned char uint8_t
      * }
      */
-    public static final OfByte uint8_t = webgpu_h.C_CHAR;
+    public static final OfByte uint8_t = wgpu_h.C_CHAR;
     /**
      * {@snippet lang=c :
      * typedef unsigned short uint16_t
      * }
      */
-    public static final OfShort uint16_t = webgpu_h.C_SHORT;
+    public static final OfShort uint16_t = wgpu_h.C_SHORT;
     /**
      * {@snippet lang=c :
      * typedef unsigned int uint32_t
      * }
      */
-    public static final OfInt uint32_t = webgpu_h.C_INT;
+    public static final OfInt uint32_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef unsigned long long uint64_t
      * }
      */
-    public static final OfLong uint64_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong uint64_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef int8_t int_least8_t
      * }
      */
-    public static final OfByte int_least8_t = webgpu_h.C_CHAR;
+    public static final OfByte int_least8_t = wgpu_h.C_CHAR;
     /**
      * {@snippet lang=c :
      * typedef int16_t int_least16_t
      * }
      */
-    public static final OfShort int_least16_t = webgpu_h.C_SHORT;
+    public static final OfShort int_least16_t = wgpu_h.C_SHORT;
     /**
      * {@snippet lang=c :
      * typedef int32_t int_least32_t
      * }
      */
-    public static final OfInt int_least32_t = webgpu_h.C_INT;
+    public static final OfInt int_least32_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef int64_t int_least64_t
      * }
      */
-    public static final OfLong int_least64_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong int_least64_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef uint8_t uint_least8_t
      * }
      */
-    public static final OfByte uint_least8_t = webgpu_h.C_CHAR;
+    public static final OfByte uint_least8_t = wgpu_h.C_CHAR;
     /**
      * {@snippet lang=c :
      * typedef uint16_t uint_least16_t
      * }
      */
-    public static final OfShort uint_least16_t = webgpu_h.C_SHORT;
+    public static final OfShort uint_least16_t = wgpu_h.C_SHORT;
     /**
      * {@snippet lang=c :
      * typedef uint32_t uint_least32_t
      * }
      */
-    public static final OfInt uint_least32_t = webgpu_h.C_INT;
+    public static final OfInt uint_least32_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef uint64_t uint_least64_t
      * }
      */
-    public static final OfLong uint_least64_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong uint_least64_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef int8_t int_fast8_t
      * }
      */
-    public static final OfByte int_fast8_t = webgpu_h.C_CHAR;
+    public static final OfByte int_fast8_t = wgpu_h.C_CHAR;
     /**
      * {@snippet lang=c :
      * typedef int16_t int_fast16_t
      * }
      */
-    public static final OfShort int_fast16_t = webgpu_h.C_SHORT;
+    public static final OfShort int_fast16_t = wgpu_h.C_SHORT;
     /**
      * {@snippet lang=c :
      * typedef int32_t int_fast32_t
      * }
      */
-    public static final OfInt int_fast32_t = webgpu_h.C_INT;
+    public static final OfInt int_fast32_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef int64_t int_fast64_t
      * }
      */
-    public static final OfLong int_fast64_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong int_fast64_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef uint8_t uint_fast8_t
      * }
      */
-    public static final OfByte uint_fast8_t = webgpu_h.C_CHAR;
+    public static final OfByte uint_fast8_t = wgpu_h.C_CHAR;
     /**
      * {@snippet lang=c :
      * typedef uint16_t uint_fast16_t
      * }
      */
-    public static final OfShort uint_fast16_t = webgpu_h.C_SHORT;
+    public static final OfShort uint_fast16_t = wgpu_h.C_SHORT;
     /**
      * {@snippet lang=c :
      * typedef uint32_t uint_fast32_t
      * }
      */
-    public static final OfInt uint_fast32_t = webgpu_h.C_INT;
+    public static final OfInt uint_fast32_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef uint64_t uint_fast64_t
      * }
      */
-    public static final OfLong uint_fast64_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong uint_fast64_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef signed char __int8_t
      * }
      */
-    public static final OfByte __int8_t = webgpu_h.C_CHAR;
+    public static final OfByte __int8_t = wgpu_h.C_CHAR;
     /**
      * {@snippet lang=c :
      * typedef unsigned char __uint8_t
      * }
      */
-    public static final OfByte __uint8_t = webgpu_h.C_CHAR;
+    public static final OfByte __uint8_t = wgpu_h.C_CHAR;
     /**
      * {@snippet lang=c :
      * typedef short __int16_t
      * }
      */
-    public static final OfShort __int16_t = webgpu_h.C_SHORT;
+    public static final OfShort __int16_t = wgpu_h.C_SHORT;
     /**
      * {@snippet lang=c :
      * typedef unsigned short __uint16_t
      * }
      */
-    public static final OfShort __uint16_t = webgpu_h.C_SHORT;
+    public static final OfShort __uint16_t = wgpu_h.C_SHORT;
     /**
      * {@snippet lang=c :
      * typedef int __int32_t
      * }
      */
-    public static final OfInt __int32_t = webgpu_h.C_INT;
+    public static final OfInt __int32_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef unsigned int __uint32_t
      * }
      */
-    public static final OfInt __uint32_t = webgpu_h.C_INT;
+    public static final OfInt __uint32_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef long long __int64_t
      * }
      */
-    public static final OfLong __int64_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong __int64_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef unsigned long long __uint64_t
      * }
      */
-    public static final OfLong __uint64_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong __uint64_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef long __darwin_intptr_t
      * }
      */
-    public static final OfLong __darwin_intptr_t = webgpu_h.C_LONG;
+    public static final OfLong __darwin_intptr_t = wgpu_h.C_LONG;
     /**
      * {@snippet lang=c :
      * typedef unsigned int __darwin_natural_t
      * }
      */
-    public static final OfInt __darwin_natural_t = webgpu_h.C_INT;
+    public static final OfInt __darwin_natural_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef int __darwin_ct_rune_t
      * }
      */
-    public static final OfInt __darwin_ct_rune_t = webgpu_h.C_INT;
+    public static final OfInt __darwin_ct_rune_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef long __darwin_ptrdiff_t
      * }
      */
-    public static final OfLong __darwin_ptrdiff_t = webgpu_h.C_LONG;
+    public static final OfLong __darwin_ptrdiff_t = wgpu_h.C_LONG;
     /**
      * {@snippet lang=c :
      * typedef unsigned long __darwin_size_t
      * }
      */
-    public static final OfLong __darwin_size_t = webgpu_h.C_LONG;
+    public static final OfLong __darwin_size_t = wgpu_h.C_LONG;
     /**
      * {@snippet lang=c :
      * typedef __builtin_va_list __darwin_va_list
      * }
      */
-    public static final AddressLayout __darwin_va_list = webgpu_h.C_POINTER;
+    public static final AddressLayout __darwin_va_list = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef int __darwin_wchar_t
      * }
      */
-    public static final OfInt __darwin_wchar_t = webgpu_h.C_INT;
+    public static final OfInt __darwin_wchar_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef __darwin_wchar_t __darwin_rune_t
      * }
      */
-    public static final OfInt __darwin_rune_t = webgpu_h.C_INT;
+    public static final OfInt __darwin_rune_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef int __darwin_wint_t
      * }
      */
-    public static final OfInt __darwin_wint_t = webgpu_h.C_INT;
+    public static final OfInt __darwin_wint_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef unsigned long __darwin_clock_t
      * }
      */
-    public static final OfLong __darwin_clock_t = webgpu_h.C_LONG;
+    public static final OfLong __darwin_clock_t = wgpu_h.C_LONG;
     /**
      * {@snippet lang=c :
      * typedef __uint32_t __darwin_socklen_t
      * }
      */
-    public static final OfInt __darwin_socklen_t = webgpu_h.C_INT;
+    public static final OfInt __darwin_socklen_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef long __darwin_ssize_t
      * }
      */
-    public static final OfLong __darwin_ssize_t = webgpu_h.C_LONG;
+    public static final OfLong __darwin_ssize_t = wgpu_h.C_LONG;
     /**
      * {@snippet lang=c :
      * typedef long __darwin_time_t
      * }
      */
-    public static final OfLong __darwin_time_t = webgpu_h.C_LONG;
+    public static final OfLong __darwin_time_t = wgpu_h.C_LONG;
     /**
      * {@snippet lang=c :
      * typedef __int64_t __darwin_blkcnt_t
      * }
      */
-    public static final OfLong __darwin_blkcnt_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong __darwin_blkcnt_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef __int32_t __darwin_blksize_t
      * }
      */
-    public static final OfInt __darwin_blksize_t = webgpu_h.C_INT;
+    public static final OfInt __darwin_blksize_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef __int32_t __darwin_dev_t
      * }
      */
-    public static final OfInt __darwin_dev_t = webgpu_h.C_INT;
+    public static final OfInt __darwin_dev_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef unsigned int __darwin_fsblkcnt_t
      * }
      */
-    public static final OfInt __darwin_fsblkcnt_t = webgpu_h.C_INT;
+    public static final OfInt __darwin_fsblkcnt_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef unsigned int __darwin_fsfilcnt_t
      * }
      */
-    public static final OfInt __darwin_fsfilcnt_t = webgpu_h.C_INT;
+    public static final OfInt __darwin_fsfilcnt_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef __uint32_t __darwin_gid_t
      * }
      */
-    public static final OfInt __darwin_gid_t = webgpu_h.C_INT;
+    public static final OfInt __darwin_gid_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef __uint32_t __darwin_id_t
      * }
      */
-    public static final OfInt __darwin_id_t = webgpu_h.C_INT;
+    public static final OfInt __darwin_id_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef __uint64_t __darwin_ino64_t
      * }
      */
-    public static final OfLong __darwin_ino64_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong __darwin_ino64_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef __darwin_ino64_t __darwin_ino_t
      * }
      */
-    public static final OfLong __darwin_ino_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong __darwin_ino_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef __darwin_natural_t __darwin_mach_port_name_t
      * }
      */
-    public static final OfInt __darwin_mach_port_name_t = webgpu_h.C_INT;
+    public static final OfInt __darwin_mach_port_name_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef __darwin_mach_port_name_t __darwin_mach_port_t
      * }
      */
-    public static final OfInt __darwin_mach_port_t = webgpu_h.C_INT;
+    public static final OfInt __darwin_mach_port_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef __uint16_t __darwin_mode_t
      * }
      */
-    public static final OfShort __darwin_mode_t = webgpu_h.C_SHORT;
+    public static final OfShort __darwin_mode_t = wgpu_h.C_SHORT;
     /**
      * {@snippet lang=c :
      * typedef __int64_t __darwin_off_t
      * }
      */
-    public static final OfLong __darwin_off_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong __darwin_off_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef __int32_t __darwin_pid_t
      * }
      */
-    public static final OfInt __darwin_pid_t = webgpu_h.C_INT;
+    public static final OfInt __darwin_pid_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef __uint32_t __darwin_sigset_t
      * }
      */
-    public static final OfInt __darwin_sigset_t = webgpu_h.C_INT;
+    public static final OfInt __darwin_sigset_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef __int32_t __darwin_suseconds_t
      * }
      */
-    public static final OfInt __darwin_suseconds_t = webgpu_h.C_INT;
+    public static final OfInt __darwin_suseconds_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef __uint32_t __darwin_uid_t
      * }
      */
-    public static final OfInt __darwin_uid_t = webgpu_h.C_INT;
+    public static final OfInt __darwin_uid_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef __uint32_t __darwin_useconds_t
      * }
      */
-    public static final OfInt __darwin_useconds_t = webgpu_h.C_INT;
+    public static final OfInt __darwin_useconds_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef unsigned long __darwin_pthread_key_t
      * }
      */
-    public static final OfLong __darwin_pthread_key_t = webgpu_h.C_LONG;
+    public static final OfLong __darwin_pthread_key_t = wgpu_h.C_LONG;
     /**
      * {@snippet lang=c :
      * typedef struct _opaque_pthread_t {
@@ -738,277 +738,277 @@ public class webgpu_h {
      * } *__darwin_pthread_t
      * }
      */
-    public static final AddressLayout __darwin_pthread_t = webgpu_h.C_POINTER;
+    public static final AddressLayout __darwin_pthread_t = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef unsigned char u_int8_t
      * }
      */
-    public static final OfByte u_int8_t = webgpu_h.C_CHAR;
+    public static final OfByte u_int8_t = wgpu_h.C_CHAR;
     /**
      * {@snippet lang=c :
      * typedef unsigned short u_int16_t
      * }
      */
-    public static final OfShort u_int16_t = webgpu_h.C_SHORT;
+    public static final OfShort u_int16_t = wgpu_h.C_SHORT;
     /**
      * {@snippet lang=c :
      * typedef unsigned int u_int32_t
      * }
      */
-    public static final OfInt u_int32_t = webgpu_h.C_INT;
+    public static final OfInt u_int32_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef unsigned long long u_int64_t
      * }
      */
-    public static final OfLong u_int64_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong u_int64_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef int64_t register_t
      * }
      */
-    public static final OfLong register_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong register_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef unsigned long uintptr_t
      * }
      */
-    public static final OfLong uintptr_t = webgpu_h.C_LONG;
+    public static final OfLong uintptr_t = wgpu_h.C_LONG;
     /**
      * {@snippet lang=c :
      * typedef u_int64_t user_addr_t
      * }
      */
-    public static final OfLong user_addr_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong user_addr_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef u_int64_t user_size_t
      * }
      */
-    public static final OfLong user_size_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong user_size_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef int64_t user_ssize_t
      * }
      */
-    public static final OfLong user_ssize_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong user_ssize_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef int64_t user_long_t
      * }
      */
-    public static final OfLong user_long_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong user_long_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef u_int64_t user_ulong_t
      * }
      */
-    public static final OfLong user_ulong_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong user_ulong_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef int64_t user_time_t
      * }
      */
-    public static final OfLong user_time_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong user_time_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef int64_t user_off_t
      * }
      */
-    public static final OfLong user_off_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong user_off_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef u_int64_t syscall_arg_t
      * }
      */
-    public static final OfLong syscall_arg_t = webgpu_h.C_LONG_LONG;
+    public static final OfLong syscall_arg_t = wgpu_h.C_LONG_LONG;
     /**
      * {@snippet lang=c :
      * typedef __darwin_intptr_t intptr_t
      * }
      */
-    public static final OfLong intptr_t = webgpu_h.C_LONG;
+    public static final OfLong intptr_t = wgpu_h.C_LONG;
     /**
      * {@snippet lang=c :
      * typedef long intmax_t
      * }
      */
-    public static final OfLong intmax_t = webgpu_h.C_LONG;
+    public static final OfLong intmax_t = wgpu_h.C_LONG;
     /**
      * {@snippet lang=c :
      * typedef unsigned long uintmax_t
      * }
      */
-    public static final OfLong uintmax_t = webgpu_h.C_LONG;
+    public static final OfLong uintmax_t = wgpu_h.C_LONG;
     /**
      * {@snippet lang=c :
      * typedef long ptrdiff_t
      * }
      */
-    public static final OfLong ptrdiff_t = webgpu_h.C_LONG;
+    public static final OfLong ptrdiff_t = wgpu_h.C_LONG;
     /**
      * {@snippet lang=c :
      * typedef unsigned long size_t
      * }
      */
-    public static final OfLong size_t = webgpu_h.C_LONG;
+    public static final OfLong size_t = wgpu_h.C_LONG;
     /**
      * {@snippet lang=c :
      * typedef unsigned long rsize_t
      * }
      */
-    public static final OfLong rsize_t = webgpu_h.C_LONG;
+    public static final OfLong rsize_t = wgpu_h.C_LONG;
     /**
      * {@snippet lang=c :
      * typedef int wchar_t
      * }
      */
-    public static final OfInt wchar_t = webgpu_h.C_INT;
+    public static final OfInt wchar_t = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef uint32_t WGPUFlags
      * }
      */
-    public static final OfInt WGPUFlags = webgpu_h.C_INT;
+    public static final OfInt WGPUFlags = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef uint32_t WGPUBool
      * }
      */
-    public static final OfInt WGPUBool = webgpu_h.C_INT;
+    public static final OfInt WGPUBool = wgpu_h.C_INT;
     /**
      * {@snippet lang=c :
      * typedef struct WGPUAdapterImpl *WGPUAdapter
      * }
      */
-    public static final AddressLayout WGPUAdapter = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPUAdapter = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPUBindGroupImpl *WGPUBindGroup
      * }
      */
-    public static final AddressLayout WGPUBindGroup = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPUBindGroup = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPUBindGroupLayoutImpl *WGPUBindGroupLayout
      * }
      */
-    public static final AddressLayout WGPUBindGroupLayout = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPUBindGroupLayout = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPUBufferImpl *WGPUBuffer
      * }
      */
-    public static final AddressLayout WGPUBuffer = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPUBuffer = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPUCommandBufferImpl *WGPUCommandBuffer
      * }
      */
-    public static final AddressLayout WGPUCommandBuffer = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPUCommandBuffer = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPUCommandEncoderImpl *WGPUCommandEncoder
      * }
      */
-    public static final AddressLayout WGPUCommandEncoder = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPUCommandEncoder = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPUComputePassEncoderImpl *WGPUComputePassEncoder
      * }
      */
-    public static final AddressLayout WGPUComputePassEncoder = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPUComputePassEncoder = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPUComputePipelineImpl *WGPUComputePipeline
      * }
      */
-    public static final AddressLayout WGPUComputePipeline = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPUComputePipeline = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPUDeviceImpl *WGPUDevice
      * }
      */
-    public static final AddressLayout WGPUDevice = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPUDevice = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPUInstanceImpl *WGPUInstance
      * }
      */
-    public static final AddressLayout WGPUInstance = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPUInstance = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPUPipelineLayoutImpl *WGPUPipelineLayout
      * }
      */
-    public static final AddressLayout WGPUPipelineLayout = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPUPipelineLayout = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPUQuerySetImpl *WGPUQuerySet
      * }
      */
-    public static final AddressLayout WGPUQuerySet = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPUQuerySet = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPUQueueImpl *WGPUQueue
      * }
      */
-    public static final AddressLayout WGPUQueue = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPUQueue = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPURenderBundleImpl *WGPURenderBundle
      * }
      */
-    public static final AddressLayout WGPURenderBundle = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPURenderBundle = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPURenderBundleEncoderImpl *WGPURenderBundleEncoder
      * }
      */
-    public static final AddressLayout WGPURenderBundleEncoder = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPURenderBundleEncoder = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPURenderPassEncoderImpl *WGPURenderPassEncoder
      * }
      */
-    public static final AddressLayout WGPURenderPassEncoder = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPURenderPassEncoder = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPURenderPipelineImpl *WGPURenderPipeline
      * }
      */
-    public static final AddressLayout WGPURenderPipeline = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPURenderPipeline = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPUSamplerImpl *WGPUSampler
      * }
      */
-    public static final AddressLayout WGPUSampler = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPUSampler = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPUShaderModuleImpl *WGPUShaderModule
      * }
      */
-    public static final AddressLayout WGPUShaderModule = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPUShaderModule = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPUSurfaceImpl *WGPUSurface
      * }
      */
-    public static final AddressLayout WGPUSurface = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPUSurface = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPUTextureImpl *WGPUTexture
      * }
      */
-    public static final AddressLayout WGPUTexture = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPUTexture = wgpu_h.C_POINTER;
     /**
      * {@snippet lang=c :
      * typedef struct WGPUTextureViewImpl *WGPUTextureView
      * }
      */
-    public static final AddressLayout WGPUTextureView = webgpu_h.C_POINTER;
+    public static final AddressLayout WGPUTextureView = wgpu_h.C_POINTER;
     private static final int WGPUAdapterType_DiscreteGPU = (int)0L;
     /**
      * {@snippet lang=c :
@@ -4330,60 +4330,6 @@ public class webgpu_h {
     public static int WGPUVertexStepMode_Force32() {
         return WGPUVertexStepMode_Force32;
     }
-    private static final int WGPUWGSLFeatureName_Undefined = (int)0L;
-    /**
-     * {@snippet lang=c :
-     * enum WGPUWGSLFeatureName.WGPUWGSLFeatureName_Undefined = 0
-     * }
-     */
-    public static int WGPUWGSLFeatureName_Undefined() {
-        return WGPUWGSLFeatureName_Undefined;
-    }
-    private static final int WGPUWGSLFeatureName_ReadonlyAndReadwriteStorageTextures = (int)1L;
-    /**
-     * {@snippet lang=c :
-     * enum WGPUWGSLFeatureName.WGPUWGSLFeatureName_ReadonlyAndReadwriteStorageTextures = 1
-     * }
-     */
-    public static int WGPUWGSLFeatureName_ReadonlyAndReadwriteStorageTextures() {
-        return WGPUWGSLFeatureName_ReadonlyAndReadwriteStorageTextures;
-    }
-    private static final int WGPUWGSLFeatureName_Packed4x8IntegerDotProduct = (int)2L;
-    /**
-     * {@snippet lang=c :
-     * enum WGPUWGSLFeatureName.WGPUWGSLFeatureName_Packed4x8IntegerDotProduct = 2
-     * }
-     */
-    public static int WGPUWGSLFeatureName_Packed4x8IntegerDotProduct() {
-        return WGPUWGSLFeatureName_Packed4x8IntegerDotProduct;
-    }
-    private static final int WGPUWGSLFeatureName_UnrestrictedPointerParameters = (int)3L;
-    /**
-     * {@snippet lang=c :
-     * enum WGPUWGSLFeatureName.WGPUWGSLFeatureName_UnrestrictedPointerParameters = 3
-     * }
-     */
-    public static int WGPUWGSLFeatureName_UnrestrictedPointerParameters() {
-        return WGPUWGSLFeatureName_UnrestrictedPointerParameters;
-    }
-    private static final int WGPUWGSLFeatureName_PointerCompositeAccess = (int)4L;
-    /**
-     * {@snippet lang=c :
-     * enum WGPUWGSLFeatureName.WGPUWGSLFeatureName_PointerCompositeAccess = 4
-     * }
-     */
-    public static int WGPUWGSLFeatureName_PointerCompositeAccess() {
-        return WGPUWGSLFeatureName_PointerCompositeAccess;
-    }
-    private static final int WGPUWGSLFeatureName_Force32 = (int)2147483647L;
-    /**
-     * {@snippet lang=c :
-     * enum WGPUWGSLFeatureName.WGPUWGSLFeatureName_Force32 = 2147483647
-     * }
-     */
-    public static int WGPUWGSLFeatureName_Force32() {
-        return WGPUWGSLFeatureName_Force32;
-    }
     private static final int WGPUBufferUsage_None = (int)0L;
     /**
      * {@snippet lang=c :
@@ -4497,7 +4443,7 @@ public class webgpu_h {
      * typedef WGPUFlags WGPUBufferUsageFlags
      * }
      */
-    public static final OfInt WGPUBufferUsageFlags = webgpu_h.C_INT;
+    public static final OfInt WGPUBufferUsageFlags = wgpu_h.C_INT;
     private static final int WGPUColorWriteMask_None = (int)0L;
     /**
      * {@snippet lang=c :
@@ -4566,7 +4512,7 @@ public class webgpu_h {
      * typedef WGPUFlags WGPUColorWriteMaskFlags
      * }
      */
-    public static final OfInt WGPUColorWriteMaskFlags = webgpu_h.C_INT;
+    public static final OfInt WGPUColorWriteMaskFlags = wgpu_h.C_INT;
     private static final int WGPUMapMode_None = (int)0L;
     /**
      * {@snippet lang=c :
@@ -4608,7 +4554,7 @@ public class webgpu_h {
      * typedef WGPUFlags WGPUMapModeFlags
      * }
      */
-    public static final OfInt WGPUMapModeFlags = webgpu_h.C_INT;
+    public static final OfInt WGPUMapModeFlags = wgpu_h.C_INT;
     private static final int WGPUShaderStage_None = (int)0L;
     /**
      * {@snippet lang=c :
@@ -4659,7 +4605,7 @@ public class webgpu_h {
      * typedef WGPUFlags WGPUShaderStageFlags
      * }
      */
-    public static final OfInt WGPUShaderStageFlags = webgpu_h.C_INT;
+    public static final OfInt WGPUShaderStageFlags = wgpu_h.C_INT;
     private static final int WGPUTextureUsage_None = (int)0L;
     /**
      * {@snippet lang=c :
@@ -4728,16 +4674,16 @@ public class webgpu_h {
      * typedef WGPUFlags WGPUTextureUsageFlags
      * }
      */
-    public static final OfInt WGPUTextureUsageFlags = webgpu_h.C_INT;
+    public static final OfInt WGPUTextureUsageFlags = wgpu_h.C_INT;
 
     private static class wgpuCreateInstance {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCreateInstance"),
+                    wgpu_h.findOrThrow("wgpuCreateInstance"),
                     DESC);
     }
 
@@ -4779,13 +4725,13 @@ public class webgpu_h {
 
     private static class wgpuGetProcAddress {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuGetProcAddress"),
+                    wgpu_h.findOrThrow("wgpuGetProcAddress"),
                     DESC);
     }
 
@@ -4827,13 +4773,13 @@ public class webgpu_h {
 
     private static class wgpuAdapterEnumerateFeatures {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_LONG,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_LONG,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuAdapterEnumerateFeatures"),
+                    wgpu_h.findOrThrow("wgpuAdapterEnumerateFeatures"),
                     DESC);
     }
 
@@ -4875,13 +4821,13 @@ public class webgpu_h {
 
     private static class wgpuAdapterGetLimits {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuAdapterGetLimits"),
+                    wgpu_h.findOrThrow("wgpuAdapterGetLimits"),
                     DESC);
     }
 
@@ -4923,12 +4869,12 @@ public class webgpu_h {
 
     private static class wgpuAdapterGetProperties {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuAdapterGetProperties"),
+                    wgpu_h.findOrThrow("wgpuAdapterGetProperties"),
                     DESC);
     }
 
@@ -4970,13 +4916,13 @@ public class webgpu_h {
 
     private static class wgpuAdapterHasFeature {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuAdapterHasFeature"),
+                    wgpu_h.findOrThrow("wgpuAdapterHasFeature"),
                     DESC);
     }
 
@@ -5016,71 +4962,23 @@ public class webgpu_h {
         }
     }
 
-    private static class wgpuAdapterRequestAdapterInfo {
-        public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
-        );
-
-        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuAdapterRequestAdapterInfo"),
-                    DESC);
-    }
-
-    /**
-     * Function descriptor for:
-     * {@snippet lang=c :
-     * void wgpuAdapterRequestAdapterInfo(WGPUAdapter adapter, WGPUAdapterRequestAdapterInfoCallback callback, void *userdata)
-     * }
-     */
-    public static FunctionDescriptor wgpuAdapterRequestAdapterInfo$descriptor() {
-        return wgpuAdapterRequestAdapterInfo.DESC;
-    }
-
-    /**
-     * Downcall method handle for:
-     * {@snippet lang=c :
-     * void wgpuAdapterRequestAdapterInfo(WGPUAdapter adapter, WGPUAdapterRequestAdapterInfoCallback callback, void *userdata)
-     * }
-     */
-    public static MethodHandle wgpuAdapterRequestAdapterInfo$handle() {
-        return wgpuAdapterRequestAdapterInfo.HANDLE;
-    }
-    /**
-     * {@snippet lang=c :
-     * void wgpuAdapterRequestAdapterInfo(WGPUAdapter adapter, WGPUAdapterRequestAdapterInfoCallback callback, void *userdata)
-     * }
-     */
-    public static void wgpuAdapterRequestAdapterInfo(MemorySegment adapter, MemorySegment callback, MemorySegment userdata) {
-        var mh$ = wgpuAdapterRequestAdapterInfo.HANDLE;
-        try {
-            if (TRACE_DOWNCALLS) {
-                traceDowncall("wgpuAdapterRequestAdapterInfo", adapter, callback, userdata);
-            }
-            mh$.invokeExact(adapter, callback, userdata);
-        } catch (Throwable ex$) {
-           throw new AssertionError("should not reach here", ex$);
-        }
-    }
-
     private static class wgpuAdapterRequestDevice {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuAdapterRequestDevice"),
+                    wgpu_h.findOrThrow("wgpuAdapterRequestDevice"),
                     DESC);
     }
 
     /**
      * Function descriptor for:
      * {@snippet lang=c :
-     * void wgpuAdapterRequestDevice(WGPUAdapter adapter, const WGPUDeviceDescriptor *descriptor, WGPUAdapterRequestDeviceCallback callback, void *userdata)
+     * void wgpuAdapterRequestDevice(WGPUAdapter adapter, const WGPUDeviceDescriptor *descriptor, WGPURequestDeviceCallback callback, void *userdata)
      * }
      */
     public static FunctionDescriptor wgpuAdapterRequestDevice$descriptor() {
@@ -5090,7 +4988,7 @@ public class webgpu_h {
     /**
      * Downcall method handle for:
      * {@snippet lang=c :
-     * void wgpuAdapterRequestDevice(WGPUAdapter adapter, const WGPUDeviceDescriptor *descriptor, WGPUAdapterRequestDeviceCallback callback, void *userdata)
+     * void wgpuAdapterRequestDevice(WGPUAdapter adapter, const WGPUDeviceDescriptor *descriptor, WGPURequestDeviceCallback callback, void *userdata)
      * }
      */
     public static MethodHandle wgpuAdapterRequestDevice$handle() {
@@ -5098,7 +4996,7 @@ public class webgpu_h {
     }
     /**
      * {@snippet lang=c :
-     * void wgpuAdapterRequestDevice(WGPUAdapter adapter, const WGPUDeviceDescriptor *descriptor, WGPUAdapterRequestDeviceCallback callback, void *userdata)
+     * void wgpuAdapterRequestDevice(WGPUAdapter adapter, const WGPUDeviceDescriptor *descriptor, WGPURequestDeviceCallback callback, void *userdata)
      * }
      */
     public static void wgpuAdapterRequestDevice(MemorySegment adapter, MemorySegment descriptor, MemorySegment callback, MemorySegment userdata) {
@@ -5115,11 +5013,11 @@ public class webgpu_h {
 
     private static class wgpuAdapterReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuAdapterReference"),
+                    wgpu_h.findOrThrow("wgpuAdapterReference"),
                     DESC);
     }
 
@@ -5161,11 +5059,11 @@ public class webgpu_h {
 
     private static class wgpuAdapterRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuAdapterRelease"),
+                    wgpu_h.findOrThrow("wgpuAdapterRelease"),
                     DESC);
     }
 
@@ -5204,36 +5102,15 @@ public class webgpu_h {
            throw new AssertionError("should not reach here", ex$);
         }
     }
-    //
-    private static class wgpuSetLogCallback {
-        public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-                webgpu_h.C_POINTER,
-                webgpu_h.C_POINTER
-        );
-
-        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                webgpu_h.findOrThrow("wgpuSetLogCallback"),
-                DESC);
-    }
-
-    private static class wgpuSetLogLevel {
-        public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-                webgpu_h.C_INT
-        );
-
-        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                webgpu_h.findOrThrow("wgpuSetLogLevel"),
-                DESC);
-    }
 
     private static class wgpuBindGroupSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuBindGroupSetLabel"),
+                    wgpu_h.findOrThrow("wgpuBindGroupSetLabel"),
                     DESC);
     }
 
@@ -5273,38 +5150,13 @@ public class webgpu_h {
         }
     }
 
-    public static void wgpuSetLogLevel(int logLevel) {
-        var mh$ = wgpuSetLogLevel.HANDLE;
-        try {
-            if (TRACE_DOWNCALLS) {
-                traceDowncall("wgpuSetLogLevel", logLevel);
-            }
-            mh$.invokeExact(logLevel);
-        } catch (Throwable ex$) {
-            throw new AssertionError("should not reach here", ex$);
-        }
-    }
-
-    public static void wgpuSetLogCallback(MemorySegment callback, MemorySegment data) {
-        var mh$ = wgpuSetLogCallback.HANDLE;
-        try {
-            if (TRACE_DOWNCALLS) {
-                traceDowncall("wgpuSetLogCallback", callback, data);
-            }
-            mh$.invokeExact(callback, data);
-        } catch (Throwable ex$) {
-            throw new AssertionError("should not reach here", ex$);
-        }
-    }
-
-
     private static class wgpuBindGroupReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuBindGroupReference"),
+                    wgpu_h.findOrThrow("wgpuBindGroupReference"),
                     DESC);
     }
 
@@ -5346,11 +5198,11 @@ public class webgpu_h {
 
     private static class wgpuBindGroupRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuBindGroupRelease"),
+                    wgpu_h.findOrThrow("wgpuBindGroupRelease"),
                     DESC);
     }
 
@@ -5392,12 +5244,12 @@ public class webgpu_h {
 
     private static class wgpuBindGroupLayoutSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuBindGroupLayoutSetLabel"),
+                    wgpu_h.findOrThrow("wgpuBindGroupLayoutSetLabel"),
                     DESC);
     }
 
@@ -5439,11 +5291,11 @@ public class webgpu_h {
 
     private static class wgpuBindGroupLayoutReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuBindGroupLayoutReference"),
+                    wgpu_h.findOrThrow("wgpuBindGroupLayoutReference"),
                     DESC);
     }
 
@@ -5485,11 +5337,11 @@ public class webgpu_h {
 
     private static class wgpuBindGroupLayoutRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuBindGroupLayoutRelease"),
+                    wgpu_h.findOrThrow("wgpuBindGroupLayoutRelease"),
                     DESC);
     }
 
@@ -5531,11 +5383,11 @@ public class webgpu_h {
 
     private static class wgpuBufferDestroy {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuBufferDestroy"),
+                    wgpu_h.findOrThrow("wgpuBufferDestroy"),
                     DESC);
     }
 
@@ -5577,14 +5429,14 @@ public class webgpu_h {
 
     private static class wgpuBufferGetConstMappedRange {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG,
-            webgpu_h.C_LONG
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG,
+            wgpu_h.C_LONG
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuBufferGetConstMappedRange"),
+                    wgpu_h.findOrThrow("wgpuBufferGetConstMappedRange"),
                     DESC);
     }
 
@@ -5626,12 +5478,12 @@ public class webgpu_h {
 
     private static class wgpuBufferGetMapState {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuBufferGetMapState"),
+                    wgpu_h.findOrThrow("wgpuBufferGetMapState"),
                     DESC);
     }
 
@@ -5673,14 +5525,14 @@ public class webgpu_h {
 
     private static class wgpuBufferGetMappedRange {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG,
-            webgpu_h.C_LONG
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG,
+            wgpu_h.C_LONG
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuBufferGetMappedRange"),
+                    wgpu_h.findOrThrow("wgpuBufferGetMappedRange"),
                     DESC);
     }
 
@@ -5722,12 +5574,12 @@ public class webgpu_h {
 
     private static class wgpuBufferGetSize {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_LONG_LONG,
-            webgpu_h.C_POINTER
+            wgpu_h.C_LONG_LONG,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuBufferGetSize"),
+                    wgpu_h.findOrThrow("wgpuBufferGetSize"),
                     DESC);
     }
 
@@ -5769,12 +5621,12 @@ public class webgpu_h {
 
     private static class wgpuBufferGetUsage {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuBufferGetUsage"),
+                    wgpu_h.findOrThrow("wgpuBufferGetUsage"),
                     DESC);
     }
 
@@ -5816,23 +5668,23 @@ public class webgpu_h {
 
     private static class wgpuBufferMapAsync {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT,
-            webgpu_h.C_LONG,
-            webgpu_h.C_LONG,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT,
+            wgpu_h.C_LONG,
+            wgpu_h.C_LONG,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuBufferMapAsync"),
+                    wgpu_h.findOrThrow("wgpuBufferMapAsync"),
                     DESC);
     }
 
     /**
      * Function descriptor for:
      * {@snippet lang=c :
-     * void wgpuBufferMapAsync(WGPUBuffer buffer, WGPUMapModeFlags mode, size_t offset, size_t size, WGPUBufferMapAsyncCallback callback, void *userdata)
+     * void wgpuBufferMapAsync(WGPUBuffer buffer, WGPUMapModeFlags mode, size_t offset, size_t size, WGPUBufferMapCallback callback, void *userdata)
      * }
      */
     public static FunctionDescriptor wgpuBufferMapAsync$descriptor() {
@@ -5842,7 +5694,7 @@ public class webgpu_h {
     /**
      * Downcall method handle for:
      * {@snippet lang=c :
-     * void wgpuBufferMapAsync(WGPUBuffer buffer, WGPUMapModeFlags mode, size_t offset, size_t size, WGPUBufferMapAsyncCallback callback, void *userdata)
+     * void wgpuBufferMapAsync(WGPUBuffer buffer, WGPUMapModeFlags mode, size_t offset, size_t size, WGPUBufferMapCallback callback, void *userdata)
      * }
      */
     public static MethodHandle wgpuBufferMapAsync$handle() {
@@ -5850,7 +5702,7 @@ public class webgpu_h {
     }
     /**
      * {@snippet lang=c :
-     * void wgpuBufferMapAsync(WGPUBuffer buffer, WGPUMapModeFlags mode, size_t offset, size_t size, WGPUBufferMapAsyncCallback callback, void *userdata)
+     * void wgpuBufferMapAsync(WGPUBuffer buffer, WGPUMapModeFlags mode, size_t offset, size_t size, WGPUBufferMapCallback callback, void *userdata)
      * }
      */
     public static void wgpuBufferMapAsync(MemorySegment buffer, int mode, long offset, long size, MemorySegment callback, MemorySegment userdata) {
@@ -5867,12 +5719,12 @@ public class webgpu_h {
 
     private static class wgpuBufferSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuBufferSetLabel"),
+                    wgpu_h.findOrThrow("wgpuBufferSetLabel"),
                     DESC);
     }
 
@@ -5914,11 +5766,11 @@ public class webgpu_h {
 
     private static class wgpuBufferUnmap {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuBufferUnmap"),
+                    wgpu_h.findOrThrow("wgpuBufferUnmap"),
                     DESC);
     }
 
@@ -5960,11 +5812,11 @@ public class webgpu_h {
 
     private static class wgpuBufferReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuBufferReference"),
+                    wgpu_h.findOrThrow("wgpuBufferReference"),
                     DESC);
     }
 
@@ -6006,11 +5858,11 @@ public class webgpu_h {
 
     private static class wgpuBufferRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuBufferRelease"),
+                    wgpu_h.findOrThrow("wgpuBufferRelease"),
                     DESC);
     }
 
@@ -6052,12 +5904,12 @@ public class webgpu_h {
 
     private static class wgpuCommandBufferSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCommandBufferSetLabel"),
+                    wgpu_h.findOrThrow("wgpuCommandBufferSetLabel"),
                     DESC);
     }
 
@@ -6099,11 +5951,11 @@ public class webgpu_h {
 
     private static class wgpuCommandBufferReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCommandBufferReference"),
+                    wgpu_h.findOrThrow("wgpuCommandBufferReference"),
                     DESC);
     }
 
@@ -6145,11 +5997,11 @@ public class webgpu_h {
 
     private static class wgpuCommandBufferRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCommandBufferRelease"),
+                    wgpu_h.findOrThrow("wgpuCommandBufferRelease"),
                     DESC);
     }
 
@@ -6191,13 +6043,13 @@ public class webgpu_h {
 
     private static class wgpuCommandEncoderBeginComputePass {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCommandEncoderBeginComputePass"),
+                    wgpu_h.findOrThrow("wgpuCommandEncoderBeginComputePass"),
                     DESC);
     }
 
@@ -6239,13 +6091,13 @@ public class webgpu_h {
 
     private static class wgpuCommandEncoderBeginRenderPass {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCommandEncoderBeginRenderPass"),
+                    wgpu_h.findOrThrow("wgpuCommandEncoderBeginRenderPass"),
                     DESC);
     }
 
@@ -6287,14 +6139,14 @@ public class webgpu_h {
 
     private static class wgpuCommandEncoderClearBuffer {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG_LONG,
-            webgpu_h.C_LONG_LONG
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG_LONG,
+            wgpu_h.C_LONG_LONG
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCommandEncoderClearBuffer"),
+                    wgpu_h.findOrThrow("wgpuCommandEncoderClearBuffer"),
                     DESC);
     }
 
@@ -6336,16 +6188,16 @@ public class webgpu_h {
 
     private static class wgpuCommandEncoderCopyBufferToBuffer {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG_LONG,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG_LONG,
-            webgpu_h.C_LONG_LONG
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG_LONG,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG_LONG,
+            wgpu_h.C_LONG_LONG
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCommandEncoderCopyBufferToBuffer"),
+                    wgpu_h.findOrThrow("wgpuCommandEncoderCopyBufferToBuffer"),
                     DESC);
     }
 
@@ -6387,14 +6239,14 @@ public class webgpu_h {
 
     private static class wgpuCommandEncoderCopyBufferToTexture {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCommandEncoderCopyBufferToTexture"),
+                    wgpu_h.findOrThrow("wgpuCommandEncoderCopyBufferToTexture"),
                     DESC);
     }
 
@@ -6436,14 +6288,14 @@ public class webgpu_h {
 
     private static class wgpuCommandEncoderCopyTextureToBuffer {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCommandEncoderCopyTextureToBuffer"),
+                    wgpu_h.findOrThrow("wgpuCommandEncoderCopyTextureToBuffer"),
                     DESC);
     }
 
@@ -6485,14 +6337,14 @@ public class webgpu_h {
 
     private static class wgpuCommandEncoderCopyTextureToTexture {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCommandEncoderCopyTextureToTexture"),
+                    wgpu_h.findOrThrow("wgpuCommandEncoderCopyTextureToTexture"),
                     DESC);
     }
 
@@ -6534,13 +6386,13 @@ public class webgpu_h {
 
     private static class wgpuCommandEncoderFinish {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCommandEncoderFinish"),
+                    wgpu_h.findOrThrow("wgpuCommandEncoderFinish"),
                     DESC);
     }
 
@@ -6582,12 +6434,12 @@ public class webgpu_h {
 
     private static class wgpuCommandEncoderInsertDebugMarker {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCommandEncoderInsertDebugMarker"),
+                    wgpu_h.findOrThrow("wgpuCommandEncoderInsertDebugMarker"),
                     DESC);
     }
 
@@ -6629,11 +6481,11 @@ public class webgpu_h {
 
     private static class wgpuCommandEncoderPopDebugGroup {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCommandEncoderPopDebugGroup"),
+                    wgpu_h.findOrThrow("wgpuCommandEncoderPopDebugGroup"),
                     DESC);
     }
 
@@ -6675,12 +6527,12 @@ public class webgpu_h {
 
     private static class wgpuCommandEncoderPushDebugGroup {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCommandEncoderPushDebugGroup"),
+                    wgpu_h.findOrThrow("wgpuCommandEncoderPushDebugGroup"),
                     DESC);
     }
 
@@ -6722,16 +6574,16 @@ public class webgpu_h {
 
     private static class wgpuCommandEncoderResolveQuerySet {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG_LONG
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG_LONG
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCommandEncoderResolveQuerySet"),
+                    wgpu_h.findOrThrow("wgpuCommandEncoderResolveQuerySet"),
                     DESC);
     }
 
@@ -6773,12 +6625,12 @@ public class webgpu_h {
 
     private static class wgpuCommandEncoderSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCommandEncoderSetLabel"),
+                    wgpu_h.findOrThrow("wgpuCommandEncoderSetLabel"),
                     DESC);
     }
 
@@ -6820,13 +6672,13 @@ public class webgpu_h {
 
     private static class wgpuCommandEncoderWriteTimestamp {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCommandEncoderWriteTimestamp"),
+                    wgpu_h.findOrThrow("wgpuCommandEncoderWriteTimestamp"),
                     DESC);
     }
 
@@ -6868,11 +6720,11 @@ public class webgpu_h {
 
     private static class wgpuCommandEncoderReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCommandEncoderReference"),
+                    wgpu_h.findOrThrow("wgpuCommandEncoderReference"),
                     DESC);
     }
 
@@ -6914,11 +6766,11 @@ public class webgpu_h {
 
     private static class wgpuCommandEncoderRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuCommandEncoderRelease"),
+                    wgpu_h.findOrThrow("wgpuCommandEncoderRelease"),
                     DESC);
     }
 
@@ -6960,14 +6812,14 @@ public class webgpu_h {
 
     private static class wgpuComputePassEncoderDispatchWorkgroups {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuComputePassEncoderDispatchWorkgroups"),
+                    wgpu_h.findOrThrow("wgpuComputePassEncoderDispatchWorkgroups"),
                     DESC);
     }
 
@@ -7009,13 +6861,13 @@ public class webgpu_h {
 
     private static class wgpuComputePassEncoderDispatchWorkgroupsIndirect {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG_LONG
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG_LONG
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuComputePassEncoderDispatchWorkgroupsIndirect"),
+                    wgpu_h.findOrThrow("wgpuComputePassEncoderDispatchWorkgroupsIndirect"),
                     DESC);
     }
 
@@ -7057,11 +6909,11 @@ public class webgpu_h {
 
     private static class wgpuComputePassEncoderEnd {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuComputePassEncoderEnd"),
+                    wgpu_h.findOrThrow("wgpuComputePassEncoderEnd"),
                     DESC);
     }
 
@@ -7103,12 +6955,12 @@ public class webgpu_h {
 
     private static class wgpuComputePassEncoderInsertDebugMarker {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuComputePassEncoderInsertDebugMarker"),
+                    wgpu_h.findOrThrow("wgpuComputePassEncoderInsertDebugMarker"),
                     DESC);
     }
 
@@ -7150,11 +7002,11 @@ public class webgpu_h {
 
     private static class wgpuComputePassEncoderPopDebugGroup {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuComputePassEncoderPopDebugGroup"),
+                    wgpu_h.findOrThrow("wgpuComputePassEncoderPopDebugGroup"),
                     DESC);
     }
 
@@ -7196,12 +7048,12 @@ public class webgpu_h {
 
     private static class wgpuComputePassEncoderPushDebugGroup {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuComputePassEncoderPushDebugGroup"),
+                    wgpu_h.findOrThrow("wgpuComputePassEncoderPushDebugGroup"),
                     DESC);
     }
 
@@ -7243,15 +7095,15 @@ public class webgpu_h {
 
     private static class wgpuComputePassEncoderSetBindGroup {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuComputePassEncoderSetBindGroup"),
+                    wgpu_h.findOrThrow("wgpuComputePassEncoderSetBindGroup"),
                     DESC);
     }
 
@@ -7293,12 +7145,12 @@ public class webgpu_h {
 
     private static class wgpuComputePassEncoderSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuComputePassEncoderSetLabel"),
+                    wgpu_h.findOrThrow("wgpuComputePassEncoderSetLabel"),
                     DESC);
     }
 
@@ -7340,12 +7192,12 @@ public class webgpu_h {
 
     private static class wgpuComputePassEncoderSetPipeline {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuComputePassEncoderSetPipeline"),
+                    wgpu_h.findOrThrow("wgpuComputePassEncoderSetPipeline"),
                     DESC);
     }
 
@@ -7387,11 +7239,11 @@ public class webgpu_h {
 
     private static class wgpuComputePassEncoderReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuComputePassEncoderReference"),
+                    wgpu_h.findOrThrow("wgpuComputePassEncoderReference"),
                     DESC);
     }
 
@@ -7433,11 +7285,11 @@ public class webgpu_h {
 
     private static class wgpuComputePassEncoderRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuComputePassEncoderRelease"),
+                    wgpu_h.findOrThrow("wgpuComputePassEncoderRelease"),
                     DESC);
     }
 
@@ -7479,13 +7331,13 @@ public class webgpu_h {
 
     private static class wgpuComputePipelineGetBindGroupLayout {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuComputePipelineGetBindGroupLayout"),
+                    wgpu_h.findOrThrow("wgpuComputePipelineGetBindGroupLayout"),
                     DESC);
     }
 
@@ -7527,12 +7379,12 @@ public class webgpu_h {
 
     private static class wgpuComputePipelineSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuComputePipelineSetLabel"),
+                    wgpu_h.findOrThrow("wgpuComputePipelineSetLabel"),
                     DESC);
     }
 
@@ -7574,11 +7426,11 @@ public class webgpu_h {
 
     private static class wgpuComputePipelineReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuComputePipelineReference"),
+                    wgpu_h.findOrThrow("wgpuComputePipelineReference"),
                     DESC);
     }
 
@@ -7620,11 +7472,11 @@ public class webgpu_h {
 
     private static class wgpuComputePipelineRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuComputePipelineRelease"),
+                    wgpu_h.findOrThrow("wgpuComputePipelineRelease"),
                     DESC);
     }
 
@@ -7666,13 +7518,13 @@ public class webgpu_h {
 
     private static class wgpuDeviceCreateBindGroup {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceCreateBindGroup"),
+                    wgpu_h.findOrThrow("wgpuDeviceCreateBindGroup"),
                     DESC);
     }
 
@@ -7714,13 +7566,13 @@ public class webgpu_h {
 
     private static class wgpuDeviceCreateBindGroupLayout {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceCreateBindGroupLayout"),
+                    wgpu_h.findOrThrow("wgpuDeviceCreateBindGroupLayout"),
                     DESC);
     }
 
@@ -7762,13 +7614,13 @@ public class webgpu_h {
 
     private static class wgpuDeviceCreateBuffer {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceCreateBuffer"),
+                    wgpu_h.findOrThrow("wgpuDeviceCreateBuffer"),
                     DESC);
     }
 
@@ -7810,13 +7662,13 @@ public class webgpu_h {
 
     private static class wgpuDeviceCreateCommandEncoder {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceCreateCommandEncoder"),
+                    wgpu_h.findOrThrow("wgpuDeviceCreateCommandEncoder"),
                     DESC);
     }
 
@@ -7858,13 +7710,13 @@ public class webgpu_h {
 
     private static class wgpuDeviceCreateComputePipeline {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceCreateComputePipeline"),
+                    wgpu_h.findOrThrow("wgpuDeviceCreateComputePipeline"),
                     DESC);
     }
 
@@ -7906,21 +7758,21 @@ public class webgpu_h {
 
     private static class wgpuDeviceCreateComputePipelineAsync {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceCreateComputePipelineAsync"),
+                    wgpu_h.findOrThrow("wgpuDeviceCreateComputePipelineAsync"),
                     DESC);
     }
 
     /**
      * Function descriptor for:
      * {@snippet lang=c :
-     * void wgpuDeviceCreateComputePipelineAsync(WGPUDevice device, const WGPUComputePipelineDescriptor *descriptor, WGPUDeviceCreateComputePipelineAsyncCallback callback, void *userdata)
+     * void wgpuDeviceCreateComputePipelineAsync(WGPUDevice device, const WGPUComputePipelineDescriptor *descriptor, WGPUCreateComputePipelineAsyncCallback callback, void *userdata)
      * }
      */
     public static FunctionDescriptor wgpuDeviceCreateComputePipelineAsync$descriptor() {
@@ -7930,7 +7782,7 @@ public class webgpu_h {
     /**
      * Downcall method handle for:
      * {@snippet lang=c :
-     * void wgpuDeviceCreateComputePipelineAsync(WGPUDevice device, const WGPUComputePipelineDescriptor *descriptor, WGPUDeviceCreateComputePipelineAsyncCallback callback, void *userdata)
+     * void wgpuDeviceCreateComputePipelineAsync(WGPUDevice device, const WGPUComputePipelineDescriptor *descriptor, WGPUCreateComputePipelineAsyncCallback callback, void *userdata)
      * }
      */
     public static MethodHandle wgpuDeviceCreateComputePipelineAsync$handle() {
@@ -7938,7 +7790,7 @@ public class webgpu_h {
     }
     /**
      * {@snippet lang=c :
-     * void wgpuDeviceCreateComputePipelineAsync(WGPUDevice device, const WGPUComputePipelineDescriptor *descriptor, WGPUDeviceCreateComputePipelineAsyncCallback callback, void *userdata)
+     * void wgpuDeviceCreateComputePipelineAsync(WGPUDevice device, const WGPUComputePipelineDescriptor *descriptor, WGPUCreateComputePipelineAsyncCallback callback, void *userdata)
      * }
      */
     public static void wgpuDeviceCreateComputePipelineAsync(MemorySegment device, MemorySegment descriptor, MemorySegment callback, MemorySegment userdata) {
@@ -7955,13 +7807,13 @@ public class webgpu_h {
 
     private static class wgpuDeviceCreatePipelineLayout {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceCreatePipelineLayout"),
+                    wgpu_h.findOrThrow("wgpuDeviceCreatePipelineLayout"),
                     DESC);
     }
 
@@ -8003,13 +7855,13 @@ public class webgpu_h {
 
     private static class wgpuDeviceCreateQuerySet {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceCreateQuerySet"),
+                    wgpu_h.findOrThrow("wgpuDeviceCreateQuerySet"),
                     DESC);
     }
 
@@ -8051,13 +7903,13 @@ public class webgpu_h {
 
     private static class wgpuDeviceCreateRenderBundleEncoder {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceCreateRenderBundleEncoder"),
+                    wgpu_h.findOrThrow("wgpuDeviceCreateRenderBundleEncoder"),
                     DESC);
     }
 
@@ -8099,13 +7951,13 @@ public class webgpu_h {
 
     private static class wgpuDeviceCreateRenderPipeline {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceCreateRenderPipeline"),
+                    wgpu_h.findOrThrow("wgpuDeviceCreateRenderPipeline"),
                     DESC);
     }
 
@@ -8147,21 +7999,21 @@ public class webgpu_h {
 
     private static class wgpuDeviceCreateRenderPipelineAsync {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceCreateRenderPipelineAsync"),
+                    wgpu_h.findOrThrow("wgpuDeviceCreateRenderPipelineAsync"),
                     DESC);
     }
 
     /**
      * Function descriptor for:
      * {@snippet lang=c :
-     * void wgpuDeviceCreateRenderPipelineAsync(WGPUDevice device, const WGPURenderPipelineDescriptor *descriptor, WGPUDeviceCreateRenderPipelineAsyncCallback callback, void *userdata)
+     * void wgpuDeviceCreateRenderPipelineAsync(WGPUDevice device, const WGPURenderPipelineDescriptor *descriptor, WGPUCreateRenderPipelineAsyncCallback callback, void *userdata)
      * }
      */
     public static FunctionDescriptor wgpuDeviceCreateRenderPipelineAsync$descriptor() {
@@ -8171,7 +8023,7 @@ public class webgpu_h {
     /**
      * Downcall method handle for:
      * {@snippet lang=c :
-     * void wgpuDeviceCreateRenderPipelineAsync(WGPUDevice device, const WGPURenderPipelineDescriptor *descriptor, WGPUDeviceCreateRenderPipelineAsyncCallback callback, void *userdata)
+     * void wgpuDeviceCreateRenderPipelineAsync(WGPUDevice device, const WGPURenderPipelineDescriptor *descriptor, WGPUCreateRenderPipelineAsyncCallback callback, void *userdata)
      * }
      */
     public static MethodHandle wgpuDeviceCreateRenderPipelineAsync$handle() {
@@ -8179,7 +8031,7 @@ public class webgpu_h {
     }
     /**
      * {@snippet lang=c :
-     * void wgpuDeviceCreateRenderPipelineAsync(WGPUDevice device, const WGPURenderPipelineDescriptor *descriptor, WGPUDeviceCreateRenderPipelineAsyncCallback callback, void *userdata)
+     * void wgpuDeviceCreateRenderPipelineAsync(WGPUDevice device, const WGPURenderPipelineDescriptor *descriptor, WGPUCreateRenderPipelineAsyncCallback callback, void *userdata)
      * }
      */
     public static void wgpuDeviceCreateRenderPipelineAsync(MemorySegment device, MemorySegment descriptor, MemorySegment callback, MemorySegment userdata) {
@@ -8196,13 +8048,13 @@ public class webgpu_h {
 
     private static class wgpuDeviceCreateSampler {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceCreateSampler"),
+                    wgpu_h.findOrThrow("wgpuDeviceCreateSampler"),
                     DESC);
     }
 
@@ -8244,13 +8096,13 @@ public class webgpu_h {
 
     private static class wgpuDeviceCreateShaderModule {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceCreateShaderModule"),
+                    wgpu_h.findOrThrow("wgpuDeviceCreateShaderModule"),
                     DESC);
     }
 
@@ -8292,13 +8144,13 @@ public class webgpu_h {
 
     private static class wgpuDeviceCreateTexture {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceCreateTexture"),
+                    wgpu_h.findOrThrow("wgpuDeviceCreateTexture"),
                     DESC);
     }
 
@@ -8340,11 +8192,11 @@ public class webgpu_h {
 
     private static class wgpuDeviceDestroy {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceDestroy"),
+                    wgpu_h.findOrThrow("wgpuDeviceDestroy"),
                     DESC);
     }
 
@@ -8386,13 +8238,13 @@ public class webgpu_h {
 
     private static class wgpuDeviceEnumerateFeatures {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_LONG,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_LONG,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceEnumerateFeatures"),
+                    wgpu_h.findOrThrow("wgpuDeviceEnumerateFeatures"),
                     DESC);
     }
 
@@ -8434,13 +8286,13 @@ public class webgpu_h {
 
     private static class wgpuDeviceGetLimits {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceGetLimits"),
+                    wgpu_h.findOrThrow("wgpuDeviceGetLimits"),
                     DESC);
     }
 
@@ -8482,12 +8334,12 @@ public class webgpu_h {
 
     private static class wgpuDeviceGetQueue {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceGetQueue"),
+                    wgpu_h.findOrThrow("wgpuDeviceGetQueue"),
                     DESC);
     }
 
@@ -8529,13 +8381,13 @@ public class webgpu_h {
 
     private static class wgpuDeviceHasFeature {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceHasFeature"),
+                    wgpu_h.findOrThrow("wgpuDeviceHasFeature"),
                     DESC);
     }
 
@@ -8577,13 +8429,13 @@ public class webgpu_h {
 
     private static class wgpuDevicePopErrorScope {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDevicePopErrorScope"),
+                    wgpu_h.findOrThrow("wgpuDevicePopErrorScope"),
                     DESC);
     }
 
@@ -8625,12 +8477,12 @@ public class webgpu_h {
 
     private static class wgpuDevicePushErrorScope {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDevicePushErrorScope"),
+                    wgpu_h.findOrThrow("wgpuDevicePushErrorScope"),
                     DESC);
     }
 
@@ -8672,12 +8524,12 @@ public class webgpu_h {
 
     private static class wgpuDeviceSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceSetLabel"),
+                    wgpu_h.findOrThrow("wgpuDeviceSetLabel"),
                     DESC);
     }
 
@@ -8719,13 +8571,13 @@ public class webgpu_h {
 
     private static class wgpuDeviceSetUncapturedErrorCallback {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceSetUncapturedErrorCallback"),
+                    wgpu_h.findOrThrow("wgpuDeviceSetUncapturedErrorCallback"),
                     DESC);
     }
 
@@ -8767,11 +8619,11 @@ public class webgpu_h {
 
     private static class wgpuDeviceReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceReference"),
+                    wgpu_h.findOrThrow("wgpuDeviceReference"),
                     DESC);
     }
 
@@ -8813,11 +8665,11 @@ public class webgpu_h {
 
     private static class wgpuDeviceRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuDeviceRelease"),
+                    wgpu_h.findOrThrow("wgpuDeviceRelease"),
                     DESC);
     }
 
@@ -8859,13 +8711,13 @@ public class webgpu_h {
 
     private static class wgpuInstanceCreateSurface {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuInstanceCreateSurface"),
+                    wgpu_h.findOrThrow("wgpuInstanceCreateSurface"),
                     DESC);
     }
 
@@ -8905,61 +8757,13 @@ public class webgpu_h {
         }
     }
 
-    private static class wgpuInstanceHasWGSLLanguageFeature {
-        public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT
-        );
-
-        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuInstanceHasWGSLLanguageFeature"),
-                    DESC);
-    }
-
-    /**
-     * Function descriptor for:
-     * {@snippet lang=c :
-     * WGPUBool wgpuInstanceHasWGSLLanguageFeature(WGPUInstance instance, WGPUWGSLFeatureName feature)
-     * }
-     */
-    public static FunctionDescriptor wgpuInstanceHasWGSLLanguageFeature$descriptor() {
-        return wgpuInstanceHasWGSLLanguageFeature.DESC;
-    }
-
-    /**
-     * Downcall method handle for:
-     * {@snippet lang=c :
-     * WGPUBool wgpuInstanceHasWGSLLanguageFeature(WGPUInstance instance, WGPUWGSLFeatureName feature)
-     * }
-     */
-    public static MethodHandle wgpuInstanceHasWGSLLanguageFeature$handle() {
-        return wgpuInstanceHasWGSLLanguageFeature.HANDLE;
-    }
-    /**
-     * {@snippet lang=c :
-     * WGPUBool wgpuInstanceHasWGSLLanguageFeature(WGPUInstance instance, WGPUWGSLFeatureName feature)
-     * }
-     */
-    public static int wgpuInstanceHasWGSLLanguageFeature(MemorySegment instance, int feature) {
-        var mh$ = wgpuInstanceHasWGSLLanguageFeature.HANDLE;
-        try {
-            if (TRACE_DOWNCALLS) {
-                traceDowncall("wgpuInstanceHasWGSLLanguageFeature", instance, feature);
-            }
-            return (int)mh$.invokeExact(instance, feature);
-        } catch (Throwable ex$) {
-           throw new AssertionError("should not reach here", ex$);
-        }
-    }
-
     private static class wgpuInstanceProcessEvents {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuInstanceProcessEvents"),
+                    wgpu_h.findOrThrow("wgpuInstanceProcessEvents"),
                     DESC);
     }
 
@@ -9001,21 +8805,21 @@ public class webgpu_h {
 
     private static class wgpuInstanceRequestAdapter {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuInstanceRequestAdapter"),
+                    wgpu_h.findOrThrow("wgpuInstanceRequestAdapter"),
                     DESC);
     }
 
     /**
      * Function descriptor for:
      * {@snippet lang=c :
-     * void wgpuInstanceRequestAdapter(WGPUInstance instance, const WGPURequestAdapterOptions *options, WGPUInstanceRequestAdapterCallback callback, void *userdata)
+     * void wgpuInstanceRequestAdapter(WGPUInstance instance, const WGPURequestAdapterOptions *options, WGPURequestAdapterCallback callback, void *userdata)
      * }
      */
     public static FunctionDescriptor wgpuInstanceRequestAdapter$descriptor() {
@@ -9025,7 +8829,7 @@ public class webgpu_h {
     /**
      * Downcall method handle for:
      * {@snippet lang=c :
-     * void wgpuInstanceRequestAdapter(WGPUInstance instance, const WGPURequestAdapterOptions *options, WGPUInstanceRequestAdapterCallback callback, void *userdata)
+     * void wgpuInstanceRequestAdapter(WGPUInstance instance, const WGPURequestAdapterOptions *options, WGPURequestAdapterCallback callback, void *userdata)
      * }
      */
     public static MethodHandle wgpuInstanceRequestAdapter$handle() {
@@ -9033,7 +8837,7 @@ public class webgpu_h {
     }
     /**
      * {@snippet lang=c :
-     * void wgpuInstanceRequestAdapter(WGPUInstance instance, const WGPURequestAdapterOptions *options, WGPUInstanceRequestAdapterCallback callback, void *userdata)
+     * void wgpuInstanceRequestAdapter(WGPUInstance instance, const WGPURequestAdapterOptions *options, WGPURequestAdapterCallback callback, void *userdata)
      * }
      */
     public static void wgpuInstanceRequestAdapter(MemorySegment instance, MemorySegment options, MemorySegment callback, MemorySegment userdata) {
@@ -9050,11 +8854,11 @@ public class webgpu_h {
 
     private static class wgpuInstanceReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuInstanceReference"),
+                    wgpu_h.findOrThrow("wgpuInstanceReference"),
                     DESC);
     }
 
@@ -9096,11 +8900,11 @@ public class webgpu_h {
 
     private static class wgpuInstanceRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuInstanceRelease"),
+                    wgpu_h.findOrThrow("wgpuInstanceRelease"),
                     DESC);
     }
 
@@ -9142,12 +8946,12 @@ public class webgpu_h {
 
     private static class wgpuPipelineLayoutSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuPipelineLayoutSetLabel"),
+                    wgpu_h.findOrThrow("wgpuPipelineLayoutSetLabel"),
                     DESC);
     }
 
@@ -9189,11 +8993,11 @@ public class webgpu_h {
 
     private static class wgpuPipelineLayoutReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuPipelineLayoutReference"),
+                    wgpu_h.findOrThrow("wgpuPipelineLayoutReference"),
                     DESC);
     }
 
@@ -9235,11 +9039,11 @@ public class webgpu_h {
 
     private static class wgpuPipelineLayoutRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuPipelineLayoutRelease"),
+                    wgpu_h.findOrThrow("wgpuPipelineLayoutRelease"),
                     DESC);
     }
 
@@ -9281,11 +9085,11 @@ public class webgpu_h {
 
     private static class wgpuQuerySetDestroy {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuQuerySetDestroy"),
+                    wgpu_h.findOrThrow("wgpuQuerySetDestroy"),
                     DESC);
     }
 
@@ -9327,12 +9131,12 @@ public class webgpu_h {
 
     private static class wgpuQuerySetGetCount {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuQuerySetGetCount"),
+                    wgpu_h.findOrThrow("wgpuQuerySetGetCount"),
                     DESC);
     }
 
@@ -9374,12 +9178,12 @@ public class webgpu_h {
 
     private static class wgpuQuerySetGetType {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuQuerySetGetType"),
+                    wgpu_h.findOrThrow("wgpuQuerySetGetType"),
                     DESC);
     }
 
@@ -9421,12 +9225,12 @@ public class webgpu_h {
 
     private static class wgpuQuerySetSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuQuerySetSetLabel"),
+                    wgpu_h.findOrThrow("wgpuQuerySetSetLabel"),
                     DESC);
     }
 
@@ -9468,11 +9272,11 @@ public class webgpu_h {
 
     private static class wgpuQuerySetReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuQuerySetReference"),
+                    wgpu_h.findOrThrow("wgpuQuerySetReference"),
                     DESC);
     }
 
@@ -9514,11 +9318,11 @@ public class webgpu_h {
 
     private static class wgpuQuerySetRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuQuerySetRelease"),
+                    wgpu_h.findOrThrow("wgpuQuerySetRelease"),
                     DESC);
     }
 
@@ -9560,20 +9364,20 @@ public class webgpu_h {
 
     private static class wgpuQueueOnSubmittedWorkDone {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuQueueOnSubmittedWorkDone"),
+                    wgpu_h.findOrThrow("wgpuQueueOnSubmittedWorkDone"),
                     DESC);
     }
 
     /**
      * Function descriptor for:
      * {@snippet lang=c :
-     * void wgpuQueueOnSubmittedWorkDone(WGPUQueue queue, WGPUQueueOnSubmittedWorkDoneCallback callback, void *userdata)
+     * void wgpuQueueOnSubmittedWorkDone(WGPUQueue queue, WGPUQueueWorkDoneCallback callback, void *userdata)
      * }
      */
     public static FunctionDescriptor wgpuQueueOnSubmittedWorkDone$descriptor() {
@@ -9583,7 +9387,7 @@ public class webgpu_h {
     /**
      * Downcall method handle for:
      * {@snippet lang=c :
-     * void wgpuQueueOnSubmittedWorkDone(WGPUQueue queue, WGPUQueueOnSubmittedWorkDoneCallback callback, void *userdata)
+     * void wgpuQueueOnSubmittedWorkDone(WGPUQueue queue, WGPUQueueWorkDoneCallback callback, void *userdata)
      * }
      */
     public static MethodHandle wgpuQueueOnSubmittedWorkDone$handle() {
@@ -9591,7 +9395,7 @@ public class webgpu_h {
     }
     /**
      * {@snippet lang=c :
-     * void wgpuQueueOnSubmittedWorkDone(WGPUQueue queue, WGPUQueueOnSubmittedWorkDoneCallback callback, void *userdata)
+     * void wgpuQueueOnSubmittedWorkDone(WGPUQueue queue, WGPUQueueWorkDoneCallback callback, void *userdata)
      * }
      */
     public static void wgpuQueueOnSubmittedWorkDone(MemorySegment queue, MemorySegment callback, MemorySegment userdata) {
@@ -9608,12 +9412,12 @@ public class webgpu_h {
 
     private static class wgpuQueueSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuQueueSetLabel"),
+                    wgpu_h.findOrThrow("wgpuQueueSetLabel"),
                     DESC);
     }
 
@@ -9655,13 +9459,13 @@ public class webgpu_h {
 
     private static class wgpuQueueSubmit {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuQueueSubmit"),
+                    wgpu_h.findOrThrow("wgpuQueueSubmit"),
                     DESC);
     }
 
@@ -9703,15 +9507,15 @@ public class webgpu_h {
 
     private static class wgpuQueueWriteBuffer {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG_LONG,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG_LONG,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuQueueWriteBuffer"),
+                    wgpu_h.findOrThrow("wgpuQueueWriteBuffer"),
                     DESC);
     }
 
@@ -9753,16 +9557,16 @@ public class webgpu_h {
 
     private static class wgpuQueueWriteTexture {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuQueueWriteTexture"),
+                    wgpu_h.findOrThrow("wgpuQueueWriteTexture"),
                     DESC);
     }
 
@@ -9804,11 +9608,11 @@ public class webgpu_h {
 
     private static class wgpuQueueReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuQueueReference"),
+                    wgpu_h.findOrThrow("wgpuQueueReference"),
                     DESC);
     }
 
@@ -9850,11 +9654,11 @@ public class webgpu_h {
 
     private static class wgpuQueueRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuQueueRelease"),
+                    wgpu_h.findOrThrow("wgpuQueueRelease"),
                     DESC);
     }
 
@@ -9896,12 +9700,12 @@ public class webgpu_h {
 
     private static class wgpuRenderBundleSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderBundleSetLabel"),
+                    wgpu_h.findOrThrow("wgpuRenderBundleSetLabel"),
                     DESC);
     }
 
@@ -9943,11 +9747,11 @@ public class webgpu_h {
 
     private static class wgpuRenderBundleReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderBundleReference"),
+                    wgpu_h.findOrThrow("wgpuRenderBundleReference"),
                     DESC);
     }
 
@@ -9989,11 +9793,11 @@ public class webgpu_h {
 
     private static class wgpuRenderBundleRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderBundleRelease"),
+                    wgpu_h.findOrThrow("wgpuRenderBundleRelease"),
                     DESC);
     }
 
@@ -10035,15 +9839,15 @@ public class webgpu_h {
 
     private static class wgpuRenderBundleEncoderDraw {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderBundleEncoderDraw"),
+                    wgpu_h.findOrThrow("wgpuRenderBundleEncoderDraw"),
                     DESC);
     }
 
@@ -10085,16 +9889,16 @@ public class webgpu_h {
 
     private static class wgpuRenderBundleEncoderDrawIndexed {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderBundleEncoderDrawIndexed"),
+                    wgpu_h.findOrThrow("wgpuRenderBundleEncoderDrawIndexed"),
                     DESC);
     }
 
@@ -10136,13 +9940,13 @@ public class webgpu_h {
 
     private static class wgpuRenderBundleEncoderDrawIndexedIndirect {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG_LONG
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG_LONG
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderBundleEncoderDrawIndexedIndirect"),
+                    wgpu_h.findOrThrow("wgpuRenderBundleEncoderDrawIndexedIndirect"),
                     DESC);
     }
 
@@ -10184,13 +9988,13 @@ public class webgpu_h {
 
     private static class wgpuRenderBundleEncoderDrawIndirect {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG_LONG
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG_LONG
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderBundleEncoderDrawIndirect"),
+                    wgpu_h.findOrThrow("wgpuRenderBundleEncoderDrawIndirect"),
                     DESC);
     }
 
@@ -10232,13 +10036,13 @@ public class webgpu_h {
 
     private static class wgpuRenderBundleEncoderFinish {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderBundleEncoderFinish"),
+                    wgpu_h.findOrThrow("wgpuRenderBundleEncoderFinish"),
                     DESC);
     }
 
@@ -10280,12 +10084,12 @@ public class webgpu_h {
 
     private static class wgpuRenderBundleEncoderInsertDebugMarker {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderBundleEncoderInsertDebugMarker"),
+                    wgpu_h.findOrThrow("wgpuRenderBundleEncoderInsertDebugMarker"),
                     DESC);
     }
 
@@ -10327,11 +10131,11 @@ public class webgpu_h {
 
     private static class wgpuRenderBundleEncoderPopDebugGroup {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderBundleEncoderPopDebugGroup"),
+                    wgpu_h.findOrThrow("wgpuRenderBundleEncoderPopDebugGroup"),
                     DESC);
     }
 
@@ -10373,12 +10177,12 @@ public class webgpu_h {
 
     private static class wgpuRenderBundleEncoderPushDebugGroup {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderBundleEncoderPushDebugGroup"),
+                    wgpu_h.findOrThrow("wgpuRenderBundleEncoderPushDebugGroup"),
                     DESC);
     }
 
@@ -10420,15 +10224,15 @@ public class webgpu_h {
 
     private static class wgpuRenderBundleEncoderSetBindGroup {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderBundleEncoderSetBindGroup"),
+                    wgpu_h.findOrThrow("wgpuRenderBundleEncoderSetBindGroup"),
                     DESC);
     }
 
@@ -10470,15 +10274,15 @@ public class webgpu_h {
 
     private static class wgpuRenderBundleEncoderSetIndexBuffer {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT,
-            webgpu_h.C_LONG_LONG,
-            webgpu_h.C_LONG_LONG
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT,
+            wgpu_h.C_LONG_LONG,
+            wgpu_h.C_LONG_LONG
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderBundleEncoderSetIndexBuffer"),
+                    wgpu_h.findOrThrow("wgpuRenderBundleEncoderSetIndexBuffer"),
                     DESC);
     }
 
@@ -10520,12 +10324,12 @@ public class webgpu_h {
 
     private static class wgpuRenderBundleEncoderSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderBundleEncoderSetLabel"),
+                    wgpu_h.findOrThrow("wgpuRenderBundleEncoderSetLabel"),
                     DESC);
     }
 
@@ -10567,12 +10371,12 @@ public class webgpu_h {
 
     private static class wgpuRenderBundleEncoderSetPipeline {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderBundleEncoderSetPipeline"),
+                    wgpu_h.findOrThrow("wgpuRenderBundleEncoderSetPipeline"),
                     DESC);
     }
 
@@ -10614,15 +10418,15 @@ public class webgpu_h {
 
     private static class wgpuRenderBundleEncoderSetVertexBuffer {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG_LONG,
-            webgpu_h.C_LONG_LONG
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG_LONG,
+            wgpu_h.C_LONG_LONG
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderBundleEncoderSetVertexBuffer"),
+                    wgpu_h.findOrThrow("wgpuRenderBundleEncoderSetVertexBuffer"),
                     DESC);
     }
 
@@ -10664,11 +10468,11 @@ public class webgpu_h {
 
     private static class wgpuRenderBundleEncoderReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderBundleEncoderReference"),
+                    wgpu_h.findOrThrow("wgpuRenderBundleEncoderReference"),
                     DESC);
     }
 
@@ -10710,11 +10514,11 @@ public class webgpu_h {
 
     private static class wgpuRenderBundleEncoderRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderBundleEncoderRelease"),
+                    wgpu_h.findOrThrow("wgpuRenderBundleEncoderRelease"),
                     DESC);
     }
 
@@ -10756,12 +10560,12 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderBeginOcclusionQuery {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderBeginOcclusionQuery"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderBeginOcclusionQuery"),
                     DESC);
     }
 
@@ -10803,15 +10607,15 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderDraw {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderDraw"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderDraw"),
                     DESC);
     }
 
@@ -10853,16 +10657,16 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderDrawIndexed {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderDrawIndexed"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderDrawIndexed"),
                     DESC);
     }
 
@@ -10904,13 +10708,13 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderDrawIndexedIndirect {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG_LONG
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG_LONG
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderDrawIndexedIndirect"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderDrawIndexedIndirect"),
                     DESC);
     }
 
@@ -10952,13 +10756,13 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderDrawIndirect {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG_LONG
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG_LONG
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderDrawIndirect"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderDrawIndirect"),
                     DESC);
     }
 
@@ -11000,11 +10804,11 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderEnd {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderEnd"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderEnd"),
                     DESC);
     }
 
@@ -11046,11 +10850,11 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderEndOcclusionQuery {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderEndOcclusionQuery"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderEndOcclusionQuery"),
                     DESC);
     }
 
@@ -11092,13 +10896,13 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderExecuteBundles {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderExecuteBundles"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderExecuteBundles"),
                     DESC);
     }
 
@@ -11140,12 +10944,12 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderInsertDebugMarker {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderInsertDebugMarker"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderInsertDebugMarker"),
                     DESC);
     }
 
@@ -11187,11 +10991,11 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderPopDebugGroup {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderPopDebugGroup"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderPopDebugGroup"),
                     DESC);
     }
 
@@ -11233,12 +11037,12 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderPushDebugGroup {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderPushDebugGroup"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderPushDebugGroup"),
                     DESC);
     }
 
@@ -11280,15 +11084,15 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderSetBindGroup {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderSetBindGroup"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderSetBindGroup"),
                     DESC);
     }
 
@@ -11330,12 +11134,12 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderSetBlendConstant {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderSetBlendConstant"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderSetBlendConstant"),
                     DESC);
     }
 
@@ -11377,15 +11181,15 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderSetIndexBuffer {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT,
-            webgpu_h.C_LONG_LONG,
-            webgpu_h.C_LONG_LONG
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT,
+            wgpu_h.C_LONG_LONG,
+            wgpu_h.C_LONG_LONG
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderSetIndexBuffer"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderSetIndexBuffer"),
                     DESC);
     }
 
@@ -11427,12 +11231,12 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderSetLabel"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderSetLabel"),
                     DESC);
     }
 
@@ -11474,12 +11278,12 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderSetPipeline {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderSetPipeline"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderSetPipeline"),
                     DESC);
     }
 
@@ -11521,15 +11325,15 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderSetScissorRect {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT,
-            webgpu_h.C_INT
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderSetScissorRect"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderSetScissorRect"),
                     DESC);
     }
 
@@ -11571,12 +11375,12 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderSetStencilReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderSetStencilReference"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderSetStencilReference"),
                     DESC);
     }
 
@@ -11618,15 +11422,15 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderSetVertexBuffer {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_LONG_LONG,
-            webgpu_h.C_LONG_LONG
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG_LONG,
+            wgpu_h.C_LONG_LONG
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderSetVertexBuffer"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderSetVertexBuffer"),
                     DESC);
     }
 
@@ -11668,17 +11472,17 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderSetViewport {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_FLOAT,
-            webgpu_h.C_FLOAT,
-            webgpu_h.C_FLOAT,
-            webgpu_h.C_FLOAT,
-            webgpu_h.C_FLOAT,
-            webgpu_h.C_FLOAT
+            wgpu_h.C_POINTER,
+            wgpu_h.C_FLOAT,
+            wgpu_h.C_FLOAT,
+            wgpu_h.C_FLOAT,
+            wgpu_h.C_FLOAT,
+            wgpu_h.C_FLOAT,
+            wgpu_h.C_FLOAT
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderSetViewport"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderSetViewport"),
                     DESC);
     }
 
@@ -11720,11 +11524,11 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderReference"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderReference"),
                     DESC);
     }
 
@@ -11766,11 +11570,11 @@ public class webgpu_h {
 
     private static class wgpuRenderPassEncoderRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPassEncoderRelease"),
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderRelease"),
                     DESC);
     }
 
@@ -11812,13 +11616,13 @@ public class webgpu_h {
 
     private static class wgpuRenderPipelineGetBindGroupLayout {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_INT
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPipelineGetBindGroupLayout"),
+                    wgpu_h.findOrThrow("wgpuRenderPipelineGetBindGroupLayout"),
                     DESC);
     }
 
@@ -11860,12 +11664,12 @@ public class webgpu_h {
 
     private static class wgpuRenderPipelineSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPipelineSetLabel"),
+                    wgpu_h.findOrThrow("wgpuRenderPipelineSetLabel"),
                     DESC);
     }
 
@@ -11907,11 +11711,11 @@ public class webgpu_h {
 
     private static class wgpuRenderPipelineReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPipelineReference"),
+                    wgpu_h.findOrThrow("wgpuRenderPipelineReference"),
                     DESC);
     }
 
@@ -11953,11 +11757,11 @@ public class webgpu_h {
 
     private static class wgpuRenderPipelineRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuRenderPipelineRelease"),
+                    wgpu_h.findOrThrow("wgpuRenderPipelineRelease"),
                     DESC);
     }
 
@@ -11999,12 +11803,12 @@ public class webgpu_h {
 
     private static class wgpuSamplerSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuSamplerSetLabel"),
+                    wgpu_h.findOrThrow("wgpuSamplerSetLabel"),
                     DESC);
     }
 
@@ -12046,11 +11850,11 @@ public class webgpu_h {
 
     private static class wgpuSamplerReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuSamplerReference"),
+                    wgpu_h.findOrThrow("wgpuSamplerReference"),
                     DESC);
     }
 
@@ -12092,11 +11896,11 @@ public class webgpu_h {
 
     private static class wgpuSamplerRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuSamplerRelease"),
+                    wgpu_h.findOrThrow("wgpuSamplerRelease"),
                     DESC);
     }
 
@@ -12138,20 +11942,20 @@ public class webgpu_h {
 
     private static class wgpuShaderModuleGetCompilationInfo {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuShaderModuleGetCompilationInfo"),
+                    wgpu_h.findOrThrow("wgpuShaderModuleGetCompilationInfo"),
                     DESC);
     }
 
     /**
      * Function descriptor for:
      * {@snippet lang=c :
-     * void wgpuShaderModuleGetCompilationInfo(WGPUShaderModule shaderModule, WGPUShaderModuleGetCompilationInfoCallback callback, void *userdata)
+     * void wgpuShaderModuleGetCompilationInfo(WGPUShaderModule shaderModule, WGPUCompilationInfoCallback callback, void *userdata)
      * }
      */
     public static FunctionDescriptor wgpuShaderModuleGetCompilationInfo$descriptor() {
@@ -12161,7 +11965,7 @@ public class webgpu_h {
     /**
      * Downcall method handle for:
      * {@snippet lang=c :
-     * void wgpuShaderModuleGetCompilationInfo(WGPUShaderModule shaderModule, WGPUShaderModuleGetCompilationInfoCallback callback, void *userdata)
+     * void wgpuShaderModuleGetCompilationInfo(WGPUShaderModule shaderModule, WGPUCompilationInfoCallback callback, void *userdata)
      * }
      */
     public static MethodHandle wgpuShaderModuleGetCompilationInfo$handle() {
@@ -12169,7 +11973,7 @@ public class webgpu_h {
     }
     /**
      * {@snippet lang=c :
-     * void wgpuShaderModuleGetCompilationInfo(WGPUShaderModule shaderModule, WGPUShaderModuleGetCompilationInfoCallback callback, void *userdata)
+     * void wgpuShaderModuleGetCompilationInfo(WGPUShaderModule shaderModule, WGPUCompilationInfoCallback callback, void *userdata)
      * }
      */
     public static void wgpuShaderModuleGetCompilationInfo(MemorySegment shaderModule, MemorySegment callback, MemorySegment userdata) {
@@ -12186,12 +11990,12 @@ public class webgpu_h {
 
     private static class wgpuShaderModuleSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuShaderModuleSetLabel"),
+                    wgpu_h.findOrThrow("wgpuShaderModuleSetLabel"),
                     DESC);
     }
 
@@ -12233,11 +12037,11 @@ public class webgpu_h {
 
     private static class wgpuShaderModuleReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuShaderModuleReference"),
+                    wgpu_h.findOrThrow("wgpuShaderModuleReference"),
                     DESC);
     }
 
@@ -12279,11 +12083,11 @@ public class webgpu_h {
 
     private static class wgpuShaderModuleRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuShaderModuleRelease"),
+                    wgpu_h.findOrThrow("wgpuShaderModuleRelease"),
                     DESC);
     }
 
@@ -12325,12 +12129,12 @@ public class webgpu_h {
 
     private static class wgpuSurfaceConfigure {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuSurfaceConfigure"),
+                    wgpu_h.findOrThrow("wgpuSurfaceConfigure"),
                     DESC);
     }
 
@@ -12372,13 +12176,13 @@ public class webgpu_h {
 
     private static class wgpuSurfaceGetCapabilities {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuSurfaceGetCapabilities"),
+                    wgpu_h.findOrThrow("wgpuSurfaceGetCapabilities"),
                     DESC);
     }
 
@@ -12420,12 +12224,12 @@ public class webgpu_h {
 
     private static class wgpuSurfaceGetCurrentTexture {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuSurfaceGetCurrentTexture"),
+                    wgpu_h.findOrThrow("wgpuSurfaceGetCurrentTexture"),
                     DESC);
     }
 
@@ -12467,13 +12271,13 @@ public class webgpu_h {
 
     private static class wgpuSurfaceGetPreferredFormat {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuSurfaceGetPreferredFormat"),
+                    wgpu_h.findOrThrow("wgpuSurfaceGetPreferredFormat"),
                     DESC);
     }
 
@@ -12515,11 +12319,11 @@ public class webgpu_h {
 
     private static class wgpuSurfacePresent {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuSurfacePresent"),
+                    wgpu_h.findOrThrow("wgpuSurfacePresent"),
                     DESC);
     }
 
@@ -12559,60 +12363,13 @@ public class webgpu_h {
         }
     }
 
-    private static class wgpuSurfaceSetLabel {
-        public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
-        );
-
-        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuSurfaceSetLabel"),
-                    DESC);
-    }
-
-    /**
-     * Function descriptor for:
-     * {@snippet lang=c :
-     * void wgpuSurfaceSetLabel(WGPUSurface surface, const char *label)
-     * }
-     */
-    public static FunctionDescriptor wgpuSurfaceSetLabel$descriptor() {
-        return wgpuSurfaceSetLabel.DESC;
-    }
-
-    /**
-     * Downcall method handle for:
-     * {@snippet lang=c :
-     * void wgpuSurfaceSetLabel(WGPUSurface surface, const char *label)
-     * }
-     */
-    public static MethodHandle wgpuSurfaceSetLabel$handle() {
-        return wgpuSurfaceSetLabel.HANDLE;
-    }
-    /**
-     * {@snippet lang=c :
-     * void wgpuSurfaceSetLabel(WGPUSurface surface, const char *label)
-     * }
-     */
-    public static void wgpuSurfaceSetLabel(MemorySegment surface, MemorySegment label) {
-        var mh$ = wgpuSurfaceSetLabel.HANDLE;
-        try {
-            if (TRACE_DOWNCALLS) {
-                traceDowncall("wgpuSurfaceSetLabel", surface, label);
-            }
-            mh$.invokeExact(surface, label);
-        } catch (Throwable ex$) {
-           throw new AssertionError("should not reach here", ex$);
-        }
-    }
-
     private static class wgpuSurfaceUnconfigure {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuSurfaceUnconfigure"),
+                    wgpu_h.findOrThrow("wgpuSurfaceUnconfigure"),
                     DESC);
     }
 
@@ -12654,11 +12411,11 @@ public class webgpu_h {
 
     private static class wgpuSurfaceReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuSurfaceReference"),
+                    wgpu_h.findOrThrow("wgpuSurfaceReference"),
                     DESC);
     }
 
@@ -12700,11 +12457,11 @@ public class webgpu_h {
 
     private static class wgpuSurfaceRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuSurfaceRelease"),
+                    wgpu_h.findOrThrow("wgpuSurfaceRelease"),
                     DESC);
     }
 
@@ -12750,14 +12507,14 @@ public class webgpu_h {
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuSurfaceCapabilitiesFreeMembers"),
+                    wgpu_h.findOrThrow("wgpuSurfaceCapabilitiesFreeMembers"),
                     DESC);
     }
 
     /**
      * Function descriptor for:
      * {@snippet lang=c :
-     * void wgpuSurfaceCapabilitiesFreeMembers(WGPUSurfaceCapabilities surfaceCapabilities)
+     * void wgpuSurfaceCapabilitiesFreeMembers(WGPUSurfaceCapabilities capabilities)
      * }
      */
     public static FunctionDescriptor wgpuSurfaceCapabilitiesFreeMembers$descriptor() {
@@ -12767,7 +12524,7 @@ public class webgpu_h {
     /**
      * Downcall method handle for:
      * {@snippet lang=c :
-     * void wgpuSurfaceCapabilitiesFreeMembers(WGPUSurfaceCapabilities surfaceCapabilities)
+     * void wgpuSurfaceCapabilitiesFreeMembers(WGPUSurfaceCapabilities capabilities)
      * }
      */
     public static MethodHandle wgpuSurfaceCapabilitiesFreeMembers$handle() {
@@ -12775,16 +12532,16 @@ public class webgpu_h {
     }
     /**
      * {@snippet lang=c :
-     * void wgpuSurfaceCapabilitiesFreeMembers(WGPUSurfaceCapabilities surfaceCapabilities)
+     * void wgpuSurfaceCapabilitiesFreeMembers(WGPUSurfaceCapabilities capabilities)
      * }
      */
-    public static void wgpuSurfaceCapabilitiesFreeMembers(MemorySegment surfaceCapabilities) {
+    public static void wgpuSurfaceCapabilitiesFreeMembers(MemorySegment capabilities) {
         var mh$ = wgpuSurfaceCapabilitiesFreeMembers.HANDLE;
         try {
             if (TRACE_DOWNCALLS) {
-                traceDowncall("wgpuSurfaceCapabilitiesFreeMembers", surfaceCapabilities);
+                traceDowncall("wgpuSurfaceCapabilitiesFreeMembers", capabilities);
             }
-            mh$.invokeExact(surfaceCapabilities);
+            mh$.invokeExact(capabilities);
         } catch (Throwable ex$) {
            throw new AssertionError("should not reach here", ex$);
         }
@@ -12792,13 +12549,13 @@ public class webgpu_h {
 
     private static class wgpuTextureCreateView {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuTextureCreateView"),
+                    wgpu_h.findOrThrow("wgpuTextureCreateView"),
                     DESC);
     }
 
@@ -12840,11 +12597,11 @@ public class webgpu_h {
 
     private static class wgpuTextureDestroy {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuTextureDestroy"),
+                    wgpu_h.findOrThrow("wgpuTextureDestroy"),
                     DESC);
     }
 
@@ -12886,12 +12643,12 @@ public class webgpu_h {
 
     private static class wgpuTextureGetDepthOrArrayLayers {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuTextureGetDepthOrArrayLayers"),
+                    wgpu_h.findOrThrow("wgpuTextureGetDepthOrArrayLayers"),
                     DESC);
     }
 
@@ -12933,12 +12690,12 @@ public class webgpu_h {
 
     private static class wgpuTextureGetDimension {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuTextureGetDimension"),
+                    wgpu_h.findOrThrow("wgpuTextureGetDimension"),
                     DESC);
     }
 
@@ -12980,12 +12737,12 @@ public class webgpu_h {
 
     private static class wgpuTextureGetFormat {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuTextureGetFormat"),
+                    wgpu_h.findOrThrow("wgpuTextureGetFormat"),
                     DESC);
     }
 
@@ -13027,12 +12784,12 @@ public class webgpu_h {
 
     private static class wgpuTextureGetHeight {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuTextureGetHeight"),
+                    wgpu_h.findOrThrow("wgpuTextureGetHeight"),
                     DESC);
     }
 
@@ -13074,12 +12831,12 @@ public class webgpu_h {
 
     private static class wgpuTextureGetMipLevelCount {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuTextureGetMipLevelCount"),
+                    wgpu_h.findOrThrow("wgpuTextureGetMipLevelCount"),
                     DESC);
     }
 
@@ -13121,12 +12878,12 @@ public class webgpu_h {
 
     private static class wgpuTextureGetSampleCount {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuTextureGetSampleCount"),
+                    wgpu_h.findOrThrow("wgpuTextureGetSampleCount"),
                     DESC);
     }
 
@@ -13168,12 +12925,12 @@ public class webgpu_h {
 
     private static class wgpuTextureGetUsage {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuTextureGetUsage"),
+                    wgpu_h.findOrThrow("wgpuTextureGetUsage"),
                     DESC);
     }
 
@@ -13215,12 +12972,12 @@ public class webgpu_h {
 
     private static class wgpuTextureGetWidth {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
-            webgpu_h.C_INT,
-            webgpu_h.C_POINTER
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuTextureGetWidth"),
+                    wgpu_h.findOrThrow("wgpuTextureGetWidth"),
                     DESC);
     }
 
@@ -13262,12 +13019,12 @@ public class webgpu_h {
 
     private static class wgpuTextureSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuTextureSetLabel"),
+                    wgpu_h.findOrThrow("wgpuTextureSetLabel"),
                     DESC);
     }
 
@@ -13309,11 +13066,11 @@ public class webgpu_h {
 
     private static class wgpuTextureReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuTextureReference"),
+                    wgpu_h.findOrThrow("wgpuTextureReference"),
                     DESC);
     }
 
@@ -13355,11 +13112,11 @@ public class webgpu_h {
 
     private static class wgpuTextureRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuTextureRelease"),
+                    wgpu_h.findOrThrow("wgpuTextureRelease"),
                     DESC);
     }
 
@@ -13401,12 +13158,12 @@ public class webgpu_h {
 
     private static class wgpuTextureViewSetLabel {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER,
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuTextureViewSetLabel"),
+                    wgpu_h.findOrThrow("wgpuTextureViewSetLabel"),
                     DESC);
     }
 
@@ -13448,11 +13205,11 @@ public class webgpu_h {
 
     private static class wgpuTextureViewReference {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuTextureViewReference"),
+                    wgpu_h.findOrThrow("wgpuTextureViewReference"),
                     DESC);
     }
 
@@ -13494,11 +13251,11 @@ public class webgpu_h {
 
     private static class wgpuTextureViewRelease {
         public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
-            webgpu_h.C_POINTER
+            wgpu_h.C_POINTER
         );
 
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
-                    webgpu_h.findOrThrow("wgpuTextureViewRelease"),
+                    wgpu_h.findOrThrow("wgpuTextureViewRelease"),
                     DESC);
     }
 
@@ -13537,6 +13294,1343 @@ public class webgpu_h {
            throw new AssertionError("should not reach here", ex$);
         }
     }
+    private static final int WGPUSType_DeviceExtras = (int)196609L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeSType.WGPUSType_DeviceExtras = 196609
+     * }
+     */
+    public static int WGPUSType_DeviceExtras() {
+        return WGPUSType_DeviceExtras;
+    }
+    private static final int WGPUSType_RequiredLimitsExtras = (int)196610L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeSType.WGPUSType_RequiredLimitsExtras = 196610
+     * }
+     */
+    public static int WGPUSType_RequiredLimitsExtras() {
+        return WGPUSType_RequiredLimitsExtras;
+    }
+    private static final int WGPUSType_PipelineLayoutExtras = (int)196611L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeSType.WGPUSType_PipelineLayoutExtras = 196611
+     * }
+     */
+    public static int WGPUSType_PipelineLayoutExtras() {
+        return WGPUSType_PipelineLayoutExtras;
+    }
+    private static final int WGPUSType_ShaderModuleGLSLDescriptor = (int)196612L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeSType.WGPUSType_ShaderModuleGLSLDescriptor = 196612
+     * }
+     */
+    public static int WGPUSType_ShaderModuleGLSLDescriptor() {
+        return WGPUSType_ShaderModuleGLSLDescriptor;
+    }
+    private static final int WGPUSType_SupportedLimitsExtras = (int)196613L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeSType.WGPUSType_SupportedLimitsExtras = 196613
+     * }
+     */
+    public static int WGPUSType_SupportedLimitsExtras() {
+        return WGPUSType_SupportedLimitsExtras;
+    }
+    private static final int WGPUSType_InstanceExtras = (int)196614L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeSType.WGPUSType_InstanceExtras = 196614
+     * }
+     */
+    public static int WGPUSType_InstanceExtras() {
+        return WGPUSType_InstanceExtras;
+    }
+    private static final int WGPUSType_BindGroupEntryExtras = (int)196615L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeSType.WGPUSType_BindGroupEntryExtras = 196615
+     * }
+     */
+    public static int WGPUSType_BindGroupEntryExtras() {
+        return WGPUSType_BindGroupEntryExtras;
+    }
+    private static final int WGPUSType_BindGroupLayoutEntryExtras = (int)196616L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeSType.WGPUSType_BindGroupLayoutEntryExtras = 196616
+     * }
+     */
+    public static int WGPUSType_BindGroupLayoutEntryExtras() {
+        return WGPUSType_BindGroupLayoutEntryExtras;
+    }
+    private static final int WGPUSType_QuerySetDescriptorExtras = (int)196617L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeSType.WGPUSType_QuerySetDescriptorExtras = 196617
+     * }
+     */
+    public static int WGPUSType_QuerySetDescriptorExtras() {
+        return WGPUSType_QuerySetDescriptorExtras;
+    }
+    private static final int WGPUSType_SurfaceConfigurationExtras = (int)196618L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeSType.WGPUSType_SurfaceConfigurationExtras = 196618
+     * }
+     */
+    public static int WGPUSType_SurfaceConfigurationExtras() {
+        return WGPUSType_SurfaceConfigurationExtras;
+    }
+    private static final int WGPUNativeSType_Force32 = (int)2147483647L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeSType.WGPUNativeSType_Force32 = 2147483647
+     * }
+     */
+    public static int WGPUNativeSType_Force32() {
+        return WGPUNativeSType_Force32;
+    }
+    private static final int WGPUNativeFeature_PushConstants = (int)196609L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeFeature.WGPUNativeFeature_PushConstants = 196609
+     * }
+     */
+    public static int WGPUNativeFeature_PushConstants() {
+        return WGPUNativeFeature_PushConstants;
+    }
+    private static final int WGPUNativeFeature_TextureAdapterSpecificFormatFeatures = (int)196610L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeFeature.WGPUNativeFeature_TextureAdapterSpecificFormatFeatures = 196610
+     * }
+     */
+    public static int WGPUNativeFeature_TextureAdapterSpecificFormatFeatures() {
+        return WGPUNativeFeature_TextureAdapterSpecificFormatFeatures;
+    }
+    private static final int WGPUNativeFeature_MultiDrawIndirect = (int)196611L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeFeature.WGPUNativeFeature_MultiDrawIndirect = 196611
+     * }
+     */
+    public static int WGPUNativeFeature_MultiDrawIndirect() {
+        return WGPUNativeFeature_MultiDrawIndirect;
+    }
+    private static final int WGPUNativeFeature_MultiDrawIndirectCount = (int)196612L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeFeature.WGPUNativeFeature_MultiDrawIndirectCount = 196612
+     * }
+     */
+    public static int WGPUNativeFeature_MultiDrawIndirectCount() {
+        return WGPUNativeFeature_MultiDrawIndirectCount;
+    }
+    private static final int WGPUNativeFeature_VertexWritableStorage = (int)196613L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeFeature.WGPUNativeFeature_VertexWritableStorage = 196613
+     * }
+     */
+    public static int WGPUNativeFeature_VertexWritableStorage() {
+        return WGPUNativeFeature_VertexWritableStorage;
+    }
+    private static final int WGPUNativeFeature_TextureBindingArray = (int)196614L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeFeature.WGPUNativeFeature_TextureBindingArray = 196614
+     * }
+     */
+    public static int WGPUNativeFeature_TextureBindingArray() {
+        return WGPUNativeFeature_TextureBindingArray;
+    }
+    private static final int WGPUNativeFeature_SampledTextureAndStorageBufferArrayNonUniformIndexing = (int)196615L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeFeature.WGPUNativeFeature_SampledTextureAndStorageBufferArrayNonUniformIndexing = 196615
+     * }
+     */
+    public static int WGPUNativeFeature_SampledTextureAndStorageBufferArrayNonUniformIndexing() {
+        return WGPUNativeFeature_SampledTextureAndStorageBufferArrayNonUniformIndexing;
+    }
+    private static final int WGPUNativeFeature_PipelineStatisticsQuery = (int)196616L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeFeature.WGPUNativeFeature_PipelineStatisticsQuery = 196616
+     * }
+     */
+    public static int WGPUNativeFeature_PipelineStatisticsQuery() {
+        return WGPUNativeFeature_PipelineStatisticsQuery;
+    }
+    private static final int WGPUNativeFeature_StorageResourceBindingArray = (int)196617L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeFeature.WGPUNativeFeature_StorageResourceBindingArray = 196617
+     * }
+     */
+    public static int WGPUNativeFeature_StorageResourceBindingArray() {
+        return WGPUNativeFeature_StorageResourceBindingArray;
+    }
+    private static final int WGPUNativeFeature_PartiallyBoundBindingArray = (int)196618L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeFeature.WGPUNativeFeature_PartiallyBoundBindingArray = 196618
+     * }
+     */
+    public static int WGPUNativeFeature_PartiallyBoundBindingArray() {
+        return WGPUNativeFeature_PartiallyBoundBindingArray;
+    }
+    private static final int WGPUNativeFeature_Force32 = (int)2147483647L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeFeature.WGPUNativeFeature_Force32 = 2147483647
+     * }
+     */
+    public static int WGPUNativeFeature_Force32() {
+        return WGPUNativeFeature_Force32;
+    }
+    private static final int WGPULogLevel_Off = (int)0L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPULogLevel.WGPULogLevel_Off = 0
+     * }
+     */
+    public static int WGPULogLevel_Off() {
+        return WGPULogLevel_Off;
+    }
+    private static final int WGPULogLevel_Error = (int)1L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPULogLevel.WGPULogLevel_Error = 1
+     * }
+     */
+    public static int WGPULogLevel_Error() {
+        return WGPULogLevel_Error;
+    }
+    private static final int WGPULogLevel_Warn = (int)2L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPULogLevel.WGPULogLevel_Warn = 2
+     * }
+     */
+    public static int WGPULogLevel_Warn() {
+        return WGPULogLevel_Warn;
+    }
+    private static final int WGPULogLevel_Info = (int)3L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPULogLevel.WGPULogLevel_Info = 3
+     * }
+     */
+    public static int WGPULogLevel_Info() {
+        return WGPULogLevel_Info;
+    }
+    private static final int WGPULogLevel_Debug = (int)4L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPULogLevel.WGPULogLevel_Debug = 4
+     * }
+     */
+    public static int WGPULogLevel_Debug() {
+        return WGPULogLevel_Debug;
+    }
+    private static final int WGPULogLevel_Trace = (int)5L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPULogLevel.WGPULogLevel_Trace = 5
+     * }
+     */
+    public static int WGPULogLevel_Trace() {
+        return WGPULogLevel_Trace;
+    }
+    private static final int WGPULogLevel_Force32 = (int)2147483647L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPULogLevel.WGPULogLevel_Force32 = 2147483647
+     * }
+     */
+    public static int WGPULogLevel_Force32() {
+        return WGPULogLevel_Force32;
+    }
+    private static final int WGPUInstanceBackend_All = (int)0L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUInstanceBackend.WGPUInstanceBackend_All = 0
+     * }
+     */
+    public static int WGPUInstanceBackend_All() {
+        return WGPUInstanceBackend_All;
+    }
+    private static final int WGPUInstanceBackend_Vulkan = (int)1L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUInstanceBackend.WGPUInstanceBackend_Vulkan = 1
+     * }
+     */
+    public static int WGPUInstanceBackend_Vulkan() {
+        return WGPUInstanceBackend_Vulkan;
+    }
+    private static final int WGPUInstanceBackend_GL = (int)2L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUInstanceBackend.WGPUInstanceBackend_GL = 2
+     * }
+     */
+    public static int WGPUInstanceBackend_GL() {
+        return WGPUInstanceBackend_GL;
+    }
+    private static final int WGPUInstanceBackend_Metal = (int)4L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUInstanceBackend.WGPUInstanceBackend_Metal = 4
+     * }
+     */
+    public static int WGPUInstanceBackend_Metal() {
+        return WGPUInstanceBackend_Metal;
+    }
+    private static final int WGPUInstanceBackend_DX12 = (int)8L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUInstanceBackend.WGPUInstanceBackend_DX12 = 8
+     * }
+     */
+    public static int WGPUInstanceBackend_DX12() {
+        return WGPUInstanceBackend_DX12;
+    }
+    private static final int WGPUInstanceBackend_DX11 = (int)16L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUInstanceBackend.WGPUInstanceBackend_DX11 = 16
+     * }
+     */
+    public static int WGPUInstanceBackend_DX11() {
+        return WGPUInstanceBackend_DX11;
+    }
+    private static final int WGPUInstanceBackend_BrowserWebGPU = (int)32L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUInstanceBackend.WGPUInstanceBackend_BrowserWebGPU = 32
+     * }
+     */
+    public static int WGPUInstanceBackend_BrowserWebGPU() {
+        return WGPUInstanceBackend_BrowserWebGPU;
+    }
+    private static final int WGPUInstanceBackend_Primary = (int)45L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUInstanceBackend.WGPUInstanceBackend_Primary = 45
+     * }
+     */
+    public static int WGPUInstanceBackend_Primary() {
+        return WGPUInstanceBackend_Primary;
+    }
+    private static final int WGPUInstanceBackend_Secondary = (int)18L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUInstanceBackend.WGPUInstanceBackend_Secondary = 18
+     * }
+     */
+    public static int WGPUInstanceBackend_Secondary() {
+        return WGPUInstanceBackend_Secondary;
+    }
+    private static final int WGPUInstanceBackend_Force32 = (int)2147483647L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUInstanceBackend.WGPUInstanceBackend_Force32 = 2147483647
+     * }
+     */
+    public static int WGPUInstanceBackend_Force32() {
+        return WGPUInstanceBackend_Force32;
+    }
+    /**
+     * {@snippet lang=c :
+     * typedef WGPUFlags WGPUInstanceBackendFlags
+     * }
+     */
+    public static final OfInt WGPUInstanceBackendFlags = wgpu_h.C_INT;
+    private static final int WGPUInstanceFlag_Default = (int)0L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUInstanceFlag.WGPUInstanceFlag_Default = 0
+     * }
+     */
+    public static int WGPUInstanceFlag_Default() {
+        return WGPUInstanceFlag_Default;
+    }
+    private static final int WGPUInstanceFlag_Debug = (int)1L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUInstanceFlag.WGPUInstanceFlag_Debug = 1
+     * }
+     */
+    public static int WGPUInstanceFlag_Debug() {
+        return WGPUInstanceFlag_Debug;
+    }
+    private static final int WGPUInstanceFlag_Validation = (int)2L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUInstanceFlag.WGPUInstanceFlag_Validation = 2
+     * }
+     */
+    public static int WGPUInstanceFlag_Validation() {
+        return WGPUInstanceFlag_Validation;
+    }
+    private static final int WGPUInstanceFlag_DiscardHalLabels = (int)4L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUInstanceFlag.WGPUInstanceFlag_DiscardHalLabels = 4
+     * }
+     */
+    public static int WGPUInstanceFlag_DiscardHalLabels() {
+        return WGPUInstanceFlag_DiscardHalLabels;
+    }
+    private static final int WGPUInstanceFlag_Force32 = (int)2147483647L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUInstanceFlag.WGPUInstanceFlag_Force32 = 2147483647
+     * }
+     */
+    public static int WGPUInstanceFlag_Force32() {
+        return WGPUInstanceFlag_Force32;
+    }
+    /**
+     * {@snippet lang=c :
+     * typedef WGPUFlags WGPUInstanceFlags
+     * }
+     */
+    public static final OfInt WGPUInstanceFlags = wgpu_h.C_INT;
+    private static final int WGPUDx12Compiler_Undefined = (int)0L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUDx12Compiler.WGPUDx12Compiler_Undefined = 0
+     * }
+     */
+    public static int WGPUDx12Compiler_Undefined() {
+        return WGPUDx12Compiler_Undefined;
+    }
+    private static final int WGPUDx12Compiler_Fxc = (int)1L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUDx12Compiler.WGPUDx12Compiler_Fxc = 1
+     * }
+     */
+    public static int WGPUDx12Compiler_Fxc() {
+        return WGPUDx12Compiler_Fxc;
+    }
+    private static final int WGPUDx12Compiler_Dxc = (int)2L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUDx12Compiler.WGPUDx12Compiler_Dxc = 2
+     * }
+     */
+    public static int WGPUDx12Compiler_Dxc() {
+        return WGPUDx12Compiler_Dxc;
+    }
+    private static final int WGPUDx12Compiler_Force32 = (int)2147483647L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUDx12Compiler.WGPUDx12Compiler_Force32 = 2147483647
+     * }
+     */
+    public static int WGPUDx12Compiler_Force32() {
+        return WGPUDx12Compiler_Force32;
+    }
+    private static final int WGPUGles3MinorVersion_Automatic = (int)0L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUGles3MinorVersion.WGPUGles3MinorVersion_Automatic = 0
+     * }
+     */
+    public static int WGPUGles3MinorVersion_Automatic() {
+        return WGPUGles3MinorVersion_Automatic;
+    }
+    private static final int WGPUGles3MinorVersion_Version0 = (int)1L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUGles3MinorVersion.WGPUGles3MinorVersion_Version0 = 1
+     * }
+     */
+    public static int WGPUGles3MinorVersion_Version0() {
+        return WGPUGles3MinorVersion_Version0;
+    }
+    private static final int WGPUGles3MinorVersion_Version1 = (int)2L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUGles3MinorVersion.WGPUGles3MinorVersion_Version1 = 2
+     * }
+     */
+    public static int WGPUGles3MinorVersion_Version1() {
+        return WGPUGles3MinorVersion_Version1;
+    }
+    private static final int WGPUGles3MinorVersion_Version2 = (int)3L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUGles3MinorVersion.WGPUGles3MinorVersion_Version2 = 3
+     * }
+     */
+    public static int WGPUGles3MinorVersion_Version2() {
+        return WGPUGles3MinorVersion_Version2;
+    }
+    private static final int WGPUGles3MinorVersion_Force32 = (int)2147483647L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUGles3MinorVersion.WGPUGles3MinorVersion_Force32 = 2147483647
+     * }
+     */
+    public static int WGPUGles3MinorVersion_Force32() {
+        return WGPUGles3MinorVersion_Force32;
+    }
+    private static final int WGPUPipelineStatisticName_VertexShaderInvocations = (int)0L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUPipelineStatisticName.WGPUPipelineStatisticName_VertexShaderInvocations = 0
+     * }
+     */
+    public static int WGPUPipelineStatisticName_VertexShaderInvocations() {
+        return WGPUPipelineStatisticName_VertexShaderInvocations;
+    }
+    private static final int WGPUPipelineStatisticName_ClipperInvocations = (int)1L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUPipelineStatisticName.WGPUPipelineStatisticName_ClipperInvocations = 1
+     * }
+     */
+    public static int WGPUPipelineStatisticName_ClipperInvocations() {
+        return WGPUPipelineStatisticName_ClipperInvocations;
+    }
+    private static final int WGPUPipelineStatisticName_ClipperPrimitivesOut = (int)2L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUPipelineStatisticName.WGPUPipelineStatisticName_ClipperPrimitivesOut = 2
+     * }
+     */
+    public static int WGPUPipelineStatisticName_ClipperPrimitivesOut() {
+        return WGPUPipelineStatisticName_ClipperPrimitivesOut;
+    }
+    private static final int WGPUPipelineStatisticName_FragmentShaderInvocations = (int)3L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUPipelineStatisticName.WGPUPipelineStatisticName_FragmentShaderInvocations = 3
+     * }
+     */
+    public static int WGPUPipelineStatisticName_FragmentShaderInvocations() {
+        return WGPUPipelineStatisticName_FragmentShaderInvocations;
+    }
+    private static final int WGPUPipelineStatisticName_ComputeShaderInvocations = (int)4L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUPipelineStatisticName.WGPUPipelineStatisticName_ComputeShaderInvocations = 4
+     * }
+     */
+    public static int WGPUPipelineStatisticName_ComputeShaderInvocations() {
+        return WGPUPipelineStatisticName_ComputeShaderInvocations;
+    }
+    private static final int WGPUPipelineStatisticName_Force32 = (int)2147483647L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUPipelineStatisticName.WGPUPipelineStatisticName_Force32 = 2147483647
+     * }
+     */
+    public static int WGPUPipelineStatisticName_Force32() {
+        return WGPUPipelineStatisticName_Force32;
+    }
+    private static final int WGPUNativeQueryType_PipelineStatistics = (int)196608L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeQueryType.WGPUNativeQueryType_PipelineStatistics = 196608
+     * }
+     */
+    public static int WGPUNativeQueryType_PipelineStatistics() {
+        return WGPUNativeQueryType_PipelineStatistics;
+    }
+    private static final int WGPUNativeQueryType_Force32 = (int)2147483647L;
+    /**
+     * {@snippet lang=c :
+     * enum WGPUNativeQueryType.WGPUNativeQueryType_Force32 = 2147483647
+     * }
+     */
+    public static int WGPUNativeQueryType_Force32() {
+        return WGPUNativeQueryType_Force32;
+    }
+    /**
+     * {@snippet lang=c :
+     * typedef uint64_t WGPUSubmissionIndex
+     * }
+     */
+    public static final OfLong WGPUSubmissionIndex = wgpu_h.C_LONG_LONG;
+
+    private static class wgpuGenerateReport {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
+        );
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
+                    wgpu_h.findOrThrow("wgpuGenerateReport"),
+                    DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * void wgpuGenerateReport(WGPUInstance instance, WGPUGlobalReport *report)
+     * }
+     */
+    public static FunctionDescriptor wgpuGenerateReport$descriptor() {
+        return wgpuGenerateReport.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * void wgpuGenerateReport(WGPUInstance instance, WGPUGlobalReport *report)
+     * }
+     */
+    public static MethodHandle wgpuGenerateReport$handle() {
+        return wgpuGenerateReport.HANDLE;
+    }
+    /**
+     * {@snippet lang=c :
+     * void wgpuGenerateReport(WGPUInstance instance, WGPUGlobalReport *report)
+     * }
+     */
+    public static void wgpuGenerateReport(MemorySegment instance, MemorySegment report) {
+        var mh$ = wgpuGenerateReport.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("wgpuGenerateReport", instance, report);
+            }
+            mh$.invokeExact(instance, report);
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
+    private static class wgpuInstanceEnumerateAdapters {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.of(
+            wgpu_h.C_LONG,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
+        );
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
+                    wgpu_h.findOrThrow("wgpuInstanceEnumerateAdapters"),
+                    DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * size_t wgpuInstanceEnumerateAdapters(WGPUInstance instance, const WGPUInstanceEnumerateAdapterOptions *options, WGPUAdapter *adapters)
+     * }
+     */
+    public static FunctionDescriptor wgpuInstanceEnumerateAdapters$descriptor() {
+        return wgpuInstanceEnumerateAdapters.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * size_t wgpuInstanceEnumerateAdapters(WGPUInstance instance, const WGPUInstanceEnumerateAdapterOptions *options, WGPUAdapter *adapters)
+     * }
+     */
+    public static MethodHandle wgpuInstanceEnumerateAdapters$handle() {
+        return wgpuInstanceEnumerateAdapters.HANDLE;
+    }
+    /**
+     * {@snippet lang=c :
+     * size_t wgpuInstanceEnumerateAdapters(WGPUInstance instance, const WGPUInstanceEnumerateAdapterOptions *options, WGPUAdapter *adapters)
+     * }
+     */
+    public static long wgpuInstanceEnumerateAdapters(MemorySegment instance, MemorySegment options, MemorySegment adapters) {
+        var mh$ = wgpuInstanceEnumerateAdapters.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("wgpuInstanceEnumerateAdapters", instance, options, adapters);
+            }
+            return (long)mh$.invokeExact(instance, options, adapters);
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
+    private static class wgpuQueueSubmitForIndex {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.of(
+            wgpu_h.C_LONG_LONG,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG,
+            wgpu_h.C_POINTER
+        );
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
+                    wgpu_h.findOrThrow("wgpuQueueSubmitForIndex"),
+                    DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * WGPUSubmissionIndex wgpuQueueSubmitForIndex(WGPUQueue queue, size_t commandCount, const WGPUCommandBuffer *commands)
+     * }
+     */
+    public static FunctionDescriptor wgpuQueueSubmitForIndex$descriptor() {
+        return wgpuQueueSubmitForIndex.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * WGPUSubmissionIndex wgpuQueueSubmitForIndex(WGPUQueue queue, size_t commandCount, const WGPUCommandBuffer *commands)
+     * }
+     */
+    public static MethodHandle wgpuQueueSubmitForIndex$handle() {
+        return wgpuQueueSubmitForIndex.HANDLE;
+    }
+    /**
+     * {@snippet lang=c :
+     * WGPUSubmissionIndex wgpuQueueSubmitForIndex(WGPUQueue queue, size_t commandCount, const WGPUCommandBuffer *commands)
+     * }
+     */
+    public static long wgpuQueueSubmitForIndex(MemorySegment queue, long commandCount, MemorySegment commands) {
+        var mh$ = wgpuQueueSubmitForIndex.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("wgpuQueueSubmitForIndex", queue, commandCount, commands);
+            }
+            return (long)mh$.invokeExact(queue, commandCount, commands);
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
+    private static class wgpuDevicePoll {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.of(
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER
+        );
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
+                    wgpu_h.findOrThrow("wgpuDevicePoll"),
+                    DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * WGPUBool wgpuDevicePoll(WGPUDevice device, WGPUBool wait, const WGPUWrappedSubmissionIndex *wrappedSubmissionIndex)
+     * }
+     */
+    public static FunctionDescriptor wgpuDevicePoll$descriptor() {
+        return wgpuDevicePoll.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * WGPUBool wgpuDevicePoll(WGPUDevice device, WGPUBool wait, const WGPUWrappedSubmissionIndex *wrappedSubmissionIndex)
+     * }
+     */
+    public static MethodHandle wgpuDevicePoll$handle() {
+        return wgpuDevicePoll.HANDLE;
+    }
+    /**
+     * {@snippet lang=c :
+     * WGPUBool wgpuDevicePoll(WGPUDevice device, WGPUBool wait, const WGPUWrappedSubmissionIndex *wrappedSubmissionIndex)
+     * }
+     */
+    public static int wgpuDevicePoll(MemorySegment device, int wait, MemorySegment wrappedSubmissionIndex) {
+        var mh$ = wgpuDevicePoll.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("wgpuDevicePoll", device, wait, wrappedSubmissionIndex);
+            }
+            return (int)mh$.invokeExact(device, wait, wrappedSubmissionIndex);
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
+    private static class wgpuSetLogCallback {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER
+        );
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
+                    wgpu_h.findOrThrow("wgpuSetLogCallback"),
+                    DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * void wgpuSetLogCallback(WGPULogCallback callback, void *userdata)
+     * }
+     */
+    public static FunctionDescriptor wgpuSetLogCallback$descriptor() {
+        return wgpuSetLogCallback.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * void wgpuSetLogCallback(WGPULogCallback callback, void *userdata)
+     * }
+     */
+    public static MethodHandle wgpuSetLogCallback$handle() {
+        return wgpuSetLogCallback.HANDLE;
+    }
+    /**
+     * {@snippet lang=c :
+     * void wgpuSetLogCallback(WGPULogCallback callback, void *userdata)
+     * }
+     */
+    public static void wgpuSetLogCallback(MemorySegment callback, MemorySegment userdata) {
+        var mh$ = wgpuSetLogCallback.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("wgpuSetLogCallback", callback, userdata);
+            }
+            mh$.invokeExact(callback, userdata);
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
+    private static class wgpuSetLogLevel {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
+            wgpu_h.C_INT
+        );
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
+                    wgpu_h.findOrThrow("wgpuSetLogLevel"),
+                    DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * void wgpuSetLogLevel(WGPULogLevel level)
+     * }
+     */
+    public static FunctionDescriptor wgpuSetLogLevel$descriptor() {
+        return wgpuSetLogLevel.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * void wgpuSetLogLevel(WGPULogLevel level)
+     * }
+     */
+    public static MethodHandle wgpuSetLogLevel$handle() {
+        return wgpuSetLogLevel.HANDLE;
+    }
+    /**
+     * {@snippet lang=c :
+     * void wgpuSetLogLevel(WGPULogLevel level)
+     * }
+     */
+    public static void wgpuSetLogLevel(int level) {
+        var mh$ = wgpuSetLogLevel.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("wgpuSetLogLevel", level);
+            }
+            mh$.invokeExact(level);
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
+    private static class wgpuGetVersion {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.of(
+            wgpu_h.C_INT    );
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
+                    wgpu_h.findOrThrow("wgpuGetVersion"),
+                    DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * uint32_t wgpuGetVersion()
+     * }
+     */
+    public static FunctionDescriptor wgpuGetVersion$descriptor() {
+        return wgpuGetVersion.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * uint32_t wgpuGetVersion()
+     * }
+     */
+    public static MethodHandle wgpuGetVersion$handle() {
+        return wgpuGetVersion.HANDLE;
+    }
+    /**
+     * {@snippet lang=c :
+     * uint32_t wgpuGetVersion()
+     * }
+     */
+    public static int wgpuGetVersion() {
+        var mh$ = wgpuGetVersion.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("wgpuGetVersion");
+            }
+            return (int)mh$.invokeExact();
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
+    private static class wgpuRenderPassEncoderSetPushConstants {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT,
+            wgpu_h.C_INT,
+            wgpu_h.C_POINTER
+        );
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderSetPushConstants"),
+                    DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderSetPushConstants(WGPURenderPassEncoder encoder, WGPUShaderStageFlags stages, uint32_t offset, uint32_t sizeBytes, const void *data)
+     * }
+     */
+    public static FunctionDescriptor wgpuRenderPassEncoderSetPushConstants$descriptor() {
+        return wgpuRenderPassEncoderSetPushConstants.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderSetPushConstants(WGPURenderPassEncoder encoder, WGPUShaderStageFlags stages, uint32_t offset, uint32_t sizeBytes, const void *data)
+     * }
+     */
+    public static MethodHandle wgpuRenderPassEncoderSetPushConstants$handle() {
+        return wgpuRenderPassEncoderSetPushConstants.HANDLE;
+    }
+    /**
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderSetPushConstants(WGPURenderPassEncoder encoder, WGPUShaderStageFlags stages, uint32_t offset, uint32_t sizeBytes, const void *data)
+     * }
+     */
+    public static void wgpuRenderPassEncoderSetPushConstants(MemorySegment encoder, int stages, int offset, int sizeBytes, MemorySegment data) {
+        var mh$ = wgpuRenderPassEncoderSetPushConstants.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("wgpuRenderPassEncoderSetPushConstants", encoder, stages, offset, sizeBytes, data);
+            }
+            mh$.invokeExact(encoder, stages, offset, sizeBytes, data);
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
+    private static class wgpuRenderPassEncoderMultiDrawIndirect {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG_LONG,
+            wgpu_h.C_INT
+        );
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderMultiDrawIndirect"),
+                    DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderMultiDrawIndirect(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64_t offset, uint32_t count)
+     * }
+     */
+    public static FunctionDescriptor wgpuRenderPassEncoderMultiDrawIndirect$descriptor() {
+        return wgpuRenderPassEncoderMultiDrawIndirect.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderMultiDrawIndirect(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64_t offset, uint32_t count)
+     * }
+     */
+    public static MethodHandle wgpuRenderPassEncoderMultiDrawIndirect$handle() {
+        return wgpuRenderPassEncoderMultiDrawIndirect.HANDLE;
+    }
+    /**
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderMultiDrawIndirect(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64_t offset, uint32_t count)
+     * }
+     */
+    public static void wgpuRenderPassEncoderMultiDrawIndirect(MemorySegment encoder, MemorySegment buffer, long offset, int count) {
+        var mh$ = wgpuRenderPassEncoderMultiDrawIndirect.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("wgpuRenderPassEncoderMultiDrawIndirect", encoder, buffer, offset, count);
+            }
+            mh$.invokeExact(encoder, buffer, offset, count);
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
+    private static class wgpuRenderPassEncoderMultiDrawIndexedIndirect {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG_LONG,
+            wgpu_h.C_INT
+        );
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderMultiDrawIndexedIndirect"),
+                    DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderMultiDrawIndexedIndirect(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64_t offset, uint32_t count)
+     * }
+     */
+    public static FunctionDescriptor wgpuRenderPassEncoderMultiDrawIndexedIndirect$descriptor() {
+        return wgpuRenderPassEncoderMultiDrawIndexedIndirect.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderMultiDrawIndexedIndirect(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64_t offset, uint32_t count)
+     * }
+     */
+    public static MethodHandle wgpuRenderPassEncoderMultiDrawIndexedIndirect$handle() {
+        return wgpuRenderPassEncoderMultiDrawIndexedIndirect.HANDLE;
+    }
+    /**
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderMultiDrawIndexedIndirect(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64_t offset, uint32_t count)
+     * }
+     */
+    public static void wgpuRenderPassEncoderMultiDrawIndexedIndirect(MemorySegment encoder, MemorySegment buffer, long offset, int count) {
+        var mh$ = wgpuRenderPassEncoderMultiDrawIndexedIndirect.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("wgpuRenderPassEncoderMultiDrawIndexedIndirect", encoder, buffer, offset, count);
+            }
+            mh$.invokeExact(encoder, buffer, offset, count);
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
+    private static class wgpuRenderPassEncoderMultiDrawIndirectCount {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG_LONG,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG_LONG,
+            wgpu_h.C_INT
+        );
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderMultiDrawIndirectCount"),
+                    DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderMultiDrawIndirectCount(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64_t offset, WGPUBuffer count_buffer, uint64_t count_buffer_offset, uint32_t max_count)
+     * }
+     */
+    public static FunctionDescriptor wgpuRenderPassEncoderMultiDrawIndirectCount$descriptor() {
+        return wgpuRenderPassEncoderMultiDrawIndirectCount.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderMultiDrawIndirectCount(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64_t offset, WGPUBuffer count_buffer, uint64_t count_buffer_offset, uint32_t max_count)
+     * }
+     */
+    public static MethodHandle wgpuRenderPassEncoderMultiDrawIndirectCount$handle() {
+        return wgpuRenderPassEncoderMultiDrawIndirectCount.HANDLE;
+    }
+    /**
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderMultiDrawIndirectCount(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64_t offset, WGPUBuffer count_buffer, uint64_t count_buffer_offset, uint32_t max_count)
+     * }
+     */
+    public static void wgpuRenderPassEncoderMultiDrawIndirectCount(MemorySegment encoder, MemorySegment buffer, long offset, MemorySegment count_buffer, long count_buffer_offset, int max_count) {
+        var mh$ = wgpuRenderPassEncoderMultiDrawIndirectCount.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("wgpuRenderPassEncoderMultiDrawIndirectCount", encoder, buffer, offset, count_buffer, count_buffer_offset, max_count);
+            }
+            mh$.invokeExact(encoder, buffer, offset, count_buffer, count_buffer_offset, max_count);
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
+    private static class wgpuRenderPassEncoderMultiDrawIndexedIndirectCount {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG_LONG,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_LONG_LONG,
+            wgpu_h.C_INT
+        );
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderMultiDrawIndexedIndirectCount"),
+                    DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderMultiDrawIndexedIndirectCount(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64_t offset, WGPUBuffer count_buffer, uint64_t count_buffer_offset, uint32_t max_count)
+     * }
+     */
+    public static FunctionDescriptor wgpuRenderPassEncoderMultiDrawIndexedIndirectCount$descriptor() {
+        return wgpuRenderPassEncoderMultiDrawIndexedIndirectCount.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderMultiDrawIndexedIndirectCount(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64_t offset, WGPUBuffer count_buffer, uint64_t count_buffer_offset, uint32_t max_count)
+     * }
+     */
+    public static MethodHandle wgpuRenderPassEncoderMultiDrawIndexedIndirectCount$handle() {
+        return wgpuRenderPassEncoderMultiDrawIndexedIndirectCount.HANDLE;
+    }
+    /**
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderMultiDrawIndexedIndirectCount(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64_t offset, WGPUBuffer count_buffer, uint64_t count_buffer_offset, uint32_t max_count)
+     * }
+     */
+    public static void wgpuRenderPassEncoderMultiDrawIndexedIndirectCount(MemorySegment encoder, MemorySegment buffer, long offset, MemorySegment count_buffer, long count_buffer_offset, int max_count) {
+        var mh$ = wgpuRenderPassEncoderMultiDrawIndexedIndirectCount.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("wgpuRenderPassEncoderMultiDrawIndexedIndirectCount", encoder, buffer, offset, count_buffer, count_buffer_offset, max_count);
+            }
+            mh$.invokeExact(encoder, buffer, offset, count_buffer, count_buffer_offset, max_count);
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
+    private static class wgpuComputePassEncoderBeginPipelineStatisticsQuery {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT
+        );
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
+                    wgpu_h.findOrThrow("wgpuComputePassEncoderBeginPipelineStatisticsQuery"),
+                    DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * void wgpuComputePassEncoderBeginPipelineStatisticsQuery(WGPUComputePassEncoder computePassEncoder, WGPUQuerySet querySet, uint32_t queryIndex)
+     * }
+     */
+    public static FunctionDescriptor wgpuComputePassEncoderBeginPipelineStatisticsQuery$descriptor() {
+        return wgpuComputePassEncoderBeginPipelineStatisticsQuery.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * void wgpuComputePassEncoderBeginPipelineStatisticsQuery(WGPUComputePassEncoder computePassEncoder, WGPUQuerySet querySet, uint32_t queryIndex)
+     * }
+     */
+    public static MethodHandle wgpuComputePassEncoderBeginPipelineStatisticsQuery$handle() {
+        return wgpuComputePassEncoderBeginPipelineStatisticsQuery.HANDLE;
+    }
+    /**
+     * {@snippet lang=c :
+     * void wgpuComputePassEncoderBeginPipelineStatisticsQuery(WGPUComputePassEncoder computePassEncoder, WGPUQuerySet querySet, uint32_t queryIndex)
+     * }
+     */
+    public static void wgpuComputePassEncoderBeginPipelineStatisticsQuery(MemorySegment computePassEncoder, MemorySegment querySet, int queryIndex) {
+        var mh$ = wgpuComputePassEncoderBeginPipelineStatisticsQuery.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("wgpuComputePassEncoderBeginPipelineStatisticsQuery", computePassEncoder, querySet, queryIndex);
+            }
+            mh$.invokeExact(computePassEncoder, querySet, queryIndex);
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
+    private static class wgpuComputePassEncoderEndPipelineStatisticsQuery {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
+            wgpu_h.C_POINTER
+        );
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
+                    wgpu_h.findOrThrow("wgpuComputePassEncoderEndPipelineStatisticsQuery"),
+                    DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * void wgpuComputePassEncoderEndPipelineStatisticsQuery(WGPUComputePassEncoder computePassEncoder)
+     * }
+     */
+    public static FunctionDescriptor wgpuComputePassEncoderEndPipelineStatisticsQuery$descriptor() {
+        return wgpuComputePassEncoderEndPipelineStatisticsQuery.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * void wgpuComputePassEncoderEndPipelineStatisticsQuery(WGPUComputePassEncoder computePassEncoder)
+     * }
+     */
+    public static MethodHandle wgpuComputePassEncoderEndPipelineStatisticsQuery$handle() {
+        return wgpuComputePassEncoderEndPipelineStatisticsQuery.HANDLE;
+    }
+    /**
+     * {@snippet lang=c :
+     * void wgpuComputePassEncoderEndPipelineStatisticsQuery(WGPUComputePassEncoder computePassEncoder)
+     * }
+     */
+    public static void wgpuComputePassEncoderEndPipelineStatisticsQuery(MemorySegment computePassEncoder) {
+        var mh$ = wgpuComputePassEncoderEndPipelineStatisticsQuery.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("wgpuComputePassEncoderEndPipelineStatisticsQuery", computePassEncoder);
+            }
+            mh$.invokeExact(computePassEncoder);
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
+    private static class wgpuRenderPassEncoderBeginPipelineStatisticsQuery {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
+            wgpu_h.C_POINTER,
+            wgpu_h.C_POINTER,
+            wgpu_h.C_INT
+        );
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderBeginPipelineStatisticsQuery"),
+                    DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderBeginPipelineStatisticsQuery(WGPURenderPassEncoder renderPassEncoder, WGPUQuerySet querySet, uint32_t queryIndex)
+     * }
+     */
+    public static FunctionDescriptor wgpuRenderPassEncoderBeginPipelineStatisticsQuery$descriptor() {
+        return wgpuRenderPassEncoderBeginPipelineStatisticsQuery.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderBeginPipelineStatisticsQuery(WGPURenderPassEncoder renderPassEncoder, WGPUQuerySet querySet, uint32_t queryIndex)
+     * }
+     */
+    public static MethodHandle wgpuRenderPassEncoderBeginPipelineStatisticsQuery$handle() {
+        return wgpuRenderPassEncoderBeginPipelineStatisticsQuery.HANDLE;
+    }
+    /**
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderBeginPipelineStatisticsQuery(WGPURenderPassEncoder renderPassEncoder, WGPUQuerySet querySet, uint32_t queryIndex)
+     * }
+     */
+    public static void wgpuRenderPassEncoderBeginPipelineStatisticsQuery(MemorySegment renderPassEncoder, MemorySegment querySet, int queryIndex) {
+        var mh$ = wgpuRenderPassEncoderBeginPipelineStatisticsQuery.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("wgpuRenderPassEncoderBeginPipelineStatisticsQuery", renderPassEncoder, querySet, queryIndex);
+            }
+            mh$.invokeExact(renderPassEncoder, querySet, queryIndex);
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
+    private static class wgpuRenderPassEncoderEndPipelineStatisticsQuery {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
+            wgpu_h.C_POINTER
+        );
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
+                    wgpu_h.findOrThrow("wgpuRenderPassEncoderEndPipelineStatisticsQuery"),
+                    DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderEndPipelineStatisticsQuery(WGPURenderPassEncoder renderPassEncoder)
+     * }
+     */
+    public static FunctionDescriptor wgpuRenderPassEncoderEndPipelineStatisticsQuery$descriptor() {
+        return wgpuRenderPassEncoderEndPipelineStatisticsQuery.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderEndPipelineStatisticsQuery(WGPURenderPassEncoder renderPassEncoder)
+     * }
+     */
+    public static MethodHandle wgpuRenderPassEncoderEndPipelineStatisticsQuery$handle() {
+        return wgpuRenderPassEncoderEndPipelineStatisticsQuery.HANDLE;
+    }
+    /**
+     * {@snippet lang=c :
+     * void wgpuRenderPassEncoderEndPipelineStatisticsQuery(WGPURenderPassEncoder renderPassEncoder)
+     * }
+     */
+    public static void wgpuRenderPassEncoderEndPipelineStatisticsQuery(MemorySegment renderPassEncoder) {
+        var mh$ = wgpuRenderPassEncoderEndPipelineStatisticsQuery.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("wgpuRenderPassEncoderEndPipelineStatisticsQuery", renderPassEncoder);
+            }
+            mh$.invokeExact(renderPassEncoder);
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
     /**
      * {@snippet lang=c :
      * #define __DARWIN_SUF_EXTSN "$DARWIN_EXTSN"
@@ -13545,7 +14639,7 @@ public class webgpu_h {
     public static MemorySegment __DARWIN_SUF_EXTSN() {
         class Holder {
             static final MemorySegment __DARWIN_SUF_EXTSN
-                = webgpu_h.LIBRARY_ARENA.allocateFrom("$DARWIN_EXTSN");
+                = wgpu_h.LIBRARY_ARENA.allocateFrom("$DARWIN_EXTSN");
         }
         return Holder.__DARWIN_SUF_EXTSN;
     }
@@ -14043,15 +15137,6 @@ public class webgpu_h {
      */
     public static long WGPU_COPY_STRIDE_UNDEFINED() {
         return WGPU_COPY_STRIDE_UNDEFINED;
-    }
-    private static final long WGPU_DEPTH_SLICE_UNDEFINED = 4294967295L;
-    /**
-     * {@snippet lang=c :
-     * #define WGPU_DEPTH_SLICE_UNDEFINED 4294967295
-     * }
-     */
-    public static long WGPU_DEPTH_SLICE_UNDEFINED() {
-        return WGPU_DEPTH_SLICE_UNDEFINED;
     }
     private static final long WGPU_LIMIT_U32_UNDEFINED = 4294967295L;
     /**

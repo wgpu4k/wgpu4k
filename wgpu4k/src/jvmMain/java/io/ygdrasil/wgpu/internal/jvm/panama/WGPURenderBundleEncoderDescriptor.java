@@ -2,8 +2,12 @@
 
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
+import java.lang.invoke.*;
 import java.lang.foreign.*;
+import java.nio.ByteOrder;
+import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import static java.lang.foreign.ValueLayout.*;
 import static java.lang.foreign.MemoryLayout.PathElement.*;
@@ -29,14 +33,14 @@ public class WGPURenderBundleEncoderDescriptor {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_POINTER.withName("label"),
-        webgpu_h.C_LONG.withName("colorFormatCount"),
-        webgpu_h.C_POINTER.withName("colorFormats"),
-        webgpu_h.C_INT.withName("depthStencilFormat"),
-        webgpu_h.C_INT.withName("sampleCount"),
-        webgpu_h.C_INT.withName("depthReadOnly"),
-        webgpu_h.C_INT.withName("stencilReadOnly")
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_POINTER.withName("label"),
+        wgpu_h.C_LONG.withName("colorFormatCount"),
+        wgpu_h.C_POINTER.withName("colorFormats"),
+        wgpu_h.C_INT.withName("depthStencilFormat"),
+        wgpu_h.C_INT.withName("sampleCount"),
+        wgpu_h.C_INT.withName("depthReadOnly"),
+        wgpu_h.C_INT.withName("stencilReadOnly")
     ).withName("WGPURenderBundleEncoderDescriptor");
 
     /**

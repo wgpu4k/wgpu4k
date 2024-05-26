@@ -3,10 +3,10 @@
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
 import java.lang.foreign.*;
-import java.util.function.*;
+import java.util.function.Consumer;
 
-import static java.lang.foreign.ValueLayout.*;
-import static java.lang.foreign.MemoryLayout.PathElement.*;
+import static java.lang.foreign.MemoryLayout.PathElement.groupElement;
+import static java.lang.foreign.ValueLayout.OfInt;
 
 /**
  * {@snippet lang=c :
@@ -24,9 +24,9 @@ public class WGPUBlendComponent {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_INT.withName("operation"),
-        webgpu_h.C_INT.withName("srcFactor"),
-        webgpu_h.C_INT.withName("dstFactor")
+        wgpu_h.C_INT.withName("operation"),
+        wgpu_h.C_INT.withName("srcFactor"),
+        wgpu_h.C_INT.withName("dstFactor")
     ).withName("WGPUBlendComponent");
 
     /**

@@ -3,10 +3,10 @@
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
 import java.lang.foreign.*;
-import java.util.function.*;
+import java.util.function.Consumer;
 
-import static java.lang.foreign.ValueLayout.*;
-import static java.lang.foreign.MemoryLayout.PathElement.*;
+import static java.lang.foreign.MemoryLayout.PathElement.groupElement;
+import static java.lang.foreign.ValueLayout.OfInt;
 
 /**
  * {@snippet lang=c :
@@ -25,10 +25,10 @@ public class WGPUMultisampleState {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_INT.withName("count"),
-        webgpu_h.C_INT.withName("mask"),
-        webgpu_h.C_INT.withName("alphaToCoverageEnabled"),
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_INT.withName("count"),
+        wgpu_h.C_INT.withName("mask"),
+        wgpu_h.C_INT.withName("alphaToCoverageEnabled"),
         MemoryLayout.paddingLayout(4)
     ).withName("WGPUMultisampleState");
 

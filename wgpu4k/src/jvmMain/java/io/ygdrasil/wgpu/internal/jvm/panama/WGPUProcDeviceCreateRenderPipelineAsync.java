@@ -4,10 +4,17 @@ package io.ygdrasil.wgpu.internal.jvm.panama;
 
 import java.lang.invoke.*;
 import java.lang.foreign.*;
+import java.nio.ByteOrder;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
+
+import static java.lang.foreign.ValueLayout.*;
+import static java.lang.foreign.MemoryLayout.PathElement.*;
 
 /**
  * {@snippet lang=c :
- * typedef void (*WGPUProcDeviceCreateRenderPipelineAsync)(WGPUDevice, const WGPURenderPipelineDescriptor *, WGPUDeviceCreateRenderPipelineAsyncCallback, void *)
+ * typedef void (*WGPUProcDeviceCreateRenderPipelineAsync)(WGPUDevice, const WGPURenderPipelineDescriptor *, WGPUCreateRenderPipelineAsyncCallback, void *)
  * }
  */
 public class WGPUProcDeviceCreateRenderPipelineAsync {
@@ -24,10 +31,10 @@ public class WGPUProcDeviceCreateRenderPipelineAsync {
     }
 
     private static final FunctionDescriptor $DESC = FunctionDescriptor.ofVoid(
-        webgpu_h.C_POINTER,
-        webgpu_h.C_POINTER,
-        webgpu_h.C_POINTER,
-        webgpu_h.C_POINTER
+        wgpu_h.C_POINTER,
+        wgpu_h.C_POINTER,
+        wgpu_h.C_POINTER,
+        wgpu_h.C_POINTER
     );
 
     /**
@@ -37,13 +44,13 @@ public class WGPUProcDeviceCreateRenderPipelineAsync {
         return $DESC;
     }
 
-    private static final MethodHandle UP$MH = webgpu_h.upcallHandle(Function.class, "apply", $DESC);
+    private static final MethodHandle UP$MH = wgpu_h.upcallHandle(WGPUProcDeviceCreateRenderPipelineAsync.Function.class, "apply", $DESC);
 
     /**
      * Allocates a new upcall stub, whose implementation is defined by {@code fi}.
      * The lifetime of the returned segment is managed by {@code arena}
      */
-    public static MemorySegment allocate(Function fi, Arena arena) {
+    public static MemorySegment allocate(WGPUProcDeviceCreateRenderPipelineAsync.Function fi, Arena arena) {
         return Linker.nativeLinker().upcallStub(UP$MH.bindTo(fi), $DESC, arena);
     }
 

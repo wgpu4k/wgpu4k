@@ -4,15 +4,22 @@ package io.ygdrasil.wgpu.internal.jvm.panama;
 
 import java.lang.invoke.*;
 import java.lang.foreign.*;
+import java.nio.ByteOrder;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
+
+import static java.lang.foreign.ValueLayout.*;
+import static java.lang.foreign.MemoryLayout.PathElement.*;
 
 /**
  * {@snippet lang=c :
- * typedef void (*WGPUAdapterRequestDeviceCallback)(WGPURequestDeviceStatus, WGPUDevice, const char *, void *)
+ * typedef void (*WGPUQueueWorkDoneCallback)(WGPUQueueWorkDoneStatus, void *)
  * }
  */
-public class WGPUAdapterRequestDeviceCallback {
+public class WGPUQueueWorkDoneCallback {
 
-    WGPUAdapterRequestDeviceCallback() {
+    WGPUQueueWorkDoneCallback() {
         // Should not be called directly
     }
 
@@ -20,14 +27,12 @@ public class WGPUAdapterRequestDeviceCallback {
      * The function pointer signature, expressed as a functional interface
      */
     public interface Function {
-        void apply(int status, MemorySegment device, MemorySegment message, MemorySegment userdata);
+        void apply(int status, MemorySegment userdata);
     }
 
     private static final FunctionDescriptor $DESC = FunctionDescriptor.ofVoid(
-        webgpu_h.C_INT,
-        webgpu_h.C_POINTER,
-        webgpu_h.C_POINTER,
-        webgpu_h.C_POINTER
+        wgpu_h.C_INT,
+        wgpu_h.C_POINTER
     );
 
     /**
@@ -37,13 +42,13 @@ public class WGPUAdapterRequestDeviceCallback {
         return $DESC;
     }
 
-    private static final MethodHandle UP$MH = webgpu_h.upcallHandle(Function.class, "apply", $DESC);
+    private static final MethodHandle UP$MH = wgpu_h.upcallHandle(WGPUQueueWorkDoneCallback.Function.class, "apply", $DESC);
 
     /**
      * Allocates a new upcall stub, whose implementation is defined by {@code fi}.
      * The lifetime of the returned segment is managed by {@code arena}
      */
-    public static MemorySegment allocate(Function fi, Arena arena) {
+    public static MemorySegment allocate(WGPUQueueWorkDoneCallback.Function fi, Arena arena) {
         return Linker.nativeLinker().upcallStub(UP$MH.bindTo(fi), $DESC, arena);
     }
 
@@ -52,9 +57,9 @@ public class WGPUAdapterRequestDeviceCallback {
     /**
      * Invoke the upcall stub {@code funcPtr}, with given parameters
      */
-    public static void invoke(MemorySegment funcPtr,int status, MemorySegment device, MemorySegment message, MemorySegment userdata) {
+    public static void invoke(MemorySegment funcPtr,int status, MemorySegment userdata) {
         try {
-             DOWN$MH.invokeExact(funcPtr, status, device, message, userdata);
+             DOWN$MH.invokeExact(funcPtr, status, userdata);
         } catch (Throwable ex$) {
             throw new AssertionError("should not reach here", ex$);
         }

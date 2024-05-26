@@ -3,10 +3,10 @@
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
 import java.lang.foreign.*;
-import java.util.function.*;
+import java.util.function.Consumer;
 
-import static java.lang.foreign.ValueLayout.*;
-import static java.lang.foreign.MemoryLayout.PathElement.*;
+import static java.lang.foreign.MemoryLayout.PathElement.groupElement;
+import static java.lang.foreign.ValueLayout.OfInt;
 
 /**
  * {@snippet lang=c :
@@ -25,11 +25,11 @@ public class WGPUColorTargetState {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_INT.withName("format"),
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_INT.withName("format"),
         MemoryLayout.paddingLayout(4),
-        webgpu_h.C_POINTER.withName("blend"),
-        webgpu_h.C_INT.withName("writeMask"),
+        wgpu_h.C_POINTER.withName("blend"),
+        wgpu_h.C_INT.withName("writeMask"),
         MemoryLayout.paddingLayout(4)
     ).withName("WGPUColorTargetState");
 

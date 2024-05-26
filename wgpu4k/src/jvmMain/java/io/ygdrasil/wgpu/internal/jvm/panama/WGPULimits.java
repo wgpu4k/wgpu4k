@@ -3,10 +3,11 @@
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
 import java.lang.foreign.*;
-import java.util.function.*;
+import java.util.function.Consumer;
 
-import static java.lang.foreign.ValueLayout.*;
-import static java.lang.foreign.MemoryLayout.PathElement.*;
+import static java.lang.foreign.MemoryLayout.PathElement.groupElement;
+import static java.lang.foreign.ValueLayout.OfInt;
+import static java.lang.foreign.ValueLayout.OfLong;
 
 /**
  * {@snippet lang=c :
@@ -53,39 +54,39 @@ public class WGPULimits {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_INT.withName("maxTextureDimension1D"),
-        webgpu_h.C_INT.withName("maxTextureDimension2D"),
-        webgpu_h.C_INT.withName("maxTextureDimension3D"),
-        webgpu_h.C_INT.withName("maxTextureArrayLayers"),
-        webgpu_h.C_INT.withName("maxBindGroups"),
-        webgpu_h.C_INT.withName("maxBindGroupsPlusVertexBuffers"),
-        webgpu_h.C_INT.withName("maxBindingsPerBindGroup"),
-        webgpu_h.C_INT.withName("maxDynamicUniformBuffersPerPipelineLayout"),
-        webgpu_h.C_INT.withName("maxDynamicStorageBuffersPerPipelineLayout"),
-        webgpu_h.C_INT.withName("maxSampledTexturesPerShaderStage"),
-        webgpu_h.C_INT.withName("maxSamplersPerShaderStage"),
-        webgpu_h.C_INT.withName("maxStorageBuffersPerShaderStage"),
-        webgpu_h.C_INT.withName("maxStorageTexturesPerShaderStage"),
-        webgpu_h.C_INT.withName("maxUniformBuffersPerShaderStage"),
-        webgpu_h.C_LONG_LONG.withName("maxUniformBufferBindingSize"),
-        webgpu_h.C_LONG_LONG.withName("maxStorageBufferBindingSize"),
-        webgpu_h.C_INT.withName("minUniformBufferOffsetAlignment"),
-        webgpu_h.C_INT.withName("minStorageBufferOffsetAlignment"),
-        webgpu_h.C_INT.withName("maxVertexBuffers"),
+        wgpu_h.C_INT.withName("maxTextureDimension1D"),
+        wgpu_h.C_INT.withName("maxTextureDimension2D"),
+        wgpu_h.C_INT.withName("maxTextureDimension3D"),
+        wgpu_h.C_INT.withName("maxTextureArrayLayers"),
+        wgpu_h.C_INT.withName("maxBindGroups"),
+        wgpu_h.C_INT.withName("maxBindGroupsPlusVertexBuffers"),
+        wgpu_h.C_INT.withName("maxBindingsPerBindGroup"),
+        wgpu_h.C_INT.withName("maxDynamicUniformBuffersPerPipelineLayout"),
+        wgpu_h.C_INT.withName("maxDynamicStorageBuffersPerPipelineLayout"),
+        wgpu_h.C_INT.withName("maxSampledTexturesPerShaderStage"),
+        wgpu_h.C_INT.withName("maxSamplersPerShaderStage"),
+        wgpu_h.C_INT.withName("maxStorageBuffersPerShaderStage"),
+        wgpu_h.C_INT.withName("maxStorageTexturesPerShaderStage"),
+        wgpu_h.C_INT.withName("maxUniformBuffersPerShaderStage"),
+        wgpu_h.C_LONG_LONG.withName("maxUniformBufferBindingSize"),
+        wgpu_h.C_LONG_LONG.withName("maxStorageBufferBindingSize"),
+        wgpu_h.C_INT.withName("minUniformBufferOffsetAlignment"),
+        wgpu_h.C_INT.withName("minStorageBufferOffsetAlignment"),
+        wgpu_h.C_INT.withName("maxVertexBuffers"),
         MemoryLayout.paddingLayout(4),
-        webgpu_h.C_LONG_LONG.withName("maxBufferSize"),
-        webgpu_h.C_INT.withName("maxVertexAttributes"),
-        webgpu_h.C_INT.withName("maxVertexBufferArrayStride"),
-        webgpu_h.C_INT.withName("maxInterStageShaderComponents"),
-        webgpu_h.C_INT.withName("maxInterStageShaderVariables"),
-        webgpu_h.C_INT.withName("maxColorAttachments"),
-        webgpu_h.C_INT.withName("maxColorAttachmentBytesPerSample"),
-        webgpu_h.C_INT.withName("maxComputeWorkgroupStorageSize"),
-        webgpu_h.C_INT.withName("maxComputeInvocationsPerWorkgroup"),
-        webgpu_h.C_INT.withName("maxComputeWorkgroupSizeX"),
-        webgpu_h.C_INT.withName("maxComputeWorkgroupSizeY"),
-        webgpu_h.C_INT.withName("maxComputeWorkgroupSizeZ"),
-        webgpu_h.C_INT.withName("maxComputeWorkgroupsPerDimension")
+        wgpu_h.C_LONG_LONG.withName("maxBufferSize"),
+        wgpu_h.C_INT.withName("maxVertexAttributes"),
+        wgpu_h.C_INT.withName("maxVertexBufferArrayStride"),
+        wgpu_h.C_INT.withName("maxInterStageShaderComponents"),
+        wgpu_h.C_INT.withName("maxInterStageShaderVariables"),
+        wgpu_h.C_INT.withName("maxColorAttachments"),
+        wgpu_h.C_INT.withName("maxColorAttachmentBytesPerSample"),
+        wgpu_h.C_INT.withName("maxComputeWorkgroupStorageSize"),
+        wgpu_h.C_INT.withName("maxComputeInvocationsPerWorkgroup"),
+        wgpu_h.C_INT.withName("maxComputeWorkgroupSizeX"),
+        wgpu_h.C_INT.withName("maxComputeWorkgroupSizeY"),
+        wgpu_h.C_INT.withName("maxComputeWorkgroupSizeZ"),
+        wgpu_h.C_INT.withName("maxComputeWorkgroupsPerDimension")
     ).withName("WGPULimits");
 
     /**

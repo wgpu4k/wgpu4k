@@ -2,8 +2,12 @@
 
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
+import java.lang.invoke.*;
 import java.lang.foreign.*;
+import java.nio.ByteOrder;
+import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import static java.lang.foreign.ValueLayout.*;
 import static java.lang.foreign.MemoryLayout.PathElement.*;
@@ -24,7 +28,7 @@ public class WGPURenderPassDescriptorMaxDrawCount {
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
         WGPUChainedStruct.layout().withName("chain"),
-        webgpu_h.C_LONG_LONG.withName("maxDrawCount")
+        wgpu_h.C_LONG_LONG.withName("maxDrawCount")
     ).withName("WGPURenderPassDescriptorMaxDrawCount");
 
     /**

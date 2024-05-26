@@ -3,10 +3,10 @@
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
 import java.lang.foreign.*;
-import java.util.function.*;
+import java.util.function.Consumer;
 
-import static java.lang.foreign.ValueLayout.*;
-import static java.lang.foreign.MemoryLayout.PathElement.*;
+import static java.lang.foreign.MemoryLayout.PathElement.groupElement;
+import static java.lang.foreign.ValueLayout.OfLong;
 
 /**
  * {@snippet lang=c :
@@ -29,14 +29,14 @@ public class WGPUDeviceDescriptor {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_POINTER.withName("label"),
-        webgpu_h.C_LONG.withName("requiredFeatureCount"),
-        webgpu_h.C_POINTER.withName("requiredFeatures"),
-        webgpu_h.C_POINTER.withName("requiredLimits"),
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_POINTER.withName("label"),
+        wgpu_h.C_LONG.withName("requiredFeatureCount"),
+        wgpu_h.C_POINTER.withName("requiredFeatures"),
+        wgpu_h.C_POINTER.withName("requiredLimits"),
         WGPUQueueDescriptor.layout().withName("defaultQueue"),
-        webgpu_h.C_POINTER.withName("deviceLostCallback"),
-        webgpu_h.C_POINTER.withName("deviceLostUserdata")
+        wgpu_h.C_POINTER.withName("deviceLostCallback"),
+        wgpu_h.C_POINTER.withName("deviceLostUserdata")
     ).withName("WGPUDeviceDescriptor");
 
     /**

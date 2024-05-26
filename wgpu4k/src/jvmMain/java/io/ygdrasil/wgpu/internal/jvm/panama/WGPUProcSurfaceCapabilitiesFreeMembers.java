@@ -4,6 +4,13 @@ package io.ygdrasil.wgpu.internal.jvm.panama;
 
 import java.lang.invoke.*;
 import java.lang.foreign.*;
+import java.nio.ByteOrder;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
+
+import static java.lang.foreign.ValueLayout.*;
+import static java.lang.foreign.MemoryLayout.PathElement.*;
 
 /**
  * {@snippet lang=c :
@@ -20,7 +27,7 @@ public class WGPUProcSurfaceCapabilitiesFreeMembers {
      * The function pointer signature, expressed as a functional interface
      */
     public interface Function {
-        void apply(MemorySegment surfaceCapabilities);
+        void apply(MemorySegment capabilities);
     }
 
     private static final FunctionDescriptor $DESC = FunctionDescriptor.ofVoid(
@@ -34,13 +41,13 @@ public class WGPUProcSurfaceCapabilitiesFreeMembers {
         return $DESC;
     }
 
-    private static final MethodHandle UP$MH = webgpu_h.upcallHandle(Function.class, "apply", $DESC);
+    private static final MethodHandle UP$MH = wgpu_h.upcallHandle(WGPUProcSurfaceCapabilitiesFreeMembers.Function.class, "apply", $DESC);
 
     /**
      * Allocates a new upcall stub, whose implementation is defined by {@code fi}.
      * The lifetime of the returned segment is managed by {@code arena}
      */
-    public static MemorySegment allocate(Function fi, Arena arena) {
+    public static MemorySegment allocate(WGPUProcSurfaceCapabilitiesFreeMembers.Function fi, Arena arena) {
         return Linker.nativeLinker().upcallStub(UP$MH.bindTo(fi), $DESC, arena);
     }
 
@@ -49,9 +56,9 @@ public class WGPUProcSurfaceCapabilitiesFreeMembers {
     /**
      * Invoke the upcall stub {@code funcPtr}, with given parameters
      */
-    public static void invoke(MemorySegment funcPtr,MemorySegment surfaceCapabilities) {
+    public static void invoke(MemorySegment funcPtr,MemorySegment capabilities) {
         try {
-             DOWN$MH.invokeExact(funcPtr, surfaceCapabilities);
+             DOWN$MH.invokeExact(funcPtr, capabilities);
         } catch (Throwable ex$) {
             throw new AssertionError("should not reach here", ex$);
         }

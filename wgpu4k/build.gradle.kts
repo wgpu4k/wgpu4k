@@ -1,13 +1,11 @@
 import de.undercouch.gradle.tasks.download.Download
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon
 import io.github.krakowski.jextract.JextractTask
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
 	alias(libs.plugins.kotest)
-	id("io.github.krakowski.jextract") version "0.5.0" apply false
+	id("io.github.krakowski.jextract") version "0.5.0" apply true
 	alias(libs.plugins.download)
 }
 
@@ -20,7 +18,7 @@ java {
 // You need to use a JDK version with jextract from here
 // https://jdk.java.net/jextract/
 val jextract = tasks.withType<JextractTask> {
-	header("${project.projectDir}/../webgpu-headers/webgpu.h") {
+	header("${project.projectDir}/../headers/wgpu.h") {
 
 		// The package under which all source files will be generated
 		targetPackage = "io.ygdrasil.wgpu.internal.jvm.panama"

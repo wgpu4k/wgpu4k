@@ -1,16 +1,16 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import java.lang.foreign.MemorySegment
 
 actual class RenderPassEncoder(private val handler: MemorySegment) : AutoCloseable {
 
     actual fun end() {
-        webgpu_h.wgpuRenderPassEncoderEnd(handler)
+        wgpu_h.wgpuRenderPassEncoderEnd(handler)
     }
 
     actual fun setPipeline(renderPipeline: RenderPipeline) {
-        webgpu_h.wgpuRenderPassEncoderSetPipeline(handler, renderPipeline.handler)
+        wgpu_h.wgpuRenderPassEncoderSetPipeline(handler, renderPipeline.handler)
     }
 
     actual fun draw(
@@ -19,11 +19,11 @@ actual class RenderPassEncoder(private val handler: MemorySegment) : AutoCloseab
         firstVertex: GPUSize32,
         firstInstance: GPUSize32
     ) {
-        webgpu_h.wgpuRenderPassEncoderDraw(handler, vertexCount, instanceCount, firstVertex, firstInstance)
+        wgpu_h.wgpuRenderPassEncoderDraw(handler, vertexCount, instanceCount, firstVertex, firstInstance)
     }
 
     actual fun setBindGroup(index: Int, bindGroup: BindGroup) {
-        webgpu_h.wgpuRenderPassEncoderSetBindGroup(
+        wgpu_h.wgpuRenderPassEncoderSetBindGroup(
             handler,
             index,
             bindGroup.handler,
@@ -33,7 +33,7 @@ actual class RenderPassEncoder(private val handler: MemorySegment) : AutoCloseab
     }
 
     actual fun setVertexBuffer(slot: Int, buffer: Buffer) {
-        webgpu_h.wgpuRenderPassEncoderSetVertexBuffer(
+        wgpu_h.wgpuRenderPassEncoderSetVertexBuffer(
             handler,
             slot,
             buffer.handler,
@@ -43,7 +43,7 @@ actual class RenderPassEncoder(private val handler: MemorySegment) : AutoCloseab
     }
 
     actual override fun close() {
-        webgpu_h.wgpuRenderPassEncoderRelease(handler)
+        wgpu_h.wgpuRenderPassEncoderRelease(handler)
     }
 
 }

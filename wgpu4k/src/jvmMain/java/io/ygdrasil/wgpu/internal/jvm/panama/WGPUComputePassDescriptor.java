@@ -23,9 +23,9 @@ public class WGPUComputePassDescriptor {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_POINTER.withName("label"),
-        webgpu_h.C_POINTER.withName("timestampWrites")
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_POINTER.withName("label"),
+        wgpu_h.C_POINTER.withName("timestampWrites")
     ).withName("WGPUComputePassDescriptor");
 
     /**

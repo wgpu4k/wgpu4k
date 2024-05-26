@@ -3,10 +3,10 @@
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
 import java.lang.foreign.*;
-import java.util.function.*;
+import java.util.function.Consumer;
 
-import static java.lang.foreign.ValueLayout.*;
-import static java.lang.foreign.MemoryLayout.PathElement.*;
+import static java.lang.foreign.MemoryLayout.PathElement.groupElement;
+import static java.lang.foreign.ValueLayout.OfLong;
 
 /**
  * {@snippet lang=c :
@@ -28,13 +28,13 @@ public class WGPUFragmentState {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_POINTER.withName("module"),
-        webgpu_h.C_POINTER.withName("entryPoint"),
-        webgpu_h.C_LONG.withName("constantCount"),
-        webgpu_h.C_POINTER.withName("constants"),
-        webgpu_h.C_LONG.withName("targetCount"),
-        webgpu_h.C_POINTER.withName("targets")
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_POINTER.withName("module"),
+        wgpu_h.C_POINTER.withName("entryPoint"),
+        wgpu_h.C_LONG.withName("constantCount"),
+        wgpu_h.C_POINTER.withName("constants"),
+        wgpu_h.C_LONG.withName("targetCount"),
+        wgpu_h.C_POINTER.withName("targets")
     ).withName("WGPUFragmentState");
 
     /**

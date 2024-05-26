@@ -1,7 +1,7 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.jvm.*
-import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.mapper.computePassDescriptorMapper
 import io.ygdrasil.wgpu.mapper.convert
 import io.ygdrasil.wgpu.mapper.map
@@ -11,7 +11,7 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
 
     actual fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder = confined { arena ->
         arena.map(descriptor)
-            .let { webgpu_h.wgpuCommandEncoderBeginRenderPass(handler, it) }
+            .let { wgpu_h.wgpuCommandEncoderBeginRenderPass(handler, it) }
             ?.let { RenderPassEncoder(it) }
             ?: error("fail to get RenderPassEncoder")
     }
@@ -19,7 +19,7 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
     actual fun finish(): CommandBuffer =
         WGPUCommandBufferDescriptor()
             .toMemory()
-            .let { webgpu_h.wgpuCommandEncoderFinish(handler, it) }
+            .let { wgpu_h.wgpuCommandEncoderFinish(handler, it) }
             ?.let { CommandBuffer(it) }
             ?: error("fail to get CommandBuffer")
 
@@ -40,7 +40,7 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
         destination: MemorySegment,
         copySize: MemorySegment
     ) {
-        webgpu_h.wgpuCommandEncoderCopyTextureToTexture(
+        wgpu_h.wgpuCommandEncoderCopyTextureToTexture(
             handler,
             source,
             destination,
@@ -51,13 +51,13 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
     actual fun beginComputePass(descriptor: ComputePassDescriptor?): ComputePassEncoder =
         descriptor?.let { computePassDescriptorMapper.map<ComputePassDescriptor, WGPUComputePassDescriptor>(descriptor) }
             .also { it?.write() }?.pointer?.toMemory()
-            .let { webgpu_h.wgpuCommandEncoderBeginComputePass(handler, it ?: MemorySegment.NULL) }
+            .let { wgpu_h.wgpuCommandEncoderBeginComputePass(handler, it ?: MemorySegment.NULL) }
             ?.let { ComputePassEncoder(it) }
             ?: error("fail to get ComputePassEncoder")
 
 
     actual override fun close() {
-        webgpu_h.wgpuCommandEncoderRelease(handler)
+        wgpu_h.wgpuCommandEncoderRelease(handler)
     }
 
 }

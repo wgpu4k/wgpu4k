@@ -5,7 +5,7 @@ import io.ygdrasil.wgpu.internal.jvm.WGPUDeviceImpl
 import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceCapabilities
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceTexture
-import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.internal.jvm.toMemory
 import io.ygdrasil.wgpu.internal.jvm.toPointer
 import java.lang.foreign.Arena
@@ -30,17 +30,17 @@ actual class RenderingContext(
 
 	actual fun getCurrentTexture(): Texture = confined { arena ->
 		WGPUSurfaceTexture.allocate(arena).let { surfaceTexture ->
-			webgpu_h.wgpuSurfaceGetCurrentTexture(handler, surfaceTexture)
+			wgpu_h.wgpuSurfaceGetCurrentTexture(handler, surfaceTexture)
 			Texture(WGPUSurfaceTexture.texture(surfaceTexture))
 		}
 	}
 
 	actual fun present() {
-		webgpu_h.wgpuSurfacePresent(handler)
+		wgpu_h.wgpuSurfacePresent(handler)
 	}
 
 	fun computeSurfaceCapabilities(adapter: Adapter) {
-		webgpu_h.wgpuSurfaceGetCapabilities(handler, adapter.handler, surfaceCapabilities)
+		wgpu_h.wgpuSurfaceGetCapabilities(handler, adapter.handler, surfaceCapabilities)
 	}
 
 	actual fun configure(canvasConfiguration: CanvasConfiguration) {
@@ -49,11 +49,11 @@ actual class RenderingContext(
 		val descriptor = canvasConfiguration.convert()
 		descriptor.write()
 
-		webgpu_h.wgpuSurfaceConfigure(handler, descriptor.pointer.toMemory())
+		wgpu_h.wgpuSurfaceConfigure(handler, descriptor.pointer.toMemory())
 	}
 
     actual override fun close() {
-		webgpu_h.wgpuSurfaceRelease(handler)
+		wgpu_h.wgpuSurfaceRelease(handler)
 	}
 
 	private fun CanvasConfiguration.convert(): io.ygdrasil.wgpu.internal.jvm.WGPUSurfaceConfiguration = io.ygdrasil.wgpu.internal.jvm.WGPUSurfaceConfiguration().also {

@@ -2,8 +2,12 @@
 
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
+import java.lang.invoke.*;
 import java.lang.foreign.*;
+import java.nio.ByteOrder;
+import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import static java.lang.foreign.ValueLayout.*;
 import static java.lang.foreign.MemoryLayout.PathElement.*;
@@ -33,18 +37,18 @@ public class WGPUSamplerDescriptor {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_POINTER.withName("label"),
-        webgpu_h.C_INT.withName("addressModeU"),
-        webgpu_h.C_INT.withName("addressModeV"),
-        webgpu_h.C_INT.withName("addressModeW"),
-        webgpu_h.C_INT.withName("magFilter"),
-        webgpu_h.C_INT.withName("minFilter"),
-        webgpu_h.C_INT.withName("mipmapFilter"),
-        webgpu_h.C_FLOAT.withName("lodMinClamp"),
-        webgpu_h.C_FLOAT.withName("lodMaxClamp"),
-        webgpu_h.C_INT.withName("compare"),
-        webgpu_h.C_SHORT.withName("maxAnisotropy"),
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_POINTER.withName("label"),
+        wgpu_h.C_INT.withName("addressModeU"),
+        wgpu_h.C_INT.withName("addressModeV"),
+        wgpu_h.C_INT.withName("addressModeW"),
+        wgpu_h.C_INT.withName("magFilter"),
+        wgpu_h.C_INT.withName("minFilter"),
+        wgpu_h.C_INT.withName("mipmapFilter"),
+        wgpu_h.C_FLOAT.withName("lodMinClamp"),
+        wgpu_h.C_FLOAT.withName("lodMaxClamp"),
+        wgpu_h.C_INT.withName("compare"),
+        wgpu_h.C_SHORT.withName("maxAnisotropy"),
         MemoryLayout.paddingLayout(2)
     ).withName("WGPUSamplerDescriptor");
 

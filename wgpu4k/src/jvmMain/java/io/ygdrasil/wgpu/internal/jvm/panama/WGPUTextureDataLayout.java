@@ -2,8 +2,12 @@
 
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
+import java.lang.invoke.*;
 import java.lang.foreign.*;
+import java.nio.ByteOrder;
+import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import static java.lang.foreign.ValueLayout.*;
 import static java.lang.foreign.MemoryLayout.PathElement.*;
@@ -25,10 +29,10 @@ public class WGPUTextureDataLayout {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_LONG_LONG.withName("offset"),
-        webgpu_h.C_INT.withName("bytesPerRow"),
-        webgpu_h.C_INT.withName("rowsPerImage")
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_LONG_LONG.withName("offset"),
+        wgpu_h.C_INT.withName("bytesPerRow"),
+        wgpu_h.C_INT.withName("rowsPerImage")
     ).withName("WGPUTextureDataLayout");
 
     /**

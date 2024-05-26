@@ -2,8 +2,12 @@
 
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
+import java.lang.invoke.*;
 import java.lang.foreign.*;
+import java.nio.ByteOrder;
+import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import static java.lang.foreign.ValueLayout.*;
 import static java.lang.foreign.MemoryLayout.PathElement.*;
@@ -31,16 +35,16 @@ public class WGPUSurfaceConfiguration {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_POINTER.withName("device"),
-        webgpu_h.C_INT.withName("format"),
-        webgpu_h.C_INT.withName("usage"),
-        webgpu_h.C_LONG.withName("viewFormatCount"),
-        webgpu_h.C_POINTER.withName("viewFormats"),
-        webgpu_h.C_INT.withName("alphaMode"),
-        webgpu_h.C_INT.withName("width"),
-        webgpu_h.C_INT.withName("height"),
-        webgpu_h.C_INT.withName("presentMode")
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_POINTER.withName("device"),
+        wgpu_h.C_INT.withName("format"),
+        wgpu_h.C_INT.withName("usage"),
+        wgpu_h.C_LONG.withName("viewFormatCount"),
+        wgpu_h.C_POINTER.withName("viewFormats"),
+        wgpu_h.C_INT.withName("alphaMode"),
+        wgpu_h.C_INT.withName("width"),
+        wgpu_h.C_INT.withName("height"),
+        wgpu_h.C_INT.withName("presentMode")
     ).withName("WGPUSurfaceConfiguration");
 
     /**

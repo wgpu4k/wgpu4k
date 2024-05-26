@@ -3,10 +3,10 @@
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
 import java.lang.foreign.*;
-import java.util.function.*;
+import java.util.function.Consumer;
 
-import static java.lang.foreign.ValueLayout.*;
-import static java.lang.foreign.MemoryLayout.PathElement.*;
+import static java.lang.foreign.MemoryLayout.PathElement.groupElement;
+import static java.lang.foreign.ValueLayout.OfInt;
 
 /**
  * {@snippet lang=c :
@@ -24,7 +24,7 @@ public class WGPUPrimitiveDepthClipControl {
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
         WGPUChainedStruct.layout().withName("chain"),
-        webgpu_h.C_INT.withName("unclippedDepth"),
+        wgpu_h.C_INT.withName("unclippedDepth"),
         MemoryLayout.paddingLayout(4)
     ).withName("WGPUPrimitiveDepthClipControl");
 

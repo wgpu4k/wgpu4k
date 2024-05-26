@@ -2,12 +2,15 @@
 
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
-import org.jetbrains.annotations.NotNull;
-
+import java.lang.invoke.*;
 import java.lang.foreign.*;
-import java.util.function.Consumer;
+import java.nio.ByteOrder;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
-import static java.lang.foreign.MemoryLayout.PathElement.groupElement;
+import static java.lang.foreign.ValueLayout.*;
+import static java.lang.foreign.MemoryLayout.PathElement.*;
 
 /**
  * {@snippet lang=c :
@@ -30,14 +33,14 @@ public class WGPURenderPipelineDescriptor {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_POINTER.withName("label"),
-        webgpu_h.C_POINTER.withName("layout"),
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_POINTER.withName("label"),
+        wgpu_h.C_POINTER.withName("layout"),
         WGPUVertexState.layout().withName("vertex"),
         WGPUPrimitiveState.layout().withName("primitive"),
-        webgpu_h.C_POINTER.withName("depthStencil"),
+        wgpu_h.C_POINTER.withName("depthStencil"),
         WGPUMultisampleState.layout().withName("multisample"),
-        webgpu_h.C_POINTER.withName("fragment")
+        wgpu_h.C_POINTER.withName("fragment")
     ).withName("WGPURenderPipelineDescriptor");
 
     /**
@@ -209,7 +212,7 @@ public class WGPURenderPipelineDescriptor {
      * WGPUVertexState vertex
      * }
      */
-    public static @NotNull MemorySegment vertex(MemorySegment struct) {
+    public static MemorySegment vertex(MemorySegment struct) {
         return struct.asSlice(vertex$OFFSET, vertex$LAYOUT.byteSize());
     }
 

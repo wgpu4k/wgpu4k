@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import java.lang.foreign.MemorySegment
 
 actual class ComputePassEncoder(internal val handler: MemorySegment) : AutoCloseable {
@@ -36,10 +36,10 @@ actual class ComputePassEncoder(internal val handler: MemorySegment) : AutoClose
     }
 
     actual fun end() {
-        webgpu_h.wgpuComputePassEncoderEnd(handler)
+        wgpu_h.wgpuComputePassEncoderEnd(handler)
     }
 
     actual override fun close() {
-        webgpu_h.wgpuComputePassEncoderRelease(handler)
+        wgpu_h.wgpuComputePassEncoderRelease(handler)
     }
 }

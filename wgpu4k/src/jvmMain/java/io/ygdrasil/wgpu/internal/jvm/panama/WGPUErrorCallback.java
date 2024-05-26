@@ -2,8 +2,11 @@
 
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
-import java.lang.invoke.*;
-import java.lang.foreign.*;
+import java.lang.foreign.Arena;
+import java.lang.foreign.FunctionDescriptor;
+import java.lang.foreign.Linker;
+import java.lang.foreign.MemorySegment;
+import java.lang.invoke.MethodHandle;
 
 /**
  * {@snippet lang=c :
@@ -24,9 +27,9 @@ public class WGPUErrorCallback {
     }
 
     private static final FunctionDescriptor $DESC = FunctionDescriptor.ofVoid(
-        webgpu_h.C_INT,
-        webgpu_h.C_POINTER,
-        webgpu_h.C_POINTER
+        wgpu_h.C_INT,
+        wgpu_h.C_POINTER,
+        wgpu_h.C_POINTER
     );
 
     /**
@@ -36,13 +39,13 @@ public class WGPUErrorCallback {
         return $DESC;
     }
 
-    private static final MethodHandle UP$MH = webgpu_h.upcallHandle(Function.class, "apply", $DESC);
+    private static final MethodHandle UP$MH = wgpu_h.upcallHandle(WGPUErrorCallback.Function.class, "apply", $DESC);
 
     /**
      * Allocates a new upcall stub, whose implementation is defined by {@code fi}.
      * The lifetime of the returned segment is managed by {@code arena}
      */
-    public static MemorySegment allocate(Function fi, Arena arena) {
+    public static MemorySegment allocate(WGPUErrorCallback.Function fi, Arena arena) {
         return Linker.nativeLinker().upcallStub(UP$MH.bindTo(fi), $DESC, arena);
     }
 

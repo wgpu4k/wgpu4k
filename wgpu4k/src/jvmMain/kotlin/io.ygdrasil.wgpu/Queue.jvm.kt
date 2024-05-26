@@ -1,7 +1,7 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.jvm.*
-import io.ygdrasil.wgpu.internal.jvm.panama.webgpu_h
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.mapper.map
 import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
@@ -14,14 +14,14 @@ actual class Queue(internal val handler: MemorySegment) {
 
             val commands = commandsBuffer.map { it.handler }.toPointerArray(arena)
 
-            webgpu_h.wgpuQueueSubmit(
+            wgpu_h.wgpuQueueSubmit(
                 handler,
                 commandsBuffer.size.toLong(),
                 commands
             )
         } else {
 
-            webgpu_h.wgpuQueueSubmit(
+            wgpu_h.wgpuQueueSubmit(
                 handler,
                 0L,
                 MemorySegment.NULL
@@ -36,7 +36,7 @@ actual class Queue(internal val handler: MemorySegment) {
         dataOffset: GPUSize64,
         size: GPUSize64
     ) = confined { arena ->
-        webgpu_h.wgpuQueueWriteBuffer(
+        wgpu_h.wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
@@ -52,7 +52,7 @@ actual class Queue(internal val handler: MemorySegment) {
         dataOffset: GPUSize64,
         size: GPUSize64
     ) = confined { arena ->
-        webgpu_h.wgpuQueueWriteBuffer(
+        wgpu_h.wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
@@ -75,7 +75,7 @@ actual class Queue(internal val handler: MemorySegment) {
 
         val bytePerPixel = destination.texture.format.getBytesPerPixel()
 
-        webgpu_h.wgpuQueueWriteTexture(
+        wgpu_h.wgpuQueueWriteTexture(
             handler,
             arena.map(destination),
             image.data,

@@ -3,10 +3,10 @@
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
 import java.lang.foreign.*;
-import java.util.function.*;
+import java.util.function.Consumer;
 
-import static java.lang.foreign.ValueLayout.*;
-import static java.lang.foreign.MemoryLayout.PathElement.*;
+import static java.lang.foreign.MemoryLayout.PathElement.groupElement;
+import static java.lang.foreign.ValueLayout.OfInt;
 
 /**
  * {@snippet lang=c :
@@ -26,11 +26,11 @@ public class WGPUImageCopyTexture {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_POINTER.withName("texture"),
-        webgpu_h.C_INT.withName("mipLevel"),
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_POINTER.withName("texture"),
+        wgpu_h.C_INT.withName("mipLevel"),
         WGPUOrigin3D.layout().withName("origin"),
-        webgpu_h.C_INT.withName("aspect"),
+        wgpu_h.C_INT.withName("aspect"),
         MemoryLayout.paddingLayout(4)
     ).withName("WGPUImageCopyTexture");
 

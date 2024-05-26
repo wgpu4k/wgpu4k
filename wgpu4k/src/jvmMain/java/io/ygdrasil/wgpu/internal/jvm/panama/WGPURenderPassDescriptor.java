@@ -2,8 +2,12 @@
 
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
+import java.lang.invoke.*;
 import java.lang.foreign.*;
+import java.nio.ByteOrder;
+import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import static java.lang.foreign.ValueLayout.*;
 import static java.lang.foreign.MemoryLayout.PathElement.*;
@@ -28,13 +32,13 @@ public class WGPURenderPassDescriptor {
     }
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
-        webgpu_h.C_POINTER.withName("nextInChain"),
-        webgpu_h.C_POINTER.withName("label"),
-        webgpu_h.C_LONG.withName("colorAttachmentCount"),
-        webgpu_h.C_POINTER.withName("colorAttachments"),
-        webgpu_h.C_POINTER.withName("depthStencilAttachment"),
-        webgpu_h.C_POINTER.withName("occlusionQuerySet"),
-        webgpu_h.C_POINTER.withName("timestampWrites")
+        wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_POINTER.withName("label"),
+        wgpu_h.C_LONG.withName("colorAttachmentCount"),
+        wgpu_h.C_POINTER.withName("colorAttachments"),
+        wgpu_h.C_POINTER.withName("depthStencilAttachment"),
+        wgpu_h.C_POINTER.withName("occlusionQuerySet"),
+        wgpu_h.C_POINTER.withName("timestampWrites")
     ).withName("WGPURenderPassDescriptor");
 
     /**

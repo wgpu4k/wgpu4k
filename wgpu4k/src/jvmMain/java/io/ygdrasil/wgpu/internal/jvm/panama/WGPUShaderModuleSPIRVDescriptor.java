@@ -2,8 +2,12 @@
 
 package io.ygdrasil.wgpu.internal.jvm.panama;
 
+import java.lang.invoke.*;
 import java.lang.foreign.*;
+import java.nio.ByteOrder;
+import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import static java.lang.foreign.ValueLayout.*;
 import static java.lang.foreign.MemoryLayout.PathElement.*;
@@ -25,9 +29,9 @@ public class WGPUShaderModuleSPIRVDescriptor {
 
     private static final GroupLayout $LAYOUT = MemoryLayout.structLayout(
         WGPUChainedStruct.layout().withName("chain"),
-        webgpu_h.C_INT.withName("codeSize"),
+        wgpu_h.C_INT.withName("codeSize"),
         MemoryLayout.paddingLayout(4),
-        webgpu_h.C_POINTER.withName("code")
+        wgpu_h.C_POINTER.withName("code")
     ).withName("WGPUShaderModuleSPIRVDescriptor");
 
     /**
