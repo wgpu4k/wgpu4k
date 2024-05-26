@@ -2,15 +2,12 @@ package io.ygdrasil.wgpu
 
 
 // TODO to implement
-class GPUQuerySet
-
-// TODO to implement
 class GPURenderPassTimestampWrites
 
 data class RenderPassDescriptor(
 	val colorAttachments: Array<ColorAttachment> = arrayOf(),
 	val depthStencilAttachment: RenderPassDepthStencilAttachment? = null,
-	val occlusionQuerySet: GPUQuerySet? = null,
+	val occlusionQuerySet: QuerySet? = null,
 	val timestampWrites: GPURenderPassTimestampWrites? = null,
 	val maxDrawCount: GPUSize64 = 50000000,
 	val label: String? = null

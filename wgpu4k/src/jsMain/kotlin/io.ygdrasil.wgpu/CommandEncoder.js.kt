@@ -38,7 +38,7 @@ private fun ComputePassDescriptor?.convert(): GPUComputePassDescriptor {
 private fun ImageCopyTexture.convert(): GPUImageCopyTexture = object : GPUImageCopyTexture {
 	override var texture: GPUTexture = this@convert.texture.handler
 	override var mipLevel: GPUIntegerCoordinate = this@convert.mipLevel
-	override var origin: dynamic = this@convert.origin.toList().toTypedArray()
+	override var origin: dynamic = this@convert.origin.toArray()
 	override var aspect: String = this@convert.aspect.stringValue
 }
 

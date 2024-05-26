@@ -2,7 +2,6 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
-import io.ygdrasil.wgpu.mapper.computePassDescriptorMapper
 import io.ygdrasil.wgpu.mapper.map
 import java.lang.foreign.MemorySegment
 
@@ -47,12 +46,12 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
         )
     }
 
-    actual fun beginComputePass(descriptor: ComputePassDescriptor?): ComputePassEncoder =
-        descriptor?.let { computePassDescriptorMapper.map<ComputePassDescriptor, WGPUComputePassDescriptor>(descriptor) }
-            .also { it?.write() }?.pointer?.toMemory()
+    actual fun beginComputePass(descriptor: ComputePassDescriptor?): ComputePassEncoder = confined { arena ->
+        descriptor?.let { arena.map(descriptor) }
             .let { wgpu_h.wgpuCommandEncoderBeginComputePass(handler, it ?: MemorySegment.NULL) }
             ?.let { ComputePassEncoder(it) }
             ?: error("fail to get ComputePassEncoder")
+    }
 
 
     actual override fun close() {
