@@ -47,7 +47,7 @@ class ParticlesScene : Application.Scene() {
         particlesBuffer = device.createBuffer(
             BufferDescriptor(
                 size = (numParticles * particleInstanceByteSize).toLong(),
-                usage = BufferUsage.vertex or BufferUsage.storage,
+                usage = setOf(BufferUsage.vertex, BufferUsage.storage),
             )
         ).bind()
 
@@ -150,7 +150,7 @@ class ParticlesScene : Application.Scene() {
         uniformBuffer = device.createBuffer(
             BufferDescriptor(
                 size = uniformBufferSize.toLong(),
-                usage = BufferUsage.uniform or BufferUsage.copydst,
+                usage = setOf(BufferUsage.uniform, BufferUsage.copydst),
             )
         ).bind();
 
@@ -192,7 +192,7 @@ class ParticlesScene : Application.Scene() {
         quadVertexBuffer = device.createBuffer(
             BufferDescriptor(
                 size = 6 * 2 * 4, // 6x vec2f
-                usage = BufferUsage.vertex.value,
+                usage = setOf(BufferUsage.vertex),
                 mappedAtCreation = true,
             )
         )
@@ -269,19 +269,19 @@ class ParticlesScene : Application.Scene() {
         val probabilityMapUBOBuffer = device.createBuffer(
             BufferDescriptor(
                 size = probabilityMapUBOBufferSize.toLong(),
-                usage = BufferUsage.uniform or BufferUsage.copydst,
+                usage = setOf(BufferUsage.uniform, BufferUsage.copydst),
             )
         )
         val buffer_a = device.createBuffer(
             BufferDescriptor(
                 size = textureWidth * textureHeight * 4L,
-                usage = BufferUsage.storage.value,
+                usage = setOf(BufferUsage.storage),
             )
         )
         val buffer_b = device.createBuffer(
             BufferDescriptor(
                 size = textureWidth * textureHeight * 4L,
-                usage = BufferUsage.storage.value,
+                usage = setOf(BufferUsage.storage),
             )
         )
         device.queue.writeBuffer(
@@ -360,7 +360,7 @@ class ParticlesScene : Application.Scene() {
         simulationUBOBuffer = device.createBuffer(
             BufferDescriptor(
                 size = simulationUBOBufferSize.toLong(),
-                usage = BufferUsage.uniform or BufferUsage.copydst,
+                usage = setOf(BufferUsage.uniform, BufferUsage.copydst),
             )
         )
 

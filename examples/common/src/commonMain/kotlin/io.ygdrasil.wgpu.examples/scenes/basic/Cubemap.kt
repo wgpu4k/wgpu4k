@@ -132,7 +132,7 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 		uniformBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = uniformBufferSize,
-				usage = BufferUsage.uniform or BufferUsage.copydst
+				usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
 			)
 		).bind()
 

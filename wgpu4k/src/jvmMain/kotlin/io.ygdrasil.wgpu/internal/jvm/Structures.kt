@@ -753,13 +753,6 @@ open class WGPUInstanceDescriptor : Structure {
 
 	constructor()
 
-	class ByReference(
-		pointer: Pointer? = null,
-	) : WGPUInstanceDescriptor(pointer), Structure.ByReference
-
-	class ByValue(
-		pointer: Pointer? = null,
-	) : WGPUInstanceDescriptor(pointer), Structure.ByValue
 }
 
 @Structure.FieldOrder(
@@ -3240,7 +3233,4 @@ open class WGPUInstanceExtras : Structure {
 		pointer: Pointer? = null,
 	) : WGPUInstanceExtras(pointer), Structure.ByReference
 
-	class ByValue(
-		pointer: Pointer? = null,
-	) : WGPUInstanceExtras(pointer), Structure.ByValue
 }

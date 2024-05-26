@@ -31,7 +31,7 @@ class RotatingCubeScene : Application.Scene(), AutoCloseable {
 		verticesBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = (cubeVertexArray.size * Float.SIZE_BYTES).toLong(),
-				usage = BufferUsage.vertex.value,
+				usage = setOf(BufferUsage.vertex),
 				mappedAtCreation = true
 			)
 		).bind()
@@ -106,7 +106,7 @@ class RotatingCubeScene : Application.Scene(), AutoCloseable {
 		uniformBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = uniformBufferSize,
-				usage = BufferUsage.uniform or BufferUsage.copydst
+				usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
 			)
 		).bind()
 

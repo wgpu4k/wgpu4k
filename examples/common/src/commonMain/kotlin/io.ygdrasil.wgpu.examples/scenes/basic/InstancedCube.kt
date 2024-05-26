@@ -33,7 +33,7 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 		verticesBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = (Cube.cubeVertexArray.size * Float.SIZE_BYTES).toLong(),
-				usage = BufferUsage.vertex.value,
+				usage = setOf(BufferUsage.vertex),
 				mappedAtCreation = true
 			)
 		)
@@ -104,7 +104,7 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 		uniformBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = uniformBufferSize,
-				usage = BufferUsage.uniform or BufferUsage.copydst
+				usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
 			)
 		).bind()
 
