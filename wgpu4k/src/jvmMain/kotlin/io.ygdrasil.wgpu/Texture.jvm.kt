@@ -2,7 +2,7 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
-import io.ygdrasil.wgpu.mapper.textureViewDescriptorMapper
+import io.ygdrasil.wgpu.mapper.map
 import java.lang.foreign.MemorySegment
 
 
@@ -31,12 +31,12 @@ actual class Texture(internal val handler: MemorySegment) : AutoCloseable {
 
 
 
-    actual fun createView(descriptor: TextureViewDescriptor?): TextureView =
-        descriptor?.let { textureViewDescriptorMapper.map<Any, WGPUTextureViewDescriptor>(it) }
-            .also { it?.write() }?.pointer?.toMemory()
+    actual fun createView(descriptor: TextureViewDescriptor?): TextureView = confined { arena ->
+        descriptor?.let { arena.map(it) }
             .let { wgpu_h.wgpuTextureCreateView(handler, it ?: MemorySegment.NULL) }
             ?.let { TextureView(it) }
             ?: error("fail to create texture view")
+    }
 
     actual override fun close() {
         wgpu_h.wgpuTextureRelease(handler)
