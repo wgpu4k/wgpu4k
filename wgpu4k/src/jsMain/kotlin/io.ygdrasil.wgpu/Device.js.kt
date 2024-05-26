@@ -123,7 +123,7 @@ private fun TextureDescriptor.convert(): GPUTextureDescriptor = object : GPUText
 
 private fun BufferDescriptor.convert(): GPUBufferDescriptor = object : GPUBufferDescriptor {
 	override var size: GPUSize64 = this@convert.size
-	override var usage: GPUBufferUsageFlags = this@convert.usage
+	override var usage: GPUBufferUsageFlags = this@convert.usage.toFlagInt()
 	override var mappedAtCreation: Boolean? = this@convert.mappedAtCreation ?: undefined
 }
 

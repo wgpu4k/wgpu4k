@@ -4,6 +4,15 @@ package io.ygdrasil.wgpu
 
 interface EnumerationWithValue {
     val value: Int
+
+    infix fun or(other: Int): Int = value or other
+    infix fun or(other: EnumerationWithValue): Int = value or other.value
+}
+
+internal fun Set<EnumerationWithValue>.toFlagInt(): Int = when (size) {
+    0 -> 0
+    1 -> first().value
+    else -> fold(0) { acc, enumerationWithValue -> acc or enumerationWithValue.value }
 }
 
 enum class AdapterType(
@@ -15,10 +24,6 @@ enum class AdapterType(
     unknown(3),
 
     ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: AdapterType): Int = value or other.value
 
     companion object {
         fun of(`value`: Int): AdapterType? = entries.find {
@@ -35,10 +40,6 @@ enum class AddressMode(
     mirrorrepeat(1, "mirror-repeat"),
     clamptoedge(2, "clamp-to-edge"),
     ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: AddressMode): Int = value or other.value
 
     companion object {
         fun of(`value`: Int): AddressMode? = entries.find {
@@ -92,10 +93,6 @@ enum class BlendFactor(
     oneminusconstant(12, "one-minus-constant"),
     ;
 
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: BlendFactor): Int = value or other.value
-
     companion object {
         fun of(`value`: Int): BlendFactor? = entries.find {
             it.value == value
@@ -113,10 +110,6 @@ enum class BlendOperation(
     min(3, "min"),
     max(4, "max"),
     ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: BlendOperation): Int = value or other.value
 
     companion object {
         fun of(`value`: Int): BlendOperation? = entries.find {
@@ -206,9 +199,6 @@ enum class CompareFunction(
     always(8, "always"),
     ;
 
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: CompareFunction): Int = value or other.value
 
     companion object {
         fun of(`value`: Int): CompareFunction? = entries.find {
@@ -310,10 +300,6 @@ enum class CullMode(
     back(2),
 
     ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: CullMode): Int = value or other.value
 
     companion object {
         fun of(`value`: Int): CullMode? = entries.find {
@@ -420,10 +406,6 @@ enum class FilterMode(
     linear(1),
     ;
 
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: FilterMode): Int = value or other.value
-
     companion object {
         fun of(`value`: Int): FilterMode? = entries.find {
             it.value == value
@@ -438,10 +420,6 @@ enum class FrontFace(
     cw(1),
 
     ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: FrontFace): Int = value or other.value
 
     companion object {
         fun of(`value`: Int): FrontFace? = entries.find {
@@ -459,10 +437,6 @@ enum class IndexFormat(
 
     ;
 
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: IndexFormat): Int = value or other.value
-
     companion object {
         fun of(`value`: Int): IndexFormat? = entries.find {
             it.value == value
@@ -475,10 +449,6 @@ enum class LoadOp(
 ) : EnumerationWithValue {
     clear(1),
     load(2);
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: LoadOp): Int = value or other.value
 
     companion object {
         fun of(`value`: Int): LoadOp? = entries.find {
@@ -493,10 +463,6 @@ enum class MipmapFilterMode(
     nearest(0),
     linear(1),
     ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: MipmapFilterMode): Int = value or other.value
 
     companion object {
         fun of(`value`: Int): MipmapFilterMode? = entries.find {
@@ -513,10 +479,6 @@ enum class PowerPreference(
     highperformance(2),
 
     ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: PowerPreference): Int = value or other.value
 
     companion object {
         fun of(`value`: Int): PowerPreference? = entries.find {
@@ -556,10 +518,6 @@ enum class PrimitiveTopology(
     trianglelist(3, "triangle-list"),
     trianglestrip(4, "triangle-strip"),
     ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: PrimitiveTopology): Int = value or other.value
 
     companion object {
         fun of(`value`: Int): PrimitiveTopology? = entries.find {
@@ -713,10 +671,6 @@ enum class StencilOperation(
     decrementwrap(7, "decrement-wrap")
     ;
 
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: StencilOperation): Int = value or other.value
-
     companion object {
         fun of(`value`: Int): StencilOperation? = entries.find {
             it.value == value
@@ -751,10 +705,6 @@ enum class StoreOp(
     store(1),
     discard(2),
     ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: StoreOp): Int = value or other.value
 
     companion object {
         fun of(`value`: Int): StoreOp? = entries.find {
@@ -795,10 +745,6 @@ enum class TextureAspect(
     depthonly(2, "depth-only"),
     ;
 
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: TextureAspect): Int = value or other.value
-
     companion object {
         fun of(`value`: Int): TextureAspect? = entries.find {
             it.value == value
@@ -814,10 +760,6 @@ enum class TextureDimension(
     `_2d`(1, "2d"),
     `_3d`(2, "3d"),
     ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: TextureDimension): Int = value or other.value
 
     companion object {
         fun of(`value`: Int): TextureDimension? = entries.find {
@@ -930,10 +872,6 @@ enum class TextureFormat(
     astc12x12unormsrgb(95),
     ;
 
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: TextureFormat): Int = value or other.value
-
     companion object {
         fun of(`value`: Int): TextureFormat? = entries.find {
             it.value == value
@@ -980,10 +918,6 @@ enum class TextureViewDimension(
     `_3d`(6, "3d"),
     ;
 
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: TextureViewDimension): Int = value or other.value
-
     companion object {
         fun of(`value`: Int): TextureViewDimension? = entries.find {
             it.value == value
@@ -1027,10 +961,6 @@ enum class VertexFormat(
     sint32x4(30),
     ;
 
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: VertexFormat): Int = value or other.value
-
     companion object {
         fun of(`value`: Int): VertexFormat? = entries.find {
             it.value == value
@@ -1045,10 +975,6 @@ enum class VertexStepMode(
     instance(1),
     vertexbuffernotused(2),
     ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: VertexStepMode): Int = value or other.value
 
     companion object {
         fun of(`value`: Int): VertexStepMode? = entries.find {
@@ -1074,10 +1000,6 @@ enum class BufferUsage(
 
     ;
 
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: BufferUsage): Int = value or other.value
-
     companion object {
         fun of(`value`: Int): BufferUsage? = entries.find {
             it.value == value
@@ -1095,10 +1017,6 @@ enum class ColorWriteMask(
     alpha(8),
     all(15),
     ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: ColorWriteMask): Int = value or other.value
 
     companion object {
         fun of(`value`: Int): ColorWriteMask? = entries.find {
