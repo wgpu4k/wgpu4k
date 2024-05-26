@@ -63,7 +63,6 @@ kotlin {
             dependencies {
                 kotlin.srcDirs("src/jvmMain/kotlin", "src/jvmMain/java")
                 api(libs.jna)
-                implementation(libs.shapeshift)
             }
         }
 
