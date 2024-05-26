@@ -1,17 +1,10 @@
 package io.ygdrasil.wgpu.mapper
 
-import com.sun.jna.Pointer
-import com.sun.jna.Structure
-import dev.krud.shapeshift.transformer.base.MappingTransformer
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.internal.jvm.WGPUTextureView
-import io.ygdrasil.wgpu.internal.jvm.WGPUTextureViewImpl
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUColor
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPassColorAttachment
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPassDepthStencilAttachment
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPassDescriptor
-import io.ygdrasil.wgpu.internal.jvm.toMemory
-import io.ygdrasil.wgpu.internal.jvm.toPointer
 import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 
@@ -31,12 +24,6 @@ internal fun Arena.map(input: RenderPassDescriptor): MemorySegment =
             }
 
             WGPURenderPassDescriptor.colorAttachments(renderPassDescriptor, colorAttachments)
-
-            val array: Array<WGPURenderPassColorAttachment2.ByReference> =
-                input.colorAttachments.toStructureArray { colorTarget ->
-                    colorAttachmentMapper.map(colorTarget, this)
-                }
-            WGPURenderPassDescriptor.colorAttachments(renderPassDescriptor, array.first().toMemory())
 
         }
 
@@ -97,121 +84,3 @@ internal fun Arena.map(input: RenderPassDescriptor.RenderPassDepthStencilAttachm
         )
         WGPURenderPassDepthStencilAttachment.stencilReadOnly(depthStencilAttachment, input.stencilReadOnly.toInt())
     }
-
-internal val colorAttachmentMapper =
-    mapper<RenderPassDescriptor.ColorAttachment, WGPURenderPassColorAttachment2.ByReference> {
-        RenderPassDescriptor.ColorAttachment::view mappedTo WGPURenderPassColorAttachment2.ByReference::view withTransformer MappingTransformer {
-            WGPUTextureViewImpl(it.originalValue?.handler?.toPointer())
-        }
-        RenderPassDescriptor.ColorAttachment::resolveTarget mappedTo WGPURenderPassColorAttachment2.ByReference::resolveTarget withTransformer MappingTransformer {
-            WGPUTextureView(it.originalValue?.handler?.toPointer())
-        }
-        RenderPassDescriptor.ColorAttachment::loadOp mappedTo WGPURenderPassColorAttachment2.ByReference::loadOp withTransformer EnumerationTransformer()
-        RenderPassDescriptor.ColorAttachment::storeOp mappedTo WGPURenderPassColorAttachment2.ByReference::storeOp withTransformer EnumerationTransformer()
-        RenderPassDescriptor.ColorAttachment::clearValue mappedTo WGPURenderPassColorAttachment2.ByReference::clearValue withTransformer MappingTransformer {
-            it.originalValue?.toWGPUColor2()
-        }
-    }
-
-
-private fun Array<Number>.toWGPUColor2() = map(Number::toDouble)
-    .let { (r, g, b, a) ->
-        WGPUColor2().also {
-            it.r = r
-            it.g = g
-            it.b = b
-            it.a = a
-        }
-    }
-
-
-@Structure.FieldOrder("nextInChain", "view", "resolveTarget", "loadOp", "storeOp", "clearValue")
-open class WGPURenderPassColorAttachment2 : Structure {
-    /**
-     * mapped from (typedef Optional[const WGPUChainedStruct] =
-     * Declared([a8(next):[*:b1]i4(sType)x4](WGPUChainedStruct)))*
-     */
-    @JvmField
-    var nextInChain: Pointer? = null
-
-    /**
-     * mapped from WGPUTextureView
-     */
-    @JvmField
-    var view: WGPUTextureView = WGPUTextureViewImpl()
-
-    /**
-     * mapped from WGPUTextureView
-     */
-    @JvmField
-    var resolveTarget: WGPUTextureView? = null
-
-    /**
-     * mapped from WGPULoadOp
-     */
-    @JvmField
-    var loadOp: Int = 0
-
-    /**
-     * mapped from WGPUStoreOp
-     */
-    @JvmField
-    var storeOp: Int = 0
-
-    /**
-     * mapped from WGPUColor
-     */
-    @JvmField
-    var clearValue: WGPUColor2? = null
-
-    constructor(pointer: Pointer?) : super(pointer)
-
-    constructor()
-
-    class ByReference(
-        pointer: Pointer? = null,
-    ) : WGPURenderPassColorAttachment2(pointer), Structure.ByReference
-
-    class ByValue(
-        pointer: Pointer? = null,
-    ) : WGPURenderPassColorAttachment2(pointer), Structure.ByValue
-}
-
-@Structure.FieldOrder("r", "g", "b", "a")
-open class WGPUColor2 : Structure {
-    /**
-     * mapped from double
-     */
-    @JvmField
-    var r: Double = 0.0
-
-    /**
-     * mapped from double
-     */
-    @JvmField
-    var g: Double = 0.0
-
-    /**
-     * mapped from double
-     */
-    @JvmField
-    var b: Double = 0.0
-
-    /**
-     * mapped from double
-     */
-    @JvmField
-    var a: Double = 0.0
-
-    constructor(pointer: Pointer?) : super(pointer)
-
-    constructor()
-
-    class ByReference(
-        pointer: Pointer? = null,
-    ) : WGPUColor2(pointer), Structure.ByReference
-
-    class ByValue(
-        pointer: Pointer? = null,
-    ) : WGPUColor2(pointer), Structure.ByValue
-}
