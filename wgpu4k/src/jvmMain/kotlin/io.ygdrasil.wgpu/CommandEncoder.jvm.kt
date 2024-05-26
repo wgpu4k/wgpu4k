@@ -3,7 +3,6 @@ package io.ygdrasil.wgpu
 import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.mapper.computePassDescriptorMapper
-import io.ygdrasil.wgpu.mapper.convert
 import io.ygdrasil.wgpu.mapper.map
 import java.lang.foreign.MemorySegment
 
@@ -27,10 +26,10 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
         source: ImageCopyTexture,
         destination: ImageCopyTexture,
         copySize: GPUIntegerCoordinates
-    ) = confined {
+    ) = confined { arena ->
         actualCopyTextureToTexture(
-            source.convert().toMemory(),
-            destination.convert().toMemory(),
+            arena.map(source),
+            arena.map(destination),
             copySize.convert().toMemory()
         )
     }

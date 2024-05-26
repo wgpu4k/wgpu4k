@@ -1,20 +1,12 @@
 package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.ImageCopyTexture
-import io.ygdrasil.wgpu.internal.jvm.WGPUImageCopyTexture
-import io.ygdrasil.wgpu.internal.jvm.WGPUOrigin3D
-import io.ygdrasil.wgpu.internal.jvm.WGPUTextureImpl
-import io.ygdrasil.wgpu.internal.jvm.toPointer
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUImageCopyTexture
+import java.lang.foreign.Arena
 
-fun ImageCopyTexture.convert(): WGPUImageCopyTexture = WGPUImageCopyTexture().also {
-
-    it.texture = WGPUTextureImpl(texture.handler.toPointer())
-    it.mipLevel = mipLevel
-    it.origin = origin.let { (x, y) ->
-        WGPUOrigin3D().also {
-            it.x = x
-            it.y = y
-        }
-    }
-    it.aspect = aspect.value
+internal fun Arena.map(input: ImageCopyTexture) = WGPUImageCopyTexture.allocate(this).also { output ->
+    WGPUImageCopyTexture.texture(output, input.texture.handler)
+    WGPUImageCopyTexture.mipLevel(output, input.mipLevel)
+    WGPUImageCopyTexture.aspect(output, input.aspect.value)
+    map(input.origin, WGPUImageCopyTexture.origin(output))
 }
