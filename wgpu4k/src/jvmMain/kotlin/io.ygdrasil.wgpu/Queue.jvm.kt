@@ -1,9 +1,9 @@
 package io.ygdrasil.wgpu
 
 
-import WGPUTextureDataLayout
 import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUExtent3D
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUTextureDataLayout
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.mapper.map
 import java.lang.foreign.Arena
@@ -83,11 +83,11 @@ actual class Queue(internal val handler: MemorySegment) {
             arena.map(destination),
             image.data,
             (image.width * bytePerPixel * image.height).toLong(),
-            WGPUTextureDataLayout().apply {
-                offset = 0
-                bytesPerRow = image.width * bytePerPixel
-                rowsPerImage = image.height
-            }.toMemory(),
+            WGPUTextureDataLayout.allocate(arena).also { dataLayout ->
+                WGPUTextureDataLayout.offset(dataLayout, 0)
+                WGPUTextureDataLayout.bytesPerRow(dataLayout, image.width * bytePerPixel)
+                WGPUTextureDataLayout.rowsPerImage(dataLayout, image.height)
+            },
             WGPUExtent3D.allocate(arena).also { size3D ->
                 WGPUExtent3D.width(size3D, image.width)
                 WGPUExtent3D.height(size3D, image.height)
