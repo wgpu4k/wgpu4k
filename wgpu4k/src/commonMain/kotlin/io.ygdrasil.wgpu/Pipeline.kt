@@ -11,12 +11,12 @@ expect class RenderPipeline : AutoCloseable {
 }
 
 data class PipelineLayoutDescriptor(
-    var bindGroupLayouts: Array<BindGroupLayout> = arrayOf(),
-    var label: String? = null
+    val bindGroupLayouts: Array<BindGroupLayout> = arrayOf(),
+    val label: String? = null
 ) {
     data class BindGroupLayout(
-        var label: String,
-        var brand: String
+        val label: String,
+        val brand: String
     )
 }
 
@@ -31,20 +31,20 @@ data class RenderPipelineDescriptor(
 ) {
 
     data class VertexState(
-        var module: ShaderModule,
-        var entryPoint: String = "main",
-        var constants: Map<String, GPUPipelineConstantValue>? = null,
-        var buffers: Array<VertexBufferLayout> = arrayOf(),
+        val module: ShaderModule,
+        val entryPoint: String = "main",
+        val constants: Map<String, GPUPipelineConstantValue>? = null,
+        val buffers: Array<VertexBufferLayout> = arrayOf(),
     ) {
         data class VertexBufferLayout(
-            var arrayStride: GPUSize64,
-            var attributes: Array<VertexAttribute> = arrayOf(),
-            var stepMode: VertexStepMode = VertexStepMode.vertex,
+            val arrayStride: GPUSize64,
+            val attributes: Array<VertexAttribute> = arrayOf(),
+            val stepMode: VertexStepMode = VertexStepMode.vertex,
         ) {
             data class VertexAttribute(
-                var format: VertexFormat,
-                var offset: GPUSize64,
-                var shaderLocation: GPUIndex32,
+                val format: VertexFormat,
+                val offset: GPUSize64,
+                val shaderLocation: GPUIndex32,
             )
         }
     }
@@ -58,23 +58,23 @@ data class RenderPipelineDescriptor(
     )
 
     data class DepthStencilState(
-        var format: TextureFormat,
-        var depthWriteEnabled: Boolean? = null,
-        var depthCompare: CompareFunction? = null,
+        val format: TextureFormat,
+        val depthWriteEnabled: Boolean? = null,
+        val depthCompare: CompareFunction? = null,
 
-        var stencilFront: StencilFaceState = StencilFaceState(),
-        var stencilBack: StencilFaceState = StencilFaceState(),
-        var stencilReadMask: GPUStencilValue = 0xFFFFFFFF,
-        var stencilWriteMask: GPUStencilValue = 0xFFFFFFFF,
-        var depthBias: GPUDepthBias = 0,
-        var depthBiasSlopeScale: Float = 0f,
-        var depthBiasClamp: Float = 0f,
+        val stencilFront: StencilFaceState = StencilFaceState(),
+        val stencilBack: StencilFaceState = StencilFaceState(),
+        val stencilReadMask: GPUStencilValue = 0xFFFFFFFF,
+        val stencilWriteMask: GPUStencilValue = 0xFFFFFFFF,
+        val depthBias: GPUDepthBias = 0,
+        val depthBiasSlopeScale: Float = 0f,
+        val depthBiasClamp: Float = 0f,
     ) {
         data class StencilFaceState(
-            var compare: CompareFunction = CompareFunction.always,
-            var failOp: StencilOperation? = StencilOperation.keep,
-            var depthFailOp: StencilOperation? = StencilOperation.keep,
-            var passOp: StencilOperation? = StencilOperation.keep,
+            val compare: CompareFunction = CompareFunction.always,
+            val failOp: StencilOperation? = StencilOperation.keep,
+            val depthFailOp: StencilOperation? = StencilOperation.keep,
+            val passOp: StencilOperation? = StencilOperation.keep,
         )
     }
 
@@ -86,24 +86,24 @@ data class RenderPipelineDescriptor(
     )
 
     data class FragmentState(
-        var module: ShaderModule,
-        var targets: Array<ColorTargetState> = arrayOf(),
-        var entryPoint: String = "main"
+        val module: ShaderModule,
+        val targets: Array<ColorTargetState> = arrayOf(),
+        val entryPoint: String = "main"
     ) {
 
         data class ColorTargetState(
-            var format: TextureFormat,
-            var writeMask: ColorWriteMask = ColorWriteMask.all,
-            var blend: BlendState = BlendState()
+            val format: TextureFormat,
+            val writeMask: ColorWriteMask = ColorWriteMask.all,
+            val blend: BlendState = BlendState()
         ) {
             data class BlendState(
-                var color: BlendComponent = BlendComponent(),
-                var alpha: BlendComponent = BlendComponent()
+                val color: BlendComponent = BlendComponent(),
+                val alpha: BlendComponent = BlendComponent()
             ) {
                 data class BlendComponent(
-                    var operation: BlendOperation = BlendOperation.add,
-                    var srcFactor: BlendFactor = BlendFactor.one,
-                    var dstFactor: BlendFactor = BlendFactor.zero
+                    val operation: BlendOperation = BlendOperation.add,
+                    val srcFactor: BlendFactor = BlendFactor.one,
+                    val dstFactor: BlendFactor = BlendFactor.zero
                 )
             }
         }

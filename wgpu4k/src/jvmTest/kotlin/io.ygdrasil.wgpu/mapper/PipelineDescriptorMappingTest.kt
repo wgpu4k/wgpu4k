@@ -53,7 +53,18 @@ class PipelineDescriptorMappingTest : FreeSpec({
                 depthStencil = RenderPipelineDescriptor.DepthStencilState(
                     depthWriteEnabled = true,
                     depthCompare = CompareFunction.less,
-                    format = TextureFormat.depth24plus
+                    format = TextureFormat.depth24plus,
+                    stencilReadMask = 0xFFFFFF22,
+                    stencilWriteMask = 0xFFFFFF11,
+                    depthBias = 1,
+                    depthBiasSlopeScale = 2f,
+                    depthBiasClamp = 1.5f,
+                    stencilFront = RenderPipelineDescriptor.DepthStencilState.StencilFaceState(
+                        compare = CompareFunction.less,
+                        failOp = StencilOperation.zero,
+                        depthFailOp = StencilOperation.invert,
+                        passOp = StencilOperation.decrementwrap
+                    )
                 )
             )
 
@@ -78,7 +89,7 @@ class PipelineDescriptorMappingTest : FreeSpec({
                                 WGPUVertexAttribute.shaderLocation(attribute) shouldBe 0
                             }
                             WGPUVertexAttribute.asSlice(attributes, 1).let { attribute ->
-                                WGPUVertexAttribute.shaderLocation(attribute) shouldBe 0
+                                WGPUVertexAttribute.shaderLocation(attribute) shouldBe 1
                                 WGPUVertexAttribute.offset(attribute) shouldBe cubeUVOffset
                                 WGPUVertexAttribute.format(attribute) shouldBe VertexFormat.float32x2.value
                             }
@@ -109,6 +120,23 @@ class PipelineDescriptorMappingTest : FreeSpec({
                 WGPUDepthStencilState.format(depthStencil) shouldBe TextureFormat.depth24plus.value
                 WGPUDepthStencilState.depthWriteEnabled(depthStencil) shouldBe 1
                 WGPUDepthStencilState.depthCompare(depthStencil) shouldBe CompareFunction.less.value
+                WGPUDepthStencilState.stencilReadMask(depthStencil) shouldBe 0xFFFFFF22.toInt()
+                WGPUDepthStencilState.stencilWriteMask(depthStencil) shouldBe 0xFFFFFF11.toInt()
+                WGPUDepthStencilState.depthBias(depthStencil) shouldBe 1
+                WGPUDepthStencilState.depthBiasSlopeScale(depthStencil) shouldBe 2f
+                WGPUDepthStencilState.depthBiasClamp(depthStencil) shouldBe 1.5f
+                WGPUDepthStencilState.stencilFront(depthStencil).also { stencilFront ->
+                    WGPUStencilFaceState.compare(stencilFront) shouldBe CompareFunction.less.value
+                    WGPUStencilFaceState.failOp(stencilFront) shouldBe StencilOperation.zero.value
+                    WGPUStencilFaceState.depthFailOp(stencilFront) shouldBe StencilOperation.invert.value
+                    WGPUStencilFaceState.passOp(stencilFront) shouldBe StencilOperation.decrementwrap.value
+                }
+                WGPUDepthStencilState.stencilBack(depthStencil).also { stencilBack ->
+                    WGPUStencilFaceState.compare(stencilBack) shouldBe CompareFunction.always.value
+                    WGPUStencilFaceState.failOp(stencilBack) shouldBe StencilOperation.keep.value
+                    WGPUStencilFaceState.depthFailOp(stencilBack) shouldBe StencilOperation.keep.value
+                    WGPUStencilFaceState.passOp(stencilBack) shouldBe StencilOperation.keep.value
+                }
             }
         }
 

@@ -111,11 +111,39 @@ internal fun Arena.map(input: RenderPipelineDescriptor) = WGPURenderPipelineDesc
     // TODO map this
     WGPURenderPipelineDescriptor.layout(output, MemorySegment.NULL)
     map(input.primitive, WGPURenderPipelineDescriptor.primitive(output))
-    if (input.depthStencil != null) WGPURenderPipelineDescriptor.depthStencil(output, depthStencilStateMapper.map<RenderPipelineDescriptor.DepthStencilState, io.ygdrasil.wgpu.internal.jvm.WGPUDepthStencilState.ByReference>(input.depthStencil).toMemory())
+    if (input.depthStencil != null) WGPURenderPipelineDescriptor.depthStencil(output, map(input.depthStencil))
     if (input.fragment != null) WGPURenderPipelineDescriptor.fragment(output, fragmentMapper.map<RenderPipelineDescriptor.FragmentState, io.ygdrasil.wgpu.internal.jvm.WGPUFragmentState.ByReference>(input.fragment).toMemory())
     map(input.multisample, WGPURenderPipelineDescriptor.multisample(output))
 }
 
+
+private fun Arena.map(input: RenderPipelineDescriptor.DepthStencilState): MemorySegment =
+    WGPUDepthStencilState.allocate(this)
+        .also { depthStencilState ->
+            WGPUDepthStencilState.format(depthStencilState, input.format.value)
+            if (input.depthWriteEnabled != null) WGPUDepthStencilState.depthWriteEnabled(
+                depthStencilState,
+                input.depthWriteEnabled.toInt()
+            )
+            if (input.depthCompare != null) WGPUDepthStencilState.depthCompare(
+                depthStencilState,
+                input.depthCompare.value
+            )
+            map(input.stencilFront, WGPUDepthStencilState.stencilFront(depthStencilState))
+            map(input.stencilBack, WGPUDepthStencilState.stencilBack(depthStencilState))
+            WGPUDepthStencilState.stencilReadMask(depthStencilState, input.stencilReadMask.toInt())
+            WGPUDepthStencilState.stencilWriteMask(depthStencilState, input.stencilWriteMask.toInt())
+            WGPUDepthStencilState.depthBias(depthStencilState, input.depthBias)
+            WGPUDepthStencilState.depthBiasSlopeScale(depthStencilState, input.depthBiasSlopeScale)
+            WGPUDepthStencilState.depthBiasClamp(depthStencilState, input.depthBiasClamp)
+        }
+
+fun map(input: RenderPipelineDescriptor.DepthStencilState.StencilFaceState, output: MemorySegment?) {
+    WGPUStencilFaceState.compare(output, input.compare.value)
+    if (input.failOp != null) WGPUStencilFaceState.failOp(output, input.failOp.value)
+    if (input.depthFailOp != null) WGPUStencilFaceState.depthFailOp(output, input.depthFailOp.value)
+    if (input.passOp != null) WGPUStencilFaceState.passOp(output, input.passOp.value)
+}
 
 private fun map(input: RenderPipelineDescriptor.MultisampleState, output: MemorySegment) {
     WGPUMultisampleState.count(output, input.count)
@@ -213,31 +241,4 @@ private val blendComponentMapper =
         RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent::dstFactor mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUBlendComponent::dstFactor withTransformer EnumerationTransformer()
         RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent::operation mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUBlendComponent::operation withTransformer EnumerationTransformer()
         RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent::srcFactor mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUBlendComponent::srcFactor withTransformer EnumerationTransformer()
-    }
-
-private val depthStencilStateMapper =
-    mapper<RenderPipelineDescriptor.DepthStencilState, io.ygdrasil.wgpu.internal.jvm.WGPUDepthStencilState.ByReference> {
-        RenderPipelineDescriptor.DepthStencilState::format mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUDepthStencilState.ByReference::format withTransformer EnumerationTransformer()
-        RenderPipelineDescriptor.DepthStencilState::depthCompare mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUDepthStencilState.ByReference::depthCompare withTransformer EnumerationTransformer()
-        RenderPipelineDescriptor.DepthStencilState::depthWriteEnabled mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUDepthStencilState.ByReference::depthWriteEnabled withTransformer BooleanToIntTransformer()
-        RenderPipelineDescriptor.DepthStencilState::stencilReadMask mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUDepthStencilState.ByReference::stencilReadMask withTransformer LongToIntTransformer()
-        RenderPipelineDescriptor.DepthStencilState::stencilWriteMask mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUDepthStencilState.ByReference::stencilWriteMask withTransformer LongToIntTransformer()
-        RenderPipelineDescriptor.DepthStencilState::stencilFront mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUDepthStencilState.ByReference::stencilFront withTransformer MappingTransformer {
-            it.originalValue?.let(
-                stencilFaceStateMapper::map
-            )
-        }
-        RenderPipelineDescriptor.DepthStencilState::stencilBack mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUDepthStencilState.ByReference::stencilBack withTransformer MappingTransformer {
-            it.originalValue?.let(
-                stencilFaceStateMapper::map
-            )
-        }
-    }
-
-private val stencilFaceStateMapper =
-    mapper<RenderPipelineDescriptor.DepthStencilState.StencilFaceState, io.ygdrasil.wgpu.internal.jvm.WGPUStencilFaceState> {
-        RenderPipelineDescriptor.DepthStencilState.StencilFaceState::compare mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUStencilFaceState::compare withTransformer EnumerationTransformer()
-        RenderPipelineDescriptor.DepthStencilState.StencilFaceState::failOp mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUStencilFaceState::failOp withTransformer EnumerationTransformer()
-        RenderPipelineDescriptor.DepthStencilState.StencilFaceState::depthFailOp mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUStencilFaceState::depthFailOp withTransformer EnumerationTransformer()
-        RenderPipelineDescriptor.DepthStencilState.StencilFaceState::passOp mappedTo io.ygdrasil.wgpu.internal.jvm.WGPUStencilFaceState::passOp withTransformer EnumerationTransformer()
     }
