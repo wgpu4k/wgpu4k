@@ -321,35 +321,6 @@ public enum class WGPURequestDeviceStatus(
 	}
 }
 
-public enum class WGPUSType(
-	public val `value`: Int,
-) {
-	WGPUSType_Invalid(0),
-	WGPUSType_SurfaceDescriptorFromMetalLayer(1),
-	WGPUSType_SurfaceDescriptorFromWindowsHWND(2),
-	WGPUSType_SurfaceDescriptorFromXlibWindow(3),
-	WGPUSType_SurfaceDescriptorFromCanvasHTMLSelector(4),
-	WGPUSType_ShaderModuleSPIRVDescriptor(5),
-	WGPUSType_ShaderModuleWGSLDescriptor(6),
-	WGPUSType_PrimitiveDepthClipControl(7),
-	WGPUSType_SurfaceDescriptorFromWaylandSurface(8),
-	WGPUSType_SurfaceDescriptorFromAndroidNativeWindow(9),
-	WGPUSType_SurfaceDescriptorFromXcbWindow(10),
-	WGPUSType_RenderPassDescriptorMaxDrawCount(15),
-
-	;
-
-	public infix fun or(other: Int): Int = value or other
-
-	public infix fun or(other: WGPUSType): Int = value or other.value
-
-	public companion object {
-		public fun of(`value`: Int): WGPUSType? = entries.find {
-			it.value == value
-		}
-	}
-}
-
 
 public enum class WGPUNativeSType(
 	public val `value`: Int,

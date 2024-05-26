@@ -8,14 +8,14 @@ expect class ShaderModule : AutoCloseable {
 }
 
 data class ShaderModuleDescriptor(
-	var code: String,
-	var label: String? = null,
-	var sourceMap: Any? = null,
-	var compilationHints: Array<CompilationHint>? = null
+	val code: String,
+	val label: String? = null,
+	val sourceMap: Any? = null,
+	val compilationHints: Array<CompilationHint>? = null
 ) {
 	data class CompilationHint(
-		var entryPoint: String,
+		val entryPoint: String,
 		// TODO
-		//var layout: dynamic /* GPUPipelineLayout? | "auto" */
+		//val layout: dynamic /* GPUPipelineLayout? | "auto" */
 	)
 }

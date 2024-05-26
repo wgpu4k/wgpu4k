@@ -9,20 +9,23 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
     
     actual val queue: Queue by lazy { Queue(wgpu_h.wgpuDeviceGetQueue(handler) ?: error("fail to get device queue")) }
 
-    actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder =
+    actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder =confined { arena ->
         descriptor?.convert()
             .let { wgpu_h.wgpuDeviceCreateCommandEncoder(handler, it ?: MemorySegment.NULL) }
             ?.let(::CommandEncoder) ?: error("fail to create command encoder")
+    }
 
-    actual fun createShaderModule(descriptor: ShaderModuleDescriptor): ShaderModule =
-        descriptor.convert()
+    actual fun createShaderModule(descriptor: ShaderModuleDescriptor): ShaderModule = confined { arena ->
+        arena.map(descriptor)
             .let { wgpu_h.wgpuDeviceCreateShaderModule(handler, it) }
             ?.let(::ShaderModule) ?: error("fail to create shader module")
+    }
 
-    actual fun createPipelineLayout(descriptor: PipelineLayoutDescriptor): PipelineLayout =
+    actual fun createPipelineLayout(descriptor: PipelineLayoutDescriptor): PipelineLayout = confined { arena ->
         descriptor.convert()
             .let { wgpu_h.wgpuDeviceCreatePipelineLayout(handler, it) }
             ?.let(::PipelineLayout) ?: error("fail to create pipeline layout")
+}
 
     actual fun createRenderPipeline(descriptor: RenderPipelineDescriptor): RenderPipeline = confined { arena ->
         arena.map(descriptor)
