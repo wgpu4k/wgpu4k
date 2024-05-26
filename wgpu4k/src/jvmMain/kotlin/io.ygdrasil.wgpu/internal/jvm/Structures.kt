@@ -460,39 +460,6 @@ open class WGPUBindGroupEntry : Structure {
 	) : WGPUBindGroupEntry(pointer), Structure.ByValue
 }
 
-@Structure.FieldOrder("operation", "srcFactor", "dstFactor")
-open class WGPUBlendComponent : Structure {
-	/**
-	 * mapped from WGPUBlendOperation
-	 */
-	@JvmField
-	var operation: Int = 0
-
-	/**
-	 * mapped from WGPUBlendFactor
-	 */
-	@JvmField
-	var srcFactor: Int = 0
-
-	/**
-	 * mapped from WGPUBlendFactor
-	 */
-	@JvmField
-	var dstFactor: Int = 0
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	constructor()
-
-	class ByReference(
-		pointer: Pointer? = null,
-	) : WGPUBlendComponent(pointer), Structure.ByReference
-
-	class ByValue(
-		pointer: Pointer? = null,
-	) : WGPUBlendComponent(pointer), Structure.ByValue
-}
-
 @Structure.FieldOrder("nextInChain", "type", "hasDynamicOffset", "minBindingSize")
 open class WGPUBufferBindingLayout : Structure {
 	/**
@@ -786,40 +753,6 @@ open class WGPUComputePassTimestampWrites : Structure {
 	) : WGPUComputePassTimestampWrites(pointer), Structure.ByValue
 }
 
-@Structure.FieldOrder("nextInChain", "key", "value")
-open class WGPUConstantEntry : Structure {
-	/**
-	 * mapped from (typedef Optional[const WGPUChainedStruct] =
-	 * Declared([a8(next):[*:b1]i4(sType)x4](WGPUChainedStruct)))*
-	 */
-	@JvmField
-	var nextInChain: Pointer? = null
-
-	/**
-	 * mapped from (Char(layout = b1))*
-	 */
-	@JvmField
-	var key: String? = null
-
-	/**
-	 * mapped from double
-	 */
-	@JvmField
-	var `value`: Double = 0.0
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	constructor()
-
-	class ByReference(
-		pointer: Pointer? = null,
-	) : WGPUConstantEntry(pointer), Structure.ByReference
-
-	class ByValue(
-		pointer: Pointer? = null,
-	) : WGPUConstantEntry(pointer), Structure.ByValue
-}
-
 @Structure.FieldOrder("width", "height", "depthOrArrayLayers")
 open class WGPUExtent3D : Structure {
 	/**
@@ -1095,46 +1028,6 @@ open class WGPULimits : Structure {
 	) : WGPULimits(pointer), Structure.ByValue
 }
 
-@Structure.FieldOrder("nextInChain", "count", "mask", "alphaToCoverageEnabled")
-open class WGPUMultisampleState : Structure {
-	/**
-	 * mapped from (typedef Optional[const WGPUChainedStruct] =
-	 * Declared([a8(next):[*:b1]i4(sType)x4](WGPUChainedStruct)))*
-	 */
-	@JvmField
-	var nextInChain: Pointer? = null
-
-	/**
-	 * mapped from uint32_t
-	 */
-	@JvmField
-	var count: Int? = null
-
-	/**
-	 * mapped from uint32_t
-	 */
-	@JvmField
-	var mask: Int? = null
-
-	/**
-	 * mapped from WGPUBool
-	 */
-	@JvmField
-	var alphaToCoverageEnabled: WGPUBool? = null
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	constructor()
-
-	class ByReference(
-		pointer: Pointer? = null,
-	) : WGPUMultisampleState(pointer), Structure.ByReference
-
-	class ByValue(
-		pointer: Pointer? = null,
-	) : WGPUMultisampleState(pointer), Structure.ByValue
-}
-
 @Structure.FieldOrder("x", "y", "z")
 open class WGPUOrigin3D : Structure {
 	/**
@@ -1233,52 +1126,6 @@ open class WGPUPrimitiveDepthClipControl : Structure {
 	class ByValue(
 		pointer: Pointer? = null,
 	) : WGPUPrimitiveDepthClipControl(pointer), Structure.ByValue
-}
-
-@Structure.FieldOrder("nextInChain", "topology", "stripIndexFormat", "frontFace", "cullMode")
-open class WGPUPrimitiveState : Structure {
-	/**
-	 * mapped from (typedef Optional[const WGPUChainedStruct] =
-	 * Declared([a8(next):[*:b1]i4(sType)x4](WGPUChainedStruct)))*
-	 */
-	@JvmField
-	var nextInChain: Pointer? = null
-
-	/**
-	 * mapped from WGPUPrimitiveTopology
-	 */
-	@JvmField
-	var topology: Int? = null
-
-	/**
-	 * mapped from WGPUIndexFormat
-	 */
-	@JvmField
-	var stripIndexFormat: Int? = null
-
-	/**
-	 * mapped from WGPUFrontFace
-	 */
-	@JvmField
-	var frontFace: Int? = null
-
-	/**
-	 * mapped from WGPUCullMode
-	 */
-	@JvmField
-	var cullMode: Int? = null
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	constructor()
-
-	class ByReference(
-		pointer: Pointer? = null,
-	) : WGPUPrimitiveState(pointer), Structure.ByReference
-
-	class ByValue(
-		pointer: Pointer? = null,
-	) : WGPUPrimitiveState(pointer), Structure.ByValue
 }
 
 @Structure.FieldOrder("nextInChain", "label", "type", "count")
@@ -1837,45 +1684,6 @@ open class WGPUShaderModuleWGSLDescriptor : Structure {
 	class ByValue(
 		pointer: Pointer? = null,
 	) : WGPUShaderModuleWGSLDescriptor(pointer), Structure.ByValue
-}
-
-@Structure.FieldOrder("compare", "failOp", "depthFailOp", "passOp")
-open class WGPUStencilFaceState : Structure {
-	/**
-	 * mapped from WGPUCompareFunction
-	 */
-	@JvmField
-	var compare: Int? = null
-
-	/**
-	 * mapped from WGPUStencilOperation
-	 */
-	@JvmField
-	var failOp: Int? = null
-
-	/**
-	 * mapped from WGPUStencilOperation
-	 */
-	@JvmField
-	var depthFailOp: Int? = null
-
-	/**
-	 * mapped from WGPUStencilOperation
-	 */
-	@JvmField
-	var passOp: Int? = null
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	constructor()
-
-	class ByReference(
-		pointer: Pointer? = null,
-	) : WGPUStencilFaceState(pointer), Structure.ByReference
-
-	class ByValue(
-		pointer: Pointer? = null,
-	) : WGPUStencilFaceState(pointer), Structure.ByValue
 }
 
 @Structure.FieldOrder("nextInChain", "access", "format", "viewDimension")
@@ -2722,33 +2530,6 @@ open class WGPUBindGroupLayoutEntry : Structure {
 	) : WGPUBindGroupLayoutEntry(pointer), Structure.ByValue
 }
 
-@Structure.FieldOrder("color", "alpha")
-open class WGPUBlendState : Structure {
-	/**
-	 * mapped from WGPUBlendComponent
-	 */
-	@JvmField
-	var color: WGPUBlendComponent? = null
-
-	/**
-	 * mapped from WGPUBlendComponent
-	 */
-	@JvmField
-	var alpha: WGPUBlendComponent? = null
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	constructor()
-
-	class ByReference(
-		pointer: Pointer? = null,
-	) : WGPUBlendState(pointer), Structure.ByReference
-
-	class ByValue(
-		pointer: Pointer? = null,
-	) : WGPUBlendState(pointer), Structure.ByValue
-}
-
 @Structure.FieldOrder("nextInChain", "messageCount", "messages")
 open class WGPUCompilationInfo : Structure {
 	/**
@@ -2817,92 +2598,6 @@ open class WGPUComputePassDescriptor : Structure {
 	class ByValue(
 		pointer: Pointer? = null,
 	) : WGPUComputePassDescriptor(pointer), Structure.ByValue
-}
-
-@Structure.FieldOrder(
-	"nextInChain", "format", "depthWriteEnabled", "depthCompare", "stencilFront",
-	"stencilBack", "stencilReadMask", "stencilWriteMask", "depthBias", "depthBiasSlopeScale",
-	"depthBiasClamp"
-)
-open class WGPUDepthStencilState : Structure {
-	/**
-	 * mapped from (typedef Optional[const WGPUChainedStruct] =
-	 * Declared([a8(next):[*:b1]i4(sType)x4](WGPUChainedStruct)))*
-	 */
-	@JvmField
-	var nextInChain: Pointer? = null
-
-	/**
-	 * mapped from WGPUTextureFormat
-	 */
-	@JvmField
-	var format: Int? = null
-
-	/**
-	 * mapped from WGPUBool
-	 */
-	@JvmField
-	var depthWriteEnabled: WGPUBool? = null
-
-	/**
-	 * mapped from WGPUCompareFunction
-	 */
-	@JvmField
-	var depthCompare: Int? = null
-
-	/**
-	 * mapped from WGPUStencilFaceState
-	 */
-	@JvmField
-	var stencilFront: WGPUStencilFaceState? = null
-
-	/**
-	 * mapped from WGPUStencilFaceState
-	 */
-	@JvmField
-	var stencilBack: WGPUStencilFaceState? = null
-
-	/**
-	 * mapped from uint32_t
-	 */
-	@JvmField
-	var stencilReadMask: Int? = null
-
-	/**
-	 * mapped from uint32_t
-	 */
-	@JvmField
-	var stencilWriteMask: Int? = null
-
-	/**
-	 * mapped from int32_t
-	 */
-	@JvmField
-	var depthBias: Int? = null
-
-	/**
-	 * mapped from float
-	 */
-	@JvmField
-	var depthBiasSlopeScale: Float? = null
-
-	/**
-	 * mapped from float
-	 */
-	@JvmField
-	var depthBiasClamp: Float? = null
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	constructor()
-
-	class ByReference(
-		pointer: Pointer? = null,
-	) : WGPUDepthStencilState(pointer), Structure.ByReference
-
-	class ByValue(
-		pointer: Pointer? = null,
-	) : WGPUDepthStencilState(pointer), Structure.ByValue
 }
 
 @Structure.FieldOrder("nextInChain", "layout", "buffer")
@@ -3359,47 +3054,6 @@ open class WGPUBindGroupLayoutDescriptor : Structure {
 	) : WGPUBindGroupLayoutDescriptor(pointer), Structure.ByValue
 }
 
-@Structure.FieldOrder("nextInChain", "format", "blend", "writeMask")
-open class WGPUColorTargetState : Structure {
-	/**
-	 * mapped from (typedef Optional[const WGPUChainedStruct] =
-	 * Declared([a8(next):[*:b1]i4(sType)x4](WGPUChainedStruct)))*
-	 */
-	@JvmField
-	var nextInChain: Pointer? = null
-
-	/**
-	 * mapped from WGPUTextureFormat
-	 */
-	@JvmField
-	var format: Int = 0
-
-	/**
-	 * mapped from (typedef Optional[const WGPUBlendState] =
-	 * Declared([[i4(operation)i4(srcFactor)i4(dstFactor)](color)[i4(operation)i4(srcFactor)i4(dstFactor)](alpha)](WGPUBlendState)))*
-	 */
-	@JvmField
-	var blend: WGPUBlendState.ByReference? = null
-
-	/**
-	 * mapped from WGPUColorWriteMaskFlags
-	 */
-	@JvmField
-	var writeMask: WGPUColorWriteMaskFlags? = null
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	constructor()
-
-	class ByReference(
-		pointer: Pointer? = null,
-	) : WGPUColorTargetState(pointer), Structure.ByReference
-
-	class ByValue(
-		pointer: Pointer? = null,
-	) : WGPUColorTargetState(pointer), Structure.ByValue
-}
-
 @Structure.FieldOrder("nextInChain", "label", "layout", "compute")
 open class WGPUComputePipelineDescriptor : Structure {
 	/**
@@ -3575,225 +3229,6 @@ open class WGPURenderPassDescriptor : Structure {
 	class ByValue(
 		pointer: Pointer? = null,
 	) : WGPURenderPassDescriptor(pointer), Structure.ByValue
-}
-
-@Structure.FieldOrder(
-	"nextInChain", "module", "entryPoint", "constantCount", "constantsPtr",
-	"bufferCount", "buffersPtr"
-)
-open class WGPUVertexState : Structure {
-	/**
-	 * mapped from (typedef Optional[const WGPUChainedStruct] =
-	 * Declared([a8(next):[*:b1]i4(sType)x4](WGPUChainedStruct)))*
-	 */
-	@JvmField
-	var nextInChain: Pointer? = null
-
-	/**
-	 * mapped from WGPUShaderModule
-	 */
-	@JvmField
-	var module: WGPUShaderModule = WGPUShaderModuleImpl()
-
-	/**
-	 * mapped from (Char(layout = b1))*
-	 */
-	@JvmField
-	var entryPoint: String? = null
-
-	/**
-	 * mapped from size_t
-	 */
-	@JvmField
-	var constantCount: NativeLong? = null
-
-	/**
-	 * mapped from (typedef Optional[const WGPUConstantEntry] =
-	 * Declared([a8(nextInChain):[*:b1]a8(key):[*:b1]d8(value)](WGPUConstantEntry)))*
-	 */
-	@JvmField
-	var constantsPtr: Pointer? = null
-
-	var constants: Array<WGPUConstantEntry.ByReference>? = null
-
-	/**
-	 * mapped from size_t
-	 */
-	@JvmField
-	var bufferCount: NativeLong? = null
-
-	/**
-	 * mapped from (typedef Optional[const WGPUVertexBufferLayout] =
-	 * Declared([j8(arrayStride)i4(stepMode)x4j8(attributeCount)a8(attributes):[*:b1]](WGPUVertexBufferLayout)))*
-	 */
-	@JvmField
-	var buffersPtr: Pointer? = null
-
-	var buffers: Array<WGPUVertexBufferLayout.ByReference>? = null
-
-	override fun write() {
-		buffers?.forEach { it.write() }
-		buffersPtr = buffers?.firstOrNull()?.pointer
-		bufferCount = buffers?.size?.toNativeLong()
-		constants?.forEach { it.write() }
-		constantsPtr = constants?.firstOrNull()?.pointer
-		constantCount = constants?.size?.toNativeLong()
-		super.write()
-	}
-
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	constructor()
-
-	class ByReference(
-		pointer: Pointer? = null,
-	) : WGPUVertexState(pointer), Structure.ByReference
-
-	class ByValue(
-		pointer: Pointer? = null,
-	) : WGPUVertexState(pointer), Structure.ByValue
-}
-
-@Structure.FieldOrder(
-	"nextInChain", "module", "entryPoint", "constantCount", "constants",
-	"targetCount", "targetsPtr"
-)
-open class WGPUFragmentState : Structure {
-	/**
-	 * mapped from (typedef Optional[const WGPUChainedStruct] =
-	 * Declared([a8(next):[*:b1]i4(sType)x4](WGPUChainedStruct)))*
-	 */
-	@JvmField
-	var nextInChain: Pointer? = null
-
-	/**
-	 * mapped from WGPUShaderModule
-	 */
-	@JvmField
-	var module: WGPUShaderModule = WGPUShaderModuleImpl()
-
-	/**
-	 * mapped from (Char(layout = b1))*
-	 */
-	@JvmField
-	var entryPoint: String? = null
-
-	/**
-	 * mapped from size_t
-	 */
-	@JvmField
-	var constantCount: NativeLong? = null
-
-	/**
-	 * mapped from (typedef Optional[const WGPUConstantEntry] =
-	 * Declared([a8(nextInChain):[*:b1]a8(key):[*:b1]d8(value)](WGPUConstantEntry)))*
-	 */
-	@JvmField
-	var constants: Pointer? = null
-
-	/**
-	 * mapped from size_t
-	 */
-	@JvmField
-	var targetCount: NativeLong? = null
-
-	/**
-	 * mapped from (typedef Optional[const WGPUColorTargetState] =
-	 * Declared([a8(nextInChain):[*:b1]i4(format)x4a8(blend):[*:b1]i4(writeMask)x4](WGPUColorTargetState)))*
-	 */
-	@JvmField
-	var targetsPtr: Pointer? = null
-
-	var targets: Array<WGPUColorTargetState.ByReference>? = null
-
-	override fun write() {
-		targets?.forEach { it.write() }
-		targetsPtr = targets?.firstOrNull()?.pointer
-		targetCount = targets?.size?.toNativeLong()
-		super.write()
-	}
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	constructor()
-
-	class ByReference(
-		pointer: Pointer? = null,
-	) : WGPUFragmentState(pointer), Structure.ByReference
-
-	class ByValue(
-		pointer: Pointer? = null,
-	) : WGPUFragmentState(pointer), Structure.ByValue
-}
-
-@Structure.FieldOrder(
-	"nextInChain", "label", "layout", "vertex", "primitive", "depthStencil",
-	"multisample", "fragment"
-)
-open class WGPURenderPipelineDescriptor : Structure {
-	/**
-	 * mapped from (typedef Optional[const WGPUChainedStruct] =
-	 * Declared([a8(next):[*:b1]i4(sType)x4](WGPUChainedStruct)))*
-	 */
-	@JvmField
-	var nextInChain: Pointer? = null
-
-	/**
-	 * mapped from (Char(layout = b1))*
-	 */
-	@JvmField
-	var label: String? = null
-
-	/**
-	 * mapped from WGPUPipelineLayout
-	 */
-	@JvmField
-	var layout: WGPUPipelineLayout? = null
-
-	/**
-	 * mapped from WGPUVertexState
-	 */
-	@JvmField
-	var vertex: WGPUVertexState? = null
-
-	/**
-	 * mapped from WGPUPrimitiveState
-	 */
-	@JvmField
-	var primitive: WGPUPrimitiveState? = null
-
-	/**
-	 * mapped from (typedef Optional[const WGPUDepthStencilState] =
-	 * Declared([a8(nextInChain):[*:b1]i4(format)i4(depthWriteEnabled)i4(depthCompare)[i4(compare)i4(failOp)i4(depthFailOp)i4(passOp)](stencilFront)[i4(compare)i4(failOp)i4(depthFailOp)i4(passOp)](stencilBack)i4(stencilReadMask)i4(stencilWriteMask)i4(depthBias)f4(depthBiasSlopeScale)f4(depthBiasClamp)](WGPUDepthStencilState)))*
-	 */
-	@JvmField
-	var depthStencil: WGPUDepthStencilState.ByReference? = null
-
-	/**
-	 * mapped from WGPUMultisampleState
-	 */
-	@JvmField
-	var multisample: WGPUMultisampleState? = null
-
-	/**
-	 * mapped from (typedef Optional[const WGPUFragmentState] =
-	 * Declared([a8(nextInChain):[*:b1]a8(module):[*:b1]a8(entryPoint):[*:b1]j8(constantCount)a8(constants):[*:b1]j8(targetCount)a8(targets):[*:b1]](WGPUFragmentState)))*
-	 */
-	@JvmField
-	var fragment: WGPUFragmentState.ByReference? = null
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	constructor()
-
-	class ByReference(
-		pointer: Pointer? = null,
-	) : WGPURenderPipelineDescriptor(pointer), Structure.ByReference
-
-	class ByValue(
-		pointer: Pointer? = null,
-	) : WGPURenderPipelineDescriptor(pointer), Structure.ByValue
 }
 
 @Structure.FieldOrder(

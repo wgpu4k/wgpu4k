@@ -3,44 +3,42 @@ package io.ygdrasil.wgpu.`internal`.jvm
 import com.sun.jna.Callback
 
 
-public typealias WGPUBool = Int
+typealias WGPUBool = Int
 
-public typealias WGPUBindGroupLayout = WGPUBindGroupLayoutImpl
+typealias WGPUBindGroupLayout = WGPUBindGroupLayoutImpl
 
-public typealias WGPUBuffer = WGPUBufferImpl
+typealias WGPUBuffer = WGPUBufferImpl
 
-public typealias WGPUDevice = WGPUDeviceImpl
+typealias WGPUDevice = WGPUDeviceImpl
 
-public typealias WGPUPipelineLayout = WGPUPipelineLayoutImpl
+typealias WGPUPipelineLayout = WGPUPipelineLayoutImpl
 
-public typealias WGPUQuerySet = WGPUQuerySetImpl
+typealias WGPUQuerySet = WGPUQuerySetImpl
 
-public typealias WGPUSampler = WGPUSamplerImpl
+typealias WGPUSampler = WGPUSamplerImpl
 
-public typealias WGPUShaderModule = WGPUShaderModuleImpl
+typealias WGPUShaderModule = WGPUShaderModuleImpl
 
-public typealias WGPUSurface = WGPUSurfaceImpl
+typealias WGPUSurface = WGPUSurfaceImpl
 
-public typealias WGPUTexture = WGPUTextureImpl
+typealias WGPUTexture = WGPUTextureImpl
 
-public typealias WGPUTextureView = WGPUTextureViewImpl
+typealias WGPUTextureView = WGPUTextureViewImpl
 
-public typealias WGPUBufferUsageFlags = Int
+typealias WGPUBufferUsageFlags = Int
 
-public typealias WGPUColorWriteMaskFlags = Int
+typealias WGPUShaderStageFlags = Int
 
-public typealias WGPUShaderStageFlags = Int
+typealias WGPUTextureUsageFlags = Int
 
-public typealias WGPUTextureUsageFlags = Int
-
-public interface WGPUDeviceLostCallback : Callback {
-	public operator fun invoke(
+interface WGPUDeviceLostCallback : Callback {
+	operator fun invoke(
 		param1: Unit,
 		param2: Byte,
 		param3: Unit,
 	)
 }
 
-public typealias WGPUInstanceBackendFlags = Int
+typealias WGPUInstanceBackendFlags = Int
 
-public typealias WGPUInstanceFlags = Int
+typealias WGPUInstanceFlags = Int
