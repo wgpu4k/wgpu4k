@@ -1,5 +1,7 @@
 package io.ygdrasil.wgpu
 
+import WGPUExtent3D
+import WGPUTextureDataLayout
 import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.mapper.map

@@ -1,7 +1,9 @@
 package io.ygdrasil.wgpu
 
 
-import io.ygdrasil.wgpu.internal.jvm.WGPUDeviceImpl
+
+import WGPUDeviceImpl
+import WGPUSurfaceConfiguration
 import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceCapabilities
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceTexture
@@ -56,7 +58,7 @@ actual class RenderingContext(
 		wgpu_h.wgpuSurfaceRelease(handler)
 	}
 
-	private fun CanvasConfiguration.convert(): io.ygdrasil.wgpu.internal.jvm.WGPUSurfaceConfiguration = io.ygdrasil.wgpu.internal.jvm.WGPUSurfaceConfiguration().also {
+	private fun CanvasConfiguration.convert(): WGPUSurfaceConfiguration = WGPUSurfaceConfiguration().also {
 		it.device = WGPUDeviceImpl(device.handler.toPointer())
 		it.usage = usage
 		it.format = format?.value ?: textureFormat.value

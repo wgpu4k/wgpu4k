@@ -1,5 +1,7 @@
 package io.ygdrasil.wgpu
 
+import WGPUCommandEncoderDescriptor
+import WGPUPipelineLayoutDescriptor
 import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.mapper.map
