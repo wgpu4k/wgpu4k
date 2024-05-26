@@ -140,9 +140,9 @@ private fun Arena.map(input: RenderPipelineDescriptor.DepthStencilState): Memory
 
 fun map(input: RenderPipelineDescriptor.DepthStencilState.StencilFaceState, output: MemorySegment?) {
     WGPUStencilFaceState.compare(output, input.compare.value)
-    if (input.failOp != null) WGPUStencilFaceState.failOp(output, input.failOp.value)
-    if (input.depthFailOp != null) WGPUStencilFaceState.depthFailOp(output, input.depthFailOp.value)
-    if (input.passOp != null) WGPUStencilFaceState.passOp(output, input.passOp.value)
+    WGPUStencilFaceState.failOp(output, input.failOp.value)
+    WGPUStencilFaceState.depthFailOp(output, input.depthFailOp.value)
+    WGPUStencilFaceState.passOp(output, input.passOp.value)
 }
 
 private fun map(input: RenderPipelineDescriptor.MultisampleState, output: MemorySegment) {

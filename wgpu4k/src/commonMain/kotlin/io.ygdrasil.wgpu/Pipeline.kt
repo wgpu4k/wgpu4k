@@ -72,9 +72,9 @@ data class RenderPipelineDescriptor(
     ) {
         data class StencilFaceState(
             val compare: CompareFunction = CompareFunction.always,
-            val failOp: StencilOperation? = StencilOperation.keep,
-            val depthFailOp: StencilOperation? = StencilOperation.keep,
-            val passOp: StencilOperation? = StencilOperation.keep,
+            val failOp: StencilOperation = StencilOperation.keep,
+            val depthFailOp: StencilOperation = StencilOperation.keep,
+            val passOp: StencilOperation = StencilOperation.keep,
         )
     }
 
