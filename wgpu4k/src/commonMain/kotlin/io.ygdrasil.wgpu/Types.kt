@@ -49,7 +49,7 @@ data class GPUExtent3DDictStrict(
 	var depthOrArrayLayers: Int = 1
 )
 
-data class GPUOrigin3DDict(
+data class Origin3D(
 	var x: GPUIntegerCoordinate = 0,
 	var y: GPUIntegerCoordinate = 0,
 	var z: GPUIntegerCoordinate = 0

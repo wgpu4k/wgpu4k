@@ -123,7 +123,7 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 		imageBitmaps.forEachIndexed { index, imageBitmap ->
 			device.queue.copyExternalImageToTexture(
 				ImageCopyExternalImage(source = imageBitmap),
-				ImageCopyTextureTagged(texture = cubemapTexture, origin = GPUOrigin3DDict(0, 0, index)),
+				ImageCopyTextureTagged(texture = cubemapTexture, origin = Origin3D(0, 0, index)),
 				imageBitmap.width to imageBitmap.height
 			)
 		}

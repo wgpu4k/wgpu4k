@@ -2,8 +2,8 @@ package io.ygdrasil.wgpu.mapper
 
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
-import io.ygdrasil.wgpu.GPUOrigin3DDict
 import io.ygdrasil.wgpu.ImageCopyTexture
+import io.ygdrasil.wgpu.Origin3D
 import io.ygdrasil.wgpu.Texture
 import io.ygdrasil.wgpu.TextureAspect
 import io.ygdrasil.wgpu.internal.jvm.confined
@@ -22,7 +22,7 @@ class ImageCopyTextureTest : FreeSpec({
             val bufferDescriptor = ImageCopyTexture(
                 texture = Texture(dummyMemory),
                 mipLevel = 10,
-                origin = GPUOrigin3DDict(1, 2, 3),
+                origin = Origin3D(1, 2, 3),
             )
 
             // When

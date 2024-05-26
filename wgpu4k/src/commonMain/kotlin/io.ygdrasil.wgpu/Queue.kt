@@ -48,10 +48,10 @@ data class ImageCopyTextureTagged(
 	var premultipliedAlpha: Boolean = false,
 	var texture: Texture,
 	var mipLevel: GPUIntegerCoordinate = 0,
-	var origin: GPUOrigin3DDict = GPUOrigin3DDict(),
+	var origin: Origin3D = Origin3D(),
 	var aspect: TextureAspect = TextureAspect.all,
 
-)
+	)
 
 enum class PredefinedColorSpace(val value: String) {
 	srgb("srgb"),
