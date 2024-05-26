@@ -2069,39 +2069,6 @@ open class WGPUTextureDataLayout : Structure {
 	) : WGPUTextureDataLayout(pointer), Structure.ByValue
 }
 
-@Structure.FieldOrder("format", "offset", "shaderLocation")
-open class WGPUVertexAttribute : Structure {
-	/**
-	 * mapped from WGPUVertexFormat
-	 */
-	@JvmField
-	var format: Int = 0
-
-	/**
-	 * mapped from uint64_t
-	 */
-	@JvmField
-	var offset: Long = 0
-
-	/**
-	 * mapped from uint32_t
-	 */
-	@JvmField
-	var shaderLocation: Int = 0
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	constructor()
-
-	class ByReference(
-		pointer: Pointer? = null,
-	) : WGPUVertexAttribute(pointer), Structure.ByReference
-
-	class ByValue(
-		pointer: Pointer? = null,
-	) : WGPUVertexAttribute(pointer), Structure.ByValue
-}
-
 @Structure.FieldOrder(
 	"nextInChain", "binding", "visibility", "buffer", "sampler", "texture",
 	"storageTexture"
@@ -2543,55 +2510,6 @@ open class WGPUTextureDescriptor : Structure {
 	class ByValue(
 		pointer: Pointer? = null,
 	) : WGPUTextureDescriptor(pointer), Structure.ByValue
-}
-
-@Structure.FieldOrder("arrayStride", "stepMode", "attributeCount", "attributesPtr")
-open class WGPUVertexBufferLayout : Structure {
-	/**
-	 * mapped from uint64_t
-	 */
-	@JvmField
-	var arrayStride: Long = 0
-
-	/**
-	 * mapped from WGPUVertexStepMode
-	 */
-	@JvmField
-	var stepMode: Int? = null
-
-	/**
-	 * mapped from size_t
-	 */
-	@JvmField
-	var attributeCount: NativeLong? = null
-
-	/**
-	 * mapped from (typedef Optional[const WGPUVertexAttribute] =
-	 * Declared([i4(format)x4j8(offset)i4(shaderLocation)x4](WGPUVertexAttribute)))*
-	 */
-	@JvmField
-	var attributesPtr: Pointer? = null
-
-	val attributes: Array<WGPUVertexAttribute.ByReference>? = null
-
-	override fun write() {
-		attributes?.forEach { it.write() }
-		attributesPtr = attributes?.firstOrNull()?.pointer
-		attributeCount = attributes?.size?.toNativeLong()
-		super.write()
-	}
-
-	constructor(pointer: Pointer?) : super(pointer)
-
-	constructor()
-
-	class ByReference(
-		pointer: Pointer? = null,
-	) : WGPUVertexBufferLayout(pointer), Structure.ByReference
-
-	class ByValue(
-		pointer: Pointer? = null,
-	) : WGPUVertexBufferLayout(pointer), Structure.ByValue
 }
 
 @Structure.FieldOrder("nextInChain", "label", "entryCount", "entries")
