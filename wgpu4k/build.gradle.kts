@@ -5,7 +5,7 @@ import io.github.krakowski.jextract.JextractTask
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
 	alias(libs.plugins.kotest)
-	id("io.github.krakowski.jextract") version "0.5.0" apply true
+	id("io.github.krakowski.jextract") version "0.5.0" apply false
 	alias(libs.plugins.download)
 }
 
