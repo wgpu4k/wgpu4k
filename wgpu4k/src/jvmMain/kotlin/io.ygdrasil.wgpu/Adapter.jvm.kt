@@ -1,6 +1,5 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.WGPURequestDeviceStatus
 import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPURequestDeviceCallback
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
@@ -31,3 +30,19 @@ actual class Adapter(internal val handler: MemorySegment) : AutoCloseable {
 		wgpu_h.wgpuAdapterRelease(handler)
 	}
 }
+
+
+internal enum class WGPURequestDeviceStatus(
+	val `value`: Int,
+) {
+	WGPURequestDeviceStatus_Success(0),
+	WGPURequestDeviceStatus_Error(1),
+	WGPURequestDeviceStatus_Unknown(2);
+
+	companion object {
+		internal fun of(`value`: Int): WGPURequestDeviceStatus? = entries.find {
+			it.value == value
+		}
+	}
+}
+

@@ -1,7 +1,6 @@
 package io.ygdrasil.wgpu.internal.jvm
 
 import com.sun.jna.Pointer
-import com.sun.jna.Structure
 import java.lang.foreign.Arena
 import java.lang.foreign.MemoryLayout
 import java.lang.foreign.MemorySegment
@@ -15,12 +14,9 @@ fun <T> confined(block: (Arena) -> T) = Arena.ofConfined()
 
 fun Pointer.toMemory() = MemorySegment.ofAddress(Pointer.nativeValue(this))
 
-internal fun MemorySegment.toPointer(): Pointer = Pointer(address())
 
 internal fun List<MemorySegment>.toPointerArray(arena: Arena): MemorySegment? {
     val commands = arena.allocate(MemoryLayout.sequenceLayout(size.toLong(), ValueLayout.ADDRESS))
     forEachIndexed { index, value -> commands.setAtIndex(ValueLayout.ADDRESS, index.toLong(), value) }
     return commands
 }
-
-fun Structure.toMemory() = also { it.write() }.pointer.toMemory()
