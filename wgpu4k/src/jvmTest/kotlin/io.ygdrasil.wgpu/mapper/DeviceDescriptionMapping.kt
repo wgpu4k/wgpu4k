@@ -1,13 +1,18 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.wgpu.mapper
 
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
+import io.ygdrasil.wgpu.Size3D
+import io.ygdrasil.wgpu.TextureDescriptor
+import io.ygdrasil.wgpu.TextureDimension
+import io.ygdrasil.wgpu.TextureFormat
+import io.ygdrasil.wgpu.TextureUsage
 import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUExtent3D
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUTextureDescriptor
-import io.ygdrasil.wgpu.mapper.map
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.ValueLayout
+import kotlin.let
 
 class DeviceDescriptionMapping : FreeSpec({
 
