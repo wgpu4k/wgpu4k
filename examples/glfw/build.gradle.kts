@@ -41,6 +41,7 @@ dependencies {
 
 	implementation(projects.examples.common)
 	implementation(libs.jnaPlatform)
+	api(libs.jna)
 
 	implementation(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
 	implementation("org.lwjgl", "lwjgl")

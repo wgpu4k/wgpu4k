@@ -7,7 +7,6 @@ import io.ygdrasil.wgpu.WGPU
 import io.ygdrasil.wgpu.WGPU.Companion.createInstance
 import io.ygdrasil.wgpu.WGPU.Companion.loadLibrary
 import io.ygdrasil.wgpu.examples.*
-import io.ygdrasil.wgpu.internal.jvm.*
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPULogCallback
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import kotlinx.coroutines.Dispatchers
@@ -164,3 +163,4 @@ fun WGPU.getSurface(window: Long): MemorySegment = when (Platform.os) {
 
 private fun Long.toPointer(): Pointer = Pointer(this)
 
+fun Pointer.toMemory() = MemorySegment.ofAddress(Pointer.nativeValue(this))

@@ -62,7 +62,6 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 kotlin.srcDirs("src/jvmMain/kotlin", "src/jvmMain/java")
-                api(libs.jna)
             }
         }
 
