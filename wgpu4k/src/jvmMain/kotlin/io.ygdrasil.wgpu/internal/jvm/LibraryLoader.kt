@@ -27,7 +27,7 @@ private fun inferWindowsWGPUPossiblePath(): File {
     listWritablePathOn(possiblePaths).forEach { path ->
         (0 until 100).forEach { index ->
             path.resolve("WGPU$index.dll")
-                .takeIf { it.canWrite() && it.exists().not() }
+                .takeIf { it.exists().not() }
                 ?.let { return it }
         }
     }

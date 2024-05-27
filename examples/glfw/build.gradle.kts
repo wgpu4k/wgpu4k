@@ -60,10 +60,6 @@ application {
 		applicationDefaultJvmArgs += "-XstartOnFirstThread"
 	}
 
-	if (isOnWindows) {
-		applicationDefaultJvmArgs += "-Djava.library.path=${windowsLib.absolutePath}"
-	}
-
 	println(getLibraryProject().toString())
 
 	applicationDefaultJvmArgs += "--add-opens=java.base/java.lang=ALL-UNNAMED"
