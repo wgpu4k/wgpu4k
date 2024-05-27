@@ -3,11 +3,20 @@
 package io.ygdrasil.wgpu
 
 interface EnumerationWithValue {
-    public val value: Int
+    val value: Int
+
+    infix fun or(other: Int): Int = value or other
+    infix fun or(other: EnumerationWithValue): Int = value or other.value
 }
 
-public enum class AdapterType(
-    public val `value`: Int,
+internal fun Set<EnumerationWithValue>.toFlagInt(): Int = when (size) {
+    0 -> 0
+    1 -> first().value
+    else -> fold(0) { acc, enumerationWithValue -> acc or enumerationWithValue.value }
+}
+
+enum class AdapterType(
+    val `value`: Int,
 ) {
     discretegpu(0),
     integratedgpu(1),
@@ -16,39 +25,31 @@ public enum class AdapterType(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: AdapterType): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): AdapterType? = entries.find {
+    companion object {
+        fun of(`value`: Int): AdapterType? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class AddressMode(
-    public override val `value`: Int,
-    public val stringValue: String,
+enum class AddressMode(
+    override val `value`: Int,
+    val stringValue: String,
 ) : EnumerationWithValue {
     repeat(0, "repeat"),
     mirrorrepeat(1, "mirror-repeat"),
     clamptoedge(2, "clamp-to-edge"),
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: AddressMode): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): AddressMode? = entries.find {
+    companion object {
+        fun of(`value`: Int): AddressMode? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class BackendType(
-    public val `value`: Int,
+enum class BackendType(
+    val `value`: Int,
 ) {
     undefined(0),
     `null`(1),
@@ -62,20 +63,20 @@ public enum class BackendType(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: BackendType): Int = value or other.value
+    infix fun or(other: BackendType): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): BackendType? = entries.find {
+    companion object {
+        fun of(`value`: Int): BackendType? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class BlendFactor(
-    public override val `value`: Int,
-    public val stringValue: String,
+enum class BlendFactor(
+    override val `value`: Int,
+    val stringValue: String,
 ) : EnumerationWithValue {
     zero(0, "zero"),
     one(1, "one"),
@@ -92,20 +93,16 @@ public enum class BlendFactor(
     oneminusconstant(12, "one-minus-constant"),
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: BlendFactor): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): BlendFactor? = entries.find {
+    companion object {
+        fun of(`value`: Int): BlendFactor? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class BlendOperation(
-    public override val `value`: Int,
-    public val stringValue: String,
+enum class BlendOperation(
+    override val `value`: Int,
+    val stringValue: String,
 ) : EnumerationWithValue {
     add(0, "add"),
     subtract(1, "subtract"),
@@ -114,19 +111,15 @@ public enum class BlendOperation(
     max(4, "max"),
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: BlendOperation): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): BlendOperation? = entries.find {
+    companion object {
+        fun of(`value`: Int): BlendOperation? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class BufferBindingType(
-    public val `value`: Int,
+enum class BufferBindingType(
+    val `value`: Int,
 ) {
     undefined(0),
     uniform(1),
@@ -135,19 +128,19 @@ public enum class BufferBindingType(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: BufferBindingType): Int = value or other.value
+    infix fun or(other: BufferBindingType): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): BufferBindingType? = entries.find {
+    companion object {
+        fun of(`value`: Int): BufferBindingType? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class BufferMapAsyncStatus(
-    public val `value`: Int,
+enum class BufferMapAsyncStatus(
+    val `value`: Int,
 ) {
     success(0),
     validationerror(1),
@@ -161,19 +154,19 @@ public enum class BufferMapAsyncStatus(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: BufferMapAsyncStatus): Int = value or other.value
+    infix fun or(other: BufferMapAsyncStatus): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): BufferMapAsyncStatus? = entries.find {
+    companion object {
+        fun of(`value`: Int): BufferMapAsyncStatus? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class BufferMapState(
-    public val `value`: Int,
+enum class BufferMapState(
+    val `value`: Int,
 ) {
     unmapped(0),
     pending(1),
@@ -181,20 +174,20 @@ public enum class BufferMapState(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: BufferMapState): Int = value or other.value
+    infix fun or(other: BufferMapState): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): BufferMapState? = entries.find {
+    companion object {
+        fun of(`value`: Int): BufferMapState? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class CompareFunction(
-    public override val `value`: Int,
-    public val stringValue: String,
+enum class CompareFunction(
+    override val `value`: Int,
+    val stringValue: String,
 ) : EnumerationWithValue {
     never(1, "never"),
     less(2, "less"),
@@ -206,19 +199,16 @@ public enum class CompareFunction(
     always(8, "always"),
     ;
 
-    public infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: CompareFunction): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): CompareFunction? = entries.find {
+    companion object {
+        fun of(`value`: Int): CompareFunction? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class CompilationInfoRequestStatus(
-    public val `value`: Int,
+enum class CompilationInfoRequestStatus(
+    val `value`: Int,
 ) {
     success(0),
     error(1),
@@ -227,19 +217,19 @@ public enum class CompilationInfoRequestStatus(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: CompilationInfoRequestStatus): Int = value or other.value
+    infix fun or(other: CompilationInfoRequestStatus): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): CompilationInfoRequestStatus? = entries.find {
+    companion object {
+        fun of(`value`: Int): CompilationInfoRequestStatus? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class CompilationMessageType(
-    public val `value`: Int,
+enum class CompilationMessageType(
+    val `value`: Int,
 ) {
     error(0),
     warning(1),
@@ -247,19 +237,19 @@ public enum class CompilationMessageType(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: CompilationMessageType): Int = value or other.value
+    infix fun or(other: CompilationMessageType): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): CompilationMessageType? = entries.find {
+    companion object {
+        fun of(`value`: Int): CompilationMessageType? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class CompositeAlphaMode(
-    public val `value`: Int,
+enum class CompositeAlphaMode(
+    val `value`: Int,
 ) {
     auto(0),
     opaque(1),
@@ -268,19 +258,19 @@ public enum class CompositeAlphaMode(
     inherit(4),
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: CompositeAlphaMode): Int = value or other.value
+    infix fun or(other: CompositeAlphaMode): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): CompositeAlphaMode? = entries.find {
+    companion object {
+        fun of(`value`: Int): CompositeAlphaMode? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class CreatePipelineAsyncStatus(
-    public val `value`: Int,
+enum class CreatePipelineAsyncStatus(
+    val `value`: Int,
 ) {
     success(0),
     validationerror(1),
@@ -291,19 +281,19 @@ public enum class CreatePipelineAsyncStatus(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: CreatePipelineAsyncStatus): Int = value or other.value
+    infix fun or(other: CreatePipelineAsyncStatus): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): CreatePipelineAsyncStatus? = entries.find {
+    companion object {
+        fun of(`value`: Int): CreatePipelineAsyncStatus? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class CullMode(
-    public override val `value`: Int,
+enum class CullMode(
+    override val `value`: Int,
 ) : EnumerationWithValue {
     none(0),
     front(1),
@@ -311,38 +301,34 @@ public enum class CullMode(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: CullMode): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): CullMode? = entries.find {
+    companion object {
+        fun of(`value`: Int): CullMode? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class DeviceLostReason(
-    public val `value`: Int,
+enum class DeviceLostReason(
+    val `value`: Int,
 ) {
     undefined(0),
     destroyed(1),
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: DeviceLostReason): Int = value or other.value
+    infix fun or(other: DeviceLostReason): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): DeviceLostReason? = entries.find {
+    companion object {
+        fun of(`value`: Int): DeviceLostReason? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class ErrorFilter(
-    public val `value`: Int,
+enum class ErrorFilter(
+    val `value`: Int,
 ) {
     validation(0),
     outofmemory(1),
@@ -350,19 +336,19 @@ public enum class ErrorFilter(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: ErrorFilter): Int = value or other.value
+    infix fun or(other: ErrorFilter): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): ErrorFilter? = entries.find {
+    companion object {
+        fun of(`value`: Int): ErrorFilter? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class ErrorType(
-    public val `value`: Int,
+enum class ErrorType(
+    val `value`: Int,
 ) {
     noerror(0),
     validation(1),
@@ -373,19 +359,19 @@ public enum class ErrorType(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: ErrorType): Int = value or other.value
+    infix fun or(other: ErrorType): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): ErrorType? = entries.find {
+    companion object {
+        fun of(`value`: Int): ErrorType? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class FeatureName(
-    public val `value`: Int,
+enum class FeatureName(
+    val `value`: Int,
 ) {
     undefined(0),
     depthclipcontrol(1),
@@ -402,56 +388,48 @@ public enum class FeatureName(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: FeatureName): Int = value or other.value
+    infix fun or(other: FeatureName): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): FeatureName? = entries.find {
+    companion object {
+        fun of(`value`: Int): FeatureName? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class FilterMode(
-    public override val `value`: Int,
+enum class FilterMode(
+    override val `value`: Int,
 ) : EnumerationWithValue {
     nearest(0),
     linear(1),
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: FilterMode): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): FilterMode? = entries.find {
+    companion object {
+        fun of(`value`: Int): FilterMode? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class FrontFace(
-    public override val `value`: Int,
+enum class FrontFace(
+    override val `value`: Int,
 ) : EnumerationWithValue {
     ccw(0),
     cw(1),
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: FrontFace): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): FrontFace? = entries.find {
+    companion object {
+        fun of(`value`: Int): FrontFace? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class IndexFormat(
-    public override val `value`: Int,
+enum class IndexFormat(
+    override val `value`: Int,
 ) : EnumerationWithValue {
     undefined(0),
     uint16(1),
@@ -459,74 +437,57 @@ public enum class IndexFormat(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: IndexFormat): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): IndexFormat? = entries.find {
+    companion object {
+        fun of(`value`: Int): IndexFormat? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class LoadOp(
-    public override val `value`: Int,
+enum class LoadOp(
+    override val `value`: Int,
 ) : EnumerationWithValue {
     clear(1),
     load(2);
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: LoadOp): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): LoadOp? = entries.find {
+    companion object {
+        fun of(`value`: Int): LoadOp? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class MipmapFilterMode(
-    public override val `value`: Int,
+enum class MipmapFilterMode(
+    override val `value`: Int,
 ) : EnumerationWithValue {
     nearest(0),
     linear(1),
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: MipmapFilterMode): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): MipmapFilterMode? = entries.find {
+    companion object {
+        fun of(`value`: Int): MipmapFilterMode? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class PowerPreference(
-    public val `value`: Int,
-) {
-    undefined(0),
-    lowpower(1),
-    highperformance(2),
+enum class PowerPreference(
+    override val `value`: Int,
+     val stringValue: String?,
+) : EnumerationWithValue {
 
-    ;
+    lowPower(1, "low-power"),
+    highPerformance(2, "low-power");
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: PowerPreference): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): PowerPreference? = entries.find {
+    companion object {
+        fun of(`value`: Int): PowerPreference? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class PresentMode(
-    public val `value`: Int,
+enum class PresentMode(
+    val `value`: Int,
 ) {
     fifo(0),
     fiforelaxed(1),
@@ -535,20 +496,20 @@ public enum class PresentMode(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: PresentMode): Int = value or other.value
+    infix fun or(other: PresentMode): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): PresentMode? = entries.find {
+    companion object {
+        fun of(`value`: Int): PresentMode? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class PrimitiveTopology(
-    public override val `value`: Int,
-    public val stringValue: String,
+enum class PrimitiveTopology(
+    override val `value`: Int,
+    val stringValue: String,
 ) : EnumerationWithValue {
     pointlist(0, "point-list"),
     linelist(1, "line-list"),
@@ -557,38 +518,34 @@ public enum class PrimitiveTopology(
     trianglestrip(4, "triangle-strip"),
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: PrimitiveTopology): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): PrimitiveTopology? = entries.find {
+    companion object {
+        fun of(`value`: Int): PrimitiveTopology? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class QueryType(
-    public val `value`: Int,
+enum class QueryType(
+    val `value`: Int,
 ) {
     occlusion(0),
     timestamp(1),
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: QueryType): Int = value or other.value
+    infix fun or(other: QueryType): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): QueryType? = entries.find {
+    companion object {
+        fun of(`value`: Int): QueryType? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class QueueWorkDoneStatus(
-    public val `value`: Int,
+enum class QueueWorkDoneStatus(
+    val `value`: Int,
 ) {
     success(0),
     error(1),
@@ -597,19 +554,19 @@ public enum class QueueWorkDoneStatus(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: QueueWorkDoneStatus): Int = value or other.value
+    infix fun or(other: QueueWorkDoneStatus): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): QueueWorkDoneStatus? = entries.find {
+    companion object {
+        fun of(`value`: Int): QueueWorkDoneStatus? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class RequestAdapterStatus(
-    public val `value`: Int,
+enum class RequestAdapterStatus(
+    val `value`: Int,
 ) {
     success(0),
     unavailable(1),
@@ -618,19 +575,19 @@ public enum class RequestAdapterStatus(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: RequestAdapterStatus): Int = value or other.value
+    infix fun or(other: RequestAdapterStatus): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): RequestAdapterStatus? = entries.find {
+    companion object {
+        fun of(`value`: Int): RequestAdapterStatus? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class RequestDeviceStatus(
-    public val `value`: Int,
+enum class RequestDeviceStatus(
+    val `value`: Int,
 ) {
     success(0),
     error(1),
@@ -638,19 +595,19 @@ public enum class RequestDeviceStatus(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: RequestDeviceStatus): Int = value or other.value
+    infix fun or(other: RequestDeviceStatus): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): RequestDeviceStatus? = entries.find {
+    companion object {
+        fun of(`value`: Int): RequestDeviceStatus? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class SType(
-    public val `value`: Int,
+enum class SType(
+    val `value`: Int,
 ) {
     invalid(0),
     surfacedescriptorfrommetallayer(1),
@@ -667,19 +624,19 @@ public enum class SType(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: SType): Int = value or other.value
+    infix fun or(other: SType): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): SType? = entries.find {
+    companion object {
+        fun of(`value`: Int): SType? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class SamplerBindingType(
-    public val `value`: Int,
+enum class SamplerBindingType(
+    val `value`: Int,
 ) {
     undefined(0),
     filtering(1),
@@ -688,20 +645,20 @@ public enum class SamplerBindingType(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: SamplerBindingType): Int = value or other.value
+    infix fun or(other: SamplerBindingType): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): SamplerBindingType? = entries.find {
+    companion object {
+        fun of(`value`: Int): SamplerBindingType? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class StencilOperation(
-    public override val `value`: Int,
-    public val `stringValue`: String,
+enum class StencilOperation(
+    override val `value`: Int,
+    val `stringValue`: String,
 ) : EnumerationWithValue {
     keep(0, "keep"),
     zero(1, "zero"),
@@ -713,19 +670,15 @@ public enum class StencilOperation(
     decrementwrap(7, "decrement-wrap")
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: StencilOperation): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): StencilOperation? = entries.find {
+    companion object {
+        fun of(`value`: Int): StencilOperation? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class StorageTextureAccess(
-    public val `value`: Int,
+enum class StorageTextureAccess(
+    val `value`: Int,
 ) {
     undefined(0),
     writeonly(1),
@@ -734,37 +687,33 @@ public enum class StorageTextureAccess(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: StorageTextureAccess): Int = value or other.value
+    infix fun or(other: StorageTextureAccess): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): StorageTextureAccess? = entries.find {
+    companion object {
+        fun of(`value`: Int): StorageTextureAccess? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class StoreOp(
-    public override val `value`: Int,
+enum class StoreOp(
+    override val `value`: Int,
 ) : EnumerationWithValue {
     store(1),
     discard(2),
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: StoreOp): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): StoreOp? = entries.find {
+    companion object {
+        fun of(`value`: Int): StoreOp? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class SurfaceGetCurrentTextureStatus(
-    public val `value`: Int,
+enum class SurfaceGetCurrentTextureStatus(
+    val `value`: Int,
 ) {
     success(0),
     timeout(1),
@@ -775,63 +724,55 @@ public enum class SurfaceGetCurrentTextureStatus(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: SurfaceGetCurrentTextureStatus): Int = value or other.value
+    infix fun or(other: SurfaceGetCurrentTextureStatus): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): SurfaceGetCurrentTextureStatus? = entries.find {
+    companion object {
+        fun of(`value`: Int): SurfaceGetCurrentTextureStatus? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class TextureAspect(
-    public override val `value`: Int,
-    public val stringValue: String,
+enum class TextureAspect(
+    override val `value`: Int,
+    val stringValue: String,
 ) : EnumerationWithValue {
     all(0, "all"),
     stencilonly(1, "stencil-only"),
     depthonly(2, "depth-only"),
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: TextureAspect): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): TextureAspect? = entries.find {
+    companion object {
+        fun of(`value`: Int): TextureAspect? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class TextureDimension(
-    public override val `value`: Int,
-    public val stringValue: String
+enum class TextureDimension(
+    override val `value`: Int,
+    val stringValue: String
 ) : EnumerationWithValue {
     `_1d`(0, "1d"),
     `_2d`(1, "2d"),
     `_3d`(2, "3d"),
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: TextureDimension): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): TextureDimension? = entries.find {
+    companion object {
+        fun of(`value`: Int): TextureDimension? = entries.find {
             it.value == value
         }
 
-        public fun of(`value`: String): TextureDimension? = entries.find {
+        fun of(`value`: String): TextureDimension? = entries.find {
             it.stringValue == value
         }
     }
 }
 
-public enum class TextureFormat(
-    public override val value: Int,
+enum class TextureFormat(
+    override val value: Int,
 ) : EnumerationWithValue {
     r8unorm(1),
     r8snorm(2),
@@ -930,12 +871,8 @@ public enum class TextureFormat(
     astc12x12unormsrgb(95),
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: TextureFormat): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): TextureFormat? = entries.find {
+    companion object {
+        fun of(`value`: Int): TextureFormat? = entries.find {
             it.value == value
         }
 
@@ -945,8 +882,8 @@ public enum class TextureFormat(
     }
 }
 
-public enum class TextureSampleType(
-    public val `value`: Int,
+enum class TextureSampleType(
+    val `value`: Int,
 ) {
     undefined(0),
     float(1),
@@ -957,20 +894,20 @@ public enum class TextureSampleType(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: TextureSampleType): Int = value or other.value
+    infix fun or(other: TextureSampleType): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): TextureSampleType? = entries.find {
+    companion object {
+        fun of(`value`: Int): TextureSampleType? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class TextureViewDimension(
-    public override val `value`: Int,
-    public val stringValue: String,
+enum class TextureViewDimension(
+    override val `value`: Int,
+    val stringValue: String,
 ) : EnumerationWithValue {
     `_1d`(1, "1d"),
     `_2d`(2, "2d"),
@@ -980,19 +917,15 @@ public enum class TextureViewDimension(
     `_3d`(6, "3d"),
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: TextureViewDimension): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): TextureViewDimension? = entries.find {
+    companion object {
+        fun of(`value`: Int): TextureViewDimension? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class VertexFormat(
-    public override val `value`: Int,
+enum class VertexFormat(
+    override val `value`: Int,
 ) : EnumerationWithValue {
     undefined(0),
     uint8x2(1),
@@ -1027,39 +960,31 @@ public enum class VertexFormat(
     sint32x4(30),
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: VertexFormat): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): VertexFormat? = entries.find {
+    companion object {
+        fun of(`value`: Int): VertexFormat? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class VertexStepMode(
-    public override val `value`: Int,
+enum class VertexStepMode(
+    override val `value`: Int,
 ) : EnumerationWithValue {
     vertex(0),
     instance(1),
     vertexbuffernotused(2),
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: VertexStepMode): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): VertexStepMode? = entries.find {
+    companion object {
+        fun of(`value`: Int): VertexStepMode? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class BufferUsage(
-    public val `value`: Int,
-) {
+enum class BufferUsage(
+    override val `value`: Int,
+) : EnumerationWithValue {
     none(0),
     mapread(1),
     mapwrite(2),
@@ -1074,19 +999,15 @@ public enum class BufferUsage(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: BufferUsage): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): BufferUsage? = entries.find {
+    companion object {
+        fun of(`value`: Int): BufferUsage? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class ColorWriteMask(
-    public override val `value`: Int,
+enum class ColorWriteMask(
+    override val `value`: Int,
 ) : EnumerationWithValue {
     none(0),
     red(1),
@@ -1096,19 +1017,15 @@ public enum class ColorWriteMask(
     all(15),
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: ColorWriteMask): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): ColorWriteMask? = entries.find {
+    companion object {
+        fun of(`value`: Int): ColorWriteMask? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class MapMode(
-    public val `value`: Int,
+enum class MapMode(
+    val `value`: Int,
 ) {
     none(0),
     read(1),
@@ -1116,19 +1033,19 @@ public enum class MapMode(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: MapMode): Int = value or other.value
+    infix fun or(other: MapMode): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): MapMode? = entries.find {
+    companion object {
+        fun of(`value`: Int): MapMode? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class ShaderStage(
-    public val `value`: Int,
+enum class ShaderStage(
+    val `value`: Int,
 ) {
     none(0),
     vertex(1),
@@ -1137,20 +1054,20 @@ public enum class ShaderStage(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: ShaderStage): Int = value or other.value
+    infix fun or(other: ShaderStage): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): ShaderStage? = entries.find {
+    companion object {
+        fun of(`value`: Int): ShaderStage? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class TextureUsage(
-    public val `value`: Int,
-) {
+enum class TextureUsage(
+    override val `value`: Int,
+) : EnumerationWithValue {
     none(0),
     copysrc(1),
     copydst(2),
@@ -1160,21 +1077,17 @@ public enum class TextureUsage(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
-
-    public infix fun or(other: TextureUsage): Int = value or other.value
-
-    public companion object {
-        public fun of(`value`: Int): TextureUsage? = entries.find {
+    companion object {
+        fun of(`value`: Int): TextureUsage? = entries.find {
             it.value == value
         }
     }
 }
 
-public infix fun Int.or(other: TextureUsage): Int = this or other.value
+infix fun Int.or(other: TextureUsage): Int = this or other.value
 
-public enum class NativeSType(
-    public val `value`: Int,
+enum class NativeSType(
+    val `value`: Int,
 ) {
     stype_deviceextras(196_609),
     stype_requiredlimitsextras(196_610),
@@ -1189,19 +1102,19 @@ public enum class NativeSType(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: NativeSType): Int = value or other.value
+    infix fun or(other: NativeSType): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): NativeSType? = entries.find {
+    companion object {
+        fun of(`value`: Int): NativeSType? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class NativeFeature(
-    public val `value`: Int,
+enum class NativeFeature(
+    val `value`: Int,
 ) {
     pushconstants(196_609),
     textureadapterspecificformatfeatures(196_610),
@@ -1214,19 +1127,19 @@ public enum class NativeFeature(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: NativeFeature): Int = value or other.value
+    infix fun or(other: NativeFeature): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): NativeFeature? = entries.find {
+    companion object {
+        fun of(`value`: Int): NativeFeature? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class LogLevel(
-    public val `value`: Int,
+enum class LogLevel(
+    val `value`: Int,
 ) {
     off(0),
     error(1),
@@ -1237,19 +1150,19 @@ public enum class LogLevel(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: LogLevel): Int = value or other.value
+    infix fun or(other: LogLevel): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): LogLevel? = entries.find {
+    companion object {
+        fun of(`value`: Int): LogLevel? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class InstanceBackend(
-    public val `value`: Int,
+enum class InstanceBackend(
+    val `value`: Int,
 ) {
     all(0),
     vulkan(1),
@@ -1263,19 +1176,19 @@ public enum class InstanceBackend(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: InstanceBackend): Int = value or other.value
+    infix fun or(other: InstanceBackend): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): InstanceBackend? = entries.find {
+    companion object {
+        fun of(`value`: Int): InstanceBackend? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class InstanceFlag(
-    public val `value`: Int,
+enum class InstanceFlag(
+    val `value`: Int,
 ) {
     default(0),
     debug(1),
@@ -1284,19 +1197,19 @@ public enum class InstanceFlag(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: InstanceFlag): Int = value or other.value
+    infix fun or(other: InstanceFlag): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): InstanceFlag? = entries.find {
+    companion object {
+        fun of(`value`: Int): InstanceFlag? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class Dx12Compiler(
-    public val `value`: Int,
+enum class Dx12Compiler(
+    val `value`: Int,
 ) {
     undefined(0),
     fxc(1),
@@ -1304,19 +1217,19 @@ public enum class Dx12Compiler(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: Dx12Compiler): Int = value or other.value
+    infix fun or(other: Dx12Compiler): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): Dx12Compiler? = entries.find {
+    companion object {
+        fun of(`value`: Int): Dx12Compiler? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class Gles3MinorVersion(
-    public val `value`: Int,
+enum class Gles3MinorVersion(
+    val `value`: Int,
 ) {
     automatic(0),
     version0(1),
@@ -1325,19 +1238,19 @@ public enum class Gles3MinorVersion(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: Gles3MinorVersion): Int = value or other.value
+    infix fun or(other: Gles3MinorVersion): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): Gles3MinorVersion? = entries.find {
+    companion object {
+        fun of(`value`: Int): Gles3MinorVersion? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class PipelineStatisticName(
-    public val `value`: Int,
+enum class PipelineStatisticName(
+    val `value`: Int,
 ) {
     vertexshaderinvocations(0),
     clipperinvocations(1),
@@ -1347,30 +1260,30 @@ public enum class PipelineStatisticName(
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: PipelineStatisticName): Int = value or other.value
+    infix fun or(other: PipelineStatisticName): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): PipelineStatisticName? = entries.find {
+    companion object {
+        fun of(`value`: Int): PipelineStatisticName? = entries.find {
             it.value == value
         }
     }
 }
 
-public enum class NativeQueryType(
-    public val `value`: Int,
+enum class NativeQueryType(
+    val `value`: Int,
 ) {
     pipelinestatistics(196_608),
 
     ;
 
-    public infix fun or(other: Int): Int = value or other
+    infix fun or(other: Int): Int = value or other
 
-    public infix fun or(other: NativeQueryType): Int = value or other.value
+    infix fun or(other: NativeQueryType): Int = value or other.value
 
-    public companion object {
-        public fun of(`value`: Int): NativeQueryType? = entries.find {
+    companion object {
+        fun of(`value`: Int): NativeQueryType? = entries.find {
             it.value == value
         }
     }

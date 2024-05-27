@@ -19,9 +19,9 @@ abstract class Application(
 	val dummyTexture by lazy {
 		device.createTexture(
 			TextureDescriptor(
-				size = GPUExtent3DDictStrict(1, 1),
+				size = Size3D(1, 1),
 				format = TextureFormat.depth24plus,
-				usage = TextureUsage.renderattachment.value,
+				usage = setOf(TextureUsage.renderattachment),
 			)
 		)
 	}

@@ -1,13 +1,11 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.WGPUBindGroup
-import io.ygdrasil.wgpu.internal.jvm.logUnitNative
-import io.ygdrasil.wgpu.internal.jvm.wgpuBindGroupRelease
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
+import java.lang.foreign.MemorySegment
 
-actual class BindGroup(internal val handler: WGPUBindGroup) : AutoCloseable {
+actual class BindGroup(internal val handler: MemorySegment) : AutoCloseable {
 
 	actual override fun close() {
-		logUnitNative { "wgpuBindGroupRelease" to listOf(handler) }
-		wgpuBindGroupRelease(handler)
+		wgpu_h.wgpuBindGroupRelease(handler)
 	}
 }

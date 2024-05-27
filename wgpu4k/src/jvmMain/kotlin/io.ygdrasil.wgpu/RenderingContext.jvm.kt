@@ -1,56 +1,64 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.*
+
+
+import io.ygdrasil.wgpu.internal.jvm.confined
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceCapabilities
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceConfiguration
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceTexture
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h.WGPUPresentMode_Fifo
+import java.lang.foreign.Arena
+import java.lang.foreign.MemorySegment
+import java.lang.foreign.ValueLayout
 
 actual class RenderingContext(
-	internal val handler: WGPUSurface,
+	internal val handler: MemorySegment,
 	private val sizeProvider: () -> Pair<Int, Int>
 ) : AutoCloseable {
 
-	private val surfaceCapabilities = WGPUSurfaceCapabilities()
+	private val surfaceCapabilities = WGPUSurfaceCapabilities.allocate(Arena.global())
 	actual val width: Int
 		get() = sizeProvider().first
 	actual val height: Int
 		get() = sizeProvider().second
 
 	actual val textureFormat: TextureFormat by lazy {
-		surfaceCapabilities.formats?.getInt(0)
-			?.let { TextureFormat.of(it) ?: error("texture format not found") }
-			?: error("call first computeSurfaceCapabilities")
+		WGPUSurfaceCapabilities.formats(surfaceCapabilities).get(ValueLayout.JAVA_INT, 0)
+			.let { TextureFormat.of(it) ?: error("texture format not found") }
 	}
 
-	actual fun getCurrentTexture(): Texture {
-		val surfaceTexture = WGPUSurfaceTexture()
-		wgpuSurfaceGetCurrentTexture(handler, surfaceTexture)
-		return Texture(surfaceTexture.texture)
+	actual fun getCurrentTexture(): Texture = confined { arena ->
+		WGPUSurfaceTexture.allocate(arena).let { surfaceTexture ->
+			wgpu_h.wgpuSurfaceGetCurrentTexture(handler, surfaceTexture)
+			Texture(WGPUSurfaceTexture.texture(surfaceTexture))
+		}
 	}
 
 	actual fun present() {
-		wgpuSurfacePresent(handler)
+		wgpu_h.wgpuSurfacePresent(handler)
 	}
 
 	fun computeSurfaceCapabilities(adapter: Adapter) {
-		wgpuSurfaceGetCapabilities(handler, adapter.handler, surfaceCapabilities)
+		wgpu_h.wgpuSurfaceGetCapabilities(handler, adapter.handler, surfaceCapabilities)
 	}
 
-	actual fun configure(canvasConfiguration: CanvasConfiguration) {
-
-		if (surfaceCapabilities.formats == null) error("call computeSurfaceCapabilities(adapter: Adapter) before configure")
-
-		wgpuSurfaceConfigure(handler, canvasConfiguration.convert())
+	actual fun configure(canvasConfiguration: CanvasConfiguration) = confined { arena ->
+		if (WGPUSurfaceCapabilities.formats(surfaceCapabilities) == MemorySegment.NULL) error("call computeSurfaceCapabilities(adapter: Adapter) before configure")
+		wgpu_h.wgpuSurfaceConfigure(handler, arena.convert(canvasConfiguration))
 	}
 
-	actual override fun close() {
-		wgpuSurfaceRelease(handler)
+    actual override fun close() {
+		wgpu_h.wgpuSurfaceRelease(handler)
 	}
 
-	private fun CanvasConfiguration.convert(): WGPUSurfaceConfiguration = WGPUSurfaceConfiguration().also {
-		it.device = device.handler
-		it.usage = usage
-		it.format = format?.value ?: textureFormat.value
-		it.presentMode = WGPUPresentMode.WGPUPresentMode_Fifo.value
-		it.alphaMode = alphaMode?.value ?: surfaceCapabilities.alphaModes?.getInt(0) ?: error("")
-		it.width = width
-		it.height = height
+	private fun Arena.convert(input: CanvasConfiguration): MemorySegment = WGPUSurfaceConfiguration.allocate(this).also { output ->
+		WGPUSurfaceConfiguration.device(output, input.device.handler)
+		WGPUSurfaceConfiguration.usage(output, input.usage)
+		WGPUSurfaceConfiguration.format(output, input.format?.value ?: textureFormat.value)
+		WGPUSurfaceConfiguration.presentMode(output, WGPUPresentMode_Fifo())
+		WGPUSurfaceConfiguration.alphaMode(output, input.alphaMode?.value ?: WGPUSurfaceCapabilities.alphaModes(surfaceCapabilities).get(ValueLayout.JAVA_INT, 0))
+		WGPUSurfaceConfiguration.width(output, width)
+		WGPUSurfaceConfiguration.height(output, height)
 	}
 }

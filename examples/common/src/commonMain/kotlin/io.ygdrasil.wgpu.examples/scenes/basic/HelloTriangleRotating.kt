@@ -1,10 +1,9 @@
 package io.ygdrasil.wgpu.examples.scenes.basic
 
-import io.ygdrasil.wgpu.examples.*
 import io.ygdrasil.wgpu.*
+import io.ygdrasil.wgpu.examples.*
 import io.ygdrasil.wgpu.examples.scenes.shader.fragment.redFragmentShader
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.basicVertexPositionShader
-import io.ygdrasil.wgpu.examples.scenes.shader.vertex.triangleVertexShader
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 
@@ -43,7 +42,7 @@ class HelloTriangleRotatingScene : Application.Scene() {
         uniformBuffer = device.createBuffer(
             BufferDescriptor(
                 size = uniformBufferSize,
-                usage = BufferUsage.uniform or BufferUsage.copydst
+                usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
             )
         ).bind()
 

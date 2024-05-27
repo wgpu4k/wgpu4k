@@ -1,11 +1,9 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.WGPUComputePassEncoder
-import io.ygdrasil.wgpu.internal.jvm.logUnitNative
-import io.ygdrasil.wgpu.internal.jvm.wgpuComputePassEncoderEnd
-import io.ygdrasil.wgpu.internal.jvm.wgpuComputePassEncoderRelease
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
+import java.lang.foreign.MemorySegment
 
-actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : AutoCloseable {
+actual class ComputePassEncoder(internal val handler: MemorySegment) : AutoCloseable {
 
     actual fun setPipeline(pipeline: ComputePipeline) {
         TODO()
@@ -38,12 +36,10 @@ actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : 
     }
 
     actual fun end() {
-        logUnitNative { "wgpuComputePassEncoderEnd" to listOf(handler) }
-        wgpuComputePassEncoderEnd(handler)
+        wgpu_h.wgpuComputePassEncoderEnd(handler)
     }
 
     actual override fun close() {
-        logUnitNative { "wgpuComputePassEncoderRelease" to listOf(handler) }
-        wgpuComputePassEncoderRelease(handler)
+        wgpu_h.wgpuComputePassEncoderRelease(handler)
     }
 }

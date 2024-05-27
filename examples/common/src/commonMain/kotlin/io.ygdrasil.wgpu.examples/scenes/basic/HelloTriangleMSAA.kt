@@ -1,7 +1,7 @@
 package io.ygdrasil.wgpu.examples.scenes.basic
 
-import io.ygdrasil.wgpu.examples.*
 import io.ygdrasil.wgpu.*
+import io.ygdrasil.wgpu.examples.*
 import io.ygdrasil.wgpu.examples.scenes.shader.fragment.redFragmentShader
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.triangleVertexShader
 
@@ -44,10 +44,10 @@ class HelloTriangleMSAAScene : Application.Scene() {
 
         val texture = device.createTexture(
             TextureDescriptor(
-                size = GPUExtent3DDictStrict(renderingContext.width, renderingContext.height),
+                size = Size3D(renderingContext.width, renderingContext.height),
                 sampleCount = sampleCount,
                 format = renderingContext.textureFormat,
-                usage = TextureUsage.renderattachment.value,
+                usage = setOf(TextureUsage.renderattachment),
             )
         ).bind()
         textureView = texture.createView().bind()

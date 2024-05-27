@@ -1,25 +1,20 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
+import java.lang.foreign.MemorySegment
 
-actual class PipelineLayout(internal val handler: WGPUPipelineLayout)
+actual class PipelineLayout(internal val handler: MemorySegment)
 
-actual class RenderPipeline(internal val handler: WGPURenderPipeline) : AutoCloseable {
+actual class RenderPipeline(internal val handler: MemorySegment) : AutoCloseable {
 
 	actual fun getBindGroupLayout(index: Int): BindGroupLayout {
-		logUnitNative { "wgpuRenderPipelineGetBindGroupLayout" to listOf(handler, index) }
-		return wgpuRenderPipelineGetBindGroupLayout(handler, index)
+		return wgpu_h.wgpuRenderPipelineGetBindGroupLayout(handler, index)
 			?.let { BindGroupLayout(it) } ?: error("fail to get bindgroup layout")
 	}
 
 
 	actual override fun close() {
-		logUnitNative { "wgpuRenderPipelineRelease" to listOf(handler) }
-		wgpuRenderPipelineRelease(handler)
+		wgpu_h.wgpuRenderPipelineRelease(handler)
 	}
 
-}
-
-private fun WGPUBindGroupLayoutImpl.convert(): PipelineLayoutDescriptor.BindGroupLayout {
-	TODO("Not yet implemented")
 }

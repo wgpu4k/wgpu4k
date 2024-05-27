@@ -29,3 +29,4 @@ gradle-app.setting
 *.jar
 **/node_modules/
 /spec-generator/bin/
+/.kotlin/

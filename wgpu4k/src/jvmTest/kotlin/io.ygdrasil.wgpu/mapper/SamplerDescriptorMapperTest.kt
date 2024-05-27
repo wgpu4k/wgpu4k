@@ -3,44 +3,50 @@ package io.ygdrasil.wgpu.mapper
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.internal.jvm.WGPUSamplerDescriptor
+import io.ygdrasil.wgpu.internal.jvm.confined
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSamplerDescriptor
+import java.lang.foreign.MemorySegment
 
 class SamplerDescriptorMapperTest : FreeSpec({
 
     "test mapping" {
         // Given
-        val descriptor = SamplerDescriptor(
-            addressModeU = AddressMode.clamptoedge,
-            addressModeV = AddressMode.clamptoedge,
-            addressModeW = AddressMode.clamptoedge,
-            magFilter = FilterMode.linear,
-            minFilter = FilterMode.linear,
-            mipmapFilter = MipmapFilterMode.linear,
-            lodMinClamp = -1000f,
-            lodMaxClamp = 1000f,
-            compare = CompareFunction.always,
-            maxAnisotropy = 1,
-        )
+        confined { arena ->
+            val descriptor = SamplerDescriptor(
+                label = "SamplerDescriptor",
+                addressModeU = AddressMode.clamptoedge,
+                addressModeV = AddressMode.clamptoedge,
+                addressModeW = AddressMode.clamptoedge,
+                magFilter = FilterMode.linear,
+                minFilter = FilterMode.linear,
+                mipmapFilter = MipmapFilterMode.linear,
+                lodMinClamp = -1000f,
+                lodMaxClamp = 1000f,
+                compare = CompareFunction.always,
+                maxAnisotropy = 1,
+            )
 
-        // when
-        val actual: WGPUSamplerDescriptor = samplerDescriptorMapper.map(descriptor)
+            // when
+            val actual: MemorySegment = arena.map(descriptor)
 
-        // then
-        actual.apply {
-            addressModeU shouldBe AddressMode.clamptoedge.value
-            addressModeV shouldBe AddressMode.clamptoedge.value
-            addressModeW shouldBe AddressMode.clamptoedge.value
+            // then
+            WGPUSamplerDescriptor.label(actual).getString(0) shouldBe "SamplerDescriptor"
 
-            magFilter shouldBe FilterMode.linear.value
-            minFilter shouldBe FilterMode.linear.value
+            WGPUSamplerDescriptor.addressModeU(actual) shouldBe AddressMode.clamptoedge.value
+            WGPUSamplerDescriptor.addressModeV(actual) shouldBe AddressMode.clamptoedge.value
+            WGPUSamplerDescriptor.addressModeW(actual) shouldBe AddressMode.clamptoedge.value
 
-            lodMinClamp shouldBe -1000f
-            lodMaxClamp shouldBe 1000f
-            maxAnisotropy shouldBe 1
+            WGPUSamplerDescriptor.magFilter(actual) shouldBe FilterMode.linear.value
+            WGPUSamplerDescriptor.minFilter(actual) shouldBe FilterMode.linear.value
 
-            mipmapFilter shouldBe MipmapFilterMode.linear.value
+            WGPUSamplerDescriptor.mipmapFilter(actual) shouldBe MipmapFilterMode.linear.value
 
-            compare shouldBe CompareFunction.always.value
+            WGPUSamplerDescriptor.lodMinClamp(actual) shouldBe -1000f
+            WGPUSamplerDescriptor.lodMaxClamp(actual) shouldBe 1000f
+
+            WGPUSamplerDescriptor.compare(actual) shouldBe CompareFunction.always.value
+            WGPUSamplerDescriptor.maxAnisotropy(actual) shouldBe 1
+
         }
     }
 

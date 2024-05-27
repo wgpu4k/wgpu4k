@@ -35,11 +35,11 @@ expect class ImageBitmapHolder : DrawableHolder {
 }
 
 data class ImageCopyExternalImage(
-	var source: DrawableHolder,
+	val source: DrawableHolder,
 	/* ImageBitmap | ImageData | HTMLImageElement | HTMLVideoElement | VideoFrame | HTMLCanvasElement | OffscreenCanvas */
-	var origin: GPUIntegerCoordinates = 0 to 0,
+	val origin: GPUIntegerCoordinates = 0 to 0,
 	/* Iterable<GPUIntegerCoordinate>? | GPUOrigin2DDictStrict? */
-	var flipY: Boolean = false
+	val flipY: Boolean = false
 
 )
 
@@ -48,10 +48,10 @@ data class ImageCopyTextureTagged(
 	var premultipliedAlpha: Boolean = false,
 	var texture: Texture,
 	var mipLevel: GPUIntegerCoordinate = 0,
-	var origin: GPUOrigin3DDict = GPUOrigin3DDict(),
+	var origin: Origin3D = Origin3D(),
 	var aspect: TextureAspect = TextureAspect.all,
 
-)
+	)
 
 enum class PredefinedColorSpace(val value: String) {
 	srgb("srgb"),

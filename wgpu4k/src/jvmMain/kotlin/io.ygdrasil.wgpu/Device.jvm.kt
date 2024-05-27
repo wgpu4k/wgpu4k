@@ -1,100 +1,70 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.jvm.*
-import io.ygdrasil.wgpu.mapper.bindGroupDescriptorMapper
-import io.ygdrasil.wgpu.mapper.renderPipelineDescriptorMapper
-import io.ygdrasil.wgpu.mapper.samplerDescriptorMapper
-import io.ygdrasil.wgpu.mapper.textureDescriptorMapper
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUCommandEncoderDescriptor
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUPipelineLayoutDescriptor
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
+import io.ygdrasil.wgpu.mapper.map
+import java.lang.foreign.MemorySegment
 
-actual class Device(internal val handler: WGPUDeviceImpl) : AutoCloseable {
+actual class Device(internal val handler: MemorySegment) : AutoCloseable {
+    
+    actual val queue: Queue by lazy { Queue(wgpu_h.wgpuDeviceGetQueue(handler) ?: error("fail to get device queue")) }
 
-    actual val queue: Queue by lazy { Queue(wgpuDeviceGetQueue(handler) ?: error("fail to get device queue")) }
-
-    actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder =
-        descriptor?.convert()
-            .also { logUnitNative { "wgpuDeviceCreateCommandEncoder" to listOf(handler, it) } }
-            .let { wgpuDeviceCreateCommandEncoder(handler, it) }
+    actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder =confined { arena ->
+        WGPUCommandEncoderDescriptor.allocate(arena)
+            .let { wgpu_h.wgpuDeviceCreateCommandEncoder(handler, it) }
             ?.let(::CommandEncoder) ?: error("fail to create command encoder")
+    }
 
-    actual fun createShaderModule(descriptor: ShaderModuleDescriptor): ShaderModule =
-        descriptor.convert()
-            .also { logUnitNative { "wgpuDeviceCreateShaderModule" to listOf(handler, it) } }
-            .let { wgpuDeviceCreateShaderModule(handler, it) }
+    actual fun createShaderModule(descriptor: ShaderModuleDescriptor): ShaderModule = confined { arena ->
+        arena.map(descriptor)
+            .let { wgpu_h.wgpuDeviceCreateShaderModule(handler, it) }
             ?.let(::ShaderModule) ?: error("fail to create shader module")
+    }
 
-    actual fun createPipelineLayout(descriptor: PipelineLayoutDescriptor): PipelineLayout =
-        descriptor.convert()
-            .also { logUnitNative { "wgpuDeviceCreatePipelineLayout" to listOf(handler, it) } }
-            .let { wgpuDeviceCreatePipelineLayout(handler, it) }
+    actual fun createPipelineLayout(descriptor: PipelineLayoutDescriptor): PipelineLayout = confined { arena ->
+        WGPUPipelineLayoutDescriptor.allocate(arena)
+            .let { wgpu_h.wgpuDeviceCreatePipelineLayout(handler, it) }
             ?.let(::PipelineLayout) ?: error("fail to create pipeline layout")
+}
 
-    actual fun createRenderPipeline(descriptor: RenderPipelineDescriptor): RenderPipeline =
-        renderPipelineDescriptorMapper.map<Any, WGPURenderPipelineDescriptor>(descriptor)
-            .also { it.write() }
-            .also {
-                logNative {
-                    Triple(
-                        "wgpuDeviceCreateRenderPipeline",
-                        listOf(handler, it),
-                        WGPURenderPipeline::class
-                    )
-                }
-            }
-            .let { wgpuDeviceCreateRenderPipeline(handler, it) }
-            .also { registerNative { it } }
+    actual fun createRenderPipeline(descriptor: RenderPipelineDescriptor): RenderPipeline = confined { arena ->
+        arena.map(descriptor)
+            .let {  wgpu_h.wgpuDeviceCreateRenderPipeline(handler, it) }
             ?.let(::RenderPipeline) ?: error("fail to create render pipeline")
+    }
 
-    actual fun createBuffer(descriptor: BufferDescriptor): Buffer =
-        descriptor.convert()
-            .also { logNative { Triple("wgpuDeviceCreateBuffer", listOf(handler, it), WGPUBuffer::class) } }
-            .let { wgpuDeviceCreateBuffer(handler, it) }
-            .also { registerNative { it } }
+    actual fun createBuffer(descriptor: BufferDescriptor): Buffer = confined { arena ->
+        arena.map(descriptor)
+            .let { wgpu_h.wgpuDeviceCreateBuffer(handler, it) }
             ?.let(::Buffer) ?: error("fail to create buffer")
+    }
 
-
-    actual fun createBindGroup(descriptor: BindGroupDescriptor): BindGroup =
-        bindGroupDescriptorMapper.map<Any, WGPUBindGroupDescriptor>(descriptor)
-            .also { logUnitNative { "wgpuDeviceCreateBindGroup" to listOf(handler, it) } }
-            .also { it.write() }
-            .let { wgpuDeviceCreateBindGroup(handler, it) }
+    actual fun createBindGroup(descriptor: BindGroupDescriptor): BindGroup = confined { arena ->
+        arena.map(descriptor)
+            .let { wgpu_h.wgpuDeviceCreateBindGroup(handler, it) }
             ?.let(::BindGroup) ?: error("fail to create bind group")
+    }
 
-    actual fun createTexture(descriptor: TextureDescriptor): Texture =
-        textureDescriptorMapper.map<Any, WGPUTextureDescriptor>(descriptor)
-            .also { logUnitNative { "wgpuDeviceCreateTexture" to listOf(handler, it) } }
-            .let { wgpuDeviceCreateTexture(handler, it) }
+    actual fun createTexture(descriptor: TextureDescriptor): Texture = confined { arena ->
+        arena.map(descriptor)
+            .let { wgpu_h.wgpuDeviceCreateTexture(handler, it) }
             ?.let(::Texture) ?: error("fail to create texture")
+    }
 
-    actual fun createSampler(descriptor: SamplerDescriptor): Sampler =
-        samplerDescriptorMapper.map<Any, WGPUSamplerDescriptor>(descriptor)
-            .also { logUnitNative { "wgpuDeviceCreateSampler" to listOf(handler, it) } }
-            .let { wgpuDeviceCreateSampler(handler, it) }
+    actual fun createSampler(descriptor: SamplerDescriptor): Sampler = confined { arena ->
+        arena.map(descriptor)
+            .let { wgpu_h.wgpuDeviceCreateSampler(handler, it) }
             ?.let(::Sampler) ?: error("fail to create texture")
+    }
 
     actual fun createComputePipeline(descriptor: ComputePipelineDescriptor): ComputePipeline {
         TODO()
     }
 
     actual override fun close() {
-        logUnitNative { "wgpuDeviceRelease" to listOf(handler) }
-        wgpuDeviceRelease(handler)
+        wgpu_h.wgpuDeviceRelease(handler)
     }
 
-}
-
-private fun BufferDescriptor.convert(): WGPUBufferDescriptor = WGPUBufferDescriptor().also {
-    it.usage = usage
-    it.size = size
-    it.mappedAtCreation = mappedAtCreation?.toInt()
-}
-
-private fun PipelineLayoutDescriptor.convert(): WGPUPipelineLayoutDescriptor = WGPUPipelineLayoutDescriptor().also {
-    it.label = label
-    // TODO find how to map this
-    //it.bindGroupLayoutCount = bindGroupLayouts.size.toLong().let { NativeLong(it) }
-    //it.bindGroupLayouts = bindGroupLayouts.map { it.convert() }.toTypedArray()
-}
-
-private fun CommandEncoderDescriptor.convert(): WGPUCommandEncoderDescriptor = WGPUCommandEncoderDescriptor().also {
-    it.label = label
 }

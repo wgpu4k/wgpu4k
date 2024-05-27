@@ -18,16 +18,16 @@ expect class Sampler : AutoCloseable {
  * @see <a href="https://www.w3.org/TR/webgpu/#GPUSamplerDescriptor">W3C specifications</a>
  */
 class SamplerDescriptor(
-	var addressModeU: AddressMode = AddressMode.clamptoedge,
-	var addressModeV: AddressMode = AddressMode.clamptoedge,
-	var addressModeW: AddressMode = AddressMode.clamptoedge,
-	var magFilter: FilterMode = FilterMode.nearest,
+	val addressModeU: AddressMode = AddressMode.clamptoedge,
+	val addressModeV: AddressMode = AddressMode.clamptoedge,
+	val addressModeW: AddressMode = AddressMode.clamptoedge,
+	val magFilter: FilterMode = FilterMode.nearest,
 
-	var minFilter: FilterMode = FilterMode.nearest,
-	var mipmapFilter: MipmapFilterMode = MipmapFilterMode.nearest,
-	var lodMinClamp: Float = 0f,
-	var lodMaxClamp: Float = 32f,
-	var compare: CompareFunction? = null,
-	var maxAnisotropy: Byte = 1,
-	var label: String? = null,
+	val minFilter: FilterMode = FilterMode.nearest,
+	val mipmapFilter: MipmapFilterMode = MipmapFilterMode.nearest,
+	val lodMinClamp: Float = 0f,
+	val lodMaxClamp: Float = 32f,
+	val compare: CompareFunction? = null,
+	val maxAnisotropy: Byte = 1,
+	val label: String? = null,
 )

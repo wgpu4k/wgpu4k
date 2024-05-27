@@ -43,13 +43,15 @@ typealias GPUStencilValue = Long
 typealias GPUTextureUsageFlags = Int
 
 @JsExport
-data class GPUExtent3DDictStrict(
+data class Size3D(
 	var width: Int,
 	var height: Int = 1,
 	var depthOrArrayLayers: Int = 1
-)
+) {
+	fun toArray() = arrayOf(width, height, depthOrArrayLayers)
+}
 
-data class GPUOrigin3DDict(
+data class Origin3D(
 	var x: GPUIntegerCoordinate = 0,
 	var y: GPUIntegerCoordinate = 0,
 	var z: GPUIntegerCoordinate = 0

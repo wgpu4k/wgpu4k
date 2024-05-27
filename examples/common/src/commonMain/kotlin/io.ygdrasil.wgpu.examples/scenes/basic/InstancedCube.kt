@@ -33,7 +33,7 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 		verticesBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = (Cube.cubeVertexArray.size * Float.SIZE_BYTES).toLong(),
-				usage = BufferUsage.vertex.value,
+				usage = setOf(BufferUsage.vertex),
 				mappedAtCreation = true
 			)
 		)
@@ -94,9 +94,9 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 
 		val depthTexture = device.createTexture(
 			TextureDescriptor(
-				size = GPUExtent3DDictStrict(renderingContext.width, renderingContext.height),
+				size = Size3D(renderingContext.width, renderingContext.height),
 				format = TextureFormat.depth24plus,
-				usage = TextureUsage.renderattachment.value,
+				usage = setOf(TextureUsage.renderattachment),
 			)
 		).bind()
 
@@ -104,7 +104,7 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 		uniformBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = uniformBufferSize,
-				usage = BufferUsage.uniform or BufferUsage.copydst
+				usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
 			)
 		).bind()
 
@@ -173,10 +173,16 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 			transformationMatrix.size.toLong()
 		)
 
-		renderPassDescriptor.colorAttachments[0].view = renderingContext
-			.getCurrentTexture()
-			.bind()
-			.createView()
+		renderPassDescriptor = renderPassDescriptor.copy(
+			colorAttachments = arrayOf(
+				renderPassDescriptor.colorAttachments[0].copy(
+					view = renderingContext.getCurrentTexture()
+						.bind()
+						.createView()
+				)
+			)
+		)
+
 
 		val encoder = device.createCommandEncoder()
 			.bind()

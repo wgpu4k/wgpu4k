@@ -7,10 +7,9 @@ import darwin.NSWindow
 import io.ygdrasil.wgpu.RenderingContext
 import io.ygdrasil.wgpu.WGPU
 import io.ygdrasil.wgpu.WGPU.Companion.createInstance
-import io.ygdrasil.wgpu.internal.jvm.WGPULogCallback
-import io.ygdrasil.wgpu.internal.jvm.WGPUSurface
-import io.ygdrasil.wgpu.internal.jvm.wgpuSetLogCallback
-import io.ygdrasil.wgpu.internal.jvm.wgpuSetLogLevel
+import io.ygdrasil.wgpu.WGPU.Companion.loadLibrary
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPULogCallback
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.lwjgl.glfw.GLFW.*
@@ -21,18 +20,18 @@ import org.lwjgl.glfw.GLFWNativeX11.glfwGetX11Window
 import org.lwjgl.system.MemoryUtil.NULL
 import org.rococoa.ID
 import org.rococoa.Rococoa
+import java.lang.foreign.Arena
+import java.lang.foreign.MemorySegment
 import kotlin.system.exitProcess
 
-
-val callback = object : WGPULogCallback {
-    override fun invoke(level: Int, message: String, param3: Pointer?) {
-        println("LOG {$level} $message")
-    }
-}
+val callback = WGPULogCallback.allocate( { level, message, data ->
+    println("LOG {$level} ${message.getString(0)}")
+}, Arena.global())
 
 suspend fun main() {
-    wgpuSetLogLevel(1)
-    wgpuSetLogCallback(callback, null)
+    loadLibrary()
+    wgpu_h.wgpuSetLogLevel(1)
+    wgpu_h.wgpuSetLogCallback(callback, MemorySegment.NULL)
 
     var width = 640
     var height = 480
@@ -50,15 +49,15 @@ suspend fun main() {
         glfwDispatcher.stop()
     }
 
-    val wgpu = createInstance() ?: error("fail to wgpu instance")
-    val surface = wgpu.getSurface(windowHandle)
+	val wgpu = createInstance() ?: error("fail to wgpu instance")
+	val surface = wgpu.getSurface(windowHandle)
 
-    val renderingContext = RenderingContext(surface) {
-        val width = intArrayOf(1)
-        val height = intArrayOf(1)
-        glfwGetWindowSize(windowHandle, width, height)
-        width[0] to height[0]
-    }
+	val renderingContext = RenderingContext(surface) {
+		val width = intArrayOf(1)
+		val height = intArrayOf(1)
+		glfwGetWindowSize(windowHandle, width, height)
+		width[0] to height[0]
+	}
 
     val adapter = wgpu.requestAdapter(renderingContext)
         ?: error("fail to get adapter")
@@ -104,9 +103,9 @@ suspend fun main() {
 
     glfwSetKeyCallback(windowHandle) { _, key, scancode, action, mods ->
 
-        if ((key == GLFW_KEY_PAGE_UP || key == GLFW_KEY_PAGE_DOWN) && action == GLFW_PRESS) {
+        if ((key == GLFW_KEY_PAGE_UP || key == GLFW_KEY_PAGE_DOWN || key == GLFW_KEY_UP || key == GLFW_KEY_DOWN) && action == GLFW_PRESS) {
             val currentIndex = availableScenes.indexOf(application.currentScene)
-            val index = if (key == GLFW_KEY_PAGE_UP) {
+            val index = if (key == GLFW_KEY_PAGE_UP || key == GLFW_KEY_UP) {
                 currentIndex - 1
             } else {
                 currentIndex + 1
@@ -137,30 +136,27 @@ suspend fun main() {
     exitProcess(0)
 }
 
-
-
-fun WGPU.getSurface(window: Long): WGPUSurface = when (Platform.os) {
-    Os.Linux -> {
-        val display = glfwGetX11Display()
-        val x11_window = glfwGetX11Window(window)
-        getSurfaceFromX11Window(Pointer(display), x11_window) ?: error("fail to get surface on Linux")
-    }
-
-    Os.Window -> {
-        val hwnd = glfwGetWin32Window(window)
-        val hinstance = Kernel32.INSTANCE.GetModuleHandle(null).pointer
-        getSurfaceFromWindows(hinstance, Pointer(hwnd)) ?: error("fail to get surface on Windows")
-    }
-
-    Os.MacOs -> {
-        val nsWindowPtr = glfwGetCocoaWindow(window)
-        val nswindow = Rococoa.wrap(ID.fromLong(nsWindowPtr), NSWindow::class.java)
-        nswindow.contentView()?.setWantsLayer(true)
-        val layer = CAMetalLayer.layer()
-        nswindow.contentView()?.setLayer(layer.id().toLong().toPointer())
-        getSurfaceFromMetalLayer(Pointer(layer.id().toLong())) ?: error("fail to get surface on MacOs")
-    }
-}
+fun WGPU.getSurface(window: Long): MemorySegment = when (Platform.os) {
+	Os.Linux -> {
+		val display = glfwGetX11Display().let { MemorySegment.ofAddress(it) }
+		val x11_window = glfwGetX11Window(window)
+		getSurfaceFromX11Window(display, x11_window) ?: error("fail to get surface on Linux")
+	}
+	Os.Window -> {
+		val hwnd = glfwGetWin32Window(window).let { MemorySegment.ofAddress(it) }
+		val hinstance = Kernel32.INSTANCE.GetModuleHandle(null).pointer.toMemory()
+		getSurfaceFromWindows(hinstance, hwnd) ?: error("fail to get surface on Windows")
+	}
+	Os.MacOs -> {
+		val nsWindowPtr = glfwGetCocoaWindow(window)
+		val nswindow = Rococoa.wrap(ID.fromLong(nsWindowPtr), NSWindow::class.java)
+		nswindow.contentView()?.setWantsLayer(true)
+		val layer = CAMetalLayer.layer()
+		nswindow.contentView()?.setLayer(layer.id().toLong().toPointer())
+		getSurfaceFromMetalLayer(MemorySegment.ofAddress(layer.id().toLong()))
+	}
+}.also { if( it == MemorySegment.NULL) error("fail to get surface") }
 
 private fun Long.toPointer(): Pointer = Pointer(this)
 
+fun Pointer.toMemory() = MemorySegment.ofAddress(Pointer.nativeValue(this))

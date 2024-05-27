@@ -1,69 +1,98 @@
 import de.undercouch.gradle.tasks.download.Download
+import io.github.krakowski.jextract.JextractTask
+
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
 	alias(libs.plugins.kotest)
+	id("io.github.krakowski.jextract") version "0.5.0" apply false
 	alias(libs.plugins.download)
 }
 
+java {
+	toolchain {
+		languageVersion.set(JavaLanguageVersion.of(22))
+	}
+}
+
+// You need to use a JDK version with jextract from here
+// https://jdk.java.net/jextract/
+val jextract = tasks.withType<JextractTask> {
+	header("${project.projectDir}/../headers/wgpu.h") {
+
+		// The package under which all source files will be generated
+		targetPackage = "io.ygdrasil.wgpu.internal.jvm.panama"
+
+		outputDir = project.objects.directoryProperty()
+			.convention(project.layout.projectDirectory.dir("src/jvmMain"))
+	}
+}
+
+
+
 kotlin {
 
-	js {
-		binaries.executable()
-		browser()
-		nodejs()
-	}
-	jvm()
+    js {
+        binaries.executable()
+        browser()
+        nodejs()
+    }
+    jvm {
+        withJava()
+    }
 
     sourceSets {
 
-		all {
-			languageSettings.optIn("kotlin.ExperimentalStdlibApi")
-			languageSettings.optIn("kotlin.ExperimentalUnsignedTypes")
-			languageSettings.optIn("kotlin.js.ExperimentalJsExport")
-		}
+        all {
+            languageSettings.optIn("kotlin.ExperimentalStdlibApi")
+            languageSettings.optIn("kotlin.ExperimentalUnsignedTypes")
+            languageSettings.optIn("kotlin.js.ExperimentalJsExport")
+        }
 
-		val kotlinWrappersVersion = "1.0.0-pre.721"
+        val kotlinWrappersVersion = "1.0.0-pre.721"
 
-		val jsMain by getting {
-			dependencies {
-				implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:$kotlinWrappersVersion"))
-				implementation("org.jetbrains.kotlin-wrappers:kotlin-js")
-				implementation("org.jetbrains.kotlin-wrappers:kotlin-web")
-			}
-		}
+        val jsMain by getting {
+            dependencies {
+                implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:$kotlinWrappersVersion"))
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-js")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-web")
+            }
+        }
 
-		val jvmMain by getting {
-			dependencies {
-				api(libs.jna)
-				implementation(libs.shapeshift)
-			}
-		}
+        val jvmMain by getting {
+            dependencies {
+                kotlin.srcDirs("src/jvmMain/kotlin", "src/jvmMain/java")
+            }
+        }
 
         val commonMain by getting {
             dependencies {
-				implementation(kotlin("stdlib-common"))
-				implementation(libs.coroutines)
-				implementation(kotlin("reflect"))
+                implementation(kotlin("stdlib-common"))
+                implementation(libs.coroutines)
             }
         }
         val commonTest by getting {
             dependencies {
-				implementation(libs.bundles.kotest)
+                implementation(libs.bundles.kotest)
             }
         }
 
-		val jvmTest by getting {
-			dependencies {
-				implementation(libs.kotest.runner.junit5)
-			}
+        val jvmTest by getting {
+            dependencies {
+                implementation(libs.kotest.runner.junit5)
+            }
 
-		}
+        }
     }
+    compilerOptions {
+        allWarningsAsErrors = true
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
+}
 
-	compilerOptions {
-		allWarningsAsErrors = true
-		freeCompilerArgs.add("-Xexpect-actual-classes")
+tasks {
+	withType<JavaCompile> {
+		options.compilerArgs.add("--enable-preview")
 	}
 }
 

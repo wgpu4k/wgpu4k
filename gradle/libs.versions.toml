@@ -6,7 +6,6 @@ kotlin = "2.0.0"
 wgpu = "v0.19.3.1"
 compose = "1.6.10"
 coroutines = "1.8.0"
-shapeshift = "0.8.0"
 korge = "5.4.0"
 download = "5.6.0"
 
@@ -17,7 +16,6 @@ kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref =
 jna = { module = "net.java.dev.jna:jna", version.ref = "jna" }
 jnaPlatform = { module = "net.java.dev.jna:jna-platform", version.ref = "jna" }
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
-shapeshift = { module = "dev.krud:shapeshift", version.ref = "shapeshift" }
 korge-foundation = { module = "com.soywiz.korge:korge-foundation", version.ref = "korge" }
 korge-core = { module = "com.soywiz.korge:korge-core", version.ref = "korge" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }

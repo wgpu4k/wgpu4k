@@ -8,30 +8,30 @@ expect class BindGroup : AutoCloseable {
 }
 
 data class BindGroupDescriptor(
-	var layout: BindGroupLayout,
-	var entries: Array<BindGroupEntry>,
-	var label: String? = null
+	val layout: BindGroupLayout,
+	val entries: Array<BindGroupEntry>,
+	val label: String? = null
 ) {
 
 	data class BindGroupEntry(
-		var binding: GPUIndex32,
+		val binding: GPUIndex32,
 		//TODO support GPUExternalTexture
-		var resource: BindGroupResource
+		val resource: BindGroupResource
 	)
 
 	sealed interface BindGroupResource
 	data class BufferBinding(
-		var buffer: Buffer,
-		var offset: GPUSize64 = 0,
-		var size: GPUSize64 = buffer.size
+		val buffer: Buffer,
+		val offset: GPUSize64 = 0,
+		val size: GPUSize64 = buffer.size
 	) : BindGroupResource
 
 	data class SamplerBinding(
-		var sampler: Sampler
+		val sampler: Sampler
 	) : BindGroupResource
 
 	data class TextureViewBinding(
-		var view: TextureView
+		val view: TextureView
 	) : BindGroupResource
 
 }

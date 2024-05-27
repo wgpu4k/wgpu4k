@@ -1,12 +1,11 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.WGPUCommandBuffer
-import io.ygdrasil.wgpu.internal.jvm.logUnitNative
-import io.ygdrasil.wgpu.internal.jvm.wgpuCommandBufferRelease
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
+import java.lang.foreign.MemorySegment
 
-actual class CommandBuffer(internal val handler: WGPUCommandBuffer) : AutoCloseable {
+actual class CommandBuffer(internal val handler: MemorySegment) : AutoCloseable {
+
 	actual override fun close() {
-		logUnitNative { "wgpuCommandBufferRelease" to listOf(handler) }
-		wgpuCommandBufferRelease(handler)
+		wgpu_h.wgpuCommandBufferRelease(handler)
 	}
 }

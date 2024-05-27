@@ -1,32 +1,33 @@
 package io.ygdrasil.wgpu
 
-import com.sun.jna.Memory
-import com.sun.jna.NativeLong
-import com.sun.jna.Pointer
+
 import io.ygdrasil.wgpu.internal.jvm.*
-import io.ygdrasil.wgpu.mapper.imageCopyTextureTaggedMapper
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUExtent3D
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUTextureDataLayout
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
+import io.ygdrasil.wgpu.mapper.map
+import java.lang.foreign.Arena
+import java.lang.foreign.MemorySegment
+import java.lang.foreign.ValueLayout
 
-actual class Queue(internal val handler: WGPUQueue) {
+actual class Queue(internal val handler: MemorySegment) {
 
-    actual fun submit(commandsBuffer: Array<CommandBuffer>) {
-        logUnitNative {
-            "wgpuQueueSubmit" to listOf(
-                handler,
-                NativeLong(commandsBuffer.size.toLong()),
-                commandsBuffer.map { it.handler }.toTypedArray()
-            )
-        }
+    actual fun submit(commandsBuffer: Array<CommandBuffer>) = confined { arena ->
         if (commandsBuffer.isNotEmpty()) {
-            wgpuQueueSubmit(
+
+            val commands = commandsBuffer.map { it.handler }.toPointerArray(arena)
+
+            wgpu_h.wgpuQueueSubmit(
                 handler,
-                NativeLong(commandsBuffer.size.toLong()),
-                commandsBuffer.map { it.handler }.toTypedArray()
+                commandsBuffer.size.toLong(),
+                commands
             )
         } else {
-            wgpuQueueSubmit(
+
+            wgpu_h.wgpuQueueSubmit(
                 handler,
-                NativeLong(0L),
-                null
+                0L,
+                MemorySegment.NULL
             )
         }
     }
@@ -37,22 +38,13 @@ actual class Queue(internal val handler: WGPUQueue) {
         data: FloatArray,
         dataOffset: GPUSize64,
         size: GPUSize64
-    ) {
-        logUnitNative {
-            "wgpuQueueWriteBuffer" to listOf(
-                handler,
-                buffer.handler,
-                bufferOffset,
-                data.toBuffer(dataOffset),
-                (size * Float.SIZE_BYTES).toNativeLong()
-            )
-        }
-        wgpuQueueWriteBuffer(
+    ) = confined { arena ->
+        wgpu_h.wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
-            data.toBuffer(dataOffset),
-            (size * Float.SIZE_BYTES).toNativeLong()
+            data.toBuffer(dataOffset, arena),
+            (size * Float.SIZE_BYTES)
         )
     }
 
@@ -62,22 +54,13 @@ actual class Queue(internal val handler: WGPUQueue) {
         data: IntArray,
         dataOffset: GPUSize64,
         size: GPUSize64
-    ) {
-        logUnitNative {
-            "wgpuQueueWriteBuffer" to listOf(
-                handler,
-                buffer.handler,
-                bufferOffset,
-                data.toBuffer(dataOffset),
-                (size * Float.SIZE_BYTES).toNativeLong()
-            )
-        }
-        wgpuQueueWriteBuffer(
+    ) = confined { arena ->
+        wgpu_h.wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
-            data.toBuffer(dataOffset),
-            (size * Float.SIZE_BYTES).toNativeLong()
+            data.toBuffer(dataOffset, arena),
+            (size * Float.SIZE_BYTES)
         )
     }
 
@@ -85,7 +68,7 @@ actual class Queue(internal val handler: WGPUQueue) {
         source: ImageCopyExternalImage,
         destination: ImageCopyTextureTagged,
         copySize: GPUIntegerCoordinates
-    ) {
+    ) = confined { arena ->
         assert(destination.texture.format == TextureFormat.rgba8unorm) {
             error("rgba8unorm is the only supported texture format supported")
         }
@@ -95,50 +78,46 @@ actual class Queue(internal val handler: WGPUQueue) {
 
         val bytePerPixel = destination.texture.format.getBytesPerPixel()
 
-        wgpuQueueWriteTexture(
+        wgpu_h.wgpuQueueWriteTexture(
             handler,
-            imageCopyTextureTaggedMapper.map(destination),
+            arena.map(destination),
             image.data,
-            (image.width * bytePerPixel * image.height).toNativeLong(),
-            WGPUTextureDataLayout().apply {
-                offset = 0
-                bytesPerRow = image.width * bytePerPixel
-                rowsPerImage = image.height
+            (image.width * bytePerPixel * image.height).toLong(),
+            WGPUTextureDataLayout.allocate(arena).also { dataLayout ->
+                WGPUTextureDataLayout.offset(dataLayout, 0)
+                WGPUTextureDataLayout.bytesPerRow(dataLayout, image.width * bytePerPixel)
+                WGPUTextureDataLayout.rowsPerImage(dataLayout, image.height)
             },
-            WGPUExtent3D().also {
-                it.width = image.width
-                it.height = image.height
-                it.depthOrArrayLayers = 1
+            WGPUExtent3D.allocate(arena).also { size3D ->
+                WGPUExtent3D.width(size3D, image.width)
+                WGPUExtent3D.height(size3D, image.height)
+                WGPUExtent3D.depthOrArrayLayers(size3D, 1)
             }
         )
 
     }
 
 
-    private fun FloatArray.toBuffer(dataOffset: GPUSize64): Pointer {
-        //Multiply by 4 because of 4 bytes per float
-        return Memory(size * 4L).apply {
-            write(0L, this@toBuffer, dataOffset.toInt(), size)
-        }
+    private fun FloatArray.toBuffer(dataOffset: GPUSize64, arena: Arena): MemorySegment {
+        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
+        return arena.allocateFrom(ValueLayout.JAVA_FLOAT, *this)
     }
 
-    private fun IntArray.toBuffer(dataOffset: GPUSize64): Pointer {
-        //Multiply by 4 because of 4 bytes per float
-        return Memory(size * 4L).apply {
-            write(0L, this@toBuffer, dataOffset.toInt(), size)
-        }
+    private fun IntArray.toBuffer(dataOffset: GPUSize64, arena: Arena): MemorySegment {
+        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
+        return arena.allocateFrom(ValueLayout.JAVA_INT, *this)
     }
 }
 
-
 actual class ImageBitmapHolder(
-    val data: Memory,
+    val arena: Arena,
+    val data: MemorySegment,
     actual val width: Int,
     actual val height: Int
 ) : DrawableHolder, AutoCloseable {
 
     override fun close() {
-        data.dump()
+        arena.close()
     }
 }
 

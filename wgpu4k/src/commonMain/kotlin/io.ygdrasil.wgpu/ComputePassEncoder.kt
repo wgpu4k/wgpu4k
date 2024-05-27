@@ -24,12 +24,12 @@ expect class ComputePassEncoder : AutoCloseable {
 }
 
 data class ComputePassDescriptor(
-    var label: String? = null,
-    var timestampWrites: ComputePassTimestampWrites? = null
+    val label: String? = null,
+    val timestampWrites: ComputePassTimestampWrites? = null
 ) {
     data class ComputePassTimestampWrites(
-        var querySet: GPUQuerySet,
-        var beginningOfPassWriteIndex: GPUSize32? = null,
-        var endOfPassWriteIndex: GPUSize32? = null,
+        val querySet: QuerySet,
+        val beginningOfPassWriteIndex: GPUSize32? = null,
+        val endOfPassWriteIndex: GPUSize32? = null,
     )
 }

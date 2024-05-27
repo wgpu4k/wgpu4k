@@ -48,7 +48,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 		verticesBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = (cubeVertexArray.size * Float.SIZE_BYTES).toLong(),
-				usage = BufferUsage.vertex.value,
+				usage = setOf(BufferUsage.vertex),
 				mappedAtCreation = true
 			)
 		)
@@ -109,9 +109,9 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 
 		val depthTexture = device.createTexture(
 			TextureDescriptor(
-				size = GPUExtent3DDictStrict(renderingContext.width, renderingContext.height),
+				size = Size3D(renderingContext.width, renderingContext.height),
 				format = TextureFormat.depth24plus,
-				usage = TextureUsage.renderattachment.value,
+				usage = setOf(TextureUsage.renderattachment),
 			)
 		).bind()
 
@@ -119,7 +119,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 		uniformBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = uniformBufferSize,
-				usage = BufferUsage.uniform or BufferUsage.copydst
+				usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
 			)
 		).bind()
 
@@ -127,9 +127,9 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 		// sample it on the next frame.
 		cubeTexture = device.createTexture(
 			TextureDescriptor(
-				size = GPUExtent3DDictStrict(renderingContext.width, renderingContext.height),
+				size = Size3D(renderingContext.width, renderingContext.height),
 				format = renderingContext.textureFormat,
-				usage = TextureUsage.texturebinding or TextureUsage.copydst,
+				usage = setOf(TextureUsage.texturebinding, TextureUsage.copydst),
 			)
 		)
 
@@ -207,9 +207,15 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 
 		val swapChainTexture = renderingContext.getCurrentTexture()
 
-		renderPassDescriptor.colorAttachments[0].view = swapChainTexture
-			.bind()
-			.createView()
+		renderPassDescriptor = renderPassDescriptor.copy(
+			colorAttachments = arrayOf(
+				renderPassDescriptor.colorAttachments[0].copy(
+					view = swapChainTexture
+						.bind()
+						.createView()
+				)
+			)
+		)
 
 		val encoder = device.createCommandEncoder()
 			.bind()
@@ -225,7 +231,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 		encoder.copyTextureToTexture(
 			source = ImageCopyTexture(texture = swapChainTexture),
 			destination = ImageCopyTexture(texture = cubeTexture),
-			renderingContext.width to renderingContext.height
+			copySize = Size3D(renderingContext.width, renderingContext.height)
 		)
 
 		val commandBuffer = encoder.finish()

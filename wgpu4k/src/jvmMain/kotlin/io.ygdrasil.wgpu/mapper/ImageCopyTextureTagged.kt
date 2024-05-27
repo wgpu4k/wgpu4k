@@ -1,24 +1,13 @@
 package io.ygdrasil.wgpu.mapper
 
-import dev.krud.shapeshift.transformer.base.MappingTransformer
-import io.ygdrasil.wgpu.EnumerationTransformer
 import io.ygdrasil.wgpu.ImageCopyTextureTagged
-import io.ygdrasil.wgpu.internal.jvm.WGPUImageCopyTexture
-import io.ygdrasil.wgpu.internal.jvm.WGPUOrigin3D
-import io.ygdrasil.wgpu.mapper
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUImageCopyTexture
+import java.lang.foreign.Arena
 
-internal val imageCopyTextureTaggedMapper = mapper<ImageCopyTextureTagged, WGPUImageCopyTexture> {
-    ImageCopyTextureTagged::texture mappedTo WGPUImageCopyTexture::texture withTransformer MappingTransformer {
-        it.originalValue?.handler
-    }
-    ImageCopyTextureTagged::origin mappedTo WGPUImageCopyTexture::origin withTransformer MappingTransformer {
-        it.originalValue?.let { (x, y, z) ->
-            WGPUOrigin3D().also {
-                it.x = x
-                it.y = y
-                it.z = z
-            }
-        }
-    }
-    ImageCopyTextureTagged::aspect mappedTo WGPUImageCopyTexture::aspect withTransformer EnumerationTransformer()
+internal fun Arena.map(input: ImageCopyTextureTagged) = WGPUImageCopyTexture.allocate(this).also { output ->
+    WGPUImageCopyTexture.texture(output, input.texture.handler)
+    WGPUImageCopyTexture.mipLevel(output, input.mipLevel)
+    WGPUImageCopyTexture.origin(output, map(input.origin))
+    WGPUImageCopyTexture.aspect(output, input.aspect.value)
 }
+

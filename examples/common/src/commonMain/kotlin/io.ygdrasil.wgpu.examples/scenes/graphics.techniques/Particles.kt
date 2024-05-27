@@ -47,7 +47,7 @@ class ParticlesScene : Application.Scene() {
         particlesBuffer = device.createBuffer(
             BufferDescriptor(
                 size = (numParticles * particleInstanceByteSize).toLong(),
-                usage = BufferUsage.vertex or BufferUsage.storage,
+                usage = setOf(BufferUsage.vertex, BufferUsage.storage),
             )
         ).bind()
 
@@ -135,9 +135,9 @@ class ParticlesScene : Application.Scene() {
 
         val depthTexture = device.createTexture(
             TextureDescriptor(
-                size = GPUExtent3DDictStrict(renderingContext.width, renderingContext.height),
+                size = Size3D(renderingContext.width, renderingContext.height),
                 format = TextureFormat.depth24plus,
-                usage = TextureUsage.renderattachment.value,
+                usage = setOf(TextureUsage.renderattachment),
             )
         )
 
@@ -150,7 +150,7 @@ class ParticlesScene : Application.Scene() {
         uniformBuffer = device.createBuffer(
             BufferDescriptor(
                 size = uniformBufferSize.toLong(),
-                usage = BufferUsage.uniform or BufferUsage.copydst,
+                usage = setOf(BufferUsage.uniform, BufferUsage.copydst),
             )
         ).bind();
 
@@ -192,7 +192,7 @@ class ParticlesScene : Application.Scene() {
         quadVertexBuffer = device.createBuffer(
             BufferDescriptor(
                 size = 6 * 2 * 4, // 6x vec2f
-                usage = BufferUsage.vertex.value,
+                usage = setOf(BufferUsage.vertex),
                 mappedAtCreation = true,
             )
         )
@@ -223,11 +223,16 @@ class ParticlesScene : Application.Scene() {
         }
         val texture = device.createTexture(
             TextureDescriptor(
-                size = GPUExtent3DDictStrict(imageBitmap.width, imageBitmap.height),
+                size = Size3D(imageBitmap.width, imageBitmap.height),
                 mipLevelCount = numMipLevels,
                 format = TextureFormat.rgba8unorm,
                 usage =
-                TextureUsage.texturebinding or TextureUsage.storagebinding or TextureUsage.copydst or TextureUsage.renderattachment,
+                setOf(
+                    TextureUsage.texturebinding,
+                    TextureUsage.storagebinding,
+                    TextureUsage.copydst,
+                    TextureUsage.renderattachment
+                ),
             )
         )
         device.queue.copyExternalImageToTexture(
@@ -269,19 +274,19 @@ class ParticlesScene : Application.Scene() {
         val probabilityMapUBOBuffer = device.createBuffer(
             BufferDescriptor(
                 size = probabilityMapUBOBufferSize.toLong(),
-                usage = BufferUsage.uniform or BufferUsage.copydst,
+                usage = setOf(BufferUsage.uniform, BufferUsage.copydst),
             )
         )
         val buffer_a = device.createBuffer(
             BufferDescriptor(
                 size = textureWidth * textureHeight * 4L,
-                usage = BufferUsage.storage.value,
+                usage = setOf(BufferUsage.storage),
             )
         )
         val buffer_b = device.createBuffer(
             BufferDescriptor(
                 size = textureWidth * textureHeight * 4L,
-                usage = BufferUsage.storage.value,
+                usage = setOf(BufferUsage.storage),
             )
         )
         device.queue.writeBuffer(
@@ -360,7 +365,7 @@ class ParticlesScene : Application.Scene() {
         simulationUBOBuffer = device.createBuffer(
             BufferDescriptor(
                 size = simulationUBOBufferSize.toLong(),
-                usage = BufferUsage.uniform or BufferUsage.copydst,
+                usage = setOf(BufferUsage.uniform, BufferUsage.copydst),
             )
         )
 
@@ -451,10 +456,15 @@ class ParticlesScene : Application.Scene() {
             )
         )
 
-
-        val swapChainTexture = renderingContext.getCurrentTexture()
-
-        renderPassDescriptor.colorAttachments[0].view = swapChainTexture.createView()
+        renderPassDescriptor = renderPassDescriptor.copy(
+            colorAttachments = arrayOf(
+                renderPassDescriptor.colorAttachments[0].copy(
+                    view = renderingContext.getCurrentTexture()
+                        .bind()
+                        .createView()
+                )
+            )
+        )
 
         val commandEncoder = device.createCommandEncoder()
 

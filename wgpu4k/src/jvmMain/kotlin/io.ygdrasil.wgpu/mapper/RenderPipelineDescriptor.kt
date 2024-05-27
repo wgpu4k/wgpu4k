@@ -1,126 +1,145 @@
 package io.ygdrasil.wgpu.mapper
 
-import dev.krud.shapeshift.transformer.base.MappingTransformer
-import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.RenderPipelineDescriptor
+import io.ygdrasil.wgpu.internal.jvm.panama.*
+import io.ygdrasil.wgpu.toInt
+import java.lang.foreign.Arena
+import java.lang.foreign.MemorySegment
 
-internal val renderPipelineDescriptorMapper = mapper<RenderPipelineDescriptor, WGPURenderPipelineDescriptor> {
-    RenderPipelineDescriptor::layout mappedTo WGPURenderPipelineDescriptor::layout withTransformer MappingTransformer { it.originalValue?.handler }
-    RenderPipelineDescriptor::fragment mappedTo WGPURenderPipelineDescriptor::fragment withTransformer MappingTransformer {
-        it.originalValue?.let(fragmentMapper::map)
-    }
-    RenderPipelineDescriptor::depthStencil mappedTo WGPURenderPipelineDescriptor::depthStencil withTransformer MappingTransformer {
-        it.originalValue?.let(depthStencilStateMapper::map)
-    }
-    RenderPipelineDescriptor::vertex mappedTo WGPURenderPipelineDescriptor::vertex withTransformer MappingTransformer {
-        it.originalValue?.let(vertexStateMapper::map)
-    }
-    RenderPipelineDescriptor::primitive mappedTo WGPURenderPipelineDescriptor::primitive withTransformer MappingTransformer {
-        it.originalValue?.let(primitiveStateMapper::map)
-    }
-    RenderPipelineDescriptor::multisample mappedTo WGPURenderPipelineDescriptor::multisample withTransformer MappingTransformer {
-        it.originalValue?.let(multisampleStateMapper::map)
-    }
+internal fun Arena.map(input: RenderPipelineDescriptor) = WGPURenderPipelineDescriptor.allocate(this).also { output ->
+    map(input.vertex, WGPURenderPipelineDescriptor.vertex(output))
+    if (input.label != null) WGPURenderPipelineDescriptor.label(output, allocateFrom(input.label))
+    if (input.layout != null) WGPURenderPipelineDescriptor.layout(output, input.layout.handler)
+    map(input.primitive, WGPURenderPipelineDescriptor.primitive(output))
+    if (input.depthStencil != null) WGPURenderPipelineDescriptor.depthStencil(output, map(input.depthStencil))
+    if (input.fragment != null) WGPURenderPipelineDescriptor.fragment(output, map(input.fragment))
+    map(input.multisample, WGPURenderPipelineDescriptor.multisample(output))
 }
 
-private val multisampleStateMapper = mapper<RenderPipelineDescriptor.MultisampleState, WGPUMultisampleState> {
-    RenderPipelineDescriptor.MultisampleState::mask mappedTo WGPUMultisampleState::mask withTransformer MappingTransformer { it.originalValue as Int? }
-    RenderPipelineDescriptor.MultisampleState::alphaToCoverageEnabled mappedTo WGPUMultisampleState::alphaToCoverageEnabled withTransformer BooleanToIntTransformer()
+fun Arena.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState, output: MemorySegment) {
+    println("colorTargetState $output")
+    WGPUColorTargetState.format(output, input.format.value)
+    WGPUColorTargetState.writeMask(output, input.writeMask.value)
+    WGPUColorTargetState.blend(output, map(input.blend))
 }
 
-private val primitiveStateMapper = mapper<RenderPipelineDescriptor.PrimitiveState, WGPUPrimitiveState> {
-    RenderPipelineDescriptor.PrimitiveState::frontFace mappedTo WGPUPrimitiveState::frontFace withTransformer EnumerationTransformer()
-    RenderPipelineDescriptor.PrimitiveState::cullMode mappedTo WGPUPrimitiveState::cullMode withTransformer EnumerationTransformer()
-    RenderPipelineDescriptor.PrimitiveState::topology mappedTo WGPUPrimitiveState::topology withTransformer EnumerationTransformer()
-    RenderPipelineDescriptor.PrimitiveState::stripIndexFormat mappedTo WGPUPrimitiveState::stripIndexFormat withTransformer EnumerationTransformer()
+fun Arena.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState): MemorySegment = WGPUBlendState
+    .allocate(this).also { output ->
+        println("blend state $output")
+        map(input.color, WGPUBlendState.color(output))
+        map(input.alpha, WGPUBlendState.alpha(output))
+
+    }
+
+fun map(
+    input: RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent,
+    output: MemorySegment
+) {
+    println("blend component $output")
+    WGPUBlendComponent.operation(output, input.operation.value)
+    WGPUBlendComponent.srcFactor(output, input.srcFactor.value)
+    WGPUBlendComponent.dstFactor(output, input.dstFactor.value)
 }
 
-private val fragmentMapper = mapper<RenderPipelineDescriptor.FragmentState, WGPUFragmentState.ByReference> {
-    RenderPipelineDescriptor.FragmentState::module mappedTo WGPUFragmentState.ByReference::module withTransformer MappingTransformer { it.originalValue?.handler }
-    RenderPipelineDescriptor.FragmentState::targets mappedTo WGPUFragmentState.ByReference::targets withTransformer MappingTransformer<Array<RenderPipelineDescriptor.FragmentState.ColorTargetState>, Array<WGPUColorTargetState.ByReference>> {
-        it.originalValue?.toStructureArray { colorTarget ->
-            colorTargetStateMapper.map(colorTarget, this)
+private fun Arena.map(input: RenderPipelineDescriptor.FragmentState): MemorySegment =
+    WGPUFragmentState.allocate(this)
+        .also { fragmentState ->
+            println("fragment $fragmentState")
+            WGPUFragmentState.module(fragmentState, input.module.handler)
+            WGPUFragmentState.entryPoint(fragmentState, allocateFrom(input.entryPoint))
+            if (input.targets.isNotEmpty()) {
+                WGPUFragmentState.targetCount(fragmentState, input.targets.size.toLong())
+                val colorTargets = WGPUColorTargetState.allocateArray(input.targets.size.toLong(), this)
+                println("colorTargets $colorTargets")
+                input.targets.forEachIndexed { index, colorTargetState ->
+                    map(colorTargetState, WGPUColorTargetState.asSlice(colorTargets, index.toLong()))
+                }
+                WGPUFragmentState.targets(fragmentState, colorTargets)
+            }
         }
-    }
-}
 
-private val colorTargetStateMapper =
-    mapper<RenderPipelineDescriptor.FragmentState.ColorTargetState, WGPUColorTargetState.ByReference> {
-        RenderPipelineDescriptor.FragmentState.ColorTargetState::format mappedTo WGPUColorTargetState.ByReference::format withTransformer EnumerationTransformer()
-        RenderPipelineDescriptor.FragmentState.ColorTargetState::writeMask mappedTo WGPUColorTargetState.ByReference::writeMask withTransformer EnumerationTransformer()
-        RenderPipelineDescriptor.FragmentState.ColorTargetState::blend mappedTo WGPUColorTargetState.ByReference::blend withTransformer MappingTransformer {
-            it.originalValue?.let(
-                blendStateMapper::map
+private fun Arena.map(input: RenderPipelineDescriptor.DepthStencilState): MemorySegment =
+    WGPUDepthStencilState.allocate(this)
+        .also { depthStencilState ->
+            WGPUDepthStencilState.format(depthStencilState, input.format.value)
+            if (input.depthWriteEnabled != null) WGPUDepthStencilState.depthWriteEnabled(
+                depthStencilState,
+                input.depthWriteEnabled.toInt()
             )
-        }
-    }
-
-private val blendStateMapper =
-    mapper<RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState, WGPUBlendState.ByReference> {
-        RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState::color mappedTo WGPUBlendState.ByReference::color withTransformer MappingTransformer {
-            it.originalValue?.let(
-                blendComponentMapper::map
+            if (input.depthCompare != null) WGPUDepthStencilState.depthCompare(
+                depthStencilState,
+                input.depthCompare.value
             )
+            map(input.stencilFront, WGPUDepthStencilState.stencilFront(depthStencilState))
+            map(input.stencilBack, WGPUDepthStencilState.stencilBack(depthStencilState))
+            WGPUDepthStencilState.stencilReadMask(depthStencilState, input.stencilReadMask.toInt())
+            WGPUDepthStencilState.stencilWriteMask(depthStencilState, input.stencilWriteMask.toInt())
+            WGPUDepthStencilState.depthBias(depthStencilState, input.depthBias)
+            WGPUDepthStencilState.depthBiasSlopeScale(depthStencilState, input.depthBiasSlopeScale)
+            WGPUDepthStencilState.depthBiasClamp(depthStencilState, input.depthBiasClamp)
         }
-        RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState::alpha mappedTo WGPUBlendState.ByReference::alpha withTransformer MappingTransformer {
-            it.originalValue?.let(
-                blendComponentMapper::map
-            )
-        }
-    }
 
-private val blendComponentMapper =
-    mapper<RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent, WGPUBlendComponent> {
-        RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent::dstFactor mappedTo WGPUBlendComponent::dstFactor withTransformer EnumerationTransformer()
-        RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent::operation mappedTo WGPUBlendComponent::operation withTransformer EnumerationTransformer()
-        RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent::srcFactor mappedTo WGPUBlendComponent::srcFactor withTransformer EnumerationTransformer()
-    }
+fun map(input: RenderPipelineDescriptor.DepthStencilState.StencilFaceState, output: MemorySegment?) {
+    WGPUStencilFaceState.compare(output, input.compare.value)
+    WGPUStencilFaceState.failOp(output, input.failOp.value)
+    WGPUStencilFaceState.depthFailOp(output, input.depthFailOp.value)
+    WGPUStencilFaceState.passOp(output, input.passOp.value)
+}
 
-private val depthStencilStateMapper =
-    mapper<RenderPipelineDescriptor.DepthStencilState, WGPUDepthStencilState.ByReference> {
-        RenderPipelineDescriptor.DepthStencilState::format mappedTo WGPUDepthStencilState.ByReference::format withTransformer EnumerationTransformer()
-        RenderPipelineDescriptor.DepthStencilState::depthCompare mappedTo WGPUDepthStencilState.ByReference::depthCompare withTransformer EnumerationTransformer()
-        RenderPipelineDescriptor.DepthStencilState::depthWriteEnabled mappedTo WGPUDepthStencilState.ByReference::depthWriteEnabled withTransformer BooleanToIntTransformer()
-        RenderPipelineDescriptor.DepthStencilState::stencilReadMask mappedTo WGPUDepthStencilState.ByReference::stencilReadMask withTransformer LongToIntTransformer()
-        RenderPipelineDescriptor.DepthStencilState::stencilWriteMask mappedTo WGPUDepthStencilState.ByReference::stencilWriteMask withTransformer LongToIntTransformer()
-        RenderPipelineDescriptor.DepthStencilState::stencilFront mappedTo WGPUDepthStencilState.ByReference::stencilFront withTransformer MappingTransformer {
-            it.originalValue?.let(
-                stencilFaceStateMapper::map
-            )
-        }
-        RenderPipelineDescriptor.DepthStencilState::stencilBack mappedTo WGPUDepthStencilState.ByReference::stencilBack withTransformer MappingTransformer {
-            it.originalValue?.let(
-                stencilFaceStateMapper::map
-            )
-        }
-    }
+private fun map(input: RenderPipelineDescriptor.MultisampleState, output: MemorySegment) {
+    WGPUMultisampleState.count(output, input.count)
+    WGPUMultisampleState.mask(output, input.mask.toInt())
+    WGPUMultisampleState.alphaToCoverageEnabled(output, input.alphaToCoverageEnabled.toInt())
+}
 
-private val stencilFaceStateMapper =
-    mapper<RenderPipelineDescriptor.DepthStencilState.StencilFaceState, WGPUStencilFaceState> {
-        RenderPipelineDescriptor.DepthStencilState.StencilFaceState::compare mappedTo WGPUStencilFaceState::compare withTransformer EnumerationTransformer()
-        RenderPipelineDescriptor.DepthStencilState.StencilFaceState::failOp mappedTo WGPUStencilFaceState::failOp withTransformer EnumerationTransformer()
-        RenderPipelineDescriptor.DepthStencilState.StencilFaceState::depthFailOp mappedTo WGPUStencilFaceState::depthFailOp withTransformer EnumerationTransformer()
-        RenderPipelineDescriptor.DepthStencilState.StencilFaceState::passOp mappedTo WGPUStencilFaceState::passOp withTransformer EnumerationTransformer()
-    }
+private fun map(input: RenderPipelineDescriptor.PrimitiveState, output: MemorySegment) {
+    WGPUPrimitiveState.topology(output, input.topology.value)
+    if (input.stripIndexFormat != null) WGPUPrimitiveState.stripIndexFormat(output, input.stripIndexFormat.value)
+    WGPUPrimitiveState.frontFace(output, input.frontFace.value)
+    WGPUPrimitiveState.cullMode(output, input.cullMode.value)
+    //TODO check how to map unclippedDepth https://docs.rs/wgpu/latest/wgpu/struct.PrimitiveState.html
+}
 
-private val vertexStateMapper = mapper<RenderPipelineDescriptor.VertexState, WGPUVertexState> {
-    RenderPipelineDescriptor.VertexState::module mappedTo WGPUVertexState::module withTransformer MappingTransformer { it.originalValue?.handler }
-    RenderPipelineDescriptor.VertexState::buffers mappedTo WGPUVertexState::buffers withTransformer MappingTransformer<Array<RenderPipelineDescriptor.VertexState.VertexBufferLayout>, Array<WGPUVertexBufferLayout.ByReference>> {
-        it.originalValue?.toStructureArray { colorTarget ->
-            vertexBufferLayoutMapper.map(colorTarget, this)
+private fun Arena.map(input: RenderPipelineDescriptor.VertexState, output: MemorySegment) {
+    println("vertex $output")
+    WGPUVertexState.module(output, input.module.handler)
+    WGPUVertexState.entryPoint(output, allocateFrom(input.entryPoint))
+    // TODO learn how to map this
+    WGPUVertexState.constants(output, MemorySegment.NULL)
+    WGPUVertexState.constantCount(output, 0L)
+    if (input.buffers.isNotEmpty()) {
+        val buffers = WGPUVertexBufferLayout.allocateArray(input.buffers.size.toLong(), this)
+        println("buffers $buffers")
+        input.buffers.forEachIndexed { index, vertexBufferLayout ->
+            map(vertexBufferLayout, WGPUVertexBufferLayout.asSlice(buffers, index.toLong()))
         }
+        WGPUVertexState.buffers(output, buffers)
+        WGPUVertexState.bufferCount(output, input.buffers.size.toLong())
     }
 }
 
-private val vertexBufferLayoutMapper = mapper<RenderPipelineDescriptor.VertexState.VertexBufferLayout, WGPUVertexBufferLayout.ByReference> {
-    RenderPipelineDescriptor.VertexState.VertexBufferLayout::stepMode mappedTo WGPUVertexBufferLayout.ByReference::stepMode withTransformer EnumerationTransformer()
-    RenderPipelineDescriptor.VertexState.VertexBufferLayout::attributes mappedTo WGPUVertexBufferLayout.ByReference::attributes withTransformer MappingTransformer<Array<RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute>, Array<WGPUVertexAttribute.ByReference>> {
-        it.originalValue?.toStructureArray { colorTarget ->
-            vertexAttributeMapper.map(colorTarget, this)
-        }
-    }
+private fun map(
+    input: RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute,
+    output: MemorySegment
+) {
+    println("attribute $output")
+    WGPUVertexAttribute.format(output, input.format.value)
+    WGPUVertexAttribute.offset(output, input.offset)
+    WGPUVertexAttribute.shaderLocation(output, input.shaderLocation)
 }
 
-private val vertexAttributeMapper = mapper<RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute, WGPUVertexAttribute.ByReference> {
-    RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute::format mappedTo WGPUVertexAttribute.ByReference::format withTransformer EnumerationTransformer()
+private fun Arena.map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout, output: MemorySegment) {
+    println("buffer $output")
+    WGPUVertexBufferLayout.arrayStride(output, input.arrayStride)
+    if (input.attributes.isNotEmpty()) {
+        val attributes = WGPUVertexAttribute.allocateArray(input.attributes.size.toLong(), this)
+        println("attributes $attributes")
+        input.attributes.forEachIndexed { index, vertexAttribute ->
+            map(vertexAttribute, WGPUVertexAttribute.asSlice(attributes, index.toLong()))
+        }
+        WGPUVertexBufferLayout.attributes(output, attributes)
+        WGPUVertexBufferLayout.attributeCount(output, input.attributes.size.toLong())
+    }
+    WGPUVertexBufferLayout.stepMode(output, input.stepMode.value)
 }
+
