@@ -20,14 +20,12 @@ internal fun exportAndLoadLibrary() {
             System.loadLibrary(libraryFile.nameWithoutExtension.removePrefix("lib"))
         }
         Os.Linux -> {
-            val libraryFile = inferLinuxWGPUPossiblePath()
+            val libraryFile = generateTempFile()
             extractResourceToTemp(libraryPath, libraryFile)
-            System.loadLibrary(libraryFile.nameWithoutExtension.removePrefix("lib"))
+            System.load(libraryFile.absolutePath)
         }
     }
 }
-
-private fun inferLinuxWGPUPossiblePath(): File  = inferWGPUPossiblePath("lib", "so")
 
 private fun inferDarwinWGPUPossiblePath(): File = inferWGPUPossiblePath("lib", "dylib")
 
