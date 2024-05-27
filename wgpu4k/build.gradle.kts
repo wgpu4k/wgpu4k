@@ -69,7 +69,6 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-common"))
                 implementation(libs.coroutines)
-                implementation(kotlin("reflect"))
             }
         }
         val commonTest by getting {
