@@ -14,19 +14,30 @@ internal fun exportAndLoadLibrary() {
             extractResourceToTemp(libraryPath, libraryFile)
             System.loadLibrary(libraryFile.nameWithoutExtension)
         }
-        else -> {
-            val libraryFile = generateTempFile()
-            extractResourceToTemp(libraryPath, generateTempFile())
-            System.load(libraryFile.absolutePath)
+        Os.MacOs -> {
+            val libraryFile = inferDarwinWGPUPossiblePath()
+            extractResourceToTemp(libraryPath, libraryFile)
+            System.loadLibrary(libraryFile.nameWithoutExtension.removePrefix("lib"))
+        }
+        Os.Linux -> {
+            val libraryFile = inferLinuxWGPUPossiblePath()
+            extractResourceToTemp(libraryPath, libraryFile)
+            System.loadLibrary(libraryFile.nameWithoutExtension.removePrefix("lib"))
         }
     }
 }
 
-private fun inferWindowsWGPUPossiblePath(): File {
+private fun inferLinuxWGPUPossiblePath(): File  = inferWGPUPossiblePath("lib", "so")
+
+private fun inferDarwinWGPUPossiblePath(): File = inferWGPUPossiblePath("lib", "dylib")
+
+private fun inferWindowsWGPUPossiblePath(): File = inferWGPUPossiblePath("", "dll")
+
+private fun inferWGPUPossiblePath(prefix: String, extension: String): File {
     val possiblePaths = libraryPaths().map { File(it) }
     listWritablePathOn(possiblePaths).forEach { path ->
         (0 until 100).forEach { index ->
-            path.resolve("WGPU$index.dll")
+            path.resolve("${prefix}WGPU$index.$extension")
                 .takeIf { it.exists().not() }
                 ?.let { return it }
         }
