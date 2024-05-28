@@ -22,7 +22,7 @@ typealias GPUIntegerCoordinateOut = Int
 
 typealias GPUMapModeFlags = Number
 
-typealias GPUPipelineConstantValue = Number
+typealias GPUPipelineConstantValue = Double
 
 typealias GPUSampleMask = UInt
 

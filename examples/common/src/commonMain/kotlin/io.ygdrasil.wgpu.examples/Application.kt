@@ -4,6 +4,7 @@ package io.ygdrasil.wgpu.examples
 
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.scenes.basic.*
+import io.ygdrasil.wgpu.examples.scenes.graphics.techniques.ParticlesScene
 
 abstract class Application(
 	val renderingContext: RenderingContext,
@@ -30,7 +31,7 @@ abstract class Application(
 		private set
 
 	init {
-		changeScene(availableScenes.first())
+		changeScene(availableScenes.last())
 	}
 
 	abstract class Scene {
@@ -103,5 +104,5 @@ val availableScenes = listOf(
 	InstancedCubeScene(),
 	TexturedCubeScene(),
 	// Not working
-	//ParticlesScene(),
+	ParticlesScene(),
 )

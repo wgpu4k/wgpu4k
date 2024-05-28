@@ -9,12 +9,13 @@ expect class ComputePipeline : AutoCloseable {
 }
 
 data class ComputePipelineDescriptor(
-    var compute: ProgrammableStage,
-    var layout: PipelineLayout? = null
+    val compute: ProgrammableStage,
+    val layout: PipelineLayout? = null,
+    val label: String? = null
 ) {
     data class ProgrammableStage(
-        var module: ShaderModule,
-        var entryPoint: String? = null,
-        var constants: Map<String, GPUPipelineConstantValue> = mapOf(),
+        val module: ShaderModule,
+        val entryPoint: String? = null,
+        val constants: Map<String, GPUPipelineConstantValue> = mapOf(),
     )
 }

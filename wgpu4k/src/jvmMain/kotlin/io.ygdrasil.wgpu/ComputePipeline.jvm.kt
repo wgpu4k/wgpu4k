@@ -1,12 +1,15 @@
 package io.ygdrasil.wgpu
 
-actual class ComputePipeline : AutoCloseable {
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
+import java.lang.foreign.MemorySegment
 
-    actual fun getBindGroupLayout(index: Int): BindGroupLayout {
-        TODO("Not yet implemented")
-    }
+actual class ComputePipeline(internal val handler: MemorySegment) : AutoCloseable {
+
+    actual fun getBindGroupLayout(index: Int): BindGroupLayout =
+        wgpu_h.wgpuComputePipelineGetBindGroupLayout(handler, index)
+            .let(::BindGroupLayout)
 
     actual override fun close() {
-        TODO("Not yet implemented")
+        wgpu_h.wgpuComputePipelineRelease(handler)
     }
 }

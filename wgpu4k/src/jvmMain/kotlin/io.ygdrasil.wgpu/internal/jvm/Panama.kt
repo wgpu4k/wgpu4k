@@ -5,7 +5,6 @@ import java.lang.foreign.MemoryLayout
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.ValueLayout
 
-
 fun <T> confined(block: (Arena) -> T) = Arena.ofConfined()
     .use { arena ->
         block(arena)

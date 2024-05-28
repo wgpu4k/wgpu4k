@@ -4,7 +4,7 @@ import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.Application
 import io.ygdrasil.wgpu.examples.autoClosableContext
 import io.ygdrasil.wgpu.examples.scenes.shader.compute.probabilityMap
-import io.ygdrasil.wgpu.examples.scenes.shader.vertex.particlesShader
+import io.ygdrasil.wgpu.examples.scenes.shader.vertex.particlesShaderFixed
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
@@ -57,7 +57,7 @@ class ParticlesScene : Application.Scene() {
                     entryPoint = "vs_main",
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
-                            code = particlesShader,
+                            code = particlesShaderFixed,
                         )
                     ).bind(),
                     buffers = arrayOf(
@@ -100,7 +100,7 @@ class ParticlesScene : Application.Scene() {
                     entryPoint = "fs_main",
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
-                            code = particlesShader,
+                            code = particlesShaderFixed,
                         )
                     ).bind(),
                     targets = arrayOf(
@@ -374,7 +374,7 @@ class ParticlesScene : Application.Scene() {
                 compute = ComputePipelineDescriptor.ProgrammableStage(
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
-                            code = particlesShader,
+                            code = particlesShaderFixed,
                         )
                     ),
                     entryPoint = "simulate",

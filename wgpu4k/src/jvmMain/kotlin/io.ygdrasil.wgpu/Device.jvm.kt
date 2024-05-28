@@ -59,8 +59,10 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
             ?.let(::Sampler) ?: error("fail to create texture")
     }
 
-    actual fun createComputePipeline(descriptor: ComputePipelineDescriptor): ComputePipeline {
-        TODO()
+    actual fun createComputePipeline(descriptor: ComputePipelineDescriptor): ComputePipeline = confined { arena ->
+        arena.map(descriptor)
+            .let { wgpu_h.wgpuDeviceCreateComputePipeline(handler, it) }
+            ?.let(::ComputePipeline) ?: error("fail to create texture")
     }
 
     actual override fun close() {
