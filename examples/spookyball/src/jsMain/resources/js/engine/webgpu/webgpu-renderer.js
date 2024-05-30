@@ -48,7 +48,6 @@ export class WebGPURenderer extends Renderer {
     this.bufferManager = new WebGPUBufferManager(this.device);
     this.#textureLoader = new WebGPUTextureLoader(this.device);
 
-    this.blackTextureView = this.#textureLoader.fromColor(0, 0, 0, 0).texture.createView();
     this.whiteTextureView = this.#textureLoader.fromColor(1.0, 1.0, 1.0, 1.0).texture.createView();
     this.defaultNormalTextureView = this.#textureLoader.fromColor(0.5, 0.5, 1.0, 0).texture.createView();
     this.defaultSampler = this.device.createSampler({

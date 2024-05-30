@@ -1,32 +1,21 @@
-import {Tag} from './engine/core/ecs.js';
 import {Transform} from './engine/core/transform.js';
 import {Camera} from './engine/core/camera.js';
 import {AmbientLight, DirectionalLight, ShadowCastingLight} from './engine/core/light.js';
 import {GltfLoader} from './engine/loaders/gltf.js';
 import {WebGPUWorld} from './engine/webgpu/webgpu-world.js';
-import {BoneVisualizerSystem} from './engine/debug/bone-visualizer.js';
 import {MouseState} from './engine/core/input.js';
 
 import {BallSystem} from './ball.js';
 import {GameState, PlayerSystem} from './player.js';
-import {Block, StageSystem} from './stage.js';
+import {StageSystem} from './stage.js';
 import {Physics2DSystem} from './physics-2d.js';
-import {Physics2DVisualizerSystem} from './physics-2d-visualizer.js';
 import {ImpactDamageSystem} from './impact-damage.js';
 import {ScoreSystem} from './score.js';
 import {DeadSystem, LifetimeHealthSystem} from './lifetime.js';
 import {HTMLDisplaySystem} from './html-display.js';
 
 import {quat} from 'gl-matrix';
-
-import dat from 'dat.gui';
 import Stats from 'stats.js';
-
-import {WebGPUDebugTextureView, WebGPUTextureDebugSystem} from './engine/webgpu/webgpu-texture-debug.js';
-import {WebGPUBloomSystem} from './engine/webgpu/webgpu-bloom.js';
-import {FlyingControls, FlyingControlsSystem} from './engine/controls/flying-controls.js';
-
-const debugMode = true;
 
 const appSettings = {
   pause: false,
@@ -64,109 +53,10 @@ try {
   errorElement.innerHTML = `Your browser doesn't appear to support WebGPU. (Scary!)<br>
 This game requires WebGPU support.`;
 
-  if (debugMode) {
-    errorElement.innerHTML += `<hr/>${error.message}`;
-  }
-
   throw error;
 }
 
 const stats = new Stats();
-
-if (debugMode) {
-  document.body.appendChild(stats.dom);
-
-  const gui = new dat.GUI();
-  document.body.appendChild(gui.domElement);
-
-  gui.add(appSettings, 'pause').onChange(() => {
-    world.paused = appSettings.pause;
-  });
-
-  gui.add(appSettings, 'showPhysicsBodies').onChange(() => {
-    if (appSettings.showPhysicsBodies) {
-      world.registerRenderSystem(Physics2DVisualizerSystem);
-    } else {
-      world.removeSystem(Physics2DVisualizerSystem);
-    }
-  });
-
-  gui.add(appSettings, 'showJoints').onChange(() => {
-    if (appSettings.showJoints) {
-      world.registerRenderSystem(BoneVisualizerSystem);
-    } else {
-      world.removeSystem(BoneVisualizerSystem);
-    }
-  });
-
-  const flyingControls = new FlyingControls();
-  flyingControls.speed = 10;
-  gui.add(appSettings, 'freeCamera').onChange(() => {
-    if (appSettings.freeCamera) {
-      world.registerRenderSystem(FlyingControlsSystem);
-      camera.add(flyingControls);
-    } else {
-      world.removeSystem(FlyingControlsSystem);
-      camera.remove(FlyingControls);
-    }
-  });
-
-
-  world.registerRenderSystem(WebGPUBloomSystem);
-
-  gui.add(appSettings, 'moonlight').onChange(() => {
-    if (appSettings.moonlight) {
-      moonlight.intensity = 1.8;
-    } else {
-      moonlight.intensity = 0.0
-    }
-  });
-
-  gui.add(appSettings, 'renderTarget', {
-    'Default': 'default',
-    'Shadow': 'shadow',
-    'Emissive': 'emissive',
-    'Bloom Pass 0': 'bloom0',
-    'Bloom Pass 1': 'bloom1',
-  }).onChange(() => {
-    world.query(WebGPUDebugTextureView).forEach((entity) => {
-      entity.destroy();
-    });
-
-    switch (appSettings.renderTarget) {
-      case 'shadow':
-        world.create(new WebGPUDebugTextureView(renderer.shadowDepthTexture.createView(), true));
-        break;
-      case 'emissive':
-        world.create(new WebGPUDebugTextureView(renderer.renderTargets.emissiveTexture.createView()));
-        break;
-      case 'bloom0':
-        world.create(new WebGPUDebugTextureView(renderer.renderTargets.bloomTextures[0].createView()));
-        break;
-      case 'bloom1':
-        world.create(new WebGPUDebugTextureView(renderer.renderTargets.bloomTextures[1].createView()));
-        break;
-      default:
-        world.removeSystem(WebGPUTextureDebugSystem);
-        return;
-    }
-
-    world.registerRenderSystem(WebGPUTextureDebugSystem);
-  });
-
-  // Mark each block as dead when you click the "clearLevel" debug button.
-  appSettings.clearLevel = () => {
-    world.query(Block).forEach((entity, block) => {
-      entity.add(Tag('dead'));
-    });
-  };
-  gui.add(appSettings, 'clearLevel');
-
-  appSettings.restart = () => {
-    world.singleton.add(new GameState());
-  };
-  gui.add(appSettings, 'restart');
-}
 
 const gltfLoader = new GltfLoader(renderer);
 
