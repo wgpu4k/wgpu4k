@@ -1,6 +1,6 @@
 import {System} from './engine/core/ecs.js';
 import {InstanceColor} from './engine/core/instance-color.js';
-import {Health} from './lifetime.js';
+import {Health} from "./spookyball.js";
 
 export class ImpactDamage {
   constructor(value = 1) {

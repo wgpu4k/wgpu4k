@@ -24,7 +24,10 @@ export {
   BonusBall,
   GameState,
   Paddle,
-  MyVector3
+  MyVector3,
+  DEAD_TAG,
+  Lifetime,
+  Health
 } from '../wgpu4k-root-examples-spookyball.mjs'
 
 const canvas = document.querySelector('canvas');

@@ -1,11 +1,11 @@
-import {System, Tag} from './engine/core/ecs.js';
+import {System} from './engine/core/ecs.js';
 import {Transform} from './engine/core/transform.js';
 import {PointLight, ShadowCastingLight} from './engine/core/light.js';
 
 import {Physics2DBody} from './physics-2d.js';
 
 import {ImpactDamage} from './impact-damage.js';
-import {Ball, BonusBall, GameState, MyVector3, Paddle} from "./spookyball.js";
+import {Ball, BonusBall, DEAD_TAG, GameState, MyVector3, Paddle} from "./spookyball.js";
 
 export class BallSystem extends System {
   executesWhenPaused = false;
@@ -14,7 +14,7 @@ export class BallSystem extends System {
     this.ballQuery = this.query(Ball, Physics2DBody, Transform);
     this.paddleQuery = this.query(Paddle);
 
-    this.bonusQuery = this.query(Transform, BonusBall, Tag('dead'));
+    this.bonusQuery = this.query(Transform, BonusBall, DEAD_TAG);
 
     gltfLoader.fromUrl('./media/models/ball-compressed.glb').then(scene => {
       // The materials for the ball need some special tweaking to look right.
@@ -77,7 +77,7 @@ export class BallSystem extends System {
 
       // If a ball gets past a player, destroy the ball.
       if (transform.position[2] > 30) {
-        entity.add(Tag('dead'));
+        entity.add(new DEAD_TAG());
         lostBall = true;
       } else {
         ballCount++;

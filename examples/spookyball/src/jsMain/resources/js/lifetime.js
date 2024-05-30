@@ -1,20 +1,6 @@
-import {System, Tag} from './engine/core/ecs.js';
+import {System} from './engine/core/ecs.js';
 import {Stage} from './engine/core/stage.js';
-import {GameState} from "./spookyball.js";
-
-const DEAD_TAG = Tag('dead');
-
-export class Lifetime {
-  constructor(value = 1) {
-    this.lifetime = value;
-  }
-}
-
-export class Health {
-  constructor(value = 1) {
-    this.health = value;
-  }
-}
+import {DEAD_TAG, GameState, Health, Lifetime} from "./spookyball.js";
 
 export class LifetimeHealthSystem extends System {
   init() {
@@ -26,13 +12,13 @@ export class LifetimeHealthSystem extends System {
     this.lifetimeQuery.forEach((entity, lifetime) => {
       lifetime.lifetime -= delta;
       if (lifetime.lifetime <= 0) {
-        entity.add(DEAD_TAG);
+        entity.add(new DEAD_TAG());
       }
     });
 
     this.healthQuery.forEach((entity, health) => {
       if (health.health <= 0) {
-        entity.add(DEAD_TAG);
+        entity.add(new DEAD_TAG());
       }
     });
   }
