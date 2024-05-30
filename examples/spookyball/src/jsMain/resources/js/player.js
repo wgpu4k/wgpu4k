@@ -1,7 +1,6 @@
 import {System} from './engine/core/ecs.js';
 import {GamepadState, KeyboardState, MouseState} from './engine/core/input.js';
 import {Physics2DBody} from './physics-2d.js';
-import {FlyingControls} from './engine/controls/flying-controls.js';
 
 const PADDLE_SPEED = 62;
 const BOARD_HALF_WIDTH = 17;
@@ -9,7 +8,6 @@ const BOARD_HALF_WIDTH = 17;
 export class GameState {
   level = 0;
   levelStarting = true;
-  score = 0;
   lives = 3;
 };
 
@@ -26,7 +24,6 @@ export class PlayerSystem extends System {
 
   init(gpu, gltfLoader) {
     this.paddleQuery = this.query(Paddle, Physics2DBody);
-    this.flyingControlsQuery = this.query(FlyingControls);
 
     // Give the paddle a shape that tilts slightly at the corners. That way, players can control the direction of the
     // ball a little better if they're skilled.
@@ -50,7 +47,6 @@ export class PlayerSystem extends System {
   }
 
   execute(delta, time) {
-    const useWASD = this.flyingControlsQuery.getCount() == 0;
 
     const gamepad = this.singleton.get(GamepadState);
     const keyboard = this.singleton.get(KeyboardState);
@@ -71,22 +67,6 @@ export class PlayerSystem extends System {
     if (keyboard.keyPressed('ArrowUp')) {
       this.useMouse = false;
       launch = true;
-    }
-
-    // An alternate set of keybindings to use, but only if flying controls aren't enabled.
-    if (useWASD) {
-      if (keyboard.keyPressed('KeyD')) {
-        this.useMouse = false;
-        movement += 1.0;
-      }
-      if (keyboard.keyPressed('KeyA')) {
-        this.useMouse = false;
-        movement -= 1.0;
-      }
-      if (keyboard.keyPressed('KeyW') || keyboard.keyPressed('Space')) {
-        this.useMouse = false;
-        launch = true;
-      }
     }
 
     // Gamepad input
