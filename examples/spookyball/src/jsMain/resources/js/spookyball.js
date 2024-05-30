@@ -10,7 +10,6 @@ import {GameState, PlayerSystem} from './player.js';
 import {StageSystem} from './stage.js';
 import {Physics2DSystem} from './physics-2d.js';
 import {ImpactDamageSystem} from './impact-damage.js';
-import {ScoreSystem} from './score.js';
 import {DeadSystem, LifetimeHealthSystem} from './lifetime.js';
 import {HTMLDisplaySystem} from './html-display.js';
 
@@ -22,7 +21,6 @@ const world = new WebGPUWorld(canvas)
   .registerSystem(Physics2DSystem)
   .registerSystem(ImpactDamageSystem)
   .registerSystem(LifetimeHealthSystem)
-  .registerSystem(ScoreSystem)
   .registerSystem(DeadSystem)
   .registerSystem(HTMLDisplaySystem)
   ;

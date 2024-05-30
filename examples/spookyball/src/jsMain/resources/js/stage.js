@@ -7,7 +7,6 @@ import {Ball, BonusBall} from './ball.js';
 import {GameState} from './player.js';
 
 import {quat} from 'gl-matrix';
-import {Points} from './score.js';
 
 const tmpQuat = quat.create();
 
@@ -175,7 +174,6 @@ export class StageSystem extends System {
           blockMesh,
           new Block(x, y, buriedAmount),
           new Transform({ position: [x, buriedAmount, y], orientation: tmpQuat }),
-          new Points(100),
           new Health(isBonus ? 2 : 1),
         );
 
