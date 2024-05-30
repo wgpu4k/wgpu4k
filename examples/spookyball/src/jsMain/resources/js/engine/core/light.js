@@ -19,19 +19,6 @@ export class PointLight {
   }
 }
 
-// TODO: Not currently functional
-export class SpotLight {
-  lightIndex = -1;
-  color = new Float32Array(3);
-
-  constructor(options) {
-    this.color.set(options?.color || [1, 1, 1]);
-    this.intensity = options?.intensity || 1;
-    this.range = options?.range || -1;
-    this.angle = options?.angle || Math.PI / 3;
-  }
-}
-
 export class DirectionalLight {
   color = new Float32Array(3);
   direction = new Float32Array(3);
@@ -88,7 +75,6 @@ export class LightSystem extends System {
     this.ambientLightQuery = this.query(AmbientLight);
     this.directionalLightQuery = this.query(DirectionalLight);
     this.pointLightQuery = this.query(PointLight);
-    this.spotLightQuery = this.query(SpotLight);
   }
 
   execute(delta, time, gpu) {
@@ -144,11 +130,6 @@ export class LightSystem extends System {
       } else {
         light.lightIndex = -1;
       }
-    });
-
-    this.spotLightQuery.forEach((entity, light) => {
-      // TODO
-      light.lightIndex = -1;
     });
 
     const pointlightCountArray = new Uint32Array(arrayBuffer, 11 * Float32Array.BYTES_PER_ELEMENT, 1);
