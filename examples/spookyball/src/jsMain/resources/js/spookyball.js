@@ -18,7 +18,9 @@ export {
   BloomBlendFragmentSource,
   BloomBlurHorizontalFragmentSource,
   BloomBlurVerticalFragmentSource,
-  TextureAtlasAllocator
+  TextureAtlasAllocator,
+  Ball,
+  BonusBall
 } from '../wgpu4k-root-examples-spookyball.mjs'
 
 

@@ -7,15 +7,7 @@ import {GameState, Paddle} from './player.js';
 
 import {vec3} from 'gl-matrix';
 import {ImpactDamage} from './impact-damage.js';
-
-export class Ball {
-  waitingForLaunch = true;
-  speed = 0.5;
-}
-
-export class BonusBall {
-  // Anything go here?
-}
+import {Ball, BonusBall} from "./spookyball.js";
 
 export class BallSystem extends System {
   executesWhenPaused = false;
