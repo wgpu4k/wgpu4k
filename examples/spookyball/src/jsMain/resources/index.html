@@ -73,29 +73,6 @@
         }
     }
 
-    #left-banner {
-        position: relative;
-        z-index: 5;
-        flex: 1;
-        height: 100%;
-        background-image: url('./media/images/left-banner.png');
-        background-size: auto 100%;
-        background-repeat: no-repeat;
-        background-position: right top;
-        margin-right: -39px;
-    }
-
-    #right-banner {
-        position: relative;
-        z-index: 5;
-        flex: 1;
-        height: 100%;
-        background-image: url('./media/images/right-banner.png');
-        background-size: auto 100%;
-        background-repeat: no-repeat;
-        background-position: left top;
-        margin-left: -78px;
-    }
 
     #score-display {
         position: absolute;
@@ -168,7 +145,6 @@
 </style>
 <body>
 
-<div id="left-banner"></div>
 <div class="container">
     <canvas></canvas>
     <div id="score-display">Score: 0</div>
@@ -176,7 +152,6 @@
     <button id="replay-button">Replay?</button>
     <div id="lives-display">Lives:</div>
 </div>
-<div id="right-banner"></div>
 
 <script type="importmap">
     {
@@ -188,8 +163,7 @@
     }
 </script>
 
-<script src="kotlinx-coroutines-core"></script>
-<script src="wgpu4k-root-examples-spookyball.js"></script>
+<script src="spookyball.js"></script>
 <script src="matter-js/matter.js"></script>
 <script type="module" src="./js/spookyball.js"></script>
 </body>
