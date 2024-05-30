@@ -1,6 +1,5 @@
 import {System} from './engine/core/ecs.js';
-import {InstanceColor} from './engine/core/instance-color.js';
-import {Health} from "./spookyball.js";
+import {Health, InstanceColor} from "./spookyball.js";
 
 export class ImpactDamage {
   constructor(value = 1) {
@@ -60,9 +59,9 @@ export class ImpactDamageSystem extends System {
 
       const t = (1.0 - (damaged.duration / FLASH_DURATION)) * 0.75 + 0.25;
 
-      flash.color[0] = Math.sin(t * Math.PI) * 0.6;
-      flash.color[1] = Math.sin(t * Math.PI) * 0.6;
-      flash.color[2] = Math.sin(t * Math.PI) * 0.4;
+      flash.color.set(0, Math.sin(t * Math.PI) * 0.6);
+      flash.color.set(1, Math.sin(t * Math.PI) * 0.6);
+      flash.color.set(2, Math.sin(t * Math.PI) * 0.4);
 
       damaged.duration -= delta;
     });

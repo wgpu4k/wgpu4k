@@ -27,7 +27,9 @@ export {
   MyVector3,
   DEAD_TAG,
   Lifetime,
-  Health
+  Health,
+  InstanceColor,
+  InstanceColorMode
 } from '../wgpu4k-root-examples-spookyball.mjs'
 
 const canvas = document.querySelector('canvas');

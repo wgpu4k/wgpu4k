@@ -1,7 +1,7 @@
 import {System} from './ecs.js';
 import {Stage} from './stage.js';
 import {Transform} from './transform.js';
-import {InstanceColor} from './instance-color.js';
+import {InstanceColor} from "../../spookyball.js";
 
 export const AttributeLocation = {
   position: 0,
