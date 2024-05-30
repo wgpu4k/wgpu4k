@@ -3,10 +3,9 @@ import {Transform} from './engine/core/transform.js';
 import {AnimationTiming} from './engine/core/animation.js';
 import {Physics2DBody} from './physics-2d.js';
 import {Health} from './lifetime.js';
-import {GameState} from './player.js';
 
 import {quat} from 'gl-matrix';
-import {Ball, BonusBall} from "./spookyball.js";
+import {Ball, BonusBall, GameState} from "./spookyball.js";
 
 const tmpQuat = quat.create();
 

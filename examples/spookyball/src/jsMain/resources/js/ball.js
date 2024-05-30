@@ -3,11 +3,10 @@ import {Transform} from './engine/core/transform.js';
 import {PointLight, ShadowCastingLight} from './engine/core/light.js';
 
 import {Physics2DBody} from './physics-2d.js';
-import {GameState, Paddle} from './player.js';
 
 import {vec3} from 'gl-matrix';
 import {ImpactDamage} from './impact-damage.js';
-import {Ball, BonusBall} from "./spookyball.js";
+import {Ball, BonusBall, GameState, Paddle} from "./spookyball.js";
 
 export class BallSystem extends System {
   executesWhenPaused = false;
@@ -62,20 +61,6 @@ export class BallSystem extends System {
           waitingBallCount++;
         }
       }
-
-      // Has the ball collided with anything?
-      /*const collisions = entity.get(Collisions);
-      if (collisions) {
-        for (const collider of collisions.entities) {
-          // If we collided with a paddle give the ball's velocity a little bump.
-          if (collider.get(Paddle)) {
-            Matter.Body.setVelocity(body.body, {
-              x: body.body.velocity.x * 1.2,
-              y: body.body.velocity.y * 1.2,
-            });
-          }
-        }
-      }*/
 
       // This is an abuse of the physics system, but it has a tencency to slow the ball down after
       // collisions even though the restitution is 1. So we'll just check and see if the ball is

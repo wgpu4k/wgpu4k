@@ -1,22 +1,10 @@
 import {System} from './engine/core/ecs.js';
 import {GamepadState, KeyboardState, MouseState} from './engine/core/input.js';
 import {Physics2DBody} from './physics-2d.js';
+import {Paddle} from "./spookyball.js";
 
 const PADDLE_SPEED = 62;
 const BOARD_HALF_WIDTH = 17;
-
-export class GameState {
-  level = 0;
-  levelStarting = true;
-  lives = 3;
-};
-
-export class Paddle {
-  constructor() {
-    this.x = 0;
-    this.launch = false;
-  }
-}
 
 export class PlayerSystem extends System {
   executesWhenPaused = false;

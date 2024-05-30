@@ -6,13 +6,14 @@ import {WebGPUWorld} from './engine/webgpu/webgpu-world.js';
 import {MouseState} from './engine/core/input.js';
 
 import {BallSystem} from './ball.js';
-import {GameState, PlayerSystem} from './player.js';
+import {PlayerSystem} from './player.js';
 import {StageSystem} from './stage.js';
 import {Physics2DSystem} from './physics-2d.js';
 import {ImpactDamageSystem} from './impact-damage.js';
 import {DeadSystem, LifetimeHealthSystem} from './lifetime.js';
 
 import {quat} from 'gl-matrix';
+import {GameState} from '../wgpu4k-root-examples-spookyball.mjs'
 
 export {
   BloomBlendFragmentSource,
@@ -20,9 +21,10 @@ export {
   BloomBlurVerticalFragmentSource,
   TextureAtlasAllocator,
   Ball,
-  BonusBall
+  BonusBall,
+  GameState,
+  Paddle
 } from '../wgpu4k-root-examples-spookyball.mjs'
-
 
 const canvas = document.querySelector('canvas');
 

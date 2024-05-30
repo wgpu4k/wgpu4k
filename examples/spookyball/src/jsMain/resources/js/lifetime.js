@@ -1,6 +1,6 @@
 import {System, Tag} from './engine/core/ecs.js';
 import {Stage} from './engine/core/stage.js';
-import {GameState} from "./player.js";
+import {GameState} from "./spookyball.js";
 
 const DEAD_TAG = Tag('dead');
 
