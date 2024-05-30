@@ -2,10 +2,10 @@ import {WebGPUSystem} from './webgpu-system.js';
 import {Stage} from '../core/stage.js';
 import {FullscreenTexturedQuadVertexSource} from './wgsl/common.js';
 import {
-    BloomBlendFragmentSource,
-    BloomBlurHorizontalFragmentSource,
-    BloomBlurVerticalFragmentSource
-} from './wgsl/bloom.js';
+  BloomBlendFragmentSource,
+  BloomBlurHorizontalFragmentSource,
+  BloomBlurVerticalFragmentSource
+} from "../../spookyball.js";
 
 export class WebGPUBloomSystem extends WebGPUSystem {
   stage = Stage.PostRender;
@@ -24,7 +24,7 @@ export class WebGPUBloomSystem extends WebGPUSystem {
       },
       fragment: {
         module: gpu.device.createShaderModule({
-          code: BloomBlurHorizontalFragmentSource,
+          code: BloomBlurHorizontalFragmentSource.get(),
           label: 'Bloom Blur Horizontal Fragment'
         }),
         entryPoint: 'fragmentMain',
@@ -46,7 +46,7 @@ export class WebGPUBloomSystem extends WebGPUSystem {
       },
       fragment: {
         module: gpu.device.createShaderModule({
-          code: BloomBlurVerticalFragmentSource,
+          code: BloomBlurVerticalFragmentSource.get(),
           label: 'Bloom Blur Vertical Fragment'
         }),
         entryPoint: 'fragmentMain',
@@ -68,7 +68,7 @@ export class WebGPUBloomSystem extends WebGPUSystem {
       },
       fragment: {
         module: gpu.device.createShaderModule({
-          code: BloomBlendFragmentSource,
+          code: BloomBlendFragmentSource.get(),
           label: 'Bloom Blend Fragment'
         }),
         entryPoint: 'fragmentMain',

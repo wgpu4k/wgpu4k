@@ -14,6 +14,13 @@ import {DeadSystem, LifetimeHealthSystem} from './lifetime.js';
 
 import {quat} from 'gl-matrix';
 
+export {
+  BloomBlendFragmentSource,
+  BloomBlurHorizontalFragmentSource,
+  BloomBlurVerticalFragmentSource
+} from '../wgpu4k-root-examples-spookyball.mjs'
+
+
 const canvas = document.querySelector('canvas');
 
 const world = new WebGPUWorld(canvas)

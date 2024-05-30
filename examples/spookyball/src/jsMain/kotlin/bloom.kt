@@ -40,7 +40,8 @@ fn getGaussianBlur(texCoord : vec2<f32>) -> vec4<f32> {
   return vec4(sum.rgb, 1.0);
 }
 """;
-
+@OptIn(ExperimentalJsExport::class)
+@JsExport
 const val BloomBlurHorizontalFragmentSource = /*wgsl*/"""
 const bloomDir = vec2(1.0, 0.0);
 ${BloomBlurCommon}
@@ -52,6 +53,8 @@ fn fragmentMain(input : FragmentInput) -> @location(0) vec4<f32> {
 """;
 
 // Combines the vertical blur step and a dimming of the previous blur results to allow for glowing trails.
+@OptIn(ExperimentalJsExport::class)
+@JsExport
 const val BloomBlurVerticalFragmentSource = /*wgsl*/"""
 const bloomDir = vec2(0.0, 1.0);
 ${BloomBlurCommon}
@@ -66,7 +69,8 @@ fn fragmentMain(input : FragmentInput) -> @location(0) vec4<f32> {
   return blurColor + dimColor;
 }
 """;
-
+@OptIn(ExperimentalJsExport::class)
+@JsExport
 const val BloomBlendFragmentSource = /*wgsl*/"""
 @group(0) @binding(0) var bloomTexture : texture_2d<f32>;
 @group(0) @binding(1) var bloomSampler : sampler;

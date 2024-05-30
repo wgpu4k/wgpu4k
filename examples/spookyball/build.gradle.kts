@@ -14,8 +14,10 @@ assert(commonResourcesFile.isNotEmpty) { "$commonResourcesFile is empty" }
 kotlin {
     js {
         binaries.executable()
-        browser()
-        nodejs()
+        useEsModules()
+        browser {
+
+        }
         generateTypeScriptDefinitions()
     }
 
