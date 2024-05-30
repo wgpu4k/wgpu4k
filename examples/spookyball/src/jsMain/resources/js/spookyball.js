@@ -17,16 +17,6 @@ import {HTMLDisplaySystem} from './html-display.js';
 import {quat} from 'gl-matrix';
 import Stats from 'stats.js';
 
-const appSettings = {
-  pause: false,
-  freeCamera: false,
-  showPhysicsBodies: false,
-  showJoints: false,
-  moonlight: true,
-  enableBloom: true,
-  renderTarget: 'default',
-};
-
 const canvas = document.querySelector('canvas');
 
 const world = new WebGPUWorld(canvas)
