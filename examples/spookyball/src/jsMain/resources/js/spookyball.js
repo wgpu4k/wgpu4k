@@ -15,7 +15,6 @@ import {DeadSystem, LifetimeHealthSystem} from './lifetime.js';
 import {HTMLDisplaySystem} from './html-display.js';
 
 import {quat} from 'gl-matrix';
-import Stats from 'stats.js';
 
 const canvas = document.querySelector('canvas');
 
@@ -45,8 +44,6 @@ This game requires WebGPU support.`;
 
   throw error;
 }
-
-const stats = new Stats();
 
 const gltfLoader = new GltfLoader(renderer);
 
@@ -84,8 +81,6 @@ world.create(
 function onFrame(t) {
   requestAnimationFrame(onFrame);
 
-  stats.begin();
   world.execute();
-  stats.end();
 }
 requestAnimationFrame(onFrame);

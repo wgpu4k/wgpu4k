@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no'>
-    <meta name='mobile-web-app-capable' content='yes'>
-    <meta name='apple-mobile-web-app-capable' content='yes'>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,10 +24,6 @@
         position: relative;
         margin: auto;
         overflow: hidden;
-    }
-
-    .container.error {
-        overflow: visible;
     }
 
     .container.error > canvas,
@@ -101,13 +97,6 @@
         margin-left: -78px;
     }
 
-    .dg.main {
-        position: absolute;
-        z-index: 100;
-        top: 1em;
-        right: 1em;
-    }
-
     #score-display {
         position: absolute;
         z-index: 10;
@@ -139,11 +128,6 @@
         pointer-events: none;
     }
 
-    #level-title.show {
-        opacity: 1.0;
-        transform: translate(-50%, 0) scale(1.0);
-    }
-
     #replay-button {
         position: absolute;
         z-index: 10;
@@ -169,11 +153,6 @@
         transform: translate(-50%, 0) scale(1.1);
     }
 
-    #replay-button.show {
-        display: block;
-        pointer-events: none;
-    }
-
     #lives-display {
         position: absolute;
         z-index: 10;
@@ -186,27 +165,6 @@
         pointer-events: none;
     }
 
-    footer {
-        position: absolute;
-        z-index: 10;
-        top: 10px;
-        right: 10px;
-        font: 1rem/1.4 -apple-system, BlinkMacSystemFont,
-        Segoe UI, Roboto, Oxygen,
-        Ubuntu, Cantarell, Fira Sans,
-        Droid Sans, Helvetica Neue, sans-serif;
-    }
-
-    footer a {
-        color: #FFFFFF;
-        text-decoration: none;
-    }
-
-    footer a:hover {
-        text-decoration: underline;
-    }
-
-    #left
 </style>
 <body>
 
@@ -225,14 +183,15 @@
         "imports": {
             "gl-matrix": "./gl-matrix/esm/index.js",
             "webgpu-texture-loader": "./web-texture-tool/build/webgpu-texture-loader.js",
-            "wgsl-preprocessor": "./wgsl-preprocessor/wgsl-preprocessor.js",
-            "stats.js": "./stats.js/src/Stats.js"
+            "wgsl-preprocessor": "./wgsl-preprocessor/wgsl-preprocessor.js"
         }
     }
 </script>
 
-<script src='matter-js/matter.js'></script>
-<script type="module" src='./js/spookyball.js'></script>
+<script src="kotlinx-coroutines-core"></script>
+<script src="wgpu4k-root-examples-spookyball.js"></script>
+<script src="matter-js/matter.js"></script>
+<script type="module" src="./js/spookyball.js"></script>
 </body>
 
 </html>
