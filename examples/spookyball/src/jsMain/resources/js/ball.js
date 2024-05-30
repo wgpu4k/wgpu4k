@@ -4,9 +4,8 @@ import {PointLight, ShadowCastingLight} from './engine/core/light.js';
 
 import {Physics2DBody} from './physics-2d.js';
 
-import {vec3} from 'gl-matrix';
 import {ImpactDamage} from './impact-damage.js';
-import {Ball, BonusBall, GameState, Paddle} from "./spookyball.js";
+import {Ball, BonusBall, GameState, MyVector3, Paddle} from "./spookyball.js";
 
 export class BallSystem extends System {
   executesWhenPaused = false;
@@ -55,7 +54,7 @@ export class BallSystem extends System {
 
         if (paddleState.launch) {
           // Launch the ball in a semi-random direction, but always primarily up
-          const direction = vec3.fromValues((Math.random() * 2.0 - 1.0) * 0.5, 0, -1.5);
+          const direction = new MyVector3((Math.random() * 2.0 - 1.0) * 0.5, 0, -1.5);
           this.launchBall(ball, body, direction);
         } else {
           waitingBallCount++;
@@ -87,7 +86,7 @@ export class BallSystem extends System {
 
     this.bonusQuery.forEach((entity, transform) => {
       // Launch the bonus ball in a random direction
-      const direction = vec3.fromValues((Math.random() * 2.0 - 1.0), 0, -(Math.random() * 2.0 - 1.0));
+      const direction = new MyVector3((Math.random() * 2.0 - 1.0), 0, -(Math.random() * 2.0 - 1.0));
       this.spawnBall([transform.position[0], 1, transform.position[2]], direction, ballCount < (gpu.flags.maxBallShadows || 1) && gpu.flags.ballShadows);
     });
 
@@ -147,11 +146,11 @@ export class BallSystem extends System {
   }
 
   launchBall(ball, body, direction) {
-    vec3.normalize(direction, direction);
-    vec3.scale(direction, direction, ball.speed);
+    direction = direction.normalize();
+    direction = direction.scale(ball.speed);
     Matter.Body.setVelocity(body.body, {
-      x: direction[0],
-      y: direction[2],
+      x: direction.x,
+      y: direction.z,
     });
     ball.waitingForLaunch = false;
   }

@@ -23,7 +23,8 @@ export {
   Ball,
   BonusBall,
   GameState,
-  Paddle
+  Paddle,
+  MyVector3
 } from '../wgpu4k-root-examples-spookyball.mjs'
 
 const canvas = document.querySelector('canvas');
