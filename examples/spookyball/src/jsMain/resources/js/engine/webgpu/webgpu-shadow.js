@@ -2,11 +2,11 @@ import {WebGPUSystem} from './webgpu-system.js';
 import {Stage} from '../core/stage.js';
 import {Transform} from '../core/transform.js';
 import {DirectionalLight, PointLight, ShadowCastingLight} from '../core/light.js';
-import {TextureAtlasAllocator} from '../util/texture-atlas-allocator.js';
 import {ShadowFragmentSource,} from './wgsl/shadow.js';
 import {WebGPUCameraBase} from './webgpu-camera.js';
 
 import {mat4, vec3, vec4} from 'gl-matrix';
+import {TextureAtlasAllocator} from "../../spookyball.js";
 
 const tmpVec3 = vec3.create();
 const lightPos = vec3.create();

@@ -17,7 +17,8 @@ import {quat} from 'gl-matrix';
 export {
   BloomBlendFragmentSource,
   BloomBlurHorizontalFragmentSource,
-  BloomBlurVerticalFragmentSource
+  BloomBlurVerticalFragmentSource,
+  TextureAtlasAllocator
 } from '../wgpu4k-root-examples-spookyball.mjs'
 
 
