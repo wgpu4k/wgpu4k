@@ -26,17 +26,6 @@
         overflow: hidden;
     }
 
-    .container.error > canvas,
-    .container.error > #level-title,
-    .container.error > #lives-display {
-        display: none;
-    }
-
-    .container.error > #score-display {
-        top: 50%;
-        white-space: normal;
-    }
-
     canvas {
         display: block;
         width: 100%;
@@ -61,9 +50,6 @@
             width: 100%;
         }
 
-        #left-banner, #right-banner {
-            display: none;
-        }
     }
 
     @media (min-aspect-ratio: 7/8) {
@@ -74,83 +60,13 @@
     }
 
 
-    #score-display {
-        position: absolute;
-        z-index: 10;
-        top: 10px;
-        width: 100%;
-        text-align: center;
-        font-size: 2em;
-        font-family: 'Creepster', cursive;
-        color: #FFFFFF;
-        white-space: nowrap;
-    }
 
-    #level-title {
-        position: absolute;
-        z-index: 10;
-        bottom: 33%;
-        left: 50%;
-        margin: 0 auto;
-        font-family: 'Creepster', cursive;
-        font-size: 5em;
-        color: white;
-        white-space: nowrap;
-
-        opacity: 0;
-        transform: translate(-50%, 0) scale(1.5);
-        transition-property: opacity, transform;
-        transition-duration: 1s;
-        transition-timing-function: ease-out;
-        pointer-events: none;
-    }
-
-    #replay-button {
-        position: absolute;
-        z-index: 10;
-        bottom: 25%;
-        left: 50%;
-        margin: 0 auto;
-
-        font-family: 'Creepster', cursive;
-        font-size: 2.5em;
-        color: white;
-        white-space: nowrap;
-
-        border: 1px solid white;
-        border-radius: 5px;
-        background: transparent;
-        padding: 0.25em;
-
-        display: none;
-        transform: translate(-50%, 0) scale(1.0);
-    }
-
-    #replay-button:hover {
-        transform: translate(-50%, 0) scale(1.1);
-    }
-
-    #lives-display {
-        position: absolute;
-        z-index: 10;
-        bottom: 2em;
-        left: 2em;
-        width: 100%;
-        font-size: 2em;
-        font-family: 'Creepster', cursive;
-        color: #FFFFFF;
-        pointer-events: none;
-    }
 
 </style>
 <body>
 
 <div class="container">
     <canvas></canvas>
-    <div id="score-display">Score: 0</div>
-    <div id="level-title">Spooky!</div>
-    <button id="replay-button">Replay?</button>
-    <div id="lives-display">Lives:</div>
 </div>
 
 <script type="importmap">

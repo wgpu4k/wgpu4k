@@ -1,5 +1,6 @@
 import {System, Tag} from './engine/core/ecs.js';
 import {Stage} from './engine/core/stage.js';
+import {GameState} from "./player.js";
 
 const DEAD_TAG = Tag('dead');
 
@@ -49,5 +50,12 @@ export class DeadSystem extends System {
     this.deadQuery.forEach((entity) => {
       entity.destroy();
     });
+
+    const gameState = this.singleton.get(GameState);
+    if (gameState.lives == 0) {
+
+      // Reset the GameState
+      this.singleton.add(new GameState());
+    }
   }
 }

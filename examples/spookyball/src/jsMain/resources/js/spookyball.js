@@ -11,7 +11,6 @@ import {StageSystem} from './stage.js';
 import {Physics2DSystem} from './physics-2d.js';
 import {ImpactDamageSystem} from './impact-damage.js';
 import {DeadSystem, LifetimeHealthSystem} from './lifetime.js';
-import {HTMLDisplaySystem} from './html-display.js';
 
 import {quat} from 'gl-matrix';
 
@@ -22,7 +21,6 @@ const world = new WebGPUWorld(canvas)
   .registerSystem(ImpactDamageSystem)
   .registerSystem(LifetimeHealthSystem)
   .registerSystem(DeadSystem)
-  .registerSystem(HTMLDisplaySystem)
   ;
 
 world.singleton.add(new GameState());
