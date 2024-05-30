@@ -19,8 +19,6 @@ import {HTMLDisplaySystem} from './html-display.js';
 
 import {quat} from 'gl-matrix';
 
-import {QueryArgs} from './query-args.js';
-
 import dat from 'dat.gui';
 import Stats from 'stats.js';
 
@@ -28,61 +26,7 @@ import {WebGPUDebugTextureView, WebGPUTextureDebugSystem} from './engine/webgpu/
 import {WebGPUBloomSystem} from './engine/webgpu/webgpu-bloom.js';
 import {FlyingControls, FlyingControlsSystem} from './engine/controls/flying-controls.js';
 
-const debugMode = QueryArgs.getBool('debug', false);
-
-function getQuality() {
-  const ULTRA_QUALITY = {
-    ballShadows: true,
-    maxBallShadows: 2,
-  };
-
-  const HIGH_QUALITY = {
-  }; // Defaults
-
-  const MEDIUM_QUALITY = {
-    shadowSamples: 4,
-    resolutionMultiplier: 0.75,
-  };
-
-  const LOW_QUALITY = {
-    shadowSamples: 2,
-    shadowResolutionMultiplier: 0.5,
-    sampleCount: 1,
-    resolutionMultiplier: 0.5,
-    bloomEnabled: false,
-  };
-
-  const POTATO_QUALITY = {
-    shadowSamples: 1,
-    shadowResolutionMultiplier: 0.5,
-    shadowUpdateFrequency: 2,
-    sampleCount: 1,
-    resolutionMultiplier: 0.5,
-    bloomEnabled: false,
-  };
-
-  const qualitySetting = QueryArgs.getString('quality');
-
-  switch (qualitySetting) {
-    case 'ultra':
-      return ULTRA_QUALITY;
-    case 'high':
-      return HIGH_QUALITY;
-    case 'medium':
-      return MEDIUM_QUALITY;
-    case 'low':
-      return LOW_QUALITY;
-    case 'potato':
-      return POTATO_QUALITY;
-  }
-
-  // TODO: Try to auto-detect a rough feature level
-  return HIGH_QUALITY;
-}
-
-const rendererFlags = getQuality();
-rendererFlags.lucasMode = QueryArgs.getBool('lucasMode', false);
-rendererFlags.powerPreference = QueryArgs.getString('powerPreference');
+const debugMode = true;
 
 const appSettings = {
   pause: false,
@@ -96,7 +40,7 @@ const appSettings = {
 
 const canvas = document.querySelector('canvas');
 
-const world = new WebGPUWorld(canvas, rendererFlags)
+const world = new WebGPUWorld(canvas)
   .registerSystem(Physics2DSystem)
   .registerSystem(ImpactDamageSystem)
   .registerSystem(LifetimeHealthSystem)
@@ -167,15 +111,8 @@ if (debugMode) {
     }
   });
 
-  if (rendererFlags.bloomEnabled !== false) {
-    gui.add(appSettings, 'enableBloom').onChange(() => {
-      if (appSettings.enableBloom) {
-        world.registerRenderSystem(WebGPUBloomSystem);
-      } else {
-        world.removeSystem(WebGPUBloomSystem);
-      }
-    });
-  }
+
+  world.registerRenderSystem(WebGPUBloomSystem);
 
   gui.add(appSettings, 'moonlight').onChange(() => {
     if (appSettings.moonlight) {

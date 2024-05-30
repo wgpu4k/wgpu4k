@@ -23,9 +23,9 @@ class WebGPURenderPass extends WebGPUSystem {
 }
 
 export class WebGPUWorld extends RenderWorld {
-  async intializeRenderer(flagOverrides) {
+  async intializeRenderer() {
     // Apply the default flags and overwrite with any provided ones.
-    const flags = Object.assign({}, WEBGPU_DEFAULT_FLAGS, flagOverrides);
+    const flags = WEBGPU_DEFAULT_FLAGS;
 
     const renderer = new WebGPURenderer();
     await renderer.init(this.canvas, flags);

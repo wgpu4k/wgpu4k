@@ -126,9 +126,6 @@ export class BallSystem extends System {
       }
     }
 
-    if (gpu.flags.lucasMode && waitingBallCount == 0 && paddleState) {
-      this.spawnBall([paddleState.x, 1, 23], null, gpu.flags.ballShadows);
-    }
   }
 
   spawnBall(position, velocity = null, castShadow = false) {
