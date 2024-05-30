@@ -4,8 +4,7 @@ import {PointLight, ShadowCastingLight} from './engine/core/light.js';
 
 import {Physics2DBody} from './physics-2d.js';
 
-import {ImpactDamage} from './impact-damage.js';
-import {Ball, BonusBall, DEAD_TAG, GameState, MyVector3, Paddle} from "./spookyball.js";
+import {Ball, BonusBall, DEAD_TAG, GameState, ImpactDamage, MyVector3, Paddle} from "./spookyball.js";
 
 export class BallSystem extends System {
   executesWhenPaused = false;

@@ -1,11 +1,5 @@
 import {System} from './engine/core/ecs.js';
-import {Health, InstanceColor} from "./spookyball.js";
-
-export class ImpactDamage {
-  constructor(value = 1) {
-    this.damage = value;
-  }
-}
+import {Health, ImpactDamage, InstanceColor} from "./spookyball.js";
 
 export class Collisions {
   entities = new Set();

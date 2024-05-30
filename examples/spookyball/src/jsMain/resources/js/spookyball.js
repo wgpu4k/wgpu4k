@@ -29,7 +29,8 @@ export {
   Lifetime,
   Health,
   InstanceColor,
-  InstanceColorMode
+  InstanceColorMode,
+  ImpactDamage
 } from '../wgpu4k-root-examples-spookyball.mjs'
 
 const canvas = document.querySelector('canvas');
