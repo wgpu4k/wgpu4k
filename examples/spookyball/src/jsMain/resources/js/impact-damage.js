@@ -1,5 +1,4 @@
-import {System} from './engine/core/ecs.js';
-import {Health, ImpactDamage, InstanceColor} from "./spookyball.js";
+import {Health, ImpactDamage, InstanceColor, System} from "./spookyball.js";
 
 export class Collisions {
   entities = new Set();
@@ -7,15 +6,15 @@ export class Collisions {
 
 const FLASH_DURATION = 0.1;
 
-export class Damaged {
+class Damaged {
   duration = FLASH_DURATION;
   amount = 0;
 }
 
 export class ImpactDamageSystem extends System {
   init() {
-    this.impactDamageQuery = this.query(ImpactDamage, Collisions);
-    this.damagedQuery = this.query(Damaged);
+    this.impactDamageQuery = this.query([ImpactDamage, Collisions]);
+    this.damagedQuery = this.query([Damaged]);
   }
 
   execute(delta) {

@@ -163,10 +163,6 @@ export class World {
     }
   }
 
-  query(...componentTypes) {
-    return this.#worldData.getQuery(componentTypes);
-  }
-
   execute(delta, time, ...args) {
     if (!delta) {
       time = performance.now() / 1000;
@@ -216,6 +212,8 @@ export class System {
   }
 
   query(...componentTypes) {
+    console.log(this)
+    console.log(componentTypes)
     return this.#worldData.getQuery(componentTypes);
   }
 

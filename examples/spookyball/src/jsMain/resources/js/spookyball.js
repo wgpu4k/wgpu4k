@@ -9,11 +9,11 @@ import {BallSystem} from './ball.js';
 import {PlayerSystem} from './player.js';
 import {StageSystem} from './stage.js';
 import {Physics2DSystem} from './physics-2d.js';
-import {ImpactDamageSystem} from './impact-damage.js';
 import {DeadSystem, LifetimeHealthSystem} from './lifetime.js';
 
 import {quat} from 'gl-matrix';
 import {GameState} from '../wgpu4k-root-examples-spookyball.mjs'
+import {ImpactDamageSystem} from "./impact-damage.js";
 
 export {
   BloomBlendFragmentSource,
@@ -30,7 +30,8 @@ export {
   Health,
   InstanceColor,
   InstanceColorMode,
-  ImpactDamage
+  ImpactDamage,
+  System
 } from '../wgpu4k-root-examples-spookyball.mjs'
 
 const canvas = document.querySelector('canvas');
