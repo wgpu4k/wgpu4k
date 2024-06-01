@@ -1,195 +1,210 @@
 import {
-  DEFAULT_SCALE,
-  mat4FromRotationTranslationScale,
-  mat4Multiply,
-  MyVector3,
-  vec3TransformMat4
+    DEFAULT_SCALE,
+    mat4FromRotationTranslationScale,
+    mat4Multiply,
+    MyVector3,
+    TransformKt,
+    vec3TransformMat4
 } from "../../spookyball.js";
 
 const DEFAULT_ORIENTATION = new Float32Array(0, 0, 0, 0);
 
 export class Transform {
-  #position;
-  #orientation;
-  #scale;
-  #localMatrix;
-  #worldMatrix;
+    actual
+    #scale;
+    #localMatrix;
+    #worldMatrix;
 
-  #localMatrixDirty = true;
-  #worldMatrixDirty = true;
-  #parent = null;
-  #children;
+    #localMatrixDirty = true;
+    #worldMatrixDirty = true;
+    #parent = null;
+    #children;
 
-  constructor(options = {}) {
-    let buffer;
-    let offset = 0;
-    // Allocate storage for all the transform elements
-    if (options.externalStorage) {
-      buffer = options.externalStorage.buffer;
-      offset = options.externalStorage.offset;
-    } else {
-      buffer = new Float32Array(42).buffer;
+    constructor(options = {}) {
+        let buffer;
+        let offset = 0;
+        // Allocate storage for all the transform elements
+        if (options.externalStorage) {
+            buffer = options.externalStorage.buffer;
+            offset = options.externalStorage.offset;
+        } else {
+            buffer = new Float32Array(42).buffer;
+        }
+
+        this.actual = new TransformKt(
+            new Float32Array(buffer, offset, 3),
+            new Float32Array(buffer, offset + 3 * Float32Array.BYTES_PER_ELEMENT, 4),
+            new Float32Array(buffer, offset + 7 * Float32Array.BYTES_PER_ELEMENT, 3),
+            new Float32Array(buffer, offset + 10 * Float32Array.BYTES_PER_ELEMENT, 16),
+            new Float32Array(buffer, offset + 26 * Float32Array.BYTES_PER_ELEMENT, 16),
+        )
+
+        this.#scale = new Float32Array(buffer, offset + 7 * Float32Array.BYTES_PER_ELEMENT, 3);
+        this.#localMatrix = new Float32Array(buffer, offset + 10 * Float32Array.BYTES_PER_ELEMENT, 16);
+        this.#worldMatrix = new Float32Array(buffer, offset + 26 * Float32Array.BYTES_PER_ELEMENT, 16);
+
+        if (options.transform) {
+            const storage = new Float32Array(this.actual.position.buffer, this.actual.position.byteOffset, 42);
+            storage.set(new Float32Array(options.transform.actual.position.buffer, options.transform.actual.position.byteOffset, 42));
+            this.#localMatrixDirty = options.transform.#localMatrixDirty;
+        } else {
+            if (options.position) {
+                this.actual.position.set(options.position);
+            }
+            this.actual.orientation.set(options.orientation ? options.orientation : DEFAULT_ORIENTATION);
+            this.#scale.set(options.scale ? options.scale : DEFAULT_SCALE.get().toJS32Array());
+        }
+
+        if (options.parent) {
+            options.parent.addChild(this);
+        }
     }
 
-    this.#position = new Float32Array(buffer, offset, 3);
-    this.#orientation = new Float32Array(buffer, offset + 3 * Float32Array.BYTES_PER_ELEMENT, 4);
-    this.#scale = new Float32Array(buffer, offset + 7 * Float32Array.BYTES_PER_ELEMENT, 3);
-    this.#localMatrix = new Float32Array(buffer, offset + 10 * Float32Array.BYTES_PER_ELEMENT, 16);
-    this.#worldMatrix = new Float32Array(buffer, offset + 26 * Float32Array.BYTES_PER_ELEMENT, 16);
-
-    if (options.transform) {
-      const storage = new Float32Array(this.#position.buffer, this.#position.byteOffset, 42);
-      storage.set(new Float32Array(options.transform.#position.buffer, options.transform.#position.byteOffset, 42));
-      this.#localMatrixDirty = options.transform.#localMatrixDirty;
-    } else {
-      if (options.position) {
-        this.#position.set(options.position);
-      }
-      this.#orientation.set(options.orientation ? options.orientation : DEFAULT_ORIENTATION);
-      this.#scale.set(options.scale ? options.scale : DEFAULT_SCALE.get().toJS32Array());
+    get position() {
+        this.#makeDirty();
+        return this.actual.position;
     }
 
-    if (options.parent) {
-      options.parent.addChild(this);
-    }
-  }
-
-  get position() {
-    this.#makeDirty();
-    return this.#position;
-  }
-  set position(value) {
-    this.#makeDirty();
-    this.#position.set(value);
-  }
-
-  getWorldPosition(out, position) {
-    if (position) {
-      if (position != out) {
-        out.set(position);
-      }
-    } else {
-      new MyVector3(0, 0, 0).into(out);
-    }
-    vec3TransformMat4(out, out, this.worldMatrix);
-  }
-
-  get orientation() {
-    this.#makeDirty();
-    return this.#orientation;
-  }
-  set orientation(value) {
-    this.#makeDirty();
-    this.#orientation.set(value);
-  }
-
-  get scale() {
-    this.#makeDirty();
-    return this.#scale;
-  }
-  set scale(value) {
-    this.#makeDirty();
-    this.#scale.set(value);
-  }
-
-  get worldMatrix() {
-    return this.#resolveWorldMatrix();
-  }
-
-  addChild(transform) {
-    if (transform.parent && transform.parent != this) {
-      transform.parent.removeChild(transform);
+    set position(value) {
+        this.#makeDirty();
+        this.actual.position.set(value);
     }
 
-    if (!this.#children) { this.#children = new Set(); }
-    this.#children.add(transform);
-    transform.#parent = this;
-    transform.#makeDirty(false);
-  }
-
-  removeChild(transform) {
-    const removed = this.#children?.delete(transform);
-    if (removed) {
-      transform.#parent = null;
-      transform.#makeDirty(false);
-    }
-  }
-
-  get children() {
-    return this.#children?.values() || [];
-  }
-
-  get parent() {
-    return this.#parent;
-  }
-
-  #makeDirty(markLocalDirty = true) {
-    if (markLocalDirty) { this.#localMatrixDirty = true; }
-    if (this.#worldMatrixDirty) { return; }
-    this.#worldMatrixDirty = true;
-
-    if (this.#children) {
-      for (const child of this.#children) {
-        child.#makeDirty(false);
-      }
-    }
-  }
-
-  #resolveLocalMatrix() {
-    const wasDirty = this.#localMatrixDirty;
-    if (this.#localMatrixDirty) {
-      mat4FromRotationTranslationScale(this.#localMatrix,
-        this.#orientation,
-        this.#position,
-        this.#scale);
-      this.#localMatrixDirty = false;
-    }
-    return this.#localMatrix;
-  }
-
-  #resolveWorldMatrix() {
-    if (this.#worldMatrixDirty) {
-      if (!this.parent) {
-        this.#worldMatrix.set(this.#resolveLocalMatrix());
-      } else {
-        mat4Multiply(this.#worldMatrix, this.parent.worldMatrix, this.#resolveLocalMatrix());
-      }
-      this.#worldMatrixDirty = false;
+    getWorldPosition(out, position) {
+        if (position) {
+            if (position != out) {
+                out.set(position);
+            }
+        } else {
+            new MyVector3(0, 0, 0).into(out);
+        }
+        vec3TransformMat4(out, out, this.worldMatrix);
     }
 
-    return this.#worldMatrix;
-  }
+    get orientation() {
+        this.#makeDirty();
+        return this.actual.orientation;
+    }
+
+    set orientation(value) {
+        this.#makeDirty();
+        this.actual.orientation.set(value);
+    }
+
+    get scale() {
+        this.#makeDirty();
+        return this.#scale;
+    }
+
+    set scale(value) {
+        this.#makeDirty();
+        this.#scale.set(value);
+    }
+
+    get worldMatrix() {
+        return this.#resolveWorldMatrix();
+    }
+
+    addChild(transform) {
+        if (transform.parent && transform.parent != this) {
+            transform.parent.removeChild(transform);
+        }
+
+        if (!this.#children) {
+            this.#children = new Set();
+        }
+        this.#children.add(transform);
+        transform.#parent = this;
+        transform.#makeDirty(false);
+    }
+
+    removeChild(transform) {
+        const removed = this.#children?.delete(transform);
+        if (removed) {
+            transform.#parent = null;
+            transform.#makeDirty(false);
+        }
+    }
+
+    get children() {
+        return this.#children?.values() || [];
+    }
+
+    get parent() {
+        return this.#parent;
+    }
+
+    #makeDirty(markLocalDirty = true) {
+        if (markLocalDirty) {
+            this.#localMatrixDirty = true;
+        }
+        if (this.#worldMatrixDirty) {
+            return;
+        }
+        this.#worldMatrixDirty = true;
+
+        if (this.#children) {
+            for (const child of this.#children) {
+                child.#makeDirty(false);
+            }
+        }
+    }
+
+    #resolveLocalMatrix() {
+        const wasDirty = this.#localMatrixDirty;
+        if (this.#localMatrixDirty) {
+            mat4FromRotationTranslationScale(this.#localMatrix,
+                this.actual.orientation,
+                this.actual.position,
+                this.#scale);
+            this.#localMatrixDirty = false;
+        }
+        return this.#localMatrix;
+    }
+
+    #resolveWorldMatrix() {
+        if (this.#worldMatrixDirty) {
+            if (!this.parent) {
+                this.#worldMatrix.set(this.#resolveLocalMatrix());
+            } else {
+                mat4Multiply(this.#worldMatrix, this.parent.worldMatrix, this.#resolveLocalMatrix());
+            }
+            this.#worldMatrixDirty = false;
+        }
+
+        return this.#worldMatrix;
+    }
 }
 
 export class TransformPool {
-  #buffer;
-  #transforms = [];
+    #buffer;
+    #transforms = [];
 
-  constructor(size) {
-    this.#buffer = new Float32Array(42 * size).buffer;
+    constructor(size) {
+        this.#buffer = new Float32Array(42 * size).buffer;
 
-    for (let i = 0; i < size; ++i) {
-      this.#transforms[i] = new Transform({
-        externalStorage: {
-          buffer: this.#buffer,
-          offset: (i * 42 * Float32Array.BYTES_PER_ELEMENT),
+        for (let i = 0; i < size; ++i) {
+            this.#transforms[i] = new Transform({
+                externalStorage: {
+                    buffer: this.#buffer,
+                    offset: (i * 42 * Float32Array.BYTES_PER_ELEMENT),
+                }
+            });
         }
-      });
     }
-  }
 
-  get size() {
-    return this.#transforms.length;
-  }
+    get size() {
+        return this.#transforms.length;
+    }
 
-  getTransform(index) {
-    return this.#transforms[index];
-  }
+    getTransform(index) {
+        return this.#transforms[index];
+    }
 
-  clone() {
-    const out = new TransformPool(this.size);
-    // Copy the entire buffer from this pool to the new one.
-    new Float32Array(out.#buffer).set(new Float32Array(this.#buffer));
-    return out;
-  }
+    clone() {
+        const out = new TransformPool(this.size);
+        // Copy the entire buffer from this pool to the new one.
+        new Float32Array(out.#buffer).set(new Float32Array(this.#buffer));
+        return out;
+    }
 }

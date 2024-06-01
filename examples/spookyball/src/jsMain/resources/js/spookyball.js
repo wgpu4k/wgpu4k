@@ -37,7 +37,8 @@ export {
   DEFAULT_SCALE,
   vec3TransformMat4,
   mat4FromRotationTranslationScale,
-  mat4Multiply
+  mat4Multiply,
+  TransformKt
 } from '../wgpu4k-root-examples-spookyball.mjs'
 
 const canvas = document.querySelector('canvas');
