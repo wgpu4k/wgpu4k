@@ -70,4 +70,20 @@ class TransformKt(options: dynamic) {
         }
         vec3TransformMat4(out, out, this.worldMatrix)
     }
+
+    fun makeDirty(markLocalDirty: Boolean = true) {
+        if (markLocalDirty) {
+            localMatrixDirty = true
+        }
+        if (worldMatrixDirty) {
+            return
+        }
+        worldMatrixDirty = true
+
+        if (children) {
+            children.forEach { child ->
+                child.makeDirtyJs(false)
+            }
+        }
+    }
 }

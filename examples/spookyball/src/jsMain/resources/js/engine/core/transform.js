@@ -75,20 +75,12 @@ export class Transform {
         return this.actual.parent;
     }
 
-    #makeDirty(markLocalDirty = true) {
-        if (markLocalDirty) {
-            this.actual.localMatrixDirty = true;
-        }
-        if (this.actual.worldMatrixDirty) {
-            return;
-        }
-        this.actual.worldMatrixDirty = true;
+    makeDirtyJs(markLocalDirty = true) {
+        this.#makeDirty(markLocalDirty)
+    }
 
-        if (this.actual.children) {
-            for (const child of this.actual.children) {
-                child.#makeDirty(false);
-            }
-        }
+    #makeDirty(markLocalDirty = true) {
+        this.actual.makeDirty(markLocalDirty)
     }
 
     #resolveLocalMatrix() {
