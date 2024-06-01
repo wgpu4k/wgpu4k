@@ -71,7 +71,7 @@ export class Transform {
     }
 
     get children() {
-        return this.actual.children?.values() || [];
+        return this.actual.children || [];
     }
 
     get parent() {
