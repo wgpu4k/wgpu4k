@@ -1,5 +1,4 @@
 import {
-    DEFAULT_SCALE,
     mat4FromRotationTranslationScale,
     mat4Multiply,
     MyVector3,
@@ -7,50 +6,18 @@ import {
     vec3TransformMat4
 } from "../../spookyball.js";
 
-const DEFAULT_ORIENTATION = new Float32Array(0, 0, 0, 0);
 
 export class Transform {
     actual
 
-    #localMatrixDirty = true;
-    #worldMatrixDirty = true;
     #parent = null;
     #children;
 
     constructor(options = {}) {
-        let buffer;
-        let offset = 0;
-        // Allocate storage for all the transform elements
-        if (options.externalStorage) {
-            buffer = options.externalStorage.buffer;
-            offset = options.externalStorage.offset;
-        } else {
-            buffer = new Float32Array(42).buffer;
-        }
 
-        this.actual = new TransformKt(
-            new Float32Array(buffer, offset, 3),
-            new Float32Array(buffer, offset + 3 * Float32Array.BYTES_PER_ELEMENT, 4),
-            new Float32Array(buffer, offset + 7 * Float32Array.BYTES_PER_ELEMENT, 3),
-            new Float32Array(buffer, offset + 10 * Float32Array.BYTES_PER_ELEMENT, 16),
-            new Float32Array(buffer, offset + 26 * Float32Array.BYTES_PER_ELEMENT, 16),
-        )
+        this.actual = new TransformKt(options)
 
-        if (options.transform) {
-            const storage = new Float32Array(this.actual.position.buffer, this.actual.position.byteOffset, 42);
-            storage.set(new Float32Array(options.transform.actual.position.buffer, options.transform.actual.position.byteOffset, 42));
-            this.#localMatrixDirty = options.transform.#localMatrixDirty;
-        } else {
-            if (options.position) {
-                this.actual.position.set(options.position);
-            }
-            this.actual.orientation.set(options.orientation ? options.orientation : DEFAULT_ORIENTATION);
-            this.actual.scale.set(options.scale ? options.scale : DEFAULT_SCALE.get().toJS32Array());
-        }
 
-        if (options.parent) {
-            options.parent.addChild(this);
-        }
     }
 
     get position() {
@@ -129,12 +96,12 @@ export class Transform {
 
     #makeDirty(markLocalDirty = true) {
         if (markLocalDirty) {
-            this.#localMatrixDirty = true;
+            this.actual.localMatrixDirty = true;
         }
-        if (this.#worldMatrixDirty) {
+        if (this.actual.worldMatrixDirty) {
             return;
         }
-        this.#worldMatrixDirty = true;
+        this.actual.worldMatrixDirty = true;
 
         if (this.#children) {
             for (const child of this.#children) {
@@ -144,25 +111,25 @@ export class Transform {
     }
 
     #resolveLocalMatrix() {
-        const wasDirty = this.#localMatrixDirty;
-        if (this.#localMatrixDirty) {
+        const wasDirty = this.actual.localMatrixDirty;
+        if (wasDirty) {
             mat4FromRotationTranslationScale(this.actual.localMatrix,
                 this.actual.orientation,
                 this.actual.position,
                 this.actual.scale);
-            this.#localMatrixDirty = false;
+            this.actual.localMatrixDirty = false;
         }
         return this.actual.localMatrix;
     }
 
     #resolveWorldMatrix() {
-        if (this.#worldMatrixDirty) {
+        if (this.actual.worldMatrixDirty) {
             if (!this.parent) {
                 this.actual.worldMatrix.set(this.#resolveLocalMatrix());
             } else {
                 mat4Multiply(this.actual.worldMatrix, this.parent.worldMatrix, this.#resolveLocalMatrix());
             }
-            this.#worldMatrixDirty = false;
+            this.actual.worldMatrixDirty = false;
         }
 
         return this.actual.worldMatrix;
