@@ -110,8 +110,6 @@ export class BallSystem extends System {
 
     const gameState = this.singleton.get(GameState);
 
-    //const ball = this.world.create(this.ballMesh, new Transform());
-
     const ball = this.ballScene.createInstance(this.world);
     ball.add(this.ballScene.animations['Take 001']);
 

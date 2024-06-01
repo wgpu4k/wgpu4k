@@ -1,8 +1,7 @@
 import {mat4, quat, vec3} from 'gl-matrix';
+import {DEFAULT_SCALE} from "../../spookyball.js";
 
-const DEFAULT_POSITION = vec3.create();
 const DEFAULT_ORIENTATION = quat.create();
-const DEFAULT_SCALE = vec3.fromValues(1, 1, 1);
 
 export class Transform {
   #storage;
@@ -45,7 +44,7 @@ export class Transform {
         this.#position.set(options.position);
       }
       this.#orientation.set(options.orientation ? options.orientation : DEFAULT_ORIENTATION);
-      this.#scale.set(options.scale ? options.scale : DEFAULT_SCALE);
+      this.#scale.set(options.scale ? options.scale : DEFAULT_SCALE.get().toJS32Array());
     }
 
     if (options.parent) {
@@ -202,33 +201,5 @@ export class TransformPool {
     // Copy the entire buffer from this pool to the new one.
     new Float32Array(out.#buffer).set(new Float32Array(this.#buffer));
     return out;
-  }
-}
-
-// Creates a lightweight transform that always reports the same world matrix
-// Mostly used for debug utilities that need to apply a static transform to
-// a mesh.
-export class StaticTransform {
-  worldMatrix = new Float32Array(16);
-
-  constructor(transform = null, matrix = null) {
-    if (transform instanceof Float32Array) {
-      matrix = transform;
-      transform = null;
-    }
-
-    if (transform) {
-      mat4.fromRotationTranslationScale(this.worldMatrix,
-        transform.orientation || DEFAULT_ORIENTATION,
-        transform.position || DEFAULT_POSITION,
-        transform.scale || DEFAULT_SCALE);
-      if (matrix) {
-        mat4.mul(this.worldMatrix, matrix, this.worldMatrix);
-      }
-    } else if (matrix) {
-      mat4.copy(this.worldMatrix, matrix);
-    } else {
-      mat4.identity(this.worldMatrix);
-    }
   }
 }

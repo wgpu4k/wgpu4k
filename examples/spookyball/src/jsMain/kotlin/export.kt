@@ -1,4 +1,5 @@
 import korlibs.math.geom.Vector3D
+import org.khronos.webgl.Float32Array
 import kotlin.math.sqrt
 
 @OptIn(ExperimentalJsExport::class)
@@ -34,5 +35,9 @@ class MyVector3(x: Double, y: Double, z: Double) {
         val y = this.x * b
         val z = this.z * b
         return MyVector3(x, y, z)
+    }
+
+    fun toJS32Array(): Float32Array {
+        return Float32Array(arrayOf(x.toFloat(), y.toFloat(), z.toFloat()))
     }
 }

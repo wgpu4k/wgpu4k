@@ -32,7 +32,9 @@ export {
   ImpactDamage,
   System,
   Collisions,
-  Damaged
+  Damaged,
+  DEFAULT_POSITION,
+  DEFAULT_SCALE
 } from '../wgpu4k-root-examples-spookyball.mjs'
 
 const canvas = document.querySelector('canvas');
