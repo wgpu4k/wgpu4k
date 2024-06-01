@@ -1,11 +1,11 @@
-import {mat4Multiply, TransformKt} from "../../spookyball.js";
+import {TransformKt} from "../../spookyball.js";
 
 
 export class Transform {
     actual
 
     constructor(options = {}) {
-        this.actual = new TransformKt(options)
+        this.actual = new TransformKt(options, this)
     }
 
     get position() {
@@ -37,41 +37,15 @@ export class Transform {
     }
 
     get worldMatrix() {
-        if (this.actual.worldMatrixDirty) {
-            if (!this.parent) {
-                this.actual.worldMatrix.set(this.actual.resolveLocalMatrix());
-            } else {
-                mat4Multiply(this.actual.worldMatrix, this.parent.worldMatrix, this.actual.resolveLocalMatrix());
-            }
-            this.actual.worldMatrixDirty = false;
-        }
-
         return this.actual.worldMatrix;
     }
 
     addChild(transform) {
-        if (transform.parent && transform.parent != this) {
-            transform.parent.removeChild(transform);
-        }
-
-        if (!this.actual.children) {
-            this.actual.children = new Set();
-        }
-        this.actual.children.add(transform);
-        transform.actual.parent = this;
-        transform.actual.makeDirty(false);
-    }
-
-    removeChild(transform) {
-        const removed = this.actual.children?.delete(transform);
-        if (removed) {
-            transform.actual.parent = null;
-            transform.actual.makeDirty(false);
-        }
+        this.actual.addChild(transform.actual);
     }
 
     get children() {
-        return this.actual.children || [];
+        return this.actual.children;
     }
 
     get parent() {

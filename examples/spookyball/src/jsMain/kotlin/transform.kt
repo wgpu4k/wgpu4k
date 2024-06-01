@@ -13,10 +13,13 @@ val DEFAULT_SCALE = MyVector3(1.0, 1.0, 1.0)
 
 @OptIn(ExperimentalJsExport::class)
 @JsExport
-class TransformKt(options: dynamic) {
+class TransformKt(
+    options: dynamic,
+    val jsValue: dynamic
+) {
 
     val dummyArray = Float32Array(arrayOf())
-
+    var parent: TransformKt? = null
     var position: Float32Array = dummyArray
         get() {
             makeDirty()
@@ -45,12 +48,24 @@ class TransformKt(options: dynamic) {
         }
     var localMatrix: Float32Array
     var worldMatrix: Float32Array
+        get() {
+            if (worldMatrixDirty) {
+                val parrent = parent
+                if (parrent == null) {
+                    field.set(resolveLocalMatrix())
+                } else {
+                    mat4Multiply(field, parrent.worldMatrix, resolveLocalMatrix())
+                }
+                worldMatrixDirty = false
+            }
+
+            return field
+        }
     var localMatrixDirty = true
     var worldMatrixDirty = true
-    var parrent: dynamic = null
-    var children: dynamic = undefined
+    var children = mutableSetOf<TransformKt>()
 
-    var orientation:Float32Array = dummyArray
+    var orientation: Float32Array = dummyArray
         get() {
             makeDirty()
             return field
@@ -84,18 +99,24 @@ class TransformKt(options: dynamic) {
 
         if (options.transform) {
             val storage = Float32Array(position.buffer, position.byteOffset, 42)
-            storage.set(Float32Array(options.transform.actual.position.buffer, options.transform.actual.position.byteOffset, 42))
-            localMatrixDirty = options.transform.localMatrixDirty;
+            storage.set(
+                Float32Array(
+                    options.transform.actual.position.buffer,
+                    options.transform.actual.position.byteOffset,
+                    42
+                )
+            )
+            localMatrixDirty = options.transform.localMatrixDirty
         } else {
             if (options.position) {
                 position.set(options.position as Array<Float>)
             }
-            orientation.set(if(options.orientation) options.orientation as Float32Array else DEFAULT_ORIENTATION)
-            scale.set(if(options.scale) options.scale as Float32Array else DEFAULT_SCALE.toJS32Array())
+            orientation.set(if (options.orientation) options.orientation as Float32Array else DEFAULT_ORIENTATION)
+            scale.set(if (options.scale) options.scale as Float32Array else DEFAULT_SCALE.toJS32Array())
         }
 
         if (options.parent) {
-            options.parent.addChild(this);
+            options.parent.addChild(this)
         }
     }
 
@@ -107,7 +128,7 @@ class TransformKt(options: dynamic) {
         } else {
             MyVector3(0.0, 0.0, 0.0).into(out)
         }
-        vec3TransformMat4(out, out, this.worldMatrix)
+        vec3TransformMat4(out, out, worldMatrix)
     }
 
     fun makeDirty(markLocalDirty: Boolean = true) {
@@ -119,21 +140,28 @@ class TransformKt(options: dynamic) {
         }
         worldMatrixDirty = true
 
-        if (children) {
-            children.forEach { child ->
-                child.actual.makeDirty(false)
-            }
+        children.forEach { child ->
+            child.makeDirty(false)
         }
+
     }
 
+    fun addChild(transform: TransformKt) {
+
+        children.add(transform)
+        transform.parent = this
+        transform.makeDirty(false)
+    }
 
     fun resolveLocalMatrix(): Float32Array {
-        val wasDirty = localMatrixDirty;
+        val wasDirty = localMatrixDirty
         if (wasDirty) {
-            mat4FromRotationTranslationScale(localMatrix,
+            mat4FromRotationTranslationScale(
+                localMatrix,
                 orientation,
                 position,
-                scale)
+                scale
+            )
             localMatrixDirty = false
         }
         return localMatrix
