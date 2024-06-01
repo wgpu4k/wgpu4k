@@ -35,7 +35,8 @@ export {
   Damaged,
   DEFAULT_POSITION,
   DEFAULT_SCALE,
-  vec3TransformMat4
+  vec3TransformMat4,
+  mat4Copy
 } from '../wgpu4k-root-examples-spookyball.mjs'
 
 const canvas = document.querySelector('canvas');
