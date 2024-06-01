@@ -9,7 +9,6 @@ import {
 const DEFAULT_ORIENTATION = new Float32Array(0, 0, 0, 0);
 
 export class Transform {
-  #storage;
   #position;
   #orientation;
   #scale;
