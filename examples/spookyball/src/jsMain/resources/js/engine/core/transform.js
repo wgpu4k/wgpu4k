@@ -5,7 +5,7 @@ export class Transform {
     actual
 
     constructor(options = {}) {
-        this.actual = new TransformKt(options, this)
+        this.actual = new TransformKt(options)
     }
 
     get position() {

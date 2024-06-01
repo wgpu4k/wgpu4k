@@ -13,9 +13,16 @@ val DEFAULT_SCALE = MyVector3(1.0, 1.0, 1.0)
 
 @OptIn(ExperimentalJsExport::class)
 @JsExport
+interface TransformOptions {
+    val externalStorage: dynamic
+    val position: Array<Float>?
+    val orientation: Float32Array?
+}
+
+@OptIn(ExperimentalJsExport::class)
+@JsExport
 class TransformKt(
-    options: dynamic,
-    val jsValue: dynamic
+    options: TransformOptions?
 ) {
 
     val dummyArray = Float32Array(arrayOf())
@@ -84,7 +91,7 @@ class TransformKt(
         var buffer: ArrayBuffer
         var offset = 0
 
-        if (options.externalStorage != null) {
+        if (options?.externalStorage != null) {
             buffer = options.externalStorage.buffer
             offset = options.externalStorage.offset
         } else {
@@ -97,27 +104,15 @@ class TransformKt(
         localMatrix = Float32Array(buffer, offset + 10 * Float32Array.BYTES_PER_ELEMENT, 16)
         worldMatrix = Float32Array(buffer, offset + 26 * Float32Array.BYTES_PER_ELEMENT, 16)
 
-        if (options.transform) {
-            val storage = Float32Array(position.buffer, position.byteOffset, 42)
-            storage.set(
-                Float32Array(
-                    options.transform.actual.position.buffer,
-                    options.transform.actual.position.byteOffset,
-                    42
-                )
-            )
-            localMatrixDirty = options.transform.localMatrixDirty
-        } else {
-            if (options.position) {
+        if (options != undefined) {
+            if (options.position != undefined) {
                 position.set(options.position as Array<Float>)
             }
-            orientation.set(if (options.orientation) options.orientation as Float32Array else DEFAULT_ORIENTATION)
-            scale.set(if (options.scale) options.scale as Float32Array else DEFAULT_SCALE.toJS32Array())
+            orientation.set(if (options.orientation != undefined) options.orientation as Float32Array else DEFAULT_ORIENTATION)
+            scale.set(arrayOf(1f, 1f, 1f))
+
         }
 
-        if (options.parent) {
-            options.parent.addChild(this)
-        }
     }
 
     fun getWorldPosition(out: Float32Array, position: Float32Array?) {
