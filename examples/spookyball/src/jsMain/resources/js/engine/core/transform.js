@@ -1,5 +1,5 @@
 import {mat4} from 'gl-matrix';
-import {DEFAULT_SCALE, mat4Copy, MyVector3, vec3TransformMat4} from "../../spookyball.js";
+import {DEFAULT_SCALE, MyVector3, vec3TransformMat4} from "../../spookyball.js";
 
 const DEFAULT_ORIENTATION = new Float32Array(0, 0, 0, 0);
 
@@ -37,8 +37,6 @@ export class Transform {
       const storage = new Float32Array(this.#position.buffer, this.#position.byteOffset, 42);
       storage.set(new Float32Array(options.transform.#position.buffer, options.transform.#position.byteOffset, 42));
       this.#localMatrixDirty = options.transform.#localMatrixDirty;
-    } else if (options.matrix) {
-      this.setLocalMatrix(options.matrix);
     } else {
       if (options.position) {
         this.#position.set(options.position);
@@ -88,14 +86,6 @@ export class Transform {
   set scale(value) {
     this.#makeDirty();
     this.#scale.set(value);
-  }
-
-  setLocalMatrix(value) {
-    mat4Copy(this.#localMatrix, value);
-    mat4.getRotation(this.#orientation, this.#localMatrix);
-    mat4.getTranslation(this.#position, this.#localMatrix);
-    mat4.getScaling(this.#scale, this.#localMatrix);
-    this.#makeDirty(false);
   }
 
   get worldMatrix() {

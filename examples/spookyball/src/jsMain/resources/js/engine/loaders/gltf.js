@@ -7,11 +7,11 @@ import {PBRMaterial, UnlitMaterial} from '../core/materials.js';
 import {vec3} from 'gl-matrix';
 import {Skin} from '../core/skin.js';
 import {
-    Animation,
-    AnimationChannel,
-    LinearAnimationSampler,
-    SphericalLinearAnimationSampler,
-    StepAnimationSampler
+  Animation,
+  AnimationChannel,
+  LinearAnimationSampler,
+  SphericalLinearAnimationSampler,
+  StepAnimationSampler
 } from '../core/animation.js';
 
 // Used for comparing values from glTF files, which uses WebGL enums natively.
@@ -289,7 +289,7 @@ class GltfClient {
     node.index = index;
 
     if (node.matrix) {
-      node.transform.setLocalMatrix(node.matrix);
+
     } else {
       if (node.translation) { node.transform.position = node.translation; }
       if (node.rotation) { node.transform.orientation = node.rotation; }
