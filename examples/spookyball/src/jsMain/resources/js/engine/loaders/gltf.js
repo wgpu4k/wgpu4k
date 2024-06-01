@@ -425,11 +425,4 @@ export class GltfLoader {
     });
   }
 
-  instanceFromUrl(world, url) {
-    const entity = world.create(new Transform());
-    const scene = this.fromUrl(url).then((scene) => {
-      scene.addInstanceToEntity(world, entity);
-    });
-    return entity;
-  }
 }
