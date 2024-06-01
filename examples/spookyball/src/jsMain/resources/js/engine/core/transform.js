@@ -1,10 +1,4 @@
-import {
-    mat4FromRotationTranslationScale,
-    mat4Multiply,
-    MyVector3,
-    TransformKt,
-    vec3TransformMat4
-} from "../../spookyball.js";
+import {mat4FromRotationTranslationScale, mat4Multiply, TransformKt} from "../../spookyball.js";
 
 
 export class Transform {
@@ -25,14 +19,7 @@ export class Transform {
     }
 
     getWorldPosition(out, position) {
-        if (position) {
-            if (position != out) {
-                out.set(position);
-            }
-        } else {
-            new MyVector3(0, 0, 0).into(out);
-        }
-        vec3TransformMat4(out, out, this.worldMatrix);
+        this.actual.getWorldPosition(out, position);
     }
 
     get orientation() {

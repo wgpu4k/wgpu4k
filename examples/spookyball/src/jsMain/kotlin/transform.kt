@@ -60,4 +60,14 @@ class TransformKt(options: dynamic) {
         }
     }
 
+    fun getWorldPosition(out: Float32Array, position: Float32Array?) {
+        if (position != null) {
+            if (position != out) {
+                out.set(position)
+            }
+        } else {
+            MyVector3(0.0, 0.0, 0.0).into(out)
+        }
+        vec3TransformMat4(out, out, this.worldMatrix)
+    }
 }
