@@ -11,9 +11,6 @@ const DEFAULT_ORIENTATION = new Float32Array(0, 0, 0, 0);
 
 export class Transform {
     actual
-    #scale;
-    #localMatrix;
-    #worldMatrix;
 
     #localMatrixDirty = true;
     #worldMatrixDirty = true;
@@ -39,10 +36,6 @@ export class Transform {
             new Float32Array(buffer, offset + 26 * Float32Array.BYTES_PER_ELEMENT, 16),
         )
 
-        this.#scale = new Float32Array(buffer, offset + 7 * Float32Array.BYTES_PER_ELEMENT, 3);
-        this.#localMatrix = new Float32Array(buffer, offset + 10 * Float32Array.BYTES_PER_ELEMENT, 16);
-        this.#worldMatrix = new Float32Array(buffer, offset + 26 * Float32Array.BYTES_PER_ELEMENT, 16);
-
         if (options.transform) {
             const storage = new Float32Array(this.actual.position.buffer, this.actual.position.byteOffset, 42);
             storage.set(new Float32Array(options.transform.actual.position.buffer, options.transform.actual.position.byteOffset, 42));
@@ -52,7 +45,7 @@ export class Transform {
                 this.actual.position.set(options.position);
             }
             this.actual.orientation.set(options.orientation ? options.orientation : DEFAULT_ORIENTATION);
-            this.#scale.set(options.scale ? options.scale : DEFAULT_SCALE.get().toJS32Array());
+            this.actual.scale.set(options.scale ? options.scale : DEFAULT_SCALE.get().toJS32Array());
         }
 
         if (options.parent) {
@@ -93,12 +86,12 @@ export class Transform {
 
     get scale() {
         this.#makeDirty();
-        return this.#scale;
+        return this.actual.scale;
     }
 
     set scale(value) {
         this.#makeDirty();
-        this.#scale.set(value);
+        this.actual.scale.set(value);
     }
 
     get worldMatrix() {
@@ -153,26 +146,26 @@ export class Transform {
     #resolveLocalMatrix() {
         const wasDirty = this.#localMatrixDirty;
         if (this.#localMatrixDirty) {
-            mat4FromRotationTranslationScale(this.#localMatrix,
+            mat4FromRotationTranslationScale(this.actual.localMatrix,
                 this.actual.orientation,
                 this.actual.position,
-                this.#scale);
+                this.actual.scale);
             this.#localMatrixDirty = false;
         }
-        return this.#localMatrix;
+        return this.actual.localMatrix;
     }
 
     #resolveWorldMatrix() {
         if (this.#worldMatrixDirty) {
             if (!this.parent) {
-                this.#worldMatrix.set(this.#resolveLocalMatrix());
+                this.actual.worldMatrix.set(this.#resolveLocalMatrix());
             } else {
-                mat4Multiply(this.#worldMatrix, this.parent.worldMatrix, this.#resolveLocalMatrix());
+                mat4Multiply(this.actual.worldMatrix, this.parent.worldMatrix, this.#resolveLocalMatrix());
             }
             this.#worldMatrixDirty = false;
         }
 
-        return this.#worldMatrix;
+        return this.actual.worldMatrix;
     }
 }
 
