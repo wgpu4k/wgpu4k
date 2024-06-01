@@ -42,6 +42,11 @@ class Entity {
     return componentSet !== undefined && componentSet.get(this.id) !== undefined;
   }
 
+  getKotlin(componentType) {
+    const componentSet = this.#worldData.components.get(componentType);
+    return componentSet !== undefined ? componentSet.get(this.id) : undefined;
+  }
+
   get(componentType) {
     const componentSet = this.#worldData.components.get(componentType);
     return componentSet !== undefined ? componentSet.get(this.id) : undefined;
@@ -77,6 +82,10 @@ class WorldData {
   systems = new Map();
   orderedSystems = new Array();
 
+  getEntities() {
+    return this.entities
+  }
+
   getQuery(componentTypes) {
     let componentNames = [];
     for(const type of componentTypes) {
@@ -99,6 +108,10 @@ export class World {
   timeScale = 1.0;
   fixedStepEpsilon = 0.001;
   paused = false;
+
+  returnWorldData() {
+    return this.#worldData
+  }
 
   constructor() {
     // Singleton entity is not added to the global list of entities.
@@ -212,8 +225,6 @@ export class System {
   }
 
   query(...componentTypes) {
-    console.log(this)
-    console.log(componentTypes)
     return this.#worldData.getQuery(componentTypes);
   }
 

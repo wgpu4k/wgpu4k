@@ -3,7 +3,7 @@ import {Transform} from './engine/core/transform.js';
 import {Stage} from './engine/core/stage.js';
 
 import {quat, vec3} from 'gl-matrix';
-import {Collisions} from './impact-damage.js';
+import {Collisions} from "./spookyball.js";
 
 const IDENTITY_QUAT = quat.create();
 
@@ -96,8 +96,8 @@ export class Physics2DSystem extends System {
               b.add(collisionsB);
             }
 
-            collisionsA.entities.add(b);
-            collisionsB.entities.add(a);
+            collisionsA.insert(b);
+            collisionsB.insert(a);
           }
         }
       }

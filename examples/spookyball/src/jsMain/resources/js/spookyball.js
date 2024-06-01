@@ -12,8 +12,7 @@ import {Physics2DSystem} from './physics-2d.js';
 import {DeadSystem, LifetimeHealthSystem} from './lifetime.js';
 
 import {quat} from 'gl-matrix';
-import {GameState} from '../wgpu4k-root-examples-spookyball.mjs'
-import {ImpactDamageSystem} from "./impact-damage.js";
+import {GameState, iterate} from '../wgpu4k-root-examples-spookyball.mjs'
 
 export {
   BloomBlendFragmentSource,
@@ -31,14 +30,15 @@ export {
   InstanceColor,
   InstanceColorMode,
   ImpactDamage,
-  System
+  System,
+  Collisions,
+  Damaged
 } from '../wgpu4k-root-examples-spookyball.mjs'
 
 const canvas = document.querySelector('canvas');
 
 const world = new WebGPUWorld(canvas)
   .registerSystem(Physics2DSystem)
-  .registerSystem(ImpactDamageSystem)
   .registerSystem(LifetimeHealthSystem)
   .registerSystem(DeadSystem)
   ;
@@ -55,8 +55,7 @@ try {
   document.querySelector('.container').classList.add('error');
   const errorElement = document.querySelector('#score-display');
 
-  errorElement.innerHTML = `Your browser doesn't appear to support WebGPU. (Scary!)<br>
-This game requires WebGPU support.`;
+  errorElement.innerHTML = `Your browser doesn't appear to support WebGPU. (Scary!)<br>This game requires WebGPU support.`;
 
   throw error;
 }
@@ -96,7 +95,7 @@ world.create(
 
 function onFrame(t) {
   requestAnimationFrame(onFrame);
-
+  iterate(world.returnWorldData())
   world.execute();
 }
 requestAnimationFrame(onFrame);
