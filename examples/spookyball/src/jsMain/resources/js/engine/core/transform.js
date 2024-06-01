@@ -1,5 +1,10 @@
-import {mat4} from 'gl-matrix';
-import {DEFAULT_SCALE, MyVector3, vec3TransformMat4} from "../../spookyball.js";
+import {
+  DEFAULT_SCALE,
+  mat4FromRotationTranslationScale,
+  mat4Multiply,
+  MyVector3,
+  vec3TransformMat4
+} from "../../spookyball.js";
 
 const DEFAULT_ORIENTATION = new Float32Array(0, 0, 0, 0);
 
@@ -134,7 +139,7 @@ export class Transform {
   #resolveLocalMatrix() {
     const wasDirty = this.#localMatrixDirty;
     if (this.#localMatrixDirty) {
-      mat4.fromRotationTranslationScale(this.#localMatrix,
+      mat4FromRotationTranslationScale(this.#localMatrix,
         this.#orientation,
         this.#position,
         this.#scale);
@@ -148,7 +153,7 @@ export class Transform {
       if (!this.parent) {
         this.#worldMatrix.set(this.#resolveLocalMatrix());
       } else {
-        mat4.mul(this.#worldMatrix, this.parent.worldMatrix, this.#resolveLocalMatrix());
+        mat4Multiply(this.#worldMatrix, this.parent.worldMatrix, this.#resolveLocalMatrix());
       }
       this.#worldMatrixDirty = false;
     }
