@@ -9,13 +9,11 @@ export class Transform {
     }
 
     get position() {
-        this.#makeDirty();
         return this.actual.position;
     }
 
     set position(value) {
-        this.#makeDirty();
-        this.actual.position.set(value);
+        this.actual.position = value;
     }
 
     getWorldPosition(out, position) {
@@ -31,13 +29,11 @@ export class Transform {
     }
 
     get scale() {
-        this.#makeDirty();
         return this.actual.scale;
     }
 
     set scale(value) {
-        this.#makeDirty();
-        this.actual.scale.set(value);
+        this.actual.scale = value;
     }
 
     get worldMatrix() {
@@ -63,14 +59,14 @@ export class Transform {
         }
         this.actual.children.add(transform);
         transform.actual.parent = this;
-        transform.#makeDirty(false);
+        transform.actual.makeDirty(false);
     }
 
     removeChild(transform) {
         const removed = this.actual.children?.delete(transform);
         if (removed) {
             transform.actual.parent = null;
-            transform.#makeDirty(false);
+            transform.actual.makeDirty(false);
         }
     }
 
@@ -80,14 +76,6 @@ export class Transform {
 
     get parent() {
         return this.actual.parent;
-    }
-
-    makeDirtyJs(markLocalDirty = true) {
-        this.#makeDirty(markLocalDirty)
-    }
-
-    #makeDirty(markLocalDirty = true) {
-        this.actual.makeDirty(markLocalDirty)
     }
 
 }

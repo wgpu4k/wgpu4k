@@ -17,8 +17,32 @@ class TransformKt(options: dynamic) {
 
     val dummyArray = Float32Array(arrayOf())
 
-    var position: Float32Array
-    var scale: Float32Array
+    var position: Float32Array = dummyArray
+        get() {
+            makeDirty()
+            return field
+        }
+        set(value) {
+            if (field == dummyArray) {
+                field = value
+            } else {
+                field.set(value)
+            }
+            makeDirty()
+        }
+    var scale: Float32Array = dummyArray
+        get() {
+            makeDirty()
+            return field
+        }
+        set(value) {
+            if (field == dummyArray) {
+                field = value
+            } else {
+                field.set(value)
+            }
+            makeDirty()
+        }
     var localMatrix: Float32Array
     var worldMatrix: Float32Array
     var localMatrixDirty = true
@@ -97,7 +121,7 @@ class TransformKt(options: dynamic) {
 
         if (children) {
             children.forEach { child ->
-                child.makeDirtyJs(false)
+                child.actual.makeDirty(false)
             }
         }
     }
