@@ -15,9 +15,9 @@ val DEFAULT_SCALE = MyVector3(1.0, 1.0, 1.0)
 @JsExport
 class TransformKt(options: dynamic) {
 
+    val dummyArray = Float32Array(arrayOf())
 
     var position: Float32Array
-    var `$orientation`: Float32Array
     var scale: Float32Array
     var localMatrix: Float32Array
     var worldMatrix: Float32Array
@@ -26,13 +26,17 @@ class TransformKt(options: dynamic) {
     var parrent: dynamic = null
     var children: dynamic = undefined
 
-    var orientation:Float32Array
+    var orientation:Float32Array = dummyArray
         get() {
             makeDirty()
-            return `$orientation`
+            return field
         }
         set(value) {
-            `$orientation`.set(value)
+            if (field == dummyArray) {
+                field = value
+            } else {
+                field.set(value)
+            }
             makeDirty()
         }
 
@@ -49,7 +53,7 @@ class TransformKt(options: dynamic) {
         }
 
         position = Float32Array(buffer, offset, 3)
-        `$orientation` = Float32Array(buffer, offset + 3 * Float32Array.BYTES_PER_ELEMENT, 4)
+        orientation = Float32Array(buffer, offset + 3 * Float32Array.BYTES_PER_ELEMENT, 4)
         scale = Float32Array(buffer, offset + 7 * Float32Array.BYTES_PER_ELEMENT, 3)
         localMatrix = Float32Array(buffer, offset + 10 * Float32Array.BYTES_PER_ELEMENT, 16)
         worldMatrix = Float32Array(buffer, offset + 26 * Float32Array.BYTES_PER_ELEMENT, 16)
@@ -62,7 +66,7 @@ class TransformKt(options: dynamic) {
             if (options.position) {
                 position.set(options.position as Array<Float>)
             }
-            `$orientation`.set(if(options.orientation) options.orientation as Float32Array else DEFAULT_ORIENTATION)
+            orientation.set(if(options.orientation) options.orientation as Float32Array else DEFAULT_ORIENTATION)
             scale.set(if(options.scale) options.scale as Float32Array else DEFAULT_SCALE.toJS32Array())
         }
 
@@ -103,7 +107,7 @@ class TransformKt(options: dynamic) {
         val wasDirty = localMatrixDirty;
         if (wasDirty) {
             mat4FromRotationTranslationScale(localMatrix,
-                `$orientation`,
+                orientation,
                 position,
                 scale)
             localMatrixDirty = false
