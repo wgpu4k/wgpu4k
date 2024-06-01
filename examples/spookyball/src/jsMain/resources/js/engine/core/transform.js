@@ -10,14 +10,8 @@ import {
 export class Transform {
     actual
 
-    #parent = null;
-    #children;
-
     constructor(options = {}) {
-
         this.actual = new TransformKt(options)
-
-
     }
 
     get position() {
@@ -70,28 +64,28 @@ export class Transform {
             transform.parent.removeChild(transform);
         }
 
-        if (!this.#children) {
-            this.#children = new Set();
+        if (!this.actual.children) {
+            this.actual.children = new Set();
         }
-        this.#children.add(transform);
-        transform.#parent = this;
+        this.actual.children.add(transform);
+        transform.actual.parent = this;
         transform.#makeDirty(false);
     }
 
     removeChild(transform) {
-        const removed = this.#children?.delete(transform);
+        const removed = this.actual.children?.delete(transform);
         if (removed) {
-            transform.#parent = null;
+            transform.actual.parent = null;
             transform.#makeDirty(false);
         }
     }
 
     get children() {
-        return this.#children?.values() || [];
+        return this.actual.children?.values() || [];
     }
 
     get parent() {
-        return this.#parent;
+        return this.actual.parent;
     }
 
     #makeDirty(markLocalDirty = true) {
@@ -103,8 +97,8 @@ export class Transform {
         }
         this.actual.worldMatrixDirty = true;
 
-        if (this.#children) {
-            for (const child of this.#children) {
+        if (this.actual.children) {
+            for (const child of this.actual.children) {
                 child.#makeDirty(false);
             }
         }

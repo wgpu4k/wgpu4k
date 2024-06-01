@@ -22,6 +22,8 @@ class TransformKt(options: dynamic) {
     var worldMatrix: Float32Array
     var localMatrixDirty = true
     var worldMatrixDirty = true
+    var parrent: dynamic = null
+    var children: dynamic = undefined
 
     init {
 
