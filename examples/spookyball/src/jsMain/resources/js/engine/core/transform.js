@@ -23,13 +23,11 @@ export class Transform {
     }
 
     get orientation() {
-        this.#makeDirty();
         return this.actual.orientation;
     }
 
     set orientation(value) {
-        this.#makeDirty();
-        this.actual.orientation.set(value);
+        this.actual.orientation = value;
     }
 
     get scale() {
