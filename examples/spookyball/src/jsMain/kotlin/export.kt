@@ -1,5 +1,6 @@
 import korlibs.math.geom.Vector3D
 import org.khronos.webgl.Float32Array
+import org.khronos.webgl.get
 import kotlin.math.sqrt
 
 @OptIn(ExperimentalJsExport::class)
@@ -20,7 +21,6 @@ class MyVector3(x: Double, y: Double, z: Double) {
         var len = x * x + y * y + z * z
 
         if (len > 0) {
-            //TODO: evaluate use of glm_invsqrt here?
             len = 1 / sqrt(len)
         }
 
@@ -40,4 +40,25 @@ class MyVector3(x: Double, y: Double, z: Double) {
     fun toJS32Array(): Float32Array {
         return Float32Array(arrayOf(x.toFloat(), y.toFloat(), z.toFloat()))
     }
+
+    fun into(input: Float32Array) {
+        input.set(toJS32Array())
+    }
+}
+
+@OptIn(ExperimentalJsExport::class)
+@JsExport
+fun vec3TransformMat4(out: Float32Array, a: Float32Array, m: Float32Array) {
+    val x = a.get(0)
+    val y = a.get(1)
+    val z = a.get(2)
+    var w = m.get(3) * x + m.get(7) * y + m.get(11) * z + m.get(15)
+    w = w.takeIf { it != 0f } ?: 1.0f
+    out.set(
+        arrayOf(
+            (m.get(0) * x + m.get(4) * y + m.get(8) * z + m.get(12)) / w,
+            (m.get(1) * x + m.get(5) * y + m.get(9) * z + m.get(13)) / w,
+            (m.get(2) * x + m.get(6) * y + m.get(10) * z + m.get(14)) / w
+        )
+    )
 }

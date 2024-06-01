@@ -1,5 +1,5 @@
-import {mat4, quat, vec3} from 'gl-matrix';
-import {DEFAULT_SCALE} from "../../spookyball.js";
+import {mat4, quat} from 'gl-matrix';
+import {DEFAULT_SCALE, MyVector3, vec3TransformMat4} from "../../spookyball.js";
 
 const DEFAULT_ORIENTATION = quat.create();
 
@@ -64,12 +64,12 @@ export class Transform {
   getWorldPosition(out, position) {
     if (position) {
       if (position != out) {
-        vec3.copy(out, position);
+        out.set(position);
       }
     } else {
-      vec3.set(out, 0, 0, 0);
+      new MyVector3(0, 0, 0).into(out);
     }
-    vec3.transformMat4(out, out, this.worldMatrix);
+    vec3TransformMat4(out, out, this.worldMatrix);
   }
 
   get orientation() {
@@ -88,10 +88,6 @@ export class Transform {
   set scale(value) {
     this.#makeDirty();
     this.#scale.set(value);
-  }
-
-  getLocalMatrix(out) {
-    return mat4.copy(out, this.#resolveLocalMatrix());
   }
 
   setLocalMatrix(value) {
