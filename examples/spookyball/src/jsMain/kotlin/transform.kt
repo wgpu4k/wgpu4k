@@ -86,4 +86,17 @@ class TransformKt(options: dynamic) {
             }
         }
     }
+
+
+    fun resolveLocalMatrix(): Float32Array {
+        val wasDirty = localMatrixDirty;
+        if (wasDirty) {
+            mat4FromRotationTranslationScale(localMatrix,
+                orientation,
+                position,
+                scale)
+            localMatrixDirty = false
+        }
+        return localMatrix
+    }
 }

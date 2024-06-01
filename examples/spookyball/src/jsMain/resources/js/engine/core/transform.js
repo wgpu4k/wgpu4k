@@ -1,4 +1,4 @@
-import {mat4FromRotationTranslationScale, mat4Multiply, TransformKt} from "../../spookyball.js";
+import {mat4Multiply, TransformKt} from "../../spookyball.js";
 
 
 export class Transform {
@@ -43,7 +43,16 @@ export class Transform {
     }
 
     get worldMatrix() {
-        return this.#resolveWorldMatrix();
+        if (this.actual.worldMatrixDirty) {
+            if (!this.parent) {
+                this.actual.worldMatrix.set(this.actual.resolveLocalMatrix());
+            } else {
+                mat4Multiply(this.actual.worldMatrix, this.parent.worldMatrix, this.actual.resolveLocalMatrix());
+            }
+            this.actual.worldMatrixDirty = false;
+        }
+
+        return this.actual.worldMatrix;
     }
 
     addChild(transform) {
@@ -83,30 +92,6 @@ export class Transform {
         this.actual.makeDirty(markLocalDirty)
     }
 
-    #resolveLocalMatrix() {
-        const wasDirty = this.actual.localMatrixDirty;
-        if (wasDirty) {
-            mat4FromRotationTranslationScale(this.actual.localMatrix,
-                this.actual.orientation,
-                this.actual.position,
-                this.actual.scale);
-            this.actual.localMatrixDirty = false;
-        }
-        return this.actual.localMatrix;
-    }
-
-    #resolveWorldMatrix() {
-        if (this.actual.worldMatrixDirty) {
-            if (!this.parent) {
-                this.actual.worldMatrix.set(this.#resolveLocalMatrix());
-            } else {
-                mat4Multiply(this.actual.worldMatrix, this.parent.worldMatrix, this.#resolveLocalMatrix());
-            }
-            this.actual.worldMatrixDirty = false;
-        }
-
-        return this.actual.worldMatrix;
-    }
 }
 
 export class TransformPool {
