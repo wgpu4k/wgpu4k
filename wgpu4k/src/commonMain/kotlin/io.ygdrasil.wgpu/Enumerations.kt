@@ -119,18 +119,12 @@ enum class BlendOperation(
 }
 
 enum class BufferBindingType(
-    val `value`: Int,
-) {
-    undefined(0),
-    uniform(1),
-    storage(2),
-    readonlystorage(3),
-
-    ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: BufferBindingType): Int = value or other.value
+    override val `value`: Int,
+    val stringValue: String,
+) : EnumerationWithValue {
+    uniform(1, "uniform"),
+    storage(2, "storage"),
+    readonlystorage(3, "read-only-storage");
 
     companion object {
         fun of(`value`: Int): BufferBindingType? = entries.find {
@@ -636,18 +630,12 @@ enum class SType(
 }
 
 enum class SamplerBindingType(
-    val `value`: Int,
-) {
-    undefined(0),
-    filtering(1),
-    nonfiltering(2),
-    comparison(3),
-
-    ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: SamplerBindingType): Int = value or other.value
+    override val `value`: Int,
+    val `stringValue`: String,
+) : EnumerationWithValue{
+    filtering(1, "filtering"),
+    nonfiltering(2, "non-filtering"),
+    comparison(3, "comparison");
 
     companion object {
         fun of(`value`: Int): SamplerBindingType? = entries.find {
@@ -678,18 +666,13 @@ enum class StencilOperation(
 }
 
 enum class StorageTextureAccess(
-    val `value`: Int,
-) {
-    undefined(0),
-    writeonly(1),
-    readonly(2),
-    readwrite(3),
-
+    override val `value`: Int,
+    val `stringValue`: String,
+) : EnumerationWithValue {
+    writeonly(1, "write-only"),
+    readonly(2, "read-only"),
+    readwrite(3, "read-write"),
     ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: StorageTextureAccess): Int = value or other.value
 
     companion object {
         fun of(`value`: Int): StorageTextureAccess? = entries.find {
@@ -883,20 +866,14 @@ enum class TextureFormat(
 }
 
 enum class TextureSampleType(
-    val `value`: Int,
-) {
-    undefined(0),
-    float(1),
-    unfilterablefloat(2),
-    depth(3),
-    sint(4),
-    uint(5),
-
-    ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: TextureSampleType): Int = value or other.value
+    override val `value`: Int,
+    val stringValue: String
+) : EnumerationWithValue {
+    float(1, "float"),
+    unfilterablefloat(2, "unfilterable-float"),
+    depth(3, "depth"),
+    sint(4, "sint"),
+    uint(5, "uint");
 
     companion object {
         fun of(`value`: Int): TextureSampleType? = entries.find {

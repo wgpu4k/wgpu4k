@@ -26,9 +26,9 @@ typealias GPUPipelineConstantValue = Double
 
 typealias GPUSampleMask = UInt
 
-typealias GPUShaderStageFlags = Number
+typealias GPUShaderStageFlags = Int
 
-typealias GPUSignedOffset32 = Number
+typealias GPUSignedOffset32 = Int
 
 typealias GPUSize32 = Int
 

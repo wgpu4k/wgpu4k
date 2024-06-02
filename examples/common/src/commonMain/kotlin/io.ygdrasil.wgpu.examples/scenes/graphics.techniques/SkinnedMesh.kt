@@ -1,7 +1,9 @@
 package io.ygdrasil.wgpu.examples.scenes.graphics.techniques
 
+import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.Application
 
+val MAT4X4_BYTES = 64
 
 class WhaleScene : Application.Scene() {
 
@@ -15,6 +17,20 @@ class WhaleScene : Application.Scene() {
     )
 
     override fun Application.initialiaze() {
+        val depthTexture = device.createTexture(
+            TextureDescriptor(
+                size = Size3D(renderingContext.width, renderingContext.height),
+                format = TextureFormat.depth24plus,
+                usage = setOf(TextureUsage.renderattachment)
+            )
+        )
+
+        val cameraBuffer = device.createBuffer(
+            BufferDescriptor(
+                size = MAT4X4_BYTES * 3L,
+                usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
+            )
+        )
         TODO("Not yet implemented")
     }
 

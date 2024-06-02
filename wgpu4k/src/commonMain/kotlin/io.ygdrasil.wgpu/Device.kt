@@ -22,8 +22,58 @@ expect class Device: AutoCloseable {
 
 	fun createComputePipeline(descriptor: ComputePipelineDescriptor): ComputePipeline
 
+	fun createBindGroupLayout(descriptor: BindGroupLayoutDescriptor): BindGroupLayout
+
+	fun createRenderBundleEncoder(descriptor: RenderBundleEncoderDescriptor): RenderBundleEncoder
+
+	fun createQuerySet(descriptor: QuerySetDescriptor): QuerySet
+
 	override fun close()
 }
 
+/**
+ *
+ * @see https://webgpu.rocks/reference/dictionary/gpubindgrouplayoutdescriptor/#idl-gpubindgrouplayoutdescriptor
+ *
+ */
+data class BindGroupLayoutDescriptor(
+	val entries: Array<Entry>,
+	val label: String? = null
+) {
+	data class Entry(
+		val binding: GPUIndex32,
+		val visibility: Set<ShaderStage>,
+		val bindingType: BindingType
+	) {
+
+		sealed interface BindingType
+
+        data class BufferBindingLayout(
+            var type: BufferBindingType = BufferBindingType.uniform,
+            var hasDynamicOffset: Boolean = false,
+            var minBindingSize: GPUSize64 = 0
+        ) : BindingType
+
+        data class SamplerBindingLayout(
+            var type: SamplerBindingType = SamplerBindingType.filtering
+        ): BindingType
+
+        data class TextureBindingLayout(
+			var sampleType: TextureSampleType = TextureSampleType.float,
+			var viewDimension: TextureViewDimension = TextureViewDimension._2d,
+			var multisampled: Boolean = false
+        ): BindingType
+
+        data class StorageTextureBindingLayout(
+            var access: StorageTextureAccess = StorageTextureAccess.writeonly,
+            var format: TextureFormat,
+            var viewDimension: TextureViewDimension = TextureViewDimension._2d
+        ): BindingType
+
+	}
+}
+
 // TODO
-data class CommandEncoderDescriptor(var label: String? = null)
+data class RenderBundleEncoderDescriptor(val label: String? = null)
+data class QuerySetDescriptor(val label: String? = null)
+data class CommandEncoderDescriptor(val label: String? = null)

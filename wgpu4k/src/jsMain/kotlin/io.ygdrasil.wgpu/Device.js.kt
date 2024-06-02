@@ -53,10 +53,36 @@ actual class Device(val handler: GPUDevice) : AutoCloseable {
 			.let { handler.createComputePipeline(it) }
 			.let(::ComputePipeline)
 
+	actual fun createBindGroupLayout(descriptor: BindGroupLayoutDescriptor): BindGroupLayout =
+		descriptor.convert()
+			.let { handler.createBindGroupLayout(it) }
+			.let(::BindGroupLayout)
+
+	actual fun createRenderBundleEncoder(descriptor: RenderBundleEncoderDescriptor): RenderBundleEncoder =
+		descriptor.convert()
+			.let { handler.createRenderBundleEncoder(it) }
+			.let(::RenderBundleEncoder)
+
+	actual fun createQuerySet(descriptor: QuerySetDescriptor): QuerySet =
+		descriptor.convert()
+			.let { handler.createQuerySet(it) }
+			.let(::QuerySet)
 
 	actual override fun close() {
 		// Nothing on JS
 	}
+}
+
+private fun QuerySetDescriptor.convert(): GPUQuerySetDescriptor {
+	TODO("Not yet implemented")
+}
+
+private fun RenderBundleEncoderDescriptor.convert(): GPURenderBundleEncoderDescriptor {
+	TODO("Not yet implemented")
+}
+
+private fun BindGroupLayoutDescriptor.convert(): GPUBindGroupLayoutDescriptor {
+	TODO("Not yet implemented")
 }
 
 private fun ComputePipelineDescriptor.convert(): GPUComputePipelineDescriptor = object : GPUComputePipelineDescriptor {
