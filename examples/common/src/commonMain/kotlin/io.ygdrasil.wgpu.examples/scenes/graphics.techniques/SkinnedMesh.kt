@@ -12,8 +12,6 @@ class WhaleScene : Application.Scene() {
         val objectScale: Int = 1,
         val angle: Double = 0.2,
         val speed: Int = 50,
-        val renderMode: String = "NORMAL",
-        val skinMode: String = "ON"
     )
 
     override fun Application.initialiaze() {

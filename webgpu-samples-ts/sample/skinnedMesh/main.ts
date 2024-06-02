@@ -99,9 +99,6 @@ const settings = {
     objectScale: 1,
     angle: 0.2,
     speed: 50,
-    object: 'Whale',
-    renderMode: 'NORMAL',
-    skinMode: 'ON',
 };
 
 const depthTexture = device.createTexture({
