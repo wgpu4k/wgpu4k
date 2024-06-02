@@ -1022,18 +1022,11 @@ enum class MapMode(
 }
 
 enum class ShaderStage(
-    val `value`: Int,
-) {
-    none(0),
+    override val `value`: Int,
+) : EnumerationWithValue {
     vertex(1),
     fragment(2),
-    compute(4),
-
-    ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: ShaderStage): Int = value or other.value
+    compute(4);
 
     companion object {
         fun of(`value`: Int): ShaderStage? = entries.find {

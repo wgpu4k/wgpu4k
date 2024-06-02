@@ -22,12 +22,12 @@ class BufferDescriptorTest : FreeSpec({
             )
 
             // When
-            val result: MemorySegment = arena.map(bufferDescriptor)
+            val actual: MemorySegment = arena.map(bufferDescriptor)
 
             // Then
-            WGPUBufferDescriptor.size(result) shouldBe 40
-            WGPUBufferDescriptor.usage(result) shouldBe (BufferUsage.vertex or BufferUsage.copydst)
-            WGPUBufferDescriptor.mappedAtCreation(result) shouldBe 1
+            WGPUBufferDescriptor.size(actual) shouldBe 40
+            WGPUBufferDescriptor.usage(actual) shouldBe (BufferUsage.vertex or BufferUsage.copydst)
+            WGPUBufferDescriptor.mappedAtCreation(actual) shouldBe 1
         }
 
     }

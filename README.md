@@ -32,7 +32,7 @@ This project focuses on creating a binding for WebGPU which can support Kotlin o
 
 ### Proof of Concept
 
-The aim of this phase is to test the technology on as many platforms as possible using elementary examples.
+The current one, the aim of this phase is to test the technology on as many platforms as possible using elementary examples.
 
 ### API Implementation
 

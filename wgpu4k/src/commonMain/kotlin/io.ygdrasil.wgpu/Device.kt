@@ -65,8 +65,8 @@ data class BindGroupLayoutDescriptor(
         ): BindingType
 
         data class StorageTextureBindingLayout(
+			var format: TextureFormat,
             var access: StorageTextureAccess = StorageTextureAccess.writeonly,
-            var format: TextureFormat,
             var viewDimension: TextureViewDimension = TextureViewDimension._2d
         ): BindingType
 
