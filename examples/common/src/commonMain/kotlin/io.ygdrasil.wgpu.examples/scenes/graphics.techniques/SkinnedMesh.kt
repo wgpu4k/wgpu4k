@@ -66,6 +66,18 @@ class WhaleScene : Application.Scene() {
         )
 
 
+        val nodeUniformsBindGroupLayout = device.createBindGroupLayout(
+            BindGroupLayoutDescriptor(
+                label = "NodeUniforms.bindGroupLayout",
+                entries = arrayOf(
+                    BindGroupLayoutDescriptor.Entry(
+                        binding = 0,
+                        bindingType = BindGroupLayoutDescriptor.Entry.BufferBindingLayout(type = BufferBindingType.uniform),
+                        visibility = setOf(ShaderStage.vertex)
+                    )
+                )
+            )
+        )
         TODO("Not yet implemented")
     }
 

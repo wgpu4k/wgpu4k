@@ -5,6 +5,7 @@ package io.ygdrasil.wgpu.examples
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.scenes.basic.*
 import io.ygdrasil.wgpu.examples.scenes.graphics.techniques.ParticlesScene
+import io.ygdrasil.wgpu.examples.scenes.graphics.techniques.WhaleScene
 
 abstract class Application(
 	val renderingContext: RenderingContext,
@@ -105,4 +106,5 @@ val availableScenes = listOf(
 	TexturedCubeScene(),
 	// Not working
 	ParticlesScene(),
+	WhaleScene(),
 )

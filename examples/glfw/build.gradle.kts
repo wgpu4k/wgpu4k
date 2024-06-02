@@ -63,7 +63,7 @@ application {
 	println(getLibraryProject().toString())
 
 	applicationDefaultJvmArgs += "--add-opens=java.base/java.lang=ALL-UNNAMED"
-	applicationDefaultJvmArgs += "-Djextract.trace.downcalls=true"
+	//applicationDefaultJvmArgs += "-Djextract.trace.downcalls=true"
 }
 
 kotlin {
