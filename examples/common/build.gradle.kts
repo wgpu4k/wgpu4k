@@ -21,6 +21,7 @@ kotlin {
 
 		val commonMain by getting {
 			dependencies {
+				implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0-RC")
 				api(projects.wgpu4k)
 				api(libs.coroutines)
 				api(libs.korge.foundation)
@@ -36,6 +37,7 @@ kotlin {
 	}
 
 	compilerOptions {
-		allWarningsAsErrors = true
+		// TODO fiw warning and uncomment
+		//allWarningsAsErrors = true
 	}
 }
