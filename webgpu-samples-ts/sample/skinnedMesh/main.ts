@@ -1,14 +1,9 @@
-import {GUI} from 'dat.gui';
 import {convertGLBToJSONAndBinary, GLTFSkin} from './glbUtils';
 import gltfWGSL from './gltf.wgsl';
 import gridWGSL from './grid.wgsl';
 import {Mat4, mat4, Quat, vec3} from 'wgpu-matrix';
 import {createBindGroupCluster} from '../bitonicSort/utils';
-import {
-    createSkinnedGridBuffers,
-    createSkinnedGridRenderPipeline,
-} from './gridUtils';
-import {gridIndices} from './gridData';
+import {createSkinnedGridBuffers, createSkinnedGridRenderPipeline,} from './gridUtils';
 
 const MAT4X4_BYTES = 64;
 
@@ -16,17 +11,6 @@ interface BoneObject {
     transforms: Mat4[];
     bindPoses: Mat4[];
     bindPosesInv: Mat4[];
-}
-
-enum RenderMode {
-    NORMAL,
-    JOINTS,
-    WEIGHTS,
-}
-
-enum SkinMode {
-    ON,
-    OFF,
 }
 
 // Copied from toji/gl-matrix
@@ -119,60 +103,6 @@ const settings = {
     renderMode: 'NORMAL',
     skinMode: 'ON',
 };
-
-const gui = new GUI();
-
-// Determine whether we want to render our whale or our skinned grid
-gui.add(settings, 'object', ['Whale', 'Skinned Grid']).onChange(() => {
-    if (settings.object === 'Skinned Grid') {
-        settings.cameraX = -10;
-        settings.cameraY = 0;
-        settings.objectScale = 1.27;
-    } else {
-        if (settings.skinMode === 'OFF') {
-            settings.cameraX = 0;
-            settings.cameraY = 0;
-            settings.cameraZ = -11;
-        } else {
-            settings.cameraX = 0;
-            settings.cameraY = -5.1;
-            settings.cameraZ = -14.6;
-        }
-    }
-});
-
-// Output the mesh normals, its joints, or the weights that influence the movement of the joints
-gui
-    .add(settings, 'renderMode', ['NORMAL', 'JOINTS', 'WEIGHTS'])
-    .onChange(() => {
-        device.queue.writeBuffer(
-            generalUniformsBuffer,
-            0,
-            new Uint32Array([RenderMode[settings.renderMode]])
-        );
-    });
-// Determine whether the mesh is static or whether skinning is activated
-gui.add(settings, 'skinMode', ['ON', 'OFF']).onChange(() => {
-    if (settings.object === 'Whale') {
-        if (settings.skinMode === 'OFF') {
-            settings.cameraX = 0;
-            settings.cameraY = 0;
-            settings.cameraZ = -11;
-        } else {
-            settings.cameraX = 0;
-            settings.cameraY = -5.1;
-            settings.cameraZ = -14.6;
-        }
-    }
-    device.queue.writeBuffer(
-        generalUniformsBuffer,
-        4,
-        new Uint32Array([SkinMode[settings.skinMode]])
-    );
-});
-const animFolder = gui.addFolder('Animation Settings');
-animFolder.add(settings, 'angle', 0.05, 0.5).step(0.05);
-animFolder.add(settings, 'speed', 10, 100).step(10);
 
 const depthTexture = device.createTexture({
     size: [canvas.width, canvas.height],
@@ -300,31 +230,17 @@ const perspectiveProjection = mat4.perspective(
 const orthographicProjection = mat4.ortho(-20, 20, -10, 10, -100, 100);
 
 function getProjectionMatrix() {
-    if (settings.object !== 'Skinned Grid') {
         return perspectiveProjection as Float32Array;
-    }
     return orthographicProjection as Float32Array;
 }
 
 function getViewMatrix() {
     const viewMatrix = mat4.identity();
-    if (settings.object === 'Skinned Grid') {
-        mat4.translate(
-            viewMatrix,
-            vec3.fromValues(
-                settings.cameraX * settings.objectScale,
-                settings.cameraY * settings.objectScale,
-                settings.cameraZ
-            ),
-            viewMatrix
-        );
-    } else {
         mat4.translate(
             viewMatrix,
             vec3.fromValues(settings.cameraX, settings.cameraY, settings.cameraZ),
             viewMatrix
         );
-    }
     return viewMatrix as Float32Array;
 }
 
@@ -336,9 +252,7 @@ function getModelMatrix() {
         settings.objectScale
     );
     mat4.scale(modelMatrix, scaleVector, modelMatrix);
-    if (settings.object === 'Whale') {
         mat4.rotateY(modelMatrix, (Date.now() / 1000) * 0.5, modelMatrix);
-    }
     return modelMatrix as Float32Array;
 }
 
@@ -517,7 +431,7 @@ function frame() {
     whaleScene.skins[0].update(device, 6, whaleScene.nodes);
 
     const commandEncoder = device.createCommandEncoder();
-    if (settings.object === 'Whale') {
+
         const passEncoder = commandEncoder.beginRenderPass(
             gltfRenderPassDescriptor
         );
@@ -528,25 +442,6 @@ function frame() {
             ]);
         }
         passEncoder.end();
-    } else {
-        // Our skinned grid isn't checking for depth, so we pass it
-        // a separate render descriptor that does not take in a depth texture
-        const passEncoder = commandEncoder.beginRenderPass(
-            skinnedGridRenderPassDescriptor
-        );
-        passEncoder.setPipeline(skinnedGridPipeline);
-        passEncoder.setBindGroup(0, cameraBGCluster.bindGroups[0]);
-        passEncoder.setBindGroup(1, generalUniformsBGCLuster.bindGroups[0]);
-        passEncoder.setBindGroup(2, skinnedGridBoneBGCluster.bindGroups[0]);
-        // Pass in vertex and index buffers generated from our static skinned grid
-        // data at ./gridData.ts
-        passEncoder.setVertexBuffer(0, skinnedGridVertexBuffers.positions);
-        passEncoder.setVertexBuffer(1, skinnedGridVertexBuffers.joints);
-        passEncoder.setVertexBuffer(2, skinnedGridVertexBuffers.weights);
-        passEncoder.setIndexBuffer(skinnedGridVertexBuffers.indices, 'uint16');
-        passEncoder.drawIndexed(gridIndices.length, 1);
-        passEncoder.end();
-    }
 
     device.queue.submit([commandEncoder.finish()]);
 
