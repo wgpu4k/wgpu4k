@@ -1,6 +1,7 @@
 package io.ygdrasil.wgpu.examples.scenes.graphics.techniques
 
 import io.ygdrasil.wgpu.*
+import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.BufferBindingLayout
 import io.ygdrasil.wgpu.examples.Application
 import io.ygdrasil.wgpu.examples.helper.BindGroupClusterDescriptor
 import io.ygdrasil.wgpu.examples.helper.createBindGroupCluster
@@ -39,7 +40,7 @@ class WhaleScene : Application.Scene() {
                 BindGroupClusterDescriptor(
                     bindings = 0,
                     visibilities = setOf(ShaderStage.vertex),
-                    bindingType = BindGroupLayoutDescriptor.Entry.BufferBindingLayout(type = BufferBindingType.uniform)
+                    bindingType = BufferBindingLayout(type = BufferBindingType.uniform)
                 )
             ),
             listOf(listOf(BindGroupDescriptor.BufferBinding(cameraBuffer))),
@@ -58,7 +59,7 @@ class WhaleScene : Application.Scene() {
                 BindGroupClusterDescriptor(
                     bindings = 0,
                     visibilities = setOf(ShaderStage.vertex, ShaderStage.fragment),
-                    bindingType = BindGroupLayoutDescriptor.Entry.BufferBindingLayout(type = BufferBindingType.uniform)
+                    bindingType = BufferBindingLayout(type = BufferBindingType.uniform)
                 )
             ),
             listOf(listOf(BindGroupDescriptor.BufferBinding(generalUniformsBuffer))),
@@ -72,7 +73,7 @@ class WhaleScene : Application.Scene() {
                 entries = arrayOf(
                     BindGroupLayoutDescriptor.Entry(
                         binding = 0,
-                        bindingType = BindGroupLayoutDescriptor.Entry.BufferBindingLayout(type = BufferBindingType.uniform),
+                        bindingType = BufferBindingLayout(type = BufferBindingType.uniform),
                         visibility = setOf(ShaderStage.vertex)
                     )
                 )
