@@ -2,6 +2,8 @@ package io.ygdrasil.wgpu.examples.scenes.graphics.techniques
 
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.Application
+import io.ygdrasil.wgpu.examples.helper.BindGroupClusterDescriptor
+import io.ygdrasil.wgpu.examples.helper.createBindGroupCluster
 
 val MAT4X4_BYTES = 64
 
@@ -31,6 +33,39 @@ class WhaleScene : Application.Scene() {
                 usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
             )
         )
+
+        val cameraBGCluster = device.createBindGroupCluster(
+            listOf(
+                BindGroupClusterDescriptor(
+                    bindings = 0,
+                    visibilities = setOf(ShaderStage.vertex),
+                    bindingType = BindGroupLayoutDescriptor.Entry.BufferBindingLayout(type = BufferBindingType.uniform)
+                )
+            ),
+            listOf(listOf(BindGroupDescriptor.BufferBinding(cameraBuffer))),
+            "Camera"
+        )
+
+        val generalUniformsBuffer = device.createBuffer(
+            BufferDescriptor(
+                size = UInt.SIZE_BYTES * 2L,
+                usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
+            )
+        )
+
+        val generalUniformsBGCluster = device.createBindGroupCluster(
+            listOf(
+                BindGroupClusterDescriptor(
+                    bindings = 0,
+                    visibilities = setOf(ShaderStage.vertex, ShaderStage.fragment),
+                    bindingType = BindGroupLayoutDescriptor.Entry.BufferBindingLayout(type = BufferBindingType.uniform)
+                )
+            ),
+            listOf(listOf(BindGroupDescriptor.BufferBinding(generalUniformsBuffer))),
+            "General"
+        )
+
+
         TODO("Not yet implemented")
     }
 
