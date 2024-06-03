@@ -182,11 +182,8 @@ const perspectiveProjection = mat4.perspective(
     100.0
 );
 
-const orthographicProjection = mat4.ortho(-20, 20, -10, 10, -100, 100);
-
 function getProjectionMatrix() {
     return perspectiveProjection as Float32Array;
-    return orthographicProjection as Float32Array;
 }
 
 function getViewMatrix() {
