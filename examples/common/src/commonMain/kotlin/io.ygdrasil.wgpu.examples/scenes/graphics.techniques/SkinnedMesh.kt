@@ -3,8 +3,10 @@ package io.ygdrasil.wgpu.examples.scenes.graphics.techniques
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.BufferBindingLayout
 import io.ygdrasil.wgpu.examples.Application
-import io.ygdrasil.wgpu.examples.helper.BindGroupClusterDescriptor
-import io.ygdrasil.wgpu.examples.helper.createBindGroupCluster
+import io.ygdrasil.wgpu.examples.helper.*
+import io.ygdrasil.wgpu.examples.scenes.shader.gltfWGSL
+import korlibs.io.async.runBlockingNoJs
+import korlibs.io.file.std.resourcesVfs
 
 val MAT4X4_BYTES = 64
 
@@ -54,7 +56,7 @@ class WhaleScene : Application.Scene() {
             )
         )
 
-        val generalUniformsBGCluster = device.createBindGroupCluster(
+        val generalUniformsBGCLuster = device.createBindGroupCluster(
             listOf(
                 BindGroupClusterDescriptor(
                     bindings = 0,
@@ -79,6 +81,25 @@ class WhaleScene : Application.Scene() {
                 )
             )
         )
+
+        val whaleScene = runBlockingNoJs {
+            resourcesVfs["assets/gltf/whale.glb"].readGLB()
+        }
+
+        whaleScene.meshes[0].buildRenderPipeline(
+            device,
+            gltfWGSL,
+            gltfWGSL,
+            renderingContext.textureFormat,
+            depthTexture.format,
+            listOf(
+                cameraBGCluster.bindGroupLayout,
+                generalUniformsBGCLuster.bindGroupLayout,
+                nodeUniformsBindGroupLayout,
+                createSharedBindGroupLayout(device),
+            )
+        );
+
         TODO("Not yet implemented")
     }
 
@@ -87,3 +108,4 @@ class WhaleScene : Application.Scene() {
     }
 
 }
+

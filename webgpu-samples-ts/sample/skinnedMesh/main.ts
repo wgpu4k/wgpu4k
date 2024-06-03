@@ -1,9 +1,7 @@
 import {convertGLBToJSONAndBinary, GLTFSkin} from './glbUtils';
 import gltfWGSL from './gltf.wgsl';
-import gridWGSL from './grid.wgsl';
 import {Mat4, mat4, Quat, vec3} from 'wgpu-matrix';
 import {createBindGroupCluster} from '../bitonicSort/utils';
-import {createSkinnedGridBuffers, createSkinnedGridRenderPipeline,} from './gridUtils';
 
 const MAT4X4_BYTES = 64;
 
@@ -175,46 +173,6 @@ whaleScene.meshes[0].buildRenderPipeline(
     ]
 );
 
-// Create skinned grid resources
-const skinnedGridVertexBuffers = createSkinnedGridBuffers(device);
-// Buffer for our uniforms, joints, and inverse bind matrices
-const skinnedGridUniformBufferUsage: GPUBufferDescriptor = {
-    // 5 4x4 matrices, one for each bone
-    size: MAT4X4_BYTES * 5,
-    usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
-};
-const skinnedGridJointUniformBuffer = device.createBuffer(
-    skinnedGridUniformBufferUsage
-);
-const skinnedGridInverseBindUniformBuffer = device.createBuffer(
-    skinnedGridUniformBufferUsage
-);
-const skinnedGridBoneBGCluster = createBindGroupCluster(
-    [0, 1],
-    [GPUShaderStage.VERTEX, GPUShaderStage.VERTEX],
-    ['buffer', 'buffer'],
-    [{type: 'read-only-storage'}, {type: 'read-only-storage'}],
-    [
-        [
-            {buffer: skinnedGridJointUniformBuffer},
-            {buffer: skinnedGridInverseBindUniformBuffer},
-        ],
-    ],
-    'SkinnedGridJointUniforms',
-    device
-);
-const skinnedGridPipeline = createSkinnedGridRenderPipeline(
-    device,
-    presentationFormat,
-    gridWGSL,
-    gridWGSL,
-    [
-        cameraBGCluster.bindGroupLayout,
-        generalUniformsBGCLuster.bindGroupLayout,
-        skinnedGridBoneBGCluster.bindGroupLayout,
-    ]
-);
-
 // Global Calc
 const aspect = canvas.width / canvas.height;
 const perspectiveProjection = mat4.perspective(
@@ -227,17 +185,17 @@ const perspectiveProjection = mat4.perspective(
 const orthographicProjection = mat4.ortho(-20, 20, -10, 10, -100, 100);
 
 function getProjectionMatrix() {
-        return perspectiveProjection as Float32Array;
+    return perspectiveProjection as Float32Array;
     return orthographicProjection as Float32Array;
 }
 
 function getViewMatrix() {
     const viewMatrix = mat4.identity();
-        mat4.translate(
-            viewMatrix,
-            vec3.fromValues(settings.cameraX, settings.cameraY, settings.cameraZ),
-            viewMatrix
-        );
+    mat4.translate(
+        viewMatrix,
+        vec3.fromValues(settings.cameraX, settings.cameraY, settings.cameraZ),
+        viewMatrix
+    );
     return viewMatrix as Float32Array;
 }
 
@@ -249,7 +207,7 @@ function getModelMatrix() {
         settings.objectScale
     );
     mat4.scale(modelMatrix, scaleVector, modelMatrix);
-        mat4.rotateY(modelMatrix, (Date.now() / 1000) * 0.5, modelMatrix);
+    mat4.rotateY(modelMatrix, (Date.now() / 1000) * 0.5, modelMatrix);
     return modelMatrix as Float32Array;
 }
 
@@ -271,66 +229,6 @@ const gltfRenderPassDescriptor: GPURenderPassDescriptor = {
         depthStoreOp: 'store',
     },
 };
-
-// Pass descriptor for grid with no depth testing
-const skinnedGridRenderPassDescriptor: GPURenderPassDescriptor = {
-    colorAttachments: [
-        {
-            view: undefined, // Assigned later
-
-            clearValue: {r: 0.3, g: 0.3, b: 0.3, a: 1.0},
-            loadOp: 'clear',
-            storeOp: 'store',
-        },
-    ],
-};
-
-const animSkinnedGrid = (boneTransforms: Mat4[], angle: number) => {
-    const m = mat4.identity();
-    mat4.rotateZ(m, angle, boneTransforms[0]);
-    mat4.translate(boneTransforms[0], vec3.create(4, 0, 0), m);
-    mat4.rotateZ(m, angle, boneTransforms[1]);
-    mat4.translate(boneTransforms[1], vec3.create(4, 0, 0), m);
-    mat4.rotateZ(m, angle, boneTransforms[2]);
-};
-
-// Create a group of bones
-// Each index associates an actual bone to its transforms, bindPoses, uniforms, etc
-const createBoneCollection = (numBones: number): BoneObject => {
-    // Initial bone transformation
-    const transforms: Mat4[] = [];
-    // Bone bind poses, an extra matrix per joint/bone that represents the starting point
-    // of the bone before any transformations are applied
-    const bindPoses: Mat4[] = [];
-    // Create a transform, bind pose, and inverse bind pose for each bone
-    for (let i = 0; i < numBones; i++) {
-        transforms.push(mat4.identity());
-        bindPoses.push(mat4.identity());
-    }
-
-    // Get initial bind pose positions
-    animSkinnedGrid(bindPoses, 0);
-    const bindPosesInv = bindPoses.map((bindPose) => {
-        return mat4.inverse(bindPose);
-    });
-
-    return {
-        transforms,
-        bindPoses,
-        bindPosesInv,
-    };
-};
-
-// Create bones of the skinned grid and write the inverse bind positions to
-// the skinned grid's inverse bind matrix array
-const gridBoneCollection = createBoneCollection(5);
-for (let i = 0; i < gridBoneCollection.bindPosesInv.length; i++) {
-    device.queue.writeBuffer(
-        skinnedGridInverseBindUniformBuffer,
-        i * 64,
-        gridBoneCollection.bindPosesInv[i] as Float32Array
-    );
-}
 
 // A map that maps a joint index to the original matrix transformation of a bone
 const origMatrices = new Map<number, Mat4>();
@@ -368,12 +266,6 @@ function frame() {
     const viewMatrix = getViewMatrix();
     const modelMatrix = getModelMatrix();
 
-    // Calculate bone transformation
-    const t = (Date.now() / 20000) * settings.speed;
-    const angle = Math.sin(t) * settings.angle;
-    // Compute Transforms when angle is applied
-    animSkinnedGrid(gridBoneCollection.transforms, angle);
-
     // Write to mvp to camera buffer
     device.queue.writeBuffer(
         cameraBuffer,
@@ -399,21 +291,8 @@ function frame() {
         modelMatrix.byteLength
     );
 
-    // Write to skinned grid bone uniform buffer
-    for (let i = 0; i < gridBoneCollection.transforms.length; i++) {
-        device.queue.writeBuffer(
-            skinnedGridJointUniformBuffer,
-            i * 64,
-            gridBoneCollection.transforms[i] as Float32Array
-        );
-    }
-
     // Difference between these two render passes is just the presence of depthTexture
     gltfRenderPassDescriptor.colorAttachments[0].view = context
-        .getCurrentTexture()
-        .createView();
-
-    skinnedGridRenderPassDescriptor.colorAttachments[0].view = context
         .getCurrentTexture()
         .createView();
 
@@ -422,6 +301,8 @@ function frame() {
         scene.root.updateWorldMatrix(device);
     }
 
+    // Calculate bone transformation
+    const t = (Date.now() / 20000) * settings.speed;
     // Updates skins (we index into skins in the renderer, which is not the best approach but hey)
     animWhaleSkin(whaleScene.skins[0], Math.sin(t) * settings.angle);
     // Node 6 should be the only node with a drawable mesh so hopefully this works fine
@@ -429,16 +310,16 @@ function frame() {
 
     const commandEncoder = device.createCommandEncoder();
 
-        const passEncoder = commandEncoder.beginRenderPass(
-            gltfRenderPassDescriptor
-        );
-        for (const scene of whaleScene.scenes) {
-            scene.root.renderDrawables(passEncoder, [
-                cameraBGCluster.bindGroups[0],
-                generalUniformsBGCLuster.bindGroups[0],
-            ]);
-        }
-        passEncoder.end();
+    const passEncoder = commandEncoder.beginRenderPass(
+        gltfRenderPassDescriptor
+    );
+    for (const scene of whaleScene.scenes) {
+        scene.root.renderDrawables(passEncoder, [
+            cameraBGCluster.bindGroups[0],
+            generalUniformsBGCLuster.bindGroups[0],
+        ]);
+    }
+    passEncoder.end();
 
     device.queue.submit([commandEncoder.finish()]);
 
