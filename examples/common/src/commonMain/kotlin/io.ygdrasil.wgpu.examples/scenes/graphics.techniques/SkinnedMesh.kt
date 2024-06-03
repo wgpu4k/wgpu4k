@@ -188,9 +188,9 @@ class WhaleScene : Application.Scene() {
         // Node 6 should be the only node with a drawable mesh so hopefully this works fine
         // TODO whaleScene.skins[0].update(device, 6, whaleScene.nodes);
 
-        val commandEncoder = device.createCommandEncoder()
+        val commandEncoder = device.createCommandEncoder().bind()
 
-        val passEncoder = commandEncoder.beginRenderPass(gltfRenderPassDescriptor)
+        val passEncoder = commandEncoder.beginRenderPass(gltfRenderPassDescriptor).bind()
         whaleScene.scenes.forEach { scene ->
             /* TODO scene.root.renderDrawables(
                 passEncoder, listOf(
