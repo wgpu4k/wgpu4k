@@ -100,6 +100,7 @@ class WhaleScene : Application.Scene() {
         }
 
         whaleScene.meshes[0].buildRenderPipeline(
+            whaleScene,
             device,
             gltfWGSL,
             gltfWGSL,
@@ -129,7 +130,7 @@ class WhaleScene : Application.Scene() {
                 )
             ),
             depthStencilAttachment = RenderPassDescriptor.RenderPassDepthStencilAttachment(
-                view = depthTexture.createView(),
+                view = depthTexture.createView().bind(),
                 depthLoadOp = LoadOp.clear,
                 depthClearValue = 1.0f,
                 depthStoreOp = StoreOp.store

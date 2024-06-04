@@ -23,6 +23,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 suspend fun VfsFile.readGLB(options: GLTF2.ReadOptions = GLTF2.ReadOptions.DEFAULT): GLTF2 = GLTF2.readGLB(this, options = options)
 suspend fun VfsFile.readGLTF2(options: GLTF2.ReadOptions = GLTF2.ReadOptions.DEFAULT): GLTF2 {
@@ -213,8 +214,9 @@ data class GLTF2(
         @Transient
         val weightsVector: Vector4 = if (weights != null) Vector4.func { weights.getOrElse(it) { 0f } } else Vector4.ZERO
     }
+    @JvmInline
     @Serializable
-    inline class PrimitiveAttribute(val str: String) {
+    value class PrimitiveAttribute(val str: String) {
         companion object {
             val POSITION = PrimitiveAttribute("POSITION")
             val NORMAL = PrimitiveAttribute("NORMAL")
@@ -875,7 +877,8 @@ abstract class GLTFProperty() : Extra by Extra.Mixin() {
     abstract val extras: JsonElement?
 }
 
-inline class GLTF2AccessorVectorMAT4(val vec: GLTF2AccessorVector) {
+@JvmInline
+value class GLTF2AccessorVectorMAT4(val vec: GLTF2AccessorVector) {
     val size: Int get() = vec.size
     operator fun get(index: Int): Matrix4 = Matrix4.fromColumns(FloatArray(16) { vec[index, it] })
     operator fun set(index: Int, value: Matrix4) {
@@ -952,7 +955,6 @@ data class GLTF2AccessorVector(val accessor: GLTF2.Accessor, val buffer: Buffer)
         when (kind) {
             GLTF2.Animation.Sampler.LookupKind.NORMAL -> {
                 for (dim in 0 until dims) {
-                    //println("a[aIndex, dim], b[bIndex, dim]=${a[aIndex, dim]} : ${b[bIndex, dim]}")
                     this[index, dim] = ratio.toRatio().interpolate(a[aIndex, dim], b[bIndex, dim])
                 }
             }

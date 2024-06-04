@@ -29,6 +29,7 @@ fun createSharedBindGroupLayout(device: Device) = device.createBindGroupLayout(
 )
 
 internal fun GLTF2.Mesh.buildRenderPipeline(
+    scene: GLTF2,
     device: Device,
     vertexShader: String,
     fragmentShader: String,
@@ -40,6 +41,7 @@ internal fun GLTF2.Mesh.buildRenderPipeline(
     // build their respective render pipelines
     this.primitives.forEachIndexed { index, primitive ->
         primitive.buildRenderPipeline(
+            scene,
             device,
             vertexShader,
             fragmentShader,
@@ -52,6 +54,7 @@ internal fun GLTF2.Mesh.buildRenderPipeline(
 }
 
 internal fun GLTF2.Primitive.buildRenderPipeline(
+    scene: GLTF2,
     device: Device,
     vertexShader: String,
     fragmentShader: String,
@@ -60,33 +63,33 @@ internal fun GLTF2.Primitive.buildRenderPipeline(
     bgLayouts: List<BindGroupLayout>,
     label: String
 ) {
-    /*
-        // For now, just check if the attributeMap contains a given attribute using map.has(), and add it if it does
-        // POSITION, NORMAL, TEXCOORD_0, JOINTS_0, WEIGHTS_0 for order
-        // Vertex attribute state and shader stage
-        let VertexInputShaderString = `struct VertexInput {\n`;
-        const vertexBuffers: GPUVertexBufferLayout[] = this.attributes.map(
-            (attr, idx) => {
-                const vertexFormat: GPUVertexFormat =
-                    this.attributeMap[attr].vertexType;
-                const attrString = attr.toLowerCase().replace(/_0$/, '');
-                VertexInputShaderString += `\t@location(${idx}) ${attrString}: ${convertGPUVertexFormatToWGSLFormat(
-                    vertexFormat
-                )},\n`;
-                return {
-                    arrayStride: this.attributeMap[attr].byteStride,
-                    attributes: [
-                        {
-                            format: this.attributeMap[attr].vertexType,
-                            offset: this.attributeMap[attr].byteOffset,
-                            shaderLocation: idx,
-                        },
-                    ],
-                } as GPUVertexBufferLayout;
-            }
-        );
-        VertexInputShaderString += '}';
+    // For now, just check if the attributeMap contains a given attribute using map.has(), and add it if it does
+    // POSITION, NORMAL, TEXCOORD_0, JOINTS_0, WEIGHTS_0 for order
+    // Vertex attribute state and shader stage
+    val vertexInputShaderStringBuilder = StringBuilder("struct VertexInput {\n")
+    val vertexBuffers = this.attributes.map { (attribute, index) ->
+        val accessor = scene.accessors.get(index)
+        val attrString = attribute.str.lowercase().replace("_0", "")
+        vertexInputShaderStringBuilder.append(
+            "\t@location($index) $attrString: ${scene.accessors.get(index).convertToWGSLFormat()},\n"
+        )
 
+        // TODO
+        /*RenderPipelineDescriptor.VertexState.VertexBufferLayout(
+            arrayStride = accessor.byteStride,
+            attributes = arrayOf(
+                VertexAttribute(
+                    format = accessor.vertexType,
+                    offset = accessor.byteOffset.toLong(),
+                    shaderLocation = index
+                )
+            )
+        )*/
+    }
+    vertexInputShaderStringBuilder.append("}")
+    val vertexInputShaderString = vertexInputShaderStringBuilder.toString()
+
+    /*
         const vertexState: GPUVertexState = {
             // Shader stage info
             module: device.createShaderModule({
@@ -134,3 +137,27 @@ internal fun GLTF2.Primitive.buildRenderPipeline(
      */
     TODO("Not yet implemented")
 }
+
+private fun GLTF2.Accessor.convertToWGSLFormat(): String {
+    return "${type.convertToWGSLFormat()}${componentType.convertToWGSLFormat()}"
+}
+
+/**
+ * https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#accessor-data-types
+ */
+private fun Int.convertToWGSLFormat(): String = when (this) {
+    5126 -> "f"
+    5121 -> "u"
+    else -> TODO("$this")
+}
+
+private fun GLTF2.AccessorType.convertToWGSLFormat(): String = when (this) {
+    GLTF2.AccessorType.SCALAR -> TODO()
+    GLTF2.AccessorType.VEC2 -> "vec2"
+    GLTF2.AccessorType.VEC3 -> "vec3"
+    GLTF2.AccessorType.VEC4 -> "vec4"
+    GLTF2.AccessorType.MAT2 -> TODO()
+    GLTF2.AccessorType.MAT3 -> TODO()
+    GLTF2.AccessorType.MAT4 -> TODO()
+}
+

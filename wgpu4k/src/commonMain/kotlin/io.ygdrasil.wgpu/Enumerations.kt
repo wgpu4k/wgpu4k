@@ -904,7 +904,6 @@ enum class TextureViewDimension(
 enum class VertexFormat(
     override val `value`: Int,
 ) : EnumerationWithValue {
-    undefined(0),
     uint8x2(1),
     uint8x4(2),
     sint8x2(3),
