@@ -373,8 +373,6 @@ export class GLTFPrimitive {
         );
         VertexInputShaderString += '}';
 
-        console.log(VertexInputShaderString);
-
         const vertexState: GPUVertexState = {
             // Shader stage info
             module: device.createShaderModule({

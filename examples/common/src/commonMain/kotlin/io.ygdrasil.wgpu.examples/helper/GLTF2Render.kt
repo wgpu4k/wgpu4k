@@ -2,6 +2,8 @@ package io.ygdrasil.wgpu.examples.helper
 
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.BufferBindingLayout
+import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute
+import kotlin.math.max
 
 
 fun createSharedBindGroupLayout(device: Device) = device.createBindGroupLayout(
@@ -71,23 +73,24 @@ internal fun GLTF2.Primitive.buildRenderPipeline(
         val accessor = scene.accessors.get(index)
         val attrString = attribute.str.lowercase().replace("_0", "")
         vertexInputShaderStringBuilder.append(
-            "\t@location($index) $attrString: ${scene.accessors.get(index).convertToWGSLFormat()},\n"
+            "\t@location($index) $attrString: ${accessor.convertToWGSLFormat()},\n"
         )
-
-        // TODO
-        /*RenderPipelineDescriptor.VertexState.VertexBufferLayout(
-            arrayStride = accessor.byteStride,
+        val bufferView = scene.bufferViews.get(accessor.bufferView)
+        val format = accessor.convertToVertexType()
+        RenderPipelineDescriptor.VertexState.VertexBufferLayout(
+            arrayStride = max(format.sizeInByte, bufferView.byteStride).toLong(),
             attributes = arrayOf(
                 VertexAttribute(
-                    format = accessor.vertexType,
+                    format = format,
                     offset = accessor.byteOffset.toLong(),
                     shaderLocation = index
                 )
             )
-        )*/
+        )
     }
     vertexInputShaderStringBuilder.append("}")
     val vertexInputShaderString = vertexInputShaderStringBuilder.toString()
+
 
     /*
         const vertexState: GPUVertexState = {
@@ -136,6 +139,26 @@ internal fun GLTF2.Primitive.buildRenderPipeline(
         this.renderPipeline = device.createRenderPipeline(rpDescript);
      */
     TODO("Not yet implemented")
+}
+
+private fun GLTF2.Accessor.convertToVertexType(): VertexFormat = when (type) {
+    GLTF2.AccessorType.VEC2 -> when (componentType) {
+        5126 -> VertexFormat.float32x2
+        else -> TODO("convertToVertexType $componentType")
+    }
+
+    GLTF2.AccessorType.VEC3 -> when (componentType) {
+        5126 -> VertexFormat.float32x3
+        else -> TODO("convertToVertexType $componentType")
+    }
+
+    GLTF2.AccessorType.VEC4 -> when (componentType) {
+        5126 -> VertexFormat.float32x4
+        5121 -> VertexFormat.uint8x4
+        else -> TODO("convertToVertexType $componentType")
+    }
+
+    else -> TODO("convertToVertexType $type")
 }
 
 private fun GLTF2.Accessor.convertToWGSLFormat(): String {
