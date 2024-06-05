@@ -17,13 +17,15 @@ val MAT4X4_BYTES = 64
 
 class WhaleScene : Application.Scene() {
 
+    private lateinit var meshPipelines: List<RenderPipeline>
     private lateinit var generalUniformsBGCLuster: BindGroupCluster
     private lateinit var cameraBGCluster: BindGroupCluster
-    private lateinit var whaleScene: GLTF2
+    private lateinit var gltf2: GLTF2
     private lateinit var cameraBuffer: Buffer
     private lateinit var gltfRenderPassDescriptor: RenderPassDescriptor
     private lateinit var projectionMatrix: Matrix4
     private val settings = Settings()
+    private lateinit var gltF2RenderContext: GLTF2RenderContext
 
     data class Settings(
         val cameraX: Double = 0.0,
@@ -95,24 +97,28 @@ class WhaleScene : Application.Scene() {
             )
         ).bind()
 
-        whaleScene = runBlockingNoJs {
+        gltf2 = runBlockingNoJs {
             resourcesVfs["assets/gltf/whale.glb"].readGLB()
         }
 
-        whaleScene.meshes[0].buildRenderPipeline(
-            whaleScene,
-            device,
-            gltfWGSL,
-            gltfWGSL,
-            renderingContext.textureFormat,
-            depthTexture.format,
-            listOf(
-                cameraBGCluster.bindGroupLayout,
-                generalUniformsBGCLuster.bindGroupLayout,
-                nodeUniformsBindGroupLayout,
-                createSharedBindGroupLayout(device),
+        gltF2RenderContext = GLTF2RenderContext(
+            device = device,
+            gltf2 = gltf2
+        ).apply {
+            meshPipelines = gltf2.meshes[0].buildRenderPipeline(
+                gltfWGSL,
+                gltfWGSL,
+                renderingContext.textureFormat,
+                depthTexture.format,
+                listOf(
+                    cameraBGCluster.bindGroupLayout,
+                    generalUniformsBGCLuster.bindGroupLayout,
+                    nodeUniformsBindGroupLayout,
+                    createSharedBindGroupLayout(device),
+                )
             )
-        )
+        }
+
 
         val aspect = renderingContext.width / renderingContext.height.toDouble()
         val fox = Angle.fromRadians((2 * PI) / 5)
@@ -173,12 +179,17 @@ class WhaleScene : Application.Scene() {
         )
 
         // The difference between these two render passes is just the presence of depthTexture
-        val gltfRenderPassDescriptor = gltfRenderPassDescriptor.copy(colorAttachments = arrayOf(gltfRenderPassDescriptor.colorAttachments[0]
-            .copy(view = renderingContext.getCurrentTexture().createView().bind()
-        )))
+        val gltfRenderPassDescriptor = gltfRenderPassDescriptor.copy(
+            colorAttachments = arrayOf(
+                gltfRenderPassDescriptor.colorAttachments[0]
+                    .copy(
+                        view = renderingContext.getCurrentTexture().createView().bind()
+                    )
+            )
+        )
 
         // Update node matrices
-        for (scene in whaleScene.scenes) {
+        for (scene in gltf2.scenes) {
             //scene.root.updateWorldMatrix(device)
         }
 
@@ -192,13 +203,18 @@ class WhaleScene : Application.Scene() {
         val commandEncoder = device.createCommandEncoder().bind()
 
         val passEncoder = commandEncoder.beginRenderPass(gltfRenderPassDescriptor).bind()
-        whaleScene.scenes.forEach { scene ->
-            /* TODO scene.root.renderDrawables(
-                passEncoder, listOf(
-                    cameraBGCluster.bindGroups[0],
-                    generalUniformsBGCLuster.bindGroups[0]
+        gltf2.scenes.forEachIndexed() { index, scene ->
+            scene.nodes.forEach { node ->
+                gltf2.nodes[node].renderDrawables(
+                    meshPipelines[index],
+                    gltf2,
+                    passEncoder,
+                    listOf(
+                        cameraBGCluster.bindGroups[0],
+                        generalUniformsBGCLuster.bindGroups[0]
+                    )
                 )
-            )*/
+            }
         }
         passEncoder.end()
 

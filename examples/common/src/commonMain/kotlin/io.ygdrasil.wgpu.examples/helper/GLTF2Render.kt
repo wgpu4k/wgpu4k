@@ -2,8 +2,180 @@ package io.ygdrasil.wgpu.examples.helper
 
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.BufferBindingLayout
+import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState
 import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute
 import kotlin.math.max
+
+
+class GLTF2RenderContext(
+    val gltf2: GLTF2,
+    val device: Device
+) {
+
+    internal fun GLTF2.Mesh.buildRenderPipeline(
+        vertexShader: String,
+        fragmentShader: String,
+        textureFormat: TextureFormat,
+        format: TextureFormat,
+        bgLayouts: List<BindGroupLayout>
+    ): List<RenderPipeline> {
+        // We take a pretty simple approach to start. Just loop through all the primitives and
+        // build their respective render pipelines
+        return primitives.mapIndexed { index, primitive ->
+            primitive.buildRenderPipeline(
+                vertexShader,
+                fragmentShader,
+                textureFormat,
+                format,
+                bgLayouts,
+                "PrimitivePipeline$index"
+            )
+        }
+    }
+
+
+    private fun GLTF2.Primitive.buildRenderPipeline(
+        vertexShader: String,
+        fragmentShader: String,
+        colorFormat: TextureFormat,
+        depthFormat: TextureFormat,
+        bgLayouts: List<BindGroupLayout>,
+        label: String
+    ): RenderPipeline {
+        if (GLTFRenderMode.of(mode) != GLTFRenderMode.TRIANGLES) error("only triangle mode is supported")
+
+        // For now, just check if the attributeMap contains a given attribute using map.has(), and add it if it does
+        // POSITION, NORMAL, TEXCOORD_0, JOINTS_0, WEIGHTS_0 for order
+        // Vertex attribute state and shader stage
+        val vertexInputShaderStringBuilder = StringBuilder("struct VertexInput {\n")
+        val vertexBuffers = this.attributes.map { (attribute, index) ->
+            val accessor = gltf2.accessors.get(index)
+            val attrString = attribute.str.lowercase().replace("_0", "")
+            vertexInputShaderStringBuilder.append(
+                "\t@location($index) $attrString: ${accessor.convertToWGSLFormat()},\n"
+            )
+            val bufferView = gltf2.bufferViews.get(accessor.bufferView)
+            val format = accessor.convertToVertexType()
+            VertexState.VertexBufferLayout(
+                arrayStride = max(format.sizeInByte, bufferView.byteStride).toLong(),
+                attributes = arrayOf(
+                    VertexAttribute(
+                        format = format,
+                        offset = accessor.byteOffset.toLong(),
+                        shaderLocation = index
+                    )
+                )
+            )
+        }
+        vertexInputShaderStringBuilder.append("}")
+        val vertexInputShaderString = vertexInputShaderStringBuilder.toString()
+
+
+        val vertexState = VertexState(
+            module = device.createShaderModule(
+                ShaderModuleDescriptor(code = vertexInputShaderString + vertexShader)
+            ),
+            buffers = vertexBuffers.toTypedArray()
+        )
+
+        val fragmentState = RenderPipelineDescriptor.FragmentState(
+            module = device.createShaderModule(
+                ShaderModuleDescriptor(vertexInputShaderString + fragmentShader)
+            ),
+            targets = arrayOf(
+                RenderPipelineDescriptor.FragmentState.ColorTargetState(format = colorFormat)
+            )
+        )
+
+
+        val pipelineLayout = device.createPipelineLayout(
+            PipelineLayoutDescriptor(
+                bindGroupLayouts = bgLayouts.toTypedArray(),
+                label = "$label.pipelineLayout"
+            )
+        )
+
+        val renderPipelineDescriptor = RenderPipelineDescriptor(
+            layout = pipelineLayout,
+            label = "$label.pipeline",
+            vertex = vertexState,
+            fragment = fragmentState,
+            depthStencil = RenderPipelineDescriptor.DepthStencilState(
+                format = depthFormat,
+                depthWriteEnabled = true,
+                depthCompare = CompareFunction.less
+            )
+        )
+
+        return device.createRenderPipeline(renderPipelineDescriptor)
+    }
+
+}
+
+fun GLTF2.Node.renderDrawables(
+    renderPipeline: RenderPipeline,
+    gltf2: GLTF2,
+    passEncoder: RenderPassEncoder,
+    bindGroups: List<BindGroup>
+) {
+
+    if (mesh != null) {
+        val mesh = gltf2.meshes[mesh]
+        mesh.render(renderPipeline, gltf2, passEncoder, bindGroups)
+    }
+
+    // Render any of its children
+    children.forEach { child -> gltf2.nodes[child].renderDrawables(renderPipeline, gltf2, passEncoder, bindGroups) }
+
+}
+
+private fun GLTF2.Mesh.render(
+    renderPipeline: RenderPipeline,
+    gltf2: GLTF2,
+    passEncoder: RenderPassEncoder,
+    bindGroups: List<BindGroup>
+) {
+    // We take a pretty simple approach to start. Just loop through all the primitives and
+    // call their individual draw methods
+    primitives.forEach {
+        it.render(renderPipeline, gltf2, passEncoder, bindGroups)
+    }
+}
+
+private fun GLTF2.Primitive.render(
+    renderPipeline: RenderPipeline,
+    gltf2: GLTF2,
+    renderPassEncoder: RenderPassEncoder,
+    bindGroups: List<BindGroup>
+) {
+    renderPassEncoder.setPipeline(renderPipeline);
+    bindGroups.forEachIndexed { idx, bg ->
+        renderPassEncoder.setBindGroup(idx, bg)
+    }
+
+    //if skin do something with bone bind group
+    /*attributes.forEach { (attr, idx) ->
+        renderPassEncoder.setVertexBuffer(
+            idx,
+            attributeMap[attr]?.view?.gpuBuffer,
+            attributeMap[attr]?.byteOffset,
+            attributeMap[attr]?.byteLength
+        )
+    }
+
+    if (attributeMap["INDICES"] != null) {
+        renderPassEncoder.setIndexBuffer(
+            attributeMap["INDICES"]?.view?.gpuBuffer,
+            attributeMap["INDICES"]?.vertexType,
+            attributeMap["INDICES"]?.byteOffset,
+            attributeMap["INDICES"]?.byteLength
+        )
+        renderPassEncoder.drawIndexed(attributeMap["INDICES"]?.count ?: 0)
+    } else {
+        renderPassEncoder.draw(attributeMap["POSITION"]?.count ?: 0)
+    }*/
+    TODO()
+}
 
 
 fun createSharedBindGroupLayout(device: Device) = device.createBindGroupLayout(
@@ -30,116 +202,6 @@ fun createSharedBindGroupLayout(device: Device) = device.createBindGroupLayout(
     )
 )
 
-internal fun GLTF2.Mesh.buildRenderPipeline(
-    scene: GLTF2,
-    device: Device,
-    vertexShader: String,
-    fragmentShader: String,
-    textureFormat: TextureFormat,
-    format: TextureFormat,
-    bgLayouts: List<BindGroupLayout>
-) {
-    // We take a pretty simple approach to start. Just loop through all the primitives and
-    // build their respective render pipelines
-    this.primitives.forEachIndexed { index, primitive ->
-        primitive.buildRenderPipeline(
-            scene,
-            device,
-            vertexShader,
-            fragmentShader,
-            textureFormat,
-            format,
-            bgLayouts,
-            "PrimitivePipeline$index"
-        )
-    }
-}
-
-internal fun GLTF2.Primitive.buildRenderPipeline(
-    scene: GLTF2,
-    device: Device,
-    vertexShader: String,
-    fragmentShader: String,
-    textureFormat: TextureFormat,
-    format: TextureFormat,
-    bgLayouts: List<BindGroupLayout>,
-    label: String
-) {
-    // For now, just check if the attributeMap contains a given attribute using map.has(), and add it if it does
-    // POSITION, NORMAL, TEXCOORD_0, JOINTS_0, WEIGHTS_0 for order
-    // Vertex attribute state and shader stage
-    val vertexInputShaderStringBuilder = StringBuilder("struct VertexInput {\n")
-    val vertexBuffers = this.attributes.map { (attribute, index) ->
-        val accessor = scene.accessors.get(index)
-        val attrString = attribute.str.lowercase().replace("_0", "")
-        vertexInputShaderStringBuilder.append(
-            "\t@location($index) $attrString: ${accessor.convertToWGSLFormat()},\n"
-        )
-        val bufferView = scene.bufferViews.get(accessor.bufferView)
-        val format = accessor.convertToVertexType()
-        RenderPipelineDescriptor.VertexState.VertexBufferLayout(
-            arrayStride = max(format.sizeInByte, bufferView.byteStride).toLong(),
-            attributes = arrayOf(
-                VertexAttribute(
-                    format = format,
-                    offset = accessor.byteOffset.toLong(),
-                    shaderLocation = index
-                )
-            )
-        )
-    }
-    vertexInputShaderStringBuilder.append("}")
-    val vertexInputShaderString = vertexInputShaderStringBuilder.toString()
-
-
-    /*
-        const vertexState: GPUVertexState = {
-            // Shader stage info
-            module: device.createShaderModule({
-                code: VertexInputShaderString + vertexShader,
-            }),
-            buffers: vertexBuffers,
-        };
-
-        const fragmentState: GPUFragmentState = {
-            // Shader info
-            module: device.createShaderModule({
-                code: VertexInputShaderString + fragmentShader,
-            }),
-            // Output render target info
-            targets: [{format: colorFormat}],
-        };
-
-        // Our loader only supports triangle lists and strips, so by default we set
-        // the primitive topology to triangle list, and check if it's instead a triangle strip
-        const primitive: GPUPrimitiveState = {topology: 'triangle-list'};
-        if (this.topology == GLTFRenderMode.TRIANGLE_STRIP) {
-            primitive.topology = 'triangle-strip';
-            primitive.stripIndexFormat = this.attributeMap['INDICES'].vertexType;
-        }
-
-        const layout: GPUPipelineLayout = device.createPipelineLayout({
-            bindGroupLayouts: bgLayouts,
-            label: `${label}.pipelineLayout`,
-        });
-
-        const rpDescript: GPURenderPipelineDescriptor = {
-            layout: layout,
-            label: `${label}.pipeline`,
-            vertex: vertexState,
-            fragment: fragmentState,
-            primitive: primitive,
-            depthStencil: {
-                format: depthFormat,
-                depthWriteEnabled: true,
-                depthCompare: 'less',
-            },
-        };
-
-        this.renderPipeline = device.createRenderPipeline(rpDescript);
-     */
-    TODO("Not yet implemented")
-}
 
 private fun GLTF2.Accessor.convertToVertexType(): VertexFormat = when (type) {
     GLTF2.AccessorType.VEC2 -> when (componentType) {

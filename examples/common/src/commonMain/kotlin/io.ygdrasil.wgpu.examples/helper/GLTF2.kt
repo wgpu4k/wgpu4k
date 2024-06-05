@@ -173,9 +173,9 @@ data class GLTF2(
         /** The index of the skin referenced by this node. When a skin is referenced by a node within a scene, all joints used by the skin **MUST** belong to the same scene. When defined, `mesh` **MUST** also be defined. */
         val skin: Int = -1,
         /** The index of the mesh in this node. */
-        val mesh: Int = -1,
+        val mesh: Int? = null,
         /** The indices of this node's children. */
-        val children: IntArray? = null,
+        val children: IntArray = intArrayOf(),
         /** The node's non-uniform scale, given as the scaling factors along the x, y, and z axes. */
         val scale: FloatArray? = null,
         /** The node's translation along the x, y, and z axes. */
@@ -264,16 +264,6 @@ data class GLTF2(
         override val extensions: JsonElement? = null,
         override val extras: JsonElement? = null,
     ) : GLTFProperty() {
-        val drawType: AGDrawType get() = when (mode) {
-            0 -> AGDrawType.POINTS
-            1 -> AGDrawType.LINES
-            2 -> AGDrawType.LINE_LOOP
-            3 -> AGDrawType.LINE_STRIP
-            4 -> AGDrawType.TRIANGLES
-            5 -> AGDrawType.TRIANGLE_STRIP
-            6 -> AGDrawType.TRIANGLE_FAN
-            else -> TODO("Unsupported draw mode=$mode")
-        }
 
         fun getBounds(gltf: GLTF2): AABB3D {
             val accessorIndex = attributes[PrimitiveAttribute.POSITION] ?: return AABB3D(Vector3.ZERO, Vector3.ZERO)
@@ -988,47 +978,6 @@ data class GLTF2AccessorVector(val accessor: GLTF2.Accessor, val buffer: Buffer)
     }
 }
 
-/*
-data class GLTF2Vector(val dims: Int, val floats: Float32Buffer) {
-    constructor(dims: Int, size: Int = 1) : this(dims, Float32Buffer(size * dims))
-    fun checkDims(dims: Int) {
-        assert(this.dims == dims) { "Expected ${this.dims} dimensions, but found $dims" }
-    }
-    fun toVector3(): Vector3 = Vector3.func { if (dims >= it) this[0, it] else 0f }
-    fun toVector4(): Vector4 = Vector4.func { if (dims >= it) this[0, it] else 0f }
-
-    val size: Int get() = floats.size / dims
-    operator fun get(n: Int, dim: Int): Float = floats[n * dims + dim]
-    operator fun set(n: Int, dim: Int, value: Float) { floats[n * dims + dim] = value }
-
-    fun setInterpolated(index: Int, a: GLTF2Vector, aIndex: Int, b: GLTF2Vector, bIndex: Int, ratio: Float) {
-        a.checkDims(dims)
-        b.checkDims(dims)
-        for (dim in 0 until dims) {
-            //println("a[aIndex, dim], b[bIndex, dim]=${a[aIndex, dim]} : ${b[bIndex, dim]}")
-            this[index, dim] = ratio.toRatio().interpolate(a[aIndex, dim], b[bIndex, dim])
-        }
-    }
-
-    override fun toString(): String {
-        return buildString {
-            append("[")
-            for (n in 0 until size) {
-                if (n != 0) append(", ")
-                append("[")
-                for (dim in 0 until dims) {
-                    if (dim != 0) append(", ")
-                    append(this@GLTF2Vector[n, dim])
-                }
-                append("]")
-            }
-            append("]")
-        }
-    }
-}
-
- */
-
 interface GLTF2Holder {
     val gltf: GLTF2
     val GLTF2.Node.childrenNodes: List<GLTF2.Node> get() = this.childrenNodes(gltf) ?: emptyList()
@@ -1037,4 +986,20 @@ interface GLTF2Holder {
 
 fun GLTF2.Node.childrenNodes(gltf: GLTF2): List<GLTF2.Node>? = this.children?.map { gltf.nodes[it] }
 fun GLTF2.Scene.childrenNodes(gltf: GLTF2): List<GLTF2.Node>? = this.nodes?.map { gltf.nodes[it] }
-fun GLTF2.Node.mesh(gltf: GLTF2): GLTF2.Mesh = gltf.meshes[this.mesh]
+fun GLTF2.Node.mesh(gltf: GLTF2): GLTF2.Mesh = gltf.meshes[this.mesh ?: error("cannot get mesh")]
+
+enum class GLTFRenderMode(val value: Int) {
+    POINTS(0),
+    LINE(1),
+    LINE_LOOP(2),
+    LINE_STRIP(3),
+    TRIANGLES(4),
+    TRIANGLE_STRIP(5),
+    TRIANGLE_FAN(6);
+
+    companion object {
+        fun of(value: Int): GLTFRenderMode? {
+            return entries.find { it.value == value }
+        }
+    }
+}

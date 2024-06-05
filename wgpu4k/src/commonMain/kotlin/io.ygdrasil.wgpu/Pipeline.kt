@@ -13,12 +13,7 @@ expect class RenderPipeline : AutoCloseable {
 data class PipelineLayoutDescriptor(
     val bindGroupLayouts: Array<BindGroupLayout> = arrayOf(),
     val label: String? = null
-) {
-    data class BindGroupLayout(
-        val label: String,
-        val brand: String
-    )
-}
+)
 
 data class RenderPipelineDescriptor(
     val vertex: VertexState,
