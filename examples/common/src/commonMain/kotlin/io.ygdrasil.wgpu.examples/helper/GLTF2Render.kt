@@ -4,6 +4,7 @@ import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.BufferBindingLayout
 import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState
 import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute
+import korlibs.memory.getS8Array
 import kotlin.math.max
 
 
@@ -11,6 +12,26 @@ class GLTF2RenderContext(
     val gltf2: GLTF2,
     val device: Device
 ) {
+
+    val buffers: Map<GLTF2.BufferView, Buffer>
+
+    init {
+
+        val bufferUsage = gltf2.accessors
+            .map { it.type }
+
+        bufferUsage.forEach { println(it) }
+
+        buffers = gltf2.bufferViews.map {
+            val byteBuffer = gltf2.buffers[it.buffer].buffer.getS8Array(it.byteOffset, it.byteLength)
+            TODO()
+            /*it to device.createBuffer(BufferDescriptor(
+                size = it.byteLength
+            ))*/
+        }.toMap()
+
+
+    }
 
     internal fun GLTF2.Mesh.buildRenderPipeline(
         vertexShader: String,
