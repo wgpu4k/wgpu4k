@@ -794,8 +794,6 @@ data class GLTF2(
     }
 
     companion object {
-        @Transient
-        val EMPTY_BUFFER = korlibs.memory.Buffer(0)
 
         val logger = Logger("GLTF2")
 
@@ -806,7 +804,7 @@ data class GLTF2(
             val version = s.readS32LE()
             if (version != 2) error("Not a glTF version 2.0")
             val fileSize = s.readS32LE()
-            var json: String = "{}"
+            var json = "{}"
             var bin: ByteArray? = null
             while (s.position < fileSize) {
                 val chunkSize = s.readS32LE()

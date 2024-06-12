@@ -5,6 +5,8 @@ package io.ygdrasil.wgpu.examples.scenes.graphics.techniques
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.Application
 import io.ygdrasil.wgpu.examples.autoClosableContext
+import io.ygdrasil.wgpu.examples.helper.GLTF2RenderContext
+import io.ygdrasil.wgpu.examples.helper.readGLB
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubePositionOffset
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeUVOffset
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeVertexArray
@@ -12,6 +14,8 @@ import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeVertexCount
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeVertexSize
 import io.ygdrasil.wgpu.examples.scenes.shader.fragment.vertexPositionColorShader
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.basicVertexShader
+import korlibs.io.async.runBlockingNoJs
+import korlibs.io.file.std.resourcesVfs
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
@@ -26,6 +30,15 @@ class RotatingMeshCubeScene : Application.Scene(), AutoCloseable {
 	lateinit var verticesBuffer: Buffer
 
 	override fun Application.initialiaze() = with(autoClosableContext) {
+
+		val gltf2 = runBlockingNoJs {
+			resourcesVfs["assets/gltf/Box.glb"].readGLB()
+		}
+
+		val gltF2RenderContext = GLTF2RenderContext(
+			device = device,
+			gltf2 = gltf2
+		)
 
 		// Create a vertex buffer from the cube data.
 		verticesBuffer = device.createBuffer(
