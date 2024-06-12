@@ -14,6 +14,7 @@ class GLTF2RenderContext(
     val device: Device
 ) {
 
+    val skinBindGroupLayout: BindGroupLayout = createSharedBindGroupLayout(device)
     val buffers: Map<GLTF2.BufferView, Buffer>
 
     init {
@@ -25,7 +26,7 @@ class GLTF2RenderContext(
         //Often necessary due to infrequencey with which the BufferView target field is populated.
         gltf2.meshes.forEach { mesh ->
             mesh.primitives.forEach { primitive ->
-                if (primitive.indices != null) {
+                primitive.indices?.let {
                     val accessor = gltf2.accessors[primitive.indices]
                     val bufferView = gltf2.bufferViews[accessor.bufferView]
                     bufferUsages[bufferView]?.add(BufferUsage.index)
@@ -39,17 +40,32 @@ class GLTF2RenderContext(
             }
         }
 
-
-        buffers = gltf2.bufferViews.map {
-            val byteBuffer = gltf2.buffers[it.buffer].buffer.getS8Array(it.byteOffset, it.byteLength)
-            it to device.createBuffer(BufferDescriptor(
-                size = alignTo(it.byteLength, 4).toLong(),
-                usage = bufferUsages[it] ?: error("buffer usage not found"),
-                mappedAtCreation = true
-            )).also {
-                it.map(byteBuffer)
+        gltf2.skins.forEach { skin ->
+            skin.inverseBindMatrices?.let {
+                val accessor = gltf2.accessors[skin.inverseBindMatrices]
+                val bufferView = gltf2.bufferViews[accessor.bufferView]
+                bufferUsages[bufferView]?.apply {
+                    add(BufferUsage.uniform)
+                    add(BufferUsage.copydst)
+                }
             }
-        }.toMap()
+        }
+
+        // Create GLTFBufferView objects for all the buffer views in the glTF file
+        buffers = gltf2.bufferViews
+            .associateWith { bufferView ->
+                println("create buffer ${bufferView} with usage ${bufferUsages[bufferView]}")
+                val byteBuffer = gltf2.buffers[bufferView.buffer]
+                    .buffer
+                    .getS8Array(bufferView.byteOffset, bufferView.byteLength)
+                device.createBuffer(
+                    BufferDescriptor(
+                        size = alignTo(bufferView.byteLength, 4).toLong(),
+                        usage = bufferUsages[bufferView] ?: error("buffer usage not found"),
+                        mappedAtCreation = true
+                    )
+                ).also { buffer -> buffer.map(byteBuffer) }
+            }
 
 
         bufferUsages.forEach { println(it) }
@@ -220,8 +236,7 @@ private fun GLTF2.Primitive.render(
     TODO()
 }
 
-
-fun createSharedBindGroupLayout(device: Device) = device.createBindGroupLayout(
+private fun createSharedBindGroupLayout(device: Device) = device.createBindGroupLayout(
     BindGroupLayoutDescriptor(
         label = "StaticGLTFSkin.bindGroupLayout",
         entries = arrayOf(

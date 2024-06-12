@@ -102,17 +102,14 @@ data class GLTF2(
     }
 
     private suspend fun ensureLoadImages(file: VfsFile?) {
-        //println("$file")
         for (image in images) {
             if (image.bitmap == null) {
-                //println("ensureLoadImages: $image")
 
                 val vfile = image.uri?.let { resolveUri(file, it) }
 
                 val (buffer, time) = measureTimeWithResult {
-                    (vfile
-                        ?: (if (image.bufferView >= 0) bufferViews[image.bufferView].slice(this).asInt8().getArray().asMemoryVfsFile() else null))
-                        //?.readBytes()
+                    (vfile ?: (if (image.bufferView >= 0) bufferViews[image.bufferView].slice(this).asInt8().getArray().asMemoryVfsFile() else null))
+
                 }
                 val (bitmap, timeBitmap) = measureTimeWithResult {
                     buffer?.let { nativeImageFormatProvider.decode(it) } ?: Bitmaps.transparent.bmp
@@ -125,14 +122,12 @@ data class GLTF2(
     }
 
     data class ReadOptions(
-        //val ignoreUnknownKeys: Boolean = true,
         val ignoreUnknownKeys: Boolean = false,
     ) {
         companion object {
             val DEFAULT = ReadOptions()
         }
     }
-
 
     fun resolveUri(file: VfsFile?, uri: String): VfsFile? {
         if (uri.startsWith("data:")) {
@@ -254,9 +249,9 @@ data class GLTF2(
         /** A plain JSON object, where each key corresponds to a mesh attribute semantic and each value is the index of the accessor containing attribute's data. */
         val attributes: Map<PrimitiveAttribute, Int> = emptyMap(),
         /** The index of the accessor that contains the vertex indices.  When this is undefined, the primitive defines non-indexed geometry.  When defined, the accessor **MUST** have `SCALAR` type and an unsigned integer component type. */
-        val indices: Int?,
+        val indices: Int? = null,
         /** The index of the material to apply to this primitive when rendering. */
-        val material: Int = -1,
+        val material: Int? = null,
         /** The topology type of primitives to render. */
         val mode: Int = 4,
         /** An array of morph targets. Morph targets: one per morphing weight. Typically, 4 as max for standard. A plain JSON object specifying attributes displacements in a morph target, where each key corresponds to one of the three supported attribute semantic (`POSITION`, `NORMAL`, or `TANGENT`) and each value is the index of the accessor containing the attribute displacements' data. */
@@ -278,17 +273,15 @@ data class GLTF2(
     data class Skin(
         override var name: String? = null,
         /** The index of the accessor containing the floating-point 4x4 inverse-bind matrices. */
-        val inverseBindMatrices: Int = -1,
+        val inverseBindMatrices: Int? = null,
         /** Indices of skeleton nodes, used as joints in this skin. */
         val joints: IntArray = IntArray(0),
         /** he index of the node used as a skeleton root. */
-        val skeleton: Int = -1,
+        val skeleton: Int? = null,
         override val extensions: JsonElement? = null,
         override val extras: JsonElement? = null
-    ) : GLTFProperty() {
-        fun inverseBindMatricesAccessor(gltf: GLTF2): Accessor = gltf.accessors[inverseBindMatrices]
-        fun skeletonNode(gltf: GLTF2): Node? = gltf.nodes.getOrNull(skeleton)
-    }
+    ) : GLTFProperty()
+
     @Serializable
     data class Animation(
         override var name: String? = null,
@@ -840,7 +833,7 @@ data class GLTF2(
         // @TODO: Use kotlinx-serialization
         suspend fun readGLTF(jsonString: String, bin: ByteArray? = null, file: VfsFile? = null, options: ReadOptions = ReadOptions.DEFAULT): GLTF2 {
             return try {
-                kotlinx.serialization.json.Json { this.ignoreUnknownKeys = options.ignoreUnknownKeys }
+                Json { this.ignoreUnknownKeys = options.ignoreUnknownKeys }
                     .decodeFromString<GLTF2>(jsonString)
                     .also { it.ensureLoad(file, bin) }
             } catch (e: Throwable) {
@@ -859,7 +852,7 @@ data class GLTF2(
  * <https://github.com/KhronosGroup/glTF/blob/main/specification/2.0/schema/extras.schema.json>
  */
 @Serializable
-abstract class GLTFProperty() : Extra by Extra.Mixin() {
+abstract class GLTFProperty : Extra by Extra.Mixin() {
     abstract var name: String?
     /** JSON object with extension-specific objects. */
     abstract val extensions: JsonElement?

@@ -114,7 +114,7 @@ class WhaleScene : Application.Scene() {
                     cameraBGCluster.bindGroupLayout,
                     generalUniformsBGCLuster.bindGroupLayout,
                     nodeUniformsBindGroupLayout,
-                    createSharedBindGroupLayout(device),
+                    skinBindGroupLayout,
                 )
             )
         }
