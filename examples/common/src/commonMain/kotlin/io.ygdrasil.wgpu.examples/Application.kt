@@ -5,6 +5,7 @@ package io.ygdrasil.wgpu.examples
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.scenes.basic.*
 import io.ygdrasil.wgpu.examples.scenes.graphics.techniques.ParticlesScene
+import io.ygdrasil.wgpu.examples.scenes.graphics.techniques.RotatingMeshCubeScene
 import io.ygdrasil.wgpu.examples.scenes.graphics.techniques.WhaleScene
 
 abstract class Application(
@@ -107,4 +108,5 @@ val availableScenes = listOf(
 	// Not working
 	ParticlesScene(),
 	WhaleScene(),
+	RotatingMeshCubeScene()
 )

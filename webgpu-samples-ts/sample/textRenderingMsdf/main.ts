@@ -1,12 +1,6 @@
 import {mat4, vec3} from 'wgpu-matrix';
 
-import {
-    cubeVertexArray,
-    cubeVertexSize,
-    cubeUVOffset,
-    cubePositionOffset,
-    cubeVertexCount,
-} from '../../meshes/cube';
+import {cubePositionOffset, cubeUVOffset, cubeVertexArray, cubeVertexCount, cubeVertexSize,} from '../../meshes/cube';
 import {MsdfTextRenderer} from './msdfText';
 
 import basicVertWGSL from '../../shaders/basic.vert.wgsl';

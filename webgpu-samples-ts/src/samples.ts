@@ -6,14 +6,9 @@ import cameras from '../sample/cameras/meta';
 import clusteredShading from '../sample/clusteredShading/meta';
 import cornell from '../sample/cornell/meta';
 import computeBoids from '../sample/computeBoids/meta';
-import cubemap from '../sample/cubemap/meta';
 import deferredRendering from '../sample/deferredRendering/meta';
-import fractalCube from '../sample/fractalCube/meta';
 import gameOfLife from '../sample/gameOfLife/meta';
-import helloTriangle from '../sample/helloTriangle/meta';
-import helloTriangleMSAA from '../sample/helloTriangleMSAA/meta';
 import imageBlur from '../sample/imageBlur/meta';
-import instancedCube from '../sample/instancedCube/meta';
 import metaballs from '../sample/metaballs/meta';
 import normalMap from '../sample/normalMap/meta';
 import particles from '../sample/particles/meta';
@@ -22,14 +17,11 @@ import renderBundles from '../sample/renderBundles/meta';
 import resizeCanvas from '../sample/resizeCanvas/meta';
 import resizeObserverHDDPI from '../sample/resizeObserverHDDPI/meta';
 import reversedZ from '../sample/reversedZ/meta';
-import rotatingCube from '../sample/rotatingCube/meta';
 import samplerParameters from '../sample/samplerParameters/meta';
 import shadowMapping from '../sample/shadowMapping/meta';
 import skinnedMesh from '../sample/skinnedMesh/meta';
 import spookyball from '../sample/spookyball/meta';
 import textRenderingMsdf from '../sample/textRenderingMsdf/meta';
-import texturedCube from '../sample/texturedCube/meta';
-import twoCubes from '../sample/twoCubes/meta';
 import videoUploading from '../sample/videoUploading/meta';
 import worker from '../sample/worker/meta';
 
@@ -53,23 +45,6 @@ type PageCategory = {
 };
 
 export const pageCategories: PageCategory[] = [
-    // Samples that implement basic rendering functionality using the WebGPU API.
-    {
-        title: 'Basic Graphics',
-        description:
-            'Basic rendering functionality implemented with the WebGPU API.',
-        samples: {
-            helloTriangle,
-            helloTriangleMSAA,
-            rotatingCube,
-            twoCubes,
-            texturedCube,
-            instancedCube,
-            fractalCube,
-            cubemap,
-        },
-    },
-
     // Samples that demonstrate functionality specific to WebGPU, or demonstrate the particularities
     // of how WebGPU implements a particular feature within its api. For instance, while many of the
     // sampler parameters in the 'samplerParameters' sample have direct analogues in other graphics api,

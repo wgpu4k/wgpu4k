@@ -1,4 +1,4 @@
-import {gridVertices, gridIndices, gridJoints, gridWeights} from './gridData';
+import {gridIndices, gridJoints, gridVertices, gridWeights} from './gridData';
 
 // Uses constant grid data to create appropriately sized GPU Buffers for our skinned grid
 export const createSkinnedGridBuffers = (device: GPUDevice) => {

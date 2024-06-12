@@ -1,12 +1,6 @@
 import {mat4, vec3} from 'wgpu-matrix';
 import {GUI} from 'dat.gui';
-import {
-    cubeVertexArray,
-    cubeVertexSize,
-    cubeUVOffset,
-    cubePositionOffset,
-    cubeVertexCount,
-} from '../../meshes/cube';
+import {cubePositionOffset, cubeUVOffset, cubeVertexArray, cubeVertexCount, cubeVertexSize,} from '../../meshes/cube';
 import cubeWGSL from './cube.wgsl';
 import {ArcballCamera, WASDCamera} from './camera';
 import {createInputHandler} from './input';

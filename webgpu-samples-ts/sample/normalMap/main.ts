@@ -3,11 +3,7 @@ import {GUI} from 'dat.gui';
 import normalMapWGSL from './normalMap.wgsl';
 import {createMeshRenderable} from '../../meshes/mesh';
 import {createBoxMeshWithTangents} from '../../meshes/box';
-import {
-    createBindGroupDescriptor,
-    create3DRenderPipeline,
-    createTextureFromImage,
-} from './utils';
+import {create3DRenderPipeline, createBindGroupDescriptor, createTextureFromImage,} from './utils';
 
 const MAT4X4_BYTES = 64;
 
