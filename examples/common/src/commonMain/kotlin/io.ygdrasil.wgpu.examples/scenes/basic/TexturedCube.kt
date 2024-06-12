@@ -31,7 +31,7 @@ class TexturedCubeScene : Application.Scene(), AutoCloseable {
         )
 
         // Util method to use getMappedRange
-        verticesBuffer.map(Cube.cubeVertexArray)
+        verticesBuffer.mapFrom(Cube.cubeVertexArray)
         verticesBuffer.unmap()
 
         renderPipeline = device.createRenderPipeline(

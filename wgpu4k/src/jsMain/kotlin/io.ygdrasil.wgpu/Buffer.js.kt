@@ -10,25 +10,19 @@ actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
 
 	actual val size: GPUSize64
 		get() = handler.size
-
-	actual fun getMappedRange(offset: GPUSize64?, size: GPUSize64?): ByteArray = when {
-		size == null && offset != null -> handler.getMappedRange(offset)
-		size == null && offset == null -> handler.getMappedRange()
-		size != null && offset != null -> handler.getMappedRange(offset, size)
-		else -> error("size cannot be set without offset")
-	}
-		.unsafeCast<ByteArray>()
+	actual val usage: Set<BufferUsage>
+		get() = BufferUsage.entries.filter { it.value and handler.usage != 0 }.toSet()
 
 	actual fun unmap() {
 		handler.unmap()
 	}
 
-	actual fun map(buffer: FloatArray) {
+	actual fun mapFrom(buffer: FloatArray) {
 		Float32Array(handler.getMappedRange())
 			.set(buffer.toTypedArray(), 0)
 	}
 
-	actual 	fun map(buffer: ByteArray) {
+	actual 	fun mapFrom(buffer: ByteArray) {
 		Int8Array(handler.getMappedRange())
 			.set(buffer.toTypedArray(), 0)
 	}

@@ -7,22 +7,20 @@ actual class Buffer(internal val handler: MemorySegment) : AutoCloseable {
 
     actual val size: GPUSize64
         get() = wgpu_h.wgpuBufferGetSize(handler)
-
-    actual fun getMappedRange(offset: GPUSize64?, size: GPUSize64?): ByteArray {
-        wgpu_h.wgpuBufferGetMappedRange(handler, offset ?: 0, size ?: 0)
-        TODO()
-    }
+    actual val usage: Set<BufferUsage>
+        get() = wgpu_h.wgpuBufferGetUsage(handler)
+            .let { usage -> BufferUsage.entries.filter { it.value and usage != 0 }.toSet() }
 
     actual fun unmap() {
         wgpu_h.wgpuBufferUnmap(handler)
     }
 
-    actual fun map(buffer: FloatArray) {
+    actual fun mapFrom(buffer: FloatArray) {
         wgpu_h.wgpuBufferGetMappedRange(handler, 0L, (buffer.size * Float.SIZE_BYTES).toLong())
             .copyFrom(MemorySegment.ofArray(buffer))
     }
 
-    actual fun map(buffer: ByteArray){
+    actual fun mapFrom(buffer: ByteArray){
         wgpu_h.wgpuBufferGetMappedRange(handler, 0L, (buffer.size * Byte.SIZE_BYTES).toLong())
             .copyFrom(MemorySegment.ofArray(buffer))
     }

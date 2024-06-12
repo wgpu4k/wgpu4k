@@ -200,7 +200,7 @@ class ParticlesScene : Application.Scene() {
         val vertexData = arrayOf(
             -1.0, -1.0, +1.0, -1.0, -1.0, +1.0, -1.0, +1.0, +1.0, -1.0, +1.0, +1.0,
         ).let { FloatArray(it.size) { index -> it[index].toFloat() } }
-        quadVertexBuffer.map(vertexData)
+        quadVertexBuffer.mapFrom(vertexData)
         quadVertexBuffer.unmap()
 
         //////////////////////////////////////////////////////////////////////////////

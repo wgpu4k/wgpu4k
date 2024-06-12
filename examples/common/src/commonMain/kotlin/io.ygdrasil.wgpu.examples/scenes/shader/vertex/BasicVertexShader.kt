@@ -25,3 +25,20 @@ fn main(
 }
 
 """
+
+const val basicVertexShader2 = """
+struct Uniforms {
+  modelViewProjectionMatrix : mat4x4<f32>,
+}
+@binding(0) @group(0) var<uniform> uniforms : Uniforms;
+
+@vertex
+fn main(
+	@location(0) normal: vec3f,
+	@location(1) position2: vec3f,
+) -> @builtin(position) vec4f {
+    var position : vec4f = vec4f(position2.x, position2.y, position2.z, 0f);
+    return uniforms.modelViewProjectionMatrix * position;
+}
+
+"""

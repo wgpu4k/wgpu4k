@@ -5,14 +5,13 @@ package io.ygdrasil.wgpu
 expect class Buffer : AutoCloseable {
 
 	val size: GPUSize64
-
-	fun getMappedRange(offset: GPUSize64? = null, size: GPUSize64? = null): ByteArray
+	val usage: Set<BufferUsage>
 
 	fun unmap()
 
-	fun map(buffer: FloatArray)
+	fun mapFrom(buffer: FloatArray)
 
-	fun map(buffer: ByteArray)
+	fun mapFrom(buffer: ByteArray)
 
 	override fun close()
 }

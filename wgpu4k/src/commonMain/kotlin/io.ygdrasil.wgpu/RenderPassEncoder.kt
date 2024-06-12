@@ -19,6 +19,8 @@ expect class RenderPassEncoder: AutoCloseable {
 
 	fun setVertexBuffer(slot: Int, buffer: Buffer)
 
+	fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat , offset: GPUSize64 = 0, size: GPUSize64 = buffer.size)
+
 	override fun close()
 
 }

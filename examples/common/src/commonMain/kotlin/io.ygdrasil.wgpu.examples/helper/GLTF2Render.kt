@@ -4,6 +4,10 @@ import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.BufferBindingLayout
 import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState
 import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute
+import io.ygdrasil.wgpu.examples.AutoClosableContext
+import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeVertexArray
+import korlibs.memory.getF32Array
+import korlibs.memory.getS16Array
 import korlibs.memory.getS8Array
 import kotlin.math.floor
 import kotlin.math.max
@@ -11,7 +15,8 @@ import kotlin.math.max
 
 class GLTF2RenderContext(
     val gltf2: GLTF2,
-    val device: Device
+    val device: Device,
+    val autoClosableContext: AutoClosableContext,
 ) {
 
     val skinBindGroupLayout: BindGroupLayout = createSharedBindGroupLayout(device)
@@ -60,13 +65,36 @@ class GLTF2RenderContext(
                 val byteBuffer = gltf2.buffers[bufferView.buffer]
                     .buffer
                     .getS8Array(bufferView.byteOffset, bufferView.byteLength)
+
+                if (usages.first() == BufferUsage.index) {
+                    println(
+                        gltf2.buffers[bufferView.buffer]
+                            .buffer
+                            .getS16Array(bufferView.byteOffset, bufferView.byteLength / Short.SIZE_BYTES)
+                            .map { it.toString() }
+                    )
+                } else {
+                    val vertex =
+                        gltf2.buffers[bufferView.buffer]
+                            .buffer
+                            .getF32Array(bufferView.byteOffset, bufferView.byteLength / Float.SIZE_BYTES)
+                            .map { it.toString() }
+                    println(
+                        "${vertex.size} " + cubeVertexArray.size
+                    )
+                }
+
                 device.createBuffer(
                     BufferDescriptor(
                         size = alignTo(bufferView.byteLength, 4).toLong(),
                         usage = usages,
                         mappedAtCreation = true
                     )
-                ).also { buffer -> buffer.map(byteBuffer) }
+                ).also { buffer ->
+                    buffer.mapFrom(byteBuffer)
+                    buffer.unmap()
+                    println(buffer.usage)
+                }
             }
 
 
@@ -263,7 +291,7 @@ private fun createSharedBindGroupLayout(device: Device) = device.createBindGroup
 )
 
 
-private fun GLTF2.Accessor.convertToVertexType(): VertexFormat = when (type) {
+internal fun GLTF2.Accessor.convertToVertexType(): VertexFormat = when (type) {
     GLTF2.AccessorType.VEC2 -> when (componentType) {
         5126 -> VertexFormat.float32x2
         else -> TODO("convertToVertexType $componentType")
@@ -283,7 +311,7 @@ private fun GLTF2.Accessor.convertToVertexType(): VertexFormat = when (type) {
     else -> TODO("convertToVertexType $type")
 }
 
-private fun GLTF2.Accessor.convertToWGSLFormat(): String {
+internal fun GLTF2.Accessor.convertToWGSLFormat(): String {
     return "${type.convertToWGSLFormat()}${componentType.convertToWGSLFormat()}"
 }
 

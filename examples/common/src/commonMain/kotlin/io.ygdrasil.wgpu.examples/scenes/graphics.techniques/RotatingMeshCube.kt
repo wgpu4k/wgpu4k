@@ -3,22 +3,21 @@
 package io.ygdrasil.wgpu.examples.scenes.graphics.techniques
 
 import io.ygdrasil.wgpu.*
+import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState
+import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute
 import io.ygdrasil.wgpu.examples.Application
 import io.ygdrasil.wgpu.examples.autoClosableContext
 import io.ygdrasil.wgpu.examples.helper.GLTF2RenderContext
-import io.ygdrasil.wgpu.examples.helper.readGLB
-import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubePositionOffset
-import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeUVOffset
-import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeVertexArray
-import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeVertexCount
-import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeVertexSize
-import io.ygdrasil.wgpu.examples.scenes.shader.fragment.vertexPositionColorShader
-import io.ygdrasil.wgpu.examples.scenes.shader.vertex.basicVertexShader
-import korlibs.io.async.runBlockingNoJs
-import korlibs.io.file.std.resourcesVfs
+import io.ygdrasil.wgpu.examples.helper.convertToVertexType
+import io.ygdrasil.wgpu.examples.helper.convertToWGSLFormat
+import io.ygdrasil.wgpu.examples.scenes.shader.fragment.redFragmentShader
+import io.ygdrasil.wgpu.examples.scenes.shader.vertex.basicVertexShader2
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
+import kotlin.math.max
+
+val localVertexCount = 24
 
 class RotatingMeshCubeScene : Application.Scene(), AutoCloseable {
 
@@ -28,61 +27,65 @@ class RotatingMeshCubeScene : Application.Scene(), AutoCloseable {
 	lateinit var uniformBuffer: Buffer
 	lateinit var uniformBindGroup: BindGroup
 	lateinit var verticesBuffer: Buffer
+	lateinit var indexBuffer: Buffer
 
 	override fun Application.initialiaze() = with(autoClosableContext) {
 
-		val gltf2 = runBlockingNoJs {
-			resourcesVfs["assets/gltf/Box.glb"].readGLB()
-		}
 
 		val gltF2RenderContext = GLTF2RenderContext(
 			device = device,
-			gltf2 = gltf2
+			gltf2 = boxMesh,
+			autoClosableContext = autoClosableContext
 		)
+		val mesh = boxMesh.meshes[0]
+		val primitive = mesh.primitives[0]
+		val vertexInputShaderStringBuilder = StringBuilder("struct VertexInput {\n")
+		val vertexBuffers = primitive.attributes.map { (attribute, index) ->
+			val accessor = boxMesh.accessors[index]
+			val attrString = attribute.str.lowercase()
+			vertexInputShaderStringBuilder.append(
+				"\t@location(${index - 1}) $attrString: ${accessor.convertToWGSLFormat()},\n"
+			)
+			val bufferView = boxMesh.bufferViews.get(accessor.bufferView)
+			val format = accessor.convertToVertexType()
+			VertexState.VertexBufferLayout(
+				arrayStride = max(format.sizeInByte, bufferView.byteStride).toLong(),
+				attributes = arrayOf(
+					VertexAttribute(
+						format = format,
+						offset = accessor.byteOffset.toLong(),
+						shaderLocation = index - 1
+					)
+				)
+			)
+		}
+		vertexInputShaderStringBuilder.append("}\n")
+		val vertexInputShaderString = vertexInputShaderStringBuilder.toString()
 
 		// Create a vertex buffer from the cube data.
-		verticesBuffer = device.createBuffer(
-			BufferDescriptor(
-				size = (cubeVertexArray.size * Float.SIZE_BYTES).toLong(),
-				usage = setOf(BufferUsage.vertex),
-				mappedAtCreation = true
-			)
-		).bind()
-
-		// Util method to use getMappedRange
-		verticesBuffer.map(cubeVertexArray)
-		verticesBuffer.unmap()
+		verticesBuffer = gltF2RenderContext.buffers
+			.map { (_, buffer) -> buffer }
+			.first { buffer -> buffer.usage.contains(BufferUsage.vertex) }
+			.bind()
+		indexBuffer = gltF2RenderContext.buffers
+			.map { (_, buffer) -> buffer }
+			.first { buffer -> buffer.usage.contains(BufferUsage.index) }
+			.bind()
 
 		renderPipeline = device.createRenderPipeline(
 			RenderPipelineDescriptor(
-				vertex = RenderPipelineDescriptor.VertexState(
+				vertex = VertexState(
 					module = device.createShaderModule(
 						ShaderModuleDescriptor(
-							code = basicVertexShader
+							code = basicVertexShader2
 						)
 					).bind(), // bind to autoClosableContext to release it later
-					buffers = arrayOf(
-						RenderPipelineDescriptor.VertexState.VertexBufferLayout(
-							arrayStride = cubeVertexSize,
-							attributes = arrayOf(
-								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
-									shaderLocation = 0,
-									offset = cubePositionOffset,
-									format = VertexFormat.float32x4
-								),
-								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
-									shaderLocation = 1,
-									offset = cubeUVOffset,
-									format = VertexFormat.float32x2
-								)
-							)
-						)
-					)
+					buffers = vertexBuffers.toTypedArray()
 				),
 				fragment = RenderPipelineDescriptor.FragmentState(
 					module = device.createShaderModule(
 						ShaderModuleDescriptor(
-							code = vertexPositionColorShader
+							code = redFragmentShader
 						)
 					).bind(), // bind to autoClosableContext to release it later
 					targets = arrayOf(
@@ -192,7 +195,9 @@ class RotatingMeshCubeScene : Application.Scene(), AutoCloseable {
 		renderPassEncoder.setPipeline(renderPipeline)
 		renderPassEncoder.setBindGroup(0, uniformBindGroup)
 		renderPassEncoder.setVertexBuffer(0, verticesBuffer)
-		renderPassEncoder.draw(cubeVertexCount)
+		renderPassEncoder.setVertexBuffer(1, verticesBuffer)
+		renderPassEncoder.setIndexBuffer(indexBuffer, IndexFormat.uint16)
+		renderPassEncoder.draw(localVertexCount)
 		renderPassEncoder.end()
 
 		val commandBuffer = encoder.finish()

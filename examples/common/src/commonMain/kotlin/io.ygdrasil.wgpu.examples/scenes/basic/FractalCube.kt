@@ -54,7 +54,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 		)
 
 		// Util method to use getMappedRange
-		verticesBuffer.map(cubeVertexArray)
+		verticesBuffer.mapFrom(cubeVertexArray)
 		verticesBuffer.unmap()
 
 		renderPipeline = device.createRenderPipeline(

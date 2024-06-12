@@ -425,11 +425,9 @@ enum class FrontFace(
 enum class IndexFormat(
     override val `value`: Int,
 ) : EnumerationWithValue {
-    undefined(0),
-    uint16(1),
-    uint32(2),
 
-    ;
+    uint16(1),
+    uint32(2);
 
     companion object {
         fun of(`value`: Int): IndexFormat? = entries.find {

@@ -42,6 +42,10 @@ actual class RenderPassEncoder(private val handler: MemorySegment) : AutoCloseab
         )
     }
 
+    actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
+        wgpu_h.wgpuRenderPassEncoderSetIndexBuffer(handler, buffer.handler, indexFormat.value, offset, size)
+    }
+
     actual override fun close() {
         wgpu_h.wgpuRenderPassEncoderRelease(handler)
     }

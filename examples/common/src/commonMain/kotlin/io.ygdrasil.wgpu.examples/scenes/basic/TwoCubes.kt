@@ -41,7 +41,7 @@ class TwoCubesScene : Application.Scene(), AutoCloseable {
 		).bind()
 
 		// Util method to use getMappedRange
-		verticesBuffer.map(cubeVertexArray)
+		verticesBuffer.mapFrom(cubeVertexArray)
 		verticesBuffer.unmap()
 
 		renderPipeline = device.createRenderPipeline(

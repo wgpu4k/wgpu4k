@@ -842,7 +842,7 @@ data class GLTF2(
  * <https://github.com/KhronosGroup/glTF/blob/main/specification/2.0/schema/extras.schema.json>
  */
 @Serializable
-abstract class GLTFProperty : Extra by Extra.Mixin() {
+abstract class GLTFProperty {
     abstract var name: String?
     /** JSON object with extension-specific objects. */
     abstract val extensions: JsonElement?

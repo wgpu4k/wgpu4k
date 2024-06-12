@@ -103,7 +103,8 @@ class WhaleScene : Application.Scene() {
 
         gltF2RenderContext = GLTF2RenderContext(
             device = device,
-            gltf2 = gltf2
+            gltf2 = gltf2,
+            autoClosableContext = autoClosableContext
         ).apply {
             meshPipelines = gltf2.meshes[0].buildRenderPipeline(
                 gltfWGSL,
