@@ -193,11 +193,11 @@ private fun RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttrib
 
 private fun RenderPipelineDescriptor.PrimitiveState.convert(): GPUPrimitiveState =
 	object : GPUPrimitiveState {
-		override var topology: String? = this@convert.topology?.stringValue ?: undefined
+		override var topology: String? = this@convert.topology?.stringValue
 		override var stripIndexFormat: String? = this@convert.stripIndexFormat?.name ?: undefined
-		override var frontFace: String? = this@convert.frontFace?.name ?: undefined
-		override var cullMode: String? = this@convert.cullMode?.name ?: undefined
-		override var unclippedDepth: Boolean? = this@convert.unclippedDepth ?: undefined
+		override var frontFace: String? = this@convert.frontFace?.name
+		override var cullMode: String? = this@convert.cullMode?.name
+		override var unclippedDepth: Boolean? = this@convert.unclippedDepth
 	}
 
 private fun RenderPipelineDescriptor.DepthStencilState.convert(): GPUDepthStencilState =
@@ -205,21 +205,21 @@ private fun RenderPipelineDescriptor.DepthStencilState.convert(): GPUDepthStenci
 		override var format: String = this@convert.format.name
 		override var depthWriteEnabled: Boolean? = this@convert.depthWriteEnabled ?: undefined
 		override var depthCompare: String? = this@convert.depthCompare?.stringValue ?: undefined
-		override var stencilFront: GPUStencilFaceState? = this@convert.stencilFront?.convert() ?: undefined
-		override var stencilBack: GPUStencilFaceState? = this@convert.stencilBack?.convert() ?: undefined
-		override var stencilReadMask: GPUStencilValue? = this@convert.stencilReadMask ?: undefined
-		override var stencilWriteMask: GPUStencilValue? = this@convert.stencilWriteMask ?: undefined
-		override var depthBias: GPUDepthBias? = this@convert.depthBias ?: undefined
-		override var depthBiasSlopeScale: Float? = this@convert.depthBiasSlopeScale ?: undefined
-		override var depthBiasClamp: Float? = this@convert.depthBiasClamp ?: undefined
+		override var stencilFront: GPUStencilFaceState? = this@convert.stencilFront.convert()
+		override var stencilBack: GPUStencilFaceState? = this@convert.stencilBack.convert()
+		override var stencilReadMask: GPUStencilValue? = this@convert.stencilReadMask
+		override var stencilWriteMask: GPUStencilValue? = this@convert.stencilWriteMask
+		override var depthBias: GPUDepthBias? = this@convert.depthBias
+		override var depthBiasSlopeScale: Float? = this@convert.depthBiasSlopeScale
+		override var depthBiasClamp: Float? = this@convert.depthBiasClamp
 	}
 
 private fun RenderPipelineDescriptor.DepthStencilState.StencilFaceState.convert(): GPUStencilFaceState =
 	object : GPUStencilFaceState {
-		override var compare: String? = this@convert.compare?.stringValue ?: undefined
-		override var failOp: String? = this@convert.failOp?.stringValue ?: undefined
-		override var depthFailOp: String? = this@convert.depthFailOp?.stringValue ?: undefined
-		override var passOp: String? = this@convert.passOp?.stringValue ?: undefined
+		override var compare: String? = this@convert.compare.stringValue
+		override var failOp: String? = this@convert.failOp.stringValue
+		override var depthFailOp: String? = this@convert.depthFailOp.stringValue
+		override var passOp: String? = this@convert.passOp.stringValue
 	}
 
 private fun RenderPipelineDescriptor.MultisampleState.convert(): GPUMultisampleState =
@@ -263,14 +263,8 @@ private fun RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.B
 private fun PipelineLayoutDescriptor.convert(): GPUPipelineLayoutDescriptor = object : GPUPipelineLayoutDescriptor {
 	override var label: String? = this@convert.label ?: undefined
 	override var bindGroupLayouts: Array<GPUBindGroupLayout> = this@convert.bindGroupLayouts
-		.map { it.convert() }.toTypedArray()
+		.map { it.handler }.toTypedArray()
 }
-
-private fun PipelineLayoutDescriptor.BindGroupLayout.convert(): GPUBindGroupLayout =
-	object : GPUBindGroupLayout {
-		override var label: String = this@convert.label
-		override var __brand: String = this@convert.brand
-	}
 
 private fun CommandEncoderDescriptor.convert(): GPUCommandEncoderDescriptor = object : GPUCommandEncoderDescriptor {
 	override var label: String? = this@convert.label ?: undefined
