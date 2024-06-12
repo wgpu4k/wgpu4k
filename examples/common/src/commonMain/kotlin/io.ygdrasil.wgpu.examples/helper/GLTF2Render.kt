@@ -5,7 +5,6 @@ import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.BufferBindingLayout
 import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState
 import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute
 import io.ygdrasil.wgpu.examples.AutoClosableContext
-import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeVertexArray
 import korlibs.memory.getF32Array
 import korlibs.memory.getS16Array
 import korlibs.memory.getS8Array
@@ -19,7 +18,7 @@ class GLTF2RenderContext(
     val autoClosableContext: AutoClosableContext,
 ) {
 
-    val skinBindGroupLayout: BindGroupLayout = createSharedBindGroupLayout(device)
+    //val skinBindGroupLayout: BindGroupLayout = createSharedBindGroupLayout(device)
     val buffers: Map<GLTF2.BufferView, Buffer>
 
     init {
@@ -80,7 +79,7 @@ class GLTF2RenderContext(
                             .getF32Array(bufferView.byteOffset, bufferView.byteLength / Float.SIZE_BYTES)
                             .map { it.toString() }
                     println(
-                        "${vertex.size} " + cubeVertexArray.size
+                        vertex
                     )
                 }
 

@@ -42,7 +42,7 @@ suspend fun genericAssetManager() = GenericAssetManager(
     bitmapFrom("assets/img/cubemap/posz.png"),
     bitmapFrom("assets/img/cubemap/negz.png"),
     bitmapFrom("assets/img/webgpu4kotlin.png"),
-    glt2From("assets/gltf/Box.glb"),
+    glt2From("assets/gltf/Box2.glb"),
 )
 
 class GenericAssetManager(

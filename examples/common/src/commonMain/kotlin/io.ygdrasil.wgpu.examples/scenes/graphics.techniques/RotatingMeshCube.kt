@@ -31,7 +31,6 @@ class RotatingMeshCubeScene : Application.Scene(), AutoCloseable {
 
 	override fun Application.initialiaze() = with(autoClosableContext) {
 
-
 		val gltF2RenderContext = GLTF2RenderContext(
 			device = device,
 			gltf2 = boxMesh,
@@ -44,7 +43,7 @@ class RotatingMeshCubeScene : Application.Scene(), AutoCloseable {
 			val accessor = boxMesh.accessors[index]
 			val attrString = attribute.str.lowercase()
 			vertexInputShaderStringBuilder.append(
-				"\t@location(${index - 1}) $attrString: ${accessor.convertToWGSLFormat()},\n"
+				"\t@location(${index}) $attrString: ${accessor.convertToWGSLFormat()},\n"
 			)
 			val bufferView = boxMesh.bufferViews.get(accessor.bufferView)
 			val format = accessor.convertToVertexType()
@@ -54,7 +53,7 @@ class RotatingMeshCubeScene : Application.Scene(), AutoCloseable {
 					VertexAttribute(
 						format = format,
 						offset = accessor.byteOffset.toLong(),
-						shaderLocation = index - 1
+						shaderLocation = index
 					)
 				)
 			)
