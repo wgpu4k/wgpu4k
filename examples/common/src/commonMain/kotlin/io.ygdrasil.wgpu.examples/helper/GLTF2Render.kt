@@ -53,15 +53,17 @@ class GLTF2RenderContext(
 
         // Create GLTFBufferView objects for all the buffer views in the glTF file
         buffers = gltf2.bufferViews
+            .filter { bufferView -> bufferUsages[bufferView]?.isNotEmpty() ?: false }
             .associateWith { bufferView ->
                 println("create buffer ${bufferView} with usage ${bufferUsages[bufferView]}")
+                val usages = bufferUsages[bufferView] ?: error("buffer usage not found")
                 val byteBuffer = gltf2.buffers[bufferView.buffer]
                     .buffer
                     .getS8Array(bufferView.byteOffset, bufferView.byteLength)
                 device.createBuffer(
                     BufferDescriptor(
                         size = alignTo(bufferView.byteLength, 4).toLong(),
-                        usage = bufferUsages[bufferView] ?: error("buffer usage not found"),
+                        usage = usages,
                         mappedAtCreation = true
                     )
                 ).also { buffer -> buffer.map(byteBuffer) }

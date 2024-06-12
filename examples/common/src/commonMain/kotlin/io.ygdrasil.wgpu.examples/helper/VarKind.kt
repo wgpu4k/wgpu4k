@@ -154,32 +154,6 @@ inline class AGIndexType(val ordinal: Int) {
     }
 }
 
-
-
-/** Encoded in 3 bits */
-inline class AGDrawType(val ordinal: Int) {
-    companion object {
-        val POINTS = AGDrawType(0)
-        val LINE_STRIP = AGDrawType(1)
-        val LINE_LOOP = AGDrawType(2)
-        val LINES = AGDrawType(3)
-        val TRIANGLES = AGDrawType(4)
-        val TRIANGLE_STRIP = AGDrawType(5)
-        val TRIANGLE_FAN = AGDrawType(6)
-    }
-
-    override fun toString(): String = when (this) {
-        POINTS -> "POINTS"
-        LINE_STRIP -> "LINE_STRIP"
-        LINE_LOOP -> "LINE_LOOP"
-        LINES -> "LINES"
-        TRIANGLES -> "TRIANGLES"
-        TRIANGLE_STRIP -> "TRIANGLE_STRIP"
-        TRIANGLE_FAN -> "TRIANGLE_FAN"
-        else -> "-"
-    }
-}
-
 fun List<AABB3D>.combineBounds(): AABB3D {
     var min = Vector3(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
     var max = Vector3(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY)

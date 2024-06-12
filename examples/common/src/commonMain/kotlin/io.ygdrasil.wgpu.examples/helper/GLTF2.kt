@@ -779,11 +779,7 @@ data class GLTF2(
             val znear: Float,
             override val extensions: JsonElement? = null,
             override val extras: JsonElement? = null,
-        ) : GLTFProperty() {
-            //fun toCamera(): Camera3D {
-            //    return Camera3D.Orthographic(yfov.radians, znear, zfar)
-            //}
-        }
+        ) : GLTFProperty()
 
         @Serializable
         data class Perspective(
@@ -794,11 +790,7 @@ data class GLTF2(
             val znear: Float = 0.01f,
             override val extensions: JsonElement? = null,
             override val extras: JsonElement? = null,
-        ) : GLTFProperty() {
-            fun toCamera(): Camera3D {
-                return Camera3D.Perspective(yfov.radians, znear, zfar)
-            }
-        }
+        ) : GLTFProperty()
     }
 
     companion object {
