@@ -5,6 +5,7 @@ import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.BufferBindingLayout
 import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState
 import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute
 import korlibs.memory.getS8Array
+import kotlin.math.floor
 import kotlin.math.max
 
 
@@ -17,20 +18,41 @@ class GLTF2RenderContext(
 
     init {
 
-        val bufferUsage = gltf2.accessors
-            .map { it.type }
+        val bufferUsages = gltf2.bufferViews
+            .associateWith { mutableSetOf<BufferUsage>() }
 
-        bufferUsage.forEach { println(it) }
+        //Mark each accessor with its intended usage within the vertexShader.
+        //Often necessary due to infrequencey with which the BufferView target field is populated.
+        gltf2.meshes.forEach { mesh ->
+            mesh.primitives.forEach { primitive ->
+                if (primitive.indices != null) {
+                    val accessor = gltf2.accessors[primitive.indices]
+                    val bufferView = gltf2.bufferViews[accessor.bufferView]
+                    bufferUsages[bufferView]?.add(BufferUsage.index)
+                }
+
+                primitive.attributes.values.forEach { attribute ->
+                    val attributeAccessor = gltf2.accessors[attribute]
+                    val attributeBufferView = gltf2.bufferViews[attributeAccessor.bufferView]
+                    bufferUsages[attributeBufferView]?.add(BufferUsage.vertex)
+                }
+            }
+        }
+
 
         buffers = gltf2.bufferViews.map {
             val byteBuffer = gltf2.buffers[it.buffer].buffer.getS8Array(it.byteOffset, it.byteLength)
-            TODO()
-            /*it to device.createBuffer(BufferDescriptor(
-                size = it.byteLength
-            ))*/
+            it to device.createBuffer(BufferDescriptor(
+                size = alignTo(it.byteLength, 4).toLong(),
+                usage = bufferUsages[it] ?: error("buffer usage not found"),
+                mappedAtCreation = true
+            )).also {
+                it.map(byteBuffer)
+            }
         }.toMap()
 
 
+        bufferUsages.forEach { println(it) }
     }
 
     internal fun GLTF2.Mesh.buildRenderPipeline(
@@ -267,3 +289,6 @@ private fun GLTF2.AccessorType.convertToWGSLFormat(): String = when (this) {
     GLTF2.AccessorType.MAT4 -> TODO()
 }
 
+fun alignTo(value: Int, align: Int): Int {
+    return floor(((value + align - 1) / align).toDouble()).toInt() * align
+}

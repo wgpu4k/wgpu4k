@@ -12,6 +12,8 @@ expect class Buffer : AutoCloseable {
 
 	fun map(buffer: FloatArray)
 
+	fun map(buffer: ByteArray)
+
 	override fun close()
 }
 

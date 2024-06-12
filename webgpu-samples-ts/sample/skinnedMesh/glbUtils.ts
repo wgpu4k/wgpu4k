@@ -858,14 +858,11 @@ export const convertGLBToJSONAndBinary = async (
         for (const primitive of mesh.primitives) {
             if ('indices' in primitive) {
                 const accessor = jsonChunk.accessors[primitive.indices];
-                jsonChunk.accessors[primitive.indices].bufferViewUsage |=
-                    GPUBufferUsage.INDEX;
                 jsonChunk.bufferViews[accessor.bufferView].usage |=
                     GPUBufferUsage.INDEX;
             }
             for (const attribute of Object.values(primitive.attributes)) {
                 const accessor = jsonChunk.accessors[attribute];
-                jsonChunk.accessors[attribute].bufferViewUsage |= GPUBufferUsage.VERTEX;
                 jsonChunk.bufferViews[accessor.bufferView].usage |=
                     GPUBufferUsage.VERTEX;
             }

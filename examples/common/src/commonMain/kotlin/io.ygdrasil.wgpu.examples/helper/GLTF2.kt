@@ -254,7 +254,7 @@ data class GLTF2(
         /** A plain JSON object, where each key corresponds to a mesh attribute semantic and each value is the index of the accessor containing attribute's data. */
         val attributes: Map<PrimitiveAttribute, Int> = emptyMap(),
         /** The index of the accessor that contains the vertex indices.  When this is undefined, the primitive defines non-indexed geometry.  When defined, the accessor **MUST** have `SCALAR` type and an unsigned integer component type. */
-        val indices: Int = -1,
+        val indices: Int?,
         /** The index of the material to apply to this primitive when rendering. */
         val material: Int = -1,
         /** The topology type of primitives to render. */
