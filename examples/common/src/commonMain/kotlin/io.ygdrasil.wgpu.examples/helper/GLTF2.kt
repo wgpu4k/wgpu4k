@@ -322,7 +322,6 @@ data class GLTF2(
                 }
             }
 
-            @Serializer(forClass = TargetPath::class)
             object TargetPathSerializer : KSerializer<TargetPath> {
                 override val descriptor: SerialDescriptor
                     get() = PrimitiveSerialDescriptor("TargetPath", PrimitiveKind.STRING)

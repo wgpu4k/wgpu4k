@@ -3,6 +3,7 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.*
+import io.ygdrasil.wgpu.mapper.map
 
 actual class Device(val handler: GPUDevice) : AutoCloseable {
 
@@ -54,7 +55,7 @@ actual class Device(val handler: GPUDevice) : AutoCloseable {
 			.let(::ComputePipeline)
 
 	actual fun createBindGroupLayout(descriptor: BindGroupLayoutDescriptor): BindGroupLayout =
-		descriptor.convert()
+		map(descriptor)
 			.let { handler.createBindGroupLayout(it) }
 			.let(::BindGroupLayout)
 
@@ -78,10 +79,6 @@ private fun QuerySetDescriptor.convert(): GPUQuerySetDescriptor {
 }
 
 private fun RenderBundleEncoderDescriptor.convert(): GPURenderBundleEncoderDescriptor {
-	TODO("Not yet implemented")
-}
-
-private fun BindGroupLayoutDescriptor.convert(): GPUBindGroupLayoutDescriptor {
 	TODO("Not yet implemented")
 }
 
