@@ -4,6 +4,6 @@ import io.ygdrasil.wgpu.QuerySetDescriptor
 import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 
-fun Arena.map(input: QuerySetDescriptor): MemorySegment {
+internal fun Arena.map(input: QuerySetDescriptor): MemorySegment {
     TODO()
 }

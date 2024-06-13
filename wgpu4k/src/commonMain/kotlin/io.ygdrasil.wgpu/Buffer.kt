@@ -17,7 +17,8 @@ expect class Buffer : AutoCloseable {
 }
 
 data class BufferDescriptor(
-	var size: GPUSize64,
-	var usage: Set<BufferUsage>,
-	var mappedAtCreation: Boolean = false
+	val size: GPUSize64,
+	val usage: Set<BufferUsage>,
+	val mappedAtCreation: Boolean = false,
+	val label: String? = null
 )

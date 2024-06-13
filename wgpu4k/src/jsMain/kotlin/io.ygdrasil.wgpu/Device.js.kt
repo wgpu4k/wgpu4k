@@ -85,6 +85,7 @@ private fun RenderBundleEncoderDescriptor.convert(): GPURenderBundleEncoderDescr
 private fun ComputePipelineDescriptor.convert(): GPUComputePipelineDescriptor = object : GPUComputePipelineDescriptor {
 	override var compute: GPUProgrammableStage = this@convert.compute.convert()
 	override var layout: dynamic = this@convert.layout?.convert() ?: "auto"
+	override var label: String? = this@convert.label ?: undefined
 }
 
 private fun PipelineLayout.convert(): dynamic {
@@ -147,7 +148,8 @@ private fun TextureDescriptor.convert(): GPUTextureDescriptor = object : GPUText
 private fun BufferDescriptor.convert(): GPUBufferDescriptor = object : GPUBufferDescriptor {
 	override var size: GPUSize64 = this@convert.size
 	override var usage: GPUBufferUsageFlags = this@convert.usage.toFlagInt()
-	override var mappedAtCreation: Boolean? = this@convert.mappedAtCreation ?: undefined
+	override var mappedAtCreation: Boolean? = this@convert.mappedAtCreation
+	override var label: String? = this@convert.label ?: undefined
 }
 
 /*** RenderPipelineDescriptor ***/
