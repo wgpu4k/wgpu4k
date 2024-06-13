@@ -2,6 +2,7 @@ import io.ygdrasil.wgpu.EnumerationWithValue
 
 enum class TextureFormat(
     override val value: Int,
+    private val extraName: String? = null
 ) : EnumerationWithValue {
     r8unorm(1),
     r8snorm(2),
@@ -21,12 +22,12 @@ enum class TextureFormat(
     rg16sint(16),
     rg16float(17),
     rgba8unorm(18),
-    rgba8unormsrgb(19),
+    rgba8unormsrgb(19, "rgba8unorm-srgb"),
     rgba8snorm(20),
     rgba8uint(21),
     rgba8sint(22),
     bgra8unorm(23),
-    bgra8unormsrgb(24),
+    bgra8unormsrgb(24, "bgra8unorm-srgb"),
     rgb10a2uint(25),
     rgb10a2unorm(26),
     rg11b10ufloat(27),
@@ -43,7 +44,7 @@ enum class TextureFormat(
     stencil8(38),
     depth16unorm(39),
     depth24plus(40),
-    depth24plusstencil8(41),
+    depth24plusstencil8(41, "depth24plus-stencil8"),
     depth32float(42),
     depth32floatstencil8(43),
     bc1rgbaunorm(44),
@@ -100,13 +101,72 @@ enum class TextureFormat(
     astc12x12unormsrgb(95),
     ;
 
+    val actualName
+        get() = if (extraName != null) extraName else name
+
     companion object {
         fun of(`value`: Int): TextureFormat? = entries.find {
             it.value == value
         }
 
         fun of(value: String): TextureFormat? = entries.find {
-            it.name == value
+            it.actualName == value
         }
     }
 }
+
+/* TODO fix missing value
+"depth32float-stencil8"
+"bc1-rgba-unorm"
+"bc1-rgba-unorm-srgb"
+"bc2-rgba-unorm"
+"bc2-rgba-unorm-srgb"
+"bc3-rgba-unorm"
+"bc3-rgba-unorm-srgb"
+"bc4-r-unorm"
+"bc4-r-snorm"
+"bc5-rg-unorm"
+"bc5-rg-snorm"
+"bc6h-rgb-ufloat"
+"bc6h-rgb-float"
+"bc7-rgba-unorm"
+"bc7-rgba-unorm-srgb"
+"etc2-rgb8unorm"
+"etc2-rgb8unorm-srgb"
+"etc2-rgb8a1unorm"
+"etc2-rgb8a1unorm-srgb"
+"etc2-rgba8unorm"
+"etc2-rgba8unorm-srgb"
+"eac-r11unorm"
+"eac-r11snorm"
+"eac-rg11unorm"
+"eac-rg11snorm"
+"astc-4x4-unorm"
+"astc-4x4-unorm-srgb"
+"astc-5x4-unorm"
+"astc-5x4-unorm-srgb"
+"astc-5x5-unorm"
+"astc-5x5-unorm-srgb"
+"astc-6x5-unorm"
+"astc-6x5-unorm-srgb"
+"astc-6x6-unorm"
+"astc-6x6-unorm-srgb"
+"astc-8x5-unorm"
+"astc-8x5-unorm-srgb"
+"astc-8x6-unorm"
+"astc-8x6-unorm-srgb"
+"astc-8x8-unorm"
+"astc-8x8-unorm-srgb"
+"astc-10x5-unorm"
+"astc-10x5-unorm-srgb"
+"astc-10x6-unorm"
+"astc-10x6-unorm-srgb"
+"astc-10x8-unorm"
+"astc-10x8-unorm-srgb"
+"astc-10x10-unorm"
+"astc-10x10-unorm-srgb"
+"astc-12x10-unorm"
+"astc-12x10-unorm-srgb"
+"astc-12x12-unorm"
+"astc-12x12-unorm-srgb"
+ */
