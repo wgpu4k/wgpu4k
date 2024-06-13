@@ -60,7 +60,7 @@ actual class Device(val handler: GPUDevice) : AutoCloseable {
 			.let(::BindGroupLayout)
 
 	actual fun createRenderBundleEncoder(descriptor: RenderBundleEncoderDescriptor): RenderBundleEncoder =
-		descriptor.convert()
+		map(descriptor)
 			.let { handler.createRenderBundleEncoder(it) }
 			.let(::RenderBundleEncoder)
 
@@ -75,10 +75,6 @@ actual class Device(val handler: GPUDevice) : AutoCloseable {
 }
 
 private fun QuerySetDescriptor.convert(): GPUQuerySetDescriptor {
-	TODO("Not yet implemented")
-}
-
-private fun RenderBundleEncoderDescriptor.convert(): GPURenderBundleEncoderDescriptor {
 	TODO("Not yet implemented")
 }
 
@@ -142,7 +138,7 @@ private fun TextureDescriptor.convert(): GPUTextureDescriptor = object : GPUText
 	override var dimension: String? = this@convert.dimension.stringValue
 	override var format: String = this@convert.format.name
 	override var usage: GPUTextureUsageFlags = this@convert.usage.toFlagInt()
-	override var viewFormats: Array<String> = this@convert.viewFormats.map { it.name }.toTypedArray()
+	override var viewFormats: Array<String> = this@convert.viewFormats.map { it.actualName }.toTypedArray()
 }
 
 private fun BufferDescriptor.convert(): GPUBufferDescriptor = object : GPUBufferDescriptor {

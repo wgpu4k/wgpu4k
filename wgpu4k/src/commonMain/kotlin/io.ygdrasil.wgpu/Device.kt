@@ -1,5 +1,7 @@
 package io.ygdrasil.wgpu
 
+import TextureFormat
+
 expect class Device : AutoCloseable {
 
     val queue: Queue
