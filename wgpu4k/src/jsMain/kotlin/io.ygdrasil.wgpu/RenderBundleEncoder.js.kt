@@ -4,7 +4,7 @@ import io.ygdrasil.wgpu.internal.js.GPURenderBundleEncoder
 import io.ygdrasil.wgpu.mapper.map
 
 actual class RenderBundleEncoder(
-    internal val handler: GPURenderBundleEncoder
+    val handler: GPURenderBundleEncoder
 ) : AutoCloseable {
     actual fun finish(descriptor: RenderBundleDescriptor): RenderBundle =
         map(descriptor)
