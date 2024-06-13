@@ -19,6 +19,7 @@ import io.ygdrasil.wgpu.RenderingContext
 import io.ygdrasil.wgpu.WGPU
 import io.ygdrasil.wgpu.examples.Application
 import io.ygdrasil.wgpu.examples.AssetManager
+import io.ygdrasil.wgpu.examples.helper.GLTF2
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -149,6 +150,8 @@ suspend fun runApp(window: ComposeWindow) {
 			override val cubemapNegz: ImageBitmapHolder
 				get() = TODO("Not yet implemented")
 			override val webgpu4kotlin: ImageBitmapHolder
+				get() = TODO("Not yet implemented")
+			override val boxMesh: GLTF2
 				get() = TODO("Not yet implemented")
 
 		}

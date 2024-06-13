@@ -25,8 +25,6 @@ class RotatingMeshCubeScene : Application.Scene(), AutoCloseable {
     lateinit var renderPassDescriptor: RenderPassDescriptor
     lateinit var uniformBuffer: Buffer
     lateinit var uniformBindGroup: BindGroup
-    lateinit var verticesBuffer: Buffer
-    lateinit var indexBuffer: Buffer
 
     override fun Application.initialiaze() = with(autoClosableContext) {
 
@@ -59,16 +57,6 @@ class RotatingMeshCubeScene : Application.Scene(), AutoCloseable {
         }
         vertexInputShaderStringBuilder.append("}\n")
         val vertexInputShaderString = vertexInputShaderStringBuilder.toString()
-
-        // Create a vertex buffer from the cube data.
-        verticesBuffer = gltF2RenderContext.buffers
-            .map { (_, buffer) -> buffer }
-            .first { buffer -> buffer.usage.contains(BufferUsage.vertex) }
-            .bind()
-        indexBuffer = gltF2RenderContext.buffers
-            .map { (_, buffer) -> buffer }
-            .first { buffer -> buffer.usage.contains(BufferUsage.index) }
-            .bind()
 
         renderPipeline = device.createRenderPipeline(
             RenderPipelineDescriptor(
@@ -207,7 +195,6 @@ class RotatingMeshCubeScene : Application.Scene(), AutoCloseable {
             }
 
         }
-        renderPassEncoder.setIndexBuffer(indexBuffer, IndexFormat.uint16)
         renderPassEncoder.draw(localVertexCount)
         renderPassEncoder.end()
 
