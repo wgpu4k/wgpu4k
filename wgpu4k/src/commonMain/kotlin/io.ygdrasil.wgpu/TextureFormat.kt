@@ -1,4 +1,4 @@
-import io.ygdrasil.wgpu.EnumerationWithValue
+package io.ygdrasil.wgpu
 
 enum class TextureFormat(
     override val value: Int,

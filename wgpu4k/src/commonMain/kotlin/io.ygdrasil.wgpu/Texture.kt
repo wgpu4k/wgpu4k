@@ -2,8 +2,6 @@
 
 package io.ygdrasil.wgpu
 
-import TextureFormat
-
 expect class Texture: AutoCloseable {
 
     val width: GPUIntegerCoordinateOut
