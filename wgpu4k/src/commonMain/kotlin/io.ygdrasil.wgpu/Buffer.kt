@@ -9,9 +9,9 @@ expect class Buffer : AutoCloseable {
 
 	fun unmap()
 
-	fun mapFrom(buffer: FloatArray)
+	fun mapFrom(buffer: FloatArray, offset: Int = 0)
 
-	fun mapFrom(buffer: ByteArray)
+	fun mapFrom(buffer: ByteArray, offset: Int = 0)
 
 	override fun close()
 }
