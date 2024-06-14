@@ -1,7 +1,6 @@
 import {
     GLTFBuffer,
     GLTFBufferView,
-    GLTFSampler,
     uploadGLBModelKt
 } from "../build/compileSync/js/main/developmentExecutable/kotlin/wgpu4k-root-webgpu-gltf2.mjs"
 
@@ -75,14 +74,6 @@ export async function uploadGLBModel(buffer, device) {
         }
     }
 
-    var defaultSampler = new GLTFSampler({}, device);
-    var samplers = [];
-    if (glbJsonData['samplers'] !== undefined) {
-        for (var i = 0; i < glbJsonData['samplers'].length; ++i) {
-            samplers.push(new GLTFSampler(glbJsonData['samplers'][i], device));
-        }
-    }
 
-
-    return uploadGLBModelKt(glbJsonData, device, bufferViews, defaultSampler, samplers, images)
+    return uploadGLBModelKt(glbJsonData, device, bufferViews, images)
 }

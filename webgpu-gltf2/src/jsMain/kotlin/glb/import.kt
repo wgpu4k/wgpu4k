@@ -11,13 +11,19 @@ fun uploadGLBModelKt(
     glbJsonData: dynamic,
     device: GPUDevice,
     bufferViews: Array<GLTFBufferView>,
-    defaultSampler: GLTFSampler,
-    samplers: Array<GLTFSampler>,
     images: Array<dynamic>
 ): GLBModel {
-    println("uploadGLBModelKt2")
+    println("uploadGLBModelKt")
 
-    var textures = mutableListOf<GLTFTexture>()
+    var defaultSampler = GLTFSampler(mapOf<Any, Any>(), device)
+    var samplers = mutableListOf<GLTFSampler>()
+    if (glbJsonData["samplers"] != undefined) {
+        for (i in 0 until glbJsonData["samplers"].length as Int) {
+            samplers.add(GLTFSampler(glbJsonData["samplers"][i], device))
+        }
+    }
+
+    val textures = mutableListOf<GLTFTexture>()
     if (glbJsonData.textures != undefined) {
         for (i in 0 until glbJsonData.textures.length as Int) {
             val tex = glbJsonData.textures[i]
