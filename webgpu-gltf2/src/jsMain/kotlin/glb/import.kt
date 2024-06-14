@@ -5,8 +5,17 @@ package glb
 import io.ygdrasil.wgpu.internal.js.GPUDevice
 
 @JsExport
-fun uploadGLBModelKt(glbJsonData: dynamic, meshes: dynamic, device: GPUDevice): GLBModel {
+fun uploadGLBModelKt(
+    glbJsonData: dynamic,
+    meshes: dynamic,
+    device: GPUDevice,
+    materials: Array<GLTFMaterial>,
+    defaultMaterial: GLTFMaterial
+): GLBModel {
     println("uploadGLBModelKt")
+
+    defaultMaterial.upload(device)
+    materials.forEach { material -> material.upload(device) }
 
     val nodes = mutableListOf<GLTFNode>()
     val gltfNodes = makeGLTFSingleLevel(glbJsonData["nodes"])

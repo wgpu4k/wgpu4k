@@ -169,10 +169,5 @@ export async function uploadGLBModel(buffer, device) {
         }
     }
 
-    defaultMaterial.upload(device);
-    for (var i = 0; i < materials.length; ++i) {
-        materials[i].upload(device);
-    }
-
-    return uploadGLBModelKt(glbJsonData, meshes, device)
+    return uploadGLBModelKt(glbJsonData, meshes, device, materials, defaultMaterial)
 }
