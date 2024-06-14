@@ -1,9 +1,7 @@
 import {
     GLTFBuffer,
     GLTFBufferView,
-    GLTFMaterial,
     GLTFSampler,
-    GLTFTexture,
     uploadGLBModelKt
 } from "../build/compileSync/js/main/developmentExecutable/kotlin/wgpu4k-root-webgpu-gltf2.mjs"
 
@@ -85,21 +83,6 @@ export async function uploadGLBModel(buffer, device) {
         }
     }
 
-    var textures = [];
-    if (glbJsonData['textures'] !== undefined) {
-        for (var i = 0; i < glbJsonData['textures'].length; ++i) {
-            var tex = glbJsonData['textures'][i];
-            var sampler =
-                tex['sampler'] !== undefined ? samplers[tex['sampler']] : defaultSampler;
-            textures.push(new GLTFTexture(sampler, images[tex['source']]));
-        }
-    }
 
-    var defaultMaterial = new GLTFMaterial({});
-    var materials = [];
-    for (var i = 0; i < glbJsonData['materials'].length; ++i) {
-        materials.push(new GLTFMaterial(glbJsonData['materials'][i], textures));
-    }
-
-    return uploadGLBModelKt(glbJsonData, device, materials, defaultMaterial, bufferViews)
+    return uploadGLBModelKt(glbJsonData, device, bufferViews, defaultSampler, samplers, images)
 }

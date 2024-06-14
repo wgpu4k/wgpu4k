@@ -10,11 +10,27 @@ import io.ygdrasil.wgpu.internal.js.GPUDevice
 fun uploadGLBModelKt(
     glbJsonData: dynamic,
     device: GPUDevice,
-    materials: Array<GLTFMaterial>,
-    defaultMaterial: GLTFMaterial,
-    bufferViews: Array<GLTFBufferView>
+    bufferViews: Array<GLTFBufferView>,
+    defaultSampler: GLTFSampler,
+    samplers: Array<GLTFSampler>,
+    images: Array<dynamic>
 ): GLBModel {
     println("uploadGLBModelKt2")
+
+    var textures = mutableListOf<GLTFTexture>()
+    if (glbJsonData.textures != undefined) {
+        for (i in 0 until glbJsonData.textures.length as Int) {
+            val tex = glbJsonData.textures[i]
+            val sampler = if (tex.sampler != undefined) samplers[tex.sampler] else defaultSampler
+            textures.add(GLTFTexture(sampler, images[tex.source]))
+        }
+    }
+
+    val defaultMaterial = GLTFMaterial(mapOf<Any, Any>())
+    val materials = mutableListOf<GLTFMaterial>()
+    for (i in 0 until glbJsonData.materials.length as Int) {
+        materials.add(GLTFMaterial(glbJsonData.materials[i], textures.toTypedArray()))
+    }
 
     val meshes = mutableListOf<GLTFMesh>()
     for (i in 0 until glbJsonData.meshes.length as Int) {
