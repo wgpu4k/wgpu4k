@@ -15,8 +15,8 @@ fun uploadGLBModelKt(
 ): GLBModel {
     println("uploadGLBModelKt")
 
-    var defaultSampler = GLTFSampler(mapOf<Any, Any>(), device)
-    var samplers = mutableListOf<GLTFSampler>()
+    val defaultSampler = GLTFSampler(mapOf<Any, Any>(), device)
+    val samplers = mutableListOf<GLTFSampler>()
     if (glbJsonData["samplers"] != undefined) {
         for (i in 0 until glbJsonData["samplers"].length as Int) {
             samplers.add(GLTFSampler(glbJsonData["samplers"][i], device))
