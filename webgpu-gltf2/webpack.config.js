@@ -12,7 +12,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.wgsl$/i,
+                test: /\.glb$/i,
                 type: "asset/source",
             }
         ]

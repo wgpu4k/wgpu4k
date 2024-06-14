@@ -5,6 +5,7 @@ import {
     GLTFMaterial,
     GLTFMesh,
     GLTFPrimitive,
+    GLTFSampler as GLTFSampler2,
     GLTFTexture,
     uploadGLBModelKt
 } from "../build/compileSync/js/main/developmentExecutable/kotlin/wgpu4k-root-webgpu-gltf2.mjs"
@@ -63,6 +64,14 @@ export class GLTFSampler {
             }
         }
 
+        console.log(
+            {
+                magFilter: magFilter,
+                minFilter: minFilter,
+                addressModeU: wrapS,
+                addressModeV: wrapT,
+            }
+        )
         this.sampler = device.createSampler({
             magFilter: magFilter,
             minFilter: minFilter,
@@ -136,6 +145,7 @@ export async function uploadGLBModel(buffer, device) {
     if (glbJsonData['samplers'] !== undefined) {
         for (var i = 0; i < glbJsonData['samplers'].length; ++i) {
             samplers.push(new GLTFSampler(glbJsonData['samplers'][i], device));
+            new GLTFSampler2(glbJsonData['samplers'][i], device)
         }
     }
 

@@ -2,36 +2,54 @@
 
 package glb
 
-@ExperimentalJsExport
-class GLTFSampler(private val sampler: dynamic, private val device: dynamic) {
+import io.ygdrasil.wgpu.AddressMode
+import io.ygdrasil.wgpu.Device
+import io.ygdrasil.wgpu.FilterMode
+import io.ygdrasil.wgpu.SamplerDescriptor
+import io.ygdrasil.wgpu.internal.js.GPUDevice
+import io.ygdrasil.wgpu.internal.js.GPUSampler
 
-    var internalSampler = createSampler()
+@JsExport
+class GLTFSampler(private val samplerNode: dynamic, _device: GPUDevice) {
 
-    private fun createSampler(): dynamic {
-        val magFilter =
-            if (sampler.magFilter == undefined || sampler.magFilter == GLTFTextureFilter.LINEAR) "linear" else "nearest"
-        val minFilter =
-            if (sampler.minFilter == undefined || sampler.minFilter == GLTFTextureFilter.LINEAR) "linear" else "nearest"
+    private val device = Device(_device)
+    val sampler = createSampler()
 
-        val wrapS = when (sampler.wrapS) {
-            GLTFTextureFilter.REPEAT -> "repeat"
-            GLTFTextureFilter.CLAMP_TO_EDGE -> "clamp-to-edge"
-            else -> "mirror-repeat"
+    private fun createSampler(): GPUSampler {
+        val magFilter = when (samplerNode.magFilter) {
+            undefined, GLTFTextureFilter.LINEAR.value -> FilterMode.linear
+            else -> FilterMode.nearest
+        }
+        val minFilter = when (samplerNode.minFilter) {
+            undefined, GLTFTextureFilter.LINEAR.value -> FilterMode.linear
+            else -> FilterMode.nearest
         }
 
-        val wrapT = when (sampler.wrapT) {
-            GLTFTextureFilter.REPEAT -> "repeat"
-            GLTFTextureFilter.CLAMP_TO_EDGE -> "clamp-to-edge"
-            else -> "mirror-repeat"
+        val wrapS = when (samplerNode.wrapS) {
+            GLTFTextureFilter.REPEAT.value -> AddressMode.repeat
+            GLTFTextureFilter.CLAMP_TO_EDGE.value -> AddressMode.clamptoedge
+            else -> AddressMode.mirrorrepeat
         }
 
-        return device.createSampler(
-            object {
-                val magFilter = magFilter
-                val minFilter = minFilter
-                val addressModeU = wrapS
-                val addressModeV = wrapT
-            }
+        val wrapT = when (samplerNode.wrapT) {
+            GLTFTextureFilter.REPEAT.value -> AddressMode.repeat
+            GLTFTextureFilter.CLAMP_TO_EDGE.value -> AddressMode.clamptoedge
+            else -> AddressMode.mirrorrepeat
+        }
+        val descriptor = SamplerDescriptor(
+            magFilter = magFilter,
+            minFilter = minFilter,
+            addressModeU = wrapS,
+            addressModeV = wrapT,
         )
+        println(descriptor)
+        return device.createSampler(
+            SamplerDescriptor(
+                magFilter = magFilter,
+                minFilter = minFilter,
+                addressModeU = wrapS,
+                addressModeV = wrapT,
+            )
+        ).handler
     }
 }

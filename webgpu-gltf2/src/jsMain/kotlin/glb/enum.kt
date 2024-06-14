@@ -24,7 +24,11 @@ enum class GLTFTextureFilter(val value: Int) {
     NEAREST_MIPMAP_NEAREST(9984),
     LINEAR_MIPMAP_NEAREST(9985),
     NEAREST_MIPMAP_LINEAR(9986),
-    LINEAR_MIPMAP_LINEAR(9987);
+    LINEAR_MIPMAP_LINEAR(9987),
+
+    REPEAT(10497),
+    MIRRORED_REPEAT(33648),
+    CLAMP_TO_EDGE(33071);
 
     companion object {
         fun of(id: Int): GLTFTextureFilter {

@@ -11,9 +11,11 @@ import {uploadGLBModel} from "./glb_import.js";
     var adapter = await navigator.gpu.requestAdapter();
     var device = await adapter.requestDevice();
 
+    var file = "https://cdn.willusher.io/glb/DamagedHelmet.glb"
+    //file = "Box2.glb"
     var glbFile =
         await fetch(
-            "https://cdn.willusher.io/glb/DamagedHelmet.glb")
+            file)
             .then(res => res.arrayBuffer().then(buf => uploadGLBModel(buf, device)));
 
     var canvas = document.getElementById("webgpu-canvas");

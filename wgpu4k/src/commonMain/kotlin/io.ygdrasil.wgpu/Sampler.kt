@@ -17,7 +17,7 @@ expect class Sampler : AutoCloseable {
  *
  * @see <a href="https://www.w3.org/TR/webgpu/#GPUSamplerDescriptor">W3C specifications</a>
  */
-class SamplerDescriptor(
+data class SamplerDescriptor(
 	val addressModeU: AddressMode = AddressMode.clamptoedge,
 	val addressModeV: AddressMode = AddressMode.clamptoedge,
 	val addressModeW: AddressMode = AddressMode.clamptoedge,
