@@ -8,6 +8,7 @@ import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry
 import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.BufferBindingLayout
 import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.SamplerBindingLayout
 import io.ygdrasil.wgpu.internal.js.GPUBindGroup
+import io.ygdrasil.wgpu.internal.js.GPUBindGroupLayout
 import io.ygdrasil.wgpu.internal.js.GPUBuffer
 import io.ygdrasil.wgpu.internal.js.GPUDevice
 
@@ -21,6 +22,7 @@ class GLTFMaterial(material: dynamic, textures: Array<GLTFTexture> = arrayOf()) 
     private var roughnessFactor = 1.0f
     private lateinit var gpuBuffer: GPUBuffer
     lateinit var bindGroup: GPUBindGroup
+    lateinit var bindGroupLayout: GPUBindGroupLayout
 
     init { // equivalent of constructor -> initializer block in Kotlin
         if (material["pbrMetallicRoughness"]) {
@@ -108,5 +110,7 @@ class GLTFMaterial(material: dynamic, textures: Array<GLTFTexture> = arrayOf()) 
                 entries = bindGroupEntries.toTypedArray()
             )
         ).handler
+
+        this.bindGroupLayout = bindGroupLayout.handler
     }
 }
