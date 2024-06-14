@@ -4,6 +4,7 @@ import {
     GLTFBufferView,
     GLTFMaterial,
     GLTFMesh,
+    GLTFPrimitive,
     GLTFTexture,
     uploadGLBModelKt
 } from "../build/compileSync/js/main/developmentExecutable/kotlin/wgpu4k-root-webgpu-gltf2.mjs"
@@ -39,107 +40,6 @@ const GLTFTextureFilter = {
     NEAREST_MIPMAP_LINEAR: 9986,
     LINEAR_MIPMAP_LINEAR: 9987,
 };
-
-export class GLTFPrimitive {
-    constructor(indices, positions, normals, texcoords, material, topology) {
-        this.indices = indices;
-        this.positions = positions;
-        this.normals = normals;
-        this.texcoords = texcoords;
-        this.material = material;
-        this.topology = topology;
-    }
-
-    // Build the primitive render commands into the bundle
-    buildRenderBundle(
-        device, shaderCache, bindGroupLayouts, bundleEncoder, swapChainFormat, depthFormat) {
-        var shaderModule = shaderCache.getShader(
-            this.normals, this.texcoords.length > 0, this.material.baseColorTexture);
-
-        var vertexBuffers = [{
-            arrayStride: this.positions.byteStride,
-            attributes: [{format: 'float32x3', offset: 0, shaderLocation: 0}]
-        }];
-
-        if (this.normals) {
-            vertexBuffers.push({
-                arrayStride: this.normals.byteStride,
-                attributes: [{format: 'float32x3', offset: 0, shaderLocation: 1}]
-            });
-        }
-
-        // TODO: Multi-texturing
-        if (this.texcoords.length > 0) {
-            vertexBuffers.push({
-                arrayStride: this.texcoords[0].byteStride,
-                attributes: [{format: 'float32x2', offset: 0, shaderLocation: 2}]
-            });
-        }
-
-        var layout = device.createPipelineLayout({
-            bindGroupLayouts:
-                [bindGroupLayouts[0], bindGroupLayouts[1], this.material.bindGroupLayout],
-        });
-
-        var vertexStage = {
-            module: shaderModule,
-            entryPoint: 'vertex_main',
-            buffers: vertexBuffers
-        };
-        var fragmentStage = {
-            module: shaderModule,
-            entryPoint: 'fragment_main',
-            targets: [{format: swapChainFormat}]
-        };
-
-        var primitive = {topology: 'triangle-list'};
-        if (this.topology == GLTFRenderMode.TRIANGLE_STRIP) {
-            primitive.topology = 'triangle-strip';
-            primitive.stripIndexFormat =
-                this.indices.componentType == GLTFComponentType.UNSIGNED_SHORT ? 'uint16'
-                    : 'uint32';
-        }
-
-        var pipelineDescriptor = {
-            layout: layout,
-            vertex: vertexStage,
-            fragment: fragmentStage,
-            primitive: primitive,
-            depthStencil: {format: depthFormat, depthWriteEnabled: true, depthCompare: 'less'}
-        };
-
-        var renderPipeline = device.createRenderPipeline(pipelineDescriptor);
-
-        bundleEncoder.setBindGroup(2, this.material.bindGroup);
-        bundleEncoder.setPipeline(renderPipeline);
-        bundleEncoder.setVertexBuffer(0,
-            this.positions.view.gpuBuffer,
-            this.positions.byteOffset,
-            this.positions.length);
-        if (this.normals) {
-            bundleEncoder.setVertexBuffer(
-                1, this.normals.view.gpuBuffer, this.normals.byteOffset, this.normals.length);
-        }
-        if (this.texcoords.length > 0) {
-            bundleEncoder.setVertexBuffer(2,
-                this.texcoords[0].view.gpuBuffer,
-                this.texcoords[0].byteOffset,
-                this.texcoords[0].length);
-        }
-        if (this.indices) {
-            var indexFormat = this.indices.componentType == GLTFComponentType.UNSIGNED_SHORT
-                ? 'uint16'
-                : 'uint32';
-            bundleEncoder.setIndexBuffer(this.indices.view.gpuBuffer,
-                indexFormat,
-                this.indices.byteOffset,
-                this.indices.length);
-            bundleEncoder.drawIndexed(this.indices.count);
-        } else {
-            bundleEncoder.draw(this.positions.count);
-        }
-    }
-}
 
 export class GLTFSampler {
     constructor(sampler, device) {

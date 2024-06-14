@@ -2,6 +2,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 
 module.exports = {
+    stats: 'none',
     entry: "./src/glb_viewer.js",
     mode: "development",
     output: {

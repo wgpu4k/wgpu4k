@@ -154,10 +154,10 @@ private fun RenderPipelineDescriptor.convert(): GPURenderPipelineDescriptor = ob
 	override var vertex: GPUVertexState = this@convert.vertex.convert()
 	override var layout: dynamic = this@convert.layout?.handler ?: "auto"
 	override var label: dynamic = this@convert.label ?: undefined
-	override var primitive: GPUPrimitiveState? = this@convert.primitive?.convert() ?: undefined
+	override var primitive: GPUPrimitiveState? = this@convert.primitive.convert()
 	override var depthStencil: GPUDepthStencilState? = this@convert.depthStencil?.convert() ?: undefined
 	override var fragment: GPUFragmentState? = this@convert.fragment?.convert() ?: undefined
-	override var multisample: GPUMultisampleState? = this@convert.multisample?.convert() ?: undefined
+	override var multisample: GPUMultisampleState? = this@convert.multisample.convert()
 }
 
 private fun RenderPipelineDescriptor.VertexState.convert(): GPUVertexState =
@@ -197,7 +197,7 @@ private fun RenderPipelineDescriptor.PrimitiveState.convert(): GPUPrimitiveState
 
 private fun RenderPipelineDescriptor.DepthStencilState.convert(): GPUDepthStencilState =
 	object : GPUDepthStencilState {
-		override var format: String = this@convert.format.name
+		override var format: String = this@convert.format.actualName
 		override var depthWriteEnabled: Boolean? = this@convert.depthWriteEnabled ?: undefined
 		override var depthCompare: String? = this@convert.depthCompare?.stringValue ?: undefined
 		override var stencilFront: GPUStencilFaceState? = this@convert.stencilFront.convert()
