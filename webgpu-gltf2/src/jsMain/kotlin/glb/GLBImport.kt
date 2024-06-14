@@ -11,10 +11,20 @@ import io.ygdrasil.wgpu.internal.js.GPUBindGroup
 import io.ygdrasil.wgpu.internal.js.GPUBuffer
 import io.ygdrasil.wgpu.internal.js.GPUDevice
 
+
+
+
 @JsExport
-class GLTFMaterial(material: dynamic, textures: dynamic) {
+class GLTFTexture(sampler: dynamic, val image: dynamic) {
+    val gltfsampler = sampler
+    val sampler = sampler.sampler
+    val imageView = image.createView()
+}
+
+@JsExport
+class GLTFMaterial(material: dynamic, textures: Array<GLTFTexture> = arrayOf()) {
     var baseColorFactor = floatArrayOf(1f, 1f, 1f, 1f)
-    var baseColorTexture: dynamic? = null
+    var baseColorTexture: GLTFTexture? = null
     private var emissiveFactor = floatArrayOf(0f, 0f, 0f, 1f)
     private var metallicFactor = 1.0f
     private var roughnessFactor = 1.0f
@@ -22,13 +32,18 @@ class GLTFMaterial(material: dynamic, textures: dynamic) {
     lateinit var bindGroup: GPUBindGroup
 
     init { // equivalent of constructor -> initializer block in Kotlin
-        material["pbrMetallicRoughness"]?.let { it ->
+        if (material["pbrMetallicRoughness"]) {
+            val it = material["pbrMetallicRoughness"]
             baseColorFactor = it["baseColorFactor"] ?: baseColorFactor
-            baseColorTexture = it["baseColorTexture"]?.let { tex -> textures[tex["index"]] }
+            if (it["baseColorTexture"]) {
+                baseColorTexture = textures[it["baseColorTexture"]["index"]]
+            }
             metallicFactor = it["metallicFactor"] ?: metallicFactor
             roughnessFactor = it["roughnessFactor"] ?: roughnessFactor
+
         }
-        material["emissiveFactor"]?.let { it ->
+        if (material["emissiveFactor"]) {
+            val it = material["emissiveFactor"]
             emissiveFactor = floatArrayOf(it[0], it[1], it[2], 1f)
         }
     }
@@ -43,8 +58,8 @@ class GLTFMaterial(material: dynamic, textures: dynamic) {
             )
         )
         buf.mapFrom(baseColorFactor)
-        buf.mapFrom(emissiveFactor, 4)
-        buf.mapFrom(floatArrayOf(metallicFactor, roughnessFactor), 8)
+        buf.mapFrom(emissiveFactor, 4 * Float.SIZE_BYTES)
+        buf.mapFrom(floatArrayOf(metallicFactor, roughnessFactor), 8 * Float.SIZE_BYTES)
         buf.unmap()
         gpuBuffer = buf.handler
 
@@ -66,7 +81,7 @@ class GLTFMaterial(material: dynamic, textures: dynamic) {
             )
         )
 
-        baseColorTexture?.let { it ->
+        baseColorTexture?.let {
             layoutEntries.add(
                 Entry(
                     binding = 1,

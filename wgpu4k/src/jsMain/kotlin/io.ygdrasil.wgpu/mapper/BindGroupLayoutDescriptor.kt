@@ -27,16 +27,16 @@ private fun map(input: BindGroupLayoutDescriptor.Entry): GPUBindGroupLayoutEntry
     } else undefined
     override var texture: GPUTextureBindingLayout?  = if (input.bindingType is TextureBindingLayout) {
         object : GPUTextureBindingLayout {
-            override var sampleType: String? = input.bindingType.sampleType.name
-            override var viewDimension: String? = input.bindingType.viewDimension.name
+            override var sampleType: String? = input.bindingType.sampleType.stringValue
+            override var viewDimension: String? = input.bindingType.viewDimension.stringValue
             override var multisampled: Boolean? = input.bindingType.multisampled
         }
     } else undefined
     override var storageTexture: GPUStorageTextureBindingLayout? = if (input.bindingType is StorageTextureBindingLayout) {
         object : GPUStorageTextureBindingLayout {
-            override var access: String? = input.bindingType.access.name
-            override var format: String = input.bindingType.format.name
-            override var viewDimension: String? = input.bindingType.viewDimension.name
+            override var access: String? = input.bindingType.access.stringValue
+            override var format: String = input.bindingType.format.actualName
+            override var viewDimension: String? = input.bindingType.viewDimension.stringValue
         }
     } else undefined
     override var externalTexture: GPUExternalTextureBindingLayout? = undefined

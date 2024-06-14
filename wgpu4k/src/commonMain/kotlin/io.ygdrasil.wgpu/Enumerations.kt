@@ -665,7 +665,7 @@ enum class StencilOperation(
 
 enum class StorageTextureAccess(
     override val `value`: Int,
-    val `stringValue`: String,
+    val stringValue: String,
 ) : EnumerationWithValue {
     writeonly(1, "write-only"),
     readonly(2, "read-only"),

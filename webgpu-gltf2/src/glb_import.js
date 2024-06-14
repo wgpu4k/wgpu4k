@@ -4,6 +4,7 @@ import {
     GLTFBufferView,
     GLTFMaterial,
     GLTFMesh,
+    GLTFTexture,
     uploadGLBModelKt
 } from "../build/compileSync/js/main/developmentExecutable/kotlin/wgpu4k-root-webgpu-gltf2.mjs"
 
@@ -259,15 +260,6 @@ export class GLTFSampler {
             addressModeU: wrapS,
             addressModeV: wrapT,
         });
-    }
-}
-
-export class GLTFTexture {
-    constructor(sampler, image) {
-        this.gltfsampler = sampler;
-        this.sampler = sampler.sampler;
-        this.image = image;
-        this.imageView = image.createView();
     }
 }
 
