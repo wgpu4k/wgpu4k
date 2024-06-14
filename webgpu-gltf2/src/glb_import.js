@@ -21,17 +21,6 @@ const GLTFRenderMode = {
     TRIANGLE_FAN: 6,
 };
 
-const GLTFComponentType = {
-    BYTE: 5120,
-    UNSIGNED_BYTE: 5121,
-    SHORT: 5122,
-    UNSIGNED_SHORT: 5123,
-    INT: 5124,
-    UNSIGNED_INT: 5125,
-    FLOAT: 5126,
-    DOUBLE: 5130,
-};
-
 const GLTFTextureFilter = {
     NEAREST: 9728,
     LINEAR: 9729,
