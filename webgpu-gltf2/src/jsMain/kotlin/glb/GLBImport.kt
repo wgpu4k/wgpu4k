@@ -12,15 +12,6 @@ import io.ygdrasil.wgpu.internal.js.GPUBuffer
 import io.ygdrasil.wgpu.internal.js.GPUDevice
 
 
-
-
-@JsExport
-class GLTFTexture(sampler: dynamic, val image: dynamic) {
-    val gltfsampler = sampler
-    val sampler = sampler.sampler
-    val imageView = image.createView()
-}
-
 @JsExport
 class GLTFMaterial(material: dynamic, textures: Array<GLTFTexture> = arrayOf()) {
     var baseColorFactor = floatArrayOf(1f, 1f, 1f, 1f)

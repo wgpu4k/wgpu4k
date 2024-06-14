@@ -13,6 +13,13 @@ import org.khronos.webgl.Uint8Array
 import kotlin.math.max
 
 @JsExport
+class GLTFTexture(sampler: dynamic, val image: dynamic) {
+    val gltfsampler = sampler
+    val sampler = sampler.sampler
+    val imageView = image.createView()
+}
+
+@JsExport
 class GLTFBuffer(
     val arrayBuffer: ArrayBuffer,
     val size: Int,
