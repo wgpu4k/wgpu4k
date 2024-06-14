@@ -6,7 +6,7 @@ import io.ygdrasil.wgpu.internal.js.GPUDevice
 
 @JsExport
 fun uploadGLBModelKt(glbJsonData: dynamic, meshes: dynamic, device: GPUDevice): GLBModel {
-    println("uploadGLBModelKt2")
+    println("uploadGLBModelKt")
 
     val nodes = mutableListOf<GLTFNode>()
     val gltfNodes = makeGLTFSingleLevel(glbJsonData["nodes"])
