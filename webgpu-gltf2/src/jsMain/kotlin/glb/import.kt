@@ -10,9 +10,17 @@ fun uploadGLBModelKt(
     meshes: dynamic,
     device: GPUDevice,
     materials: Array<GLTFMaterial>,
-    defaultMaterial: GLTFMaterial
+    defaultMaterial: GLTFMaterial,
+    bufferViews: Array<GLTFBufferView>
 ): GLBModel {
     println("uploadGLBModelKt")
+
+    // Upload the different views used by meshes
+    bufferViews.forEach { bufferView ->
+        if (bufferView.needsUpload) {
+            bufferView.upload(device)
+        }
+    }
 
     defaultMaterial.upload(device)
     materials.forEach { material -> material.upload(device) }

@@ -162,12 +162,6 @@ export async function uploadGLBModel(buffer, device) {
         meshes.push(new GLTFMesh(mesh['name'], primitives));
     }
 
-    // Upload the different views used by meshes
-    for (var i = 0; i < bufferViews.length; ++i) {
-        if (bufferViews[i].needsUpload) {
-            bufferViews[i].upload(device);
-        }
-    }
 
-    return uploadGLBModelKt(glbJsonData, meshes, device, materials, defaultMaterial)
+    return uploadGLBModelKt(glbJsonData, meshes, device, materials, defaultMaterial, bufferViews)
 }
