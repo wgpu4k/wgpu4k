@@ -5,7 +5,7 @@ import {
     GLTFMaterial,
     GLTFMesh,
     GLTFPrimitive,
-    GLTFSampler as GLTFSampler2,
+    GLTFSampler,
     GLTFTexture,
     uploadGLBModelKt
 } from "../build/compileSync/js/main/developmentExecutable/kotlin/wgpu4k-root-webgpu-gltf2.mjs"
@@ -21,66 +21,6 @@ const GLTFRenderMode = {
     // an error or converted into a list/strip
     TRIANGLE_FAN: 6,
 };
-
-const GLTFTextureFilter = {
-    NEAREST: 9728,
-    LINEAR: 9729,
-    NEAREST_MIPMAP_NEAREST: 9984,
-    LINEAR_MIPMAP_NEAREST: 9985,
-    NEAREST_MIPMAP_LINEAR: 9986,
-    LINEAR_MIPMAP_LINEAR: 9987,
-};
-
-export class GLTFSampler {
-    constructor(sampler, device) {
-        var magFilter = sampler['magFilter'] === undefined ||
-            sampler['magFilter'] == GLTFTextureFilter.LINEAR
-            ? 'linear'
-            : 'nearest';
-        var minFilter = sampler['minFilter'] === undefined ||
-            sampler['minFilter'] == GLTFTextureFilter.LINEAR
-            ? 'linear'
-            : 'nearest';
-
-        var wrapS = 'repeat';
-        if (sampler['wrapS'] !== undefined) {
-            if (sampler['wrapS'] == GLTFTextureFilter.REPEAT) {
-                wrapS = 'repeat';
-            } else if (sampler['wrapS'] == GLTFTextureFilter.CLAMP_TO_EDGE) {
-                wrapS = 'clamp-to-edge';
-            } else {
-                wrapS = 'mirror-repeat';
-            }
-        }
-
-        var wrapT = 'repeat';
-        if (sampler['wrapT'] !== undefined) {
-            if (sampler['wrapT'] == GLTFTextureFilter.REPEAT) {
-                wrapT = 'repeat';
-            } else if (sampler['wrapT'] == GLTFTextureFilter.CLAMP_TO_EDGE) {
-                wrapT = 'clamp-to-edge';
-            } else {
-                wrapT = 'mirror-repeat';
-            }
-        }
-
-        console.log(
-            {
-                magFilter: magFilter,
-                minFilter: minFilter,
-                addressModeU: wrapS,
-                addressModeV: wrapT,
-            }
-        )
-        this.sampler = device.createSampler({
-            magFilter: magFilter,
-            minFilter: minFilter,
-            addressModeU: wrapS,
-            addressModeV: wrapT,
-        });
-    }
-}
-
 
 // Upload a GLB model and return it
 export async function uploadGLBModel(buffer, device) {
@@ -145,7 +85,6 @@ export async function uploadGLBModel(buffer, device) {
     if (glbJsonData['samplers'] !== undefined) {
         for (var i = 0; i < glbJsonData['samplers'].length; ++i) {
             samplers.push(new GLTFSampler(glbJsonData['samplers'][i], device));
-            new GLTFSampler2(glbJsonData['samplers'][i], device)
         }
     }
 

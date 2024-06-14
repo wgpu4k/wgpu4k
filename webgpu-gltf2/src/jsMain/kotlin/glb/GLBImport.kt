@@ -28,21 +28,17 @@ class GLTFSampler(private val samplerNode: dynamic, _device: GPUDevice) {
         val wrapS = when (samplerNode.wrapS) {
             GLTFTextureFilter.REPEAT.value -> AddressMode.repeat
             GLTFTextureFilter.CLAMP_TO_EDGE.value -> AddressMode.clamptoedge
+            undefined -> AddressMode.repeat
             else -> AddressMode.mirrorrepeat
         }
 
         val wrapT = when (samplerNode.wrapT) {
             GLTFTextureFilter.REPEAT.value -> AddressMode.repeat
             GLTFTextureFilter.CLAMP_TO_EDGE.value -> AddressMode.clamptoedge
+            undefined -> AddressMode.repeat
             else -> AddressMode.mirrorrepeat
         }
-        val descriptor = SamplerDescriptor(
-            magFilter = magFilter,
-            minFilter = minFilter,
-            addressModeU = wrapS,
-            addressModeV = wrapT,
-        )
-        println(descriptor)
+
         return device.createSampler(
             SamplerDescriptor(
                 magFilter = magFilter,
