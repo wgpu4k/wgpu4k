@@ -177,7 +177,7 @@ class GLTFMesh(
 )
 
 @JsExport
-class GLTFAccessor(val view: dynamic, accessor: dynamic) {
+class GLTFAccessor(val view: GLTFBufferView, accessor: dynamic) {
     var count: Int = accessor["count"]
     var componentType: Int = accessor["componentType"]
     var gltfType: String = accessor["type"]

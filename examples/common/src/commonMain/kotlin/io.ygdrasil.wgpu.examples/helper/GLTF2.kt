@@ -23,6 +23,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.js.JsExport
 import kotlin.jvm.JvmInline
 
 suspend fun VfsFile.readGLB(options: GLTF2.ReadOptions = GLTF2.ReadOptions.DEFAULT): GLTF2 = GLTF2.readGLB(this, options = options)
@@ -970,6 +971,7 @@ fun GLTF2.Node.childrenNodes(gltf: GLTF2): List<GLTF2.Node>? = this.children?.ma
 fun GLTF2.Scene.childrenNodes(gltf: GLTF2): List<GLTF2.Node>? = this.nodes?.map { gltf.nodes[it] }
 fun GLTF2.Node.mesh(gltf: GLTF2): GLTF2.Mesh = gltf.meshes[this.mesh ?: error("cannot get mesh")]
 
+@JsExport
 enum class GLTFRenderMode(val value: Int) {
     POINTS(0),
     LINE(1),

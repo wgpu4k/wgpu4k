@@ -1,6 +1,6 @@
 package glb
 
-enum class GLTFComponentType(val id: Int) {
+enum class GLTFComponentType(val value: Int) {
     BYTE(5120),
     UNSIGNED_BYTE(5121),
     SHORT(5122),
@@ -12,7 +12,7 @@ enum class GLTFComponentType(val id: Int) {
 
     companion object {
         fun of(id: Int): GLTFComponentType {
-            return entries.firstOrNull { it.id == id }
+            return entries.firstOrNull { it.value == id }
                 ?: error("Unknown id: $id")
         }
     }
