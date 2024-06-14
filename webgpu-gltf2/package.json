@@ -1,0 +1,33 @@
+{
+  "name": "webgpu-gltf",
+  "version": "1.0.0",
+  "description": "A glTF loader and viewer using WebGPU. Try it out [online!](https://www.willusher.io/webgpu-gltf)",
+  "main": "glb_viewer.js",
+  "scripts": {
+    "build": "webpack",
+    "serve": "webpack server",
+    "deploy": "webpack --mode=production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Twinklebear/webgpu-gltf.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Twinklebear/webgpu-gltf/issues"
+  },
+  "homepage": "https://github.com/Twinklebear/webgpu-gltf#readme",
+  "devDependencies": {
+    "html-webpack-plugin": "^5.3.2",
+    "webpack": "^5.53.0",
+    "webpack-cli": "^4.8.0",
+    "webpack-dev-server": "^4.2.1"
+  },
+  "dependencies": {
+    "arcball_camera": "^1.0.1",
+    "ez_canvas_controller": "^1.0.0",
+    "gl-matrix": "^3.3.0"
+  }
+}
