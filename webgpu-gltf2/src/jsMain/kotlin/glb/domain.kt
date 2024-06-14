@@ -314,6 +314,11 @@ class GLTFBufferView(buffer: GLTFBuffer, view: dynamic) {
         this.usage.add(BufferUsage.of(usage) ?: error("bad usage"))
     }
 
+
+    internal fun addUsage(usage: BufferUsage) {
+        this.usage.add(usage)
+    }
+
     fun upload(_device: dynamic) {
         val device = Device(_device)
         // Note: must align to 4 byte size when mapped at creation is true
@@ -355,7 +360,7 @@ class GLTFAccessor(val view: GLTFBufferView, accessor: dynamic) {
     val byteStride: Int
         get() {
             val elementSize = gltfTypeSize(GLTFComponentType.of(componentType), gltfType)
-            return max(elementSize, view.byteStride as Int)
+            return max(elementSize, view.byteStride)
         }
 }
 
@@ -431,7 +436,7 @@ class GLTFNode(val name: String, val mesh: dynamic, val transform: DoubleArray) 
                 entries = arrayOf(
                     BindGroupEntry(
                         binding = 0,
-                        resource = BindGroupDescriptor.BufferBinding(
+                        resource = BufferBinding(
                             buffer = Buffer(gpuUniforms)
                         )
                     )

@@ -1,10 +1,7 @@
 import {
-    GLTFAccessor,
     GLTFBuffer,
     GLTFBufferView,
     GLTFMaterial,
-    GLTFMesh,
-    GLTFPrimitive,
     GLTFSampler,
     GLTFTexture,
     uploadGLBModelKt
@@ -104,64 +101,5 @@ export async function uploadGLBModel(buffer, device) {
         materials.push(new GLTFMaterial(glbJsonData['materials'][i], textures));
     }
 
-    var meshes = [];
-    for (var i = 0; i < glbJsonData.meshes.length; ++i) {
-        var mesh = glbJsonData.meshes[i];
-
-        var primitives = [];
-        for (var j = 0; j < mesh.primitives.length; ++j) {
-            var prim = mesh.primitives[j];
-            var topology = prim['mode'];
-            // Default is triangles if mode specified
-            if (topology === undefined) {
-                topology = GLTFRenderMode.TRIANGLES;
-            }
-            if (topology != GLTFRenderMode.TRIANGLES &&
-                topology != GLTFRenderMode.TRIANGLE_STRIP) {
-                alert('Ignoring primitive with unsupported mode ' + prim['mode']);
-                continue;
-            }
-
-            var indices = null;
-            if (glbJsonData['accessors'][prim['indices']] !== undefined) {
-                var accessor = glbJsonData['accessors'][prim['indices']];
-                var viewID = accessor['bufferView'];
-                bufferViews[viewID].needsUpload = true;
-                bufferViews[viewID].addUsage(GPUBufferUsage.INDEX);
-                indices = new GLTFAccessor(bufferViews[viewID], accessor);
-            }
-
-            var positions = null;
-            var normals = null;
-            var texcoords = [];
-            for (var attr in prim['attributes']) {
-                var accessor = glbJsonData['accessors'][prim['attributes'][attr]];
-                var viewID = accessor['bufferView'];
-                bufferViews[viewID].needsUpload = true;
-                bufferViews[viewID].addUsage(GPUBufferUsage.VERTEX);
-                if (attr == 'POSITION') {
-                    positions = new GLTFAccessor(bufferViews[viewID], accessor);
-                } else if (attr == 'NORMAL') {
-                    normals = new GLTFAccessor(bufferViews[viewID], accessor);
-                } else if (attr.startsWith('TEXCOORD')) {
-                    texcoords.push(new GLTFAccessor(bufferViews[viewID], accessor));
-                }
-            }
-
-            var material = null;
-            if (prim['material'] !== undefined) {
-                material = materials[prim['material']];
-            } else {
-                material = defaultMaterial;
-            }
-
-            var gltfPrim =
-                new GLTFPrimitive(indices, positions, normals, texcoords, material, topology);
-            primitives.push(gltfPrim);
-        }
-        meshes.push(new GLTFMesh(mesh['name'], primitives));
-    }
-
-
-    return uploadGLBModelKt(glbJsonData, meshes, device, materials, defaultMaterial, bufferViews)
+    return uploadGLBModelKt(glbJsonData, device, materials, defaultMaterial, bufferViews)
 }

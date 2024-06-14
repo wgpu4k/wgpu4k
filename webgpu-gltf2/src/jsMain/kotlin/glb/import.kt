@@ -2,18 +2,75 @@
 
 package glb
 
+import io.ygdrasil.wgpu.BufferUsage
+import io.ygdrasil.wgpu.examples.helper.GLTFRenderMode
 import io.ygdrasil.wgpu.internal.js.GPUDevice
 
 @JsExport
 fun uploadGLBModelKt(
     glbJsonData: dynamic,
-    meshes: dynamic,
     device: GPUDevice,
     materials: Array<GLTFMaterial>,
     defaultMaterial: GLTFMaterial,
     bufferViews: Array<GLTFBufferView>
 ): GLBModel {
-    println("uploadGLBModelKt")
+    println("uploadGLBModelKt2")
+
+    val meshes = mutableListOf<GLTFMesh>()
+    for (i in 0 until glbJsonData.meshes.length as Int) {
+        val mesh = glbJsonData.meshes[i]
+
+        val primitives = mutableListOf<GLTFPrimitive>()
+        for (j in 0 until mesh.primitives.length as Int) {
+            val prim = mesh.primitives[j]
+            var topology = prim["mode"]
+            // Default is triangles if mode specified
+            if (topology == undefined) {
+                topology = GLTFRenderMode.TRIANGLES.value
+            }
+            if (topology != GLTFRenderMode.TRIANGLES.value && topology != GLTFRenderMode.TRIANGLE_STRIP.value) {
+                console.warn("Ignoring primitive with unsupported mode ${prim["mode"]}")
+                continue
+            }
+
+            var indices: GLTFAccessor? = null
+            if (glbJsonData["accessors"][prim["indices"]] != undefined) {
+                val accessor = glbJsonData["accessors"][prim["indices"]]
+                val viewID = accessor["bufferView"]
+                bufferViews[viewID].needsUpload = true
+                bufferViews[viewID].addUsage(BufferUsage.index)
+                indices = GLTFAccessor(bufferViews[viewID], accessor)
+            }
+
+            var positions: GLTFAccessor? = null
+            var normals: GLTFAccessor? = null
+            val texcoords = mutableListOf<GLTFAccessor>()
+            for (attr in js("Object.keys(prim['attributes'])") as Array<String>) {
+                val accessor = glbJsonData["accessors"][prim.attributes[attr]]
+                val viewID = accessor["bufferView"]
+                bufferViews[viewID].needsUpload = true
+                bufferViews[viewID].addUsage(BufferUsage.vertex)
+                when (attr) {
+                    "POSITION" -> positions = GLTFAccessor(bufferViews[viewID], accessor)
+                    "NORMAL" -> normals = GLTFAccessor(bufferViews[viewID], accessor)
+                    else -> {
+                        if (attr.startsWith("TEXCOORD")) {
+                            texcoords.add(GLTFAccessor(bufferViews[viewID], accessor))
+                        }
+                    }
+                }
+            }
+
+            val material = if (prim["material"] != undefined) {
+                materials[prim["material"]]
+            } else {
+                defaultMaterial
+            }
+            val gltfPrim = GLTFPrimitive(indices, positions!!, normals, texcoords.toTypedArray(), material, topology)
+            primitives.add(gltfPrim)
+        }
+        meshes.add(GLTFMesh(mesh["name"], primitives.toTypedArray()))
+    }
 
     // Upload the different views used by meshes
     bufferViews.forEach { bufferView ->
