@@ -136,7 +136,7 @@ private fun TextureDescriptor.convert(): GPUTextureDescriptor = object : GPUText
 	override var mipLevelCount: GPUIntegerCoordinate? = this@convert.mipLevelCount
 	override var sampleCount: GPUSize32? = this@convert.sampleCount
 	override var dimension: String? = this@convert.dimension.stringValue
-	override var format: String = this@convert.format.name
+	override var format: String = this@convert.format.actualName
 	override var usage: GPUTextureUsageFlags = this@convert.usage.toFlagInt()
 	override var viewFormats: Array<String> = this@convert.viewFormats.map { it.actualName }.toTypedArray()
 }
@@ -163,12 +163,12 @@ private fun RenderPipelineDescriptor.convert(): GPURenderPipelineDescriptor = ob
 private fun RenderPipelineDescriptor.VertexState.convert(): GPUVertexState =
 	object : GPUVertexState {
 		override var module: GPUShaderModule = this@convert.module.handler
-		override var entryPoint: String? = this@convert.entryPoint ?: undefined
+		override var entryPoint: String? = this@convert.entryPoint
 
 		//TODO check mapping
 		//override var constants: Map<String, GPUPipelineConstantValue>? = null
 		override var buffers: Array<GPUVertexBufferLayout?>? = this@convert.buffers
-			?.map { it?.convert() }?.toTypedArray() ?: undefined
+			.map { it.convert() }?.toTypedArray() ?: undefined
 	}
 
 private fun RenderPipelineDescriptor.VertexState.VertexBufferLayout.convert(): GPUVertexBufferLayout =
@@ -176,7 +176,7 @@ private fun RenderPipelineDescriptor.VertexState.VertexBufferLayout.convert(): G
 		override var arrayStride: GPUSize64 = this@convert.arrayStride
 		override var attributes: Array<GPUVertexAttribute> = this@convert.attributes
 			.map { it.convert() }.toTypedArray()
-		override var stepMode: String? = this@convert.stepMode?.name ?: undefined
+		override var stepMode: String? = this@convert.stepMode.name
 	}
 
 private fun RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute.convert(): GPUVertexAttribute =
@@ -188,10 +188,10 @@ private fun RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttrib
 
 private fun RenderPipelineDescriptor.PrimitiveState.convert(): GPUPrimitiveState =
 	object : GPUPrimitiveState {
-		override var topology: String? = this@convert.topology?.stringValue
+		override var topology: String? = this@convert.topology.stringValue
 		override var stripIndexFormat: String? = this@convert.stripIndexFormat?.name ?: undefined
-		override var frontFace: String? = this@convert.frontFace?.name
-		override var cullMode: String? = this@convert.cullMode?.name
+		override var frontFace: String? = this@convert.frontFace.name
+		override var cullMode: String? = this@convert.cullMode.name
 		override var unclippedDepth: Boolean? = this@convert.unclippedDepth
 	}
 
@@ -226,7 +226,7 @@ private fun RenderPipelineDescriptor.MultisampleState.convert(): GPUMultisampleS
 
 private fun RenderPipelineDescriptor.FragmentState.convert(): GPUFragmentState =
 	object : GPUFragmentState {
-		override var targets: Array<GPUColorTargetState?> = this@convert.targets.map { it?.convert() }.toTypedArray()
+		override var targets: Array<GPUColorTargetState?> = this@convert.targets.map { it.convert() }.toTypedArray()
 		override var module: GPUShaderModule = this@convert.module.handler
 		override var entryPoint: String? = this@convert.entryPoint
 		// TODO not sure how to map this
@@ -236,8 +236,8 @@ private fun RenderPipelineDescriptor.FragmentState.convert(): GPUFragmentState =
 private fun RenderPipelineDescriptor.FragmentState.ColorTargetState.convert(): GPUColorTargetState =
 	object : GPUColorTargetState {
 		override var format: String = this@convert.format.name
-		override var blend: GPUBlendState? = this@convert.blend?.convert()
-		override var writeMask: GPUColorWriteFlags? = this@convert.writeMask?.value
+		override var blend: GPUBlendState? = this@convert.blend.convert()
+		override var writeMask: GPUColorWriteFlags? = this@convert.writeMask.value
 	}
 
 private fun RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.convert(): GPUBlendState =
