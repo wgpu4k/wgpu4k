@@ -75,5 +75,5 @@ export async function uploadGLBModel(buffer, device) {
     }
 
 
-    return uploadGLBModelKt(glbJsonData, device, bufferViews, images)
+    return await uploadGLBModelKt(glbJsonData, device, bufferViews, glbBuffer, images)
 }
