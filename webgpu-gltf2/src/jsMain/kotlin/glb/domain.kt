@@ -10,7 +10,8 @@ import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.SamplerBindingLayout
 import io.ygdrasil.wgpu.RenderPipelineDescriptor.FragmentState
 import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState.VertexBufferLayout
 import io.ygdrasil.wgpu.examples.helper.GLTFRenderMode
-import io.ygdrasil.wgpu.internal.js.*
+import io.ygdrasil.wgpu.internal.js.GPUBuffer
+import io.ygdrasil.wgpu.internal.js.GPUTexture
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.Uint8Array
 import kotlin.math.max
@@ -29,12 +30,11 @@ class GLTFPrimitive(
     fun buildRenderBundle(
         device: Device,
         shaderCache: GLBShaderCache,
-        bindGroupLayouts: Array<GPUBindGroupLayout>,
-        _bundleEncoder: GPURenderBundleEncoder,
+        bindGroupLayouts: Array<BindGroupLayout>,
+        bundleEncoder: RenderBundleEncoder,
         swapChainFormat: String,
         depthFormat: String,
     ) {
-        val bundleEncoder = RenderBundleEncoder(_bundleEncoder)
 
         val shaderModule = shaderCache.getShader(
             normals != null,
@@ -89,9 +89,9 @@ class GLTFPrimitive(
         val layout = device.createPipelineLayout(
             PipelineLayoutDescriptor(
                 bindGroupLayouts = arrayOf(
-                    BindGroupLayout(bindGroupLayouts[0]),
-                    BindGroupLayout(bindGroupLayouts[1]),
-                    BindGroupLayout(material.bindGroupLayout)
+                    bindGroupLayouts[0],
+                    bindGroupLayouts[1],
+                    material.bindGroupLayout
                 )
             )
         )
@@ -137,7 +137,7 @@ class GLTFPrimitive(
 
         var renderPipeline = device.createRenderPipeline(pipelineDescriptor)
 
-        bundleEncoder.setBindGroup(2, BindGroup(material.bindGroup))
+        bundleEncoder.setBindGroup(2, material.bindGroup)
         bundleEncoder.setPipeline(renderPipeline)
         bundleEncoder.setVertexBuffer(
             0,
@@ -178,8 +178,8 @@ class GLTFMaterial(material: dynamic, textures: Array<GLTFTexture> = arrayOf()) 
     private var metallicFactor = 1.0f
     private var roughnessFactor = 1.0f
     private lateinit var gpuBuffer: GPUBuffer
-    lateinit var bindGroup: GPUBindGroup
-    lateinit var bindGroupLayout: GPUBindGroupLayout
+    lateinit var bindGroup: BindGroup
+    lateinit var bindGroupLayout: BindGroupLayout
 
     init { // equivalent of constructor -> initializer block in Kotlin
         if (material["pbrMetallicRoughness"]) {
@@ -260,16 +260,14 @@ class GLTFMaterial(material: dynamic, textures: Array<GLTFTexture> = arrayOf()) 
             )
         )
 
-        println("createBindGroup $bindGroupEntries")
         bindGroup = device.createBindGroup(
             BindGroupDescriptor(
                 layout = bindGroupLayout,
                 entries = bindGroupEntries.toTypedArray()
             )
-        ).handler
-        println("done")
+        )
 
-        this.bindGroupLayout = bindGroupLayout.handler
+        this.bindGroupLayout = bindGroupLayout
     }
 }
 
@@ -361,8 +359,8 @@ class GLBModel(val nodes: Array<GLTFNode>) {
     fun buildRenderBundles(
         device: Device,
         shaderCache: GLBShaderCache,
-        viewParamsLayout: GPUBindGroupLayout,
-        viewParamsBindGroup: GPUBindGroup,
+        viewParamsLayout: BindGroupLayout,
+        viewParamsBindGroup: BindGroup,
         swapChainFormat: String
     ): Array<RenderBundle> {
         val renderBundles = mutableListOf<RenderBundle>()
@@ -401,8 +399,8 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: DoubleArray)
     fun buildRenderBundle(
         device: Device,
         shaderCache: GLBShaderCache,
-        viewParamsLayout: GPUBindGroupLayout,
-        viewParamsBindGroup: GPUBindGroup,
+        viewParamsLayout: BindGroupLayout,
+        viewParamsBindGroup: BindGroup,
         swapChainFormat: String,
         depthFormat: String,
     ): RenderBundle {
@@ -432,7 +430,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: DoubleArray)
             )
         )
 
-        val bindGroupLayouts = arrayOf(viewParamsLayout, nodeParamsLayout.handler)
+        val bindGroupLayouts = arrayOf(viewParamsLayout, nodeParamsLayout)
 
         val bundleEncoder = device.createRenderBundleEncoder(
             RenderBundleEncoderDescriptor(
@@ -441,7 +439,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: DoubleArray)
             )
         )
 
-        bundleEncoder.setBindGroup(0, BindGroup(viewParamsBindGroup))
+        bundleEncoder.setBindGroup(0, viewParamsBindGroup)
         bundleEncoder.setBindGroup(1, bindGroup)
 
         for (primitive in mesh.primitives) {
@@ -449,7 +447,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: DoubleArray)
                 device,
                 shaderCache,
                 bindGroupLayouts,
-                bundleEncoder.handler,
+                bundleEncoder,
                 swapChainFormat,
                 depthFormat
             )

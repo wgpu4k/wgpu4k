@@ -138,8 +138,8 @@ class MyRenderContext(
         renderBundles = model.buildRenderBundles(
             device,
             shaderCache,
-            viewParamsLayout.handler,
-            viewParamsBindGroup.handler,
+            viewParamsLayout,
+            viewParamsBindGroup,
             renderingContext.textureFormat.actualName,
         )
 
