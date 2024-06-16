@@ -2,12 +2,11 @@
 import io.ygdrasil.wgpu.Device
 import io.ygdrasil.wgpu.ShaderModule
 import io.ygdrasil.wgpu.ShaderModuleDescriptor
-import io.ygdrasil.wgpu.internal.js.GPUShaderModule
 
-class GLBShaderCache(private val device: Device) {
+class ShaderCache(private val device: Device) {
     private val shaderCache: MutableMap<String, ShaderModule> = mutableMapOf()
 
-    fun getShader(hasNormals: Boolean, hasUVs: Boolean, hasColorTexture: Boolean): GPUShaderModule {
+    fun getShader(hasNormals: Boolean, hasUVs: Boolean, hasColorTexture: Boolean): ShaderModule {
         var shaderID = "glb"
         if (hasNormals) {
             shaderID += "n"
@@ -22,7 +21,7 @@ class GLBShaderCache(private val device: Device) {
             val shaderSource = generateGLTFShader(hasNormals, hasUVs, hasColorTexture)
             shaderCache[shaderID] = device.createShaderModule(ShaderModuleDescriptor(code = shaderSource))
         }
-        return shaderCache[shaderID]!!.handler
+        return shaderCache[shaderID]!!
     }
 }
 

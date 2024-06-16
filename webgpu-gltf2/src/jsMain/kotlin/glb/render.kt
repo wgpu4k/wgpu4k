@@ -2,7 +2,7 @@
 
 package glb
 
-import GLBShaderCache
+import ShaderCache
 import getProjectionMatrix
 import getTransformationMatrix
 import io.ygdrasil.wgpu.*
@@ -61,7 +61,7 @@ class MyRenderContext(
     internal var viewParamBuf: Buffer
     internal var projectionMatrix: Matrix4
     internal var renderPassDesc: RenderPassDescriptor
-    internal val shaderCache = GLBShaderCache(device)
+    internal val shaderCache = ShaderCache(device)
     var frame = 0
 
     init {

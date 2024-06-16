@@ -1,6 +1,6 @@
 package glb
 
-import GLBShaderCache
+import ShaderCache
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.BindGroupDescriptor.*
 import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry
@@ -27,7 +27,7 @@ class GLTFPrimitive(
     // Build the primitive render commands into the bundle
     fun buildRenderBundle(
         device: Device,
-        shaderCache: GLBShaderCache,
+        shaderCache: ShaderCache,
         bindGroupLayouts: Array<BindGroupLayout>,
         bundleEncoder: RenderBundleEncoder,
         swapChainFormat: String,
@@ -95,13 +95,13 @@ class GLTFPrimitive(
         )
 
         var vertexStage = RenderPipelineDescriptor.VertexState(
-            module = ShaderModule(shaderModule),
+            module = shaderModule,
             entryPoint = "vertex_main",
             buffers = vertexBuffers.toTypedArray()
         )
 
         var fragmentStage = FragmentState(
-            module = ShaderModule(shaderModule),
+            module = shaderModule,
             entryPoint = "fragment_main",
             targets = arrayOf(
                 FragmentState.ColorTargetState(
@@ -349,7 +349,7 @@ class GLBModel(val nodes: Array<GLTFNode>) {
 
     fun buildRenderBundles(
         device: Device,
-        shaderCache: GLBShaderCache,
+        shaderCache: ShaderCache,
         viewParamsLayout: BindGroupLayout,
         viewParamsBindGroup: BindGroup,
         swapChainFormat: String,
@@ -389,7 +389,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: DoubleArray)
 
     fun buildRenderBundle(
         device: Device,
-        shaderCache: GLBShaderCache,
+        shaderCache: ShaderCache,
         viewParamsLayout: BindGroupLayout,
         viewParamsBindGroup: BindGroup,
         swapChainFormat: String,
