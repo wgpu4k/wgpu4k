@@ -9,44 +9,46 @@ import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.BindGroupDescriptor.BindGroupEntry
 import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry
 import io.ygdrasil.wgpu.RenderPassDescriptor.ColorAttachment
+import korlibs.io.file.std.resourcesVfs
+import korlibs.io.util.toInt8Array
 import korlibs.math.geom.Matrix4
 import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.promise
-import org.khronos.webgl.ArrayBuffer
 import org.w3c.dom.HTMLCanvasElement
-import kotlin.js.Promise
 
-@JsExport
-fun renderContext(fileBuffer: ArrayBuffer): Promise<dynamic> {
-    return MainScope().promise {
+external fun setInterval(render: () -> Unit, updateInterval: Int)
 
-        val canvas: HTMLCanvasElement = document.getElementById("webgpu-canvas") as HTMLCanvasElement
-        val devicePixelRatio = window.devicePixelRatio
-        canvas.width = (canvas.clientWidth * devicePixelRatio).toInt()
-        canvas.height = (canvas.clientHeight * devicePixelRatio).toInt()
-        val adapter = requestAdapter() ?: error("No appropriate Adapter found.")
-        val device = adapter.requestDevice() ?: error("No appropriate Device found.")
-        val renderingContext = canvas.getRenderingContext() ?: error("fail to get context")
+// ~60 Frame per second
+val UPDATE_INTERVAL = (1000.0 / 60.0).toInt()
+val file = "./DamagedHelmet.glb"
 
-        val model = uploadGLBModel(device, fileBuffer)
+suspend fun renderContext(): MyRenderContext {
 
-        renderingContext.configure(
-            CanvasConfiguration(
-                device = device
-            )
+    val fileBuffer = resourcesVfs[file].readBytes()
+        .toInt8Array()
+
+    val canvas: HTMLCanvasElement = document.getElementById("webgpu") as HTMLCanvasElement
+    val devicePixelRatio = window.devicePixelRatio
+    canvas.width = (canvas.clientWidth * devicePixelRatio).toInt()
+    canvas.height = (canvas.clientHeight * devicePixelRatio).toInt()
+    val adapter = requestAdapter() ?: error("No appropriate Adapter found.")
+    val device = adapter.requestDevice() ?: error("No appropriate Device found.")
+    val renderingContext = canvas.getRenderingContext() ?: error("fail to get context")
+    val model = uploadGLBModel(device, fileBuffer.buffer)
+
+    renderingContext.configure(
+        CanvasConfiguration(
+            device = device
         )
+    )
 
-        MyRenderContext(
-            device,
-            model,
-            renderingContext,
-            canvas
-        )
-    }
-
+    return MyRenderContext(
+        device,
+        model,
+        renderingContext,
+        canvas
+    )
 }
 
 class MyRenderContext(
@@ -61,6 +63,7 @@ class MyRenderContext(
     internal var projectionMatrix: Matrix4
     internal var renderPassDesc: RenderPassDescriptor
     internal val shaderCache = GLBShaderCache(device)
+    var frame = 0
 
     init {
         val dummyTexture by lazy {
@@ -141,8 +144,44 @@ class MyRenderContext(
         )
 
         projectionMatrix = getProjectionMatrix(canvas.width, canvas.height)
+
+        setInterval({
+            render()
+        }, UPDATE_INTERVAL)
     }
 
+    fun render() {
+        frame += 1
+        val renderPassDesc = renderPassDesc.copy(
+            colorAttachments = arrayOf(
+                renderPassDesc.colorAttachments[0].copy(
+                    view = renderingContext.getCurrentTexture().createView()
+                )
+            )
+        )
+
+        val transformationMatrix = getTransformationMatrix(
+            frame / 120.0,
+            projectionMatrix
+        )
+
+        device.queue.writeBuffer(
+            viewParamBuf,
+            0L,
+            transformationMatrix,
+            0L,
+            transformationMatrix.size.toLong()
+        )
+
+        val commandEncoder = device.createCommandEncoder()
+        val renderPass = commandEncoder.beginRenderPass(renderPassDesc)
+        renderPass.executeBundles(renderBundles)
+
+        renderPass.end()
+        device.queue.submit(arrayOf(commandEncoder.finish()))
+
+
+    }
 }
 
 var frame = 0

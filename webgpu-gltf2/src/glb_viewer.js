@@ -1,7 +1,4 @@
-import {
-    renderContext,
-    renderKt
-} from "../build/compileSync/js/main/developmentExecutable/kotlin/wgpu4k-root-webgpu-gltf2.mjs"
+import {renderContext} from "../build/compileSync/js/main/developmentExecutable/kotlin/wgpu4k-root-webgpu-gltf2.mjs"
 
 (async () => {
 
@@ -11,10 +8,10 @@ import {
 
     var context = await renderContext(glbFile);
 
-    const renderJs = async () => {
+    /*const renderJs = async () => {
         renderKt(context)
         requestAnimationFrame(renderJs);
     };
-    requestAnimationFrame(renderJs);
+    requestAnimationFrame(renderJs);*/
 })();
 
