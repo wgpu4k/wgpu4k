@@ -39,8 +39,8 @@ actual class RenderingContext(private val handler: GPUCanvasContext) : AutoClose
 
 	fun CanvasConfiguration.convert(): GPUCanvasConfiguration = object : GPUCanvasConfiguration {
 		override var device: GPUDevice = this@convert.device.handler
-		override var format: String = this@convert.format?.name ?: textureFormat.name
-		override var usage: GPUTextureUsageFlags? = this@convert.usage ?: undefined
+		override var format: String = this@convert.format?.name ?: textureFormat.actualName
+		override var usage: GPUTextureUsageFlags? = this@convert.usage
 		override var viewFormats: Array<String?>? = this@convert.viewFormats ?: undefined
 		override var colorSpace: Any? = this@convert.colorSpace ?: undefined
 		override var alphaMode: String? = this@convert.alphaMode?.name ?: undefined

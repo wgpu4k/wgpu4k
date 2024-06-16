@@ -6,29 +6,22 @@ import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.helper.GLTFRenderMode
 import io.ygdrasil.wgpu.examples.helper.readGLB
 import io.ygdrasil.wgpu.examples.toBitmapHolder
-import io.ygdrasil.wgpu.internal.js.GPUDevice
 import io.ygdrasil.wgpu.internal.js.GPUTexture
 import korlibs.image.format.readBitmap
 import korlibs.io.file.std.asMemoryVfsFile
 import korlibs.io.lang.TextDecoder
 import korlibs.io.util.toByteArray
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.asPromise
-import kotlinx.coroutines.async
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.Uint32Array
 import org.khronos.webgl.Uint8Array
 import org.khronos.webgl.get
-import kotlin.js.Promise
 
-@JsExport
-fun uploadGLBModel(
-    _device: GPUDevice,
+
+suspend fun uploadGLBModel(
+    device: Device,
     rawJSBuffer: ArrayBuffer
-): Promise<GLBModel> {
-    return GlobalScope.async {
-        val device = Device(_device)
+): GLBModel {
         println("uploadGLBModelKt")
 
         val header = Uint32Array(rawJSBuffer, 0, 5)
@@ -88,11 +81,11 @@ fun uploadGLBModel(
             }
         }
 
-        val defaultSampler = GLTFSampler(mapOf<Any, Any>(), _device)
+    val defaultSampler = GLTFSampler(mapOf<Any, Any>(), device)
         val samplers = mutableListOf<GLTFSampler>()
         if (glbJsonData["samplers"] != undefined) {
             for (i in 0 until glbJsonData["samplers"].length as Int) {
-                samplers.add(GLTFSampler(glbJsonData["samplers"][i], _device))
+                samplers.add(GLTFSampler(glbJsonData["samplers"][i], device))
             }
         }
 
@@ -171,12 +164,12 @@ fun uploadGLBModel(
         // Upload the different views used by meshes
         bufferViews.forEach { bufferView ->
             if (bufferView.needsUpload) {
-                bufferView.upload(_device)
+                bufferView.upload(device)
             }
         }
 
-        defaultMaterial.upload(_device)
-        materials.forEach { material -> material.upload(_device) }
+    defaultMaterial.upload(device)
+    materials.forEach { material -> material.upload(device) }
 
         val nodes = mutableListOf<GLTFNode>()
         val gltfNodes = makeGLTFSingleLevel(glbJsonData["nodes"])
@@ -186,12 +179,11 @@ fun uploadGLBModel(
                 val nodeName = n["name"] as String
                 val mesh = meshes[n["mesh"]]
                 val node = GLTFNode(nodeName, mesh, readNodeTransform(n))
-                node.upload(_device)
+                node.upload(device)
                 nodes.add(node)
             }
         }
-        GLBModel(nodes.toTypedArray())
-    }.asPromise()
+    return GLBModel(nodes.toTypedArray())
 }
 
 @JsExport

@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalJsExport::class)
 
 package glb
 
@@ -16,7 +15,6 @@ import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.Uint8Array
 import kotlin.math.max
 
-@JsExport
 class GLTFPrimitive(
     val indices: GLTFAccessor?,
     val positions: GLTFAccessor,
@@ -29,14 +27,13 @@ class GLTFPrimitive(
 
     // Build the primitive render commands into the bundle
     fun buildRenderBundle(
-        _device: GPUDevice,
+        device: Device,
         shaderCache: GLBShaderCache,
         bindGroupLayouts: Array<GPUBindGroupLayout>,
         _bundleEncoder: GPURenderBundleEncoder,
         swapChainFormat: String,
         depthFormat: String,
     ) {
-        val device = Device(_device)
         val bundleEncoder = RenderBundleEncoder(_bundleEncoder)
 
         val shaderModule = shaderCache.getShader(
@@ -174,7 +171,6 @@ class GLTFPrimitive(
     }
 }
 
-@JsExport
 class GLTFMaterial(material: dynamic, textures: Array<GLTFTexture> = arrayOf()) {
     var baseColorFactor = floatArrayOf(1f, 1f, 1f, 1f)
     var baseColorTexture: GLTFTexture? = null
@@ -202,8 +198,7 @@ class GLTFMaterial(material: dynamic, textures: Array<GLTFTexture> = arrayOf()) 
         }
     }
 
-    fun upload(_device: GPUDevice) {
-        val device = Device(_device)
+    fun upload(device: Device) {
         val buf = device.createBuffer(
             BufferDescriptor(
                 size = 3 * 4 * 4,
@@ -265,32 +260,32 @@ class GLTFMaterial(material: dynamic, textures: Array<GLTFTexture> = arrayOf()) 
             )
         )
 
+        println("createBindGroup $bindGroupEntries")
         bindGroup = device.createBindGroup(
             BindGroupDescriptor(
                 layout = bindGroupLayout,
                 entries = bindGroupEntries.toTypedArray()
             )
         ).handler
+        println("done")
 
         this.bindGroupLayout = bindGroupLayout.handler
     }
 }
 
-@JsExport
-class GLTFTexture(sampler: dynamic, val image: dynamic) {
+class GLTFTexture(sampler: GLTFSampler, val image: GPUTexture) {
     val gltfsampler = sampler
     val sampler = sampler.sampler
     val imageView = image.createView()
 }
 
-@JsExport
+
 class GLTFBuffer(
     val arrayBuffer: ArrayBuffer,
     val size: Int,
     val byteOffset: Int
 )
 
-@JsExport
 class GLTFBufferView(buffer: GLTFBuffer, view: dynamic) {
     var length = view["byteLength"]
     var byteOffset = buffer.byteOffset
@@ -319,8 +314,7 @@ class GLTFBufferView(buffer: GLTFBuffer, view: dynamic) {
         this.usage.add(usage)
     }
 
-    fun upload(_device: dynamic) {
-        val device = Device(_device)
+    fun upload(device: Device) {
         // Note: must align to 4 byte size when mapped at creation is true
         val buf = device.createBuffer(
             BufferDescriptor(
@@ -336,13 +330,11 @@ class GLTFBufferView(buffer: GLTFBuffer, view: dynamic) {
     }
 }
 
-@JsExport
 class GLTFMesh(
-    val name: dynamic,
-    val primitives: dynamic
+    val name: String,
+    val primitives: Array<GLTFPrimitive>
 )
 
-@JsExport
 class GLTFAccessor(val view: GLTFBufferView, accessor: dynamic) {
     var count: Int = accessor["count"]
     var componentType: Int = accessor["componentType"]
@@ -364,17 +356,16 @@ class GLTFAccessor(val view: GLTFBufferView, accessor: dynamic) {
         }
 }
 
-@JsExport
 class GLBModel(val nodes: Array<GLTFNode>) {
 
     fun buildRenderBundles(
-        device: GPUDevice,
+        device: Device,
         shaderCache: GLBShaderCache,
         viewParamsLayout: GPUBindGroupLayout,
         viewParamsBindGroup: GPUBindGroup,
         swapChainFormat: String
-    ): Array<GPURenderBundle> {
-        val renderBundles = mutableListOf<GPURenderBundle>()
+    ): Array<RenderBundle> {
+        val renderBundles = mutableListOf<RenderBundle>()
         nodes.forEach { node ->
             val bundle = node.buildRenderBundle(
                 device,
@@ -390,13 +381,11 @@ class GLBModel(val nodes: Array<GLTFNode>) {
     }
 }
 
-@JsExport
-class GLTFNode(val name: String, val mesh: dynamic, val transform: DoubleArray) {
+class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: DoubleArray) {
     lateinit var gpuUniforms: GPUBuffer
     lateinit var bindGroup: BindGroup
 
-    fun upload(_device: GPUDevice) {
-        val device = Device(_device)
+    fun upload(device: Device) {
         val buf = device.createBuffer(
             BufferDescriptor(
                 size = 4 * 4 * 4,
@@ -410,14 +399,13 @@ class GLTFNode(val name: String, val mesh: dynamic, val transform: DoubleArray) 
     }
 
     fun buildRenderBundle(
-        _device: GPUDevice,
+        device: Device,
         shaderCache: GLBShaderCache,
         viewParamsLayout: GPUBindGroupLayout,
         viewParamsBindGroup: GPUBindGroup,
         swapChainFormat: String,
         depthFormat: String,
-    ): GPURenderBundle {
-        val device = Device(_device)
+    ): RenderBundle {
         val nodeParamsLayout = device.createBindGroupLayout(
             BindGroupLayoutDescriptor(
                 entries = arrayOf(
@@ -458,7 +446,7 @@ class GLTFNode(val name: String, val mesh: dynamic, val transform: DoubleArray) 
 
         for (primitive in mesh.primitives) {
             primitive.buildRenderBundle(
-                _device,
+                device,
                 shaderCache,
                 bindGroupLayouts,
                 bundleEncoder.handler,
@@ -468,6 +456,6 @@ class GLTFNode(val name: String, val mesh: dynamic, val transform: DoubleArray) 
         }
 
         val renderBundle = bundleEncoder.finish()
-        return renderBundle.handler
+        return renderBundle
     }
 }

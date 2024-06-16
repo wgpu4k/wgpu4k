@@ -1,13 +1,10 @@
-@file:OptIn(ExperimentalJsExport::class)
 
 import io.ygdrasil.wgpu.Device
 import io.ygdrasil.wgpu.ShaderModule
 import io.ygdrasil.wgpu.ShaderModuleDescriptor
 import io.ygdrasil.wgpu.internal.js.GPUShaderModule
 
-@JsExport
-class GLBShaderCache(_device: dynamic) {
-    private val device: Device = Device(_device)
+class GLBShaderCache(private val device: Device) {
     private val shaderCache: MutableMap<String, ShaderModule> = mutableMapOf()
 
     fun getShader(hasNormals: Boolean, hasUVs: Boolean, hasColorTexture: Boolean): GPUShaderModule {
@@ -166,5 +163,5 @@ fun generateGLTFShader(hasNormals: Boolean, hasUVs: Boolean, hasColorTexture: Bo
         }
             """
 
-    return typeDefs + vertexStage + fragmentStage;
+    return typeDefs + vertexStage + fragmentStage
 }

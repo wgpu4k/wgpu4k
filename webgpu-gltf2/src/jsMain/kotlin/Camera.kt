@@ -1,19 +1,16 @@
-@file:OptIn(ExperimentalJsExport::class)
 
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
 
-@JsExport
-fun getProjectionMatrix(width: Int, height: Int): dynamic {
+
+fun getProjectionMatrix(width: Int, height: Int): Matrix4 {
     val aspect = width / height.toDouble()
     val fox = Angle.fromRadians((2 * PI) / 5)
     return Matrix4.perspective(fox, aspect, 1.0, 100.0)
 }
 
-@JsExport
-fun getTransformationMatrix(angle: Double, _projectionMatrix: dynamic): FloatArray {
-    val projectionMatrix: Matrix4 = _projectionMatrix
+fun getTransformationMatrix(angle: Double, projectionMatrix: Matrix4): FloatArray {
     var viewMatrix = Matrix4.IDENTITY
     viewMatrix = viewMatrix.translated(0, 0, -4)
 

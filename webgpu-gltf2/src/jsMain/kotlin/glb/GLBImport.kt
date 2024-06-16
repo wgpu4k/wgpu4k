@@ -6,13 +6,10 @@ import io.ygdrasil.wgpu.AddressMode
 import io.ygdrasil.wgpu.Device
 import io.ygdrasil.wgpu.FilterMode
 import io.ygdrasil.wgpu.SamplerDescriptor
-import io.ygdrasil.wgpu.internal.js.GPUDevice
 import io.ygdrasil.wgpu.internal.js.GPUSampler
 
-@JsExport
-class GLTFSampler(private val samplerNode: dynamic, _device: GPUDevice) {
+class GLTFSampler(private val samplerNode: dynamic, private val device: Device) {
 
-    private val device = Device(_device)
     val sampler = createSampler()
 
     private fun createSampler(): GPUSampler {

@@ -5,7 +5,7 @@ package io.ygdrasil.wgpu
 import io.ygdrasil.wgpu.internal.js.*
 import io.ygdrasil.wgpu.mapper.map
 
-actual class Device(val handler: GPUDevice) : AutoCloseable {
+actual class Device(internal val handler: GPUDevice) : AutoCloseable {
 
 	actual val queue: Queue by lazy { Queue(handler.queue) }
 
@@ -168,7 +168,7 @@ private fun RenderPipelineDescriptor.VertexState.convert(): GPUVertexState =
 		//TODO check mapping
 		//override var constants: Map<String, GPUPipelineConstantValue>? = null
 		override var buffers: Array<GPUVertexBufferLayout?>? = this@convert.buffers
-			.map { it.convert() }?.toTypedArray() ?: undefined
+			.map { it.convert() }.toTypedArray()
 	}
 
 private fun RenderPipelineDescriptor.VertexState.VertexBufferLayout.convert(): GPUVertexBufferLayout =
