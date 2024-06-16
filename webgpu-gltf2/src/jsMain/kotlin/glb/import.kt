@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalJsExport::class, DelicateCoroutinesApi::class)
 
 package glb
 
@@ -10,7 +9,6 @@ import korlibs.image.format.readBitmap
 import korlibs.io.file.std.asMemoryVfsFile
 import korlibs.io.lang.TextDecoder
 import korlibs.io.util.toByteArray
-import kotlinx.coroutines.DelicateCoroutinesApi
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.Uint32Array
 import org.khronos.webgl.Uint8Array
@@ -185,7 +183,6 @@ suspend fun uploadGLBModel(
     return GLBModel(nodes.toTypedArray())
 }
 
-@JsExport
 fun flattenGLTFChildren(nodes: dynamic, node: dynamic, parent_transform: DoubleArray) {
     var tfm = readNodeTransform(node)
     tfm = multiply(tfm, parent_transform, tfm)
@@ -201,7 +198,6 @@ fun flattenGLTFChildren(nodes: dynamic, node: dynamic, parent_transform: DoubleA
     node["children"] = undefined
 }
 
-@JsExport
 fun makeGLTFSingleLevel(nodes: dynamic): dynamic {
     val rootTfm = create()
     for (i in 0 until nodes.length) {

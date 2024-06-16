@@ -10,7 +10,7 @@ import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.SamplerBindingLayout
 import io.ygdrasil.wgpu.RenderPipelineDescriptor.FragmentState
 import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState.VertexBufferLayout
 import io.ygdrasil.wgpu.examples.helper.GLTFRenderMode
-import io.ygdrasil.wgpu.internal.js.GPUBuffer
+import io.ygdrasil.wgpu.internal.js.GPUSampler
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.Uint8Array
 import kotlin.math.max
@@ -140,18 +140,18 @@ class GLTFPrimitive(
         bundleEncoder.setPipeline(renderPipeline)
         bundleEncoder.setVertexBuffer(
             0,
-            Buffer(positions.view.gpuBuffer ?: error("fail to get buffer")),
+            positions.view.gpuBuffer ?: error("fail to get buffer"),
             positions.byteOffset.toLong()
         )
         if (normals != null) {
             bundleEncoder.setVertexBuffer(
-                1, Buffer(normals.view.gpuBuffer ?: error("fail to get buffer")), normals.byteOffset.toLong()
+                1, normals.view.gpuBuffer ?: error("fail to get buffer"), normals.byteOffset.toLong()
             )
         }
         if (texcoords.size > 0) {
             bundleEncoder.setVertexBuffer(
                 2,
-                Buffer(texcoords[0].view.gpuBuffer ?: error("fail to get buffer")),
+                texcoords[0].view.gpuBuffer ?: error("fail to get buffer"),
                 texcoords[0].byteOffset.toLong()
             )
         }
@@ -159,7 +159,7 @@ class GLTFPrimitive(
             val indexFormat = if(indices.componentType == GLTFComponentType.UNSIGNED_SHORT.value) IndexFormat.uint16 else IndexFormat.uint32
 
             bundleEncoder.setIndexBuffer(
-                Buffer(indices.view.gpuBuffer ?: error("fail to get buffer")),
+                indices.view.gpuBuffer ?: error("fail to get buffer"),
                 indexFormat,
                 indices.byteOffset.toLong()
             )
@@ -176,7 +176,7 @@ class GLTFMaterial(material: dynamic, textures: Array<GLTFTexture> = arrayOf()) 
     private var emissiveFactor = floatArrayOf(0f, 0f, 0f, 1f)
     private var metallicFactor = 1.0f
     private var roughnessFactor = 1.0f
-    private lateinit var gpuBuffer: GPUBuffer
+    private lateinit var gpuBuffer: Buffer
     lateinit var bindGroup: BindGroup
     lateinit var bindGroupLayout: BindGroupLayout
 
@@ -209,7 +209,7 @@ class GLTFMaterial(material: dynamic, textures: Array<GLTFTexture> = arrayOf()) 
         buf.mapFrom(emissiveFactor, 4 * Float.SIZE_BYTES)
         buf.mapFrom(floatArrayOf(metallicFactor, roughnessFactor), 8 * Float.SIZE_BYTES)
         buf.unmap()
-        gpuBuffer = buf.handler
+        gpuBuffer = buf
 
         val layoutEntries = mutableListOf(
             Entry(
@@ -224,7 +224,7 @@ class GLTFMaterial(material: dynamic, textures: Array<GLTFTexture> = arrayOf()) 
             BindGroupEntry(
                 binding = 0,
                 resource = BufferBinding(
-                    buffer = Buffer(gpuBuffer)
+                    buffer = gpuBuffer
                 )
             )
         )
@@ -289,7 +289,7 @@ class GLTFBufferView(buffer: GLTFBuffer, view: dynamic) {
     var byteStride = 0
     var buffer: ByteArray
     var needsUpload = false
-    var gpuBuffer: GPUBuffer? = null
+    var gpuBuffer: Buffer? = null
     private val usage = mutableSetOf<BufferUsage>()
 
     init {
@@ -322,7 +322,7 @@ class GLTFBufferView(buffer: GLTFBuffer, view: dynamic) {
         )
         buf.mapFrom(buffer)
         buf.unmap()
-        this.gpuBuffer = buf.handler
+        this.gpuBuffer = buf
         this.needsUpload = false
     }
 }
@@ -379,7 +379,7 @@ class GLBModel(val nodes: Array<GLTFNode>) {
 }
 
 class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: DoubleArray) {
-    lateinit var gpuUniforms: GPUBuffer
+    lateinit var gpuUniforms: Buffer
     lateinit var bindGroup: BindGroup
 
     fun upload(device: Device) {
@@ -392,7 +392,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: DoubleArray)
         )
         buf.mapFrom(transform.map { it.toFloat() }.toFloatArray())
         buf.unmap()
-        gpuUniforms = buf.handler
+        gpuUniforms = buf
     }
 
     fun buildRenderBundle(
@@ -422,7 +422,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: DoubleArray)
                     BindGroupEntry(
                         binding = 0,
                         resource = BufferBinding(
-                            buffer = Buffer(gpuUniforms)
+                            buffer = gpuUniforms
                         )
                     )
                 )
@@ -454,5 +454,45 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: DoubleArray)
 
         val renderBundle = bundleEncoder.finish()
         return renderBundle
+    }
+}
+
+
+class GLTFSampler(private val samplerNode: dynamic, private val device: Device) {
+
+    val sampler = createSampler()
+
+    private fun createSampler(): GPUSampler {
+        val magFilter = when (samplerNode.magFilter) {
+            undefined, GLTFTextureFilter.LINEAR.value -> FilterMode.linear
+            else -> FilterMode.nearest
+        }
+        val minFilter = when (samplerNode.minFilter) {
+            undefined, GLTFTextureFilter.LINEAR.value -> FilterMode.linear
+            else -> FilterMode.nearest
+        }
+
+        val wrapS = when (samplerNode.wrapS) {
+            GLTFTextureFilter.REPEAT.value -> AddressMode.repeat
+            GLTFTextureFilter.CLAMP_TO_EDGE.value -> AddressMode.clamptoedge
+            undefined -> AddressMode.repeat
+            else -> AddressMode.mirrorrepeat
+        }
+
+        val wrapT = when (samplerNode.wrapT) {
+            GLTFTextureFilter.REPEAT.value -> AddressMode.repeat
+            GLTFTextureFilter.CLAMP_TO_EDGE.value -> AddressMode.clamptoedge
+            undefined -> AddressMode.repeat
+            else -> AddressMode.mirrorrepeat
+        }
+
+        return device.createSampler(
+            SamplerDescriptor(
+                magFilter = magFilter,
+                minFilter = minFilter,
+                addressModeU = wrapS,
+                addressModeV = wrapT,
+            )
+        ).handler
     }
 }

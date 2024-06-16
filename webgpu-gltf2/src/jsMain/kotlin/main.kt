@@ -8,11 +8,7 @@ val file = "./DamagedHelmet.glb"
 fun main() {
     window.addEventListener("DOMContentLoaded", {
         MainScope().launch {
-            run()
+            renderContext()
         }
     })
-}
-
-suspend fun run() {
-    renderContext()
 }

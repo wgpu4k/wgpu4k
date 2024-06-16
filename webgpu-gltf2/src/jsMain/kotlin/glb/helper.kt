@@ -1,10 +1,6 @@
-@file:OptIn(ExperimentalJsExport::class)
 
 package glb
 
-import korlibs.math.geom.Matrix4
-
-@JsExport
 fun gltfTypeNumComponents(type: String): Int {
     return when (type) {
         "SCALAR" -> 1
@@ -29,12 +25,10 @@ fun gltfTypeSize(componentType: GLTFComponentType, type: String): Int {
     return gltfTypeNumComponents(type) * typeSize
 }
 
-@JsExport
 fun alignTo(value: Int, align: Int): Int {
     return ((value + align - 1) / align) * align
 }
 
-@JsExport
 fun readNodeTransform(node: dynamic): DoubleArray {
 
     if (node.matrix != null) {
@@ -124,8 +118,6 @@ fun fromRotationTranslationScale(out: DoubleArray, q: Array<Double>, v: Array<Do
     return out
 }
 
-
-@JsExport
 fun multiply(out: DoubleArray, a: DoubleArray, b: DoubleArray): DoubleArray {
     val a00 = a[0]
     val a01 = a[1]
