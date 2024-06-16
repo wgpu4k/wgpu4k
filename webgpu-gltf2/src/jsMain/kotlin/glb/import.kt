@@ -93,21 +93,16 @@ suspend fun uploadGLBModel(
         GLTFMaterial(glbJsonData.materials[index], textures)
     }
 
-    val meshes = mutableListOf<GLTFMesh>()
-    for (i in 0 until glbJsonData.meshes.length as Int) {
-        val mesh = glbJsonData.meshes[i]
+    val meshes = gltf2.meshes.mapIndexed { index, mesh ->
+        val mjsonMsh = glbJsonData.meshes[index]
 
         val primitives = mutableListOf<GLTFPrimitive>()
-        for (j in 0 until mesh.primitives.length as Int) {
-            val prim = mesh.primitives[j]
-            var topology = prim["mode"]
-            // Default is triangles if mode specified
-            if (topology == undefined) {
-                topology = GLTFRenderMode.TRIANGLES.value
-            }
-            if (topology != GLTFRenderMode.TRIANGLES.value && topology != GLTFRenderMode.TRIANGLE_STRIP.value) {
+        mesh.primitives.forEachIndexed { index, primitive ->
+            val prim = mjsonMsh.primitives[index]
+            val topology = GLTFRenderMode.of(primitive.mode) ?: error("topology not found")
+
+            if (topology != GLTFRenderMode.TRIANGLES && topology != GLTFRenderMode.TRIANGLE_STRIP) {
                 console.warn("Ignoring primitive with unsupported mode ${prim["mode"]}")
-                continue
             }
 
             var indices: GLTFAccessor? = null
@@ -118,6 +113,15 @@ suspend fun uploadGLBModel(
                 bufferViews[viewID].addUsage(BufferUsage.index)
                 indices = GLTFAccessor(bufferViews[viewID], accessor)
             }
+            /*
+              val indices: GLTFAccessor? = if (primitive.indices != null) {
+                    val accessor = gltf2.accessors[primitive.indices!!]
+                    val viewID = accessor.bufferView
+                    bufferViews[viewID].needsUpload = true
+                    bufferViews[viewID].addUsage(BufferUsage.index)
+                    GLTFAccessor(bufferViews[viewID], accessor)
+                } else null
+             */
 
             var positions: GLTFAccessor? = null
             var normals: GLTFAccessor? = null
@@ -147,7 +151,7 @@ suspend fun uploadGLBModel(
                 GLTFPrimitive(indices, positions!!, normals, texcoords.toTypedArray(), material, topology)
             primitives.add(gltfPrim)
         }
-        meshes.add(GLTFMesh(mesh["name"], primitives.toTypedArray()))
+        GLTFMesh(mesh.name ?: "", primitives.toTypedArray())
     }
 
     // Upload the different views used by meshes

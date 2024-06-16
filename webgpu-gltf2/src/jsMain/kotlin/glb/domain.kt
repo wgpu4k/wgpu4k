@@ -21,9 +21,8 @@ class GLTFPrimitive(
     val normals: GLTFAccessor?,
     val texcoords: Array<GLTFAccessor>,
     val material: GLTFMaterial,
-    _topology: Int,
+    val topology: GLTFRenderMode,
 ) {
-    val topology: GLTFRenderMode = GLTFRenderMode.of(_topology) ?: error("fail to get topology")
 
     // Build the primitive render commands into the bundle
     fun buildRenderBundle(
