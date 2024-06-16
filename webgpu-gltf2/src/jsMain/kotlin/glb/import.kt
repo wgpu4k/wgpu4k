@@ -49,7 +49,7 @@ suspend fun uploadGLBModel(
             gltf2.buffers[bufferView.buffer]
         )
 
-        val image = imageView.buffer
+        val bitmap = imageView.buffer
             .asMemoryVfsFile()
             .readBitmap()
             .toBMP32()
@@ -60,18 +60,18 @@ suspend fun uploadGLBModel(
         // is used by a metallic/roughness param
         val gpuImg = device.createTexture(
             TextureDescriptor(
-                size = Size3D(width = image.width, height = image.height, depthOrArrayLayers = 1),
+                size = Size3D(width = bitmap.width, height = bitmap.height, depthOrArrayLayers = 1),
                 format = TextureFormat.rgba8unormsrgb,
                 usage = setOf(TextureUsage.texturebinding, TextureUsage.copydst, TextureUsage.renderattachment)
             )
         )
 
-        val src = ImageCopyExternalImage(source = image.toBitmapHolder())
+        val src = ImageCopyExternalImage(source = bitmap.toBitmapHolder())
         val dst = ImageCopyTextureTagged(texture = gpuImg)
         device.queue.copyExternalImageToTexture(
             src,
             dst,
-            image.width to image.height
+            bitmap.width to bitmap.height
         )
 
         gpuImg
