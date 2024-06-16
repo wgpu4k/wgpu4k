@@ -93,16 +93,14 @@ suspend fun uploadGLBModel(
         GLTFMaterial(glbJsonData.materials[index], textures)
     }
 
-    val meshes = gltf2.meshes.mapIndexed { index, mesh ->
-        val mjsonMsh = glbJsonData.meshes[index]
+    val meshes = gltf2.meshes.map { mesh ->
 
         val primitives = mutableListOf<GLTFPrimitive>()
-        mesh.primitives.forEachIndexed { index, primitive ->
-            val prim = mjsonMsh.primitives[index]
+        mesh.primitives.forEach { primitive ->
             val topology = GLTFRenderMode.of(primitive.mode) ?: error("topology not found")
 
             if (topology != GLTFRenderMode.TRIANGLES && topology != GLTFRenderMode.TRIANGLE_STRIP) {
-                console.warn("Ignoring primitive with unsupported mode ${prim["mode"]}")
+                console.warn("Ignoring primitive with unsupported mode $primitive")
             }
 
             val indices: GLTFAccessor? = if (primitive.indices != null) {
@@ -117,16 +115,16 @@ suspend fun uploadGLBModel(
             var positions: GLTFAccessor? = null
             var normals: GLTFAccessor? = null
             val texcoords = mutableListOf<GLTFAccessor>()
-            for (attr in js("Object.keys(prim['attributes'])") as Array<String>) {
-                val accessor = gltf2.accessors[prim.attributes[attr]]
+            primitive.attributes.forEach { (attribute, index) ->
+                val accessor = gltf2.accessors[index]
                 val viewID = accessor.bufferView
                 bufferViews[viewID].needsUpload = true
                 bufferViews[viewID].addUsage(BufferUsage.vertex)
-                when (attr) {
+                when (attribute.str) {
                     "POSITION" -> positions = GLTFAccessor(bufferViews[viewID], accessor)
                     "NORMAL" -> normals = GLTFAccessor(bufferViews[viewID], accessor)
                     else -> {
-                        if (attr.startsWith("TEXCOORD")) {
+                        if (attribute.str.startsWith("TEXCOORD")) {
                             texcoords.add(GLTFAccessor(bufferViews[viewID], accessor))
                         }
                     }
