@@ -19,7 +19,7 @@ suspend fun uploadGLBModel(
     device: Device,
     rawFile: VfsFile
 ): GLBModel {
-    println("uploadGLBModel")
+    println("uploadGLBModel2")
 
     val rawJSBuffer = rawFile.readBytes().toInt8Array().buffer
     val header = Uint32Array(rawJSBuffer, 0, 5)
@@ -30,7 +30,6 @@ suspend fun uploadGLBModel(
         JSON.parse(TextDecoder("utf-8").decode(Uint8Array(rawJSBuffer, 20, header.get(3))))
 
     val binaryHeader = Uint32Array(rawJSBuffer, 20 + header.get(3), 2)
-    val glbBuffer = GLTFBuffer(rawJSBuffer, binaryHeader.get(0), 28 + header.get(3))
 
     if (28 + header.get(3) + binaryHeader.get(0) != rawJSBuffer.byteLength) {
         console.log("TODO: Multiple binary chunks in file")
@@ -41,7 +40,7 @@ suspend fun uploadGLBModel(
 
     assert(gltf2.bufferViews.size == glbJsonData.bufferViews.length)
     val bufferViews = gltf2.bufferViews.mapIndexed { index, bufferView ->
-        GLTFBufferView(glbBuffer, bufferView)
+        GLTFBufferView(bufferView, gltf2.buffers[bufferView.buffer])
     }
 
 
@@ -49,9 +48,10 @@ suspend fun uploadGLBModel(
     if (glbJsonData["images"] != undefined) {
         for (i in 0 until glbJsonData["images"].length as Int) {
             val imgJson = glbJsonData["images"][i]
+            val bufferView = gltf2.bufferViews[imgJson["bufferView"]]
             val imageView = GLTFBufferView(
-                glbBuffer,
-                gltf2.bufferViews[imgJson["bufferView"]]
+                bufferView,
+                gltf2.buffers[bufferView.buffer]
             )
 
             val image = imageView.buffer.asMemoryVfsFile().readBitmap()

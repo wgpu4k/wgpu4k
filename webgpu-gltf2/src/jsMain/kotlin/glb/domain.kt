@@ -12,8 +12,8 @@ import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState.VertexBufferLayout
 import io.ygdrasil.wgpu.examples.helper.GLTF2
 import io.ygdrasil.wgpu.examples.helper.GLTFRenderMode
 import io.ygdrasil.wgpu.internal.js.GPUSampler
+import korlibs.memory.getS8Array
 import org.khronos.webgl.ArrayBuffer
-import org.khronos.webgl.Uint8Array
 import kotlin.math.max
 
 class GLTFPrimitive(
@@ -289,9 +289,9 @@ class GLTFBuffer(
     }
 }
 
-class GLTFBufferView(buffer: GLTFBuffer, bufferView: GLTF2.BufferView) {
+class GLTFBufferView(bufferView: GLTF2.BufferView, buffer: GLTF2.Buffer) {
     private var length = bufferView.byteLength
-    private var byteOffset = buffer.byteOffset + bufferView.byteOffset
+    private var byteOffset = bufferView.byteOffset
     var byteStride: Int = bufferView.byteStride
     var buffer: ByteArray
     var needsUpload = false
@@ -299,7 +299,7 @@ class GLTFBufferView(buffer: GLTFBuffer, bufferView: GLTF2.BufferView) {
     private val usage = mutableSetOf<BufferUsage>()
 
     init {
-        this.buffer = Uint8Array(buffer.arrayBuffer, byteOffset, length).unsafeCast<ByteArray>()
+        this.buffer = buffer.buffer.getS8Array(byteOffset, length)
     }
 
     internal fun addUsage(usage: BufferUsage) {
