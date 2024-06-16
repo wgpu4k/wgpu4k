@@ -271,7 +271,7 @@ class GLTFMaterial(material: dynamic, textures: Array<GLTFTexture> = arrayOf()) 
     }
 }
 
-class GLTFTexture(sampler: GLTFSampler, val image: Texture) {
+class GLTFTexture(sampler: GLTFSampler, image: Texture) {
     val gltfsampler = sampler
     val sampler = sampler.sampler
     val imageView = image.createView()

@@ -8,7 +8,6 @@ import korlibs.image.format.readBitmap
 import korlibs.io.file.VfsFile
 import korlibs.io.file.std.asMemoryVfsFile
 import korlibs.io.lang.TextDecoder
-import korlibs.io.lang.assert
 import korlibs.io.util.toInt8Array
 import org.khronos.webgl.Uint32Array
 import org.khronos.webgl.Uint8Array
@@ -17,7 +16,7 @@ import org.khronos.webgl.get
 
 suspend fun uploadGLBModel(
     device: Device,
-    rawFile: VfsFile
+    rawFile: VfsFile,
 ): GLBModel {
     println("uploadGLBModel2")
 
@@ -38,47 +37,44 @@ suspend fun uploadGLBModel(
     val gltf2 = rawFile
         .readGLB()
 
-    assert(gltf2.bufferViews.size == glbJsonData.bufferViews.length)
     val bufferViews = gltf2.bufferViews.mapIndexed { index, bufferView ->
         GLTFBufferView(bufferView, gltf2.buffers[bufferView.buffer])
     }
 
+    val images = gltf2.images.map { image ->
 
-    val images = mutableListOf<Texture>()
-    if (glbJsonData["images"] != undefined) {
-        for (i in 0 until glbJsonData["images"].length as Int) {
-            val imgJson = glbJsonData["images"][i]
-            val bufferView = gltf2.bufferViews[imgJson["bufferView"]]
-            val imageView = GLTFBufferView(
-                bufferView,
-                gltf2.buffers[bufferView.buffer]
+        val bufferView = gltf2.bufferViews[image.bufferView]
+        val imageView = GLTFBufferView(
+            bufferView,
+            gltf2.buffers[bufferView.buffer]
+        )
+
+        val image = imageView.buffer
+            .asMemoryVfsFile()
+            .readBitmap()
+            .toBMP32()
+
+        // TODO: For glTF we need to look at where an image is used to know
+        // if it should be srgb or not. We basically need to pass through
+        // the material list and find if the texture which uses this image
+        // is used by a metallic/roughness param
+        val gpuImg = device.createTexture(
+            TextureDescriptor(
+                size = Size3D(width = image.width, height = image.height, depthOrArrayLayers = 1),
+                format = TextureFormat.rgba8unormsrgb,
+                usage = setOf(TextureUsage.texturebinding, TextureUsage.copydst, TextureUsage.renderattachment)
             )
+        )
 
-            val image = imageView.buffer.asMemoryVfsFile().readBitmap()
-                .toBMP32()
+        val src = ImageCopyExternalImage(source = image.toBitmapHolder())
+        val dst = ImageCopyTextureTagged(texture = gpuImg)
+        device.queue.copyExternalImageToTexture(
+            src,
+            dst,
+            image.width to image.height
+        )
 
-            // TODO: For glTF we need to look at where an image is used to know
-            // if it should be srgb or not. We basically need to pass through
-            // the material list and find if the texture which uses this image
-            // is used by a metallic/roughness param
-            val gpuImg = device.createTexture(
-                TextureDescriptor(
-                    size = Size3D(width = image.width, height = image.height, depthOrArrayLayers = 1),
-                    format = TextureFormat.rgba8unormsrgb,
-                    usage = setOf(TextureUsage.texturebinding, TextureUsage.copydst, TextureUsage.renderattachment)
-                )
-            )
-
-            val src = ImageCopyExternalImage(source = image.toBitmapHolder())
-            val dst = ImageCopyTextureTagged(texture = gpuImg)
-            device.queue.copyExternalImageToTexture(
-                src,
-                dst,
-                image.width to image.height
-            )
-
-            images.add(gpuImg)
-        }
+        gpuImg
     }
 
     val defaultSampler = GLTFSampler(mapOf<Any, Any>(), device)
