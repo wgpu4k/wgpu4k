@@ -177,7 +177,6 @@ class GLTFMaterial(material: dynamic, textures: List<GLTFTexture> = listOf()) {
     private var emissiveFactor = floatArrayOf(0f, 0f, 0f, 1f)
     private var metallicFactor = 1.0f
     private var roughnessFactor = 1.0f
-    private lateinit var gpuBuffer: Buffer
     lateinit var bindGroup: BindGroup
     lateinit var bindGroupLayout: BindGroupLayout
 
@@ -210,7 +209,6 @@ class GLTFMaterial(material: dynamic, textures: List<GLTFTexture> = listOf()) {
         buf.mapFrom(emissiveFactor, 4 * Float.SIZE_BYTES)
         buf.mapFrom(floatArrayOf(metallicFactor, roughnessFactor), 8 * Float.SIZE_BYTES)
         buf.unmap()
-        gpuBuffer = buf
 
         val layoutEntries = mutableListOf(
             Entry(
@@ -225,7 +223,7 @@ class GLTFMaterial(material: dynamic, textures: List<GLTFTexture> = listOf()) {
             BindGroupEntry(
                 binding = 0,
                 resource = BufferBinding(
-                    buffer = gpuBuffer
+                    buffer = buf
                 )
             )
         )
