@@ -1,20 +1,8 @@
 import {
     GLTFBuffer,
-    GLTFBufferView,
     uploadGLBModelKt
 } from "../build/compileSync/js/main/developmentExecutable/kotlin/wgpu4k-root-webgpu-gltf2.mjs"
 
-const GLTFRenderMode = {
-    POINTS: 0,
-    LINE: 1,
-    LINE_LOOP: 2,
-    LINE_STRIP: 3,
-    TRIANGLES: 4,
-    TRIANGLE_STRIP: 5,
-    // Note: fans are not supported in WebGPU, use should be
-    // an error or converted into a list/strip
-    TRIANGLE_FAN: 6,
-};
 
 // Upload a GLB model and return it
 export async function uploadGLBModel(buffer, device) {
@@ -38,14 +26,5 @@ export async function uploadGLBModel(buffer, device) {
         console.log('TODO: Multiple binary chunks in file');
     }
 
-    // TODO: Later could look at merging buffers and actually using the starting
-    // offsets, but want to avoid uploading the entire buffer since it may
-    // contain packed images
-    var bufferViews = [];
-    for (var i = 0; i < glbJsonData.bufferViews.length; ++i) {
-        bufferViews.push(new GLTFBufferView(glbBuffer, glbJsonData.bufferViews[i]));
-    }
-
-
-    return await uploadGLBModelKt(glbJsonData, device, bufferViews, glbBuffer)
+    return await uploadGLBModelKt(glbJsonData, device, glbBuffer, buffer)
 }

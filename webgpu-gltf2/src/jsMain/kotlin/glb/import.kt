@@ -4,27 +4,40 @@ package glb
 
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.helper.GLTFRenderMode
+import io.ygdrasil.wgpu.examples.helper.readGLB
 import io.ygdrasil.wgpu.examples.toBitmapHolder
 import io.ygdrasil.wgpu.internal.js.GPUDevice
 import io.ygdrasil.wgpu.internal.js.GPUTexture
 import korlibs.image.format.readBitmap
 import korlibs.io.file.std.asMemoryVfsFile
+import korlibs.io.util.toByteArray
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.asPromise
 import kotlinx.coroutines.async
+import org.khronos.webgl.ArrayBuffer
 import kotlin.js.Promise
 
 @JsExport
 fun uploadGLBModelKt(
     glbJsonData: dynamic,
     _device: GPUDevice,
-    bufferViews: Array<GLTFBufferView>,
     glbBuffer: GLTFBuffer,
+    rawJSBuffer: ArrayBuffer
 ): Promise<GLBModel> {
     return GlobalScope.async {
         val device = Device(_device)
         println("uploadGLBModelKt2")
+
+        val byteBuffer = rawJSBuffer.toByteArray()
+        val gltf2 = byteBuffer.asMemoryVfsFile()
+            .readGLB()
+
+        val bufferViews = mutableListOf<GLTFBufferView>()
+        for (i in 0 until glbJsonData.bufferViews.length) {
+            bufferViews.add(GLTFBufferView(glbBuffer, glbJsonData.bufferViews[i]))
+        }
+
 
         val images = mutableListOf<GPUTexture>()
         if (glbJsonData["images"] != undefined) {
@@ -178,11 +191,11 @@ fun flattenGLTFChildren(nodes: dynamic, node: dynamic, parent_transform: DoubleA
             flattenGLTFChildren(nodes, nodes[children[i]], tfm)
         }
     }
-     node["children"] = undefined
+    node["children"] = undefined
 }
 
 @JsExport
-    fun makeGLTFSingleLevel(nodes: dynamic): dynamic {
+fun makeGLTFSingleLevel(nodes: dynamic): dynamic {
     val rootTfm = create()
     for (i in 0 until nodes.length) {
         flattenGLTFChildren(nodes, nodes[i], rootTfm)
