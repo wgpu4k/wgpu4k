@@ -1,4 +1,4 @@
-
+package glb
 import io.ygdrasil.wgpu.Device
 import io.ygdrasil.wgpu.ShaderModule
 import io.ygdrasil.wgpu.ShaderModuleDescriptor

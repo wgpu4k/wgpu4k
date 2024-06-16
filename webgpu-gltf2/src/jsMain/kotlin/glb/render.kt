@@ -2,7 +2,6 @@
 
 package glb
 
-import ShaderCache
 import getProjectionMatrix
 import getTransformationMatrix
 import io.ygdrasil.wgpu.*

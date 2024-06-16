@@ -1,6 +1,5 @@
 package glb
 
-import ShaderCache
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.BindGroupDescriptor.*
 import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry
