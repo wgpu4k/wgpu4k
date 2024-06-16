@@ -1,22 +1,22 @@
 import {
     getProjectionMatrix,
     getTransformationMatrix,
-    GLBShaderCache
+    GLBShaderCache,
+    uploadGLBModel
 } from "../build/compileSync/js/main/developmentExecutable/kotlin/wgpu4k-root-webgpu-gltf2.mjs"
-
-import {uploadGLBModel} from "./glb_import.js";
 
 (async () => {
 
     var adapter = await navigator.gpu.requestAdapter();
     var device = await adapter.requestDevice();
 
+
     var file = "https://cdn.willusher.io/glb/DamagedHelmet.glb"
     //file = "Box2.glb"
     var glbFile =
         await fetch(
             file)
-            .then(res => res.arrayBuffer().then(buf => uploadGLBModel(buf, device)));
+            .then(res => res.arrayBuffer().then(buf => uploadGLBModel(device, buf)));
 
     var canvas = document.getElementById("webgpu-canvas");
     var context = canvas.getContext("webgpu");

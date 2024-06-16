@@ -10,24 +10,40 @@ import io.ygdrasil.wgpu.internal.js.GPUDevice
 import io.ygdrasil.wgpu.internal.js.GPUTexture
 import korlibs.image.format.readBitmap
 import korlibs.io.file.std.asMemoryVfsFile
+import korlibs.io.lang.TextDecoder
 import korlibs.io.util.toByteArray
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.asPromise
 import kotlinx.coroutines.async
 import org.khronos.webgl.ArrayBuffer
+import org.khronos.webgl.Uint32Array
+import org.khronos.webgl.Uint8Array
+import org.khronos.webgl.get
 import kotlin.js.Promise
 
 @JsExport
-fun uploadGLBModelKt(
-    glbJsonData: dynamic,
+fun uploadGLBModel(
     _device: GPUDevice,
-    glbBuffer: GLTFBuffer,
     rawJSBuffer: ArrayBuffer
 ): Promise<GLBModel> {
     return GlobalScope.async {
         val device = Device(_device)
-        println("uploadGLBModelKt2")
+        println("uploadGLBModelKt")
+
+        val header = Uint32Array(rawJSBuffer, 0, 5)
+        if (header.get(0) != 0x46546C67) {
+            error("This does not appear to be a glb file?")
+        }
+        val glbJsonData: dynamic =
+            JSON.parse(TextDecoder("utf-8").decode(Uint8Array(rawJSBuffer, 20, header.get(3))))
+
+        val binaryHeader = Uint32Array(rawJSBuffer, 20 + header.get(3), 2)
+        val glbBuffer = GLTFBuffer(rawJSBuffer, binaryHeader.get(0), 28 + header.get(3))
+
+        if (28 + header.get(3) + binaryHeader.get(0) != rawJSBuffer.byteLength) {
+            console.log("TODO: Multiple binary chunks in file")
+        }
 
         val byteBuffer = rawJSBuffer.toByteArray()
         val gltf2 = byteBuffer.asMemoryVfsFile()
