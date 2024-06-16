@@ -168,7 +168,7 @@ class GLTFPrimitive(
     }
 }
 
-class GLTFMaterial(material: dynamic, textures: List<GLTFTexture> = listOf()) {
+class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture> = listOf()) {
     var baseColorFactor = floatArrayOf(1f, 1f, 1f, 1f)
     var baseColorTexture: GLTFTexture? = null
     private var emissiveFactor = floatArrayOf(0f, 0f, 0f, 1f)
@@ -178,18 +178,18 @@ class GLTFMaterial(material: dynamic, textures: List<GLTFTexture> = listOf()) {
     lateinit var bindGroupLayout: BindGroupLayout
 
     init {
-        if (material["pbrMetallicRoughness"]) {
-            val it = material["pbrMetallicRoughness"]
-            baseColorFactor = it["baseColorFactor"] ?: baseColorFactor
-            if (it["baseColorTexture"]) {
-                baseColorTexture = textures[it["baseColorTexture"]["index"]]
+        if (material?.pbrMetallicRoughness != null) {
+            val it = material.pbrMetallicRoughness!!
+            baseColorFactor = it.baseColorFactor ?: baseColorFactor
+            if (it.baseColorTexture != null) {
+                baseColorTexture = textures[it.baseColorTexture!!.index]
             }
-            metallicFactor = it["metallicFactor"] ?: metallicFactor
-            roughnessFactor = it["roughnessFactor"] ?: roughnessFactor
+            metallicFactor = it.metallicFactor ?: metallicFactor
+            roughnessFactor = it.roughnessFactor?: roughnessFactor
 
         }
-        if (material["emissiveFactor"]) {
-            val it = material["emissiveFactor"]
+        if (material?.emissiveFactor != null) {
+            val it = material.emissiveFactor!!
             emissiveFactor = floatArrayOf(it[0], it[1], it[2], 1f)
         }
     }

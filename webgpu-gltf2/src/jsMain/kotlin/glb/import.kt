@@ -54,10 +54,6 @@ suspend fun uploadGLBModel(
             .readBitmap()
             .toBMP32()
 
-        // TODO: For glTF we need to look at where an image is used to know
-        // if it should be srgb or not. We basically need to pass through
-        // the material list and find if the texture which uses this image
-        // is used by a metallic/roughness param
         val gpuImg = device.createTexture(
             TextureDescriptor(
                 size = Size3D(width = bitmap.width, height = bitmap.height, depthOrArrayLayers = 1),
@@ -87,9 +83,9 @@ suspend fun uploadGLBModel(
         GLTFTexture(sampler, images[texture.source])
     }
 
-    val defaultMaterial = GLTFMaterial(mapOf<Any, Any>())
+    val defaultMaterial = GLTFMaterial()
     val materials = gltf2.materials.mapIndexed { index, material ->
-        GLTFMaterial(glbJsonData.materials[index], textures)
+        GLTFMaterial(material, textures)
     }
 
     val meshes = gltf2.meshes.map { mesh ->

@@ -1,7 +1,6 @@
 
 package io.ygdrasil.wgpu.examples.helper
 
-import io.ygdrasil.wgpu.examples.helper.material.PBRMaterial3D
 import korlibs.datastructure.*
 import korlibs.encoding.*
 import korlibs.image.bitmap.*
@@ -59,27 +58,6 @@ data class GLTF2(
     override val extras: JsonElement? = null,
 ) : GLTFProperty(), GLTF2Holder {
     override val gltf: GLTF2 get() = this
-
-    val materials3D: List<PBRMaterial3D> by lazy {
-        materials.map { gmat ->
-            val gMetallicRoughness = gmat.pbrMetallicRoughness
-            val baseColorFactor = gMetallicRoughness.baseColorFactor ?: FloatArray(0)
-            PBRMaterial3D(
-                diffuse = gMetallicRoughness.baseColorTexture
-                    ?.let { PBRMaterial3D.LightTexture(it.getTexture(this)) }
-                //?.let { null }
-                    ?: PBRMaterial3D.LightColor(
-                        RGBA.float(
-                        baseColorFactor.getOrElse(0) { 1f },
-                        baseColorFactor.getOrElse(1) { 1f },
-                        baseColorFactor.getOrElse(2) { 1f },
-                        baseColorFactor.getOrElse(3) { 1f }
-                    )),
-                occlusionTexture = gmat.occlusionTexture?.let { it.getTexture(gltf) },
-                doubleSided = gmat.doubleSided,
-            )
-        }
-    }
 
     private suspend fun ensureLoad(file: VfsFile?, bin: ByteArray?) {
         ensureLoadBuffers(file, bin)
@@ -606,7 +584,7 @@ data class GLTF2(
         /** The emissive texture. It controls the color and intensity of the light being emitted by the material. This texture contains RGB components encoded with the sRGB transfer function. If a fourth component (A) is present, it **MUST** be ignored. When undefined, the texture **MUST** be sampled as having `1.0` in RGB components. */
         val emissiveTexture: TextureInfo? = null,
         /** A set of parameter values that are used to define the metallic-roughness material model from Physically Based Rendering (PBR) methodology. When undefined, all the default values of `pbrMetallicRoughness` **MUST** apply. */
-        val pbrMetallicRoughness: PBRMetallicRoughness = PBRMetallicRoughness(),
+        val pbrMetallicRoughness: PBRMetallicRoughness? = null,
         /** The tangent space normal texture. The texture encodes RGB components with linear transfer function. Each texel represents the XYZ components of a normal vector in tangent space. The normal vectors use the convention +X is right and +Y is up. +Z points toward the viewer. If a fourth component (A) is present, it **MUST** be ignored. When undefined, the material does not have a tangent space normal texture. */
         val normalTexture: NormalTextureInfo? = null,
         /** The occlusion texture. The occlusion values are linearly sampled from the R channel. Higher values indicate areas that receive full indirect lighting and lower values indicate no indirect lighting. If other channels are present (GBA), they **MUST** be ignored for occlusion calculations. When undefined, the material does not have an occlusion texture. */
@@ -639,13 +617,13 @@ data class GLTF2(
              * The factor for the metalness of the material. This value defines a linear multiplier for
              * the sampled metalness values of the metallic-roughness texture.
              **/
-            val metallicFactor: Float = 0f,
+            val metallicFactor: Float? = null,
             /**
              * The factor for the roughness of the material.
              * This value defines a linear multiplier for the sampled roughness
              * values of the metallic-roughness texture.
              **/
-            val roughnessFactor: Float = 0f,
+            val roughnessFactor: Float? = null,
             /**
              * The metallic-roughness texture. The metalness values are sampled from the B channel.
              * The roughness values are sampled from the G channel.
