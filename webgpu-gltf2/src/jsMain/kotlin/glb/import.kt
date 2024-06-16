@@ -21,13 +21,12 @@ fun uploadGLBModelKt(
     _device: GPUDevice,
     bufferViews: Array<GLTFBufferView>,
     glbBuffer: GLTFBuffer,
-    images: Array<GPUTexture>,
 ): Promise<GLBModel> {
     return GlobalScope.async {
         val device = Device(_device)
-        println("uploadGLBModelKt")
+        println("uploadGLBModelKt2")
 
-        //val images = mutableListOf<GPUTexture>()
+        val images = mutableListOf<GPUTexture>()
         if (glbJsonData["images"] != undefined) {
             for (i in 0 until glbJsonData["images"].length as Int) {
                 val imgJson = glbJsonData["images"][i]
@@ -43,7 +42,7 @@ fun uploadGLBModelKt(
                 val gpuImg = device.createTexture(
                     TextureDescriptor(
                         size = Size3D(width = image.width, height = image.height, depthOrArrayLayers = 1),
-                        format = TextureFormat.rgba8unorm,
+                        format = TextureFormat.rgba8unormsrgb,
                         usage = setOf(TextureUsage.texturebinding, TextureUsage.copydst, TextureUsage.renderattachment)
                     )
                 )
@@ -56,7 +55,7 @@ fun uploadGLBModelKt(
                     image.width to image.height
                 )
 
-                //images.add(gpuImg.handler)
+                images.add(gpuImg.handler)
             }
         }
 

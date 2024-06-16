@@ -46,34 +46,6 @@ export async function uploadGLBModel(buffer, device) {
         bufferViews.push(new GLTFBufferView(glbBuffer, glbJsonData.bufferViews[i]));
     }
 
-    var images = [];
-    if (glbJsonData['images'] !== undefined) {
-        for (var i = 0; i < glbJsonData['images'].length; ++i) {
-            var imgJson = glbJsonData['images'][i];
-            var imageView = new GLTFBufferView(
-                glbBuffer, glbJsonData['bufferViews'][imgJson['bufferView']]);
-            var imgBlob = new Blob([imageView.buffer], {type: imgJson['mime/type']});
-            var img = await createImageBitmap(imgBlob);
 
-            // TODO: For glTF we need to look at where an image is used to know
-            // if it should be srgb or not. We basically need to pass through
-            // the material list and find if the texture which uses this image
-            // is used by a metallic/roughness param
-            var gpuImg = device.createTexture({
-                size: [img.width, img.height, 1],
-                format: 'rgba8unorm-srgb',
-                usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST |
-                    GPUTextureUsage.RENDER_ATTACHMENT,
-            });
-
-            var src = {source: img};
-            var dst = {texture: gpuImg};
-            device.queue.copyExternalImageToTexture(src, dst, [img.width, img.height, 1]);
-
-            images.push(gpuImg);
-        }
-    }
-
-
-    return await uploadGLBModelKt(glbJsonData, device, bufferViews, glbBuffer, images)
+    return await uploadGLBModelKt(glbJsonData, device, bufferViews, glbBuffer)
 }

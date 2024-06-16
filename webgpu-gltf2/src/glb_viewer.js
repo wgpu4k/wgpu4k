@@ -59,14 +59,16 @@ import {uploadGLBModel} from "./glb_import.js";
 
     var projectionMatrix = getProjectionMatrix(canvas.width, canvas.height)
 
-    const render = async () => {
+    var frame = 0
 
+    const render = async () => {
+        frame = frame + 1
         renderPassDesc.colorAttachments[0].view = context.getCurrentTexture().createView();
 
         var commandEncoder = device.createCommandEncoder();
 
         var transformationMatrix = getTransformationMatrix(
-            90,
+            frame / 120,
             projectionMatrix
         )
 

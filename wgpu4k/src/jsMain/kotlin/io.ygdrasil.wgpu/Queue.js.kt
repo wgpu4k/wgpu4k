@@ -1,7 +1,6 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.*
-import io.ygdrasil.wgpu.internal.js.GPUExtent3DDictStrict
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.Float32Array
 import org.khronos.webgl.Int32Array
@@ -49,8 +48,8 @@ actual class Queue(private val handler: GPUQueue) {
 		destination: ImageCopyTextureTagged,
 		copySize: GPUIntegerCoordinates
 	) {
-		if(destination.texture.format != TextureFormat.rgba8unorm) {
-			error("rgba8unorm is the only supported texture format supported")
+		if (destination.texture.format !in listOf(TextureFormat.rgba8unorm, TextureFormat.rgba8unormsrgb)) {
+			error("rgba8unorm asnd rgba8unormsrgb are the only supported texture format supported")
 		}
 
 		val image = (source.source as? ImageBitmapHolder)
