@@ -19,7 +19,7 @@ class GLTFPrimitive(
     val indices: GLTFAccessor?,
     val positions: GLTFAccessor,
     val normals: GLTFAccessor?,
-    val texcoords: Array<GLTFAccessor>,
+    val texcoords: List<GLTFAccessor>,
     val material: GLTFMaterial,
     val topology: GLTFRenderMode,
 ) {
@@ -321,7 +321,7 @@ class GLTFBufferView(bufferView: GLTF2.BufferView, buffer: GLTF2.Buffer) {
 
 class GLTFMesh(
     val name: String,
-    val primitives: Array<GLTFPrimitive>,
+    val primitives: List<GLTFPrimitive>,
 )
 
 class GLTFAccessor(val view: GLTFBufferView, accessor: GLTF2.Accessor) {

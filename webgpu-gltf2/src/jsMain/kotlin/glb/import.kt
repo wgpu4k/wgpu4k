@@ -95,8 +95,7 @@ suspend fun uploadGLBModel(
 
     val meshes = gltf2.meshes.map { mesh ->
 
-        val primitives = mutableListOf<GLTFPrimitive>()
-        mesh.primitives.forEach { primitive ->
+        val primitives = mesh.primitives.map { primitive ->
             val topology = GLTFRenderMode.of(primitive.mode) ?: error("topology not found")
 
             if (topology != GLTFRenderMode.TRIANGLES && topology != GLTFRenderMode.TRIANGLE_STRIP) {
@@ -136,11 +135,9 @@ suspend fun uploadGLBModel(
             } else {
                 defaultMaterial
             }
-            val gltfPrim =
-                GLTFPrimitive(indices, positions!!, normals, texcoords.toTypedArray(), material, topology)
-            primitives.add(gltfPrim)
+            GLTFPrimitive(indices, positions!!, normals, texcoords, material, topology)
         }
-        GLTFMesh(mesh.name ?: "", primitives.toTypedArray())
+        GLTFMesh(mesh.name ?: "", primitives)
     }
 
     // Upload the different views used by meshes
