@@ -1,4 +1,3 @@
-
 package glb
 
 import GLBShaderCache
@@ -157,7 +156,8 @@ class GLTFPrimitive(
             )
         }
         if (indices != null) {
-            val indexFormat = if(indices.componentType == GLTFComponentType.UNSIGNED_SHORT.value) IndexFormat.uint16 else IndexFormat.uint32
+            val indexFormat =
+                if (indices.componentType == GLTFComponentType.UNSIGNED_SHORT.value) IndexFormat.uint16 else IndexFormat.uint32
 
             bundleEncoder.setIndexBuffer(
                 indices.view.gpuBuffer ?: error("fail to get buffer"),
@@ -171,7 +171,7 @@ class GLTFPrimitive(
     }
 }
 
-class GLTFMaterial(material: dynamic, textures: Array<GLTFTexture> = arrayOf()) {
+class GLTFMaterial(material: dynamic, textures: List<GLTFTexture> = listOf()) {
     var baseColorFactor = floatArrayOf(1f, 1f, 1f, 1f)
     var baseColorTexture: GLTFTexture? = null
     private var emissiveFactor = floatArrayOf(0f, 0f, 0f, 1f)
@@ -181,7 +181,7 @@ class GLTFMaterial(material: dynamic, textures: Array<GLTFTexture> = arrayOf()) 
     lateinit var bindGroup: BindGroup
     lateinit var bindGroupLayout: BindGroupLayout
 
-    init { // equivalent of constructor -> initializer block in Kotlin
+    init {
         if (material["pbrMetallicRoughness"]) {
             val it = material["pbrMetallicRoughness"]
             baseColorFactor = it["baseColorFactor"] ?: baseColorFactor
@@ -281,7 +281,7 @@ class GLTFTexture(sampler: GLTFSampler, image: Texture) {
 class GLTFBuffer(
     val arrayBuffer: ArrayBuffer,
     val size: Int,
-    val byteOffset: Int
+    val byteOffset: Int,
 ) {
     init {
         println("byteOffset $byteOffset")
@@ -324,7 +324,7 @@ class GLTFBufferView(bufferView: GLTF2.BufferView, buffer: GLTF2.Buffer) {
 
 class GLTFMesh(
     val name: String,
-    val primitives: Array<GLTFPrimitive>
+    val primitives: Array<GLTFPrimitive>,
 )
 
 class GLTFAccessor(val view: GLTFBufferView, accessor: dynamic) {
@@ -355,7 +355,7 @@ class GLBModel(val nodes: Array<GLTFNode>) {
         shaderCache: GLBShaderCache,
         viewParamsLayout: BindGroupLayout,
         viewParamsBindGroup: BindGroup,
-        swapChainFormat: String
+        swapChainFormat: String,
     ): Array<RenderBundle> {
         val renderBundles = mutableListOf<RenderBundle>()
         nodes.forEach { node ->
@@ -428,7 +428,9 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: DoubleArray)
 
         val bundleEncoder = device.createRenderBundleEncoder(
             RenderBundleEncoderDescriptor(
-                colorFormats = arrayOf(TextureFormat.of(swapChainFormat) ?: error("fail to get texture format $swapChainFormat")),
+                colorFormats = arrayOf(
+                    TextureFormat.of(swapChainFormat) ?: error("fail to get texture format $swapChainFormat")
+                ),
                 depthStencilFormat = TextureFormat.of(depthFormat) ?: error("fail to get texture format $depthFormat")
             )
         )

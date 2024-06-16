@@ -89,9 +89,8 @@ suspend fun uploadGLBModel(
     }
 
     val defaultMaterial = GLTFMaterial(mapOf<Any, Any>())
-    val materials = mutableListOf<GLTFMaterial>()
-    for (i in 0 until glbJsonData.materials.length as Int) {
-        materials.add(GLTFMaterial(glbJsonData.materials[i], textures.toTypedArray()))
+    val materials = gltf2.materials.mapIndexed { index, material ->
+        GLTFMaterial(glbJsonData.materials[index], textures)
     }
 
     val meshes = mutableListOf<GLTFMesh>()
