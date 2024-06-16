@@ -77,9 +77,9 @@ suspend fun uploadGLBModel(
         gpuImg
     }
 
-    val defaultSampler = GLTFSampler(mapOf<Any, Any>(), device)
+    val defaultSampler = GLTFSampler(device)
     val samplers = gltf2.samplers.mapIndexed { index, sampler ->
-        GLTFSampler(glbJsonData["samplers"][index], device)
+        GLTFSampler(device, sampler)
     }
 
     val textures = gltf2.textures.mapIndexed { index, texture ->

@@ -446,31 +446,31 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: DoubleArray)
 }
 
 
-class GLTFSampler(private val samplerNode: dynamic, private val device: Device) {
+class GLTFSampler(private val device: Device, private val samplerNode: GLTF2.Sampler? = null) {
 
     val sampler = createSampler()
 
     private fun createSampler(): GPUSampler {
-        val magFilter = when (samplerNode.magFilter) {
-            undefined, GLTFTextureFilter.LINEAR.value -> FilterMode.linear
+        val magFilter = when (samplerNode?.magFilter) {
+            null, GLTFTextureFilter.LINEAR.value -> FilterMode.linear
             else -> FilterMode.nearest
         }
-        val minFilter = when (samplerNode.minFilter) {
-            undefined, GLTFTextureFilter.LINEAR.value -> FilterMode.linear
+        val minFilter = when (samplerNode?.minFilter) {
+            null, GLTFTextureFilter.LINEAR.value -> FilterMode.linear
             else -> FilterMode.nearest
         }
 
-        val wrapS = when (samplerNode.wrapS) {
+        val wrapS = when (samplerNode?.wrapS) {
             GLTFTextureFilter.REPEAT.value -> AddressMode.repeat
             GLTFTextureFilter.CLAMP_TO_EDGE.value -> AddressMode.clamptoedge
-            undefined -> AddressMode.repeat
+            null -> AddressMode.repeat
             else -> AddressMode.mirrorrepeat
         }
 
-        val wrapT = when (samplerNode.wrapT) {
+        val wrapT = when (samplerNode?.wrapT) {
             GLTFTextureFilter.REPEAT.value -> AddressMode.repeat
             GLTFTextureFilter.CLAMP_TO_EDGE.value -> AddressMode.clamptoedge
-            undefined -> AddressMode.repeat
+            null -> AddressMode.repeat
             else -> AddressMode.mirrorrepeat
         }
 

@@ -754,10 +754,10 @@ data class GLTF2(
     @Serializable
     data class Sampler(
         override var name: String? = null,
-        val magFilter: Int = -1,
-        val minFilter: Int = -1,
-        val wrapS: Int = -1,
-        val wrapT: Int = -1,
+        val magFilter: Int? = null,
+        val minFilter: Int? = null,
+        val wrapS: Int? = null,
+        val wrapT: Int? = null,
         override val extensions: JsonElement? = null,
         override val extras: JsonElement? = null,
     ) : GLTFProperty()
