@@ -66,9 +66,7 @@ fun readNodeTransform(node: GLTF2.Node): DoubleArray {
 }
 
 fun create(): DoubleArray {
-    val out = DoubleArray(16)
-
-    out.fill(0.0)
+    val out = DoubleArray(16) { 0.0 }
 
     out[0] = 1.0
     out[5] = 1.0
@@ -78,12 +76,12 @@ fun create(): DoubleArray {
 }
 
 
-fun fromRotationTranslationScale(out: DoubleArray, q: Array<Double>, v: Array<Double>, s: Array<Double>): DoubleArray {
+fun fromRotationTranslationScale(out: DoubleArray, rotation: Array<Double>, translation: Array<Double>, scale: Array<Double>): DoubleArray {
     // Quaternion math
-    val x = q[0]
-    val y = q[1]
-    val z = q[2]
-    val w = q[3]
+    val x = rotation[0]
+    val y = rotation[1]
+    val z = rotation[2]
+    val w = rotation[3]
     val x2 = x + x
     val y2 = y + y
     val z2 = z + z
@@ -96,9 +94,9 @@ fun fromRotationTranslationScale(out: DoubleArray, q: Array<Double>, v: Array<Do
     val wx = w * x2
     val wy = w * y2
     val wz = w * z2
-    val sx = s[0]
-    val sy = s[1]
-    val sz = s[2]
+    val sx = scale[0]
+    val sy = scale[1]
+    val sz = scale[2]
 
     out[0] = (1 - (yy + zz)) * sx
     out[1] = (xy + wz) * sx
@@ -112,9 +110,9 @@ fun fromRotationTranslationScale(out: DoubleArray, q: Array<Double>, v: Array<Do
     out[9] = (yz - wx) * sz
     out[10] = (1 - (xx + yy)) * sz
     out[11] = 0.0
-    out[12] = v[0]
-    out[13] = v[1]
-    out[14] = v[2]
+    out[12] = translation[0]
+    out[13] = translation[1]
+    out[14] = translation[2]
     out[15] = 1.0
 
     return out
