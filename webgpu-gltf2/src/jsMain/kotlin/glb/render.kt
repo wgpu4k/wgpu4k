@@ -10,7 +10,6 @@ import io.ygdrasil.wgpu.BindGroupDescriptor.BindGroupEntry
 import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry
 import io.ygdrasil.wgpu.RenderPassDescriptor.ColorAttachment
 import korlibs.io.file.std.resourcesVfs
-import korlibs.io.util.toInt8Array
 import korlibs.math.geom.Matrix4
 import kotlinx.browser.document
 import kotlinx.browser.window
@@ -25,8 +24,8 @@ val file = "./DamagedHelmet.glb"
 
 suspend fun renderContext(): MyRenderContext {
 
-    val fileBuffer = resourcesVfs[file].readBytes()
-        .toInt8Array()
+    val fileBuffer = resourcesVfs[file]
+
 
     val canvas: HTMLCanvasElement = document.getElementById("webgpu") as HTMLCanvasElement
     val devicePixelRatio = window.devicePixelRatio
@@ -35,7 +34,7 @@ suspend fun renderContext(): MyRenderContext {
     val adapter = requestAdapter() ?: error("No appropriate Adapter found.")
     val device = adapter.requestDevice() ?: error("No appropriate Device found.")
     val renderingContext = canvas.getRenderingContext() ?: error("fail to get context")
-    val model = uploadGLBModel(device, fileBuffer.buffer)
+    val model = uploadGLBModel(device, fileBuffer)
 
     renderingContext.configure(
         CanvasConfiguration(

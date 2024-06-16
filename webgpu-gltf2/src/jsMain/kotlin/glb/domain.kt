@@ -9,6 +9,7 @@ import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.BufferBindingLayout
 import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.SamplerBindingLayout
 import io.ygdrasil.wgpu.RenderPipelineDescriptor.FragmentState
 import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState.VertexBufferLayout
+import io.ygdrasil.wgpu.examples.helper.GLTF2
 import io.ygdrasil.wgpu.examples.helper.GLTFRenderMode
 import io.ygdrasil.wgpu.internal.js.GPUSampler
 import org.khronos.webgl.ArrayBuffer
@@ -281,31 +282,25 @@ class GLTFBuffer(
     val arrayBuffer: ArrayBuffer,
     val size: Int,
     val byteOffset: Int
-)
+) {
+    init {
+        println("byteOffset $byteOffset")
+        println("size $size")
+    }
+}
 
-class GLTFBufferView(buffer: GLTFBuffer, view: dynamic) {
-    var length = view["byteLength"]
-    var byteOffset = buffer.byteOffset
-    var byteStride = 0
+class GLTFBufferView(buffer: GLTFBuffer, bufferView: GLTF2.BufferView) {
+    private var length = bufferView.byteLength
+    private var byteOffset = buffer.byteOffset + bufferView.byteOffset
+    var byteStride: Int = bufferView.byteStride
     var buffer: ByteArray
     var needsUpload = false
     var gpuBuffer: Buffer? = null
     private val usage = mutableSetOf<BufferUsage>()
 
     init {
-        if (view["byteOffset"] !== undefined) {
-            this.byteOffset += view["byteOffset"] as Int
-        }
-        if (view["byteStride"] !== undefined) {
-            this.byteStride = view["byteStride"]
-        }
-        this.buffer = Uint8Array(buffer.arrayBuffer, this.byteOffset, this.length).unsafeCast<ByteArray>()
+        this.buffer = Uint8Array(buffer.arrayBuffer, byteOffset, length).unsafeCast<ByteArray>()
     }
-
-    fun addUsage(usage: Int) {
-        this.usage.add(BufferUsage.of(usage) ?: error("bad usage"))
-    }
-
 
     internal fun addUsage(usage: BufferUsage) {
         this.usage.add(usage)
@@ -322,8 +317,8 @@ class GLTFBufferView(buffer: GLTFBuffer, view: dynamic) {
         )
         buf.mapFrom(buffer)
         buf.unmap()
-        this.gpuBuffer = buf
-        this.needsUpload = false
+        gpuBuffer = buf
+        needsUpload = false
     }
 }
 
