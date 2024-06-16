@@ -324,19 +324,13 @@ class GLTFMesh(
     val primitives: Array<GLTFPrimitive>,
 )
 
-class GLTFAccessor(val view: GLTFBufferView, accessor: dynamic) {
-    var count: Int = accessor["count"]
-    var componentType: Int = accessor["componentType"]
-    var gltfType: String = accessor["type"]
-    var numComponents: Int = gltfTypeNumComponents(accessor["type"])
+class GLTFAccessor(val view: GLTFBufferView, accessor: GLTF2.Accessor) {
+    var count: Int = accessor.count
+    var componentType: Int = accessor.componentType
+    var gltfType: String = accessor.type.name
+    var numComponents: Int = gltfTypeNumComponents(accessor.type.name)
     var numScalars: Int = count * numComponents
-    var byteOffset: Int = 0
-
-    init {
-        if (accessor["byteOffset"] != null) {
-            byteOffset = accessor["byteOffset"] as Int
-        }
-    }
+    var byteOffset: Int = accessor.byteOffset
 
     val byteStride: Int
         get() {

@@ -105,30 +105,21 @@ suspend fun uploadGLBModel(
                 console.warn("Ignoring primitive with unsupported mode ${prim["mode"]}")
             }
 
-            var indices: GLTFAccessor? = null
-            if (glbJsonData["accessors"][prim["indices"]] != undefined) {
-                val accessor = glbJsonData["accessors"][prim["indices"]]
-                val viewID = accessor["bufferView"]
+            val indices: GLTFAccessor? = if (primitive.indices != null) {
+                val accessor = gltf2.accessors[primitive.indices!!]
+                val viewID = accessor.bufferView
                 bufferViews[viewID].needsUpload = true
                 bufferViews[viewID].addUsage(BufferUsage.index)
-                indices = GLTFAccessor(bufferViews[viewID], accessor)
-            }
-            /*
-              val indices: GLTFAccessor? = if (primitive.indices != null) {
-                    val accessor = gltf2.accessors[primitive.indices!!]
-                    val viewID = accessor.bufferView
-                    bufferViews[viewID].needsUpload = true
-                    bufferViews[viewID].addUsage(BufferUsage.index)
-                    GLTFAccessor(bufferViews[viewID], accessor)
-                } else null
-             */
+                GLTFAccessor(bufferViews[viewID], accessor)
+            } else null
+
 
             var positions: GLTFAccessor? = null
             var normals: GLTFAccessor? = null
             val texcoords = mutableListOf<GLTFAccessor>()
             for (attr in js("Object.keys(prim['attributes'])") as Array<String>) {
-                val accessor = glbJsonData["accessors"][prim.attributes[attr]]
-                val viewID = accessor["bufferView"]
+                val accessor = gltf2.accessors[prim.attributes[attr]]
+                val viewID = accessor.bufferView
                 bufferViews[viewID].needsUpload = true
                 bufferViews[viewID].addUsage(BufferUsage.vertex)
                 when (attr) {
