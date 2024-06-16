@@ -11,7 +11,6 @@ import io.ygdrasil.wgpu.RenderPipelineDescriptor.FragmentState
 import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState.VertexBufferLayout
 import io.ygdrasil.wgpu.examples.helper.GLTFRenderMode
 import io.ygdrasil.wgpu.internal.js.GPUBuffer
-import io.ygdrasil.wgpu.internal.js.GPUTexture
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.Uint8Array
 import kotlin.math.max
@@ -250,7 +249,7 @@ class GLTFMaterial(material: dynamic, textures: Array<GLTFTexture> = arrayOf()) 
                 BindGroupEntry(binding = 1, resource = SamplerBinding(Sampler(it.sampler)))
             )
             bindGroupEntries.add(
-                BindGroupEntry(binding = 2, resource = TextureViewBinding(TextureView(it.imageView)))
+                BindGroupEntry(binding = 2, resource = TextureViewBinding(it.imageView))
             )
         }
 
@@ -271,7 +270,7 @@ class GLTFMaterial(material: dynamic, textures: Array<GLTFTexture> = arrayOf()) 
     }
 }
 
-class GLTFTexture(sampler: GLTFSampler, val image: GPUTexture) {
+class GLTFTexture(sampler: GLTFSampler, val image: Texture) {
     val gltfsampler = sampler
     val sampler = sampler.sampler
     val imageView = image.createView()

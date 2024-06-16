@@ -5,7 +5,7 @@ package io.ygdrasil.wgpu
 import io.ygdrasil.wgpu.internal.js.GPUTexture
 import io.ygdrasil.wgpu.internal.js.GPUTextureViewDescriptor
 
-actual class Texture(val handler: GPUTexture) : AutoCloseable {
+actual class Texture(internal val handler: GPUTexture) : AutoCloseable {
 
     actual val width: GPUIntegerCoordinateOut
         get() = handler.width

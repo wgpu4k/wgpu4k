@@ -6,7 +6,6 @@ import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.helper.GLTFRenderMode
 import io.ygdrasil.wgpu.examples.helper.readGLB
 import io.ygdrasil.wgpu.examples.toBitmapHolder
-import io.ygdrasil.wgpu.internal.js.GPUTexture
 import korlibs.image.format.readBitmap
 import korlibs.io.file.std.asMemoryVfsFile
 import korlibs.io.lang.TextDecoder
@@ -48,7 +47,7 @@ suspend fun uploadGLBModel(
         }
 
 
-        val images = mutableListOf<GPUTexture>()
+    val images = mutableListOf<Texture>()
         if (glbJsonData["images"] != undefined) {
             for (i in 0 until glbJsonData["images"].length as Int) {
                 val imgJson = glbJsonData["images"][i]
@@ -77,7 +76,7 @@ suspend fun uploadGLBModel(
                     image.width to image.height
                 )
 
-                images.add(gpuImg.handler)
+                images.add(gpuImg)
             }
         }
 
