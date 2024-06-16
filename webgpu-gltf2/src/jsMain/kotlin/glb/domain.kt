@@ -11,7 +11,6 @@ import io.ygdrasil.wgpu.examples.helper.GLTF2
 import io.ygdrasil.wgpu.examples.helper.GLTFRenderMode
 import io.ygdrasil.wgpu.internal.js.GPUSampler
 import korlibs.memory.getS8Array
-import org.khronos.webgl.ArrayBuffer
 import kotlin.math.max
 
 class GLTFPrimitive(
@@ -268,21 +267,8 @@ class GLTFMaterial(material: dynamic, textures: List<GLTFTexture> = listOf()) {
 }
 
 class GLTFTexture(sampler: GLTFSampler, image: Texture) {
-    val gltfsampler = sampler
     val sampler = sampler.sampler
     val imageView = image.createView()
-}
-
-
-class GLTFBuffer(
-    val arrayBuffer: ArrayBuffer,
-    val size: Int,
-    val byteOffset: Int,
-) {
-    init {
-        println("byteOffset $byteOffset")
-        println("size $size")
-    }
 }
 
 class GLTFBufferView(bufferView: GLTF2.BufferView, buffer: GLTF2.Buffer) {

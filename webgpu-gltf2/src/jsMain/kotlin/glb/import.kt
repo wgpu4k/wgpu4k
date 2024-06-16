@@ -83,9 +83,8 @@ suspend fun uploadGLBModel(
     }
 
     val textures = gltf2.textures.mapIndexed { index, texture ->
-        val tex = glbJsonData.textures[index]
-        val sampler = if (tex.sampler != undefined) samplers[tex.sampler] else defaultSampler
-        GLTFTexture(sampler, images[tex.source])
+        val sampler = if (texture.sampler != null) samplers[texture.sampler!!] else defaultSampler
+        GLTFTexture(sampler, images[texture.source])
     }
 
     val defaultMaterial = GLTFMaterial(mapOf<Any, Any>())

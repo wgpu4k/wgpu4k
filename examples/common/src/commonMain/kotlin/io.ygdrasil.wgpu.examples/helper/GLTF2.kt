@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalSerializationApi::class)
 
 package io.ygdrasil.wgpu.examples.helper
 
@@ -529,18 +528,6 @@ data class GLTF2(
         init {
             if (sparse != null) TODO("Unimplemented SPARSE: $sparse")
         }
-        ///**
-        // * <https://github.com/KhronosGroup/glTF/blob/main/specification/2.0/schema/accessor.sparse.schema.json>
-        // */
-        //@Serializable
-        //data class Sparse(
-        //    override var name: String? = null,
-        //    /** Number of deviating accessor values stored in the sparse array. */
-        //    val count: Int = -1,
-        //    override val extensions: JsonElement? = null,
-        //    override val extras: JsonElement? = null,
-        //) : GLTFProperty() {
-        //}
 
         var attachDebugName: String? = null
 
@@ -729,7 +716,7 @@ data class GLTF2(
     @Serializable
     data class Texture(
         override var name: String? = null,
-        val sampler: Int = -1,
+        val sampler: Int? = null,
         val source: Int = -1,
         override val extensions: JsonElement? = null,
         override val extras: JsonElement? = null,
