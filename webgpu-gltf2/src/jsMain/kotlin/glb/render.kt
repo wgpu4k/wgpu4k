@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalJsExport::class, DelicateCoroutinesApi::class)
 
 package glb
 
@@ -12,7 +11,6 @@ import korlibs.io.file.std.resourcesVfs
 import korlibs.math.geom.Matrix4
 import kotlinx.browser.document
 import kotlinx.browser.window
-import kotlinx.coroutines.DelicateCoroutinesApi
 import org.w3c.dom.HTMLCanvasElement
 
 external fun setInterval(render: () -> Unit, updateInterval: Int)
@@ -51,7 +49,7 @@ suspend fun renderContext(): MyRenderContext {
 
 class MyRenderContext(
     val device: Device,
-    val model: GLBModel,
+    model: GLBModel,
     val renderingContext: RenderingContext,
     canvas: HTMLCanvasElement
 ) {
@@ -173,46 +171,6 @@ class MyRenderContext(
 
         val commandEncoder = device.createCommandEncoder()
         val renderPass = commandEncoder.beginRenderPass(renderPassDesc)
-        renderPass.executeBundles(renderBundles)
-
-        renderPass.end()
-        device.queue.submit(arrayOf(commandEncoder.finish()))
-
-
-    }
-}
-
-var frame = 0
-
-@JsExport
-fun renderKt(_renderContext: dynamic) {
-    val renderContext: MyRenderContext = _renderContext
-    with(renderContext) {
-
-        frame += 1
-        val renderPassDesc = renderContext.renderPassDesc.copy(
-            colorAttachments = arrayOf(
-                renderContext.renderPassDesc.colorAttachments[0].copy(
-                    view = renderContext.renderingContext.getCurrentTexture().createView()
-                )
-            )
-        )
-
-        var transformationMatrix = getTransformationMatrix(
-            frame / 120.0,
-            projectionMatrix
-        )
-
-        device.queue.writeBuffer(
-            viewParamBuf,
-            0L,
-            transformationMatrix,
-            0L,
-            transformationMatrix.size.toLong()
-        )
-
-        var commandEncoder = device.createCommandEncoder()
-        var renderPass = commandEncoder.beginRenderPass(renderPassDesc)
         renderPass.executeBundles(renderBundles)
 
         renderPass.end()

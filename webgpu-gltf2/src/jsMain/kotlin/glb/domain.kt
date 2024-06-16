@@ -324,7 +324,7 @@ class GLTFAccessor(val view: GLTFBufferView, accessor: GLTF2.Accessor) {
         }
 }
 
-class GLBModel(val nodes: Array<GLTFNode>) {
+class GLBModel(val nodes: List<GLTFNode>) {
 
     fun buildRenderBundles(
         device: Device,
@@ -354,16 +354,15 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: DoubleArray)
     lateinit var bindGroup: BindGroup
 
     fun upload(device: Device) {
-        val buf = device.createBuffer(
+        gpuUniforms = device.createBuffer(
             BufferDescriptor(
                 size = 4 * 4 * 4,
                 usage = setOf(BufferUsage.uniform),
                 mappedAtCreation = true
             )
         )
-        buf.mapFrom(transform.map { it.toFloat() }.toFloatArray())
-        buf.unmap()
-        gpuUniforms = buf
+        gpuUniforms.mapFrom(transform.map { it.toFloat() }.toFloatArray())
+        gpuUniforms.unmap()
     }
 
     fun buildRenderBundle(

@@ -1,6 +1,8 @@
 
 package glb
 
+import io.ygdrasil.wgpu.examples.helper.GLTF2
+
 fun gltfTypeNumComponents(type: String): Int {
     return when (type) {
         "SCALAR" -> 1
@@ -29,10 +31,10 @@ fun alignTo(value: Int, align: Int): Int {
     return ((value + align - 1) / align) * align
 }
 
-fun readNodeTransform(node: dynamic): DoubleArray {
+fun readNodeTransform(node: GLTF2.Node): DoubleArray {
 
     if (node.matrix != null) {
-        val m = node.matrix
+        val m = node.matrix!!.map { it.toDouble() }
         // Both glTF and gl matrix are column major
         return doubleArrayOf(
             m[0],
@@ -53,9 +55,9 @@ fun readNodeTransform(node: dynamic): DoubleArray {
             m[15]
         )
     } else {
-        val scale = if (node.scale != null) node.scale as Array<Double> else arrayOf(1.0, 1.0, 1.0)
-        val rotation = if (node.rotation != null) node.rotation as Array<Double> else arrayOf(0.0, 0.0, 0.0, 1.0)
-        val translation = if (node.translation != null) node.translation as Array<Double> else arrayOf(0.0, 0.0, 0.0)
+        val scale = if (node.scale != null) node.scale!!.map { it.toDouble() }.toTypedArray() else arrayOf(1.0, 1.0, 1.0)
+        val rotation = if (node.rotation != null) node.rotation!!.map { it.toDouble() }.toTypedArray()  else arrayOf(0.0, 0.0, 0.0, 1.0)
+        val translation = if (node.translation != null) node.translation!!.map { it.toDouble() }.toTypedArray() else arrayOf(0.0, 0.0, 0.0)
 
         val matrix = create()
 
