@@ -94,13 +94,16 @@ suspend fun uploadGLBModel(
     }
 
     val meshes = gltf2.meshes.map { mesh ->
-
-        val primitives = mesh.primitives.map { primitive ->
-            val topology = GLTFRenderMode.of(primitive.mode) ?: error("topology not found")
-
-            if (topology != GLTFRenderMode.TRIANGLES && topology != GLTFRenderMode.TRIANGLE_STRIP) {
-                console.warn("Ignoring primitive with unsupported mode $primitive")
+        val primitives = mesh.primitives
+            .filter { primitive ->
+                // Filter only supported mode
+                (GLTFRenderMode.of(primitive.mode) ?: error("topology not found")) in listOf(
+                    GLTFRenderMode.TRIANGLES,
+                    GLTFRenderMode.TRIANGLE_STRIP
+                )
             }
+            .map { primitive ->
+            val topology = GLTFRenderMode.of(primitive.mode) ?: error("topology not found")
 
             val indices: GLTFAccessor? = if (primitive.indices != null) {
                 val accessor = gltf2.accessors[primitive.indices!!]
@@ -109,7 +112,6 @@ suspend fun uploadGLBModel(
                 bufferViews[viewID].addUsage(BufferUsage.index)
                 GLTFAccessor(bufferViews[viewID], accessor)
             } else null
-
 
             var positions: GLTFAccessor? = null
             var normals: GLTFAccessor? = null
