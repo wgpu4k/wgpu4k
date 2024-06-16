@@ -78,20 +78,14 @@ suspend fun uploadGLBModel(
     }
 
     val defaultSampler = GLTFSampler(mapOf<Any, Any>(), device)
-    val samplers = mutableListOf<GLTFSampler>()
-    if (glbJsonData["samplers"] != undefined) {
-        for (i in 0 until glbJsonData["samplers"].length as Int) {
-            samplers.add(GLTFSampler(glbJsonData["samplers"][i], device))
-        }
+    val samplers = gltf2.samplers.mapIndexed { index, sampler ->
+        GLTFSampler(glbJsonData["samplers"][index], device)
     }
 
-    val textures = mutableListOf<GLTFTexture>()
-    if (glbJsonData.textures != undefined) {
-        for (i in 0 until glbJsonData.textures.length as Int) {
-            val tex = glbJsonData.textures[i]
-            val sampler = if (tex.sampler != undefined) samplers[tex.sampler] else defaultSampler
-            textures.add(GLTFTexture(sampler, images[tex.source]))
-        }
+    val textures = gltf2.textures.mapIndexed { index, texture ->
+        val tex = glbJsonData.textures[index]
+        val sampler = if (tex.sampler != undefined) samplers[tex.sampler] else defaultSampler
+        GLTFTexture(sampler, images[tex.source])
     }
 
     val defaultMaterial = GLTFMaterial(mapOf<Any, Any>())
