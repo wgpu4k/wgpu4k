@@ -133,8 +133,8 @@ suspend fun uploadGLBModel(
                 }
             }
 
-            val material = if (prim["material"] != undefined) {
-                materials[prim["material"]]
+            val material = if (primitive.material != null) {
+                materials[primitive.material!!]
             } else {
                 defaultMaterial
             }
