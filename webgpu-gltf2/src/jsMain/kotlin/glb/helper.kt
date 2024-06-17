@@ -2,6 +2,7 @@
 package glb
 
 import io.ygdrasil.wgpu.examples.helper.GLTF2
+import korlibs.math.geom.Matrix4
 
 fun gltfTypeNumComponents(type: String): Int {
     return when (type) {
@@ -31,37 +32,20 @@ fun alignTo(value: Int, align: Int): Int {
     return ((value + align - 1) / align) * align
 }
 
-fun readNodeTransform(node: GLTF2.Node): DoubleArray {
+fun readNodeTransform(node: GLTF2.Node): FloatArray {
 
     if (node.matrix != null) {
-        val m = node.matrix!!.map { it.toDouble() }
         // Both glTF and gl matrix are column major
-        return doubleArrayOf(
-            m[0],
-            m[1],
-            m[2],
-            m[3],
-            m[4],
-            m[5],
-            m[6],
-            m[7],
-            m[8],
-            m[9],
-            m[10],
-            m[11],
-            m[12],
-            m[13],
-            m[14],
-            m[15]
-        )
+        return node.matrix!!
     } else {
         val scale = if (node.scale != null) node.scale!!.map { it.toDouble() }.toTypedArray() else arrayOf(1.0, 1.0, 1.0)
         val rotation = if (node.rotation != null) node.rotation!!.map { it.toDouble() }.toTypedArray()  else arrayOf(0.0, 0.0, 0.0, 1.0)
         val translation = if (node.translation != null) node.translation!!.map { it.toDouble() }.toTypedArray() else arrayOf(0.0, 0.0, 0.0)
 
         val matrix = create()
+        Matrix4.IDENTITY
 
-        return fromRotationTranslationScale(matrix, rotation, translation, scale)
+        return fromRotationTranslationScale(matrix, rotation, translation, scale).map { it.toFloat() }.toTypedArray().toFloatArray()
     }
 }
 
@@ -118,7 +102,7 @@ fun fromRotationTranslationScale(out: DoubleArray, rotation: Array<Double>, tran
     return out
 }
 
-fun multiply(out: DoubleArray, a: DoubleArray, b: DoubleArray): DoubleArray {
+fun multiply(out: FloatArray, a: FloatArray, b: FloatArray): FloatArray {
     val a00 = a[0]
     val a01 = a[1]
     val a02 = a[2]

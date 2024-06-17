@@ -8,6 +8,7 @@ import io.ygdrasil.wgpu.examples.toBitmapHolder
 import korlibs.image.format.readBitmap
 import korlibs.io.file.VfsFile
 import korlibs.io.file.std.asMemoryVfsFile
+import korlibs.math.geom.Matrix4
 
 suspend fun uploadGLBModel(
     device: Device,
@@ -134,7 +135,7 @@ suspend fun uploadGLBModel(
 }
 
 fun makeGLTFSingleLevel(gltF2: GLTF2, meshes: List<GLTFMesh>): List<GLTFNode> {
-    val rootTfm = create()
+    val rootTfm = Matrix4.IDENTITY.copyToColumns()
     return gltF2.scenes[gltF2.scene]
         .nodes
         .map { gltF2.nodes[it] }
@@ -146,7 +147,7 @@ fun makeGLTFSingleLevel(gltF2: GLTF2, meshes: List<GLTFMesh>): List<GLTFNode> {
 fun loadNodes(
     nodes: List<GLTF2.Node>,
     node: GLTF2.Node,
-    parent_transform: DoubleArray,
+    parent_transform: FloatArray,
     meshes: List<GLTFMesh>,
     createdNodes: MutableList<GLTFNode> = mutableListOf(),
 ): List<GLTFNode> {

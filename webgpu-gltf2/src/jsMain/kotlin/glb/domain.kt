@@ -349,7 +349,7 @@ class GLBModel(val nodes: List<GLTFNode>) {
     }
 }
 
-class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: DoubleArray) {
+class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) {
     lateinit var gpuUniforms: Buffer
     lateinit var bindGroup: BindGroup
 
@@ -361,7 +361,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: DoubleArray)
                 mappedAtCreation = true
             )
         )
-        gpuUniforms.mapFrom(transform.map { it.toFloat() }.toFloatArray())
+        gpuUniforms.mapFrom(transform)
         gpuUniforms.unmap()
     }
 
