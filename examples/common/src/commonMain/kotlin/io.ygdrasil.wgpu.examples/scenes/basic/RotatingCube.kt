@@ -25,7 +25,7 @@ class RotatingCubeScene : Application.Scene(), AutoCloseable {
 	lateinit var uniformBindGroup: BindGroup
 	lateinit var verticesBuffer: Buffer
 
-	override fun Application.initialiaze() = with(autoClosableContext) {
+	override suspend fun Application.initialiaze() = with(autoClosableContext) {
 
 		// Create a vertex buffer from the cube data.
 		verticesBuffer = device.createBuffer(

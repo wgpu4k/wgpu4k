@@ -10,6 +10,7 @@ import io.ygdrasil.wgpu.WGPU.Companion.createInstance
 import io.ygdrasil.wgpu.WGPU.Companion.loadLibrary
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPULogCallback
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
+import korlibs.io.async.launch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.lwjgl.glfw.GLFW.*
@@ -85,6 +86,8 @@ suspend fun main() {
 
     }
 
+    application.load()
+
     fun render() {
 
         with(application.currentScene) {
@@ -118,7 +121,7 @@ suspend fun main() {
             }
 
 
-            glfwDispatcher.dispatch(Dispatchers.Main) {
+            launch(glfwDispatcher) {
                 application.changeScene(availableScenes[index])
             }
         }

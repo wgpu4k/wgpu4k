@@ -40,7 +40,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 		)
 	}
 
-	override fun Application.initialiaze() = with(autoClosableContext) {
+	override suspend fun Application.initialiaze() = with(autoClosableContext) {
 
 
 

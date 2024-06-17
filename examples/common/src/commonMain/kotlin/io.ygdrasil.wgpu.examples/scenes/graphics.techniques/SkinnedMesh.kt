@@ -1,3 +1,4 @@
+@file:OptIn(DelicateCoroutinesApi::class)
 
 package io.ygdrasil.wgpu.examples.scenes.graphics.techniques
 
@@ -11,19 +12,18 @@ import io.ygdrasil.wgpu.examples.helper.glb.ShaderCache
 import io.ygdrasil.wgpu.examples.helper.glb.uploadGLBModel
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlin.math.PI
 
 class SkinnedMeshScene : Application.Scene() {
 
-    internal var renderBundles: Array<RenderBundle>? = null
+    internal lateinit var renderBundles: Array<RenderBundle>
     internal lateinit var viewParamBuf: Buffer
     internal lateinit var projectionMatrix: Matrix4
     internal lateinit var renderPassDesc: RenderPassDescriptor
     internal lateinit var shaderCache: ShaderCache
 
-    override fun Application.initialiaze() = with(autoClosableContext) {
+    override suspend fun Application.initialiaze() = with(autoClosableContext) {
 
         shaderCache = ShaderCache(device)
 
@@ -95,58 +95,51 @@ class SkinnedMeshScene : Application.Scene() {
             )
         )
 
-        MainScope().launch {
-            val model = uploadGLBModel(device, boxMesh)
+        val model = uploadGLBModel(device, boxMesh)
 
-            renderBundles = model.buildRenderBundles(
-                device,
-                shaderCache,
-                viewParamsLayout,
-                viewParamsBindGroup,
-                renderingContext.textureFormat.actualName,
-            )
-        }
+        renderBundles = model.buildRenderBundles(
+            device,
+            shaderCache,
+            viewParamsLayout,
+            viewParamsBindGroup,
+            renderingContext.textureFormat.actualName,
+        )
 
         projectionMatrix = getProjectionMatrix(renderingContext.width, renderingContext.height)
     }
 
     override fun Application.render() = autoClosableContext {
-        renderBundles?.let { renderBundles ->
-            val renderPassDesc = renderPassDesc.copy(
-                colorAttachments = arrayOf(
-                    renderPassDesc.colorAttachments[0].copy(
-                        view = renderingContext.getCurrentTexture().createView()
-                    )
+
+        val renderPassDesc = renderPassDesc.copy(
+            colorAttachments = arrayOf(
+                renderPassDesc.colorAttachments[0].copy(
+                    view = renderingContext.getCurrentTexture().createView().bind()
                 )
             )
+        )
 
-            val transformationMatrix = getTransformationMatrix(
-                frame / 120.0,
-                projectionMatrix
-            )
+        val transformationMatrix = getTransformationMatrix(
+            frame / 120.0,
+            projectionMatrix
+        )
 
-            device.queue.writeBuffer(
-                viewParamBuf,
-                0L,
-                transformationMatrix,
-                0L,
-                transformationMatrix.size.toLong()
-            )
+        device.queue.writeBuffer(
+            viewParamBuf,
+            0L,
+            transformationMatrix,
+            0L,
+            transformationMatrix.size.toLong()
+        )
 
-            val commandEncoder = device.createCommandEncoder()
-            val renderPass = commandEncoder.beginRenderPass(renderPassDesc)
-            renderPass.executeBundles(renderBundles)
+        val commandEncoder = device.createCommandEncoder().bind()
+        val renderPass = commandEncoder.beginRenderPass(renderPassDesc).bind()
+        renderPass.executeBundles(renderBundles)
 
-            renderPass.end()
-            device.queue.submit(arrayOf(commandEncoder.finish()))
-        }
+        renderPass.end()
+        device.queue.submit(arrayOf(commandEncoder.finish()))
 
         renderingContext.present()
     }
-
-
-
-
 
 
     fun getProjectionMatrix(width: Int, height: Int): Matrix4 {

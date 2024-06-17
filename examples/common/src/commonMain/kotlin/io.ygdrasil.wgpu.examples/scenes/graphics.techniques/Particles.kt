@@ -42,7 +42,7 @@ class ParticlesScene : Application.Scene() {
     lateinit var particlesBuffer: Buffer
     lateinit var quadVertexBuffer: Buffer
 
-    override fun Application.initialiaze() = with(autoClosableContext) {
+    override suspend fun Application.initialiaze() = with(autoClosableContext) {
 
         particlesBuffer = device.createBuffer(
             BufferDescriptor(

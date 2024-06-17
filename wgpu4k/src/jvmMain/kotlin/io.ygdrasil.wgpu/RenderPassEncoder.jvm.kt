@@ -1,6 +1,8 @@
 package io.ygdrasil.wgpu
 
+import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
+import io.ygdrasil.wgpu.internal.jvm.toPointerArray
 import java.lang.foreign.MemorySegment
 
 actual class RenderPassEncoder(private val handler: MemorySegment) : AutoCloseable {
@@ -45,11 +47,11 @@ actual class RenderPassEncoder(private val handler: MemorySegment) : AutoCloseab
     actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
         wgpu_h.wgpuRenderPassEncoderSetIndexBuffer(handler, buffer.handler, indexFormat.value, offset, size)
     }
-    actual fun executeBundles(bundles: Array<RenderBundle>) {
+    actual fun executeBundles(bundles: Array<RenderBundle>) = confined { arena ->
         wgpu_h.wgpuRenderPassEncoderExecuteBundles(
             handler,
             bundles.size.toLong(),
-            bundles.map { it.handler }.toTypedArray()
+            bundles.map { it.handler }.toPointerArray(arena)
         )
     }
 

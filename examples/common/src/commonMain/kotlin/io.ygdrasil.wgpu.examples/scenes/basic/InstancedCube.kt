@@ -27,7 +27,7 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 	lateinit var verticesBuffer: Buffer
 	val modelMatrices = Array<Matrix4?>(numInstances) { null }
 
-	override fun Application.initialiaze() = with(autoClosableContext) {
+	override suspend fun Application.initialiaze() = with(autoClosableContext) {
 
 		// Create a vertex buffer from the cube data.
 		verticesBuffer = device.createBuffer(

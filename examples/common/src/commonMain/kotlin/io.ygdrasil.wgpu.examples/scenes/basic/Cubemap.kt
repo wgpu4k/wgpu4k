@@ -28,7 +28,7 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 	val modelMatrix = Matrix4.scale(1000, 1000, 1000)
 	val depthLayer = 6
 
-	override fun Application.initialiaze() = with(autoClosableContext) {
+	override suspend fun Application.initialiaze() = with(autoClosableContext) {
 
 		// Create a vertex buffer from the cube data.
 		verticesBuffer = device.createBuffer(

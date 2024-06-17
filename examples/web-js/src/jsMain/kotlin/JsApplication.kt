@@ -6,6 +6,7 @@ import io.ygdrasil.wgpu.getRenderingContext
 import io.ygdrasil.wgpu.requestAdapter
 import kotlinx.browser.window
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.promise
 import org.w3c.dom.HTMLCanvasElement
 import kotlin.js.Promise
@@ -40,6 +41,7 @@ fun jsApplication(canvas: HTMLCanvasElement): Promise<Application> {
 				}, UPDATE_INTERVAL);
 			}
 		}.also { application ->
+			application.load()
 			window.onkeydown = { event ->
 				if (event.keyCode == 33 || event.keyCode == 34) {
 					val currentIndex = availableScenes.indexOf(application.currentScene)
@@ -55,8 +57,9 @@ fun jsApplication(canvas: HTMLCanvasElement): Promise<Application> {
 						}
 					}
 
-
-					application.changeScene(availableScenes[index])
+					MainScope().launch {
+						application.changeScene(availableScenes[index])
+					}
 				}
 
 

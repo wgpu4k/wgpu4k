@@ -31,7 +31,7 @@ abstract class Application(
 	var frame = 0
 		private set
 
-	init {
+	suspend fun load() {
 		changeScene(availableScenes.last())
 	}
 
@@ -39,7 +39,7 @@ abstract class Application(
 
 		val autoClosableContext = AutoClosableContext()
 
-		abstract fun Application.initialiaze()
+		abstract suspend fun Application.initialiaze()
 
 		abstract fun Application.render()
 
@@ -53,7 +53,7 @@ abstract class Application(
 
 	}
 
-	fun changeScene(nextScene: Scene) {
+	suspend fun changeScene(nextScene: Scene) {
 		println("switch to scene ${nextScene::class.simpleName}")
 		with(nextScene) {
 			try {
