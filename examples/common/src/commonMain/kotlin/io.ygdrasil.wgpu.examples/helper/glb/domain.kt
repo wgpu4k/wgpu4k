@@ -7,8 +7,6 @@ import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.BufferBindingLayout
 import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.SamplerBindingLayout
 import io.ygdrasil.wgpu.RenderPipelineDescriptor.FragmentState
 import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState.VertexBufferLayout
-import io.ygdrasil.wgpu.examples.helper.GLTF2
-import io.ygdrasil.wgpu.examples.helper.GLTFRenderMode
 import korlibs.memory.getS8Array
 import kotlin.math.max
 

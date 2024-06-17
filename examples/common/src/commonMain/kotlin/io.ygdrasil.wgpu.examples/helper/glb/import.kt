@@ -1,8 +1,6 @@
 package io.ygdrasil.wgpu.examples.helper.glb
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.helper.GLTF2
-import io.ygdrasil.wgpu.examples.helper.GLTFRenderMode
 import io.ygdrasil.wgpu.examples.toBitmapHolder
 import korlibs.image.format.readBitmap
 import korlibs.io.file.std.asMemoryVfsFile

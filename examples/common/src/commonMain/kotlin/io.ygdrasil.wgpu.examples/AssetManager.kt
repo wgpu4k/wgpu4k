@@ -1,8 +1,8 @@
 package io.ygdrasil.wgpu.examples
 
 import io.ygdrasil.wgpu.ImageBitmapHolder
-import io.ygdrasil.wgpu.examples.helper.GLTF2
-import io.ygdrasil.wgpu.examples.helper.readGLB
+import io.ygdrasil.wgpu.examples.helper.glb.GLTF2
+import io.ygdrasil.wgpu.examples.helper.glb.readGLB
 import korlibs.image.bitmap.Bitmap32
 import korlibs.image.format.readBitmap
 import korlibs.io.file.std.resourcesVfs

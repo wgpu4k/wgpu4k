@@ -1,4 +1,4 @@
-package io.ygdrasil.wgpu.examples.helper
+package io.ygdrasil.wgpu.examples.helper.glb
 
 import korlibs.io.lang.invalidOp
 import korlibs.math.geom.AABB3D

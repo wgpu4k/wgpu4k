@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalCoroutinesApi::class)
 
 package io.ygdrasil.wgpu.examples.scenes.graphics.techniques
 
@@ -10,14 +9,13 @@ import io.ygdrasil.wgpu.examples.Application
 import io.ygdrasil.wgpu.examples.autoClosableContext
 import io.ygdrasil.wgpu.examples.helper.glb.ShaderCache
 import io.ygdrasil.wgpu.examples.helper.glb.uploadGLBModel
-import korlibs.io.async.async
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import kotlin.math.PI
 
-class WhaleScene : Application.Scene() {
+class SkinnedMeshScene : Application.Scene() {
 
     internal var renderBundles: Array<RenderBundle>? = null
     internal lateinit var viewParamBuf: Buffer
@@ -97,7 +95,7 @@ class WhaleScene : Application.Scene() {
             )
         )
 
-        MainScope().async {
+        MainScope().launch {
             val model = uploadGLBModel(device, boxMesh)
 
             renderBundles = model.buildRenderBundles(
@@ -109,11 +107,7 @@ class WhaleScene : Application.Scene() {
             )
         }
 
-
-
-
         projectionMatrix = getProjectionMatrix(renderingContext.width, renderingContext.height)
-
     }
 
     override fun Application.render() = autoClosableContext {

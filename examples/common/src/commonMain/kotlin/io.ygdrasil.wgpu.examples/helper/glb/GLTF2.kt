@@ -1,5 +1,5 @@
 
-package io.ygdrasil.wgpu.examples.helper
+package io.ygdrasil.wgpu.examples.helper.glb
 
 import korlibs.datastructure.*
 import korlibs.encoding.*
@@ -24,7 +24,8 @@ import kotlinx.serialization.json.*
 import kotlin.js.JsExport
 import kotlin.jvm.JvmInline
 
-suspend fun VfsFile.readGLB(options: GLTF2.ReadOptions = GLTF2.ReadOptions.DEFAULT): GLTF2 = GLTF2.readGLB(this, options = options)
+suspend fun VfsFile.readGLB(options: GLTF2.ReadOptions = GLTF2.ReadOptions.DEFAULT): GLTF2 =
+    GLTF2.readGLB(this, options = options)
 suspend fun VfsFile.readGLTF2(options: GLTF2.ReadOptions = GLTF2.ReadOptions.DEFAULT): GLTF2 {
     if (this.extensionLC == "glb") return readGLB(options)
     return GLTF2.readGLTF(this.readString(), null, this, options)
@@ -509,7 +510,8 @@ data class GLTF2(
 
         var attachDebugName: String? = null
 
-        val componentTType: VarKind get() = when (componentType) {
+        val componentTType: VarKind
+            get() = when (componentType) {
             /* 5120 */ 0x1400 -> VarKind.TBYTE // signed byte --- f = max(c / 127.0, -1.0)   --- c = round(f * 127.0)
             /* 5121 */ 0x1401 -> VarKind.TUNSIGNED_BYTE // unsigned byte --- f = c / 255.0  --- c = round(f * 255.0)
             /* 5122 */ 0x1402 -> VarKind.TSHORT // signed short --- f = max(c / 32767.0, -1.0) --- c = round(f * 32767.0)
@@ -529,17 +531,17 @@ data class GLTF2(
 
         fun VarType.Companion.gen(kind: VarKind, ncomponent: Int, type: AccessorType): VarType {
             return when (type) {
-                AccessorType.MAT2 -> VarType.MAT(2)
-                AccessorType.MAT3 -> VarType.MAT(3)
-                AccessorType.MAT4 -> VarType.MAT(4)
+                AccessorType.MAT2 -> MAT(2)
+                AccessorType.MAT3 -> MAT(3)
+                AccessorType.MAT4 -> MAT(4)
                 else -> when (kind) {
-                    VarKind.TBOOL -> VarType.BOOL(ncomponent)
-                    VarKind.TBYTE -> VarType.BYTE(ncomponent)
-                    VarKind.TUNSIGNED_BYTE -> VarType.UBYTE(ncomponent)
-                    VarKind.TSHORT -> VarType.SHORT(ncomponent)
-                    VarKind.TUNSIGNED_SHORT -> VarType.USHORT(ncomponent)
-                    VarKind.TINT -> VarType.INT(ncomponent)
-                    VarKind.TFLOAT -> VarType.FLOAT(ncomponent)
+                    VarKind.TBOOL -> BOOL(ncomponent)
+                    VarKind.TBYTE -> BYTE(ncomponent)
+                    VarKind.TUNSIGNED_BYTE -> UBYTE(ncomponent)
+                    VarKind.TSHORT -> SHORT(ncomponent)
+                    VarKind.TUNSIGNED_SHORT -> USHORT(ncomponent)
+                    VarKind.TINT -> INT(ncomponent)
+                    VarKind.TFLOAT -> FLOAT(ncomponent)
                 }
             }
         }
