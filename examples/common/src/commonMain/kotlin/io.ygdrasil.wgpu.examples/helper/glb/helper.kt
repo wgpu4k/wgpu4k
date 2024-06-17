@@ -1,5 +1,5 @@
 
-package glb
+package io.ygdrasil.wgpu.examples.helper.glb
 
 import io.ygdrasil.wgpu.examples.helper.GLTF2
 import korlibs.math.geom.Matrix4

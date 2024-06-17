@@ -1,4 +1,4 @@
-package glb
+package io.ygdrasil.wgpu.examples.helper.glb
 
 enum class GLTFComponentType(val value: Int) {
     BYTE(5120),

@@ -107,6 +107,6 @@ val availableScenes = listOf(
 	TexturedCubeScene(),
 	// Not working
 	ParticlesScene(),
+	RotatingMeshCubeScene(),
 	WhaleScene(),
-	RotatingMeshCubeScene()
 )

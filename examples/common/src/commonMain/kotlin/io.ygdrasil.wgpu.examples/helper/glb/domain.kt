@@ -1,4 +1,4 @@
-package glb
+package io.ygdrasil.wgpu.examples.helper.glb
 
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.BindGroupDescriptor.*
@@ -9,7 +9,6 @@ import io.ygdrasil.wgpu.RenderPipelineDescriptor.FragmentState
 import io.ygdrasil.wgpu.RenderPipelineDescriptor.VertexState.VertexBufferLayout
 import io.ygdrasil.wgpu.examples.helper.GLTF2
 import io.ygdrasil.wgpu.examples.helper.GLTFRenderMode
-import io.ygdrasil.wgpu.internal.js.GPUSampler
 import korlibs.memory.getS8Array
 import kotlin.math.max
 
@@ -92,13 +91,13 @@ class GLTFPrimitive(
             )
         )
 
-        var vertexStage = RenderPipelineDescriptor.VertexState(
+        val vertexStage = RenderPipelineDescriptor.VertexState(
             module = shaderModule,
             entryPoint = "vertex_main",
             buffers = vertexBuffers.toTypedArray()
         )
 
-        var fragmentStage = FragmentState(
+        val fragmentStage = FragmentState(
             module = shaderModule,
             entryPoint = "fragment_main",
             targets = arrayOf(
@@ -119,7 +118,7 @@ class GLTFPrimitive(
             )
         }
 
-        var pipelineDescriptor = RenderPipelineDescriptor(
+        val pipelineDescriptor = RenderPipelineDescriptor(
             layout = layout,
             vertex = vertexStage,
             fragment = fragmentStage,
@@ -131,7 +130,7 @@ class GLTFPrimitive(
             )
         )
 
-        var renderPipeline = device.createRenderPipeline(pipelineDescriptor)
+        val renderPipeline = device.createRenderPipeline(pipelineDescriptor)
 
         bundleEncoder.setBindGroup(2, material.bindGroup)
         bundleEncoder.setPipeline(renderPipeline)
@@ -242,7 +241,7 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
             )
 
             bindGroupEntries.add(
-                BindGroupEntry(binding = 1, resource = SamplerBinding(Sampler(it.sampler)))
+                BindGroupEntry(binding = 1, resource = SamplerBinding(it.sampler))
             )
             bindGroupEntries.add(
                 BindGroupEntry(binding = 2, resource = TextureViewBinding(it.imageView))
@@ -434,7 +433,7 @@ class GLTFSampler(private val device: Device, private val samplerNode: GLTF2.Sam
 
     val sampler = createSampler()
 
-    private fun createSampler(): GPUSampler {
+    private fun createSampler(): Sampler {
         val magFilter = when (samplerNode?.magFilter) {
             null, GLTFTextureFilter.LINEAR.value -> FilterMode.linear
             else -> FilterMode.nearest
@@ -465,6 +464,6 @@ class GLTFSampler(private val device: Device, private val samplerNode: GLTF2.Sam
                 addressModeU = wrapS,
                 addressModeV = wrapT,
             )
-        ).handler
+        )
     }
 }

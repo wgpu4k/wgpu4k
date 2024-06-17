@@ -1,4 +1,4 @@
-package glb
+package io.ygdrasil.wgpu.examples.helper.glb
 import io.ygdrasil.wgpu.Device
 import io.ygdrasil.wgpu.ShaderModule
 import io.ygdrasil.wgpu.ShaderModuleDescriptor
@@ -7,7 +7,7 @@ class ShaderCache(private val device: Device) {
     private val shaderCache: MutableMap<String, ShaderModule> = mutableMapOf()
 
     fun getShader(hasNormals: Boolean, hasUVs: Boolean, hasColorTexture: Boolean): ShaderModule {
-        var shaderID = "glb"
+        var shaderID = "io.ygdrasil.wgpu.examples/helper/glb"
         if (hasNormals) {
             shaderID += "n"
         }

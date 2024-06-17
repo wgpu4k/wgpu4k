@@ -1,23 +1,18 @@
-package glb
+package io.ygdrasil.wgpu.examples.helper.glb
 
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.helper.GLTF2
 import io.ygdrasil.wgpu.examples.helper.GLTFRenderMode
-import io.ygdrasil.wgpu.examples.helper.readGLB
 import io.ygdrasil.wgpu.examples.toBitmapHolder
 import korlibs.image.format.readBitmap
-import korlibs.io.file.VfsFile
 import korlibs.io.file.std.asMemoryVfsFile
 import korlibs.math.geom.Matrix4
 
 suspend fun uploadGLBModel(
     device: Device,
-    rawFile: VfsFile,
+    gltf2: GLTF2,
 ): GLBModel {
     println("uploadGLBModel")
-
-    val gltf2 = rawFile
-        .readGLB()
 
     val bufferViews = gltf2.bufferViews.mapIndexed { index, bufferView ->
         GLTFBufferView(bufferView, gltf2.buffers[bufferView.buffer])

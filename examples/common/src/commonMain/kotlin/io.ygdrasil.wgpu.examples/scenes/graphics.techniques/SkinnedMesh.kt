@@ -1,253 +1,177 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package io.ygdrasil.wgpu.examples.scenes.graphics.techniques
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.BufferBindingLayout
+import io.ygdrasil.wgpu.BindGroupDescriptor.BindGroupEntry
+import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry
 import io.ygdrasil.wgpu.RenderPassDescriptor.ColorAttachment
 import io.ygdrasil.wgpu.examples.Application
 import io.ygdrasil.wgpu.examples.autoClosableContext
-import io.ygdrasil.wgpu.examples.helper.*
-import io.ygdrasil.wgpu.examples.scenes.shader.gltfWGSL
-import korlibs.io.async.runBlockingNoJs
-import korlibs.io.file.std.resourcesVfs
+import io.ygdrasil.wgpu.examples.helper.glb.ShaderCache
+import io.ygdrasil.wgpu.examples.helper.glb.uploadGLBModel
+import korlibs.io.async.async
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.MainScope
 import kotlin.math.PI
-
-val MAT4X4_BYTES = 64
 
 class WhaleScene : Application.Scene() {
 
-    private lateinit var meshPipelines: List<RenderPipeline>
-    private lateinit var generalUniformsBGCLuster: BindGroupCluster
-    private lateinit var cameraBGCluster: BindGroupCluster
-    private lateinit var gltf2: GLTF2
-    private lateinit var cameraBuffer: Buffer
-    private lateinit var gltfRenderPassDescriptor: RenderPassDescriptor
-    private lateinit var projectionMatrix: Matrix4
-    private val settings = Settings()
-    private lateinit var gltF2RenderContext: GLTF2RenderContext
-
-    data class Settings(
-        val cameraX: Double = 0.0,
-        val cameraY: Double = -5.1,
-        val cameraZ: Double = -14.6,
-        val objectScale: Int = 1,
-        val angle: Double = 0.2,
-        val speed: Int = 50,
-    )
+    internal var renderBundles: Array<RenderBundle>? = null
+    internal lateinit var viewParamBuf: Buffer
+    internal lateinit var projectionMatrix: Matrix4
+    internal lateinit var renderPassDesc: RenderPassDescriptor
+    internal lateinit var shaderCache: ShaderCache
 
     override fun Application.initialiaze() = with(autoClosableContext) {
+
+        shaderCache = ShaderCache(device)
+
+        val dummyTexture by lazy {
+            device.createTexture(
+                TextureDescriptor(
+                    size = Size3D(1, 1),
+                    format = TextureFormat.depth24plus,
+                    usage = setOf(TextureUsage.renderattachment),
+                )
+            )
+        }
+
         val depthTexture = device.createTexture(
             TextureDescriptor(
-                size = Size3D(renderingContext.width, renderingContext.height),
-                format = TextureFormat.depth24plus,
+                size = Size3D(width = renderingContext.width, height = renderingContext.height, depthOrArrayLayers = 1),
+                format = TextureFormat.depth24plusstencil8,
                 usage = setOf(TextureUsage.renderattachment)
             )
-        ).bind()
-
-        cameraBuffer = device.createBuffer(
-            BufferDescriptor(
-                size = MAT4X4_BYTES * 3L,
-                usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
-            )
-        ).bind()
-
-        cameraBGCluster = device.createBindGroupCluster(
-            listOf(
-                BindGroupClusterDescriptor(
-                    bindings = 0,
-                    visibilities = setOf(ShaderStage.vertex),
-                    bindingType = BufferBindingLayout(type = BufferBindingType.uniform)
-                )
-            ),
-            listOf(listOf(BindGroupDescriptor.BufferBinding(cameraBuffer))),
-            "Camera"
         )
 
-        val generalUniformsBuffer = device.createBuffer(
-            BufferDescriptor(
-                size = UInt.SIZE_BYTES * 2L,
-                usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
-            )
-        ).bind()
-
-        generalUniformsBGCLuster = device.createBindGroupCluster(
-            listOf(
-                BindGroupClusterDescriptor(
-                    bindings = 0,
-                    visibilities = setOf(ShaderStage.vertex, ShaderStage.fragment),
-                    bindingType = BufferBindingLayout(type = BufferBindingType.uniform)
-                )
-            ),
-            listOf(listOf(BindGroupDescriptor.BufferBinding(generalUniformsBuffer))),
-            "General"
-        )
-
-
-        val nodeUniformsBindGroupLayout = device.createBindGroupLayout(
-            BindGroupLayoutDescriptor(
-                label = "NodeUniforms.bindGroupLayout",
-                entries = arrayOf(
-                    BindGroupLayoutDescriptor.Entry(
-                        binding = 0,
-                        bindingType = BufferBindingLayout(type = BufferBindingType.uniform),
-                        visibility = setOf(ShaderStage.vertex)
-                    )
-                )
-            )
-        ).bind()
-
-        gltf2 = runBlockingNoJs {
-            resourcesVfs["assets/gltf/whale.glb"].readGLB()
-        }
-
-        gltF2RenderContext = GLTF2RenderContext(
-            device = device,
-            gltf2 = gltf2,
-            autoClosableContext = autoClosableContext
-        ).apply {
-            meshPipelines = gltf2.meshes[0].buildRenderPipeline(
-                gltfWGSL,
-                gltfWGSL,
-                renderingContext.textureFormat,
-                depthTexture.format,
-                listOf(
-                    cameraBGCluster.bindGroupLayout,
-                    generalUniformsBGCLuster.bindGroupLayout,
-                    nodeUniformsBindGroupLayout,
-                    //skinBindGroupLayout,
-                )
-            )
-        }
-
-
-        val aspect = renderingContext.width / renderingContext.height.toDouble()
-        val fox = Angle.fromRadians((2 * PI) / 5)
-        projectionMatrix = Matrix4.perspective(fox, aspect, .1, 100.0)
-
-        // Pass Descriptor for GLTFs
-        gltfRenderPassDescriptor = RenderPassDescriptor(
+        renderPassDesc = RenderPassDescriptor(
             colorAttachments = arrayOf(
                 ColorAttachment(
-                    view = dummyTexture.createView(), // Assigned later
-
-                    clearValue = arrayOf(0.3, 0.3, 0.3, 1.0),
+                    view = dummyTexture.createView(),
                     loadOp = LoadOp.clear,
+                    clearValue = arrayOf(0.3, 0.3, 0.3, 1),
                     storeOp = StoreOp.store
                 )
             ),
             depthStencilAttachment = RenderPassDescriptor.RenderPassDepthStencilAttachment(
-                view = depthTexture.createView().bind(),
+                view = depthTexture.createView(),
                 depthLoadOp = LoadOp.clear,
-                depthClearValue = 1.0f,
-                depthStoreOp = StoreOp.store
+                depthClearValue = 1f,
+                depthStoreOp = StoreOp.store,
+                stencilLoadOp = LoadOp.clear,
+                stencilClearValue = 0,
+                stencilStoreOp = StoreOp.store
             )
         )
 
-        TODO("Not yet implemented")
+        val viewParamsLayout = device.createBindGroupLayout(
+            BindGroupLayoutDescriptor(
+                entries = arrayOf(
+                    Entry(
+                        binding = 0,
+                        visibility = setOf(ShaderStage.vertex),
+                        bindingType = Entry.BufferBindingLayout(type = BufferBindingType.uniform)
+                    )
+                )
+            )
+        )
+
+        viewParamBuf = device.createBuffer(
+            BufferDescriptor(
+                size = 4 * 4 * 4, usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
+            )
+        )
+
+        val viewParamsBindGroup = device.createBindGroup(
+            BindGroupDescriptor(
+                layout = viewParamsLayout,
+                entries = arrayOf(
+                    BindGroupEntry(
+                        binding = 0,
+                        resource = BindGroupDescriptor.BufferBinding(buffer = viewParamBuf)
+                    )
+                )
+            )
+        )
+
+        MainScope().async {
+            val model = uploadGLBModel(device, boxMesh)
+
+            renderBundles = model.buildRenderBundles(
+                device,
+                shaderCache,
+                viewParamsLayout,
+                viewParamsBindGroup,
+                renderingContext.textureFormat.actualName,
+            )
+        }
+
+
+
+
+        projectionMatrix = getProjectionMatrix(renderingContext.width, renderingContext.height)
+
     }
 
     override fun Application.render() = autoClosableContext {
-
-        // Calculate camera matrices
-        val projectionMatrix = getProjectionMatrix()
-        val viewMatrix = getViewMatrix()
-        val modelMatrix = getModelMatrix(frame)
-
-        // Write to mvp to camera buffer
-        device.queue.writeBuffer(
-            cameraBuffer,
-            0,
-            projectionMatrix,
-            0,
-            projectionMatrix.size.toLong()
-        )
-
-        device.queue.writeBuffer(
-            cameraBuffer,
-            64,
-            viewMatrix,
-            0,
-            viewMatrix.size.toLong()
-        )
-
-        device.queue.writeBuffer(
-            cameraBuffer,
-            128,
-            modelMatrix,
-            0,
-            modelMatrix.size.toLong()
-        )
-
-        // The difference between these two render passes is just the presence of depthTexture
-        val gltfRenderPassDescriptor = gltfRenderPassDescriptor.copy(
-            colorAttachments = arrayOf(
-                gltfRenderPassDescriptor.colorAttachments[0]
-                    .copy(
-                        view = renderingContext.getCurrentTexture().createView().bind()
-                    )
-            )
-        )
-
-        // Update node matrices
-        for (scene in gltf2.scenes) {
-            //scene.root.updateWorldMatrix(device)
-        }
-
-        // Calculate bone transformation
-        // TODO const t = (frame / 20000) * settings.speed;
-        // Updates skins (we index into skins in the renderer, which is not the best approach but hey)
-        // TODO animWhaleSkin(whaleScene.skins[0], Math.sin(t) * settings.angle);
-        // Node 6 should be the only node with a drawable mesh so hopefully this works fine
-        // TODO whaleScene.skins[0].update(device, 6, whaleScene.nodes);
-
-        val commandEncoder = device.createCommandEncoder().bind()
-
-        val passEncoder = commandEncoder.beginRenderPass(gltfRenderPassDescriptor).bind()
-        gltf2.scenes.forEachIndexed() { index, scene ->
-            scene.nodes.forEach { node ->
-                gltf2.nodes[node].renderDrawables(
-                    meshPipelines[index],
-                    gltf2,
-                    passEncoder,
-                    listOf(
-                        cameraBGCluster.bindGroups[0],
-                        generalUniformsBGCLuster.bindGroups[0]
+        renderBundles?.let { renderBundles ->
+            val renderPassDesc = renderPassDesc.copy(
+                colorAttachments = arrayOf(
+                    renderPassDesc.colorAttachments[0].copy(
+                        view = renderingContext.getCurrentTexture().createView()
                     )
                 )
-            }
-        }
-        passEncoder.end()
+            )
 
-        device.queue.submit(arrayOf(commandEncoder.finish()))
+            val transformationMatrix = getTransformationMatrix(
+                frame / 120.0,
+                projectionMatrix
+            )
+
+            device.queue.writeBuffer(
+                viewParamBuf,
+                0L,
+                transformationMatrix,
+                0L,
+                transformationMatrix.size.toLong()
+            )
+
+            val commandEncoder = device.createCommandEncoder()
+            val renderPass = commandEncoder.beginRenderPass(renderPassDesc)
+            renderPass.executeBundles(renderBundles)
+
+            renderPass.end()
+            device.queue.submit(arrayOf(commandEncoder.finish()))
+        }
 
         renderingContext.present()
     }
 
 
-    fun getProjectionMatrix(): FloatArray {
-        return projectionMatrix.copyToColumns()
+
+
+
+
+    fun getProjectionMatrix(width: Int, height: Int): Matrix4 {
+        val aspect = width / height.toDouble()
+        val fox = Angle.fromRadians((2 * PI) / 5)
+        return Matrix4.perspective(fox, aspect, 1.0, 100.0)
     }
 
-    fun getViewMatrix(): FloatArray {
-        return Matrix4.IDENTITY
-            .translated(
-                settings.cameraX.toFloat(), settings.cameraY.toFloat(), settings.cameraZ.toFloat()
-            ).copyToColumns()
-    }
+    fun getTransformationMatrix(angle: Double, projectionMatrix: Matrix4): FloatArray {
+        var viewMatrix = Matrix4.IDENTITY
+        viewMatrix = viewMatrix.translated(0, 0, -4)
 
-    fun getModelMatrix(frame: Int): FloatArray {
-        return Matrix4.IDENTITY.scaled(
-            settings.objectScale.toFloat(),
-            settings.objectScale.toFloat(),
-            settings.objectScale.toFloat()
-        ).rotated(
-            Angle.fromRadians((frame / 100) * 0.5f),
-            0,
-            1,
-            0
-        ).copyToColumns()
+        viewMatrix = viewMatrix.rotated(
+            Angle.fromRadians(Angle.fromRadians(angle).sine),
+            Angle.fromRadians(Angle.fromRadians(angle).cosine),
+            Angle.fromRadians(0)
+        )
+
+        return (projectionMatrix * viewMatrix).copyToColumns()
     }
 
 }
-
