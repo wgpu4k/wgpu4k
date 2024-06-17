@@ -38,29 +38,18 @@ fun readNodeTransform(node: GLTF2.Node): FloatArray {
         // Both glTF and gl matrix are column major
         return node.matrix!!
     } else {
-        val scale = if (node.scale != null) node.scale!!.map { it.toDouble() }.toTypedArray() else arrayOf(1.0, 1.0, 1.0)
-        val rotation = if (node.rotation != null) node.rotation!!.map { it.toDouble() }.toTypedArray()  else arrayOf(0.0, 0.0, 0.0, 1.0)
-        val translation = if (node.translation != null) node.translation!!.map { it.toDouble() }.toTypedArray() else arrayOf(0.0, 0.0, 0.0)
+        val scale = if (node.scale != null) node.scale!! else floatArrayOf(1f, 1f, 1f)
+        val rotation = if (node.rotation != null) node.rotation!! else floatArrayOf(0f, 0f, 0f, 1f)
+        val translation = if (node.translation != null) node.translation!! else floatArrayOf(0f, 0f, 0f)
 
-        val matrix = create()
+        val matrix = Matrix4.IDENTITY.copyToColumns()
         Matrix4.IDENTITY
 
-        return fromRotationTranslationScale(matrix, rotation, translation, scale).map { it.toFloat() }.toTypedArray().toFloatArray()
+        return fromRotationTranslationScale(matrix, rotation, translation, scale)
     }
 }
 
-fun create(): DoubleArray {
-    val out = DoubleArray(16) { 0.0 }
-
-    out[0] = 1.0
-    out[5] = 1.0
-    out[10] = 1.0
-    out[15] = 1.0
-    return out
-}
-
-
-fun fromRotationTranslationScale(out: DoubleArray, rotation: Array<Double>, translation: Array<Double>, scale: Array<Double>): DoubleArray {
+fun fromRotationTranslationScale(out: FloatArray, rotation: FloatArray, translation: FloatArray, scale: FloatArray): FloatArray {
     // Quaternion math
     val x = rotation[0]
     val y = rotation[1]
@@ -85,19 +74,19 @@ fun fromRotationTranslationScale(out: DoubleArray, rotation: Array<Double>, tran
     out[0] = (1 - (yy + zz)) * sx
     out[1] = (xy + wz) * sx
     out[2] = (xz - wy) * sx
-    out[3] = 0.0
+    out[3] = 0f
     out[4] = (xy - wz) * sy
     out[5] = (1 - (xx + zz)) * sy
     out[6] = (yz + wx) * sy
-    out[7] = 0.0
+    out[7] = 0f
     out[8] = (xz + wy) * sz
     out[9] = (yz - wx) * sz
     out[10] = (1 - (xx + yy)) * sz
-    out[11] = 0.0
+    out[11] = 0f
     out[12] = translation[0]
     out[13] = translation[1]
     out[14] = translation[2]
-    out[15] = 1.0
+    out[15] = 1f
 
     return out
 }
