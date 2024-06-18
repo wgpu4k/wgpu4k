@@ -1,20 +1,25 @@
-//import org.lwjgl.opengl.GL
-//import org.lwjgl.opengl.GL11
-//import org.lwjgl.opengl.GL30.GL_FRAMEBUFFER_BINDING
+
 import androidx.compose.ui.ComposeScene
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
+import io.ygdrasil.wgpu.WGPU.Companion.loadLibrary
+import io.ygdrasil.wgpu.examples.callback
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import org.jetbrains.skia.Color
 import org.jetbrains.skia.DirectContext
 import org.jetbrains.skia.Surface
 import org.jetbrains.skiko.FrameDispatcher
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.system.MemoryUtil.NULL
+import java.lang.foreign.MemorySegment
 import kotlin.system.exitProcess
 
 fun main() {
     var width = 640
     var height = 480
+    loadLibrary()
+    wgpu_h.wgpuSetLogLevel(0)
+    wgpu_h.wgpuSetLogCallback(callback, MemorySegment.NULL)
 
     glfwInit()
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
@@ -23,7 +28,6 @@ fun main() {
     glfwMakeContextCurrent(windowHandle)
     glfwSwapInterval(1)
 
-//    GL.createCapabilities()
 
     val context = DirectContext.makeGL()
     var surface = createSurface(width, height, context) // Skia Surface, bound to the OpenGL framebuffer

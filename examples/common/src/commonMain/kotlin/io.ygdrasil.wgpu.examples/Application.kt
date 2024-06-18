@@ -32,7 +32,7 @@ abstract class Application(
 		private set
 
 	suspend fun load() {
-		changeScene(availableScenes.last())
+		changeScene(availableScenes.first())
 	}
 
 	abstract class Scene {

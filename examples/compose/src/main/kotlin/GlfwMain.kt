@@ -1,3 +1,7 @@
+package io.ygdrasil.wgpu.examples
+
+import GlfwCoroutineDispatcher
+import androidx.compose.ui.ComposeScene
 import com.sun.jna.Pointer
 import com.sun.jna.platform.win32.Kernel32
 import darwin.CAMetalLayer
@@ -6,16 +10,21 @@ import io.ygdrasil.wgpu.RenderingContext
 import io.ygdrasil.wgpu.WGPU
 import io.ygdrasil.wgpu.WGPU.Companion.createInstance
 import io.ygdrasil.wgpu.WGPU.Companion.loadLibrary
-import io.ygdrasil.wgpu.examples.*
+import io.ygdrasil.wgpu.WGPUInstanceBackend
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPULogCallback
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import korlibs.io.async.launch
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import org.jetbrains.skia.*
+import org.jetbrains.skia.FramebufferFormat.Companion.GR_GL_RGBA8
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
 import org.lwjgl.glfw.GLFWNativeWin32.glfwGetWin32Window
 import org.lwjgl.glfw.GLFWNativeX11.glfwGetX11Display
 import org.lwjgl.glfw.GLFWNativeX11.glfwGetX11Window
+import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL30.GL_FRAMEBUFFER_BINDING
 import org.lwjgl.system.MemoryUtil.NULL
 import org.rococoa.ID
 import org.rococoa.Rococoa
@@ -23,17 +32,13 @@ import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 import kotlin.system.exitProcess
 
-var oneFrame = false
-
 val callback = WGPULogCallback.allocate( { level, message, data ->
     println("LOG {$level} ${message.getString(0)}")
 }, Arena.global())
 
-
 suspend fun main() {
-    oneFrame = true
     loadLibrary()
-    wgpu_h.wgpuSetLogLevel(0)
+    wgpu_h.wgpuSetLogLevel(1)
     wgpu_h.wgpuSetLogCallback(callback, MemorySegment.NULL)
 
     var width = 640
@@ -52,7 +57,7 @@ suspend fun main() {
         glfwDispatcher.stop()
     }
 
-    val wgpu = createInstance() ?: error("fail to wgpu instance")
+    val wgpu = createInstance(WGPUInstanceBackend.GL) ?: error("fail to wgpu instance")
     val surface = wgpu.getSurface(windowHandle)
 
     val renderingContext = RenderingContext(surface) {
@@ -70,7 +75,7 @@ suspend fun main() {
 
     renderingContext.computeSurfaceCapabilities(adapter)
 
-    val assetManager = genericAssetManager()
+    val assetManager = runBlocking { genericAssetManager() }
 
     val application = object : Application(
         renderingContext,
@@ -82,14 +87,14 @@ suspend fun main() {
         override fun run() {
             glfwDispatcher.dispatch(Dispatchers.Main) {
                 renderFrame()
-                if (!oneFrame) {
-                    run()
-                }
+                run()
             }
         }
 
     }
+
     application.load()
+    lateinit var composeScene: ComposeScene
 
     fun render() {
 
@@ -109,9 +114,9 @@ suspend fun main() {
 
     glfwSetKeyCallback(windowHandle) { _, key, scancode, action, mods ->
 
-        if ((key == GLFW_KEY_PAGE_UP || key == GLFW_KEY_PAGE_DOWN) && action == GLFW_PRESS) {
+        if ((key == GLFW_KEY_PAGE_UP || key == GLFW_KEY_PAGE_DOWN || key == GLFW_KEY_UP || key == GLFW_KEY_DOWN) && action == GLFW_PRESS) {
             val currentIndex = availableScenes.indexOf(application.currentScene)
-            val index = if (key == GLFW_KEY_PAGE_UP) {
+            val index = if (key == GLFW_KEY_PAGE_UP || key == GLFW_KEY_UP) {
                 currentIndex - 1
             } else {
                 currentIndex + 1
@@ -122,6 +127,7 @@ suspend fun main() {
                     else -> it
                 }
             }
+
 
             launch(glfwDispatcher) {
                 application.changeScene(availableScenes[index])
@@ -161,6 +167,14 @@ fun WGPU.getSurface(window: Long): MemorySegment = when (Platform.os) {
         getSurfaceFromMetalLayer(MemorySegment.ofAddress(layer.id().toLong()))
     }
 }.also { if( it == MemorySegment.NULL) error("fail to get surface") }
+
+private fun createSurface(width: Int, height: Int, context: DirectContext): Surface {
+    val fbId = GL11.glGetInteger(GL_FRAMEBUFFER_BINDING)
+    val renderTarget = BackendRenderTarget.makeGL(width, height, 0, 8, fbId, GR_GL_RGBA8)
+    return Surface.makeFromBackendRenderTarget(
+        context, renderTarget, SurfaceOrigin.BOTTOM_LEFT, SurfaceColorFormat.RGBA_8888, ColorSpace.sRGB
+    )!!
+}
 
 private fun Long.toPointer(): Pointer = Pointer(this)
 

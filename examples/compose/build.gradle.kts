@@ -39,6 +39,7 @@ val lwjglNatives = Pair(
 	}
 }
 
+val isOnMac = arrayOf("Mac OS X", "Darwin").any { System.getProperty("os.name").startsWith(it) }
 val lwjglVersion = "3.3.3"
 
 dependencies {
@@ -52,20 +53,30 @@ dependencies {
 	implementation(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
 	implementation("org.lwjgl", "lwjgl")
 	implementation("org.lwjgl", "lwjgl-glfw")
+	implementation("org.lwjgl", "lwjgl-opengl")
 	runtimeOnly("org.lwjgl", "lwjgl", classifier = lwjglNatives)
 	runtimeOnly("org.lwjgl", "lwjgl-glfw", classifier = lwjglNatives)
+	runtimeOnly("org.lwjgl", "lwjgl-opengl", classifier = lwjglNatives)
 }
 
 compose.desktop {
 	application {
-        mainClass = "MainKt"
+        mainClass = "io.ygdrasil.wgpu.examples.GlfwMainKt"
 
 		jvmArgs += "--add-opens=java.base/java.lang=ALL-UNNAMED"
+
+		if (isOnMac) {
+			jvmArgs.add("-XstartOnFirstThread")
+		}
 
 		nativeDistributions {
 			targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
 			packageName = "wgpu-X-compose"
 			packageVersion = "1.0.0"
+		}
+
+		buildTypes.release.proguard {
+			isEnabled = false
 		}
 	}
 }
