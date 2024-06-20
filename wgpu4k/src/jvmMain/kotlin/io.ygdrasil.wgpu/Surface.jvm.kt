@@ -12,7 +12,7 @@ import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.ValueLayout
 
-actual class RenderingContext(
+actual class Surface(
 	internal val handler: MemorySegment,
 	private val sizeProvider: () -> Pair<Int, Int>
 ) : AutoCloseable {

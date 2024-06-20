@@ -28,10 +28,10 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 
 
 	override fun Application.configureRenderingContext() {
-		renderingContext.configure(
+		surface.configure(
 			CanvasConfiguration(
 				device,
-				format = renderingContext.textureFormat,
+				format = surface.textureFormat,
 
 				// Specify we want both RENDER_ATTACHMENT and COPY_SRC since we
 				// will copy out of the swapchain texture.
@@ -91,7 +91,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 					).bind(), // bind to autoClosableContext to release it later
 					targets = arrayOf(
 						RenderPipelineDescriptor.FragmentState.ColorTargetState(
-							format = renderingContext.textureFormat
+							format = surface.textureFormat
 						)
 					)
 				),
@@ -109,7 +109,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 
 		val depthTexture = device.createTexture(
 			TextureDescriptor(
-				size = Size3D(renderingContext.width, renderingContext.height),
+				size = Size3D(surface.width, surface.height),
 				format = TextureFormat.depth24plus,
 				usage = setOf(TextureUsage.renderattachment),
 			)
@@ -127,8 +127,8 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 		// sample it on the next frame.
 		cubeTexture = device.createTexture(
 			TextureDescriptor(
-				size = Size3D(renderingContext.width, renderingContext.height),
-				format = renderingContext.textureFormat,
+				size = Size3D(surface.width, surface.height),
+				format = surface.textureFormat,
 				usage = setOf(TextureUsage.texturebinding, TextureUsage.copydst),
 			)
 		)
@@ -186,7 +186,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 		)
 
 
-		val aspect = renderingContext.width / renderingContext.height.toDouble()
+		val aspect = surface.width / surface.height.toDouble()
 		val fox = Angle.fromRadians((2 * PI) / 5)
 		projectionMatrix = Matrix4.perspective(fox, aspect, 1.0, 100.0)
 	}
@@ -205,7 +205,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 			transformationMatrix.size.toLong()
 		)
 
-		val swapChainTexture = renderingContext.getCurrentTexture()
+		val swapChainTexture = surface.getCurrentTexture()
 
 		renderPassDescriptor = renderPassDescriptor.copy(
 			colorAttachments = arrayOf(
@@ -231,7 +231,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 		encoder.copyTextureToTexture(
 			source = ImageCopyTexture(texture = swapChainTexture),
 			destination = ImageCopyTexture(texture = cubeTexture),
-			copySize = Size3D(renderingContext.width, renderingContext.height)
+			copySize = Size3D(surface.width, surface.height)
 		)
 
 		val commandBuffer = encoder.finish()
@@ -239,7 +239,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 
 		device.queue.submit(arrayOf(commandBuffer))
 
-		renderingContext.present()
+		surface.present()
 
 	}
 

@@ -6,7 +6,7 @@ import com.sun.jna.Pointer
 import com.sun.jna.platform.win32.Kernel32
 import darwin.CAMetalLayer
 import darwin.NSWindow
-import io.ygdrasil.wgpu.RenderingContext
+import io.ygdrasil.wgpu.Surface
 import io.ygdrasil.wgpu.WGPU
 import io.ygdrasil.wgpu.WGPU.Companion.createInstance
 import io.ygdrasil.wgpu.WGPU.Companion.loadLibrary
@@ -15,15 +15,11 @@ import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import korlibs.io.async.launch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import org.jetbrains.skia.*
-import org.jetbrains.skia.FramebufferFormat.Companion.GR_GL_RGBA8
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
 import org.lwjgl.glfw.GLFWNativeWin32.glfwGetWin32Window
 import org.lwjgl.glfw.GLFWNativeX11.glfwGetX11Display
 import org.lwjgl.glfw.GLFWNativeX11.glfwGetX11Window
-import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL30.GL_FRAMEBUFFER_BINDING
 import org.lwjgl.system.MemoryUtil.NULL
 import org.rococoa.ID
 import org.rococoa.Rococoa
@@ -59,7 +55,7 @@ suspend fun main() {
     val wgpu = createInstance() ?: error("fail to wgpu instance")
     val surface = wgpu.getSurface(windowHandle)
 
-    val renderingContext = RenderingContext(surface) {
+    val renderingContext = Surface(surface) {
         val width = intArrayOf(1)
         val height = intArrayOf(1)
         glfwGetWindowSize(windowHandle, width, height)
@@ -166,14 +162,6 @@ fun WGPU.getSurface(window: Long): MemorySegment = when (Platform.os) {
         getSurfaceFromMetalLayer(MemorySegment.ofAddress(layer.id().toLong()))
     }
 }.also { if( it == MemorySegment.NULL) error("fail to get surface") }
-
-private fun createSurface(width: Int, height: Int, context: DirectContext): Surface {
-    val fbId = GL11.glGetInteger(GL_FRAMEBUFFER_BINDING)
-    val renderTarget = BackendRenderTarget.makeGL(width, height, 0, 8, fbId, GR_GL_RGBA8)
-    return Surface.makeFromBackendRenderTarget(
-        context, renderTarget, SurfaceOrigin.BOTTOM_LEFT, SurfaceColorFormat.RGBA_8888, ColorSpace.sRGB
-    )!!
-}
 
 private fun Long.toPointer(): Pointer = Pointer(this)
 

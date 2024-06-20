@@ -28,7 +28,7 @@ class HelloTriangleScene : Application.Scene() {
                     ).bind(),
                     targets = arrayOf(
                         RenderPipelineDescriptor.FragmentState.ColorTargetState(
-                            format = renderingContext.textureFormat
+                            format = surface.textureFormat
                         )
                     )
                 ),
@@ -42,7 +42,7 @@ class HelloTriangleScene : Application.Scene() {
         val encoder = device.createCommandEncoder()
             .bind()
 
-        val texture = renderingContext.getCurrentTexture()
+        val texture = surface.getCurrentTexture()
             .bind()
 
         val renderPassEncoder = encoder.beginRenderPass(
@@ -67,6 +67,6 @@ class HelloTriangleScene : Application.Scene() {
 
         device.queue.submit(arrayOf(commandBuffer))
 
-        renderingContext.present()
+        surface.present()
     }
 }

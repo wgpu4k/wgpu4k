@@ -2,7 +2,7 @@
 
 package io.ygdrasil.wgpu
 
-expect class RenderingContext: AutoCloseable {
+expect class Surface: AutoCloseable {
 
 	val width: Int
 	val height: Int

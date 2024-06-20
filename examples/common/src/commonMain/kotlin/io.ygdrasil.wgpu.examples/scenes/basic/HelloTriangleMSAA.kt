@@ -30,7 +30,7 @@ class HelloTriangleMSAAScene : Application.Scene() {
                     ).bind(),
                     targets = arrayOf(
                         RenderPipelineDescriptor.FragmentState.ColorTargetState(
-                            format = renderingContext.textureFormat
+                            format = surface.textureFormat
                         )
                     )
                 ),
@@ -45,9 +45,9 @@ class HelloTriangleMSAAScene : Application.Scene() {
 
         val texture = device.createTexture(
             TextureDescriptor(
-                size = Size3D(renderingContext.width, renderingContext.height),
+                size = Size3D(surface.width, surface.height),
                 sampleCount = sampleCount,
-                format = renderingContext.textureFormat,
+                format = surface.textureFormat,
                 usage = setOf(TextureUsage.renderattachment),
             )
         ).bind()
@@ -65,7 +65,7 @@ class HelloTriangleMSAAScene : Application.Scene() {
                 colorAttachments = arrayOf(
                     RenderPassDescriptor.ColorAttachment(
                         view = textureView,
-                        resolveTarget = renderingContext.getCurrentTexture().createView().bind(),
+                        resolveTarget = surface.getCurrentTexture().createView().bind(),
                         loadOp = LoadOp.clear,
                         clearValue = arrayOf(0, 0, 0, 1.0),
                         storeOp = StoreOp.discard
@@ -83,6 +83,6 @@ class HelloTriangleMSAAScene : Application.Scene() {
 
         device.queue.submit(arrayOf(commandBuffer))
 
-        renderingContext.present()
+        surface.present()
     }
 }

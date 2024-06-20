@@ -11,6 +11,7 @@ pluginManagement {
 }
 
 include("wgpu4k")
+include("wgpu4k-toolkit")
 include("librococoa")
 //include("examples")
 include("examples:common")

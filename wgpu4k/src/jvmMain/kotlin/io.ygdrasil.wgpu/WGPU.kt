@@ -4,12 +4,6 @@ package io.ygdrasil.wgpu
 import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.exportAndLoadLibrary
 import io.ygdrasil.wgpu.internal.jvm.panama.*
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUChainedStruct
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPURequestAdapterOptions
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptor
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptorFromMetalLayer
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptorFromWindowsHWND
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptorFromXlibWindow
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h.WGPUSType_InstanceExtras
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -24,7 +18,7 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
     }
 
     fun requestAdapter(
-        renderingContext: RenderingContext,
+        surface: Surface,
         powerPreference: PowerPreference? = null
     ): Adapter? = confined { arena ->
 
@@ -47,7 +41,7 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 
 
         val options = WGPURequestAdapterOptions.allocate(arena)
-        WGPURequestAdapterOptions.compatibleSurface(options, renderingContext.handler)
+        WGPURequestAdapterOptions.compatibleSurface(options, surface.handler)
         if (powerPreference != null) WGPURequestAdapterOptions.powerPreference(options, powerPreference.value)
 
         wgpu_h.wgpuInstanceRequestAdapter(handler, options, handleRequestAdapter, MemorySegment.NULL)

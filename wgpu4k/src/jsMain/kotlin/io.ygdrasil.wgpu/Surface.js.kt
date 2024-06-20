@@ -7,7 +7,7 @@ import io.ygdrasil.wgpu.internal.js.GPUCanvasContext
 import io.ygdrasil.wgpu.internal.js.GPUDevice
 import org.w3c.dom.HTMLCanvasElement
 
-actual class RenderingContext(private val handler: GPUCanvasContext) : AutoCloseable {
+actual class Surface(private val handler: GPUCanvasContext) : AutoCloseable {
 
 	actual val width: Int
 		get() = handler.canvas.width
@@ -48,5 +48,5 @@ actual class RenderingContext(private val handler: GPUCanvasContext) : AutoClose
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
-fun HTMLCanvasElement.getRenderingContext() = (getContext("webgpu") as? GPUCanvasContext)?.let { RenderingContext(it) }
+fun HTMLCanvasElement.getRenderingContext() = (getContext("webgpu") as? GPUCanvasContext)?.let { Surface(it) }
 

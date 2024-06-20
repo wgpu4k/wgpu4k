@@ -76,7 +76,7 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 					).bind(), // bind to autoClosableContext to release it later
 					targets = arrayOf(
 						RenderPipelineDescriptor.FragmentState.ColorTargetState(
-							format = renderingContext.textureFormat
+							format = surface.textureFormat
 						)
 					)
 				),
@@ -94,7 +94,7 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 
 		val depthTexture = device.createTexture(
 			TextureDescriptor(
-				size = Size3D(renderingContext.width, renderingContext.height),
+				size = Size3D(surface.width, surface.height),
 				format = TextureFormat.depth24plus,
 				usage = setOf(TextureUsage.renderattachment),
 			)
@@ -140,7 +140,7 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 		)
 
 
-		val aspect = renderingContext.width / renderingContext.height.toDouble()
+		val aspect = surface.width / surface.height.toDouble()
 		val fox = Angle.fromRadians((2 * PI) / 5)
 		projectionMatrix = Matrix4.perspective(fox, aspect, 1.0, 100.0)
 
@@ -176,7 +176,7 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 		renderPassDescriptor = renderPassDescriptor.copy(
 			colorAttachments = arrayOf(
 				renderPassDescriptor.colorAttachments[0].copy(
-					view = renderingContext.getCurrentTexture()
+					view = surface.getCurrentTexture()
 						.bind()
 						.createView()
 				)
@@ -200,7 +200,7 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 
 		device.queue.submit(arrayOf(commandBuffer))
 
-		renderingContext.present()
+		surface.present()
 
 	}
 

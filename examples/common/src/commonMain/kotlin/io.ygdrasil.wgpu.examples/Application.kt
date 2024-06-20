@@ -8,7 +8,7 @@ import io.ygdrasil.wgpu.examples.scenes.graphics.techniques.ParticlesScene
 import io.ygdrasil.wgpu.examples.scenes.graphics.techniques.SkinnedMeshScene
 
 abstract class Application(
-	val renderingContext: RenderingContext,
+	val surface: Surface,
 	val device: Device,
 	val adapter: Adapter,
 	assetManager: AssetManager
@@ -44,7 +44,7 @@ abstract class Application(
 		abstract fun Application.render()
 
 		open fun Application.configureRenderingContext() {
-			renderingContext.configure(
+			surface.configure(
 				CanvasConfiguration(
 					device = device
 				)
@@ -85,7 +85,7 @@ abstract class Application(
 	}
 
 	override fun close() {
-		renderingContext.close()
+		surface.close()
 		device.close()
 		adapter.close()
 	}

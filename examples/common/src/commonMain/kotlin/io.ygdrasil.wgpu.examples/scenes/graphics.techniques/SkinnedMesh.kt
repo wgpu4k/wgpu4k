@@ -39,7 +39,7 @@ class SkinnedMeshScene : Application.Scene() {
 
         val depthTexture = device.createTexture(
             TextureDescriptor(
-                size = Size3D(width = renderingContext.width, height = renderingContext.height, depthOrArrayLayers = 1),
+                size = Size3D(width = surface.width, height = surface.height, depthOrArrayLayers = 1),
                 format = TextureFormat.depth24plusstencil8,
                 usage = setOf(TextureUsage.renderattachment)
             )
@@ -102,10 +102,10 @@ class SkinnedMeshScene : Application.Scene() {
             shaderCache,
             viewParamsLayout,
             viewParamsBindGroup,
-            renderingContext.textureFormat.actualName,
+            surface.textureFormat.actualName,
         )
 
-        projectionMatrix = getProjectionMatrix(renderingContext.width, renderingContext.height)
+        projectionMatrix = getProjectionMatrix(surface.width, surface.height)
     }
 
     override fun Application.render() = autoClosableContext {
@@ -113,7 +113,7 @@ class SkinnedMeshScene : Application.Scene() {
         val renderPassDesc = renderPassDesc.copy(
             colorAttachments = arrayOf(
                 renderPassDesc.colorAttachments[0].copy(
-                    view = renderingContext.getCurrentTexture().createView().bind()
+                    view = surface.getCurrentTexture().createView().bind()
                 )
             )
         )
@@ -138,7 +138,7 @@ class SkinnedMeshScene : Application.Scene() {
         renderPass.end()
         device.queue.submit(arrayOf(commandEncoder.finish()))
 
-        renderingContext.present()
+        surface.present()
     }
 
 

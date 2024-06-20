@@ -23,18 +23,13 @@ kotlin {
 		val commonMain by getting {
 			dependencies {
 				implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0-RC")
-				api(projects.wgpu4k)
+				api(projects.wgpu4kToolkit)
 				api(libs.coroutines)
 				api(libs.korge.foundation)
 				api(libs.korge.core)
 			}
 		}
 
-		val jvmMain by getting {
-			dependencies {
-				api(projects.librococoa)
-			}
-		}
 	}
 
 	compilerOptions {
