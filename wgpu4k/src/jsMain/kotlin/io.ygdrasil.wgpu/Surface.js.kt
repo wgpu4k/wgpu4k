@@ -40,7 +40,7 @@ actual class Surface(private val handler: GPUCanvasContext) : AutoCloseable {
 	fun CanvasConfiguration.convert(): GPUCanvasConfiguration = object : GPUCanvasConfiguration {
 		override var device: GPUDevice = this@convert.device.handler
 		override var format: String = this@convert.format?.name ?: textureFormat.actualName
-		override var usage: GPUTextureUsageFlags? = this@convert.usage
+		override var usage: GPUTextureUsageFlags? = this@convert.usage.toFlagInt()
 		override var viewFormats: Array<String?>? = this@convert.viewFormats ?: undefined
 		override var colorSpace: Any? = this@convert.colorSpace ?: undefined
 		override var alphaMode: String? = this@convert.alphaMode?.name ?: undefined
@@ -48,5 +48,5 @@ actual class Surface(private val handler: GPUCanvasContext) : AutoCloseable {
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
-fun HTMLCanvasElement.getRenderingContext() = (getContext("webgpu") as? GPUCanvasContext)?.let { Surface(it) }
+fun HTMLCanvasElement.getSurface() = (getContext("webgpu") as? GPUCanvasContext)?.let { Surface(it) }
 

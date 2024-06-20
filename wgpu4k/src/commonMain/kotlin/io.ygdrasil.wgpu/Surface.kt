@@ -28,7 +28,7 @@ expect class Surface: AutoCloseable {
 data class CanvasConfiguration(
 	var device: Device,
 	var format: TextureFormat? = null,
-	var usage: GPUTextureUsageFlags = TextureUsage.renderattachment.value,
+	var usage: Set<TextureUsage> = setOf(TextureUsage.renderattachment),
 	var viewFormats: Array<String?>? = null,
 	var colorSpace: Any? = null,
 	var alphaMode: CompositeAlphaMode? = null

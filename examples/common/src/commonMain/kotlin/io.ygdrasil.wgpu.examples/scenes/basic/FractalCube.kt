@@ -4,7 +4,7 @@ package io.ygdrasil.wgpu.examples.scenes.basic
 
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.Application
-import io.ygdrasil.wgpu.examples.autoClosableContext
+import io.ygdrasil.wgpu.examples.GenericAssetManager
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubePositionOffset
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeUVOffset
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeVertexArray
@@ -16,7 +16,7 @@ import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
 
-class FractalCubeScene : Application.Scene(), AutoCloseable {
+class FractalCubeScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Application.Scene(wgpuContext, assetManager) {
 
 	lateinit var renderPipeline: RenderPipeline
 	lateinit var projectionMatrix: Matrix4
@@ -26,22 +26,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 	lateinit var verticesBuffer: Buffer
 	lateinit var cubeTexture: Texture
 
-
-	override fun Application.configureRenderingContext() {
-		surface.configure(
-			CanvasConfiguration(
-				device,
-				format = surface.textureFormat,
-
-				// Specify we want both RENDER_ATTACHMENT and COPY_SRC since we
-				// will copy out of the swapchain texture.
-				usage = TextureUsage.renderattachment or TextureUsage.copysrc
-			)
-		)
-	}
-
-	override suspend fun Application.initialiaze() = with(autoClosableContext) {
-
+	override suspend fun initialize() = with(autoClosableContext) {
 
 
 		// Create a vertex buffer from the cube data.
@@ -91,7 +76,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 					).bind(), // bind to autoClosableContext to release it later
 					targets = arrayOf(
 						RenderPipelineDescriptor.FragmentState.ColorTargetState(
-							format = surface.textureFormat
+							format = renderingContext.textureFormat
 						)
 					)
 				),
@@ -109,7 +94,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 
 		val depthTexture = device.createTexture(
 			TextureDescriptor(
-				size = Size3D(surface.width, surface.height),
+				size = Size3D(renderingContext.width, renderingContext.height),
 				format = TextureFormat.depth24plus,
 				usage = setOf(TextureUsage.renderattachment),
 			)
@@ -127,8 +112,8 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 		// sample it on the next frame.
 		cubeTexture = device.createTexture(
 			TextureDescriptor(
-				size = Size3D(surface.width, surface.height),
-				format = surface.textureFormat,
+				size = Size3D(renderingContext.width, renderingContext.height),
+				format = renderingContext.textureFormat,
 				usage = setOf(TextureUsage.texturebinding, TextureUsage.copydst),
 			)
 		)
@@ -186,12 +171,12 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 		)
 
 
-		val aspect = surface.width / surface.height.toDouble()
+		val aspect = renderingContext.width / renderingContext.height.toDouble()
 		val fox = Angle.fromRadians((2 * PI) / 5)
 		projectionMatrix = Matrix4.perspective(fox, aspect, 1.0, 100.0)
 	}
 
-	override fun Application.render() = autoClosableContext {
+	override fun render() = autoClosableContext {
 
 		val transformationMatrix = getTransformationMatrix(
 			frame / 100.0,
@@ -205,7 +190,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 			transformationMatrix.size.toLong()
 		)
 
-		val swapChainTexture = surface.getCurrentTexture()
+		val swapChainTexture = renderingContext.getCurrentTexture()
 
 		renderPassDescriptor = renderPassDescriptor.copy(
 			colorAttachments = arrayOf(
@@ -231,7 +216,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 		encoder.copyTextureToTexture(
 			source = ImageCopyTexture(texture = swapChainTexture),
 			destination = ImageCopyTexture(texture = cubeTexture),
-			copySize = Size3D(surface.width, surface.height)
+			copySize = Size3D(renderingContext.width, renderingContext.height)
 		)
 
 		val commandBuffer = encoder.finish()
@@ -239,12 +224,6 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 
 		device.queue.submit(arrayOf(commandBuffer))
 
-		surface.present()
-
-	}
-
-	override fun close() {
-		autoClosableContext.close()
 	}
 
 }

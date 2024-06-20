@@ -12,8 +12,6 @@ repositories {
 	google()
 }
 
-val isOnMac = arrayOf("Mac OS X", "Darwin").any { System.getProperty("os.name").startsWith(it) }
-
 dependencies {
 	implementation(compose.desktop.currentOs)
 	implementation(projects.examples.common)
@@ -21,11 +19,11 @@ dependencies {
 
 compose.desktop {
 	application {
-        mainClass = "io.ygdrasil.wgpu.examples.GlfwMainKt"
+        mainClass = "MainKt"
 
 		jvmArgs += "--add-opens=java.base/java.lang=ALL-UNNAMED"
 
-		if (isOnMac) {
+		if (Platform.os == Os.MacOs) {
 			jvmArgs.add("-XstartOnFirstThread")
 		}
 

@@ -1,6 +1,6 @@
 
 
-package io.ygdrasil.wgpu.examples
+package io.ygdrasil.wgpu
 
 fun <T> autoClosableContext(block: AutoClosableContext.() -> T): T = AutoClosableContext()
 	.use { it.block() }

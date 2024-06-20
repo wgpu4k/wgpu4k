@@ -2,15 +2,15 @@ package io.ygdrasil.wgpu.examples.scenes.basic
 
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.Application
-import io.ygdrasil.wgpu.examples.autoClosableContext
+import io.ygdrasil.wgpu.examples.GenericAssetManager
 import io.ygdrasil.wgpu.examples.scenes.shader.fragment.redFragmentShader
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.triangleVertexShader
 
-class HelloTriangleScene : Application.Scene() {
+class HelloTriangleScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Application.Scene(wgpuContext, assetManager) {
 
     lateinit var renderPipeline: RenderPipeline
 
-    override suspend fun Application.initialiaze() = with(autoClosableContext) {
+    override suspend fun initialize() = with(autoClosableContext) {
         renderPipeline = device.createRenderPipeline(
             RenderPipelineDescriptor(
                 vertex = RenderPipelineDescriptor.VertexState(
@@ -28,7 +28,7 @@ class HelloTriangleScene : Application.Scene() {
                     ).bind(),
                     targets = arrayOf(
                         RenderPipelineDescriptor.FragmentState.ColorTargetState(
-                            format = surface.textureFormat
+                            format = renderingContext.textureFormat
                         )
                     )
                 ),
@@ -36,13 +36,13 @@ class HelloTriangleScene : Application.Scene() {
         ).bind()
     }
 
-    override fun Application.render() = autoClosableContext {
+    override fun render() = autoClosableContext {
 
         // Clear the canvas with a render pass
         val encoder = device.createCommandEncoder()
             .bind()
 
-        val texture = surface.getCurrentTexture()
+        val texture = renderingContext.getCurrentTexture()
             .bind()
 
         val renderPassEncoder = encoder.beginRenderPass(
@@ -67,6 +67,5 @@ class HelloTriangleScene : Application.Scene() {
 
         device.queue.submit(arrayOf(commandBuffer))
 
-        surface.present()
     }
 }

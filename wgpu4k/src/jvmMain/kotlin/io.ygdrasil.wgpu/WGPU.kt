@@ -104,7 +104,12 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
     }
 
     companion object {
+
+        private var libraryLoaded = false
+
         fun loadLibrary() {
+            if (libraryLoaded) return
+            libraryLoaded = true
             exportAndLoadLibrary()
         }
 

@@ -2,17 +2,17 @@ package io.ygdrasil.wgpu.examples.scenes.basic
 
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.Application
-import io.ygdrasil.wgpu.examples.autoClosableContext
+import io.ygdrasil.wgpu.examples.GenericAssetManager
 import io.ygdrasil.wgpu.examples.scenes.shader.fragment.redFragmentShader
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.triangleVertexShader
 
-class HelloTriangleMSAAScene : Application.Scene() {
+class HelloTriangleMSAAScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Application.Scene(wgpuContext, assetManager) {
 
     lateinit var renderPipeline: RenderPipeline
     lateinit var textureView: TextureView
     val  sampleCount = 4
 
-    override suspend fun Application.initialiaze() = with(autoClosableContext) {
+    override suspend fun initialize() = with(autoClosableContext) {
         renderPipeline = device.createRenderPipeline(
             RenderPipelineDescriptor(
                 vertex = RenderPipelineDescriptor.VertexState(
@@ -30,7 +30,7 @@ class HelloTriangleMSAAScene : Application.Scene() {
                     ).bind(),
                     targets = arrayOf(
                         RenderPipelineDescriptor.FragmentState.ColorTargetState(
-                            format = surface.textureFormat
+                            format = renderingContext.textureFormat
                         )
                     )
                 ),
@@ -45,16 +45,16 @@ class HelloTriangleMSAAScene : Application.Scene() {
 
         val texture = device.createTexture(
             TextureDescriptor(
-                size = Size3D(surface.width, surface.height),
+                size = Size3D(renderingContext.width, renderingContext.height),
                 sampleCount = sampleCount,
-                format = surface.textureFormat,
+                format = renderingContext.textureFormat,
                 usage = setOf(TextureUsage.renderattachment),
             )
         ).bind()
         textureView = texture.createView().bind()
     }
 
-    override fun Application.render() = autoClosableContext {
+    override fun render() = autoClosableContext {
 
 
         val encoder = device.createCommandEncoder()
@@ -65,7 +65,7 @@ class HelloTriangleMSAAScene : Application.Scene() {
                 colorAttachments = arrayOf(
                     RenderPassDescriptor.ColorAttachment(
                         view = textureView,
-                        resolveTarget = surface.getCurrentTexture().createView().bind(),
+                        resolveTarget = renderingContext.getCurrentTexture().createView().bind(),
                         loadOp = LoadOp.clear,
                         clearValue = arrayOf(0, 0, 0, 1.0),
                         storeOp = StoreOp.discard
@@ -83,6 +83,5 @@ class HelloTriangleMSAAScene : Application.Scene() {
 
         device.queue.submit(arrayOf(commandBuffer))
 
-        surface.present()
     }
 }

@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalJsExport::class)
+
 package my.dummy
 
 @JsExport

@@ -4,29 +4,46 @@ package io.ygdrasil.wgpu.examples
 
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.scenes.basic.*
-import io.ygdrasil.wgpu.examples.scenes.graphics.techniques.ParticlesScene
-import io.ygdrasil.wgpu.examples.scenes.graphics.techniques.SkinnedMeshScene
 
-abstract class Application(
-	val surface: Surface,
-	val device: Device,
-	val adapter: Adapter,
-	assetManager: AssetManager
-) : AutoCloseable, AssetManager by assetManager {
+suspend fun createApplication(wgpuContext: WGPUContext): Application {
+	val assetManager = genericAssetManager()
+	wgpuContext.configureRenderingContext()
 
-	lateinit var currentScene: Scene
+	val availableScenes = listOf(
+		HelloTriangleScene(wgpuContext, assetManager),
+		HelloTriangleMSAAScene(wgpuContext, assetManager),
+		HelloTriangleRotatingScene(wgpuContext, assetManager),
+		RotatingCubeScene(wgpuContext, assetManager),
+		TwoCubesScene(wgpuContext, assetManager),
+		CubemapScene(wgpuContext, assetManager),
+		FractalCubeScene(wgpuContext, assetManager),
+		InstancedCubeScene(wgpuContext, assetManager),
+		TexturedCubeScene(wgpuContext, assetManager),
+		// TODO: Not working test on wgpu new releases ParticlesScene(),
+		// TODO: fix it SkinnedMeshScene(),
+	)
+
+	val scene = availableScenes.first()
+
+
+	return Application(wgpuContext, scene, availableScenes)
+}
+
+class Application internal constructor(
+	private val wgpuContext: WGPUContext,
+	currentScene: Scene,
+	val availableScenes: List<Scene>
+) {
+
+	var currentScene: Scene = currentScene
 		private set
-	private var onError = false
 
-	val dummyTexture by lazy {
-		device.createTexture(
-			TextureDescriptor(
-				size = Size3D(1, 1),
-				format = TextureFormat.depth24plus,
-				usage = setOf(TextureUsage.renderattachment),
-			)
-		)
-	}
+	internal val surface: Surface
+		get() = wgpuContext.surface
+	internal val device: Device
+		get() = wgpuContext.device
+
+	private var onError = false
 
 	var frame = 0
 		private set
@@ -35,30 +52,49 @@ abstract class Application(
 		changeScene(availableScenes.first())
 	}
 
-	abstract class Scene {
+	fun configureRenderingContext() {
+		wgpuContext.configureRenderingContext()
+	}
 
-		val autoClosableContext = AutoClosableContext()
+	abstract class Scene(
+		private val context: WGPUContext,
+		assetManager: AssetManager
+	) : AutoCloseable, AssetManager by assetManager {
 
-		abstract suspend fun Application.initialiaze()
+		internal var frame = 0
 
-		abstract fun Application.render()
-
-		open fun Application.configureRenderingContext() {
-			surface.configure(
-				CanvasConfiguration(
-					device = device
+		val dummyTexture by lazy {
+			device.createTexture(
+				TextureDescriptor(
+					size = Size3D(1, 1),
+					format = TextureFormat.depth24plus,
+					usage = setOf(TextureUsage.renderattachment),
 				)
-			)
+			).also { with(autoClosableContext) { it.bind() } }
 		}
 
+		internal val device: Device
+			get() = context.device
+
+		internal val renderingContext: RenderingContext
+			get() = context.renderingContext
+
+		protected val autoClosableContext = AutoClosableContext()
+
+		abstract suspend fun initialize()
+
+		abstract fun render()
+
+		override fun close() {
+			autoClosableContext.close()
+		}
 	}
 
 	suspend fun changeScene(nextScene: Scene) {
 		println("switch to scene ${nextScene::class.simpleName}")
 		with(nextScene) {
 			try {
-				configureRenderingContext()
-				initialiaze()
+				initialize()
 			} catch (e: Throwable) {
 				e.printStackTrace()
 				onError = true
@@ -84,27 +120,14 @@ abstract class Application(
 		}
 	}
 
-	override fun close() {
-		surface.close()
-		device.close()
-		adapter.close()
-	}
-
-	abstract fun run()
-
 }
 
-val availableScenes = listOf(
-	HelloTriangleScene(),
-	HelloTriangleMSAAScene(),
-	HelloTriangleRotatingScene(),
-	RotatingCubeScene(),
-	TwoCubesScene(),
-	CubemapScene(),
-	FractalCubeScene(),
-	InstancedCubeScene(),
-	TexturedCubeScene(),
-	// Not working
-	ParticlesScene(),
-	SkinnedMeshScene(),
-)
+
+private fun WGPUContext.configureRenderingContext() {
+	surface.configure(
+		CanvasConfiguration(
+			device = device,
+			usage = setOf(TextureUsage.renderattachment, TextureUsage.copysrc)
+		)
+	)
+}

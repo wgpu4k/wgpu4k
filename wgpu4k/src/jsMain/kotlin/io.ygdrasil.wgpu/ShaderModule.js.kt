@@ -6,7 +6,6 @@ import io.ygdrasil.wgpu.internal.js.GPUShaderModule
 import io.ygdrasil.wgpu.internal.js.GPUShaderModuleCompilationHint
 import io.ygdrasil.wgpu.internal.js.GPUShaderModuleDescriptor
 
-@JsExport
 actual class ShaderModule(internal val handler: GPUShaderModule) : AutoCloseable {
 	actual override fun close() {
 		// Nothing to do on JS

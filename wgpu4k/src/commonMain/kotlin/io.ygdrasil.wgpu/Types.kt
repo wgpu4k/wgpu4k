@@ -1,12 +1,10 @@
 package io.ygdrasil.wgpu
 
-import kotlin.js.JsExport
-
 typealias GPUBufferDynamicOffset = Number
 
 typealias GPUBufferUsageFlags = Int
 
-typealias GPUColorWriteFlags = Number
+typealias GPUColorWriteFlags = Int
 
 typealias GPUDepthBias = Int
 
@@ -42,7 +40,6 @@ typealias GPUStencilValue = Long
 
 typealias GPUTextureUsageFlags = Int
 
-@JsExport
 data class Size3D(
 	var width: Int,
 	var height: Int = 1,

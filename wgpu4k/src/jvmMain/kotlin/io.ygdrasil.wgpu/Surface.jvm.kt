@@ -54,7 +54,7 @@ actual class Surface(
 
 	private fun Arena.convert(input: CanvasConfiguration): MemorySegment = WGPUSurfaceConfiguration.allocate(this).also { output ->
 		WGPUSurfaceConfiguration.device(output, input.device.handler)
-		WGPUSurfaceConfiguration.usage(output, input.usage)
+		WGPUSurfaceConfiguration.usage(output, input.usage.toFlagInt())
 		WGPUSurfaceConfiguration.format(output, input.format?.value ?: textureFormat.value)
 		WGPUSurfaceConfiguration.presentMode(output, WGPUPresentMode_Fifo())
 		WGPUSurfaceConfiguration.alphaMode(output, input.alphaMode?.value ?: WGPUSurfaceCapabilities.alphaModes(surfaceCapabilities).get(ValueLayout.JAVA_INT, 0))

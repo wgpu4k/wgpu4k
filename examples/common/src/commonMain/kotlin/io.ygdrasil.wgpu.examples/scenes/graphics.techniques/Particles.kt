@@ -2,7 +2,7 @@ package io.ygdrasil.wgpu.examples.scenes.graphics.techniques
 
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.Application
-import io.ygdrasil.wgpu.examples.autoClosableContext
+import io.ygdrasil.wgpu.examples.GenericAssetManager
 import io.ygdrasil.wgpu.examples.scenes.shader.compute.probabilityMap
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.particlesShaderFixed
 import korlibs.math.geom.Angle
@@ -12,7 +12,7 @@ import kotlin.math.ceil
 import kotlin.random.Random
 
 
-class ParticlesScene : Application.Scene() {
+class ParticlesScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Application.Scene(wgpuContext, assetManager) {
 
     // Constants
     val numParticles = 50000
@@ -42,7 +42,7 @@ class ParticlesScene : Application.Scene() {
     lateinit var particlesBuffer: Buffer
     lateinit var quadVertexBuffer: Buffer
 
-    override suspend fun Application.initialiaze() = with(autoClosableContext) {
+    override suspend fun initialize() = with(autoClosableContext) {
 
         particlesBuffer = device.createBuffer(
             BufferDescriptor(
@@ -105,7 +105,7 @@ class ParticlesScene : Application.Scene() {
                     ).bind(),
                     targets = arrayOf(
                         RenderPipelineDescriptor.FragmentState.ColorTargetState(
-                            format = surface.textureFormat,
+                            format = renderingContext.textureFormat,
                             blend = RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState(
                                 color = RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent(
                                     srcFactor = BlendFactor.srcalpha,
@@ -135,7 +135,7 @@ class ParticlesScene : Application.Scene() {
 
         val depthTexture = device.createTexture(
             TextureDescriptor(
-                size = Size3D(surface.width, surface.height),
+                size = Size3D(renderingContext.width, renderingContext.height),
                 format = TextureFormat.depth24plus,
                 usage = setOf(TextureUsage.renderattachment),
             )
@@ -408,7 +408,7 @@ class ParticlesScene : Application.Scene() {
             )
         )
 
-        val aspect = surface.width / surface.height.toDouble()
+        val aspect = renderingContext.width / renderingContext.height.toDouble()
         val fox = Angle.fromRadians((2 * PI) / 5)
         projectionMatrix = Matrix4.perspective(fox, aspect, 1.0, 100.0)
 
@@ -417,7 +417,7 @@ class ParticlesScene : Application.Scene() {
             .rotated(Angle.fromRadians(PI * -0.1), 1, 0, 0)
     }
 
-    override fun Application.render() = autoClosableContext {
+    override fun render() = autoClosableContext {
 
         device.queue.writeBuffer(
             simulationUBOBuffer,
@@ -459,7 +459,7 @@ class ParticlesScene : Application.Scene() {
         renderPassDescriptor = renderPassDescriptor.copy(
             colorAttachments = arrayOf(
                 renderPassDescriptor.colorAttachments[0].copy(
-                    view = surface.getCurrentTexture()
+                    view = renderingContext.getCurrentTexture()
                         .bind()
                         .createView()
                 )
@@ -486,6 +486,5 @@ class ParticlesScene : Application.Scene() {
 
         device.queue.submit(arrayOf(commandEncoder.finish()))
 
-        surface.present()
     }
 }

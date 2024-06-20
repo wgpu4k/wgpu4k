@@ -4,7 +4,7 @@ package io.ygdrasil.wgpu.examples.scenes.basic
 
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.Application
-import io.ygdrasil.wgpu.examples.autoClosableContext
+import io.ygdrasil.wgpu.examples.GenericAssetManager
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube
 import io.ygdrasil.wgpu.examples.scenes.shader.fragment.vertexPositionColorShader
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.instancedShader
@@ -16,7 +16,7 @@ val xCount = 4
 val yCount = 4
 val numInstances = xCount * yCount
 
-class InstancedCubeScene() : Application.Scene(), AutoCloseable {
+class InstancedCubeScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Application.Scene(wgpuContext, assetManager) {
 
 
 	lateinit var renderPipeline: RenderPipeline
@@ -27,7 +27,7 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 	lateinit var verticesBuffer: Buffer
 	val modelMatrices = Array<Matrix4?>(numInstances) { null }
 
-	override suspend fun Application.initialiaze() = with(autoClosableContext) {
+	override suspend fun initialize() = with(autoClosableContext) {
 
 		// Create a vertex buffer from the cube data.
 		verticesBuffer = device.createBuffer(
@@ -76,7 +76,7 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 					).bind(), // bind to autoClosableContext to release it later
 					targets = arrayOf(
 						RenderPipelineDescriptor.FragmentState.ColorTargetState(
-							format = surface.textureFormat
+							format = renderingContext.textureFormat
 						)
 					)
 				),
@@ -94,7 +94,7 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 
 		val depthTexture = device.createTexture(
 			TextureDescriptor(
-				size = Size3D(surface.width, surface.height),
+				size = Size3D(renderingContext.width, renderingContext.height),
 				format = TextureFormat.depth24plus,
 				usage = setOf(TextureUsage.renderattachment),
 			)
@@ -140,7 +140,7 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 		)
 
 
-		val aspect = surface.width / surface.height.toDouble()
+		val aspect = renderingContext.width / renderingContext.height.toDouble()
 		val fox = Angle.fromRadians((2 * PI) / 5)
 		projectionMatrix = Matrix4.perspective(fox, aspect, 1.0, 100.0)
 
@@ -159,7 +159,7 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 		}
 	}
 
-	override fun Application.render() = autoClosableContext {
+	override fun render() = autoClosableContext {
 
 		val transformationMatrix = getTransformationMatrix(
 			frame / 100.0,
@@ -176,7 +176,7 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 		renderPassDescriptor = renderPassDescriptor.copy(
 			colorAttachments = arrayOf(
 				renderPassDescriptor.colorAttachments[0].copy(
-					view = surface.getCurrentTexture()
+					view = renderingContext.getCurrentTexture()
 						.bind()
 						.createView()
 				)
@@ -200,13 +200,8 @@ class InstancedCubeScene() : Application.Scene(), AutoCloseable {
 
 		device.queue.submit(arrayOf(commandBuffer))
 
-		surface.present()
-
 	}
 
-	override fun close() {
-		autoClosableContext.close()
-	}
 }
 
 private fun getTransformationMatrix(angle: Double, modelMatrices: Array<Matrix4?>): FloatArray {

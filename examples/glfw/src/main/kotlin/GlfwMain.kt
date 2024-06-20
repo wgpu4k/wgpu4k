@@ -1,128 +1,79 @@
 package io.ygdrasil.wgpu.examples
 
-import io.ygdrasil.wgpu.WGPU.Companion.createInstance
 import io.ygdrasil.wgpu.WGPU.Companion.loadLibrary
-import io.ygdrasil.wgpu.getSurface
+import io.ygdrasil.wgpu.glfwContextRenderer
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPULogCallback
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import korlibs.io.async.launch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.lwjgl.glfw.GLFW.*
-import org.lwjgl.system.MemoryUtil.NULL
 import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
-import kotlin.system.exitProcess
 
 val callback = WGPULogCallback.allocate( { level, message, data ->
     println("LOG {$level} ${message.getString(0)}")
 }, Arena.global())
 
-suspend fun main() {
+fun main() = runBlocking {
     loadLibrary()
     wgpu_h.wgpuSetLogLevel(1)
     wgpu_h.wgpuSetLogCallback(callback, MemorySegment.NULL)
 
-    var width = 640
-    var height = 480
-
-    glfwInit()
-    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
-    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
-    // Disable context creation, else vulkan backend crashes because swap already exists
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API)
-    val windowHandle: Long = glfwCreateWindow(width, height, "GLFW+WebGPU", NULL, NULL)
+    val glfwContext = glfwContextRenderer(width = 640, height = 480, title = "GLFW+WebGPU")
 
     val glfwDispatcher = GlfwCoroutineDispatcher() // a custom coroutine dispatcher, in which Compose will run
 
-    glfwSetWindowCloseCallback(windowHandle) {
+    glfwSetWindowCloseCallback(glfwContext.windowHandler) {
         glfwDispatcher.stop()
     }
 
-	val wgpu = createInstance() ?: error("fail to wgpu instance")
-	val surface = wgpu.getSurface(windowHandle){
-        val width = intArrayOf(1)
-        val height = intArrayOf(1)
-        glfwGetWindowSize(windowHandle, width, height)
-        width[0] to height[0]
-    }
+    val application = createApplication(
+        glfwContext.wgpuContext
+    )
 
-
-    val adapter = wgpu.requestAdapter(surface)
-        ?: error("fail to get adapter")
-
-    val device = adapter.requestDevice()
-        ?: error("fail to get device")
-
-    surface.computeSurfaceCapabilities(adapter)
-
-    val assetManager = runBlocking { genericAssetManager() }
-
-    val application = object : Application(
-        surface,
-        device,
-        adapter,
-        assetManager
-    ) {
-
-        override fun run() {
-            glfwDispatcher.dispatch(Dispatchers.Main) {
-                renderFrame()
-                run()
-            }
+    fun run() {
+        glfwDispatcher.dispatch(Dispatchers.Main) {
+            application.renderFrame()
+            run()
         }
-
     }
 
     application.load()
-
-    fun render() {
-
-        with(application.currentScene) {
-            application.configureRenderingContext()
-        }
+    glfwSetWindowSizeCallback(glfwContext.windowHandler) { _, windowWidth, windowHeight ->
+        application.configureRenderingContext()
         application.renderFrame()
     }
 
-
-    glfwSetWindowSizeCallback(windowHandle) { _, windowWidth, windowHeight ->
-        width = windowWidth
-        height = windowHeight
-
-        render()
-    }
-
-    glfwSetKeyCallback(windowHandle) { _, key, scancode, action, mods ->
+    glfwSetKeyCallback(glfwContext.windowHandler) { _, key, scancode, action, mods ->
 
         if ((key == GLFW_KEY_PAGE_UP || key == GLFW_KEY_PAGE_DOWN || key == GLFW_KEY_UP || key == GLFW_KEY_DOWN) && action == GLFW_PRESS) {
-            val currentIndex = availableScenes.indexOf(application.currentScene)
+            val currentIndex = application.availableScenes.indexOf(application.currentScene)
             val index = if (key == GLFW_KEY_PAGE_UP || key == GLFW_KEY_UP) {
                 currentIndex - 1
             } else {
                 currentIndex + 1
             }.let {
                 when (it) {
-                    availableScenes.size -> 0
-                    -1 -> availableScenes.size - 1
+                    application.availableScenes.size -> 0
+                    -1 -> application.availableScenes.size - 1
                     else -> it
                 }
             }
 
 
-            launch(glfwDispatcher) {
-                application.changeScene(availableScenes[index])
+            launch(Dispatchers.Main) {
+                application.changeScene(application.availableScenes[index])
             }
         }
     }
 
 
-    glfwShowWindow(windowHandle)
+    glfwShowWindow(glfwContext.windowHandler)
 
-    application.run()
+    run()
     glfwDispatcher.runLoop()
 
-    application.close()
-    wgpu.close()
-    glfwDestroyWindow(windowHandle)
-    exitProcess(0)
+    glfwContext.close()
+
 }

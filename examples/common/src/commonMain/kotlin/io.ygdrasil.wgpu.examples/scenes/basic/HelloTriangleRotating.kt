@@ -2,19 +2,19 @@ package io.ygdrasil.wgpu.examples.scenes.basic
 
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.Application
-import io.ygdrasil.wgpu.examples.autoClosableContext
+import io.ygdrasil.wgpu.examples.GenericAssetManager
 import io.ygdrasil.wgpu.examples.scenes.shader.fragment.redFragmentShader
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.basicVertexPositionShader
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 
-class HelloTriangleRotatingScene : Application.Scene() {
+class HelloTriangleRotatingScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Application.Scene(wgpuContext, assetManager) {
 
     lateinit var renderPipeline: RenderPipeline
     lateinit var uniformBuffer: Buffer
     lateinit var uniformBindGroup: BindGroup
 
-    override suspend  fun Application.initialiaze() = with(autoClosableContext) {
+    override suspend  fun initialize() = with(autoClosableContext) {
         renderPipeline = device.createRenderPipeline(
             RenderPipelineDescriptor(
                 vertex = RenderPipelineDescriptor.VertexState(
@@ -32,7 +32,7 @@ class HelloTriangleRotatingScene : Application.Scene() {
                     ).bind(),
                     targets = arrayOf(
                         RenderPipelineDescriptor.FragmentState.ColorTargetState(
-                            format = surface.textureFormat
+                            format = renderingContext.textureFormat
                         )
                     )
                 ),
@@ -62,10 +62,10 @@ class HelloTriangleRotatingScene : Application.Scene() {
         )
     }
 
-    override fun Application.render() = autoClosableContext {
+    override fun render() = autoClosableContext {
 
         val transformationMatrix = Matrix4
-            .rotation(Angle.Companion.fromDegrees(frame), .0, .0, 1.0)
+            .rotation(Angle.fromDegrees(frame), .0, .0, 1.0)
             .copyToColumns()
 
         device.queue.writeBuffer(
@@ -79,7 +79,7 @@ class HelloTriangleRotatingScene : Application.Scene() {
         val encoder = device.createCommandEncoder()
             .bind()
 
-        val texture = surface.getCurrentTexture()
+        val texture = renderingContext.getCurrentTexture()
             .bind()
 
         val renderPassEncoder = encoder.beginRenderPass(
@@ -105,6 +105,5 @@ class HelloTriangleRotatingScene : Application.Scene() {
 
         device.queue.submit(arrayOf(commandBuffer))
 
-        surface.present()
     }
 }

@@ -7,7 +7,7 @@ import io.ygdrasil.wgpu.BindGroupDescriptor.BindGroupEntry
 import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry
 import io.ygdrasil.wgpu.RenderPassDescriptor.ColorAttachment
 import io.ygdrasil.wgpu.examples.Application
-import io.ygdrasil.wgpu.examples.autoClosableContext
+import io.ygdrasil.wgpu.examples.GenericAssetManager
 import io.ygdrasil.wgpu.examples.helper.glb.ShaderCache
 import io.ygdrasil.wgpu.examples.helper.glb.uploadGLBModel
 import korlibs.math.geom.Angle
@@ -15,7 +15,7 @@ import korlibs.math.geom.Matrix4
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlin.math.PI
 
-class SkinnedMeshScene : Application.Scene() {
+class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Application.Scene(wgpuContext, assetManager) {
 
     internal lateinit var renderBundles: Array<RenderBundle>
     internal lateinit var viewParamBuf: Buffer
@@ -23,7 +23,7 @@ class SkinnedMeshScene : Application.Scene() {
     internal lateinit var renderPassDesc: RenderPassDescriptor
     internal lateinit var shaderCache: ShaderCache
 
-    override suspend fun Application.initialiaze() = with(autoClosableContext) {
+    override suspend fun initialize() = with(autoClosableContext) {
 
         shaderCache = ShaderCache(device)
 
@@ -39,7 +39,7 @@ class SkinnedMeshScene : Application.Scene() {
 
         val depthTexture = device.createTexture(
             TextureDescriptor(
-                size = Size3D(width = surface.width, height = surface.height, depthOrArrayLayers = 1),
+                size = Size3D(width = renderingContext.width, height = renderingContext.height, depthOrArrayLayers = 1),
                 format = TextureFormat.depth24plusstencil8,
                 usage = setOf(TextureUsage.renderattachment)
             )
@@ -102,18 +102,18 @@ class SkinnedMeshScene : Application.Scene() {
             shaderCache,
             viewParamsLayout,
             viewParamsBindGroup,
-            surface.textureFormat.actualName,
+            renderingContext.textureFormat.actualName,
         )
 
-        projectionMatrix = getProjectionMatrix(surface.width, surface.height)
+        projectionMatrix = getProjectionMatrix(renderingContext.width, renderingContext.height)
     }
 
-    override fun Application.render() = autoClosableContext {
+    override fun render() = autoClosableContext {
 
         val renderPassDesc = renderPassDesc.copy(
             colorAttachments = arrayOf(
                 renderPassDesc.colorAttachments[0].copy(
-                    view = surface.getCurrentTexture().createView().bind()
+                    view = renderingContext.getCurrentTexture().createView().bind()
                 )
             )
         )
@@ -138,7 +138,6 @@ class SkinnedMeshScene : Application.Scene() {
         renderPass.end()
         device.queue.submit(arrayOf(commandEncoder.finish()))
 
-        surface.present()
     }
 
 

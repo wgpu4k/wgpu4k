@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-interface ContextRenderer: AutoCloseable {
+interface RenderingContext: AutoCloseable {
     val width: Int
     val height: Int
     val textureFormat: TextureFormat
