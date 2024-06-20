@@ -90,12 +90,6 @@ kotlin {
     }
 }
 
-tasks {
-	withType<JavaCompile> {
-		options.compilerArgs.add("--enable-preview")
-	}
-}
-
 val resourcesDirectory = project.file("src").resolve("jvmMain").resolve("resources")
 val zipBuildDirectory = project.file("build").resolve("zip")
 val baseUrl = "https://github.com/gfx-rs/wgpu-native/releases/download/${libs.versions.wgpu.get()}/"

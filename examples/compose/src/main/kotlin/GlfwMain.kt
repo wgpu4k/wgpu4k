@@ -10,7 +10,6 @@ import io.ygdrasil.wgpu.RenderingContext
 import io.ygdrasil.wgpu.WGPU
 import io.ygdrasil.wgpu.WGPU.Companion.createInstance
 import io.ygdrasil.wgpu.WGPU.Companion.loadLibrary
-import io.ygdrasil.wgpu.WGPUInstanceBackend
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPULogCallback
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import korlibs.io.async.launch
@@ -57,7 +56,7 @@ suspend fun main() {
         glfwDispatcher.stop()
     }
 
-    val wgpu = createInstance(WGPUInstanceBackend.GL) ?: error("fail to wgpu instance")
+    val wgpu = createInstance() ?: error("fail to wgpu instance")
     val surface = wgpu.getSurface(windowHandle)
 
     val renderingContext = RenderingContext(surface) {
