@@ -14,5 +14,6 @@ class AutoClosableContext : AutoCloseable {
 	override fun close() {
 		subjects.reversed()
 			.forEach { it.close() }
+		subjects.clear()
 	}
 }

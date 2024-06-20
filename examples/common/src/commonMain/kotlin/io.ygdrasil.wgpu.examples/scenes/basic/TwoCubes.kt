@@ -3,8 +3,8 @@
 package io.ygdrasil.wgpu.examples.scenes.basic
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.Application
 import io.ygdrasil.wgpu.examples.GenericAssetManager
+import io.ygdrasil.wgpu.examples.Scene
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubePositionOffset
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeUVOffset
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeVertexArray
@@ -16,7 +16,7 @@ import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
 
-class TwoCubesScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Application.Scene(wgpuContext, assetManager) {
+class TwoCubesScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Scene(wgpuContext, assetManager) {
 
 	val offset = 256L; // uniformBindGroup offset must be 256-byte aligned
 
@@ -169,7 +169,7 @@ class TwoCubesScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager)
 			.translated(2.0, 0.0, -7.0)
 	}
 
-	override fun render() = autoClosableContext {
+	override fun AutoClosableContext.render() {
 
 		val transformationMatrix1 = getTransformationMatrix(
 			frame / 100.0,

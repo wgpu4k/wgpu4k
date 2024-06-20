@@ -1,8 +1,8 @@
 package io.ygdrasil.wgpu.examples.scenes.basic
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.Application
 import io.ygdrasil.wgpu.examples.GenericAssetManager
+import io.ygdrasil.wgpu.examples.Scene
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube
 import io.ygdrasil.wgpu.examples.scenes.shader.fragment.sampleTextureMixColorShader
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.basicVertexShader
@@ -10,7 +10,7 @@ import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
 
-class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Application.Scene(wgpuContext, assetManager) {
+class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Scene(wgpuContext, assetManager) {
 
     lateinit var renderPipeline: RenderPipeline
     lateinit var projectionMatrix: Matrix4
@@ -175,7 +175,7 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: GenericAssetMana
         projectionMatrix = Matrix4.perspective(fox, aspect, 1.0, 100.0)
     }
 
-    override fun render() = autoClosableContext {
+    override fun AutoClosableContext.render() {
 
         val transformationMatrix = getTransformationMatrix(
             frame / 100.0,

@@ -1,8 +1,8 @@
 package io.ygdrasil.wgpu.examples.scenes.graphics.techniques
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.Application
 import io.ygdrasil.wgpu.examples.GenericAssetManager
+import io.ygdrasil.wgpu.examples.Scene
 import io.ygdrasil.wgpu.examples.scenes.shader.compute.probabilityMap
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.particlesShaderFixed
 import korlibs.math.geom.Angle
@@ -12,7 +12,7 @@ import kotlin.math.ceil
 import kotlin.random.Random
 
 
-class ParticlesScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Application.Scene(wgpuContext, assetManager) {
+class ParticlesScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Scene(wgpuContext, assetManager) {
 
     // Constants
     val numParticles = 50000
@@ -417,7 +417,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager
             .rotated(Angle.fromRadians(PI * -0.1), 1, 0, 0)
     }
 
-    override fun render() = autoClosableContext {
+    override fun AutoClosableContext.render() {
 
         device.queue.writeBuffer(
             simulationUBOBuffer,

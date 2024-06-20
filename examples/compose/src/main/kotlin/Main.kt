@@ -140,8 +140,6 @@ suspend fun runApp(window: ComposeWindow) {
 			)
 		)
 
-		application.load()
-
 		fun run() {
 			application.renderFrame()
 			applicationScope.launch {

@@ -39,7 +39,6 @@ fun main() = runBlocking {
         }
     }
 
-    application.load()
     glfwSetWindowSizeCallback(glfwContext.windowHandler) { _, windowWidth, windowHeight ->
         application.configureRenderingContext()
         application.renderFrame()
