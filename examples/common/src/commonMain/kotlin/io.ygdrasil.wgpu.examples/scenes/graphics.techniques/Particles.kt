@@ -1,7 +1,7 @@
 package io.ygdrasil.wgpu.examples.scenes.graphics.techniques
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.GenericAssetManager
+import io.ygdrasil.wgpu.examples.AssetManager
 import io.ygdrasil.wgpu.examples.Scene
 import io.ygdrasil.wgpu.examples.scenes.shader.compute.probabilityMap
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.particlesShaderFixed
@@ -12,7 +12,7 @@ import kotlin.math.ceil
 import kotlin.random.Random
 
 
-class ParticlesScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Scene(wgpuContext, assetManager) {
+class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene(wgpuContext), AssetManager by assetManager {
 
     // Constants
     val numParticles = 50000

@@ -3,7 +3,6 @@
 package io.ygdrasil.wgpu.examples.scenes.basic
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.GenericAssetManager
 import io.ygdrasil.wgpu.examples.Scene
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube
 import io.ygdrasil.wgpu.examples.scenes.shader.fragment.vertexPositionColorShader
@@ -16,7 +15,7 @@ val xCount = 4
 val yCount = 4
 val numInstances = xCount * yCount
 
-class InstancedCubeScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Scene(wgpuContext, assetManager) {
+class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 
 	lateinit var renderPipeline: RenderPipeline

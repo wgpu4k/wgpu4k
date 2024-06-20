@@ -8,14 +8,14 @@ suspend fun createApplication(wgpuContext: WGPUContext): Application {
     wgpuContext.configureRenderingContext()
 
     val availableScenes = listOf(
-        HelloTriangleScene(wgpuContext, assetManager),
-        HelloTriangleMSAAScene(wgpuContext, assetManager),
-        HelloTriangleRotatingScene(wgpuContext, assetManager),
-        RotatingCubeScene(wgpuContext, assetManager),
-        TwoCubesScene(wgpuContext, assetManager),
+        HelloTriangleScene(wgpuContext),
+        HelloTriangleMSAAScene(wgpuContext),
+        HelloTriangleRotatingScene(wgpuContext),
+        RotatingCubeScene(wgpuContext),
+        TwoCubesScene(wgpuContext),
         CubemapScene(wgpuContext, assetManager),
-        FractalCubeScene(wgpuContext, assetManager),
-        InstancedCubeScene(wgpuContext, assetManager),
+        FractalCubeScene(wgpuContext),
+        InstancedCubeScene(wgpuContext),
         TexturedCubeScene(wgpuContext, assetManager),
         // TODO: Not working test on wgpu new releases ParticlesScene(),
         // TODO: fix it SkinnedMeshScene(),
@@ -80,7 +80,9 @@ class Application internal constructor(
                 throw e
             }
         }
-        surface.present()
+        if (wgpuContext.renderingContext is SurfaceRenderingContext) {
+            surface.present()
+        }
     }
 
 }

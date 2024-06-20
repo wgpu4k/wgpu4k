@@ -235,14 +235,8 @@ external interface GPUImageCopyTextureTagged : GPUImageCopyTexture {
 
 external interface GPUImageDataLayout {
     var offset: GPUSize64?
-        get() = definedExternally
-        set(value) = definedExternally
     var bytesPerRow: GPUSize32?
-        get() = definedExternally
-        set(value) = definedExternally
     var rowsPerImage: GPUSize32?
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUMultisampleState {
@@ -696,7 +690,10 @@ external interface GPUCommandEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebug
 		copySize: Array<GPUIntegerCoordinate>
 	): Nothing?
     fun copyBufferToTexture(source: GPUImageCopyBuffer, destination: GPUImageCopyTexture, copySize: GPUExtent3DDictStrict): Nothing?
-    fun copyTextureToBuffer(source: GPUImageCopyTexture, destination: GPUImageCopyBuffer, copySize: Iterable<GPUIntegerCoordinate>): Nothing?
+    fun copyTextureToBuffer(
+        source: GPUImageCopyTexture,
+        destination: GPUImageCopyBuffer,
+        copySize: Array<GPUIntegerCoordinate>): Nothing?
     fun copyTextureToBuffer(source: GPUImageCopyTexture, destination: GPUImageCopyBuffer, copySize: GPUExtent3DDictStrict): Nothing?
 	fun copyTextureToTexture(
 		source: GPUImageCopyTexture,

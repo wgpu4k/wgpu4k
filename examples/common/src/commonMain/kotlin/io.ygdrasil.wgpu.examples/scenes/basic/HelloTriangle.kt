@@ -1,12 +1,11 @@
 package io.ygdrasil.wgpu.examples.scenes.basic
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.GenericAssetManager
 import io.ygdrasil.wgpu.examples.Scene
 import io.ygdrasil.wgpu.examples.scenes.shader.fragment.redFragmentShader
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.triangleVertexShader
 
-class HelloTriangleScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Scene(wgpuContext, assetManager) {
+class HelloTriangleScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
     lateinit var renderPipeline: RenderPipeline
 

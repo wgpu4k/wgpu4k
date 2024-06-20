@@ -4,8 +4,7 @@ import io.ygdrasil.wgpu.*
 
 abstract class Scene(
     private val context: WGPUContext,
-    assetManager: AssetManager
-) : AutoCloseable, AssetManager by assetManager {
+) : AutoCloseable {
 
     internal var frame = 0
 

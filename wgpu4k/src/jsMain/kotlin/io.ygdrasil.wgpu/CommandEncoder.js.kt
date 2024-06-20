@@ -3,6 +3,7 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.*
+import io.ygdrasil.wgpu.mapper.map
 
 actual class CommandEncoder(private val handler: GPUCommandEncoder) : AutoCloseable {
 	actual fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder {
@@ -18,7 +19,19 @@ actual class CommandEncoder(private val handler: GPUCommandEncoder) : AutoClosea
 		destination: ImageCopyTexture,
 		copySize: Size3D
 	) {
-		handler.copyTextureToTexture(source.convert(), destination.convert(), copySize.toArray())
+		handler.copyTextureToTexture(
+			map(source),
+			map(destination),
+			copySize.toArray()
+		)
+	}
+
+	actual fun copyTextureToBuffer(source: ImageCopyTexture, destination: ImageCopyBuffer, copySize: Size3D) {
+		handler.copyTextureToBuffer(
+			map(source),
+			map(destination),
+			copySize.toArray()
+		)
 	}
 
 	actual fun beginComputePass(descriptor: ComputePassDescriptor?): ComputePassEncoder =
@@ -33,13 +46,6 @@ actual class CommandEncoder(private val handler: GPUCommandEncoder) : AutoClosea
 
 private fun ComputePassDescriptor?.convert(): GPUComputePassDescriptor {
 	TODO()
-}
-
-private fun ImageCopyTexture.convert(): GPUImageCopyTexture = object : GPUImageCopyTexture {
-	override var texture: GPUTexture = this@convert.texture.handler
-	override var mipLevel: GPUIntegerCoordinate = this@convert.mipLevel
-	override var origin: dynamic = this@convert.origin.toArray()
-	override var aspect: String = this@convert.aspect.stringValue
 }
 
 

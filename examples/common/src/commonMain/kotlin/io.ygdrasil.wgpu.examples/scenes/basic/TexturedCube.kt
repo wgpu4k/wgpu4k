@@ -1,7 +1,7 @@
 package io.ygdrasil.wgpu.examples.scenes.basic
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.GenericAssetManager
+import io.ygdrasil.wgpu.examples.AssetManager
 import io.ygdrasil.wgpu.examples.Scene
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube
 import io.ygdrasil.wgpu.examples.scenes.shader.fragment.sampleTextureMixColorShader
@@ -10,7 +10,7 @@ import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
 
-class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Scene(wgpuContext, assetManager) {
+class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene(wgpuContext), AssetManager by assetManager {
 
     lateinit var renderPipeline: RenderPipeline
     lateinit var projectionMatrix: Matrix4

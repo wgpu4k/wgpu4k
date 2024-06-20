@@ -3,7 +3,6 @@
 package io.ygdrasil.wgpu.examples.scenes.basic
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.GenericAssetManager
 import io.ygdrasil.wgpu.examples.Scene
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubePositionOffset
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeUVOffset
@@ -16,7 +15,7 @@ import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
 
-class TwoCubesScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Scene(wgpuContext, assetManager) {
+class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 	val offset = 256L; // uniformBindGroup offset must be 256-byte aligned
 

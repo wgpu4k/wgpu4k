@@ -21,6 +21,7 @@ application {
 	}
 
 	applicationDefaultJvmArgs += "--add-opens=java.base/java.lang=ALL-UNNAMED"
+	applicationDefaultJvmArgs += "--enable-native-access=ALL-UNNAMED"
 	//applicationDefaultJvmArgs += "-Djextract.trace.downcalls=true"
 }
 

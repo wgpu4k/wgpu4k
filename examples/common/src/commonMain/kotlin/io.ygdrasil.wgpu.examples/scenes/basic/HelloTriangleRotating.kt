@@ -1,14 +1,13 @@
 package io.ygdrasil.wgpu.examples.scenes.basic
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.GenericAssetManager
 import io.ygdrasil.wgpu.examples.Scene
 import io.ygdrasil.wgpu.examples.scenes.shader.fragment.redFragmentShader
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.basicVertexPositionShader
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 
-class HelloTriangleRotatingScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Scene(wgpuContext, assetManager) {
+class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
     lateinit var renderPipeline: RenderPipeline
     lateinit var uniformBuffer: Buffer

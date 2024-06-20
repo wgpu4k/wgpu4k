@@ -6,7 +6,7 @@ import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.BindGroupDescriptor.BindGroupEntry
 import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry
 import io.ygdrasil.wgpu.RenderPassDescriptor.ColorAttachment
-import io.ygdrasil.wgpu.examples.GenericAssetManager
+import io.ygdrasil.wgpu.examples.AssetManager
 import io.ygdrasil.wgpu.examples.Scene
 import io.ygdrasil.wgpu.examples.helper.glb.ShaderCache
 import io.ygdrasil.wgpu.examples.helper.glb.uploadGLBModel
@@ -15,7 +15,7 @@ import korlibs.math.geom.Matrix4
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlin.math.PI
 
-class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: GenericAssetManager) : Scene(wgpuContext, assetManager) {
+class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene(wgpuContext), AssetManager by assetManager {
 
     internal lateinit var renderBundles: Array<RenderBundle>
     internal lateinit var viewParamBuf: Buffer

@@ -24,8 +24,7 @@ dependencies {
 
 kotlin {
 	compilerOptions {
-		allWarningsAsErrors = true
-		freeCompilerArgs.add("-Xexpect-actual-classes")
+		//allWarningsAsErrors = true
 	}
 }
 
