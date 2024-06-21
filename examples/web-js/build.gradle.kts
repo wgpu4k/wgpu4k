@@ -15,7 +15,6 @@ kotlin {
     js {
         binaries.executable()
         browser()
-        nodejs()
         generateTypeScriptDefinitions()
     }
 

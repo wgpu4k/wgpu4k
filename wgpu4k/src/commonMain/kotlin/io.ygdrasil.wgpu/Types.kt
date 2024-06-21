@@ -54,4 +54,8 @@ data class Origin3D(
 	var z: GPUIntegerCoordinate = 0
 ) {
 	fun toArray() = arrayOf(x, y, z)
+
+	companion object {
+		val Zero = Origin3D(0, 0, 0)
+	}
 }

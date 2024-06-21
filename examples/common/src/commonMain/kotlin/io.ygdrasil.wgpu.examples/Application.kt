@@ -67,7 +67,7 @@ class Application internal constructor(
         currentScene = nextScene
     }
 
-    fun renderFrame() = autoClosableContext {
+    suspend fun renderFrame() = autoClosableContext {
         if (onError) return@autoClosableContext
         frame += 1
         currentScene.frame = frame

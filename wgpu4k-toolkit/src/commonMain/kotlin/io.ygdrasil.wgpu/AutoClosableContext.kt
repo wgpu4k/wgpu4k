@@ -2,7 +2,7 @@
 
 package io.ygdrasil.wgpu
 
-fun <T> autoClosableContext(block: AutoClosableContext.() -> T): T = AutoClosableContext()
+inline suspend fun <T> autoClosableContext(crossinline block: suspend AutoClosableContext.() -> T): T = AutoClosableContext()
 	.use { it.block() }
 
 class AutoClosableContext : AutoCloseable {

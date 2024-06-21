@@ -27,7 +27,14 @@ actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
 			.set(buffer.toTypedArray(), 0)
 	}
 
+	fun mapInto(buffer: ByteArray, offset: Int) {
+		Int8Array(handler.getMappedRange(offset.toLong(), buffer.size.toLong()))
+			.also { it.buffer.unsafeCast<ByteArray>().copyInto(buffer) }
+	}
+
 	actual override fun close() {
 		//Nothing to do on JS
 	}
+
+
 }

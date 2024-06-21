@@ -1,7 +1,7 @@
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
 	alias(libs.plugins.kotest)
+    application
 }
 
 java {
@@ -12,7 +12,10 @@ java {
 
 kotlin {
 
-    js { browser() }
+    js {
+        binaries.executable()
+        browser()
+    }
     jvm()
 
     sourceSets {
@@ -36,7 +39,7 @@ kotlin {
         }
     }
     compilerOptions {
-        //allWarningsAsErrors = true
+        allWarningsAsErrors = true
     }
 }
 
@@ -56,3 +59,13 @@ tasks.named<Test>("jvmTest") {
 		exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 	}
 }
+
+/*application {
+    mainClass.set("MainKt")
+    if (Platform.os == Os.MacOs) {
+        applicationDefaultJvmArgs += "-XstartOnFirstThread"
+    }
+
+    applicationDefaultJvmArgs += "--add-opens=java.base/java.lang=ALL-UNNAMED"
+    applicationDefaultJvmArgs += "--enable-native-access=ALL-UNNAMED"
+}*/
