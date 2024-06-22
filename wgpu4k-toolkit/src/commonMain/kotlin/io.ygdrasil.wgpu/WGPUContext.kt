@@ -11,8 +11,8 @@ class WGPUContext(
     override fun close() {
         renderingContext.close()
         surface.close()
-        device.close()
         adapter.close()
+        device.close()
     }
 
 }

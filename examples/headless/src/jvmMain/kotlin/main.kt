@@ -4,7 +4,7 @@ import kotlinx.coroutines.runBlocking
 fun main() {
     runBlocking {
         try {
-            render()
+            captureScene()
         } catch (error: Throwable) {
             error.printStackTrace()
         }

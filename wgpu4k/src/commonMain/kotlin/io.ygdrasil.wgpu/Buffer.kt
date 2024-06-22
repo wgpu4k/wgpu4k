@@ -2,8 +2,6 @@
 
 package io.ygdrasil.wgpu
 
-import kotlinx.coroutines.Deferred
-
 expect class Buffer : AutoCloseable {
 
 	val size: GPUSize64
@@ -17,7 +15,7 @@ expect class Buffer : AutoCloseable {
 
 	fun mapInto(buffer: ByteArray, offset: Int)
 
-	suspend fun map(mode: Set<MapMode>, offset: GPUSize64 = 0, size: GPUSize64 = this.size): Deferred<BufferMapAsyncStatus>
+	suspend fun map(mode: Set<MapMode>, offset: GPUSize64 = 0, size: GPUSize64 = this.size)
 
 	override fun close()
 }

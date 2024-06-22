@@ -83,6 +83,10 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
             ?.let(::QuerySet) ?: error("fail to create bind group layout")
     }
 
+    actual suspend fun poll() {
+        wgpu_h.wgpuDevicePoll(handler, 1, MemorySegment.NULL)
+    }
+
     actual override fun close() {
         wgpu_h.wgpuDeviceRelease(handler)
     }

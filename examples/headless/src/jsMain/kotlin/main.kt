@@ -4,6 +4,6 @@ import kotlinx.coroutines.MainScope
 fun main() {
 
     MainScope().launch {
-        render()
+        captureScene()
     }
 }

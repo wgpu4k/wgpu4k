@@ -2,6 +2,7 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.*
 import io.ygdrasil.wgpu.mapper.map
+import kotlinx.coroutines.await
 
 actual class Device(internal val handler: GPUDevice) : AutoCloseable {
 
@@ -66,6 +67,10 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
         descriptor.convert()
             .let { handler.createQuerySet(it) }
             .let(::QuerySet)
+
+    actual suspend fun poll() {
+        queue.handler.onSubmittedWorkDone().await()
+    }
 
     actual override fun close() {
         // Nothing on JS

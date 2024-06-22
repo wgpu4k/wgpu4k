@@ -2,11 +2,10 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUBufferMapCallback
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
-import kotlinx.coroutines.*
-import java.lang.Thread.sleep
 import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
-import java.util.concurrent.atomic.AtomicInteger
+
+private val mapCallback = WGPUBufferMapCallback.allocate({ status, data -> }, Arena.global())
 
 actual class Buffer(internal val handler: MemorySegment) : AutoCloseable {
 
@@ -25,38 +24,22 @@ actual class Buffer(internal val handler: MemorySegment) : AutoCloseable {
             .copyFrom(MemorySegment.ofArray(buffer))
     }
 
-    actual fun mapFrom(buffer: ByteArray, offset: Int){
+    actual fun mapFrom(buffer: ByteArray, offset: Int) {
         wgpu_h.wgpuBufferGetMappedRange(handler, offset.toLong(), (buffer.size * Byte.SIZE_BYTES).toLong())
             .copyFrom(MemorySegment.ofArray(buffer))
     }
 
-    actual suspend fun map(mode: Set<MapMode>, offset: GPUSize64, size: GPUSize64): Deferred<BufferMapAsyncStatus> {
-        val arena = Arena.ofConfined()
-        val atomicStatus = AtomicInteger(-1)
-        val callback = WGPUBufferMapCallback.allocate( { status, data ->
-            println("done")
-            runBlocking {
-                atomicStatus.set(status)
-            }
-        }, arena)
-
-        wgpu_h.wgpuBufferMapAsync(handler, mode.toFlagInt(), offset, size, callback, callback)
-
-        println("mhh ${atomicStatus.get()}")
-        return CoroutineScope(Dispatchers.IO).async {
-            while(atomicStatus.get() == -1) {
-                sleep(1000)
-                yield()
-            }
-            arena.close()
-            BufferMapAsyncStatus.of(atomicStatus.get()) ?: error("fail to get BufferMapAsyncStatus with raw value ${atomicStatus.get()}")
-        }
+    actual suspend fun map(mode: Set<MapMode>, offset: GPUSize64, size: GPUSize64) {
+        wgpu_h.wgpuBufferMapAsync(handler, mode.toFlagInt(), offset, size, mapCallback, MemorySegment.NULL)
     }
 
     actual fun mapInto(buffer: ByteArray, offset: Int) {
-        wgpu_h.wgpuBufferGetMappedRange(handler, offset.toLong(), buffer.size.toLong())
-            .asByteBuffer()
-            .get(buffer,0, buffer.size)
+        MemorySegment.ofArray(buffer)
+            .copyFrom(
+                wgpu_h.wgpuBufferGetMappedRange(handler, offset.toLong(), buffer.size.toLong())
+                    // create a slice, as the buffer size is wrong
+                    .asSlice(0, buffer.size.toLong())
+            )
     }
 
     actual override fun close() {

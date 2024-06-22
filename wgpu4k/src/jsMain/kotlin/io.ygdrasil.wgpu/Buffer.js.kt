@@ -3,8 +3,6 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPUBuffer
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.asDeferred
 import org.khronos.webgl.Float32Array
 import org.khronos.webgl.Int8Array
 
@@ -31,16 +29,12 @@ actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
 
 	actual fun mapInto(buffer: ByteArray, offset: Int) {
 		Int8Array(handler.getMappedRange(offset.toLong(), buffer.size.toLong()))
-			.also { it.buffer.unsafeCast<ByteArray>().copyInto(buffer) }
+			.unsafeCast<ByteArray>()
+			.copyInto(buffer)
 	}
 
-	actual suspend fun map(mode: Set<MapMode>, offset: GPUSize64, size: GPUSize64): Deferred<BufferMapAsyncStatus> {
-		return handler.mapAsync(mode.toFlagInt(), offset, size)
-			.then {
-				println("mapAsync return ? $it")
-				BufferMapAsyncStatus.success
-			}
-			.asDeferred()
+	actual suspend fun map(mode: Set<MapMode>, offset: GPUSize64, size: GPUSize64) {
+		handler.mapAsync(mode.toFlagInt(), offset, size)
 	}
 
 	actual override fun close() {

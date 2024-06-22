@@ -28,6 +28,8 @@ expect class Device : AutoCloseable {
 
     fun createQuerySet(descriptor: QuerySetDescriptor): QuerySet
 
+    suspend fun poll()
+
     override fun close()
 }
 
