@@ -2,8 +2,6 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-	alias(libs.plugins.kotest)
-    application
 }
 
 java {
@@ -19,7 +17,7 @@ kotlin {
         browser()
     }
     jvm {
-        // On to make the "application" plugin work, else we got class not found with main see https://youtrack.jetbrains.com/issue/KT-42683
+        // On to make "JavaExec" work, else we got SourceSet with name 'main' not found, see https://youtrack.jetbrains.com/issue/KT-42683
         withJava()
     }
 
@@ -30,18 +28,6 @@ kotlin {
 				implementation(projects.examples.common)
             }
         }
-        val commonTest by getting {
-            dependencies {
-                implementation(libs.bundles.kotest)
-            }
-        }
-
-        val jvmTest by getting {
-            dependencies {
-                implementation(libs.kotest.runner.junit5)
-            }
-
-        }
     }
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
@@ -49,29 +35,19 @@ kotlin {
     }
 }
 
-tasks.named<Test>("jvmTest") {
-	useJUnitPlatform()
-    jvmArgs = listOf("-XstartOnFirstThread", "--add-opens=java.base/java.lang=ALL-UNNAMED")
-	filter {
-		isFailOnNoMatchingTests = false
-	}
-	testLogging {
-		showExceptions = true
-		showStandardStreams = true
-		events = setOf(
-			org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED,
-			org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED
-		)
-		exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-	}
-}
-
-application {
-    mainClass.set("MainKt")
+tasks.register<JavaExec>("runApp") {
+    mainClass = "MainKt"
     if (Platform.os == Os.MacOs) {
-        applicationDefaultJvmArgs += "-XstartOnFirstThread"
+        jvmArgs(
+            "-XstartOnFirstThread",
+            "--add-opens=java.base/java.lang=ALL-UNNAMED",
+            "--enable-native-access=ALL-UNNAMED"
+        )
+    } else {
+        jvmArgs(
+            "--add-opens=java.base/java.lang=ALL-UNNAMED",
+            "--enable-native-access=ALL-UNNAMED"
+        )
     }
-
-    applicationDefaultJvmArgs += "--add-opens=java.base/java.lang=ALL-UNNAMED"
-    applicationDefaultJvmArgs += "--enable-native-access=ALL-UNNAMED"
+    classpath = sourceSets["main"].runtimeClasspath
 }

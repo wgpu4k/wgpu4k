@@ -16,6 +16,8 @@ expect class CommandEncoder : AutoCloseable {
 
     fun copyTextureToBuffer(source: ImageCopyTexture, destination: ImageCopyBuffer, copySize: Size3D)
 
+    fun copyBufferToTexture(source: ImageCopyBuffer, destination: ImageCopyTexture, copySize: Size3D)
+
     override fun close()
 }
 

@@ -28,7 +28,7 @@ suspend fun captureScene() {
 
             with(scene) { render() }
 
-            if (context.renderingContext is TextureRenderingContext) {
+            if (renderingContext is TextureRenderingContext) {
                 val commandEncoder = context.device.createCommandEncoder().bind()
                 commandEncoder.copyTextureToBuffer(
                     ImageCopyTexture(

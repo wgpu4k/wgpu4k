@@ -57,6 +57,21 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
         )
     }
 
+    actual fun copyBufferToTexture(
+        source : ImageCopyBuffer,
+        destination: ImageCopyTexture,
+        copySize: Size3D,
+    ) = confined { arena ->
+
+        wgpu_h.wgpuCommandEncoderCopyBufferToTexture(
+            handler,
+            arena.map(source),
+            arena.map(destination),
+            arena.map(copySize)
+        )
+    }
+
+
     actual override fun close() {
         wgpu_h.wgpuCommandEncoderRelease(handler)
     }

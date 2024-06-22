@@ -10,13 +10,15 @@ import java.nio.file.Paths
 import java.util.*
 
 
-fun endToEndWebserver(): NettyApplicationEngine {
+fun endToEndWebserver(basePath: String): NettyApplicationEngine {
+    val pagePath = "$basePath/build/dist/js/productionExecutable"
+    println("serve page at $pagePath")
     return embeddedServer(Netty, port = 9000) {
 
         routing {
             staticFiles(
                 "/",
-                File("/Users/chaos/IdeaProjects/wgpu4k/examples/headless/build/dist/js/productionExecutable")
+                File(pagePath)
             )
         }
     }.start(wait = false)
@@ -47,7 +49,13 @@ fun browser() {
                 page.navigate("http://localhost:9000")
                 page.screenshot(
                     Page.ScreenshotOptions()
-                        .setPath(Paths.get(("screenshot-" + browserType.name()).toString() + ".png"))
+                        .setPath(
+                            File("js")
+                                .resolve(browserType.name().toString())
+                                .also { it.mkdirs() }
+                                .resolve("screenshot.png")
+                                .toPath()
+                        )
                 )
 
             }
