@@ -1,6 +1,13 @@
+import io.ygdrasil.wgpu.CanvasConfiguration
 import io.ygdrasil.wgpu.WGPUContext
 import io.ygdrasil.wgpu.canvasContextRenderer
 
 actual suspend fun getHeadlessContext(): WGPUContext {
-    return canvasContextRenderer(deferredRendering = true).wgpuContext
+    val canvas = canvasContextRenderer(deferredRendering = false, width = 256, height = 256)
+    canvas.wgpuContext.surface.configure(
+        CanvasConfiguration(
+            canvas.wgpuContext.device
+        )
+    )
+    return canvas.wgpuContext
 }

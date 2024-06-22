@@ -5,5 +5,6 @@ fun main() {
 
     MainScope().launch {
         captureScene()
+        console.log("render ended")
     }
 }

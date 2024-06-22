@@ -611,8 +611,7 @@ enum class StencilOperation(
     incrementclamp(4, "increment-clamp"),
     decrementclamp(5, "decrement-clamp"),
     incrementwrap(6, "increment-wrap"),
-    decrementwrap(7, "decrement-wrap")
-    ;
+    decrementwrap(7, "decrement-wrap");
 
     companion object {
         fun of(value: Int): StencilOperation? = entries.find {
@@ -641,8 +640,7 @@ enum class StoreOp(
     override val value: Int,
 ) : EnumerationWithValue {
     store(1),
-    discard(2),
-    ;
+    discard(2);
 
     companion object {
         fun of(value: Int): StoreOp? = entries.find {
@@ -659,9 +657,7 @@ enum class SurfaceGetCurrentTextureStatus(
     outdated(2),
     lost(3),
     outofmemory(4),
-    devicelost(5),
-
-    ;
+    devicelost(5);
 
     infix fun or(other: Int): Int = value or other
 
@@ -680,8 +676,7 @@ enum class TextureAspect(
 ) : EnumerationWithValue {
     all(0, "all"),
     stencilonly(1, "stencil-only"),
-    depthonly(2, "depth-only"),
-    ;
+    depthonly(2, "depth-only");
 
     companion object {
         fun of(value: Int): TextureAspect? = entries.find {
@@ -694,9 +689,9 @@ enum class TextureDimension(
     override val value: Int,
     val stringValue: String
 ) : EnumerationWithValue {
-    `_1d`(0, "1d"),
-    `_2d`(1, "2d"),
-    `_3d`(2, "3d"),
+    _1d(0, "1d"),
+    _2d(1, "2d"),
+    _3d(2, "3d"),
     ;
 
     companion object {
@@ -732,13 +727,12 @@ enum class TextureViewDimension(
     override val value: Int,
     val stringValue: String,
 ) : EnumerationWithValue {
-    `_1d`(1, "1d"),
-    `_2d`(2, "2d"),
-    `_2darray`(3, "2d-array"),
+    _1d(1, "1d"),
+    _2d(2, "2d"),
+    _2darray(3, "2d-array"),
     cube(4, "cube"),
     cubearray(5, "cube-array"),
-    `_3d`(6, "3d"),
-    ;
+    _3d(6, "3d");
 
     companion object {
         fun of(value: Int): TextureViewDimension? = entries.find {
@@ -791,8 +785,7 @@ enum class ColorWriteMask(
     green(2),
     blue(4),
     alpha(8),
-    all(15),
-    ;
+    all(15);
 
     companion object {
         fun of(value: Int): ColorWriteMask? = entries.find {
@@ -836,9 +829,7 @@ enum class TextureUsage(
     copydst(2),
     texturebinding(4),
     storagebinding(8),
-    renderattachment(16),
-
-    ;
+    renderattachment(16);
 
     companion object {
         fun of(value: Int): TextureUsage? = entries.find {
@@ -861,9 +852,7 @@ enum class NativeSType(
     stype_bindgroupentryextras(196_615),
     stype_bindgrouplayoutentryextras(196_616),
     stype_querysetdescriptorextras(196_617),
-    stype_surfaceconfigurationextras(196_618),
-
-    ;
+    stype_surfaceconfigurationextras(196_618);
 
     infix fun or(other: Int): Int = value or other
 
@@ -886,9 +875,7 @@ enum class NativeFeature(
     vertexwritablestorage(196_613),
     texturebindingarray(196_614),
     sampledtextureandstoragebufferarraynonuniformindexing(196_615),
-    pipelinestatisticsquery(196_616),
-
-    ;
+    pipelinestatisticsquery(196_616);
 
     infix fun or(other: Int): Int = value or other
 
@@ -909,9 +896,7 @@ enum class LogLevel(
     warn(2),
     info(3),
     debug(4),
-    trace(5),
-
-    ;
+    trace(5);
 
     infix fun or(other: Int): Int = value or other
 
@@ -935,9 +920,7 @@ enum class InstanceBackend(
     dx11(16),
     browserwebgpu(32),
     primary(45),
-    secondary(18),
-
-    ;
+    secondary(18);
 
     infix fun or(other: Int): Int = value or other
 
@@ -956,9 +939,7 @@ enum class InstanceFlag(
     default(0),
     debug(1),
     validation(2),
-    discardhallabels(4),
-
-    ;
+    discardhallabels(4);
 
     infix fun or(other: Int): Int = value or other
 
@@ -976,9 +957,7 @@ enum class Dx12Compiler(
 ) {
     undefined(0),
     fxc(1),
-    dxc(2),
-
-    ;
+    dxc(2);
 
     infix fun or(other: Int): Int = value or other
 
@@ -997,9 +976,7 @@ enum class Gles3MinorVersion(
     automatic(0),
     version0(1),
     version1(2),
-    version2(3),
-
-    ;
+    version2(3);
 
     infix fun or(other: Int): Int = value or other
 
@@ -1019,9 +996,7 @@ enum class PipelineStatisticName(
     clipperinvocations(1),
     clipperprimitivesout(2),
     fragmentshaderinvocations(3),
-    computeshaderinvocations(4),
-
-    ;
+    computeshaderinvocations(4);
 
     infix fun or(other: Int): Int = value or other
 
@@ -1037,9 +1012,7 @@ enum class PipelineStatisticName(
 enum class NativeQueryType(
     val value: Int,
 ) {
-    pipelinestatistics(196_608),
-
-    ;
+    pipelinestatistics(196_608);
 
     infix fun or(other: Int): Int = value or other
 
