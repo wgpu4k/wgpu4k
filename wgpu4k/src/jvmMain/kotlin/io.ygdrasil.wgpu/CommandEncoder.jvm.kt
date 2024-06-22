@@ -43,9 +43,24 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
             ?: error("fail to get ComputePassEncoder")
     }
 
+    actual fun copyTextureToBuffer(
+        source: ImageCopyTexture,
+        destination: ImageCopyBuffer,
+        copySize: Size3D,
+    ) = confined { arena ->
+
+        wgpu_h.wgpuCommandEncoderCopyTextureToBuffer(
+            handler,
+            arena.map(source),
+            arena.map(destination),
+            arena.map(copySize)
+        )
+    }
 
     actual override fun close() {
         wgpu_h.wgpuCommandEncoderRelease(handler)
     }
+
+
 
 }

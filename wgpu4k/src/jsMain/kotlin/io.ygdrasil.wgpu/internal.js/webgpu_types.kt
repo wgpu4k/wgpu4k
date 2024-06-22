@@ -343,45 +343,22 @@ external interface GPURenderPassColorAttachment {
 external interface GPURenderPassDepthStencilAttachment {
     var view: GPUTextureView
     var depthClearValue: Number?
-        get() = definedExternally
-        set(value) = definedExternally
     var depthLoadOp: String? /* "load" | "clear" */
-        get() = definedExternally
-        set(value) = definedExternally
     var depthStoreOp: String? /* "store" | "discard" */
-        get() = definedExternally
-        set(value) = definedExternally
     var depthReadOnly: Boolean?
-        get() = definedExternally
-        set(value) = definedExternally
     var stencilClearValue: GPUStencilValue?
-        get() = definedExternally
-        set(value) = definedExternally
     var stencilLoadOp: String? /* "load" | "clear" */
-        get() = definedExternally
-        set(value) = definedExternally
     var stencilStoreOp: String? /* "store" | "discard" */
-        get() = definedExternally
-        set(value) = definedExternally
     var stencilReadOnly: Boolean?
-        get() = definedExternally
-        set(value) = definedExternally
+
 }
 
 external interface GPURenderPassDescriptor : GPUObjectDescriptorBase {
     var colorAttachments: Array<GPURenderPassColorAttachment>
     var depthStencilAttachment: GPURenderPassDepthStencilAttachment?
-        get() = definedExternally
-        set(value) = definedExternally
     var occlusionQuerySet: GPUQuerySet?
-        get() = definedExternally
-        set(value) = definedExternally
     var timestampWrites: GPURenderPassTimestampWrites?
-        get() = definedExternally
-        set(value) = definedExternally
     var maxDrawCount: GPUSize64?
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPURenderPassLayout : GPUObjectDescriptorBase {
@@ -393,11 +370,7 @@ external interface GPURenderPassLayout : GPUObjectDescriptorBase {
 external interface GPURenderPassTimestampWrites {
     var querySet: GPUQuerySet
     var beginningOfPassWriteIndex: GPUSize32?
-        get() = definedExternally
-        set(value) = definedExternally
     var endOfPassWriteIndex: GPUSize32?
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPURenderPipelineDescriptor : GPUPipelineDescriptorBase {
@@ -410,11 +383,7 @@ external interface GPURenderPipelineDescriptor : GPUPipelineDescriptorBase {
 
 external interface GPURequestAdapterOptions {
     var powerPreference: String? /* "low-power" | "high-performance" */
-        get() = definedExternally
-        set(value) = definedExternally
     var forceFallbackAdapter: Boolean?
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUSamplerBindingLayout {
@@ -423,67 +392,33 @@ external interface GPUSamplerBindingLayout {
 
 external interface GPUSamplerDescriptor : GPUObjectDescriptorBase {
     var addressModeU: String? /* "clamp-to-edge" | "repeat" | "mirror-repeat" */
-        get() = definedExternally
-        set(value) = definedExternally
     var addressModeV: String? /* "clamp-to-edge" | "repeat" | "mirror-repeat" */
-        get() = definedExternally
-        set(value) = definedExternally
     var addressModeW: String? /* "clamp-to-edge" | "repeat" | "mirror-repeat" */
-        get() = definedExternally
-        set(value) = definedExternally
     var magFilter: String? /* "nearest" | "linear" */
-        get() = definedExternally
-        set(value) = definedExternally
     var minFilter: String? /* "nearest" | "linear" */
-        get() = definedExternally
-        set(value) = definedExternally
     var mipmapFilter: String? /* "nearest" | "linear" */
-        get() = definedExternally
-        set(value) = definedExternally
     var lodMinClamp: Number?
-        get() = definedExternally
-        set(value) = definedExternally
     var lodMaxClamp: Number?
-        get() = definedExternally
-        set(value) = definedExternally
     var compare: String? /* "never" | "less" | "equal" | "less-equal" | "greater" | "not-equal" | "greater-equal" | "always" */
-        get() = definedExternally
-        set(value) = definedExternally
     var maxAnisotropy: Number?
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUShaderModuleCompilationHint {
     var entryPoint: String
     var layout: dynamic /* GPUPipelineLayout? | "auto" */
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUShaderModuleDescriptor : GPUObjectDescriptorBase {
     var code: String
     var sourceMap: Any?
-        get() = definedExternally
-        set(value) = definedExternally
     var compilationHints: Array<GPUShaderModuleCompilationHint>?
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUStencilFaceState {
     var compare: String? /* "never" | "less" | "equal" | "less-equal" | "greater" | "not-equal" | "greater-equal" | "always" */
-        get() = definedExternally
-        set(value) = definedExternally
     var failOp: String? /* "keep" | "zero" | "replace" | "invert" | "increment-clamp" | "decrement-clamp" | "increment-wrap" | "decrement-wrap" */
-        get() = definedExternally
-        set(value) = definedExternally
     var depthFailOp: String? /* "keep" | "zero" | "replace" | "invert" | "increment-clamp" | "decrement-clamp" | "increment-wrap" | "decrement-wrap" */
-        get() = definedExternally
-        set(value) = definedExternally
     var passOp: String? /* "keep" | "zero" | "replace" | "invert" | "increment-clamp" | "decrement-clamp" | "increment-wrap" | "decrement-wrap" */
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUStorageTextureBindingLayout {
@@ -510,26 +445,12 @@ external interface GPUTextureDescriptor : GPUObjectDescriptorBase {
 
 external interface GPUTextureViewDescriptor : GPUObjectDescriptorBase {
     var format: String? /* "r8unorm" | "r8snorm" | "r8uint" | "r8sint" | "r16uint" | "r16sint" | "r16float" | "rg8unorm" | "rg8snorm" | "rg8uint" | "rg8sint" | "r32uint" | "r32sint" | "r32float" | "rg16uint" | "rg16sint" | "rg16float" | "rgba8unorm" | "rgba8unorm-srgb" | "rgba8snorm" | "rgba8uint" | "rgba8sint" | "bgra8unorm" | "bgra8unorm-srgb" | "rgb9e5ufloat" | "rgb10a2uint" | "rgb10a2unorm" | "rg11b10ufloat" | "rg32uint" | "rg32sint" | "rg32float" | "rgba16uint" | "rgba16sint" | "rgba16float" | "rgba32uint" | "rgba32sint" | "rgba32float" | "stencil8" | "depth16unorm" | "depth24plus" | "depth24plus-stencil8" | "depth32float" | "depth32float-stencil8" | "bc1-rgba-unorm" | "bc1-rgba-unorm-srgb" | "bc2-rgba-unorm" | "bc2-rgba-unorm-srgb" | "bc3-rgba-unorm" | "bc3-rgba-unorm-srgb" | "bc4-r-unorm" | "bc4-r-snorm" | "bc5-rg-unorm" | "bc5-rg-snorm" | "bc6h-rgb-ufloat" | "bc6h-rgb-float" | "bc7-rgba-unorm" | "bc7-rgba-unorm-srgb" | "etc2-rgb8unorm" | "etc2-rgb8unorm-srgb" | "etc2-rgb8a1unorm" | "etc2-rgb8a1unorm-srgb" | "etc2-rgba8unorm" | "etc2-rgba8unorm-srgb" | "eac-r11unorm" | "eac-r11snorm" | "eac-rg11unorm" | "eac-rg11snorm" | "astc-4x4-unorm" | "astc-4x4-unorm-srgb" | "astc-5x4-unorm" | "astc-5x4-unorm-srgb" | "astc-5x5-unorm" | "astc-5x5-unorm-srgb" | "astc-6x5-unorm" | "astc-6x5-unorm-srgb" | "astc-6x6-unorm" | "astc-6x6-unorm-srgb" | "astc-8x5-unorm" | "astc-8x5-unorm-srgb" | "astc-8x6-unorm" | "astc-8x6-unorm-srgb" | "astc-8x8-unorm" | "astc-8x8-unorm-srgb" | "astc-10x5-unorm" | "astc-10x5-unorm-srgb" | "astc-10x6-unorm" | "astc-10x6-unorm-srgb" | "astc-10x8-unorm" | "astc-10x8-unorm-srgb" | "astc-10x10-unorm" | "astc-10x10-unorm-srgb" | "astc-12x10-unorm" | "astc-12x10-unorm-srgb" | "astc-12x12-unorm" | "astc-12x12-unorm-srgb" */
-        get() = definedExternally
-        set(value) = definedExternally
     var dimension: String? /* "1d" | "2d" | "2d-array" | "cube" | "cube-array" | "3d" */
-        get() = definedExternally
-        set(value) = definedExternally
     var aspect: String? /* "all" | "stencil-only" | "depth-only" */
-        get() = definedExternally
-        set(value) = definedExternally
     var baseMipLevel: GPUIntegerCoordinate?
-        get() = definedExternally
-        set(value) = definedExternally
     var mipLevelCount: GPUIntegerCoordinate?
-        get() = definedExternally
-        set(value) = definedExternally
     var baseArrayLayer: GPUIntegerCoordinate?
-        get() = definedExternally
-        set(value) = definedExternally
     var arrayLayerCount: GPUIntegerCoordinate?
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUUncapturedErrorEventInit : EventInit {
@@ -605,14 +526,12 @@ external interface NavigatorGPU {
     var gpu: GPU
 }
 
-
 external interface GPU {
     fun requestAdapter(options: GPURequestAdapterOptions = definedExternally): Promise<GPUAdapter?>
     fun getPreferredCanvasFormat(): String /* "r8unorm" | "r8snorm" | "r8uint" | "r8sint" | "r16uint" | "r16sint" | "r16float" | "rg8unorm" | "rg8snorm" | "rg8uint" | "rg8sint" | "r32uint" | "r32sint" | "r32float" | "rg16uint" | "rg16sint" | "rg16float" | "rgba8unorm" | "rgba8unorm-srgb" | "rgba8snorm" | "rgba8uint" | "rgba8sint" | "bgra8unorm" | "bgra8unorm-srgb" | "rgb9e5ufloat" | "rgb10a2uint" | "rgb10a2unorm" | "rg11b10ufloat" | "rg32uint" | "rg32sint" | "rg32float" | "rgba16uint" | "rgba16sint" | "rgba16float" | "rgba32uint" | "rgba32sint" | "rgba32float" | "stencil8" | "depth16unorm" | "depth24plus" | "depth24plus-stencil8" | "depth32float" | "depth32float-stencil8" | "bc1-rgba-unorm" | "bc1-rgba-unorm-srgb" | "bc2-rgba-unorm" | "bc2-rgba-unorm-srgb" | "bc3-rgba-unorm" | "bc3-rgba-unorm-srgb" | "bc4-r-unorm" | "bc4-r-snorm" | "bc5-rg-unorm" | "bc5-rg-snorm" | "bc6h-rgb-ufloat" | "bc6h-rgb-float" | "bc7-rgba-unorm" | "bc7-rgba-unorm-srgb" | "etc2-rgb8unorm" | "etc2-rgb8unorm-srgb" | "etc2-rgb8a1unorm" | "etc2-rgb8a1unorm-srgb" | "etc2-rgba8unorm" | "etc2-rgba8unorm-srgb" | "eac-r11unorm" | "eac-r11snorm" | "eac-rg11unorm" | "eac-rg11snorm" | "astc-4x4-unorm" | "astc-4x4-unorm-srgb" | "astc-5x4-unorm" | "astc-5x4-unorm-srgb" | "astc-5x5-unorm" | "astc-5x5-unorm-srgb" | "astc-6x5-unorm" | "astc-6x5-unorm-srgb" | "astc-6x6-unorm" | "astc-6x6-unorm-srgb" | "astc-8x5-unorm" | "astc-8x5-unorm-srgb" | "astc-8x6-unorm" | "astc-8x6-unorm-srgb" | "astc-8x8-unorm" | "astc-8x8-unorm-srgb" | "astc-10x5-unorm" | "astc-10x5-unorm-srgb" | "astc-10x6-unorm" | "astc-10x6-unorm-srgb" | "astc-10x8-unorm" | "astc-10x8-unorm-srgb" | "astc-10x10-unorm" | "astc-10x10-unorm-srgb" | "astc-12x10-unorm" | "astc-12x10-unorm-srgb" | "astc-12x12-unorm" | "astc-12x12-unorm-srgb" */
     var wgslLanguageFeatures: WGSLLanguageFeatures
 
 }
-
 
 external interface GPUAdapter {
     var features: GPUSupportedFeatures
@@ -623,7 +542,6 @@ external interface GPUAdapter {
 
 }
 
-
 external interface GPUAdapterInfo {
     var vendor: String
     var architecture: String
@@ -632,7 +550,6 @@ external interface GPUAdapterInfo {
 
 }
 
-
 external interface GPUBindGroup : GPUObjectBase
 external interface GPUBindGroupLayout : GPUObjectBase
 
@@ -640,7 +557,7 @@ external interface GPUBuffer : GPUObjectBase {
     var size: GPUSize64Out
     var usage: GPUFlagsConstant
     var mapState: String /* "unmapped" | "pending" | "mapped" */
-    fun mapAsync(mode: GPUMapModeFlags, offset: GPUSize64 = definedExternally, size: GPUSize64 = definedExternally): Promise<Nothing?>
+    fun mapAsync(mode: GPUMapModeFlags, offset: GPUSize64, size: GPUSize64): Promise<Any?>
     fun getMappedRange(offset: GPUSize64 = definedExternally, size: GPUSize64 = definedExternally): ArrayBuffer
     fun unmap(): Nothing?
     fun destroy(): Nothing?
@@ -650,12 +567,9 @@ external interface GPUBuffer : GPUObjectBase {
 
 external interface GPUCanvasContext {
     var canvas: dynamic /* HTMLCanvasElement | OffscreenCanvas */
-        get() = definedExternally
-        set(value) = definedExternally
     fun configure(configuration: GPUCanvasConfiguration): Nothing?
     fun unconfigure(): Nothing?
     fun getCurrentTexture(): GPUTexture
-
 }
 
 external interface GPUCommandBuffer : GPUObjectBase

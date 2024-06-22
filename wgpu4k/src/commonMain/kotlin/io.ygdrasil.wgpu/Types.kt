@@ -18,7 +18,7 @@ typealias GPUIntegerCoordinates = Pair<GPUIntegerCoordinate, GPUIntegerCoordinat
 
 typealias GPUIntegerCoordinateOut = Int
 
-typealias GPUMapModeFlags = Number
+typealias GPUMapModeFlags = Int
 
 typealias GPUPipelineConstantValue = Double
 

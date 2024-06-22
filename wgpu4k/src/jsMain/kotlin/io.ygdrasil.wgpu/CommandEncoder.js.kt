@@ -3,6 +3,7 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.*
+import io.ygdrasil.wgpu.internal.js.GPURenderPassTimestampWrites
 import io.ygdrasil.wgpu.mapper.map
 
 actual class CommandEncoder(private val handler: GPUCommandEncoder) : AutoCloseable {
@@ -55,11 +56,8 @@ private fun RenderPassDescriptor.convert(): GPURenderPassDescriptor = object : G
 	override var label: String? = this@convert.label ?: undefined
 	override var depthStencilAttachment: GPURenderPassDepthStencilAttachment? =
 		this@convert.depthStencilAttachment?.convert() ?: undefined
-
-	/*
-	override var occlusionQuerySet: GPUQuerySet?
-	override var timestampWrites: GPURenderPassTimestampWrites?
-	*/
+	override var occlusionQuerySet: GPUQuerySet? = undefined // TODO map this
+	override var timestampWrites: GPURenderPassTimestampWrites? = undefined // TODO map this
 	override var maxDrawCount: GPUSize64? = this@convert.maxDrawCount
 }
 

@@ -16,7 +16,10 @@ kotlin {
         binaries.executable()
         browser()
     }
-    jvm()
+    jvm {
+        // On to make the "application" plugin work, else we got class not found with main see https://youtrack.jetbrains.com/issue/KT-42683
+        withJava()
+    }
 
     sourceSets {
 
@@ -60,7 +63,7 @@ tasks.named<Test>("jvmTest") {
 	}
 }
 
-/*application {
+application {
     mainClass.set("MainKt")
     if (Platform.os == Os.MacOs) {
         applicationDefaultJvmArgs += "-XstartOnFirstThread"
@@ -68,4 +71,4 @@ tasks.named<Test>("jvmTest") {
 
     applicationDefaultJvmArgs += "--add-opens=java.base/java.lang=ALL-UNNAMED"
     applicationDefaultJvmArgs += "--enable-native-access=ALL-UNNAMED"
-}*/
+}

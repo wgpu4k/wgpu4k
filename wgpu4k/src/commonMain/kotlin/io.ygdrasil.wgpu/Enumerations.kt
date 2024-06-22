@@ -795,8 +795,7 @@ enum class VertexStepMode(
 ) : EnumerationWithValue {
     vertex(0),
     instance(1),
-    vertexbuffernotused(2),
-    ;
+    vertexbuffernotused(2);
 
     companion object {
         fun of(`value`: Int): VertexStepMode? = entries.find {
@@ -808,7 +807,6 @@ enum class VertexStepMode(
 enum class BufferUsage(
     override val `value`: Int,
 ) : EnumerationWithValue {
-    none(0),
     mapread(1),
     mapwrite(2),
     copysrc(4),
@@ -818,9 +816,7 @@ enum class BufferUsage(
     uniform(64),
     storage(128),
     indirect(256),
-    queryresolve(512),
-
-    ;
+    queryresolve(512);
 
     companion object {
         fun of(`value`: Int): BufferUsage? = entries.find {
@@ -848,17 +844,10 @@ enum class ColorWriteMask(
 }
 
 enum class MapMode(
-    val `value`: Int,
-) {
-    none(0),
+    override val `value`: Int,
+) : EnumerationWithValue {
     read(1),
-    write(2),
-
-    ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: MapMode): Int = value or other.value
+    write(2);
 
     companion object {
         fun of(`value`: Int): MapMode? = entries.find {
