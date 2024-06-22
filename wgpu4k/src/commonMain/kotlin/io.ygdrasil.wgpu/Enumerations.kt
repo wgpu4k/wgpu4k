@@ -190,9 +190,7 @@ enum class CompareFunction(
     greaterequal(5, "greater-equal"),
     equal(6, "equal"),
     notequal(7, "not-equal"),
-    always(8, "always"),
-    ;
-
+    always(8, "always");
 
     companion object {
         fun of(value: Int): CompareFunction? = entries.find {
@@ -207,9 +205,7 @@ enum class CompilationInfoRequestStatus(
     success(0),
     error(1),
     devicelost(2),
-    unknown(3),
-
-    ;
+    unknown(3);
 
     infix fun or(other: Int): Int = value or other
 
@@ -227,9 +223,7 @@ enum class CompilationMessageType(
 ) {
     error(0),
     warning(1),
-    info(2),
-
-    ;
+    info(2);
 
     infix fun or(other: Int): Int = value or other
 
@@ -249,8 +243,7 @@ enum class CompositeAlphaMode(
     opaque(1),
     premultiplied(2),
     postmultiplied(3),
-    inherit(4),
-    ;
+    inherit(4);
 
     infix fun or(other: Int): Int = value or other
 
@@ -271,9 +264,7 @@ enum class CreatePipelineAsyncStatus(
     internalerror(2),
     devicelost(3),
     devicedestroyed(4),
-    unknown(5),
-
-    ;
+    unknown(5);
 
     infix fun or(other: Int): Int = value or other
 
@@ -291,9 +282,7 @@ enum class CullMode(
 ) : EnumerationWithValue {
     none(0),
     front(1),
-    back(2),
-
-    ;
+    back(2);
 
     companion object {
         fun of(value: Int): CullMode? = entries.find {
@@ -306,9 +295,7 @@ enum class DeviceLostReason(
     val value: Int,
 ) {
     undefined(0),
-    destroyed(1),
-
-    ;
+    destroyed(1);
 
     infix fun or(other: Int): Int = value or other
 
@@ -326,9 +313,7 @@ enum class ErrorFilter(
 ) {
     validation(0),
     outofmemory(1),
-    `internal`(2),
-
-    ;
+    `internal`(2);
 
     infix fun or(other: Int): Int = value or other
 
@@ -349,9 +334,7 @@ enum class ErrorType(
     outofmemory(2),
     `internal`(3),
     unknown(4),
-    devicelost(5),
-
-    ;
+    devicelost(5);
 
     infix fun or(other: Int): Int = value or other
 
@@ -378,9 +361,7 @@ enum class FeatureName(
     shaderf16(8),
     rg11b10ufloatrenderable(9),
     bgra8unormstorage(10),
-    float32filterable(11),
-
-    ;
+    float32filterable(11);
 
     infix fun or(other: Int): Int = value or other
 
@@ -397,8 +378,7 @@ enum class FilterMode(
     override val value: Int,
 ) : EnumerationWithValue {
     nearest(0),
-    linear(1),
-    ;
+    linear(1);
 
     companion object {
         fun of(value: Int): FilterMode? = entries.find {
@@ -411,9 +391,7 @@ enum class FrontFace(
     override val value: Int,
 ) : EnumerationWithValue {
     ccw(0),
-    cw(1),
-
-    ;
+    cw(1);
 
     companion object {
         fun of(value: Int): FrontFace? = entries.find {
@@ -453,8 +431,7 @@ enum class MipmapFilterMode(
     override val value: Int,
 ) : EnumerationWithValue {
     nearest(0),
-    linear(1),
-    ;
+    linear(1);
 
     companion object {
         fun of(value: Int): MipmapFilterMode? = entries.find {
@@ -479,18 +456,12 @@ enum class PowerPreference(
 }
 
 enum class PresentMode(
-    val value: Int,
-) {
+    override val value: Int,
+) : EnumerationWithValue{
     fifo(0),
     fiforelaxed(1),
     immediate(2),
-    mailbox(3),
-
-    ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: PresentMode): Int = value or other.value
+    mailbox(3);
 
     companion object {
         fun of(value: Int): PresentMode? = entries.find {
@@ -507,8 +478,7 @@ enum class PrimitiveTopology(
     linelist(1, "line-list"),
     linestrip(2, "line-strip"),
     trianglelist(3, "triangle-list"),
-    trianglestrip(4, "triangle-strip"),
-    ;
+    trianglestrip(4, "triangle-strip");
 
     companion object {
         fun of(value: Int): PrimitiveTopology? = entries.find {
@@ -521,9 +491,7 @@ enum class QueryType(
     val value: Int,
 ) {
     occlusion(0),
-    timestamp(1),
-
-    ;
+    timestamp(1);
 
     infix fun or(other: Int): Int = value or other
 
@@ -542,9 +510,7 @@ enum class QueueWorkDoneStatus(
     success(0),
     error(1),
     unknown(2),
-    devicelost(3),
-
-    ;
+    devicelost(3);
 
     infix fun or(other: Int): Int = value or other
 
@@ -558,18 +524,12 @@ enum class QueueWorkDoneStatus(
 }
 
 enum class RequestAdapterStatus(
-    val value: Int,
-) {
+    override val value: Int,
+) : EnumerationWithValue {
     success(0),
     unavailable(1),
     error(2),
-    unknown(3),
-
-    ;
-
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: RequestAdapterStatus): Int = value or other.value
+    unknown(3);
 
     companion object {
         fun of(value: Int): RequestAdapterStatus? = entries.find {
@@ -583,9 +543,7 @@ enum class RequestDeviceStatus(
 ) {
     success(0),
     error(1),
-    unknown(2),
-
-    ;
+    unknown(2);
 
     infix fun or(other: Int): Int = value or other
 
