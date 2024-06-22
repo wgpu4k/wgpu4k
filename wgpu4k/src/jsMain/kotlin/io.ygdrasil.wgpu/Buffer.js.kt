@@ -12,6 +12,8 @@ actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
 		get() = handler.size
 	actual val usage: Set<BufferUsage>
 		get() = BufferUsage.entries.filter { it.value and handler.usage != 0 }.toSet()
+	actual val mapState: BufferMapState
+		get() = BufferMapState.of(handler.mapState) ?: error("fail to get MapState")
 
 	actual fun unmap() {
 		handler.unmap()

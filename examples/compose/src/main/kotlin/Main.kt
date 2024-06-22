@@ -141,8 +141,8 @@ suspend fun runApp(window: ComposeWindow) {
 		)
 
 		fun run() {
-			application.renderFrame()
 			applicationScope.launch {
+				application.renderFrame()
 				delay(UPDATE_INTERVAL)
 				run()
 			}

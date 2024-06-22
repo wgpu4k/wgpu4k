@@ -5,6 +5,7 @@ import io.ygdrasil.wgpu.glfwContextRenderer
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPULogCallback
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import korlibs.io.async.launch
+import korlibs.io.async.launchUnscoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.lwjgl.glfw.GLFW.*
@@ -34,14 +35,18 @@ fun main() = runBlocking {
 
     fun run() {
         glfwDispatcher.dispatch(Dispatchers.Main) {
-            application.renderFrame()
-            run()
+            Dispatchers.Main.launchUnscoped {
+                application.renderFrame()
+                run()
+            }
         }
     }
 
     glfwSetWindowSizeCallback(glfwContext.windowHandler) { _, windowWidth, windowHeight ->
         application.configureRenderingContext()
-        application.renderFrame()
+        Dispatchers.Main.launchUnscoped {
+            application.renderFrame()
+        }
     }
 
     glfwSetKeyCallback(glfwContext.windowHandler) { _, key, scancode, action, mods ->

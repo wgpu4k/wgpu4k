@@ -44,7 +44,9 @@ fun jsApplication(canvas: HTMLCanvasElement) {
         }
         // Schedule main loop to run repeatedly
         setInterval({
-            application.renderFrame()
+            MainScope().launch {
+                application.renderFrame()
+            }
         }, UPDATE_INTERVAL)
 
     }

@@ -16,24 +16,22 @@ internal fun Set<EnumerationWithValue>.toFlagInt(): Int = when (size) {
 }
 
 enum class AdapterType(
-    val `value`: Int,
+    val value: Int,
 ) {
     discretegpu(0),
     integratedgpu(1),
     cpu(2),
-    unknown(3),
-
-    ;
+    unknown(3);
 
     companion object {
-        fun of(`value`: Int): AdapterType? = entries.find {
+        fun of(value: Int): AdapterType? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class AddressMode(
-    override val `value`: Int,
+    override val value: Int,
     val stringValue: String,
 ) : EnumerationWithValue {
     repeat(0, "repeat"),
@@ -42,14 +40,14 @@ enum class AddressMode(
     ;
 
     companion object {
-        fun of(`value`: Int): AddressMode? = entries.find {
+        fun of(value: Int): AddressMode? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class BackendType(
-    val `value`: Int,
+    val value: Int,
 ) {
     undefined(0),
     `null`(1),
@@ -68,14 +66,14 @@ enum class BackendType(
     infix fun or(other: BackendType): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): BackendType? = entries.find {
+        fun of(value: Int): BackendType? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class BlendFactor(
-    override val `value`: Int,
+    override val value: Int,
     val stringValue: String,
 ) : EnumerationWithValue {
     zero(0, "zero"),
@@ -94,14 +92,14 @@ enum class BlendFactor(
     ;
 
     companion object {
-        fun of(`value`: Int): BlendFactor? = entries.find {
+        fun of(value: Int): BlendFactor? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class BlendOperation(
-    override val `value`: Int,
+    override val value: Int,
     val stringValue: String,
 ) : EnumerationWithValue {
     add(0, "add"),
@@ -112,14 +110,14 @@ enum class BlendOperation(
     ;
 
     companion object {
-        fun of(`value`: Int): BlendOperation? = entries.find {
+        fun of(value: Int): BlendOperation? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class BufferBindingType(
-    override val `value`: Int,
+    override val value: Int,
     val stringValue: String,
 ) : EnumerationWithValue {
     uniform(1, "uniform"),
@@ -127,14 +125,14 @@ enum class BufferBindingType(
     readonlystorage(3, "read-only-storage");
 
     companion object {
-        fun of(`value`: Int): BufferBindingType? = entries.find {
+        fun of(value: Int): BufferBindingType? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class BufferMapAsyncStatus(
-    val `value`: Int,
+    val value: Int,
 ) {
     success(0),
     validationerror(1),
@@ -153,34 +151,36 @@ enum class BufferMapAsyncStatus(
     infix fun or(other: BufferMapAsyncStatus): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): BufferMapAsyncStatus? = entries.find {
+        fun of(value: Int): BufferMapAsyncStatus? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class BufferMapState(
-    val `value`: Int,
+    val value: Int,
 ) {
     unmapped(0),
     pending(1),
-    mapped(2),
-
-    ;
+    mapped(2);
 
     infix fun or(other: Int): Int = value or other
 
     infix fun or(other: BufferMapState): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): BufferMapState? = entries.find {
+        fun of(value: Int): BufferMapState? = entries.find {
             it.value == value
+        }
+
+        fun of(value: String): BufferMapState? = entries.find {
+            it.name == value
         }
     }
 }
 
 enum class CompareFunction(
-    override val `value`: Int,
+    override val value: Int,
     val stringValue: String,
 ) : EnumerationWithValue {
     never(1, "never"),
@@ -195,14 +195,14 @@ enum class CompareFunction(
 
 
     companion object {
-        fun of(`value`: Int): CompareFunction? = entries.find {
+        fun of(value: Int): CompareFunction? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class CompilationInfoRequestStatus(
-    val `value`: Int,
+    val value: Int,
 ) {
     success(0),
     error(1),
@@ -216,14 +216,14 @@ enum class CompilationInfoRequestStatus(
     infix fun or(other: CompilationInfoRequestStatus): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): CompilationInfoRequestStatus? = entries.find {
+        fun of(value: Int): CompilationInfoRequestStatus? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class CompilationMessageType(
-    val `value`: Int,
+    val value: Int,
 ) {
     error(0),
     warning(1),
@@ -236,14 +236,14 @@ enum class CompilationMessageType(
     infix fun or(other: CompilationMessageType): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): CompilationMessageType? = entries.find {
+        fun of(value: Int): CompilationMessageType? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class CompositeAlphaMode(
-    val `value`: Int,
+    val value: Int,
 ) {
     auto(0),
     opaque(1),
@@ -257,14 +257,14 @@ enum class CompositeAlphaMode(
     infix fun or(other: CompositeAlphaMode): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): CompositeAlphaMode? = entries.find {
+        fun of(value: Int): CompositeAlphaMode? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class CreatePipelineAsyncStatus(
-    val `value`: Int,
+    val value: Int,
 ) {
     success(0),
     validationerror(1),
@@ -280,14 +280,14 @@ enum class CreatePipelineAsyncStatus(
     infix fun or(other: CreatePipelineAsyncStatus): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): CreatePipelineAsyncStatus? = entries.find {
+        fun of(value: Int): CreatePipelineAsyncStatus? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class CullMode(
-    override val `value`: Int,
+    override val value: Int,
 ) : EnumerationWithValue {
     none(0),
     front(1),
@@ -296,14 +296,14 @@ enum class CullMode(
     ;
 
     companion object {
-        fun of(`value`: Int): CullMode? = entries.find {
+        fun of(value: Int): CullMode? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class DeviceLostReason(
-    val `value`: Int,
+    val value: Int,
 ) {
     undefined(0),
     destroyed(1),
@@ -315,14 +315,14 @@ enum class DeviceLostReason(
     infix fun or(other: DeviceLostReason): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): DeviceLostReason? = entries.find {
+        fun of(value: Int): DeviceLostReason? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class ErrorFilter(
-    val `value`: Int,
+    val value: Int,
 ) {
     validation(0),
     outofmemory(1),
@@ -335,14 +335,14 @@ enum class ErrorFilter(
     infix fun or(other: ErrorFilter): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): ErrorFilter? = entries.find {
+        fun of(value: Int): ErrorFilter? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class ErrorType(
-    val `value`: Int,
+    val value: Int,
 ) {
     noerror(0),
     validation(1),
@@ -358,14 +358,14 @@ enum class ErrorType(
     infix fun or(other: ErrorType): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): ErrorType? = entries.find {
+        fun of(value: Int): ErrorType? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class FeatureName(
-    val `value`: Int,
+    val value: Int,
 ) {
     undefined(0),
     depthclipcontrol(1),
@@ -387,28 +387,28 @@ enum class FeatureName(
     infix fun or(other: FeatureName): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): FeatureName? = entries.find {
+        fun of(value: Int): FeatureName? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class FilterMode(
-    override val `value`: Int,
+    override val value: Int,
 ) : EnumerationWithValue {
     nearest(0),
     linear(1),
     ;
 
     companion object {
-        fun of(`value`: Int): FilterMode? = entries.find {
+        fun of(value: Int): FilterMode? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class FrontFace(
-    override val `value`: Int,
+    override val value: Int,
 ) : EnumerationWithValue {
     ccw(0),
     cw(1),
@@ -416,55 +416,55 @@ enum class FrontFace(
     ;
 
     companion object {
-        fun of(`value`: Int): FrontFace? = entries.find {
+        fun of(value: Int): FrontFace? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class IndexFormat(
-    override val `value`: Int,
+    override val value: Int,
 ) : EnumerationWithValue {
 
     uint16(1),
     uint32(2);
 
     companion object {
-        fun of(`value`: Int): IndexFormat? = entries.find {
+        fun of(value: Int): IndexFormat? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class LoadOp(
-    override val `value`: Int,
+    override val value: Int,
 ) : EnumerationWithValue {
     clear(1),
     load(2);
 
     companion object {
-        fun of(`value`: Int): LoadOp? = entries.find {
+        fun of(value: Int): LoadOp? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class MipmapFilterMode(
-    override val `value`: Int,
+    override val value: Int,
 ) : EnumerationWithValue {
     nearest(0),
     linear(1),
     ;
 
     companion object {
-        fun of(`value`: Int): MipmapFilterMode? = entries.find {
+        fun of(value: Int): MipmapFilterMode? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class PowerPreference(
-    override val `value`: Int,
+    override val value: Int,
      val stringValue: String?,
 ) : EnumerationWithValue {
 
@@ -472,14 +472,14 @@ enum class PowerPreference(
     highPerformance(2, "low-power");
 
     companion object {
-        fun of(`value`: Int): PowerPreference? = entries.find {
+        fun of(value: Int): PowerPreference? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class PresentMode(
-    val `value`: Int,
+    val value: Int,
 ) {
     fifo(0),
     fiforelaxed(1),
@@ -493,14 +493,14 @@ enum class PresentMode(
     infix fun or(other: PresentMode): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): PresentMode? = entries.find {
+        fun of(value: Int): PresentMode? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class PrimitiveTopology(
-    override val `value`: Int,
+    override val value: Int,
     val stringValue: String,
 ) : EnumerationWithValue {
     pointlist(0, "point-list"),
@@ -511,14 +511,14 @@ enum class PrimitiveTopology(
     ;
 
     companion object {
-        fun of(`value`: Int): PrimitiveTopology? = entries.find {
+        fun of(value: Int): PrimitiveTopology? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class QueryType(
-    val `value`: Int,
+    val value: Int,
 ) {
     occlusion(0),
     timestamp(1),
@@ -530,14 +530,14 @@ enum class QueryType(
     infix fun or(other: QueryType): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): QueryType? = entries.find {
+        fun of(value: Int): QueryType? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class QueueWorkDoneStatus(
-    val `value`: Int,
+    val value: Int,
 ) {
     success(0),
     error(1),
@@ -551,14 +551,14 @@ enum class QueueWorkDoneStatus(
     infix fun or(other: QueueWorkDoneStatus): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): QueueWorkDoneStatus? = entries.find {
+        fun of(value: Int): QueueWorkDoneStatus? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class RequestAdapterStatus(
-    val `value`: Int,
+    val value: Int,
 ) {
     success(0),
     unavailable(1),
@@ -572,14 +572,14 @@ enum class RequestAdapterStatus(
     infix fun or(other: RequestAdapterStatus): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): RequestAdapterStatus? = entries.find {
+        fun of(value: Int): RequestAdapterStatus? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class RequestDeviceStatus(
-    val `value`: Int,
+    val value: Int,
 ) {
     success(0),
     error(1),
@@ -592,14 +592,14 @@ enum class RequestDeviceStatus(
     infix fun or(other: RequestDeviceStatus): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): RequestDeviceStatus? = entries.find {
+        fun of(value: Int): RequestDeviceStatus? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class SType(
-    val `value`: Int,
+    val value: Int,
 ) {
     invalid(0),
     surfacedescriptorfrommetallayer(1),
@@ -621,14 +621,14 @@ enum class SType(
     infix fun or(other: SType): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): SType? = entries.find {
+        fun of(value: Int): SType? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class SamplerBindingType(
-    override val `value`: Int,
+    override val value: Int,
     val `stringValue`: String,
 ) : EnumerationWithValue{
     filtering(1, "filtering"),
@@ -636,14 +636,14 @@ enum class SamplerBindingType(
     comparison(3, "comparison");
 
     companion object {
-        fun of(`value`: Int): SamplerBindingType? = entries.find {
+        fun of(value: Int): SamplerBindingType? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class StencilOperation(
-    override val `value`: Int,
+    override val value: Int,
     val `stringValue`: String,
 ) : EnumerationWithValue {
     keep(0, "keep"),
@@ -657,14 +657,14 @@ enum class StencilOperation(
     ;
 
     companion object {
-        fun of(`value`: Int): StencilOperation? = entries.find {
+        fun of(value: Int): StencilOperation? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class StorageTextureAccess(
-    override val `value`: Int,
+    override val value: Int,
     val stringValue: String,
 ) : EnumerationWithValue {
     writeonly(1, "write-only"),
@@ -673,28 +673,28 @@ enum class StorageTextureAccess(
     ;
 
     companion object {
-        fun of(`value`: Int): StorageTextureAccess? = entries.find {
+        fun of(value: Int): StorageTextureAccess? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class StoreOp(
-    override val `value`: Int,
+    override val value: Int,
 ) : EnumerationWithValue {
     store(1),
     discard(2),
     ;
 
     companion object {
-        fun of(`value`: Int): StoreOp? = entries.find {
+        fun of(value: Int): StoreOp? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class SurfaceGetCurrentTextureStatus(
-    val `value`: Int,
+    val value: Int,
 ) {
     success(0),
     timeout(1),
@@ -710,14 +710,14 @@ enum class SurfaceGetCurrentTextureStatus(
     infix fun or(other: SurfaceGetCurrentTextureStatus): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): SurfaceGetCurrentTextureStatus? = entries.find {
+        fun of(value: Int): SurfaceGetCurrentTextureStatus? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class TextureAspect(
-    override val `value`: Int,
+    override val value: Int,
     val stringValue: String,
 ) : EnumerationWithValue {
     all(0, "all"),
@@ -726,14 +726,14 @@ enum class TextureAspect(
     ;
 
     companion object {
-        fun of(`value`: Int): TextureAspect? = entries.find {
+        fun of(value: Int): TextureAspect? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class TextureDimension(
-    override val `value`: Int,
+    override val value: Int,
     val stringValue: String
 ) : EnumerationWithValue {
     `_1d`(0, "1d"),
@@ -742,11 +742,11 @@ enum class TextureDimension(
     ;
 
     companion object {
-        fun of(`value`: Int): TextureDimension? = entries.find {
+        fun of(value: Int): TextureDimension? = entries.find {
             it.value == value
         }
 
-        fun of(`value`: String): TextureDimension? = entries.find {
+        fun of(value: String): TextureDimension? = entries.find {
             it.stringValue == value
         }
     }
@@ -754,7 +754,7 @@ enum class TextureDimension(
 
 
 enum class TextureSampleType(
-    override val `value`: Int,
+    override val value: Int,
     val stringValue: String
 ) : EnumerationWithValue {
     float(1, "float"),
@@ -764,14 +764,14 @@ enum class TextureSampleType(
     uint(5, "uint");
 
     companion object {
-        fun of(`value`: Int): TextureSampleType? = entries.find {
+        fun of(value: Int): TextureSampleType? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class TextureViewDimension(
-    override val `value`: Int,
+    override val value: Int,
     val stringValue: String,
 ) : EnumerationWithValue {
     `_1d`(1, "1d"),
@@ -783,7 +783,7 @@ enum class TextureViewDimension(
     ;
 
     companion object {
-        fun of(`value`: Int): TextureViewDimension? = entries.find {
+        fun of(value: Int): TextureViewDimension? = entries.find {
             it.value == value
         }
     }
@@ -791,21 +791,21 @@ enum class TextureViewDimension(
 
 
 enum class VertexStepMode(
-    override val `value`: Int,
+    override val value: Int,
 ) : EnumerationWithValue {
     vertex(0),
     instance(1),
     vertexbuffernotused(2);
 
     companion object {
-        fun of(`value`: Int): VertexStepMode? = entries.find {
+        fun of(value: Int): VertexStepMode? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class BufferUsage(
-    override val `value`: Int,
+    override val value: Int,
 ) : EnumerationWithValue {
     mapread(1),
     mapwrite(2),
@@ -819,14 +819,14 @@ enum class BufferUsage(
     queryresolve(512);
 
     companion object {
-        fun of(`value`: Int): BufferUsage? = entries.find {
+        fun of(value: Int): BufferUsage? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class ColorWriteMask(
-    override val `value`: Int,
+    override val value: Int,
 ) : EnumerationWithValue {
     none(0),
     red(1),
@@ -837,41 +837,41 @@ enum class ColorWriteMask(
     ;
 
     companion object {
-        fun of(`value`: Int): ColorWriteMask? = entries.find {
+        fun of(value: Int): ColorWriteMask? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class MapMode(
-    override val `value`: Int,
+    override val value: Int,
 ) : EnumerationWithValue {
     read(1),
     write(2);
 
     companion object {
-        fun of(`value`: Int): MapMode? = entries.find {
+        fun of(value: Int): MapMode? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class ShaderStage(
-    override val `value`: Int,
+    override val value: Int,
 ) : EnumerationWithValue {
     vertex(1),
     fragment(2),
     compute(4);
 
     companion object {
-        fun of(`value`: Int): ShaderStage? = entries.find {
+        fun of(value: Int): ShaderStage? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class TextureUsage(
-    override val `value`: Int,
+    override val value: Int,
 ) : EnumerationWithValue {
     none(0),
     copysrc(1),
@@ -883,7 +883,7 @@ enum class TextureUsage(
     ;
 
     companion object {
-        fun of(`value`: Int): TextureUsage? = entries.find {
+        fun of(value: Int): TextureUsage? = entries.find {
             it.value == value
         }
     }
@@ -892,7 +892,7 @@ enum class TextureUsage(
 infix fun Int.or(other: TextureUsage): Int = this or other.value
 
 enum class NativeSType(
-    val `value`: Int,
+    val value: Int,
 ) {
     stype_deviceextras(196_609),
     stype_requiredlimitsextras(196_610),
@@ -912,14 +912,14 @@ enum class NativeSType(
     infix fun or(other: NativeSType): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): NativeSType? = entries.find {
+        fun of(value: Int): NativeSType? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class NativeFeature(
-    val `value`: Int,
+    val value: Int,
 ) {
     pushconstants(196_609),
     textureadapterspecificformatfeatures(196_610),
@@ -937,14 +937,14 @@ enum class NativeFeature(
     infix fun or(other: NativeFeature): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): NativeFeature? = entries.find {
+        fun of(value: Int): NativeFeature? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class LogLevel(
-    val `value`: Int,
+    val value: Int,
 ) {
     off(0),
     error(1),
@@ -960,14 +960,14 @@ enum class LogLevel(
     infix fun or(other: LogLevel): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): LogLevel? = entries.find {
+        fun of(value: Int): LogLevel? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class InstanceBackend(
-    val `value`: Int,
+    val value: Int,
 ) {
     all(0),
     vulkan(1),
@@ -986,14 +986,14 @@ enum class InstanceBackend(
     infix fun or(other: InstanceBackend): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): InstanceBackend? = entries.find {
+        fun of(value: Int): InstanceBackend? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class InstanceFlag(
-    val `value`: Int,
+    val value: Int,
 ) {
     default(0),
     debug(1),
@@ -1007,14 +1007,14 @@ enum class InstanceFlag(
     infix fun or(other: InstanceFlag): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): InstanceFlag? = entries.find {
+        fun of(value: Int): InstanceFlag? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class Dx12Compiler(
-    val `value`: Int,
+    val value: Int,
 ) {
     undefined(0),
     fxc(1),
@@ -1027,14 +1027,14 @@ enum class Dx12Compiler(
     infix fun or(other: Dx12Compiler): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): Dx12Compiler? = entries.find {
+        fun of(value: Int): Dx12Compiler? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class Gles3MinorVersion(
-    val `value`: Int,
+    val value: Int,
 ) {
     automatic(0),
     version0(1),
@@ -1048,14 +1048,14 @@ enum class Gles3MinorVersion(
     infix fun or(other: Gles3MinorVersion): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): Gles3MinorVersion? = entries.find {
+        fun of(value: Int): Gles3MinorVersion? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class PipelineStatisticName(
-    val `value`: Int,
+    val value: Int,
 ) {
     vertexshaderinvocations(0),
     clipperinvocations(1),
@@ -1070,14 +1070,14 @@ enum class PipelineStatisticName(
     infix fun or(other: PipelineStatisticName): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): PipelineStatisticName? = entries.find {
+        fun of(value: Int): PipelineStatisticName? = entries.find {
             it.value == value
         }
     }
 }
 
 enum class NativeQueryType(
-    val `value`: Int,
+    val value: Int,
 ) {
     pipelinestatistics(196_608),
 
@@ -1088,7 +1088,7 @@ enum class NativeQueryType(
     infix fun or(other: NativeQueryType): Int = value or other.value
 
     companion object {
-        fun of(`value`: Int): NativeQueryType? = entries.find {
+        fun of(value: Int): NativeQueryType? = entries.find {
             it.value == value
         }
     }

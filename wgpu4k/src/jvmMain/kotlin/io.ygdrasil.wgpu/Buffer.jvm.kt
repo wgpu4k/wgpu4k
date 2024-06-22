@@ -14,6 +14,9 @@ actual class Buffer(internal val handler: MemorySegment) : AutoCloseable {
     actual val usage: Set<BufferUsage>
         get() = wgpu_h.wgpuBufferGetUsage(handler)
             .let { usage -> BufferUsage.entries.filter { it.value and usage != 0 }.toSet() }
+    actual val mapState: BufferMapState
+        get() = wgpu_h.wgpuBufferGetMapState(handler)
+            .let { BufferMapState.of(it) ?: error("Can't get map state: $it") }
 
     actual fun unmap() {
         wgpu_h.wgpuBufferUnmap(handler)

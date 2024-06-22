@@ -6,6 +6,7 @@ expect class Buffer : AutoCloseable {
 
 	val size: GPUSize64
 	val usage: Set<BufferUsage>
+	val mapState: BufferMapState
 
 	fun unmap()
 
