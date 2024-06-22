@@ -587,7 +587,7 @@ enum class SType(
 
 enum class SamplerBindingType(
     override val value: Int,
-    val `stringValue`: String,
+    val stringValue: String,
 ) : EnumerationWithValue{
     filtering(1, "filtering"),
     nonfiltering(2, "non-filtering"),
@@ -602,7 +602,7 @@ enum class SamplerBindingType(
 
 enum class StencilOperation(
     override val value: Int,
-    val `stringValue`: String,
+    val stringValue: String,
 ) : EnumerationWithValue {
     keep(0, "keep"),
     zero(1, "zero"),
