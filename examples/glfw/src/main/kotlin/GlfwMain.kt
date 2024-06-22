@@ -34,8 +34,8 @@ fun main() = runBlocking {
     )
 
     fun run() {
-        glfwDispatcher.dispatch(Dispatchers.Main) {
-            Dispatchers.Main.launchUnscoped {
+        glfwDispatcher.dispatch(Dispatchers.Default) {
+            Dispatchers.Default.launchUnscoped {
                 application.renderFrame()
                 run()
             }
@@ -44,7 +44,7 @@ fun main() = runBlocking {
 
     glfwSetWindowSizeCallback(glfwContext.windowHandler) { _, windowWidth, windowHeight ->
         application.configureRenderingContext()
-        Dispatchers.Main.launchUnscoped {
+        Dispatchers.Default.launchUnscoped {
             application.renderFrame()
         }
     }
@@ -66,7 +66,7 @@ fun main() = runBlocking {
             }
 
 
-            launch(Dispatchers.Main) {
+            launch(Dispatchers.Default) {
                 application.changeScene(application.availableScenes[index])
             }
         }
