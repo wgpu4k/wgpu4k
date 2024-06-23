@@ -13,3 +13,9 @@ actual fun initLog() {
     wgpu_h.wgpuSetLogLevel(LogLevel.trace.value)
     wgpu_h.wgpuSetLogCallback(callback, MemorySegment.NULL)
 }
+
+actual fun getSceneParameter(): SceneParameter {
+    val scene = System.getenv("scene")
+    val frame = System.getenv("frame")
+    return SceneParameter(scene, frame.toInt())
+}

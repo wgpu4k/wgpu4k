@@ -4,6 +4,12 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
 }
 
+val commonResourcesFile = getCommonProject()
+    .projectDir
+    .resolve("src")
+    .resolve("commonMain")
+    .resolve("resources")
+
 java {
 	toolchain {
 		languageVersion.set(JavaLanguageVersion.of(22))
@@ -28,6 +34,14 @@ kotlin {
 				implementation(projects.examples.common)
             }
         }
+
+        val jsMain by getting {
+            resources.setSrcDirs(
+                resources.srcDirs + setOf(
+                    commonResourcesFile
+                )
+            )
+        }
     }
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
@@ -51,3 +65,10 @@ tasks.register<JavaExec>("runApp") {
     }
     classpath = sourceSets["main"].runtimeClasspath
 }
+
+fun getHeadlessProject() = projects.examples.headless.identityPath.path
+    ?.let(::project) ?: error("Could not find project path")
+
+
+fun getCommonProject() = projects.examples.common.identityPath.path
+    ?.let(::project) ?: error("Could not find project path")

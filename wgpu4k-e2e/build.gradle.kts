@@ -1,4 +1,3 @@
-
 plugins {
     kotlin("jvm")
 }
@@ -27,8 +26,9 @@ tasks.register<JavaExec>("runJvmE2e") {
 tasks.create("runE2eTest") {
     doLast {
         val server = endToEndWebserver(getHeadlessProject().projectDir.absolutePath)
-        browser()
+        browser(project.projectDir)
         server.stop()
+
     }
 }
 

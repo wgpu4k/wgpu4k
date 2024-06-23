@@ -1,5 +1,6 @@
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.scenes.basic.HelloTriangleScene
+import io.ygdrasil.wgpu.examples.Scene
+import io.ygdrasil.wgpu.examples.loadScenes
 import korlibs.image.bitmap.Bitmap32
 import korlibs.image.format.PNG
 import korlibs.image.format.writeBitmap
@@ -9,8 +10,10 @@ import korlibs.io.file.std.localVfs
 suspend fun captureScene() {
     val context = getHeadlessContext()
     initLog()
+    val (sceneName, frame) = getSceneParameter()
     val renderingContext = context.renderingContext
-    HelloTriangleScene(context).let { scene ->
+    val availableScenes = loadScenes(context)
+    availableScenes.findWithName(sceneName).let { scene ->
 
         autoClosableContext {
             context.bind()
@@ -26,6 +29,7 @@ suspend fun captureScene() {
                 )
             )
 
+            scene.frame = frame
             with(scene) { render() }
 
             if (renderingContext is TextureRenderingContext) {
@@ -73,6 +77,12 @@ suspend fun captureScene() {
 
 }
 
+private fun List<Scene>.findWithName(sceneName: String): Scene = first {
+    it::class.simpleName == sceneName
+}
+
+expect fun getSceneParameter(): SceneParameter
+
 fun byteArrayToIntArrayBigEndian(input: ByteArray, output: IntArray) {
     output.indices.forEach { index ->
         output[index] = ((input[index * 4].toInt() and 0xFF) shl 24) or
@@ -83,3 +93,6 @@ fun byteArrayToIntArrayBigEndian(input: ByteArray, output: IntArray) {
 }
 
 expect fun initLog()
+
+
+data class SceneParameter(val sceneName: String, val frame: Int)

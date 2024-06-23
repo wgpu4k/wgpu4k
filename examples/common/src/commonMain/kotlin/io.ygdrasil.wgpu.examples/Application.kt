@@ -1,26 +1,10 @@
 package io.ygdrasil.wgpu.examples
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.scenes.basic.*
 
 suspend fun createApplication(wgpuContext: WGPUContext): Application {
-    val assetManager = genericAssetManager()
     wgpuContext.configureRenderingContext()
-
-    val availableScenes = listOf(
-        HelloTriangleScene(wgpuContext),
-        HelloTriangleMSAAScene(wgpuContext),
-        HelloTriangleRotatingScene(wgpuContext),
-        RotatingCubeScene(wgpuContext),
-        TwoCubesScene(wgpuContext),
-        CubemapScene(wgpuContext, assetManager),
-        FractalCubeScene(wgpuContext),
-        InstancedCubeScene(wgpuContext),
-        TexturedCubeScene(wgpuContext, assetManager),
-        // TODO: Not working test on wgpu new releases ParticlesScene(),
-        // TODO: fix it SkinnedMeshScene(),
-    )
-
+    val availableScenes = loadScenes(wgpuContext)
     val scene = availableScenes.first()
     scene.initialize()
 
