@@ -23,7 +23,7 @@ tasks.register<JavaExec>("runJvmE2e") {
     classpath = sourceSets["main"].runtimeClasspath
 }
 
-tasks.create("runE2eTest") {
+tasks.create("e2eTest") {
     doLast {
         val server = endToEndWebserver(getHeadlessProject().projectDir.absolutePath)
         browser(project.projectDir)
