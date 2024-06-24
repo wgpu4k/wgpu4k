@@ -57,7 +57,6 @@ fun browser(projectDir: File) {
                 scenes.forEach { (sceneName, frames) ->
                     frames.forEach { frame ->
                         page.navigate("http://localhost:9000/index.html?scene=$sceneName&frame=$frame")
-                        Thread.sleep(1000)
                         page.screenshot(
                             Page.ScreenshotOptions()
                                 .setPath(
