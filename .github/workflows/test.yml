@@ -40,7 +40,7 @@ jobs:
       - name: Run e2e tests
         run: |
           ./gradlew assemble 
-          ./gradlew :wgpu4k-e2e:e2eTest
+          ./gradlew :wgpu4k-e2e:e2eTest --stacktrace
       - name: Bundle the build report
         if: failure()
         run: | 
