@@ -15,7 +15,8 @@ actual fun initLog() {
 }
 
 actual fun getSceneParameter(): SceneParameter {
-    val scene = System.getenv("scene")
-    val frame = System.getenv("frame")
-    return SceneParameter(scene, frame.toInt())
+    val scene = System.getProperty("scene")
+    val frame = System.getProperty("frame")
+    val screenshotPath = System.getProperty("screenshotPath")
+    return SceneParameter(scene, frame.toInt(), screenshotPath)
 }

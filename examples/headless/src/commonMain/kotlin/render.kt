@@ -10,7 +10,7 @@ import korlibs.io.file.std.localVfs
 suspend fun captureScene() {
     val context = getHeadlessContext()
     initLog()
-    val (sceneName, frame) = getSceneParameter()
+    val (sceneName, frame, screenshotPath) = getSceneParameter()
     val renderingContext = context.renderingContext
     val availableScenes = loadScenes(context)
     availableScenes.findWithName(sceneName).let { scene ->
@@ -65,9 +65,9 @@ suspend fun captureScene() {
                 val image = Bitmap32(width = renderingContext.width, height = renderingContext.height)
                 byteArrayToIntArrayBigEndian(input = textureData, output = image.ints)
 
-                val path = "/Users/chaos/"
-                val screenshotsVfs = localVfs(path).also { it.mkdirs() }.jail()
-                screenshotsVfs["image.png"].writeBitmap(image, PNG)
+                val path = screenshotPath ?: error("screenshot path not set")
+                val screenshotsVfs = localVfs(path)["jvm"].also { it.mkdirs() }.jail()
+                screenshotsVfs["$sceneName-$frame.png"].writeBitmap(image, PNG)
             } else {
                 // Complete async work
                 context.device.poll()
@@ -95,4 +95,4 @@ fun byteArrayToIntArrayBigEndian(input: ByteArray, output: IntArray) {
 expect fun initLog()
 
 
-data class SceneParameter(val sceneName: String, val frame: Int)
+data class SceneParameter(val sceneName: String, val frame: Int, val screenshotPath: String?)
