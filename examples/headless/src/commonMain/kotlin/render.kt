@@ -63,7 +63,7 @@ suspend fun captureScene() {
                 println(textureData.map { it.toString() }.joinToString(","))
                 println("creating image of size ${renderingContext.width} ${renderingContext.height}")
                 val image = Bitmap32(width = renderingContext.width, height = renderingContext.height)
-                byteArrayToIntArrayBigEndian(input = textureData, output = image.ints)
+                byteArrayToIntArray(input = textureData, output = image.ints)
 
                 val path = screenshotPath ?: error("screenshot path not set")
                 val screenshotsVfs = localVfs(path)["jvm"].also { it.mkdirs() }.jail()
@@ -83,12 +83,12 @@ private fun List<Scene>.findWithName(sceneName: String): Scene = first {
 
 expect fun getSceneParameter(): SceneParameter
 
-fun byteArrayToIntArrayBigEndian(input: ByteArray, output: IntArray) {
+fun byteArrayToIntArray(input: ByteArray, output: IntArray) {
     output.indices.forEach { index ->
-        output[index] = ((input[index * 4].toInt() and 0xFF) shl 24) or
-                ((input[index * 4 + 1].toInt() and 0xFF) shl 16) or
-                ((input[index * 4 + 2].toInt() and 0xFF) shl 8) or
-                (input[index * 4 + 3].toInt() and 0xFF)
+        output[index] = (input[index * 4].toInt() and 0xFF) or
+                ((input[index * 4 + 1].toInt() and 0xFF) shl 8) or
+                ((input[index * 4 + 2].toInt() and 0xFF) shl 16) or
+                ((input[index * 4 + 3].toInt() and 0xFF) shl 24)
     }
 }
 
