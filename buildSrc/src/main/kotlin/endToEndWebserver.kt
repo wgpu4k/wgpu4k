@@ -48,10 +48,7 @@ fun browser(projectDir: File, logger: Logger) {
         for (browserType in browserTypes) {
             browserType.launch().use { browser ->
                 var renderEnded: Boolean
-                val context: BrowserContext = browser.newContext(
-                    Browser.NewContextOptions()
-                        .setViewportSize(256, 256)
-                )
+                val context: BrowserContext = browser.newContext()
                 val page: Page = context.newPage()
                 page.navigate("chrome://gpu")
                 page.screenshot(
@@ -64,6 +61,7 @@ fun browser(projectDir: File, logger: Logger) {
                                 .toPath()
                         )
                 )
+                page.setViewportSize(256, 2566)
                 context.onConsoleMessage {
                     println(it.text())
                     if (it.text().equals("render ended", ignoreCase = true)) {

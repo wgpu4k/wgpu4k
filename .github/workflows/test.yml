@@ -37,10 +37,10 @@ jobs:
         run: |
           gradle wrapper
           ./gradlew build check --stacktrace --info
+      - name: package
+        run: ./gradlew assemble --stacktrace  --info
       - name: Run e2e tests
-        run: |
-          ./gradlew assemble --stacktrace  --info
-          ./gradlew :wgpu4k-e2e:e2eTest --stacktrace --info
+        run: ./gradlew :wgpu4k-e2e:e2eTest --stacktrace --info
       - name: Bundle the build report
         run: | 
           find . -type d -name 'reports' | zip -@ -r build-reports.zip
