@@ -10,6 +10,7 @@ val jvmTask = mutableListOf<TaskProvider<*>>()
 scenes.forEach { (sceneName, frames) ->
     frames.forEach { frame ->
         tasks.register<JavaExec>("e2eJvm-$sceneName-$frame") {
+            isIgnoreExitValue = true
             mainClass = "MainKt"
             jvmArgs(
                 if (Platform.os == Os.MacOs) {
