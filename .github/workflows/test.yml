@@ -41,13 +41,24 @@ jobs:
         run: ./gradlew assemble --stacktrace  --info
       - name: Run e2e tests
         run: ./gradlew :wgpu4k-e2e:e2eTest --stacktrace --info
-      - name: Bundle the build report
-        run: | 
-          find . -type d -name 'reports' | zip -@ -r build-reports.zip
-          find ./wgpu4k-e2e/js-chromium -type f -name '*.png' | zip -@ -r js-chromium-screenshots.zip
+
+      - name: Bundle chromium screenshot
+        uses: vimtor/action-zip@v1.2
+        with:
+          files: .wgpu4k-e2e/js-chromium/ *.png
+          recursive: false
+          dest: js-chromium-screenshots.zip
+
+      - name: Bundle jvm screenshot
+        uses: vimtor/action-zip@v1.2
+        with:
+          files: .wgpu4k-e2e/jvm/ *.png
+          recursive: false
+          dest: jvm-screenshots.zip
+
       - name: Upload the build reports
         uses: actions/upload-artifact@v3
         with:
           path: |
-            build-reports.zip
+            jvm-screenshots.zip
             js-chromium-screenshots.zip
