@@ -60,5 +60,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           path: |
-            jvm-screenshots.zip
-            js-chromium-screenshots.zip
+            jvm-${{ runner.os }}-screenshots.zip
+            js-chromium-${{ runner.os }}-screenshots.zip
