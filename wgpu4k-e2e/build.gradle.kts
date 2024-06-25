@@ -39,7 +39,7 @@ val e2eBrowserTest = tasks.create("e2eBrowserTest") {
     onlyIf { Platform.os != Os.Windows }
     doLast {
         val server = endToEndWebserver(getHeadlessProject().projectDir.absolutePath)
-        browser(project.projectDir)
+        browser(project.projectDir, logger)
         server.stop()
 
     }
