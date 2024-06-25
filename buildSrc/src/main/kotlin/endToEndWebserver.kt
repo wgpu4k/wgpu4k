@@ -46,6 +46,7 @@ fun browser(projectDir: File) {
         )
         for (browserType in browserTypes) {
             browserType.launch().use { browser ->
+                var renderEnded = false
                 val context: BrowserContext = browser.newContext(
                     Browser.NewContextOptions()
                         .setViewportSize(256, 256)
@@ -53,10 +54,13 @@ fun browser(projectDir: File) {
                 val page: Page = context.newPage()
                 context.onConsoleMessage {
                     println(it.text())
+                    if (it.text().equals("render ended", ignoreCase = true)) { renderEnded = true }
                 }
                 scenes.forEach { (sceneName, frames) ->
                     frames.forEach { frame ->
+                        renderEnded = false
                         page.navigate("http://localhost:9000/index.html?scene=$sceneName&frame=$frame")
+                        context.waitForCondition { renderEnded }
                         page.screenshot(
                             Page.ScreenshotOptions()
                                 .setPath(

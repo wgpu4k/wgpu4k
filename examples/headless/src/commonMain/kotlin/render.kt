@@ -60,8 +60,6 @@ suspend fun captureScene() {
                 // Complete async work
                 context.device.poll()
                 outputStagingBuffer.mapInto(buffer = textureData, offset = 0)
-                println(textureData.map { it.toString() }.joinToString(","))
-                println("creating image of size ${renderingContext.width} ${renderingContext.height}")
                 val image = Bitmap32(width = renderingContext.width, height = renderingContext.height)
                 byteArrayToIntArray(input = textureData, output = image.ints)
 
