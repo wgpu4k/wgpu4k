@@ -45,16 +45,16 @@ jobs:
       - name: Bundle chromium screenshot
         uses: vimtor/action-zip@v1.2
         with:
-          files: ./wgpu4k-e2e/js-chromium/ *.png
+          files: ./wgpu4k-e2e/js-chromium/
           recursive: false
-          dest: js-chromium-screenshots.zip
+          dest: js-chromium-${{ runner.os }}-screenshots.zip
 
       - name: Bundle jvm screenshot
         uses: vimtor/action-zip@v1.2
         with:
-          files: ./wgpu4k-e2e/jvm/ *.png
+          files: ./wgpu4k-e2e/jvm/
           recursive: false
-          dest: jvm-screenshots.zip
+          dest: jvm-${{ runner.os }}-screenshots.zip
 
       - name: Upload the build reports
         uses: actions/upload-artifact@v3
