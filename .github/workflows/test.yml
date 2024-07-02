@@ -61,7 +61,7 @@ jobs:
           dest: jvm-${{ runner.os }}-screenshots.zip
 
       - name: Upload the build reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: |
             jvm-${{ runner.os }}-screenshots.zip
