@@ -39,7 +39,7 @@ val e2eBrowserTest = tasks.create("e2eBrowserTest") {
     // not working on windows Github CI
     onlyIf { Platform.os != Os.Windows }
     doLast {
-        val server = endToEndWebserver(getHeadlessProject().projectDir.absolutePath)
+        val server = endToEndWebserver(getHeadlessProject().projectDir)
         browser(project.projectDir, logger)
         server.stop()
 

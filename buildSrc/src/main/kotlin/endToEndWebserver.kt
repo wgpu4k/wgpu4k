@@ -19,15 +19,18 @@ val scenes = listOf(
     "TexturedCubeScene" to listOf(0, 10, 50, 100),
 )
 
-fun endToEndWebserver(basePath: String): NettyApplicationEngine {
-    val pagePath = "$basePath/build/dist/js/productionExecutable"
-    println("serve page at $pagePath")
+fun endToEndWebserver(basePath: File): NettyApplicationEngine {
+    val pagePath = basePath.resolve("build")
+        .resolve("dist")
+        .resolve("js")
+        .resolve("productionExecutable")
+    println("serve page at ${pagePath.absolutePath}")
     return embeddedServer(Netty, port = 9000) {
 
         routing {
             staticFiles(
                 "/",
-                File(pagePath)
+                pagePath
             )
         }
     }.start(wait = false)
@@ -61,7 +64,7 @@ fun browser(projectDir: File, logger: Logger) {
                                 .toPath()
                         )
                 )
-                page.setViewportSize(256, 2566)
+                page.setViewportSize(256, 256)
                 context.onConsoleMessage {
                     println(it.text())
                     if (it.text().equals("render ended", ignoreCase = true)) {
