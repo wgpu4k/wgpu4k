@@ -7,6 +7,7 @@ plugins {
 	alias(libs.plugins.kotest)
 	id("io.github.krakowski.jextract") version "0.5.0" apply false
 	alias(libs.plugins.download)
+	`maven-publish`
 }
 
 java {

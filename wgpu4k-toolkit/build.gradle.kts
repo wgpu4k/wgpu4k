@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
 	alias(libs.plugins.kotest)
 	alias(libs.plugins.download)
+    `maven-publish`
 }
 
 java {
