@@ -50,6 +50,13 @@ val e2eBrowserTest = tasks.create("e2eBrowserTest") {
 tasks.create("e2eTest") {
     dependsOn(e2eBrowserTest)
     jvmTask.forEach { tasks -> dependsOn(tasks) }
+
+    doLast {
+        logger.info("Starting e2e test...")
+        val result = compareImages(project   .projectDir, logger)
+            .filter { !it.similar }
+        if (result.isNotEmpty()) error("Not similar tests found: ${result.joinToString()}")
+    }
 }
 
 fun getHeadlessProject() = projects.examples.headless.identityPath.path
