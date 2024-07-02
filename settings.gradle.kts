@@ -11,11 +11,12 @@ pluginManagement {
 }
 
 include("wgpu4k")
+include("wgpu4k-toolkit")
 include("librococoa")
-//include("examples")
 include("examples:common")
+include("wgpu4k-e2e")
 include("examples:compose")
 include("examples:web-js")
-//include("examples:SDL2")
 include("examples:glfw")
-//include("webgpu-samples-ts")
+include("examples:headless")
+include("webgpu-samples-ts")

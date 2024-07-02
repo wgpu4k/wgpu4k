@@ -1,3 +1,5 @@
 package io.ygdrasil.wgpu
 
-expect class BindGroupLayout
+expect class BindGroupLayout : AutoCloseable {
+    override fun close()
+}

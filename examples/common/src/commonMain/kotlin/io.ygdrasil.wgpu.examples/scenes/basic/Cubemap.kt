@@ -3,8 +3,8 @@
 package io.ygdrasil.wgpu.examples.scenes.basic
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.Application
-import io.ygdrasil.wgpu.examples.autoClosableContext
+import io.ygdrasil.wgpu.examples.AssetManager
+import io.ygdrasil.wgpu.examples.Scene
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubePositionOffset
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeUVOffset
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeVertexArray
@@ -16,7 +16,7 @@ import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
 
-class CubemapScene : Application.Scene(), AutoCloseable {
+class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene(wgpuContext), AssetManager by assetManager {
 
 	lateinit var renderPipeline: RenderPipeline
 	lateinit var projectionMatrix: Matrix4
@@ -28,7 +28,7 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 	val modelMatrix = Matrix4.scale(1000, 1000, 1000)
 	val depthLayer = 6
 
-	override fun Application.initialiaze() = with(autoClosableContext) {
+	override suspend fun initialize() = with(autoClosableContext) {
 
 		// Create a vertex buffer from the cube data.
 		verticesBuffer = device.createBuffer(
@@ -40,7 +40,7 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 		)
 
 		// Util method to use getMappedRange
-		verticesBuffer.map(cubeVertexArray)
+		verticesBuffer.mapFrom(cubeVertexArray)
 		verticesBuffer.unmap()
 
 		renderPipeline = device.createRenderPipeline(
@@ -115,7 +115,7 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 				// Create a 2d array texture.
 				// Assume each image has the same size.
 				size = Size3D(imageBitmaps[0].width, imageBitmaps[0].height, depthLayer),
-				format = TextureFormat.rgba8unorm,
+				format = TextureFormat.rgba8unormsrgb,
 				usage = setOf(TextureUsage.texturebinding, TextureUsage.copydst, TextureUsage.renderattachment),
 			)
 		).bind()
@@ -202,7 +202,7 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 
 	}
 
-	override fun Application.render() = autoClosableContext {
+	override fun AutoClosableContext.render() {
 
 		val transformationMatrix = getTransformationMatrix(
 			frame / 100.0,
@@ -241,9 +241,6 @@ class CubemapScene : Application.Scene(), AutoCloseable {
 			.bind()
 
 		device.queue.submit(arrayOf(commandBuffer))
-
-		renderingContext.present()
-
 	}
 
 	override fun close() {

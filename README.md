@@ -20,7 +20,7 @@ This project focuses on creating a binding for WebGPU which can support Kotlin o
 
 ## Prerequisites
 
-- Gradle 8.8(RC1+) or lower version with gradle wrapper
+- Gradle 8.8 or lower version with gradle wrapper
 - JDK 22+
 - A recent version of Chrome or Firefox Nightly for web browser execution. Check compatibility [here][chart].
 
@@ -32,7 +32,7 @@ This project focuses on creating a binding for WebGPU which can support Kotlin o
 
 ### Proof of Concept
 
-The aim of this phase is to test the technology on as many platforms as possible using elementary examples.
+The current one, the aim of this phase is to test the technology on as many platforms as possible using elementary examples.
 
 ### API Implementation
 

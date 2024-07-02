@@ -3,8 +3,7 @@
 package io.ygdrasil.wgpu.examples.scenes.basic
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.Application
-import io.ygdrasil.wgpu.examples.autoClosableContext
+import io.ygdrasil.wgpu.examples.Scene
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubePositionOffset
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeUVOffset
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeVertexArray
@@ -16,7 +15,7 @@ import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
 
-class RotatingCubeScene : Application.Scene(), AutoCloseable {
+class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 	lateinit var renderPipeline: RenderPipeline
 	lateinit var projectionMatrix: Matrix4
@@ -25,7 +24,7 @@ class RotatingCubeScene : Application.Scene(), AutoCloseable {
 	lateinit var uniformBindGroup: BindGroup
 	lateinit var verticesBuffer: Buffer
 
-	override fun Application.initialiaze() = with(autoClosableContext) {
+	override suspend fun initialize() = with(autoClosableContext) {
 
 		// Create a vertex buffer from the cube data.
 		verticesBuffer = device.createBuffer(
@@ -37,7 +36,7 @@ class RotatingCubeScene : Application.Scene(), AutoCloseable {
 		).bind()
 
 		// Util method to use getMappedRange
-		verticesBuffer.map(cubeVertexArray)
+		verticesBuffer.mapFrom(cubeVertexArray)
 		verticesBuffer.unmap()
 
 		renderPipeline = device.createRenderPipeline(
@@ -147,7 +146,7 @@ class RotatingCubeScene : Application.Scene(), AutoCloseable {
 		projectionMatrix = Matrix4.perspective(fox, aspect, 1.0, 100.0)
 	}
 
-	override fun Application.render() = autoClosableContext {
+	override fun AutoClosableContext.render() {
 
 		val transformationMatrix = getTransformationMatrix(
 			frame / 100.0,
@@ -187,12 +186,6 @@ class RotatingCubeScene : Application.Scene(), AutoCloseable {
 
 		device.queue.submit(arrayOf(commandBuffer))
 
-		renderingContext.present()
-
-	}
-
-	override fun close() {
-		autoClosableContext.close()
 	}
 
 }

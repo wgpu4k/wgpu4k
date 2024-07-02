@@ -1,107 +1,82 @@
-
-
 package io.ygdrasil.wgpu.examples
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.scenes.basic.*
 
-abstract class Application(
-	val renderingContext: RenderingContext,
-	val device: Device,
-	val adapter: Adapter,
-	assetManager: AssetManager
-) : AutoCloseable, AssetManager by assetManager {
+suspend fun createApplication(wgpuContext: WGPUContext): Application {
+    wgpuContext.configureRenderingContext()
+    val availableScenes = loadScenes(wgpuContext)
+    val scene = availableScenes.first()
+    scene.initialize()
 
-	lateinit var currentScene: Scene
-		private set
-	private var onError = false
+    return Application(wgpuContext, scene, availableScenes)
+}
 
-	val dummyTexture by lazy {
-		device.createTexture(
-			TextureDescriptor(
-				size = Size3D(1, 1),
-				format = TextureFormat.depth24plus,
-				usage = setOf(TextureUsage.renderattachment),
-			)
-		)
-	}
+class Application internal constructor(
+    private val wgpuContext: WGPUContext,
+    currentScene: Scene,
+    val availableScenes: List<Scene>,
+) {
 
-	var frame = 0
-		private set
+    var currentScene: Scene = currentScene
+        private set
 
-	init {
-		changeScene(availableScenes.first())
-	}
+    internal val surface: Surface
+        get() = wgpuContext.surface
+    internal val device: Device
+        get() = wgpuContext.device
 
-	abstract class Scene {
+    private var onError = false
 
-		val autoClosableContext = AutoClosableContext()
+    var frame = 0
+        private set
 
-		abstract fun Application.initialiaze()
+    fun configureRenderingContext() {
+        wgpuContext.configureRenderingContext()
+    }
 
-		abstract fun Application.render()
+    suspend fun changeScene(nextScene: Scene) {
+        println("switch to scene ${nextScene::class.simpleName}")
+        with(nextScene) {
+            try {
+                initialize()
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                onError = true
+                throw e
+            }
+        }
+        // TODO make it stable
 
-		open fun Application.configureRenderingContext() {
-			renderingContext.configure(
-				CanvasConfiguration(
-					device = device
-				)
-			)
-		}
+        //if (this::currentScene.isInitialized) currentScene.autoClosableContext.close()
+        currentScene = nextScene
+    }
 
-	}
-
-	fun changeScene(nextScene: Scene) {
-		println("switch to scene ${nextScene::class.simpleName}")
-		with(nextScene) {
-			try {
-				configureRenderingContext()
-				initialiaze()
-			} catch (e: Throwable) {
-				e.printStackTrace()
-				onError = true
-				throw e
-			}
-		}
-		// TODO make it stable
-		//if (this::currentScene.isInitialized) currentScene.autoClosableContext.close()
-		currentScene = nextScene
-	}
-
-	fun renderFrame() {
-		if (onError) return
-		frame += 1
-		with(currentScene) {
-			try {
-				render()
-			} catch (e: Throwable) {
-				e.printStackTrace()
-				onError = true
-				throw e
-			}
-		}
-	}
-
-	override fun close() {
-		renderingContext.close()
-		device.close()
-		adapter.close()
-	}
-
-	abstract fun run()
+    suspend fun renderFrame() = autoClosableContext {
+        if (onError) return@autoClosableContext
+        frame += 1
+        currentScene.frame = frame
+        with(currentScene) {
+            try {
+                render()
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                onError = true
+                throw e
+            }
+        }
+        if (wgpuContext.renderingContext is SurfaceRenderingContext) {
+            surface.present()
+        }
+    }
 
 }
 
-val availableScenes = listOf(
-	HelloTriangleScene(),
-	HelloTriangleMSAAScene(),
-	HelloTriangleRotatingScene(),
-	RotatingCubeScene(),
-	TwoCubesScene(),
-	CubemapScene(),
-	FractalCubeScene(),
-	InstancedCubeScene(),
-	TexturedCubeScene(),
-	// Not working
-	//ParticlesScene(),
-)
+
+private fun WGPUContext.configureRenderingContext() {
+    surface.configure(
+        CanvasConfiguration(
+            device = device,
+            usage = setOf(TextureUsage.renderattachment, TextureUsage.copysrc)
+        )
+    )
+}

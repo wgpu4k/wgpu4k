@@ -3,8 +3,7 @@
 package io.ygdrasil.wgpu.examples.scenes.basic
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.Application
-import io.ygdrasil.wgpu.examples.autoClosableContext
+import io.ygdrasil.wgpu.examples.Scene
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubePositionOffset
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeUVOffset
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeVertexArray
@@ -16,7 +15,7 @@ import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
 
-class TwoCubesScene : Application.Scene(), AutoCloseable {
+class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 	val offset = 256L; // uniformBindGroup offset must be 256-byte aligned
 
@@ -29,7 +28,7 @@ class TwoCubesScene : Application.Scene(), AutoCloseable {
 	lateinit var uniformBindGroup2: BindGroup
 	lateinit var verticesBuffer: Buffer
 
-	override fun Application.initialiaze() = with(autoClosableContext) {
+	override suspend fun initialize() = with(autoClosableContext) {
 
 		// Create a vertex buffer from the cube data.
 		verticesBuffer = device.createBuffer(
@@ -41,7 +40,7 @@ class TwoCubesScene : Application.Scene(), AutoCloseable {
 		).bind()
 
 		// Util method to use getMappedRange
-		verticesBuffer.map(cubeVertexArray)
+		verticesBuffer.mapFrom(cubeVertexArray)
 		verticesBuffer.unmap()
 
 		renderPipeline = device.createRenderPipeline(
@@ -169,7 +168,7 @@ class TwoCubesScene : Application.Scene(), AutoCloseable {
 			.translated(2.0, 0.0, -7.0)
 	}
 
-	override fun Application.render() = autoClosableContext {
+	override fun AutoClosableContext.render() {
 
 		val transformationMatrix1 = getTransformationMatrix(
 			frame / 100.0,
@@ -227,12 +226,6 @@ class TwoCubesScene : Application.Scene(), AutoCloseable {
 
 		device.queue.submit(arrayOf(commandBuffer))
 
-		renderingContext.present()
-
-	}
-
-	override fun close() {
-		autoClosableContext.close()
 	}
 
 }

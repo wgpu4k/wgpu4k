@@ -1,8 +1,4 @@
-import {
-    BindGroupCluster,
-    Base2DRendererClass,
-    createBindGroupCluster,
-} from './utils';
+import {Base2DRendererClass, BindGroupCluster, createBindGroupCluster,} from './utils';
 
 import bitonicDisplay from './bitonicDisplay.frag.wgsl';
 

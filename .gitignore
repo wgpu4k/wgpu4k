@@ -30,3 +30,5 @@ gradle-app.setting
 **/node_modules/
 /spec-generator/bin/
 /.kotlin/
+/wgpu4k-e2e/jvm/
+/wgpu4k-e2e/js-chromium/

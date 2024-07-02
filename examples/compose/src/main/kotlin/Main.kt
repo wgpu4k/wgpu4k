@@ -14,11 +14,11 @@ import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import darwin.NSWindow
-import io.ygdrasil.wgpu.ImageBitmapHolder
-import io.ygdrasil.wgpu.RenderingContext
+import io.ygdrasil.wgpu.Surface
+import io.ygdrasil.wgpu.SurfaceRenderingContext
 import io.ygdrasil.wgpu.WGPU
-import io.ygdrasil.wgpu.examples.Application
-import io.ygdrasil.wgpu.examples.AssetManager
+import io.ygdrasil.wgpu.WGPUContext
+import io.ygdrasil.wgpu.examples.createApplication
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -120,56 +120,35 @@ suspend fun runApp(window: ComposeWindow) {
 	(WGPU.createInstance() ?: error("fail to wgpu instance")).use { instance ->
 
 
-		val surface = instance.getSurfaceFromMetalLayer(java.lang.foreign.MemorySegment.ofAddress(layer.id().toLong())) ?: error("fail to get surface")
-		val renderingContext = RenderingContext(surface) {
+		val surfacePointer = instance.getSurfaceFromMetalLayer(java.lang.foreign.MemorySegment.ofAddress(layer.id().toLong())) ?: error("fail to get surface")
+		val surface = Surface(surfacePointer) {
 			window.width to window.height
 		}
 
-		val adapter = instance.requestAdapter(renderingContext)
+		val adapter = instance.requestAdapter(surface)
 			?: error("fail to get adapter")
 
 		val device = adapter.requestDevice()
 			?: error("fail to get device")
 
-		renderingContext.computeSurfaceCapabilities(adapter)
+		val application = createApplication(
+			WGPUContext(
+				surface,
+				adapter,
+				device,
+				SurfaceRenderingContext(surface)
+			)
+		)
 
-		val assetManager = object : AssetManager {
-			override val Di3d: ImageBitmapHolder
-				get() = TODO("Not yet implemented")
-			override val cubemapPosx: ImageBitmapHolder
-				get() = TODO("Not yet implemented")
-			override val cubemapNegx: ImageBitmapHolder
-				get() = TODO("Not yet implemented")
-			override val cubemapPosy: ImageBitmapHolder
-				get() = TODO("Not yet implemented")
-			override val cubemapNegy: ImageBitmapHolder
-				get() = TODO("Not yet implemented")
-			override val cubemapPosz: ImageBitmapHolder
-				get() = TODO("Not yet implemented")
-			override val cubemapNegz: ImageBitmapHolder
-				get() = TODO("Not yet implemented")
-			override val webgpu4kotlin: ImageBitmapHolder
-				get() = TODO("Not yet implemented")
-
-		}
-
-		val application = object : Application(
-			renderingContext,
-			device,
-			adapter,
-			assetManager
-		) {
-			override fun run() {
-				renderFrame()
-				applicationScope.launch() {
-					delay(UPDATE_INTERVAL)
-					run()
-				}
+		fun run() {
+			applicationScope.launch {
+				application.renderFrame()
+				delay(UPDATE_INTERVAL)
+				run()
 			}
-
-
 		}
-		application.run()
+
+		run()
 	}
 }
 

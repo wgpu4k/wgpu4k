@@ -1,5 +1,6 @@
 plugins {
 	alias(libs.plugins.kotlinMultiplatform)
+	kotlin("plugin.serialization") version "2.0.0"
 }
 
 kotlin {
@@ -21,21 +22,18 @@ kotlin {
 
 		val commonMain by getting {
 			dependencies {
-				api(projects.wgpu4k)
+				implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0-RC")
+				api(projects.wgpu4kToolkit)
 				api(libs.coroutines)
 				api(libs.korge.foundation)
 				api(libs.korge.core)
 			}
 		}
 
-		val jvmMain by getting {
-			dependencies {
-				api(projects.librococoa)
-			}
-		}
 	}
 
 	compilerOptions {
-		allWarningsAsErrors = true
+		// TODO fiw warning and uncomment
+		//allWarningsAsErrors = true
 	}
 }

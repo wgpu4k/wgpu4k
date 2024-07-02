@@ -1,16 +1,14 @@
 package io.ygdrasil.wgpu
 
-import kotlin.js.JsExport
-
 typealias GPUBufferDynamicOffset = Number
 
 typealias GPUBufferUsageFlags = Int
 
-typealias GPUColorWriteFlags = Number
+typealias GPUColorWriteFlags = Int
 
 typealias GPUDepthBias = Int
 
-typealias GPUFlagsConstant = Number
+typealias GPUFlagsConstant = Int
 
 typealias GPUIndex32 = Int
 
@@ -20,15 +18,15 @@ typealias GPUIntegerCoordinates = Pair<GPUIntegerCoordinate, GPUIntegerCoordinat
 
 typealias GPUIntegerCoordinateOut = Int
 
-typealias GPUMapModeFlags = Number
+typealias GPUMapModeFlags = Int
 
-typealias GPUPipelineConstantValue = Number
+typealias GPUPipelineConstantValue = Double
 
 typealias GPUSampleMask = UInt
 
-typealias GPUShaderStageFlags = Number
+typealias GPUShaderStageFlags = Int
 
-typealias GPUSignedOffset32 = Number
+typealias GPUSignedOffset32 = Int
 
 typealias GPUSize32 = Int
 
@@ -42,7 +40,6 @@ typealias GPUStencilValue = Long
 
 typealias GPUTextureUsageFlags = Int
 
-@JsExport
 data class Size3D(
 	var width: Int,
 	var height: Int = 1,
@@ -57,4 +54,8 @@ data class Origin3D(
 	var z: GPUIntegerCoordinate = 0
 ) {
 	fun toArray() = arrayOf(x, y, z)
+
+	companion object {
+		val Zero = Origin3D(0, 0, 0)
+	}
 }

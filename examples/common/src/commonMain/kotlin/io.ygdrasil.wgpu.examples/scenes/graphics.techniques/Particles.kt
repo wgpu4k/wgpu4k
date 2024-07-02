@@ -1,10 +1,10 @@
 package io.ygdrasil.wgpu.examples.scenes.graphics.techniques
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.Application
-import io.ygdrasil.wgpu.examples.autoClosableContext
+import io.ygdrasil.wgpu.examples.AssetManager
+import io.ygdrasil.wgpu.examples.Scene
 import io.ygdrasil.wgpu.examples.scenes.shader.compute.probabilityMap
-import io.ygdrasil.wgpu.examples.scenes.shader.vertex.particlesShader
+import io.ygdrasil.wgpu.examples.scenes.shader.vertex.particlesShaderFixed
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
@@ -12,7 +12,7 @@ import kotlin.math.ceil
 import kotlin.random.Random
 
 
-class ParticlesScene : Application.Scene() {
+class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene(wgpuContext), AssetManager by assetManager {
 
     // Constants
     val numParticles = 50000
@@ -42,7 +42,7 @@ class ParticlesScene : Application.Scene() {
     lateinit var particlesBuffer: Buffer
     lateinit var quadVertexBuffer: Buffer
 
-    override fun Application.initialiaze() = with(autoClosableContext) {
+    override suspend fun initialize() = with(autoClosableContext) {
 
         particlesBuffer = device.createBuffer(
             BufferDescriptor(
@@ -57,7 +57,7 @@ class ParticlesScene : Application.Scene() {
                     entryPoint = "vs_main",
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
-                            code = particlesShader,
+                            code = particlesShaderFixed,
                         )
                     ).bind(),
                     buffers = arrayOf(
@@ -100,7 +100,7 @@ class ParticlesScene : Application.Scene() {
                     entryPoint = "fs_main",
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
-                            code = particlesShader,
+                            code = particlesShaderFixed,
                         )
                     ).bind(),
                     targets = arrayOf(
@@ -200,7 +200,7 @@ class ParticlesScene : Application.Scene() {
         val vertexData = arrayOf(
             -1.0, -1.0, +1.0, -1.0, -1.0, +1.0, -1.0, +1.0, +1.0, -1.0, +1.0, +1.0,
         ).let { FloatArray(it.size) { index -> it[index].toFloat() } }
-        quadVertexBuffer.map(vertexData)
+        quadVertexBuffer.mapFrom(vertexData)
         quadVertexBuffer.unmap()
 
         //////////////////////////////////////////////////////////////////////////////
@@ -374,7 +374,7 @@ class ParticlesScene : Application.Scene() {
                 compute = ComputePipelineDescriptor.ProgrammableStage(
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
-                            code = particlesShader,
+                            code = particlesShaderFixed,
                         )
                     ),
                     entryPoint = "simulate",
@@ -417,7 +417,7 @@ class ParticlesScene : Application.Scene() {
             .rotated(Angle.fromRadians(PI * -0.1), 1, 0, 0)
     }
 
-    override fun Application.render() = autoClosableContext {
+    override fun AutoClosableContext.render() {
 
         device.queue.writeBuffer(
             simulationUBOBuffer,
@@ -486,6 +486,5 @@ class ParticlesScene : Application.Scene() {
 
         device.queue.submit(arrayOf(commandEncoder.finish()))
 
-        renderingContext.present()
     }
 }

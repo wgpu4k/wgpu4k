@@ -1,27 +1,36 @@
-
-
 package io.ygdrasil.wgpu
 
 expect class CommandEncoder : AutoCloseable {
 
-	fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder
+    fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder
 
-	fun finish(): CommandBuffer
+    fun finish(): CommandBuffer
 
-	fun copyTextureToTexture(
-		source: ImageCopyTexture,
-		destination: ImageCopyTexture,
-		copySize: Size3D
-	)
+    fun copyTextureToTexture(
+        source: ImageCopyTexture,
+        destination: ImageCopyTexture,
+        copySize: Size3D,
+    )
 
-	fun beginComputePass(descriptor: ComputePassDescriptor? = null): ComputePassEncoder
+    fun beginComputePass(descriptor: ComputePassDescriptor? = null): ComputePassEncoder
 
-	override fun close()
+    fun copyTextureToBuffer(source: ImageCopyTexture, destination: ImageCopyBuffer, copySize: Size3D)
+
+    fun copyBufferToTexture(source: ImageCopyBuffer, destination: ImageCopyTexture, copySize: Size3D)
+
+    override fun close()
 }
 
 data class ImageCopyTexture(
-	var texture: Texture,
-	var mipLevel: GPUIntegerCoordinate = 0,
-	var origin: Origin3D = Origin3D(0, 0),
-	var aspect: TextureAspect = TextureAspect.all,
+    val texture: Texture,
+    val mipLevel: GPUIntegerCoordinate = 0,
+    val origin: Origin3D = Origin3D(0, 0),
+    val aspect: TextureAspect = TextureAspect.all,
+)
+
+data class ImageCopyBuffer(
+    var buffer: Buffer,
+    var offset: GPUSize64,
+    var bytesPerRow: GPUSize32,
+    var rowsPerImage: GPUSize32
 )

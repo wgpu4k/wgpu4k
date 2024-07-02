@@ -1,17 +1,17 @@
 package io.ygdrasil.wgpu.examples.scenes.basic
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.*
+import io.ygdrasil.wgpu.examples.Scene
 import io.ygdrasil.wgpu.examples.scenes.shader.fragment.redFragmentShader
 import io.ygdrasil.wgpu.examples.scenes.shader.vertex.triangleVertexShader
 
-class HelloTriangleMSAAScene : Application.Scene() {
+class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
     lateinit var renderPipeline: RenderPipeline
     lateinit var textureView: TextureView
     val  sampleCount = 4
 
-    override fun Application.initialiaze() = with(autoClosableContext) {
+    override suspend fun initialize() = with(autoClosableContext) {
         renderPipeline = device.createRenderPipeline(
             RenderPipelineDescriptor(
                 vertex = RenderPipelineDescriptor.VertexState(
@@ -53,7 +53,7 @@ class HelloTriangleMSAAScene : Application.Scene() {
         textureView = texture.createView().bind()
     }
 
-    override fun Application.render() = autoClosableContext {
+    override fun AutoClosableContext.render() {
 
 
         val encoder = device.createCommandEncoder()
@@ -82,6 +82,5 @@ class HelloTriangleMSAAScene : Application.Scene() {
 
         device.queue.submit(arrayOf(commandBuffer))
 
-        renderingContext.present()
     }
 }

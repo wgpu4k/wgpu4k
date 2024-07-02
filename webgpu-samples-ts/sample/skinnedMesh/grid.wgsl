@@ -61,10 +61,10 @@ fn vertexMain(input: VertexInput) -> VertexOutput {
 @fragment
 fn fragmentMain(input: VertexOutput) -> @location(0) vec4f {
   switch general_uniforms.render_mode {
-    case 1: {
+    case 1u: {
       return input.joints;
     }
-    case 2: {
+    case 2u: {
       return input.weights;
     }
     default: {

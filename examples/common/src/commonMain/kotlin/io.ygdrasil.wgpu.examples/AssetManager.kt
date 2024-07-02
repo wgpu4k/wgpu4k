@@ -1,6 +1,8 @@
 package io.ygdrasil.wgpu.examples
 
 import io.ygdrasil.wgpu.ImageBitmapHolder
+import io.ygdrasil.wgpu.examples.helper.glb.GLTF2
+import io.ygdrasil.wgpu.examples.helper.glb.readGLB
 import korlibs.image.bitmap.Bitmap32
 import korlibs.image.format.readBitmap
 import korlibs.io.file.std.resourcesVfs
@@ -17,6 +19,8 @@ interface AssetManager {
     val cubemapNegz: ImageBitmapHolder
 
     val webgpu4kotlin: ImageBitmapHolder
+
+    val boxMesh: GLTF2
 }
 
 suspend fun bitmapFrom(path: String): ImageBitmapHolder = resourcesVfs[path]
@@ -24,6 +28,8 @@ suspend fun bitmapFrom(path: String): ImageBitmapHolder = resourcesVfs[path]
     .toBMP32()
     .toBitmapHolder()
 
+suspend fun glt2From(path: String): GLTF2 = resourcesVfs[path]
+    .readGLB()
 
 expect fun Bitmap32.toBitmapHolder(): ImageBitmapHolder
 
@@ -36,6 +42,7 @@ suspend fun genericAssetManager() = GenericAssetManager(
     bitmapFrom("assets/img/cubemap/posz.png"),
     bitmapFrom("assets/img/cubemap/negz.png"),
     bitmapFrom("assets/img/webgpu4kotlin.png"),
+    glt2From("assets/gltf/DamagedHelmet.glb"),
 )
 
 class GenericAssetManager(
@@ -49,4 +56,6 @@ class GenericAssetManager(
     override val cubemapNegz: ImageBitmapHolder,
 
     override val webgpu4kotlin: ImageBitmapHolder,
+
+    override val boxMesh: GLTF2,
 ) : AssetManager

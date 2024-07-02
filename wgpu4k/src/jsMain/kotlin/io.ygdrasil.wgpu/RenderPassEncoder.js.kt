@@ -36,7 +36,17 @@ actual class RenderPassEncoder(private val handler: GPURenderPassEncoder) : Auto
 		handler.setVertexBuffer(slot, buffer.handler)
 	}
 
+	actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
+		handler.setIndexBuffer(buffer.handler, indexFormat.name, offset, size)
+	}
+
+	actual fun executeBundles(bundles: Array<RenderBundle>) {
+		handler.executeBundles(bundles.map { it.handler }.toTypedArray())
+	}
+
 	actual override fun close() {
 		// Nothing to do
 	}
+
+
 }

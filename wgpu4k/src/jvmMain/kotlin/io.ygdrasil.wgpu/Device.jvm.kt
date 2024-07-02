@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUCommandEncoderDescriptor
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUPipelineLayoutDescriptor
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
@@ -56,11 +56,35 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
     actual fun createSampler(descriptor: SamplerDescriptor): Sampler = confined { arena ->
         arena.map(descriptor)
             .let { wgpu_h.wgpuDeviceCreateSampler(handler, it) }
-            ?.let(::Sampler) ?: error("fail to create texture")
+            ?.let(::Sampler) ?: error("fail to create sampler")
     }
 
-    actual fun createComputePipeline(descriptor: ComputePipelineDescriptor): ComputePipeline {
-        TODO()
+    actual fun createComputePipeline(descriptor: ComputePipelineDescriptor): ComputePipeline = confined { arena ->
+        arena.map(descriptor)
+            .let { wgpu_h.wgpuDeviceCreateComputePipeline(handler, it) }
+            ?.let(::ComputePipeline) ?: error("fail to create compute pipeline")
+    }
+
+    actual fun createBindGroupLayout(descriptor: BindGroupLayoutDescriptor): BindGroupLayout = confined { arena ->
+        arena.map(descriptor)
+            .let { wgpu_h.wgpuDeviceCreateBindGroupLayout(handler, it) }
+            ?.let(::BindGroupLayout) ?: error("fail to create bind group layout")
+    }
+
+    actual fun createRenderBundleEncoder(descriptor: RenderBundleEncoderDescriptor): RenderBundleEncoder = confined { arena ->
+        arena.map(descriptor)
+            .let { wgpu_h.wgpuDeviceCreateRenderBundleEncoder(handler, it) }
+            ?.let(::RenderBundleEncoder) ?: error("fail to create bind group layout")
+    }
+
+    actual fun createQuerySet(descriptor: QuerySetDescriptor): QuerySet = confined { arena ->
+        arena.map(descriptor)
+            .let { wgpu_h.wgpuDeviceCreateQuerySet(handler, it) }
+            ?.let(::QuerySet) ?: error("fail to create bind group layout")
+    }
+
+    actual suspend fun poll() {
+        wgpu_h.wgpuDevicePoll(handler, 1, MemorySegment.NULL)
     }
 
     actual override fun close() {

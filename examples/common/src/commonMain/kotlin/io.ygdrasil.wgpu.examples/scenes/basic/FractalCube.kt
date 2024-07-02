@@ -3,8 +3,7 @@
 package io.ygdrasil.wgpu.examples.scenes.basic
 
 import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.Application
-import io.ygdrasil.wgpu.examples.autoClosableContext
+import io.ygdrasil.wgpu.examples.Scene
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubePositionOffset
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeUVOffset
 import io.ygdrasil.wgpu.examples.scenes.mesh.Cube.cubeVertexArray
@@ -16,7 +15,7 @@ import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
 
-class FractalCubeScene : Application.Scene(), AutoCloseable {
+class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 	lateinit var renderPipeline: RenderPipeline
 	lateinit var projectionMatrix: Matrix4
@@ -26,22 +25,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 	lateinit var verticesBuffer: Buffer
 	lateinit var cubeTexture: Texture
 
-
-	override fun Application.configureRenderingContext() {
-		renderingContext.configure(
-			CanvasConfiguration(
-				device,
-				format = renderingContext.textureFormat,
-
-				// Specify we want both RENDER_ATTACHMENT and COPY_SRC since we
-				// will copy out of the swapchain texture.
-				usage = TextureUsage.renderattachment or TextureUsage.copysrc
-			)
-		)
-	}
-
-	override fun Application.initialiaze() = with(autoClosableContext) {
-
+	override suspend fun initialize() = with(autoClosableContext) {
 
 
 		// Create a vertex buffer from the cube data.
@@ -54,7 +38,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 		)
 
 		// Util method to use getMappedRange
-		verticesBuffer.map(cubeVertexArray)
+		verticesBuffer.mapFrom(cubeVertexArray)
 		verticesBuffer.unmap()
 
 		renderPipeline = device.createRenderPipeline(
@@ -191,7 +175,7 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 		projectionMatrix = Matrix4.perspective(fox, aspect, 1.0, 100.0)
 	}
 
-	override fun Application.render() = autoClosableContext {
+	override fun AutoClosableContext.render() {
 
 		val transformationMatrix = getTransformationMatrix(
 			frame / 100.0,
@@ -239,12 +223,6 @@ class FractalCubeScene : Application.Scene(), AutoCloseable {
 
 		device.queue.submit(arrayOf(commandBuffer))
 
-		renderingContext.present()
-
-	}
-
-	override fun close() {
-		autoClosableContext.close()
 	}
 
 }
