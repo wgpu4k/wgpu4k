@@ -16,7 +16,7 @@ jobs:
           java-version: 22
           cache: 'gradle'
       - name: Build and publish with Gradle
-        run: ./gradlew publishToMavenLocal --info
+        run: ./gradlew publish --info
         env:
           VERSION: ${{ github.event.release.tag_name }}
           SONATYPE_LOGIN: ${{ secrets.SONATYPE_LOGIN }}
