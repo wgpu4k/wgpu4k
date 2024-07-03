@@ -1,5 +1,6 @@
 import de.undercouch.gradle.tasks.download.Download
 import io.github.krakowski.jextract.JextractTask
+import org.jreleaser.model.Active
 
 
 plugins {
@@ -184,18 +185,18 @@ jreleaser {
     }
 
     signing {
-        setActive("ALWAYS")
+        active.set(Active.ALWAYS)
         armored = true
-
+        artifacts = true
     }
     deploy {
-        setActive("ALWAYS")
+        active.set(Active.ALWAYS)
         maven {
-            setActive("ALWAYS")
+            active.set(Active.ALWAYS)
             mavenCentral {
-                setActive("ALWAYS")
-                create("sonatype") {
-                    setActive("ALWAYS")
+                active.set(Active.ALWAYS)
+                this.create("sonatype") {
+                    active.set(Active.ALWAYS)
                     url = "https://central.sonatype.com/api/v1/publisher"
                     stagingRepository("build/staging-deploy")
                 }
@@ -205,6 +206,7 @@ jreleaser {
 
     release {
         github {
+            skipRelease = true
             skipTag = true
             overwrite = false
             token = "none"
