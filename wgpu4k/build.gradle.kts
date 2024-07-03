@@ -143,10 +143,10 @@ fun downloadInto(fileName: String, target: File): Task {
 }
 
 fun unzipTask(
-	zipFile: File,
-	target: File,
-	zipFilename: String,
-	downloadTask: Task,
+    zipFile: File,
+    target: File,
+    zipFilename: String,
+    downloadTask: Task,
 ) = tasks.register<Copy>("unzip-${zipFile.name}") {
     onlyIf { !target.exists() }
     from(zipTree(zipFile))
@@ -215,10 +215,21 @@ jreleaser {
 }
 
 publishing {
-    
     repositories {
         maven {
-            url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
+            if ((version as String).contains("SNAPSHOT")) {
+                name = "GitLab"
+                url = uri("https://gitlab.com/api/v4/projects/25805863/packages/maven")
+                credentials(HttpHeaderCredentials::class) {
+                    name = "Authorization"
+                    value = "Bearer ${System.getenv("GITLAB_TOKEN")}"
+                }
+                authentication {
+                    create<HttpHeaderAuthentication>("header")
+                }
+            } else {
+                url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
+            }
         }
     }
 }

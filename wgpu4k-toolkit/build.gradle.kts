@@ -86,11 +86,18 @@ tasks.named<Test>("jvmTest") {
 publishing {
     repositories {
         maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/ygdrasil-io/wgpu4k")
-            credentials {
-                username = System.getenv("USERNAME")
-                password = System.getenv("TOKEN")
+            if ((version as String).contains("SNAPSHOT")) {
+                name = "GitLab"
+                url = uri("https://gitlab.com/api/v4/projects/25805863/packages/maven")
+                credentials(HttpHeaderCredentials::class) {
+                    name = "Authorization"
+                    value = "Bearer ${System.getenv("GITLAB_TOKEN")}"
+                }
+                authentication {
+                    create<HttpHeaderAuthentication>("header")
+                }
+            } else {
+                url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
             }
         }
     }
