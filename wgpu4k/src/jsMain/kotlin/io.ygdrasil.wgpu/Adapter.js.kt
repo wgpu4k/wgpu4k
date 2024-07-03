@@ -24,8 +24,8 @@ actual class Adapter(val handler: GPUAdapter) : AutoCloseable {
 	}
 
 	actual suspend fun requestDevice(): Device? {
-		return handler.requestDevice().await()?.let {
-			Device(it)
-		}
+		return handler.requestDevice()
+			.await()
+			.let(::Device)
 	}
 }

@@ -462,9 +462,8 @@ external interface GPUAdapter {
     var features: GPUSupportedFeatures
     var limits: GPUSupportedLimits
     var isFallbackAdapter: Boolean
-    fun requestDevice(descriptor: GPUDeviceDescriptor = definedExternally): Promise<GPUDevice>
+    suspend fun requestDevice(descriptor: GPUDeviceDescriptor = definedExternally): Promise<GPUDevice>
     fun requestAdapterInfo(): Promise<GPUAdapterInfo>
-
 }
 
 external interface GPUAdapterInfo {
@@ -472,7 +471,6 @@ external interface GPUAdapterInfo {
     var architecture: String
     var device: String
     var description: String
-
 }
 
 external interface GPUBindGroup : GPUObjectBase
@@ -486,7 +484,6 @@ external interface GPUBuffer : GPUObjectBase {
     fun getMappedRange(offset: GPUSize64 = definedExternally, size: GPUSize64 = definedExternally): ArrayBuffer
     fun unmap()
     fun destroy()
-
 }
 
 
@@ -571,7 +568,6 @@ external interface GPUCompilationMessage {
     var linePos: Number
     var offset: Number
     var length: Number
-
 }
 
 
@@ -593,7 +589,6 @@ external interface GPUComputePassEncoder : GPUObjectBase, GPUCommandsMixin, GPUD
 external interface GPUComputePipeline : GPUObjectBase, GPUPipelineBase
 
 open external class GPUDevice : EventTarget, GPUObjectBase {
-
     override var label: String
     var features: GPUSupportedFeatures
     var limits: GPUSupportedLimits
@@ -621,20 +616,15 @@ open external class GPUDevice : EventTarget, GPUObjectBase {
 
 }
 
-
 external interface GPUDeviceLostInfo {
     var __brand: String /* "GPUDeviceLostInfo" */
     var reason: String /* "unknown" | "destroyed" */
     var message: String
-
 }
-
 
 external interface GPUError {
     var message: String
-
 }
-
 
 external interface GPUExternalTexture : GPUObjectBase
 external interface GPUInternalError : GPUError
@@ -642,7 +632,6 @@ external interface GPUOutOfMemoryError : GPUError
 
 open external class GPUPipelineError : DOMException {
     var reason: String /* "validation" | "internal" */
-
 }
 
 external interface GPUPipelineLayout : GPUObjectBase
@@ -651,7 +640,6 @@ external interface GPUQuerySet : GPUObjectBase {
     fun destroy()
     var type: String /* "occlusion" | "timestamp" */
     var count: GPUSize32Out
-
 }
 
 external interface GPUQueue : GPUObjectBase {
