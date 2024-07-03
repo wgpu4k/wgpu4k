@@ -176,18 +176,47 @@ tasks.named<Test>("jvmTest") {
 }
 
 jreleaser {
+    gitRootSearch = true
+
+    project {
+        description = "Webgpu binding to kotlin multiplatform"
+        copyright = "MIT"
+    }
+
     signing {
+        setActive("ALWAYS")
         armored = true
+
     }
     deploy {
+        setActive("ALWAYS")
         maven {
+            setActive("ALWAYS")
             mavenCentral {
+                setActive("ALWAYS")
                 create("sonatype") {
-
+                    setActive("ALWAYS")
                     url = "https://central.sonatype.com/api/v1/publisher"
-                    stagingRepository("target/staging-deploy")
+                    stagingRepository("build/staging-deploy")
                 }
             }
+        }
+    }
+
+    release {
+        github {
+            skipTag = true
+            overwrite = false
+            token = "none"
+        }
+    }
+}
+
+publishing {
+    
+    repositories {
+        maven {
+            url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
         }
     }
 }
