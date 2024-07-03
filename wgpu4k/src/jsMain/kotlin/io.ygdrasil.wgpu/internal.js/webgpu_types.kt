@@ -12,9 +12,6 @@ import org.w3c.dom.events.EventTarget
 import web.errors.DOMException
 import kotlin.js.Promise
 
-external interface GPUOrigin2DDictStrict : GPUOrigin2DDict
-
-external interface GPUExtent3DDictStrict : GPUExtent3DDict
 
 external interface GPUBindGroupDescriptor : GPUObjectDescriptorBase {
     var layout: GPUBindGroupLayout
@@ -23,9 +20,7 @@ external interface GPUBindGroupDescriptor : GPUObjectDescriptorBase {
 
 external interface GPUBindGroupEntry {
     var binding: GPUIndex32
-    var resource: dynamic /* GPUSampler | GPUTextureView | GPUBufferBinding | GPUExternalTexture */
-        get() = definedExternally
-        set(value) = definedExternally
+    var resource: Any /* GPUSampler | GPUTextureView | GPUBufferBinding | GPUExternalTexture */
 }
 
 external interface GPUBindGroupLayoutDescriptor : GPUObjectDescriptorBase {
@@ -44,14 +39,8 @@ external interface GPUBindGroupLayoutEntry {
 
 external interface GPUBlendComponent {
     var operation: String? /* "add" | "subtract" | "reverse-subtract" | "min" | "max" */
-        get() = definedExternally
-        set(value) = definedExternally
     var srcFactor: String? /* "zero" | "one" | "src" | "one-minus-src" | "src-alpha" | "one-minus-src-alpha" | "dst" | "one-minus-dst" | "dst-alpha" | "one-minus-dst-alpha" | "src-alpha-saturated" | "constant" | "one-minus-constant" */
-        get() = definedExternally
-        set(value) = definedExternally
     var dstFactor: String? /* "zero" | "one" | "src" | "one-minus-src" | "src-alpha" | "one-minus-src-alpha" | "dst" | "one-minus-dst" | "dst-alpha" | "one-minus-dst-alpha" | "src-alpha-saturated" | "constant" | "one-minus-constant" */
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUBlendState {
@@ -162,7 +151,7 @@ external interface GPUImageCopyExternalImage {
     var source: Any
 
     /* ImageBitmap | ImageData | HTMLImageElement | HTMLVideoElement | VideoFrame | HTMLCanvasElement | OffscreenCanvas */
-    var origin: GPUOrigin2DDictStrict /* Iterable<GPUIntegerCoordinate>? | GPUOrigin2DDictStrict? */
+    var origin: GPUOrigin2DDict /* Iterable<GPUIntegerCoordinate>? | GPUOrigin2DDictStrict? */
     var flipY: Boolean
 }
 
@@ -530,7 +519,7 @@ external interface GPUCommandEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebug
     fun copyBufferToTexture(
         source: GPUImageCopyBuffer,
         destination: GPUImageCopyTexture,
-        copySize: GPUExtent3DDictStrict,
+        copySize: GPUExtent3DDict,
     )
 
     fun copyTextureToBuffer(
@@ -542,7 +531,7 @@ external interface GPUCommandEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebug
     fun copyTextureToBuffer(
         source: GPUImageCopyTexture,
         destination: GPUImageCopyBuffer,
-        copySize: GPUExtent3DDictStrict,
+        copySize: GPUExtent3DDict,
     )
 
     fun copyTextureToTexture(
@@ -554,7 +543,7 @@ external interface GPUCommandEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebug
     fun copyTextureToTexture(
         source: GPUImageCopyTexture,
         destination: GPUImageCopyTexture,
-        copySize: GPUExtent3DDictStrict,
+        copySize: GPUExtent3DDict,
     )
 
     fun clearBuffer(buffer: GPUBuffer, offset: GPUSize64 = definedExternally, size: GPUSize64 = definedExternally)
@@ -710,7 +699,7 @@ external interface GPUQueue : GPUObjectBase {
         destination: GPUImageCopyTexture,
         data: ArrayBufferView,
         dataLayout: GPUImageDataLayout,
-        size: GPUExtent3DDictStrict,
+        size: GPUExtent3DDict,
     )
 
     fun writeTexture(
@@ -724,7 +713,7 @@ external interface GPUQueue : GPUObjectBase {
         destination: GPUImageCopyTexture,
         data: ArrayBuffer,
         dataLayout: GPUImageDataLayout,
-        size: GPUExtent3DDictStrict,
+        size: GPUExtent3DDict,
     )
 
     /*fun writeTexture(destination: GPUImageCopyTexture, data: SharedArrayBuffer, dataLayout: GPUImageDataLayout, size: Iterable<GPUIntegerCoordinate>)
@@ -738,7 +727,7 @@ external interface GPUQueue : GPUObjectBase {
     fun copyExternalImageToTexture(
         source: GPUImageCopyExternalImage,
         destination: GPUImageCopyTextureTagged,
-        copySize: GPUExtent3DDictStrict,
+        copySize: GPUExtent3DDict,
     )
 
 }
