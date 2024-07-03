@@ -18,7 +18,7 @@ external interface GPUExtent3DDictStrict : GPUExtent3DDict
 
 external interface GPUBindGroupDescriptor : GPUObjectDescriptorBase {
     var layout: GPUBindGroupLayout
-	var entries: Array<GPUBindGroupEntry>
+    var entries: Array<GPUBindGroupEntry>
 }
 
 external interface GPUBindGroupEntry {
@@ -62,11 +62,7 @@ external interface GPUBlendState {
 external interface GPUBufferBinding {
     var buffer: GPUBuffer
     var offset: GPUSize64?
-        get() = definedExternally
-        set(value) = definedExternally
     var size: GPUSize64?
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUBufferBindingLayout {
@@ -79,25 +75,15 @@ external interface GPUBufferDescriptor : GPUObjectDescriptorBase {
     var size: GPUSize64
     var usage: GPUBufferUsageFlags
     var mappedAtCreation: Boolean?
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUCanvasConfiguration {
     var device: GPUDevice
     var format: String /* "r8unorm" | "r8snorm" | "r8uint" | "r8sint" | "r16uint" | "r16sint" | "r16float" | "rg8unorm" | "rg8snorm" | "rg8uint" | "rg8sint" | "r32uint" | "r32sint" | "r32float" | "rg16uint" | "rg16sint" | "rg16float" | "rgba8unorm" | "rgba8unorm-srgb" | "rgba8snorm" | "rgba8uint" | "rgba8sint" | "bgra8unorm" | "bgra8unorm-srgb" | "rgb9e5ufloat" | "rgb10a2uint" | "rgb10a2unorm" | "rg11b10ufloat" | "rg32uint" | "rg32sint" | "rg32float" | "rgba16uint" | "rgba16sint" | "rgba16float" | "rgba32uint" | "rgba32sint" | "rgba32float" | "stencil8" | "depth16unorm" | "depth24plus" | "depth24plus-stencil8" | "depth32float" | "depth32float-stencil8" | "bc1-rgba-unorm" | "bc1-rgba-unorm-srgb" | "bc2-rgba-unorm" | "bc2-rgba-unorm-srgb" | "bc3-rgba-unorm" | "bc3-rgba-unorm-srgb" | "bc4-r-unorm" | "bc4-r-snorm" | "bc5-rg-unorm" | "bc5-rg-snorm" | "bc6h-rgb-ufloat" | "bc6h-rgb-float" | "bc7-rgba-unorm" | "bc7-rgba-unorm-srgb" | "etc2-rgb8unorm" | "etc2-rgb8unorm-srgb" | "etc2-rgb8a1unorm" | "etc2-rgb8a1unorm-srgb" | "etc2-rgba8unorm" | "etc2-rgba8unorm-srgb" | "eac-r11unorm" | "eac-r11snorm" | "eac-rg11unorm" | "eac-rg11snorm" | "astc-4x4-unorm" | "astc-4x4-unorm-srgb" | "astc-5x4-unorm" | "astc-5x4-unorm-srgb" | "astc-5x5-unorm" | "astc-5x5-unorm-srgb" | "astc-6x5-unorm" | "astc-6x5-unorm-srgb" | "astc-6x6-unorm" | "astc-6x6-unorm-srgb" | "astc-8x5-unorm" | "astc-8x5-unorm-srgb" | "astc-8x6-unorm" | "astc-8x6-unorm-srgb" | "astc-8x8-unorm" | "astc-8x8-unorm-srgb" | "astc-10x5-unorm" | "astc-10x5-unorm-srgb" | "astc-10x6-unorm" | "astc-10x6-unorm-srgb" | "astc-10x8-unorm" | "astc-10x8-unorm-srgb" | "astc-10x10-unorm" | "astc-10x10-unorm-srgb" | "astc-12x10-unorm" | "astc-12x10-unorm-srgb" | "astc-12x12-unorm" | "astc-12x12-unorm-srgb" */
     var usage: GPUTextureUsageFlags?
-        get() = definedExternally
-        set(value) = definedExternally
-	var viewFormats: Array<String? /* "r8unorm" | "r8snorm" | "r8uint" | "r8sint" | "r16uint" | "r16sint" | "r16float" | "rg8unorm" | "rg8snorm" | "rg8uint" | "rg8sint" | "r32uint" | "r32sint" | "r32float" | "rg16uint" | "rg16sint" | "rg16float" | "rgba8unorm" | "rgba8unorm-srgb" | "rgba8snorm" | "rgba8uint" | "rgba8sint" | "bgra8unorm" | "bgra8unorm-srgb" | "rgb9e5ufloat" | "rgb10a2uint" | "rgb10a2unorm" | "rg11b10ufloat" | "rg32uint" | "rg32sint" | "rg32float" | "rgba16uint" | "rgba16sint" | "rgba16float" | "rgba32uint" | "rgba32sint" | "rgba32float" | "stencil8" | "depth16unorm" | "depth24plus" | "depth24plus-stencil8" | "depth32float" | "depth32float-stencil8" | "bc1-rgba-unorm" | "bc1-rgba-unorm-srgb" | "bc2-rgba-unorm" | "bc2-rgba-unorm-srgb" | "bc3-rgba-unorm" | "bc3-rgba-unorm-srgb" | "bc4-r-unorm" | "bc4-r-snorm" | "bc5-rg-unorm" | "bc5-rg-snorm" | "bc6h-rgb-ufloat" | "bc6h-rgb-float" | "bc7-rgba-unorm" | "bc7-rgba-unorm-srgb" | "etc2-rgb8unorm" | "etc2-rgb8unorm-srgb" | "etc2-rgb8a1unorm" | "etc2-rgb8a1unorm-srgb" | "etc2-rgba8unorm" | "etc2-rgba8unorm-srgb" | "eac-r11unorm" | "eac-r11snorm" | "eac-rg11unorm" | "eac-rg11snorm" | "astc-4x4-unorm" | "astc-4x4-unorm-srgb" | "astc-5x4-unorm" | "astc-5x4-unorm-srgb" | "astc-5x5-unorm" | "astc-5x5-unorm-srgb" | "astc-6x5-unorm" | "astc-6x5-unorm-srgb" | "astc-6x6-unorm" | "astc-6x6-unorm-srgb" | "astc-8x5-unorm" | "astc-8x5-unorm-srgb" | "astc-8x6-unorm" | "astc-8x6-unorm-srgb" | "astc-8x8-unorm" | "astc-8x8-unorm-srgb" | "astc-10x5-unorm" | "astc-10x5-unorm-srgb" | "astc-10x6-unorm" | "astc-10x6-unorm-srgb" | "astc-10x8-unorm" | "astc-10x8-unorm-srgb" | "astc-10x10-unorm" | "astc-10x10-unorm-srgb" | "astc-12x10-unorm" | "astc-12x10-unorm-srgb" | "astc-12x12-unorm" | "astc-12x12-unorm-srgb" */>?
-        get() = definedExternally
-        set(value) = definedExternally
+    var viewFormats: Array<String? /* "r8unorm" | "r8snorm" | "r8uint" | "r8sint" | "r16uint" | "r16sint" | "r16float" | "rg8unorm" | "rg8snorm" | "rg8uint" | "rg8sint" | "r32uint" | "r32sint" | "r32float" | "rg16uint" | "rg16sint" | "rg16float" | "rgba8unorm" | "rgba8unorm-srgb" | "rgba8snorm" | "rgba8uint" | "rgba8sint" | "bgra8unorm" | "bgra8unorm-srgb" | "rgb9e5ufloat" | "rgb10a2uint" | "rgb10a2unorm" | "rg11b10ufloat" | "rg32uint" | "rg32sint" | "rg32float" | "rgba16uint" | "rgba16sint" | "rgba16float" | "rgba32uint" | "rgba32sint" | "rgba32float" | "stencil8" | "depth16unorm" | "depth24plus" | "depth24plus-stencil8" | "depth32float" | "depth32float-stencil8" | "bc1-rgba-unorm" | "bc1-rgba-unorm-srgb" | "bc2-rgba-unorm" | "bc2-rgba-unorm-srgb" | "bc3-rgba-unorm" | "bc3-rgba-unorm-srgb" | "bc4-r-unorm" | "bc4-r-snorm" | "bc5-rg-unorm" | "bc5-rg-snorm" | "bc6h-rgb-ufloat" | "bc6h-rgb-float" | "bc7-rgba-unorm" | "bc7-rgba-unorm-srgb" | "etc2-rgb8unorm" | "etc2-rgb8unorm-srgb" | "etc2-rgb8a1unorm" | "etc2-rgb8a1unorm-srgb" | "etc2-rgba8unorm" | "etc2-rgba8unorm-srgb" | "eac-r11unorm" | "eac-r11snorm" | "eac-rg11unorm" | "eac-rg11snorm" | "astc-4x4-unorm" | "astc-4x4-unorm-srgb" | "astc-5x4-unorm" | "astc-5x4-unorm-srgb" | "astc-5x5-unorm" | "astc-5x5-unorm-srgb" | "astc-6x5-unorm" | "astc-6x5-unorm-srgb" | "astc-6x6-unorm" | "astc-6x6-unorm-srgb" | "astc-8x5-unorm" | "astc-8x5-unorm-srgb" | "astc-8x6-unorm" | "astc-8x6-unorm-srgb" | "astc-8x8-unorm" | "astc-8x8-unorm-srgb" | "astc-10x5-unorm" | "astc-10x5-unorm-srgb" | "astc-10x6-unorm" | "astc-10x6-unorm-srgb" | "astc-10x8-unorm" | "astc-10x8-unorm-srgb" | "astc-10x10-unorm" | "astc-10x10-unorm-srgb" | "astc-12x10-unorm" | "astc-12x10-unorm-srgb" | "astc-12x12-unorm" | "astc-12x12-unorm-srgb" */>?
     var colorSpace: Any?
-        get() = definedExternally
-        set(value) = definedExternally
     var alphaMode: String? /* "opaque" | "premultiplied" */
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUColorDict {
@@ -110,11 +96,7 @@ external interface GPUColorDict {
 external interface GPUColorTargetState {
     var format: String /* "r8unorm" | "r8snorm" | "r8uint" | "r8sint" | "r16uint" | "r16sint" | "r16float" | "rg8unorm" | "rg8snorm" | "rg8uint" | "rg8sint" | "r32uint" | "r32sint" | "r32float" | "rg16uint" | "rg16sint" | "rg16float" | "rgba8unorm" | "rgba8unorm-srgb" | "rgba8snorm" | "rgba8uint" | "rgba8sint" | "bgra8unorm" | "bgra8unorm-srgb" | "rgb9e5ufloat" | "rgb10a2uint" | "rgb10a2unorm" | "rg11b10ufloat" | "rg32uint" | "rg32sint" | "rg32float" | "rgba16uint" | "rgba16sint" | "rgba16float" | "rgba32uint" | "rgba32sint" | "rgba32float" | "stencil8" | "depth16unorm" | "depth24plus" | "depth24plus-stencil8" | "depth32float" | "depth32float-stencil8" | "bc1-rgba-unorm" | "bc1-rgba-unorm-srgb" | "bc2-rgba-unorm" | "bc2-rgba-unorm-srgb" | "bc3-rgba-unorm" | "bc3-rgba-unorm-srgb" | "bc4-r-unorm" | "bc4-r-snorm" | "bc5-rg-unorm" | "bc5-rg-snorm" | "bc6h-rgb-ufloat" | "bc6h-rgb-float" | "bc7-rgba-unorm" | "bc7-rgba-unorm-srgb" | "etc2-rgb8unorm" | "etc2-rgb8unorm-srgb" | "etc2-rgb8a1unorm" | "etc2-rgb8a1unorm-srgb" | "etc2-rgba8unorm" | "etc2-rgba8unorm-srgb" | "eac-r11unorm" | "eac-r11snorm" | "eac-rg11unorm" | "eac-rg11snorm" | "astc-4x4-unorm" | "astc-4x4-unorm-srgb" | "astc-5x4-unorm" | "astc-5x4-unorm-srgb" | "astc-5x5-unorm" | "astc-5x5-unorm-srgb" | "astc-6x5-unorm" | "astc-6x5-unorm-srgb" | "astc-6x6-unorm" | "astc-6x6-unorm-srgb" | "astc-8x5-unorm" | "astc-8x5-unorm-srgb" | "astc-8x6-unorm" | "astc-8x6-unorm-srgb" | "astc-8x8-unorm" | "astc-8x8-unorm-srgb" | "astc-10x5-unorm" | "astc-10x5-unorm-srgb" | "astc-10x6-unorm" | "astc-10x6-unorm-srgb" | "astc-10x8-unorm" | "astc-10x8-unorm-srgb" | "astc-10x10-unorm" | "astc-10x10-unorm-srgb" | "astc-12x10-unorm" | "astc-12x10-unorm-srgb" | "astc-12x12-unorm" | "astc-12x12-unorm-srgb" */
     var blend: GPUBlendState?
-        get() = definedExternally
-        set(value) = definedExternally
     var writeMask: GPUColorWriteFlags?
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 typealias GPUCommandBufferDescriptor = GPUObjectDescriptorBase
@@ -123,18 +105,12 @@ typealias GPUCommandEncoderDescriptor = GPUObjectDescriptorBase
 
 external interface GPUComputePassDescriptor : GPUObjectDescriptorBase {
     var timestampWrites: GPUComputePassTimestampWrites?
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUComputePassTimestampWrites {
     var querySet: GPUQuerySet
     var beginningOfPassWriteIndex: GPUSize32?
-        get() = definedExternally
-        set(value) = definedExternally
     var endOfPassWriteIndex: GPUSize32?
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUComputePipelineDescriptor : GPUPipelineDescriptorBase {
@@ -144,44 +120,21 @@ external interface GPUComputePipelineDescriptor : GPUPipelineDescriptorBase {
 external interface GPUDepthStencilState {
     var format: String /* "r8unorm" | "r8snorm" | "r8uint" | "r8sint" | "r16uint" | "r16sint" | "r16float" | "rg8unorm" | "rg8snorm" | "rg8uint" | "rg8sint" | "r32uint" | "r32sint" | "r32float" | "rg16uint" | "rg16sint" | "rg16float" | "rgba8unorm" | "rgba8unorm-srgb" | "rgba8snorm" | "rgba8uint" | "rgba8sint" | "bgra8unorm" | "bgra8unorm-srgb" | "rgb9e5ufloat" | "rgb10a2uint" | "rgb10a2unorm" | "rg11b10ufloat" | "rg32uint" | "rg32sint" | "rg32float" | "rgba16uint" | "rgba16sint" | "rgba16float" | "rgba32uint" | "rgba32sint" | "rgba32float" | "stencil8" | "depth16unorm" | "depth24plus" | "depth24plus-stencil8" | "depth32float" | "depth32float-stencil8" | "bc1-rgba-unorm" | "bc1-rgba-unorm-srgb" | "bc2-rgba-unorm" | "bc2-rgba-unorm-srgb" | "bc3-rgba-unorm" | "bc3-rgba-unorm-srgb" | "bc4-r-unorm" | "bc4-r-snorm" | "bc5-rg-unorm" | "bc5-rg-snorm" | "bc6h-rgb-ufloat" | "bc6h-rgb-float" | "bc7-rgba-unorm" | "bc7-rgba-unorm-srgb" | "etc2-rgb8unorm" | "etc2-rgb8unorm-srgb" | "etc2-rgb8a1unorm" | "etc2-rgb8a1unorm-srgb" | "etc2-rgba8unorm" | "etc2-rgba8unorm-srgb" | "eac-r11unorm" | "eac-r11snorm" | "eac-rg11unorm" | "eac-rg11snorm" | "astc-4x4-unorm" | "astc-4x4-unorm-srgb" | "astc-5x4-unorm" | "astc-5x4-unorm-srgb" | "astc-5x5-unorm" | "astc-5x5-unorm-srgb" | "astc-6x5-unorm" | "astc-6x5-unorm-srgb" | "astc-6x6-unorm" | "astc-6x6-unorm-srgb" | "astc-8x5-unorm" | "astc-8x5-unorm-srgb" | "astc-8x6-unorm" | "astc-8x6-unorm-srgb" | "astc-8x8-unorm" | "astc-8x8-unorm-srgb" | "astc-10x5-unorm" | "astc-10x5-unorm-srgb" | "astc-10x6-unorm" | "astc-10x6-unorm-srgb" | "astc-10x8-unorm" | "astc-10x8-unorm-srgb" | "astc-10x10-unorm" | "astc-10x10-unorm-srgb" | "astc-12x10-unorm" | "astc-12x10-unorm-srgb" | "astc-12x12-unorm" | "astc-12x12-unorm-srgb" */
     var depthWriteEnabled: Boolean?
-        get() = definedExternally
-        set(value) = definedExternally
     var depthCompare: String? /* "never" | "less" | "equal" | "less-equal" | "greater" | "not-equal" | "greater-equal" | "always" */
-        get() = definedExternally
-        set(value) = definedExternally
     var stencilFront: GPUStencilFaceState?
-        get() = definedExternally
-        set(value) = definedExternally
     var stencilBack: GPUStencilFaceState?
-        get() = definedExternally
-        set(value) = definedExternally
     var stencilReadMask: GPUStencilValue?
-        get() = definedExternally
-        set(value) = definedExternally
     var stencilWriteMask: GPUStencilValue?
-        get() = definedExternally
-        set(value) = definedExternally
     var depthBias: GPUDepthBias?
-        get() = definedExternally
-        set(value) = definedExternally
-	var depthBiasSlopeScale: Float?
-        get() = definedExternally
-        set(value) = definedExternally
-	var depthBiasClamp: Float?
-        get() = definedExternally
-        set(value) = definedExternally
+    var depthBiasSlopeScale: Float?
+    var depthBiasClamp: Float?
+
 }
 
 external interface GPUDeviceDescriptor : GPUObjectDescriptorBase {
     var requiredFeatures: Iterable<String? /* "depth-clip-control" | "depth32float-stencil8" | "texture-compression-bc" | "texture-compression-etc2" | "texture-compression-astc" | "timestamp-query" | "indirect-first-instance" | "shader-f16" | "rg11b10ufloat-renderable" | "bgra8unorm-storage" | "float32-filterable" */>?
-        get() = definedExternally
-        set(value) = definedExternally
     var requiredLimits: Record<String, GPUSize64>?
-        get() = definedExternally
-        set(value) = definedExternally
     var defaultQueue: GPUQueueDescriptor?
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUExtent3DDict {
@@ -194,15 +147,11 @@ external interface GPUExternalTextureBindingLayout
 
 external interface GPUExternalTextureDescriptor : GPUObjectDescriptorBase {
     var source: dynamic /* HTMLVideoElement | VideoFrame */
-        get() = definedExternally
-        set(value) = definedExternally
     var colorSpace: Any?
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUFragmentState : GPUProgrammableStage {
-	var targets: Array<GPUColorTargetState?>
+    var targets: Array<GPUColorTargetState?>
 }
 
 external interface GPUImageCopyBuffer : GPUImageDataLayout {
@@ -237,15 +186,9 @@ external interface GPUImageDataLayout {
 
 external interface GPUMultisampleState {
     var count: GPUSize32?
-        get() = definedExternally
-        set(value) = definedExternally
     @Suppress("INLINE_CLASS_IN_EXTERNAL_DECLARATION_WARNING")
     var mask: GPUSampleMask?
-        get() = definedExternally
-        set(value) = definedExternally
     var alphaToCoverageEnabled: Boolean?
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUObjectDescriptorBase {
@@ -259,20 +202,12 @@ external interface GPUOrigin2DDict {
 
 external interface GPUOrigin3DDict {
     var x: GPUIntegerCoordinate?
-        get() = definedExternally
-        set(value) = definedExternally
     var y: GPUIntegerCoordinate?
-        get() = definedExternally
-        set(value) = definedExternally
     var z: GPUIntegerCoordinate?
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUPipelineDescriptorBase : GPUObjectDescriptorBase {
     var layout: dynamic /* GPUPipelineLayout | "auto" */
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUPipelineErrorInit {
@@ -280,35 +215,21 @@ external interface GPUPipelineErrorInit {
 }
 
 external interface GPUPipelineLayoutDescriptor : GPUObjectDescriptorBase {
-	var bindGroupLayouts: Array<GPUBindGroupLayout>
+    var bindGroupLayouts: Array<GPUBindGroupLayout>
 }
 
 external interface GPUPrimitiveState {
     var topology: String? /* "point-list" | "line-list" | "line-strip" | "triangle-list" | "triangle-strip" */
-        get() = definedExternally
-        set(value) = definedExternally
     var stripIndexFormat: String? /* "uint16" | "uint32" */
-        get() = definedExternally
-        set(value) = definedExternally
     var frontFace: String? /* "ccw" | "cw" */
-        get() = definedExternally
-        set(value) = definedExternally
     var cullMode: String? /* "none" | "front" | "back" */
-        get() = definedExternally
-        set(value) = definedExternally
     var unclippedDepth: Boolean?
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUProgrammableStage {
     var module: GPUShaderModule
     var entryPoint: String?
-        get() = definedExternally
-        set(value) = definedExternally
     var constants: Map<String, GPUPipelineConstantValue>?
-        get() = definedExternally
-        set(value) = definedExternally
 }
 
 external interface GPUQuerySetDescriptor : GPUObjectDescriptorBase {
@@ -328,14 +249,8 @@ external interface GPURenderBundleEncoderDescriptor : GPURenderPassLayout {
 external interface GPURenderPassColorAttachment {
     var view: GPUTextureView
     var depthSlice: GPUIntegerCoordinate?
-        get() = definedExternally
-        set(value) = definedExternally
     var resolveTarget: GPUTextureView?
-        get() = definedExternally
-        set(value) = definedExternally
     var clearValue: Array<Number>? /* Iterable<Number>? | GPUColorDict? */
-        get() = definedExternally
-        set(value) = definedExternally
     var loadOp: String /* "load" | "clear" */
     var storeOp: String /* "store" | "discard" */
 }
@@ -440,7 +355,7 @@ external interface GPUTextureDescriptor : GPUObjectDescriptorBase {
     var dimension: String? /* "1d" | "2d" | "3d" */
     var format: String /* "r8unorm" | "r8snorm" | "r8uint" | "r8sint" | "r16uint" | "r16sint" | "r16float" | "rg8unorm" | "rg8snorm" | "rg8uint" | "rg8sint" | "r32uint" | "r32sint" | "r32float" | "rg16uint" | "rg16sint" | "rg16float" | "rgba8unorm" | "rgba8unorm-srgb" | "rgba8snorm" | "rgba8uint" | "rgba8sint" | "bgra8unorm" | "bgra8unorm-srgb" | "rgb9e5ufloat" | "rgb10a2uint" | "rgb10a2unorm" | "rg11b10ufloat" | "rg32uint" | "rg32sint" | "rg32float" | "rgba16uint" | "rgba16sint" | "rgba16float" | "rgba32uint" | "rgba32sint" | "rgba32float" | "stencil8" | "depth16unorm" | "depth24plus" | "depth24plus-stencil8" | "depth32float" | "depth32float-stencil8" | "bc1-rgba-unorm" | "bc1-rgba-unorm-srgb" | "bc2-rgba-unorm" | "bc2-rgba-unorm-srgb" | "bc3-rgba-unorm" | "bc3-rgba-unorm-srgb" | "bc4-r-unorm" | "bc4-r-snorm" | "bc5-rg-unorm" | "bc5-rg-snorm" | "bc6h-rgb-ufloat" | "bc6h-rgb-float" | "bc7-rgba-unorm" | "bc7-rgba-unorm-srgb" | "etc2-rgb8unorm" | "etc2-rgb8unorm-srgb" | "etc2-rgb8a1unorm" | "etc2-rgb8a1unorm-srgb" | "etc2-rgba8unorm" | "etc2-rgba8unorm-srgb" | "eac-r11unorm" | "eac-r11snorm" | "eac-rg11unorm" | "eac-rg11snorm" | "astc-4x4-unorm" | "astc-4x4-unorm-srgb" | "astc-5x4-unorm" | "astc-5x4-unorm-srgb" | "astc-5x5-unorm" | "astc-5x5-unorm-srgb" | "astc-6x5-unorm" | "astc-6x5-unorm-srgb" | "astc-6x6-unorm" | "astc-6x6-unorm-srgb" | "astc-8x5-unorm" | "astc-8x5-unorm-srgb" | "astc-8x6-unorm" | "astc-8x6-unorm-srgb" | "astc-8x8-unorm" | "astc-8x8-unorm-srgb" | "astc-10x5-unorm" | "astc-10x5-unorm-srgb" | "astc-10x6-unorm" | "astc-10x6-unorm-srgb" | "astc-10x8-unorm" | "astc-10x8-unorm-srgb" | "astc-10x10-unorm" | "astc-10x10-unorm-srgb" | "astc-12x10-unorm" | "astc-12x10-unorm-srgb" | "astc-12x12-unorm" | "astc-12x12-unorm-srgb" */
     var usage: GPUTextureUsageFlags
-	var viewFormats: Array<String /* "r8unorm" | "r8snorm" | "r8uint" | "r8sint" | "r16uint" | "r16sint" | "r16float" | "rg8unorm" | "rg8snorm" | "rg8uint" | "rg8sint" | "r32uint" | "r32sint" | "r32float" | "rg16uint" | "rg16sint" | "rg16float" | "rgba8unorm" | "rgba8unorm-srgb" | "rgba8snorm" | "rgba8uint" | "rgba8sint" | "bgra8unorm" | "bgra8unorm-srgb" | "rgb9e5ufloat" | "rgb10a2uint" | "rgb10a2unorm" | "rg11b10ufloat" | "rg32uint" | "rg32sint" | "rg32float" | "rgba16uint" | "rgba16sint" | "rgba16float" | "rgba32uint" | "rgba32sint" | "rgba32float" | "stencil8" | "depth16unorm" | "depth24plus" | "depth24plus-stencil8" | "depth32float" | "depth32float-stencil8" | "bc1-rgba-unorm" | "bc1-rgba-unorm-srgb" | "bc2-rgba-unorm" | "bc2-rgba-unorm-srgb" | "bc3-rgba-unorm" | "bc3-rgba-unorm-srgb" | "bc4-r-unorm" | "bc4-r-snorm" | "bc5-rg-unorm" | "bc5-rg-snorm" | "bc6h-rgb-ufloat" | "bc6h-rgb-float" | "bc7-rgba-unorm" | "bc7-rgba-unorm-srgb" | "etc2-rgb8unorm" | "etc2-rgb8unorm-srgb" | "etc2-rgb8a1unorm" | "etc2-rgb8a1unorm-srgb" | "etc2-rgba8unorm" | "etc2-rgba8unorm-srgb" | "eac-r11unorm" | "eac-r11snorm" | "eac-rg11unorm" | "eac-rg11snorm" | "astc-4x4-unorm" | "astc-4x4-unorm-srgb" | "astc-5x4-unorm" | "astc-5x4-unorm-srgb" | "astc-5x5-unorm" | "astc-5x5-unorm-srgb" | "astc-6x5-unorm" | "astc-6x5-unorm-srgb" | "astc-6x6-unorm" | "astc-6x6-unorm-srgb" | "astc-8x5-unorm" | "astc-8x5-unorm-srgb" | "astc-8x6-unorm" | "astc-8x6-unorm-srgb" | "astc-8x8-unorm" | "astc-8x8-unorm-srgb" | "astc-10x5-unorm" | "astc-10x5-unorm-srgb" | "astc-10x6-unorm" | "astc-10x6-unorm-srgb" | "astc-10x8-unorm" | "astc-10x8-unorm-srgb" | "astc-10x10-unorm" | "astc-10x10-unorm-srgb" | "astc-12x10-unorm" | "astc-12x10-unorm-srgb" | "astc-12x12-unorm" | "astc-12x12-unorm-srgb" */>
+    var viewFormats: Array<String /* "r8unorm" | "r8snorm" | "r8uint" | "r8sint" | "r16uint" | "r16sint" | "r16float" | "rg8unorm" | "rg8snorm" | "rg8uint" | "rg8sint" | "r32uint" | "r32sint" | "r32float" | "rg16uint" | "rg16sint" | "rg16float" | "rgba8unorm" | "rgba8unorm-srgb" | "rgba8snorm" | "rgba8uint" | "rgba8sint" | "bgra8unorm" | "bgra8unorm-srgb" | "rgb9e5ufloat" | "rgb10a2uint" | "rgb10a2unorm" | "rg11b10ufloat" | "rg32uint" | "rg32sint" | "rg32float" | "rgba16uint" | "rgba16sint" | "rgba16float" | "rgba32uint" | "rgba32sint" | "rgba32float" | "stencil8" | "depth16unorm" | "depth24plus" | "depth24plus-stencil8" | "depth32float" | "depth32float-stencil8" | "bc1-rgba-unorm" | "bc1-rgba-unorm-srgb" | "bc2-rgba-unorm" | "bc2-rgba-unorm-srgb" | "bc3-rgba-unorm" | "bc3-rgba-unorm-srgb" | "bc4-r-unorm" | "bc4-r-snorm" | "bc5-rg-unorm" | "bc5-rg-snorm" | "bc6h-rgb-ufloat" | "bc6h-rgb-float" | "bc7-rgba-unorm" | "bc7-rgba-unorm-srgb" | "etc2-rgb8unorm" | "etc2-rgb8unorm-srgb" | "etc2-rgb8a1unorm" | "etc2-rgb8a1unorm-srgb" | "etc2-rgba8unorm" | "etc2-rgba8unorm-srgb" | "eac-r11unorm" | "eac-r11snorm" | "eac-rg11unorm" | "eac-rg11snorm" | "astc-4x4-unorm" | "astc-4x4-unorm-srgb" | "astc-5x4-unorm" | "astc-5x4-unorm-srgb" | "astc-5x5-unorm" | "astc-5x5-unorm-srgb" | "astc-6x5-unorm" | "astc-6x5-unorm-srgb" | "astc-6x6-unorm" | "astc-6x6-unorm-srgb" | "astc-8x5-unorm" | "astc-8x5-unorm-srgb" | "astc-8x6-unorm" | "astc-8x6-unorm-srgb" | "astc-8x8-unorm" | "astc-8x8-unorm-srgb" | "astc-10x5-unorm" | "astc-10x5-unorm-srgb" | "astc-10x6-unorm" | "astc-10x6-unorm-srgb" | "astc-10x8-unorm" | "astc-10x8-unorm-srgb" | "astc-10x10-unorm" | "astc-10x10-unorm-srgb" | "astc-12x10-unorm" | "astc-12x10-unorm-srgb" | "astc-12x12-unorm" | "astc-12x12-unorm-srgb" */>
 }
 
 external interface GPUTextureViewDescriptor : GPUObjectDescriptorBase {
@@ -458,9 +373,9 @@ external interface GPUUncapturedErrorEventInit : EventInit {
 }
 
 external interface GPUVertexAttribute {
-	var format: String
+    var format: String
 
-	/* "uint8x2" | "uint8x4" | "sint8x2" | "sint8x4" | "unorm8x2" | "unorm8x4" | "snorm8x2" | "snorm8x4" | "uint16x2" | "uint16x4" | "sint16x2" | "sint16x4" | "unorm16x2" | "unorm16x4" | "snorm16x2" | "snorm16x4" | "float16x2" | "float16x4" | "float32" | "float32x2" | "float32x3" | "float32x4" | "uint32" | "uint32x2" | "uint32x3" | "uint32x4" | "sint32" | "sint32x2" | "sint32x3" | "sint32x4" | "unorm10-10-10-2" */
+    /* "uint8x2" | "uint8x4" | "sint8x2" | "sint8x4" | "unorm8x2" | "unorm8x4" | "snorm8x2" | "snorm8x4" | "uint16x2" | "uint16x4" | "sint16x2" | "sint16x4" | "unorm16x2" | "unorm16x4" | "snorm16x2" | "snorm16x4" | "float16x2" | "float16x4" | "float32" | "float32x2" | "float32x3" | "float32x4" | "uint32" | "uint32x2" | "uint32x3" | "uint32x4" | "sint32" | "sint32x2" | "sint32x3" | "sint32x4" | "unorm10-10-10-2" */
     var offset: GPUSize64
     var shaderLocation: GPUIndex32
 }
@@ -468,22 +383,18 @@ external interface GPUVertexAttribute {
 external interface GPUVertexBufferLayout {
     var arrayStride: GPUSize64
     var stepMode: String? /* "vertex" | "instance" */
-        get() = definedExternally
-        set(value) = definedExternally
-	var attributes: Array<GPUVertexAttribute>
+    var attributes: Array<GPUVertexAttribute>
 }
 
 external interface GPUVertexState : GPUProgrammableStage {
-	var buffers: Array<GPUVertexBufferLayout?>?
-        get() = definedExternally
-        set(value) = definedExternally
+    var buffers: Array<GPUVertexBufferLayout?>?
 }
 
 external interface GPUBindingCommandsMixin {
     fun setBindGroup(
         index: GPUIndex32,
         bindGroup: GPUBindGroup?,
-        dynamicOffsets: Array<GPUBufferDynamicOffset> = definedExternally
+        dynamicOffsets: Array<GPUBufferDynamicOffset> = definedExternally,
     )
 
     fun setBindGroup(index: GPUIndex32, bindGroup: GPUBindGroup?)
@@ -492,16 +403,16 @@ external interface GPUBindingCommandsMixin {
         bindGroup: GPUBindGroup?,
         dynamicOffsetsData: Uint32Array,
         dynamicOffsetsDataStart: GPUSize64,
-        dynamicOffsetsDataLength: GPUSize32
+        dynamicOffsetsDataLength: GPUSize32,
     )
 }
 
 external interface GPUCommandsMixin
 
 external interface GPUDebugCommandsMixin {
-    fun pushDebugGroup(groupLabel: String): Nothing?
-    fun popDebugGroup(): Nothing?
-    fun insertDebugMarker(markerLabel: String): Nothing?
+    fun pushDebugGroup(groupLabel: String)
+    fun popDebugGroup()
+    fun insertDebugMarker(markerLabel: String)
 }
 
 external interface GPUObjectBase {
@@ -513,13 +424,38 @@ external interface GPUPipelineBase {
 }
 
 external interface GPURenderCommandsMixin {
-    fun setPipeline(pipeline: GPURenderPipeline): Nothing?
-    fun setIndexBuffer(buffer: GPUBuffer, indexFormat: String /* "uint16" | "uint32" */, offset: GPUSize64 = definedExternally, size: GPUSize64 = definedExternally): Nothing?
-    fun setVertexBuffer(slot: GPUIndex32, buffer: GPUBuffer?, offset: GPUSize64 = definedExternally, size: GPUSize64 = definedExternally): Nothing?
-    fun draw(vertexCount: GPUSize32, instanceCount: GPUSize32 = definedExternally, firstVertex: GPUSize32 = definedExternally, firstInstance: GPUSize32 = definedExternally): Nothing?
-    fun drawIndexed(indexCount: GPUSize32, instanceCount: GPUSize32 = definedExternally, firstIndex: GPUSize32 = definedExternally, baseVertex: GPUSignedOffset32 = definedExternally, firstInstance: GPUSize32 = definedExternally): Nothing?
-    fun drawIndirect(indirectBuffer: GPUBuffer, indirectOffset: GPUSize64): Nothing?
-    fun drawIndexedIndirect(indirectBuffer: GPUBuffer, indirectOffset: GPUSize64): Nothing?
+    fun setPipeline(pipeline: GPURenderPipeline)
+    fun setIndexBuffer(
+        buffer: GPUBuffer,
+        indexFormat: String, /* "uint16" | "uint32" */
+        offset: GPUSize64 = definedExternally,
+        size: GPUSize64 = definedExternally,
+    )
+
+    fun setVertexBuffer(
+        slot: GPUIndex32,
+        buffer: GPUBuffer?,
+        offset: GPUSize64 = definedExternally,
+        size: GPUSize64 = definedExternally,
+    )
+
+    fun draw(
+        vertexCount: GPUSize32,
+        instanceCount: GPUSize32 = definedExternally,
+        firstVertex: GPUSize32 = definedExternally,
+        firstInstance: GPUSize32 = definedExternally,
+    )
+
+    fun drawIndexed(
+        indexCount: GPUSize32,
+        instanceCount: GPUSize32 = definedExternally,
+        firstIndex: GPUSize32 = definedExternally,
+        baseVertex: GPUSignedOffset32 = definedExternally,
+        firstInstance: GPUSize32 = definedExternally,
+    )
+
+    fun drawIndirect(indirectBuffer: GPUBuffer, indirectOffset: GPUSize64)
+    fun drawIndexedIndirect(indirectBuffer: GPUBuffer, indirectOffset: GPUSize64)
 }
 
 external interface NavigatorGPU {
@@ -559,16 +495,16 @@ external interface GPUBuffer : GPUObjectBase {
     var mapState: String /* "unmapped" | "pending" | "mapped" */
     fun mapAsync(mode: GPUMapModeFlags, offset: GPUSize64, size: GPUSize64): Promise<Any?>
     fun getMappedRange(offset: GPUSize64 = definedExternally, size: GPUSize64 = definedExternally): ArrayBuffer
-    fun unmap(): Nothing?
-    fun destroy(): Nothing?
+    fun unmap()
+    fun destroy()
 
 }
 
 
 external interface GPUCanvasContext {
     var canvas: dynamic /* HTMLCanvasElement | OffscreenCanvas */
-    fun configure(configuration: GPUCanvasConfiguration): Nothing?
-    fun unconfigure(): Nothing?
+    fun configure(configuration: GPUCanvasConfiguration)
+    fun unconfigure()
     fun getCurrentTexture(): GPUTexture
 }
 
@@ -577,26 +513,59 @@ external interface GPUCommandBuffer : GPUObjectBase
 external interface GPUCommandEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin {
     fun beginRenderPass(descriptor: GPURenderPassDescriptor): GPURenderPassEncoder
     fun beginComputePass(descriptor: GPUComputePassDescriptor? = definedExternally): GPUComputePassEncoder
-    fun copyBufferToBuffer(source: GPUBuffer, sourceOffset: GPUSize64, destination: GPUBuffer, destinationOffset: GPUSize64, size: GPUSize64): Nothing?
-	fun copyBufferToTexture(
-		source: GPUImageCopyBuffer,
-		destination: GPUImageCopyTexture,
-		copySize: Array<GPUIntegerCoordinate>
-	): Nothing?
-    fun copyBufferToTexture(source: GPUImageCopyBuffer, destination: GPUImageCopyTexture, copySize: GPUExtent3DDictStrict): Nothing?
+    fun copyBufferToBuffer(
+        source: GPUBuffer,
+        sourceOffset: GPUSize64,
+        destination: GPUBuffer,
+        destinationOffset: GPUSize64,
+        size: GPUSize64,
+    )
+
+    fun copyBufferToTexture(
+        source: GPUImageCopyBuffer,
+        destination: GPUImageCopyTexture,
+        copySize: Array<GPUIntegerCoordinate>,
+    )
+
+    fun copyBufferToTexture(
+        source: GPUImageCopyBuffer,
+        destination: GPUImageCopyTexture,
+        copySize: GPUExtent3DDictStrict,
+    )
+
     fun copyTextureToBuffer(
         source: GPUImageCopyTexture,
         destination: GPUImageCopyBuffer,
-        copySize: Array<GPUIntegerCoordinate>): Nothing?
-    fun copyTextureToBuffer(source: GPUImageCopyTexture, destination: GPUImageCopyBuffer, copySize: GPUExtent3DDictStrict): Nothing?
-	fun copyTextureToTexture(
-		source: GPUImageCopyTexture,
-		destination: GPUImageCopyTexture,
-		copySize: Array<GPUIntegerCoordinate>
-	): Nothing?
-    fun copyTextureToTexture(source: GPUImageCopyTexture, destination: GPUImageCopyTexture, copySize: GPUExtent3DDictStrict): Nothing?
-    fun clearBuffer(buffer: GPUBuffer, offset: GPUSize64 = definedExternally, size: GPUSize64 = definedExternally): Nothing?
-    fun resolveQuerySet(querySet: GPUQuerySet, firstQuery: GPUSize32, queryCount: GPUSize32, destination: GPUBuffer, destinationOffset: GPUSize64): Nothing?
+        copySize: Array<GPUIntegerCoordinate>,
+    )
+
+    fun copyTextureToBuffer(
+        source: GPUImageCopyTexture,
+        destination: GPUImageCopyBuffer,
+        copySize: GPUExtent3DDictStrict,
+    )
+
+    fun copyTextureToTexture(
+        source: GPUImageCopyTexture,
+        destination: GPUImageCopyTexture,
+        copySize: Array<GPUIntegerCoordinate>,
+    )
+
+    fun copyTextureToTexture(
+        source: GPUImageCopyTexture,
+        destination: GPUImageCopyTexture,
+        copySize: GPUExtent3DDictStrict,
+    )
+
+    fun clearBuffer(buffer: GPUBuffer, offset: GPUSize64 = definedExternally, size: GPUSize64 = definedExternally)
+    fun resolveQuerySet(
+        querySet: GPUQuerySet,
+        firstQuery: GPUSize32,
+        queryCount: GPUSize32,
+        destination: GPUBuffer,
+        destinationOffset: GPUSize64,
+    )
+
     fun finish(descriptor: GPUCommandBufferDescriptor = definedExternally): GPUCommandBuffer
 
 }
@@ -617,12 +586,13 @@ external interface GPUCompilationMessage {
 }
 
 
-external interface GPUComputePassEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin, GPUBindingCommandsMixin {
+external interface GPUComputePassEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin,
+    GPUBindingCommandsMixin {
     fun setPipeline(pipeline: GPUComputePipeline)
     fun dispatchWorkgroups(
         workgroupCountX: GPUSize32,
         workgroupCountY: GPUSize32 = definedExternally,
-        workgroupCountZ: GPUSize32 = definedExternally
+        workgroupCountZ: GPUSize32 = definedExternally,
     )
 
     fun dispatchWorkgroupsIndirect(indirectBuffer: GPUBuffer, indirectOffset: GPUSize64)
@@ -639,7 +609,7 @@ open external class GPUDevice : EventTarget, GPUObjectBase {
     var features: GPUSupportedFeatures
     var limits: GPUSupportedLimits
     var queue: GPUQueue
-    fun destroy(): Nothing?
+    fun destroy()
     fun createBuffer(descriptor: GPUBufferDescriptor): GPUBuffer
     fun createTexture(descriptor: GPUTextureDescriptor): GPUTexture
     fun createSampler(descriptor: GPUSamplerDescriptor = definedExternally): GPUSampler
@@ -656,7 +626,7 @@ open external class GPUDevice : EventTarget, GPUObjectBase {
     fun createRenderBundleEncoder(descriptor: GPURenderBundleEncoderDescriptor): GPURenderBundleEncoder
     fun createQuerySet(descriptor: GPUQuerySetDescriptor): GPUQuerySet
     var lost: Promise<GPUDeviceLostInfo>
-    fun pushErrorScope(filter: String /* "validation" | "out-of-memory" | "internal" */): Nothing?
+    fun pushErrorScope(filter: String /* "validation" | "out-of-memory" | "internal" */)
     fun popErrorScope(): Promise<GPUError?>
     var onuncapturederror: ((self: GPUDevice, ev: GPUUncapturedErrorEvent) -> Any)?
 
@@ -689,7 +659,7 @@ open external class GPUPipelineError : DOMException {
 external interface GPUPipelineLayout : GPUObjectBase
 
 external interface GPUQuerySet : GPUObjectBase {
-    fun destroy(): Nothing?
+    fun destroy()
     var type: String /* "occlusion" | "timestamp" */
     var count: GPUSize32Out
 
@@ -697,50 +667,107 @@ external interface GPUQuerySet : GPUObjectBase {
 
 external interface GPUQueue : GPUObjectBase {
 
-    fun submit(commandBuffers: Array<GPUCommandBuffer>): Nothing?
+    fun submit(commandBuffers: Array<GPUCommandBuffer>)
     fun onSubmittedWorkDone(): Promise<Nothing?>
-    fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: ArrayBufferView, dataOffset: GPUSize64 = definedExternally, size: GPUSize64 = definedExternally): Nothing?
-    fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: ArrayBufferView): Nothing?
-    fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: ArrayBufferView, dataOffset: GPUSize64 = definedExternally): Nothing?
-    fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: ArrayBuffer, dataOffset: GPUSize64 = definedExternally, size: GPUSize64 = definedExternally): Nothing?
-    fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: ArrayBuffer): Nothing?
-    /*fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: ArrayBuffer, dataOffset: GPUSize64 = definedExternally): Nothing?
-    fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: SharedArrayBuffer, dataOffset: GPUSize64 = definedExternally, size: GPUSize64 = definedExternally): Nothing?
-    fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: SharedArrayBuffer): Nothing?
-    fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: SharedArrayBuffer, dataOffset: GPUSize64 = definedExternally): Nothing?*/
-    fun writeTexture(destination: GPUImageCopyTexture, data: ArrayBufferView, dataLayout: GPUImageDataLayout, size: Iterable<GPUIntegerCoordinate>): Nothing?
-    fun writeTexture(destination: GPUImageCopyTexture, data: ArrayBufferView, dataLayout: GPUImageDataLayout, size: GPUExtent3DDictStrict): Nothing?
-    fun writeTexture(destination: GPUImageCopyTexture, data: ArrayBuffer, dataLayout: GPUImageDataLayout, size: Iterable<GPUIntegerCoordinate>): Nothing?
-    fun writeTexture(destination: GPUImageCopyTexture, data: ArrayBuffer, dataLayout: GPUImageDataLayout, size: GPUExtent3DDictStrict): Nothing?
+    fun writeBuffer(
+        buffer: GPUBuffer,
+        bufferOffset: GPUSize64,
+        data: ArrayBufferView,
+        dataOffset: GPUSize64 = definedExternally,
+        size: GPUSize64 = definedExternally,
+    )
 
-    /*fun writeTexture(destination: GPUImageCopyTexture, data: SharedArrayBuffer, dataLayout: GPUImageDataLayout, size: Iterable<GPUIntegerCoordinate>): Nothing?
-    fun writeTexture(destination: GPUImageCopyTexture, data: SharedArrayBuffer, dataLayout: GPUImageDataLayout, size: GPUExtent3DDictStrict): Nothing?*/
-	fun copyExternalImageToTexture(
-		source: GPUImageCopyExternalImage,
-		destination: GPUImageCopyTextureTagged,
-		copySize: Array<GPUIntegerCoordinate>
-	): Nothing?
-    fun copyExternalImageToTexture(source: GPUImageCopyExternalImage, destination: GPUImageCopyTextureTagged, copySize: GPUExtent3DDictStrict): Nothing?
+    fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: ArrayBufferView)
+    fun writeBuffer(
+        buffer: GPUBuffer,
+        bufferOffset: GPUSize64,
+        data: ArrayBufferView,
+        dataOffset: GPUSize64 = definedExternally,
+    )
+
+    fun writeBuffer(
+        buffer: GPUBuffer,
+        bufferOffset: GPUSize64,
+        data: ArrayBuffer,
+        dataOffset: GPUSize64 = definedExternally,
+        size: GPUSize64 = definedExternally,
+    )
+
+    fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: ArrayBuffer)
+
+    /*fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: ArrayBuffer, dataOffset: GPUSize64 = definedExternally)
+    fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: SharedArrayBuffer, dataOffset: GPUSize64 = definedExternally, size: GPUSize64 = definedExternally)
+    fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: SharedArrayBuffer)
+    fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: SharedArrayBuffer, dataOffset: GPUSize64 = definedExternally)*/
+    fun writeTexture(
+        destination: GPUImageCopyTexture,
+        data: ArrayBufferView,
+        dataLayout: GPUImageDataLayout,
+        size: Iterable<GPUIntegerCoordinate>,
+    )
+
+    fun writeTexture(
+        destination: GPUImageCopyTexture,
+        data: ArrayBufferView,
+        dataLayout: GPUImageDataLayout,
+        size: GPUExtent3DDictStrict,
+    )
+
+    fun writeTexture(
+        destination: GPUImageCopyTexture,
+        data: ArrayBuffer,
+        dataLayout: GPUImageDataLayout,
+        size: Iterable<GPUIntegerCoordinate>,
+    )
+
+    fun writeTexture(
+        destination: GPUImageCopyTexture,
+        data: ArrayBuffer,
+        dataLayout: GPUImageDataLayout,
+        size: GPUExtent3DDictStrict,
+    )
+
+    /*fun writeTexture(destination: GPUImageCopyTexture, data: SharedArrayBuffer, dataLayout: GPUImageDataLayout, size: Iterable<GPUIntegerCoordinate>)
+    fun writeTexture(destination: GPUImageCopyTexture, data: SharedArrayBuffer, dataLayout: GPUImageDataLayout, size: GPUExtent3DDictStrict)*/
+    fun copyExternalImageToTexture(
+        source: GPUImageCopyExternalImage,
+        destination: GPUImageCopyTextureTagged,
+        copySize: Array<GPUIntegerCoordinate>,
+    )
+
+    fun copyExternalImageToTexture(
+        source: GPUImageCopyExternalImage,
+        destination: GPUImageCopyTextureTagged,
+        copySize: GPUExtent3DDictStrict,
+    )
 
 }
 
 
 external interface GPURenderBundle : GPUObjectBase
 
-external interface GPURenderBundleEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin, GPUBindingCommandsMixin, GPURenderCommandsMixin {
+external interface GPURenderBundleEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin,
+    GPUBindingCommandsMixin, GPURenderCommandsMixin {
     fun finish(descriptor: GPURenderBundleDescriptor = definedExternally): GPURenderBundle
 }
 
-external interface GPURenderPassEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin, GPUBindingCommandsMixin, GPURenderCommandsMixin {
-    fun setViewport(x: Number, y: Number, width: Number, height: Number, minDepth: Number, maxDepth: Number): Nothing?
-    fun setScissorRect(x: GPUIntegerCoordinate, y: GPUIntegerCoordinate, width: GPUIntegerCoordinate, height: GPUIntegerCoordinate): Nothing?
-    fun setBlendConstant(color: Array<Number>): Nothing?
-    fun setBlendConstant(color: GPUColorDict): Nothing?
-    fun setStencilReference(reference: GPUStencilValue): Nothing?
-    fun beginOcclusionQuery(queryIndex: GPUSize32): Nothing?
-    fun endOcclusionQuery(): Nothing?
-    fun executeBundles(bundles: Array<GPURenderBundle>): Nothing?
-    fun end(): Nothing?
+external interface GPURenderPassEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin,
+    GPUBindingCommandsMixin, GPURenderCommandsMixin {
+    fun setViewport(x: Number, y: Number, width: Number, height: Number, minDepth: Number, maxDepth: Number)
+    fun setScissorRect(
+        x: GPUIntegerCoordinate,
+        y: GPUIntegerCoordinate,
+        width: GPUIntegerCoordinate,
+        height: GPUIntegerCoordinate,
+    )
+
+    fun setBlendConstant(color: Array<Number>)
+    fun setBlendConstant(color: GPUColorDict)
+    fun setStencilReference(reference: GPUStencilValue)
+    fun beginOcclusionQuery(queryIndex: GPUSize32)
+    fun endOcclusionQuery()
+    fun executeBundles(bundles: Array<GPURenderBundle>)
+    fun end()
 }
 
 external interface GPURenderPipeline : GPUObjectBase, GPUPipelineBase
@@ -793,7 +820,7 @@ external interface GPUSupportedLimits {
 
 external interface GPUTexture : GPUObjectBase {
     fun createView(descriptor: GPUTextureViewDescriptor = definedExternally): GPUTextureView
-    fun destroy(): Nothing?
+    fun destroy()
     var width: GPUIntegerCoordinateOut
     var height: GPUIntegerCoordinateOut
     var depthOrArrayLayers: GPUIntegerCoordinateOut
@@ -863,5 +890,4 @@ external interface GPUTextureUsage {
     var TEXTURE_BINDING: GPUFlagsConstant
     var STORAGE_BINDING: GPUFlagsConstant
     var RENDER_ATTACHMENT: GPUFlagsConstant
-
 }
