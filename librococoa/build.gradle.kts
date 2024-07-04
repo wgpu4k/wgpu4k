@@ -59,6 +59,12 @@ tasks.named("processResources") {
 
 
 publishing {
+	publications {
+		create<MavenPublication>("library") {
+			from(components["java"])
+		}
+	}
+
 	repositories {
 		maven {
 			if ((version as String).contains("SNAPSHOT")) {
