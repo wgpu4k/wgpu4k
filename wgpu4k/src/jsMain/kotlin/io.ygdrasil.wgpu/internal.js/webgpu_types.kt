@@ -121,7 +121,7 @@ external interface GPUDepthStencilState {
 }
 
 external interface GPUDeviceDescriptor : GPUObjectDescriptorBase {
-    var requiredFeatures: Iterable<String? /* "depth-clip-control" | "depth32float-stencil8" | "texture-compression-bc" | "texture-compression-etc2" | "texture-compression-astc" | "timestamp-query" | "indirect-first-instance" | "shader-f16" | "rg11b10ufloat-renderable" | "bgra8unorm-storage" | "float32-filterable" */>?
+    var requiredFeatures: Array<String? /* "depth-clip-control" | "depth32float-stencil8" | "texture-compression-bc" | "texture-compression-etc2" | "texture-compression-astc" | "timestamp-query" | "indirect-first-instance" | "shader-f16" | "rg11b10ufloat-renderable" | "bgra8unorm-storage" | "float32-filterable" */>?
     var requiredLimits: Record<String, GPUSize64>?
     var defaultQueue: GPUQueueDescriptor?
 }
@@ -149,9 +149,8 @@ external interface GPUImageCopyBuffer : GPUImageDataLayout {
 
 external interface GPUImageCopyExternalImage {
     var source: Any
-
     /* ImageBitmap | ImageData | HTMLImageElement | HTMLVideoElement | VideoFrame | HTMLCanvasElement | OffscreenCanvas */
-    var origin: GPUOrigin2DDict /* Iterable<GPUIntegerCoordinate>? | GPUOrigin2DDictStrict? */
+    var origin: GPUOrigin2DDict
     var flipY: Boolean
 }
 
@@ -239,7 +238,7 @@ external interface GPURenderPassColorAttachment {
     var view: GPUTextureView
     var depthSlice: GPUIntegerCoordinate?
     var resolveTarget: GPUTextureView?
-    var clearValue: Array<Number>? /* Iterable<Number>? | GPUColorDict? */
+    var clearValue: GPUColorDict?
     var loadOp: String /* "load" | "clear" */
     var storeOp: String /* "store" | "discard" */
 }
@@ -338,7 +337,7 @@ external interface GPUTextureBindingLayout {
 }
 
 external interface GPUTextureDescriptor : GPUObjectDescriptorBase {
-    var size: GPUExtent3DDict /* Iterable<GPUIntegerCoordinate> | GPUExtent3DDictStrict */
+    var size: GPUExtent3DDict
     var mipLevelCount: GPUIntegerCoordinate?
     var sampleCount: GPUSize32?
     var dimension: String? /* "1d" | "2d" | "3d" */
@@ -462,7 +461,7 @@ external interface GPUAdapter {
     var features: GPUSupportedFeatures
     var limits: GPUSupportedLimits
     var isFallbackAdapter: Boolean
-    suspend fun requestDevice(descriptor: GPUDeviceDescriptor = definedExternally): Promise<GPUDevice>
+    fun requestDevice(descriptor: GPUDeviceDescriptor = definedExternally): Promise<GPUDevice>
     fun requestAdapterInfo(): Promise<GPUAdapterInfo>
 }
 
@@ -680,7 +679,7 @@ external interface GPUQueue : GPUObjectBase {
         destination: GPUImageCopyTexture,
         data: ArrayBufferView,
         dataLayout: GPUImageDataLayout,
-        size: Iterable<GPUIntegerCoordinate>,
+        size: Array<GPUIntegerCoordinate>,
     )
 
     fun writeTexture(
@@ -694,7 +693,7 @@ external interface GPUQueue : GPUObjectBase {
         destination: GPUImageCopyTexture,
         data: ArrayBuffer,
         dataLayout: GPUImageDataLayout,
-        size: Iterable<GPUIntegerCoordinate>,
+        size: Array<GPUIntegerCoordinate>,
     )
 
     fun writeTexture(
@@ -704,7 +703,7 @@ external interface GPUQueue : GPUObjectBase {
         size: GPUExtent3DDict,
     )
 
-    /*fun writeTexture(destination: GPUImageCopyTexture, data: SharedArrayBuffer, dataLayout: GPUImageDataLayout, size: Iterable<GPUIntegerCoordinate>)
+    /*fun writeTexture(destination: GPUImageCopyTexture, data: SharedArrayBuffer, dataLayout: GPUImageDataLayout, size: Array<GPUIntegerCoordinate>)
     fun writeTexture(destination: GPUImageCopyTexture, data: SharedArrayBuffer, dataLayout: GPUImageDataLayout, size: GPUExtent3DDictStrict)*/
     fun copyExternalImageToTexture(
         source: GPUImageCopyExternalImage,
@@ -859,7 +858,6 @@ external interface GPUShaderStage {
     var COMPUTE: GPUFlagsConstant
 
 }
-
 
 external interface GPUTextureUsage {
     var COPY_SRC: GPUFlagsConstant
