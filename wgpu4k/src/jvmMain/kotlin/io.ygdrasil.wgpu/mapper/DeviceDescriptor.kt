@@ -7,6 +7,7 @@ import io.ygdrasil.wgpu.internal.jvm.panama.WGPUQueueDescriptor
 import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 
+// TODO add unit tests
 internal fun Arena.map(input: DeviceDescriptor): MemorySegment = WGPUDeviceDescriptor.allocate(this).also { output ->
     if(input.label != null) WGPUDeviceDescriptor.label(output, allocateFrom(input.label))
     // TODO map this
