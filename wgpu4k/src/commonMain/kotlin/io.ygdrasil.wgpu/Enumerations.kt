@@ -351,17 +351,17 @@ enum class FeatureName(
     override val value: Int,
     private val extraName: String? = null
 ) : EnumerationWithValue {
-    depthclipcontrol(1, "depth-clip-control"),
-    depth32floatstencil8(2, "depth32float-stencil8"),
-    timestampquery(3, "timestamp-query"),
-    texturecompressionbc(4, "texture-compression-bc"),
-    texturecompressionetc2(5, "texture-compression-etc2"),
-    texturecompressionastc(6, "texture-compression-astc"),
-    indirectfirstinstance(7, "indirect-first-instance"),
-    shaderf16(8, "shader-f16"),
-    rg11b10ufloatrenderable(9, "rg11b10ufloat-renderable"),
-    bgra8unormstorage(10, "bgra8unorm-storage"),
-    float32filterable(11, "float32-filterable");
+    depthClipControl(1, "depth-clip-control"),
+    depth32floatStencil8(2, "depth32float-stencil8"),
+    timestampQuery(3, "timestamp-query"),
+    textureCompressionBc(4, "texture-compression-bc"),
+    textureCompressionEtc2(5, "texture-compression-etc2"),
+    textureCompressionAstc(6, "texture-compression-astc"),
+    indirectFirstInstance(7, "indirect-first-instance"),
+    shaderF16(8, "shader-f16"),
+    rg11b10ufloatRenderable(9, "rg11b10ufloat-renderable"),
+    bgra8unormStorage(10, "bgra8unorm-storage"),
+    float32Filterable(11, "float32-filterable");
 
     val actualName
         get() = if (extraName != null) extraName else name
