@@ -9,22 +9,16 @@ This project focuses on creating a binding for WebGPU which can support Kotlin o
 
 ## Table of Contents
 
-1. [How to Run the demo projects](#how-to-run-the-project)
-2. [Prerequisites](#prerequisites)
-3. [Getting started](#getting-started) 
-4. [Backend](#backend)
-5. [Project Phases](#project-phases)
+1. [Prerequisites](#prerequisites)
+2. [How to Run the demo projects from library sources](#how-to-run-the-project)
+3. [Getting started](#getting-started)
+4. [Compatibility](#compatibility)
+5. [Backend](#backend)
+6. [Project Phases](#project-phases)
    1. [Proof of Concept](#proof-of-concept)
    2. [API Implementation](#api-implementation)
    3. [API Refinement](#api-refinement)
    4. [Production](#production)
-
-## How to Run the demo projects
-
-- On desktop: `./gradlew examples:glfw:run`
-- On web: `./gradlew examples:web-js:jsBrowserRun`
-
-Use `page down` and `page up` on your keyboard to switch scene.
 
 ## Prerequisites
 
@@ -32,9 +26,40 @@ Use `page down` and `page up` on your keyboard to switch scene.
 - JDK 22+
 - A recent version of Chrome or Firefox Nightly for web browser execution. Check compatibility [here][chart].
 
+## How to Run the demo projects from library sources
+
+```
+git clone https://github.com/wgpu4k/wgpu4k.git
+cd wgpu4k
+```
+- On desktop: `./gradlew examples:glfw:run`
+- On web: `./gradlew examples:web-js:jsBrowserRun`
+
+Use `page down` and `page up` on your keyboard to switch scene.
+
 ## Getting started
 
 Documentation will be added later, to start you can check out the minimalist project [here][hello-cube] or see scenes implemented to end-to-end tests [here][scenes].
+
+## Compatibility
+
+| Target       | Windows | Linux | MacOs | iOS | Android |
+|--------------|---------|-------|-------|-----|---------|
+| JVM x64      | ✅       | 🆗    | 🆗    | X   | X️      |
+| JVM arm64    | 🛠️     | 🆗    | ✅     | X   | X       |
+| JS           | ✅       | 🆗    | ✅     | 🛠️ | 🛠️     |
+| wasm         | 🛠️     | 🛠️   | 🛠️   | 🛠️ | 🛠️     |
+| native x86   | 🛠️     | 🛠️   | 🛠️   | 🛠️ | 🛠️     |
+| native arm64 | 🛠️     | 🛠️   | 🛠️   | 🛠️ | 🛠️     |
+
+
+✅ = First class citizen
+
+🆗 = Best effort
+
+🛠️ = Unsupported yet, open to contributions
+
+X = Not applicable 
 
 ## Backend
 
