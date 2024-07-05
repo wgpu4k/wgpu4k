@@ -11,7 +11,7 @@ This project focuses on creating a binding for WebGPU which can support Kotlin o
 ## Table of Contents
 
 1. [Prerequisites](#prerequisites)
-2. [How to Run the demo projects from library sources](#how-to-run-the-project)
+2. [How to run the demo projects from library sources](#how-to-run-the-demo-projects-from-library-sources)
 3. [Getting started](#getting-started)
 4. [Compatibility](#compatibility)
 5. [Backend](#backend)
@@ -27,7 +27,7 @@ This project focuses on creating a binding for WebGPU which can support Kotlin o
 - JDK 22+
 - A recent version of Chrome or Firefox Nightly for web browser execution. Check compatibility [here][chart].
 
-## How to Run the demo projects from library sources
+## How to run the demo projects from library sources
 
 ```
 git clone https://github.com/wgpu4k/wgpu4k.git
@@ -64,7 +64,7 @@ Documentation will be added later, to start you can check out the minimalist pro
 
 ## Backend
 
-[GitHub Link][link]
+On JVM we are using the firefox backend, see the [GitHub page][link] to get more information.
 
 ## Project Phases
 
