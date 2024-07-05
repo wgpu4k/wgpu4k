@@ -1,10 +1,14 @@
 # WGPU4K: A WebGPU Binding for Kotlin Multi-platform
+[![Tests](https://github.com/wgpu4k/wgpu4k/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/wgpu4k/wgpu4k/actions/workflows/test.yml)
+![Static Badge](https://img.shields.io/badge/Status-Alpha-red?style=plastic)
+![Static Badge](https://img.shields.io/badge/Latest%20version-preview_1-red?style=plastic)
+[![Static Badge](https://img.shields.io/badge/Licence-MIT-blue?style=plastic)](https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FMIT_License)
 
 This project focuses on creating a binding for WebGPU which can support Kotlin on multiple platforms.
 
 ## Table of Contents
 
-1. [How to Run the Project](#how-to-run-the-project)
+1. [How to Run the demo projects](#how-to-run-the-project)
 2. [Prerequisites](#prerequisites)
 3. [Backend](#backend)
 4. [Project Phases](#project-phases)
@@ -13,10 +17,12 @@ This project focuses on creating a binding for WebGPU which can support Kotlin o
    3. [API Refinement](#api-refinement)
    4. [Production](#production)
 
-## How to Run the Project
+## How to Run the demo projects
 
-1. On desktop: `gradle wrapper && ./gradlew examples:glfw:run`
-2. On web: `gradle wrapper && ./gradlew examples:web-js:jsBrowserRun`
+- On desktop: `./gradlew examples:glfw:run`
+- On web: `./gradlew examples:web-js:jsBrowserRun`
+
+Use `page down` and `page up` on your keyboard to switch scene.
 
 ## Prerequisites
 
