@@ -4,7 +4,7 @@ import io.ygdrasil.wgpu.GPUSize32
 import io.ygdrasil.wgpu.RenderBundleEncoderDescriptor
 import io.ygdrasil.wgpu.internal.js.GPURenderBundleEncoderDescriptor
 
-fun map(input: RenderBundleEncoderDescriptor): GPURenderBundleEncoderDescriptor = object : GPURenderBundleEncoderDescriptor{
+internal fun map(input: RenderBundleEncoderDescriptor): GPURenderBundleEncoderDescriptor = object : GPURenderBundleEncoderDescriptor{
     override var depthReadOnly: Boolean? = input.depthReadOnly
     override var stencilReadOnly: Boolean? = input.stencilReadOnly
     override var colorFormats: Array<String> = input.colorFormats.map { it.actualName }.toTypedArray()

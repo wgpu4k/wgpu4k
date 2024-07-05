@@ -1,4 +1,4 @@
-name: Publish klang
+name: Publish wgpu4k
 
 on:
   release:
@@ -8,22 +8,22 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: 21
+          java-version: 22
           cache: 'gradle'
       - name: Build and publish with Gradle
-        run: |
-          cd ./klang
-          ./gradlew publishAll --info
+        run: ./gradlew publish --info
         env:
+          SNAPSHOT: "false"
           VERSION: ${{ github.event.release.tag_name }}
           SONATYPE_LOGIN: ${{ secrets.SONATYPE_LOGIN }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           PGP_PUBLIC: ${{ secrets.PGP_PUBLIC }}
           PGP_PRIVATE: ${{ secrets.PGP_PRIVATE }}
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
 

@@ -17,9 +17,8 @@ private fun RenderPipelineDescriptor.VertexState.convert(): GPUVertexState =
     object : GPUVertexState {
         override var module: GPUShaderModule = this@convert.module.handler
         override var entryPoint: String? = this@convert.entryPoint
-
-        //TODO check mapping
-        //override var constants: Map<String, GPUPipelineConstantValue>? = null
+        // TODO map this
+        override var constants: Map<String, GPUPipelineConstantValue>? = undefined
         override var buffers: Array<GPUVertexBufferLayout?>? = this@convert.buffers
             .map { it.convert() }.toTypedArray()
     }
@@ -83,7 +82,7 @@ private fun RenderPipelineDescriptor.FragmentState.convert(): GPUFragmentState =
         override var module: GPUShaderModule = this@convert.module.handler
         override var entryPoint: String? = this@convert.entryPoint
         // TODO not sure how to map this
-        //override var constants: Record<String, GPUPipelineConstantValue>? = TODO("Not yet implemented")
+        override var constants: Map<String, GPUPipelineConstantValue>? = undefined
     }
 
 private fun RenderPipelineDescriptor.FragmentState.ColorTargetState.convert(): GPUColorTargetState =

@@ -4,6 +4,7 @@ import java.nio.file.Paths
 
 plugins {
 	kotlin("jvm")
+	`maven-publish`
 }
 
 repositories {
@@ -54,4 +55,31 @@ val copyFileFromDependencyTask = tasks.register<DownloadTask>("copyFileFromUrl")
 
 tasks.named("processResources") {
 	dependsOn(copyFileFromDependencyTask)
+}
+
+
+publishing {
+	publications {
+		create<MavenPublication>("library") {
+			from(components["java"])
+		}
+	}
+
+	repositories {
+		maven {
+			if (isSnapshot()) {
+				name = "GitLab"
+				url = uri("https://gitlab.com/api/v4/projects/25805863/packages/maven")
+				credentials(HttpHeaderCredentials::class) {
+					name = "Authorization"
+					value = "Bearer ${System.getenv("GITLAB_TOKEN")}"
+				}
+				authentication {
+					create<HttpHeaderAuthentication>("header")
+				}
+			} else {
+				url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
+			}
+		}
+	}
 }

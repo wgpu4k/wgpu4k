@@ -5,7 +5,7 @@ import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.*
 import io.ygdrasil.wgpu.internal.js.*
 
 // TODO: add unit test
-fun map(input: BindGroupLayoutDescriptor): GPUBindGroupLayoutDescriptor = object : GPUBindGroupLayoutDescriptor {
+internal fun map(input: BindGroupLayoutDescriptor): GPUBindGroupLayoutDescriptor = object : GPUBindGroupLayoutDescriptor {
     override var label: String? = input.label ?: undefined
     override var entries: Array<GPUBindGroupLayoutEntry> = input.entries.map { map(it) }.toTypedArray()
 }

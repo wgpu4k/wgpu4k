@@ -89,5 +89,12 @@ private fun RenderPassDescriptor.ColorAttachment.convert(): GPURenderPassColorAt
 		override var storeOp: String = this@convert.storeOp.name
 		override var depthSlice: GPUIntegerCoordinate? = this@convert.depthSlice ?: undefined
 		override var resolveTarget: GPUTextureView? = this@convert.resolveTarget?.handler ?: undefined
-		override var clearValue: Array<Number>? = this@convert.clearValue
+		override var clearValue: GPUColorDict? = map(this@convert.clearValue)
 	}
+
+private fun map(input: Array<Number>): GPUColorDict = object : GPUColorDict {
+	override var r: Number = input[0]
+	override var g: Number = input[1]
+	override var b: Number = input[2]
+	override var a: Number = input[3]
+}

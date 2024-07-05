@@ -21,7 +21,7 @@ suspend fun glfwContextRenderer(width: Int = 1, height: Int = 1, title: String =
 
     glfwInit()
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
-    glfwWindowHint(GLFW_RESIZABLE, if (deferredRendering) GLFW_FALSE else GLFW_TRUE)
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE)
     // Disable context creation, WGPU will manage that
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API)
     val windowHandler: Long = glfwCreateWindow(width, height, title, NULL, NULL)

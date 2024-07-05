@@ -70,7 +70,7 @@ actual class Queue(internal val handler: GPUQueue) {
 				override var bytesPerRow: GPUSize32? = image.width * bytePerPixel
 				override var rowsPerImage: GPUSize32? = image.height
 			},
-			object : GPUExtent3DDictStrict {
+			object : GPUExtent3DDict {
 				override var width: GPUIntegerCoordinate = image.width
 				override var height: GPUIntegerCoordinate? = image.height
 				override var depthOrArrayLayers: GPUIntegerCoordinate? = 1

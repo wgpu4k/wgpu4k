@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
 	alias(libs.plugins.kotest)
 	alias(libs.plugins.download)
+    `maven-publish`
 }
 
 java {
@@ -48,8 +49,10 @@ kotlin {
 
                 api("org.lwjgl:lwjgl:$lwjglVersion")
                 api("org.lwjgl:lwjgl-glfw:$lwjglVersion")
-                runtimeOnly("org.lwjgl:lwjgl:$lwjglVersion:$lwjglNatives")
-                runtimeOnly("org.lwjgl:lwjgl-glfw:$lwjglVersion:$lwjglNatives")
+                listOf("natives-windows", "natives-macos", "natives-macos-arm64", "natives-linux", "natives-linux-arm64").forEach { dependencyType ->
+                    runtimeOnly("org.lwjgl:lwjgl:$lwjglVersion:$dependencyType")
+                    runtimeOnly("org.lwjgl:lwjgl-glfw:$lwjglVersion:$dependencyType")
+                }
             }
         }
 
@@ -80,4 +83,24 @@ tasks.named<Test>("jvmTest") {
 		)
 		exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 	}
+}
+
+publishing {
+    repositories {
+        maven {
+            if (isSnapshot()) {
+                name = "GitLab"
+                url = uri("https://gitlab.com/api/v4/projects/25805863/packages/maven")
+                credentials(HttpHeaderCredentials::class) {
+                    name = "Authorization"
+                    value = "Bearer ${System.getenv("GITLAB_TOKEN")}"
+                }
+                authentication {
+                    create<HttpHeaderAuthentication>("header")
+                }
+            } else {
+                url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
+            }
+        }
+    }
 }

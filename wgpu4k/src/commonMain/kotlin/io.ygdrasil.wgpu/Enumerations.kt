@@ -348,24 +348,23 @@ enum class ErrorType(
 }
 
 enum class FeatureName(
-    val value: Int,
-) {
-    undefined(0),
-    depthclipcontrol(1),
-    depth32floatstencil8(2),
-    timestampquery(3),
-    texturecompressionbc(4),
-    texturecompressionetc2(5),
-    texturecompressionastc(6),
-    indirectfirstinstance(7),
-    shaderf16(8),
-    rg11b10ufloatrenderable(9),
-    bgra8unormstorage(10),
-    float32filterable(11);
+    override val value: Int,
+    private val extraName: String? = null
+) : EnumerationWithValue {
+    depthClipControl(1, "depth-clip-control"),
+    depth32floatStencil8(2, "depth32float-stencil8"),
+    timestampQuery(3, "timestamp-query"),
+    textureCompressionBc(4, "texture-compression-bc"),
+    textureCompressionEtc2(5, "texture-compression-etc2"),
+    textureCompressionAstc(6, "texture-compression-astc"),
+    indirectFirstInstance(7, "indirect-first-instance"),
+    shaderF16(8, "shader-f16"),
+    rg11b10ufloatRenderable(9, "rg11b10ufloat-renderable"),
+    bgra8unormStorage(10, "bgra8unorm-storage"),
+    float32Filterable(11, "float32-filterable");
 
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: FeatureName): Int = value or other.value
+    val actualName
+        get() = if (extraName != null) extraName else name
 
     companion object {
         fun of(value: Int): FeatureName? = entries.find {
