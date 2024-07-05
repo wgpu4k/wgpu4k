@@ -19,7 +19,7 @@ sonar {
         property("sonar.organization", "ygdrasil-io")
         property("sonar.host.url", "https://sonarcloud.io")
         // Exclude panama generated classes
-        property("sonar.exclusions", "src/jvmMain/java")
+        property("sonar.exclusions", "**/*.java")
     }
 }
 

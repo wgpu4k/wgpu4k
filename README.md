@@ -10,8 +10,9 @@ This project focuses on creating a binding for WebGPU which can support Kotlin o
 
 1. [How to Run the demo projects](#how-to-run-the-project)
 2. [Prerequisites](#prerequisites)
-3. [Backend](#backend)
-4. [Project Phases](#project-phases)
+3. [Getting started](#getting-started) 
+4. [Backend](#backend)
+5. [Project Phases](#project-phases)
    1. [Proof of Concept](#proof-of-concept)
    2. [API Implementation](#api-implementation)
    3. [API Refinement](#api-refinement)
