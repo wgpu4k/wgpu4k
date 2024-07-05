@@ -49,8 +49,10 @@ kotlin {
 
                 api("org.lwjgl:lwjgl:$lwjglVersion")
                 api("org.lwjgl:lwjgl-glfw:$lwjglVersion")
-                runtimeOnly("org.lwjgl:lwjgl:$lwjglVersion:$lwjglNatives")
-                runtimeOnly("org.lwjgl:lwjgl-glfw:$lwjglVersion:$lwjglNatives")
+                listOf("natives-windows", "natives-macos", "natives-macos-arm64", "natives-linux", "natives-linux-arm64").forEach { dependencyType ->
+                    runtimeOnly("org.lwjgl:lwjgl:$lwjglVersion:$dependencyType")
+                    runtimeOnly("org.lwjgl:lwjgl-glfw:$lwjglVersion:$dependencyType")
+                }
             }
         }
 
