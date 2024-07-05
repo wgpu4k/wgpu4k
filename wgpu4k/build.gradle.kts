@@ -18,6 +18,8 @@ sonar {
         property("sonar.projectKey", "io.ygdrasil:wgpu4k")
         property("sonar.organization", "ygdrasil-io")
         property("sonar.host.url", "https://sonarcloud.io")
+        // Exclude panama generated classes
+        property("sonar.exclusions", "src/jvmMain/java")
     }
 }
 

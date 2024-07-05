@@ -30,6 +30,10 @@ Use `page down` and `page up` on your keyboard to switch scene.
 - JDK 22+
 - A recent version of Chrome or Firefox Nightly for web browser execution. Check compatibility [here][chart].
 
+## Getting started
+
+Documentation will be added later, to start you can check out the minimalist project [here][hello-cube] or see scenes implemented to end-to-end tests [here][scenes].
+
 ## Backend
 
 [GitHub Link][link]
@@ -55,5 +59,6 @@ This is the final phase when the project is ready for production.
 <!-- Reference Links -->
 
 [chart]: https://caniuse.com/webgpu
-
 [link]: https://github.com/gfx-rs/wgpu
+[hello-cube]: https://github.com/wgpu4k/hello-cube
+[scenes]: https://github.com/wgpu4k/wgpu4k/tree/main/examples/common/src/commonMain/kotlin/io.ygdrasil.wgpu.examples/scenes/basic
