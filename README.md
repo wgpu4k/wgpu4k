@@ -2,7 +2,6 @@
 [![Tests](https://github.com/wgpu4k/wgpu4k/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/wgpu4k/wgpu4k/actions/workflows/test.yml)
 ![Static Badge](https://img.shields.io/badge/Status-Alpha-red?style=plastic)
 ![Static Badge](https://img.shields.io/badge/Latest%20version-preview_1-red?style=plastic)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=io.ygdrasil%3Awgpu4k&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=io.ygdrasil%3Awgpu4k)
 [![Static Badge](https://img.shields.io/badge/Licence-MIT-blue?style=plastic)](https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FMIT_License)
 [![Static Badge](https://img.shields.io/badge/Discord-wgpu4k-purple?style=plastic)](https://discord.gg/ZdNb4ZXQ)
 
