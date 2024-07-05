@@ -2,7 +2,10 @@ name: Publish wgpu4k snapshot
 
 on:
   workflow_dispatch:
-
+    inputs:
+      version:
+        description: 'version to publish'
+        required: false
 jobs:
   build:
     runs-on: macos-latest
@@ -17,7 +20,8 @@ jobs:
       - name: Build and publish with Gradle
         run: ./gradlew publish --info
         env:
-          VERSION: ${{ github.event.release.tag_name }}
+          SNAPSHOT: "true"
+          VERSION: ${{ github.event.inputs.version }}
           SONATYPE_LOGIN: ${{ secrets.SONATYPE_LOGIN }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           PGP_PUBLIC: ${{ secrets.PGP_PUBLIC }}

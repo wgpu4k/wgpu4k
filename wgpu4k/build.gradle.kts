@@ -217,7 +217,7 @@ jreleaser {
 publishing {
     repositories {
         maven {
-            if ((version as String).contains("SNAPSHOT")) {
+            if (isSnapshot()) {
                 name = "GitLab"
                 url = uri("https://gitlab.com/api/v4/projects/25805863/packages/maven")
                 credentials(HttpHeaderCredentials::class) {

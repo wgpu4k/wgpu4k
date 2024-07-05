@@ -18,6 +18,7 @@ jobs:
       - name: Build and publish with Gradle
         run: ./gradlew publish --info
         env:
+          SNAPSHOT: "false"
           VERSION: ${{ github.event.release.tag_name }}
           SONATYPE_LOGIN: ${{ secrets.SONATYPE_LOGIN }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
