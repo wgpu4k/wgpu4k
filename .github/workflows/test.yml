@@ -28,15 +28,18 @@ jobs:
           java-version: 22
           cache: 'gradle'
       - name: Cache Gradle packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
           restore-keys: ${{ runner.os }}-gradle
-      - name: Build & test
+      - name: Build, test & Analyse
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           gradle wrapper
-          ./gradlew build check --stacktrace --info
+          ./gradlew build check sonar --stacktrace --info
       - name: package
         run: ./gradlew assemble --stacktrace  --info
       - name: Run e2e tests
@@ -67,8 +70,3 @@ jobs:
           path: |
             jvm-${{ runner.os }}-screenshots.zip
             js-chromium-${{ runner.os }}-screenshots.zip
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.0.1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}

@@ -10,6 +10,15 @@ plugins {
     alias(libs.plugins.download)
     `maven-publish`
     id("org.jreleaser") version "1.13.1"
+    id("org.sonarqube") version "4.4.1.3373"
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "io.ygdrasil:wgpu4k")
+        property("sonar.organization", "ygdrasil-io")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
 }
 
 java {
@@ -30,8 +39,6 @@ val jextract = tasks.withType<JextractTask> {
             .convention(project.layout.projectDirectory.dir("src/jvmMain"))
     }
 }
-
-
 
 kotlin {
 
