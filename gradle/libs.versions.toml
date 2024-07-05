@@ -1,5 +1,5 @@
 [versions]
-kotest = "5.9.0"
+kotest = "5.9.1"
 klang = "0.0.0"
 jna = "5.13.0"
 kotlin = "2.0.0"
