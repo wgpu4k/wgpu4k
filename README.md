@@ -46,8 +46,8 @@ Documentation will be added later, to start you can check out the minimalist pro
 
 | Target       | Windows | Linux | MacOs | iOS | Android |
 |--------------|---------|-------|-------|-----|---------|
-| JVM x64      | ✅       | 🆗    | 🆗    | X   | X️      |
-| JVM arm64    | 🛠️     | 🆗    | ✅     | X   | X       |
+| JVM x64      | ✅       | 🆗    | 🆗    | ⛌   | ⛌      |
+| JVM arm64    | 🛠️     | 🆗    | ✅     | ⛌   | ⛌       |
 | JS           | ✅       | 🆗    | ✅     | 🛠️ | 🛠️     |
 | wasm         | 🛠️     | 🛠️   | 🛠️   | 🛠️ | 🛠️     |
 | native x86   | 🛠️     | 🛠️   | 🛠️   | 🛠️ | 🛠️     |
@@ -60,7 +60,7 @@ Documentation will be added later, to start you can check out the minimalist pro
 
 🛠️ = Unsupported yet, open to contributions
 
-X = Not applicable 
+⛌ = Not applicable 
 
 ## Backend
 
