@@ -7,7 +7,8 @@ import io.ygdrasil.wgpu.internal.js.navigator
 import kotlinx.coroutines.await
 
 actual class Adapter(internal val handler: GPUAdapter) : AutoCloseable {
-    actual suspend fun requestDevice(): Device? {
+
+    actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? {
         return handler.requestDevice()
             .await<GPUDevice>()
             .let { Device(it) }

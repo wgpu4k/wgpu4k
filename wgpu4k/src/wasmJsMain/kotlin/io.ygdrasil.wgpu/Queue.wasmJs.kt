@@ -37,9 +37,8 @@ actual class Queue {
 }
 
 actual sealed interface DrawableHolder
-actual class ImageBitmapHolder : DrawableHolder {
-    actual val width: Int
-        get() = TODO("Not yet implemented")
-    actual val height: Int
-        get() = TODO("Not yet implemented")
-}
+actual class ImageBitmapHolder(
+    actual val width: Int,
+    actual val height: Int,
+    val data: ByteArray
+) : DrawableHolder
