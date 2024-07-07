@@ -103,7 +103,6 @@ kotlin {
 			dependsOn(commonMain)
 		}
 
-		val wasmJsMain by getting { dependsOn(unmappedMain) }
 		val macosX64Main by getting { dependsOn(unmappedMain) }
 		val macosArm64Main by getting { dependsOn(unmappedMain) }
 		val linuxArm64Main by getting { dependsOn(unmappedMain) }

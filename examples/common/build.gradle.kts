@@ -7,9 +7,12 @@ kotlin {
 	js {
 		binaries.executable()
 		browser()
-		generateTypeScriptDefinitions()
 	}
 	jvm()
+	wasmJs {
+		binaries.executable()
+		browser()
+	}
 
 
 	sourceSets {
