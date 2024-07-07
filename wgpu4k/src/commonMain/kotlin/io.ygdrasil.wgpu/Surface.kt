@@ -26,10 +26,10 @@ expect class Surface: AutoCloseable {
 }
 
 data class CanvasConfiguration(
-	var device: Device,
-	var format: TextureFormat? = null,
-	var usage: Set<TextureUsage> = setOf(TextureUsage.renderattachment),
-	var viewFormats: Array<String?>? = null,
-	var colorSpace: Any? = null,
-	var alphaMode: CompositeAlphaMode? = null
+	val device: Device,
+	val format: TextureFormat? = null,
+	val usage: Set<TextureUsage> = setOf(TextureUsage.renderattachment),
+	val viewFormats: Array<String>? = null,
+	val colorSpace: Any? = null,
+	val alphaMode: CompositeAlphaMode? = null
 )

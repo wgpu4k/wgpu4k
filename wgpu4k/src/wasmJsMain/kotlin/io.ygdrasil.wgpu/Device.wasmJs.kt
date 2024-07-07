@@ -1,6 +1,8 @@
 package io.ygdrasil.wgpu
 
-actual class Device : AutoCloseable {
+import io.ygdrasil.wgpu.internal.js.GPUDevice
+
+actual class Device(internal val handler: GPUDevice) : AutoCloseable {
     actual val queue: Queue
         get() = TODO("Not yet implemented")
 

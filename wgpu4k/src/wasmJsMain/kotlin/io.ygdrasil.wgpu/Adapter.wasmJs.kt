@@ -1,13 +1,16 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPUAdapter
+import io.ygdrasil.wgpu.internal.js.GPUDevice
 import io.ygdrasil.wgpu.internal.js.GPURequestAdapterOptions
 import io.ygdrasil.wgpu.internal.js.navigator
 import kotlinx.coroutines.await
 
-actual class Adapter(internal val gpuAdapter: GPUAdapter) : AutoCloseable {
+actual class Adapter(internal val handler: GPUAdapter) : AutoCloseable {
     actual suspend fun requestDevice(): Device? {
-        TODO("Not yet implemented")
+        return handler.requestDevice()
+            .await<GPUDevice>()
+            .let { Device(it) }
     }
 
     actual override fun close() {

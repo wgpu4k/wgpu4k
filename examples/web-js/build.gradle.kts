@@ -15,7 +15,11 @@ kotlin {
     js {
         binaries.executable()
         browser()
-        generateTypeScriptDefinitions()
+    }
+
+    wasmJs {
+        binaries.executable()
+        browser()
     }
 
     sourceSets {
@@ -26,6 +30,14 @@ kotlin {
         }
 
         val jsMain by getting {
+            resources.setSrcDirs(
+                resources.srcDirs + setOf(
+                    commonResourcesFile
+                )
+            )
+        }
+
+        val wasmJsMain by getting {
             resources.setSrcDirs(
                 resources.srcDirs + setOf(
                     commonResourcesFile
