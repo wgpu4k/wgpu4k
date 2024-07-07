@@ -42,10 +42,10 @@ kotlin {
         withJava()
     }
 
-	/*androidNativeX64()
+	androidNativeX64()
 	androidNativeArm64()
 	iosX64()
-	iosArm64()*/
+	iosArm64()
 	linuxArm64()
 	linuxX64()
 	macosArm64()
@@ -108,6 +108,10 @@ kotlin {
 		val macosArm64Main by getting { dependsOn(unmappedMain) }
 		val linuxArm64Main by getting { dependsOn(unmappedMain) }
 		val linuxX64Main by getting { dependsOn(unmappedMain) }
+		val iosX64Main by getting { dependsOn(unmappedMain) }
+		val iosArm64Main by getting { dependsOn(unmappedMain) }
+		val androidNativeX64Main by getting { dependsOn(unmappedMain) }
+		val androidNativeArm64Main by getting { dependsOn(unmappedMain) }
 
     }
     compilerOptions {
