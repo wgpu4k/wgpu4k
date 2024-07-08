@@ -76,6 +76,7 @@ private fun WGPUContext.configureRenderingContext() {
     surface.configure(
         CanvasConfiguration(
             device = device,
+            format = surface.textureFormat,
             usage = setOf(TextureUsage.renderattachment, TextureUsage.copysrc)
         )
     )
