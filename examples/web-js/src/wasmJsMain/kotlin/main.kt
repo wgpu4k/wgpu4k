@@ -8,9 +8,9 @@ fun main() {
     if (document.readyState != DocumentReadyState.Companion.LOADING) {
         run()
     } else {
-        window.addEventListener("DOMContentLoaded", {
+        window.addEventListener("DOMContentLoaded") {
             run()
-        })
+        }
     }
 }
 
