@@ -7,8 +7,8 @@ import kotlin.js.Promise
 fun <T : JsAny>createJsObject(): T =
     js("({ })")
 
-fun <T : JsAny> List<T>.toJsArray(): JsArray<JsAny> {
-    val output: JsArray<JsAny> = JsArray()
+fun <T : JsAny> List<T>.toJsArray(): JsArray<T> {
+    val output: JsArray<T> = JsArray()
     forEachIndexed { index, value ->
         output[index] = value
     }
@@ -54,7 +54,7 @@ external interface GPURenderPipelineDescriptor : GPUPipelineDescriptorBase {
 }
 
 external interface GPUFragmentState : GPUProgrammableStage {
-    var targets: JsArray<GPUColorTargetState?>
+    var targets: JsArray<GPUColorTargetState>
 }
 
 external interface GPUColorTargetState: JsAny {
@@ -63,38 +63,38 @@ external interface GPUColorTargetState: JsAny {
     var writeMask: GPUColorWriteFlags?
 }
 
-external interface GPUBlendState {
+external interface GPUBlendState : JsAny {
     var color: GPUBlendComponent
     var alpha: GPUBlendComponent
 }
 
-external interface GPUBlendComponent {
+external interface GPUBlendComponent : JsAny {
     var operation: String?
     var srcFactor: String?
     var dstFactor: String?
 }
 
-external interface GPUMultisampleState {
+external interface GPUMultisampleState : JsAny {
     var count: JsNumber?
-    var mask: JsNumber?
+    var mask: JsBigInt?
     var alphaToCoverageEnabled: Boolean?
 }
 
-external interface GPUDepthStencilState {
+external interface GPUDepthStencilState : JsAny {
     var format: String
     var depthWriteEnabled: Boolean?
     var depthCompare: String?
     var stencilFront: GPUStencilFaceState?
     var stencilBack: GPUStencilFaceState?
-    var stencilReadMask: JsNumber?
-    var stencilWriteMask: JsNumber?
+    var stencilReadMask: JsBigInt?
+    var stencilWriteMask: JsBigInt?
     var depthBias: JsNumber?
     var depthBiasSlopeScale: Float?
     var depthBiasClamp: Float?
 
 }
 
-external interface GPUStencilFaceState {
+external interface GPUStencilFaceState : JsAny {
     var compare: String?
     var failOp: String?
     var depthFailOp: String?
@@ -102,7 +102,7 @@ external interface GPUStencilFaceState {
 }
 
 
-external interface GPUPrimitiveState {
+external interface GPUPrimitiveState : JsAny {
     var topology: String?
     var stripIndexFormat: String?
     var frontFace: String?
@@ -115,21 +115,21 @@ external interface GPUVertexState : GPUProgrammableStage {
 }
 
 external interface GPUVertexBufferLayout : JsAny {
-    var arrayStride: JsNumber
+    var arrayStride: JsBigInt
     var stepMode: String? /* "vertex" | "instance" */
     var attributes: JsArray<GPUVertexAttribute>
 }
 
 external interface GPUVertexAttribute : JsAny {
     var format: String
-    var offset: JsNumber
+    var offset: JsBigInt
     var shaderLocation: JsNumber
 }
 
-external interface GPUProgrammableStage {
+external interface GPUProgrammableStage : JsAny {
     var module: GPUShaderModule
     var entryPoint: JsString?
-    var constants: JsAny //Map<JsString, JsNumber>?
+    var constants: JsAny? //Map<JsString, JsNumber>?
 }
 
 external interface GPURenderPipeline : GPUObjectBase, GPUPipelineBase
@@ -166,7 +166,7 @@ external interface GPUObjectDescriptorBase : JsAny {
     var label: JsString?
 }
 
-external interface GPUObjectBase {
+external interface GPUObjectBase : JsAny {
     var label: JsString
 }
 
@@ -182,6 +182,8 @@ external interface GPUCanvasConfiguration : JsAny {
     var colorSpace: JsString?
     var alphaMode: JsString?
 }
+
+external interface GPUPipelineLayout : GPUObjectBase
 
 external interface GPUTexture
 

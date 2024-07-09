@@ -177,7 +177,7 @@ external interface GPUImageDataLayout {
 external interface GPUMultisampleState {
     var count: GPUSize32?
     @Suppress("INLINE_CLASS_IN_EXTERNAL_DECLARATION_WARNING")
-    var mask: GPUSampleMask?
+    var mask: dynamic
     var alphaToCoverageEnabled: Boolean?
 }
 
