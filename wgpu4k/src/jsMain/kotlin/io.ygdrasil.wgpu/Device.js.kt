@@ -25,8 +25,8 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
         .createPipelineLayout(descriptor.convert())
         .let(::PipelineLayout)
 
-    actual fun createRenderPipeline(descriptor: RenderPipelineDescriptor): RenderPipeline = handler
-        .createRenderPipeline(map(descriptor))
+    actual fun createRenderPipeline(descriptor: RenderPipelineDescriptor): RenderPipeline = map(descriptor)
+        .let { handler.createRenderPipeline(it) }
         .let(::RenderPipeline)
 
 

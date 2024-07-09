@@ -12,6 +12,8 @@ import org.w3c.dom.events.EventTarget
 import web.errors.DOMException
 import kotlin.js.Promise
 
+fun <T>createJsObject(): T =
+    js("({ })")
 
 external interface GPUBindGroupDescriptor : GPUObjectDescriptorBase {
     var layout: GPUBindGroupLayout
