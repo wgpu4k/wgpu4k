@@ -18,7 +18,9 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
     }
 
     actual fun createShaderModule(descriptor: ShaderModuleDescriptor): ShaderModule {
-        return ShaderModule(handler.createShaderModule(descriptor.convert()))
+        return map(descriptor)
+            .let { handler.createShaderModule(it) }
+            .let(::ShaderModule)
     }
 
     actual fun createPipelineLayout(descriptor: PipelineLayoutDescriptor): PipelineLayout = handler

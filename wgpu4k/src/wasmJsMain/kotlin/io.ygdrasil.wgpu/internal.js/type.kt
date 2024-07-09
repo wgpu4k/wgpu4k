@@ -4,16 +4,6 @@ import io.ygdrasil.wgpu.GPUColorWriteFlags
 import org.w3c.dom.HTMLCanvasElement
 import kotlin.js.Promise
 
-fun <T : JsAny>createJsObject(): T =
-    js("({ })")
-
-fun <T : JsAny> List<T>.toJsArray(): JsArray<T> {
-    val output: JsArray<T> = JsArray()
-    forEachIndexed { index, value ->
-        output[index] = value
-    }
-    return output
-}
 
 
 external interface GPUCanvasContext {
@@ -43,14 +33,15 @@ external interface GPUAdapter : JsAny {
 
 external class GPUDevice : JsAny {
     fun createRenderPipeline(canvasConfiguration: GPURenderPipelineDescriptor): GPURenderPipeline
+    fun createShaderModule(descriptor: GPUShaderModuleDescriptor): GPUShaderModule
 }
 
 external interface GPURenderPipelineDescriptor : GPUPipelineDescriptorBase {
     var vertex: GPUVertexState
-    var primitive: GPUPrimitiveState?
-    var depthStencil: GPUDepthStencilState?
-    var multisample: GPUMultisampleState?
-    var fragment: GPUFragmentState?
+    var primitive: GPUPrimitiveState
+    var depthStencil: GPUDepthStencilState
+    var multisample: GPUMultisampleState
+    var fragment: GPUFragmentState
 }
 
 external interface GPUFragmentState : GPUProgrammableStage {
@@ -58,9 +49,9 @@ external interface GPUFragmentState : GPUProgrammableStage {
 }
 
 external interface GPUColorTargetState: JsAny {
-    var format: String
-    var blend: GPUBlendState?
-    var writeMask: GPUColorWriteFlags?
+    var format: JsString
+    var blend: GPUBlendState
+    var writeMask: GPUColorWriteFlags
 }
 
 external interface GPUBlendState : JsAny {
@@ -69,44 +60,54 @@ external interface GPUBlendState : JsAny {
 }
 
 external interface GPUBlendComponent : JsAny {
-    var operation: String?
-    var srcFactor: String?
-    var dstFactor: String?
+    var operation: JsString
+    var srcFactor: JsString
+    var dstFactor: JsString
 }
 
 external interface GPUMultisampleState : JsAny {
     var count: JsNumber?
-    var mask: JsBigInt?
+    var mask: JsNumber?
     var alphaToCoverageEnabled: Boolean?
 }
 
 external interface GPUDepthStencilState : JsAny {
-    var format: String
-    var depthWriteEnabled: Boolean?
-    var depthCompare: String?
-    var stencilFront: GPUStencilFaceState?
-    var stencilBack: GPUStencilFaceState?
-    var stencilReadMask: JsBigInt?
-    var stencilWriteMask: JsBigInt?
-    var depthBias: JsNumber?
-    var depthBiasSlopeScale: Float?
-    var depthBiasClamp: Float?
+    var format: JsString
+    var depthWriteEnabled: Boolean
+    var depthCompare: JsString
+    var stencilFront: GPUStencilFaceState
+    var stencilBack: GPUStencilFaceState
+    var stencilReadMask: JsBigInt
+    var stencilWriteMask: JsBigInt
+    var depthBias: JsNumber
+    var depthBiasSlopeScale: Float
+    var depthBiasClamp: Float
 
 }
 
 external interface GPUStencilFaceState : JsAny {
-    var compare: String?
-    var failOp: String?
-    var depthFailOp: String?
-    var passOp: String?
+    var compare: JsString
+    var failOp: JsString
+    var depthFailOp: JsString
+    var passOp: JsString
 }
 
+external interface GPUShaderModuleDescriptor : GPUObjectDescriptorBase {
+    var code: JsString
+    var sourceMap: JsAny
+    var compilationHints: JsArray<GPUShaderModuleCompilationHint>?
+}
+
+external interface GPUShaderModuleCompilationHint : JsAny {
+    var entryPoint: String
+    var layout: JsAny /* GPUPipelineLayout? | "auto" */
+}
 
 external interface GPUPrimitiveState : JsAny {
-    var topology: String?
-    var stripIndexFormat: String?
-    var frontFace: String?
-    var cullMode: String?
+    var topology: String
+    var stripIndexFormat: String
+    var frontFace: String
+    var cullMode: String
     var unclippedDepth: Boolean?
 }
 
@@ -116,7 +117,7 @@ external interface GPUVertexState : GPUProgrammableStage {
 
 external interface GPUVertexBufferLayout : JsAny {
     var arrayStride: JsBigInt
-    var stepMode: String? /* "vertex" | "instance" */
+    var stepMode: String /* "vertex" | "instance" */
     var attributes: JsArray<GPUVertexAttribute>
 }
 
@@ -177,10 +178,10 @@ external interface GPUAdapterInfo : JsAny
 external interface GPUCanvasConfiguration : JsAny {
     var device: GPUDevice
     var format: JsString
-    var usage: JsNumber?
-    var viewFormats: JsArray<JsAny>?
-    var colorSpace: JsString?
-    var alphaMode: JsString?
+    var usage: JsNumber
+    var viewFormats: JsArray<JsAny>
+    var colorSpace: JsString
+    var alphaMode: JsString
 }
 
 external interface GPUPipelineLayout : GPUObjectBase

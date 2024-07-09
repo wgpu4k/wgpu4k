@@ -3,6 +3,7 @@ package io.ygdrasil.wgpu
 import io.ygdrasil.wgpu.internal.js.GPUDevice
 import io.ygdrasil.wgpu.mapper.map
 
+
 actual class Device(internal val handler: GPUDevice) : AutoCloseable {
     actual val queue: Queue
         get() = TODO("Not yet implemented")
@@ -12,7 +13,9 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
     }
 
     actual fun createShaderModule(descriptor: ShaderModuleDescriptor): ShaderModule {
-        TODO("Not yet implemented")
+        return map(descriptor)
+            .let { handler.createShaderModule(it) }
+            .let(::ShaderModule)
     }
 
     actual fun createPipelineLayout(descriptor: PipelineLayoutDescriptor): PipelineLayout {

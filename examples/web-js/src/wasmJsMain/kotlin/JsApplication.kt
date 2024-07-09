@@ -19,8 +19,6 @@ fun jsApplication(canvas: HTMLCanvasElement) {
             canvasContext.wgpuContext
         )
 
-        println("test")
-
         window.onkeydown = { event ->
             if (event.keyCode == 33 || event.keyCode == 34) {
                 val currentIndex = application.availableScenes.indexOf(application.currentScene)
