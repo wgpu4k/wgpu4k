@@ -66,9 +66,9 @@ external interface GPUBlendComponent : JsAny {
 }
 
 external interface GPUMultisampleState : JsAny {
-    var count: JsNumber?
-    var mask: JsNumber?
-    var alphaToCoverageEnabled: Boolean?
+    var count: JsNumber
+    var mask: JsNumber
+    var alphaToCoverageEnabled: Boolean
 }
 
 external interface GPUDepthStencilState : JsAny {
@@ -95,7 +95,7 @@ external interface GPUStencilFaceState : JsAny {
 external interface GPUShaderModuleDescriptor : GPUObjectDescriptorBase {
     var code: JsString
     var sourceMap: JsAny
-    var compilationHints: JsArray<GPUShaderModuleCompilationHint>?
+    var compilationHints: JsArray<GPUShaderModuleCompilationHint>
 }
 
 external interface GPUShaderModuleCompilationHint : JsAny {
@@ -108,11 +108,11 @@ external interface GPUPrimitiveState : JsAny {
     var stripIndexFormat: String
     var frontFace: String
     var cullMode: String
-    var unclippedDepth: Boolean?
+    var unclippedDepth: Boolean
 }
 
 external interface GPUVertexState : GPUProgrammableStage {
-    var buffers: JsArray<GPUVertexBufferLayout>?
+    var buffers: JsArray<GPUVertexBufferLayout>
 }
 
 external interface GPUVertexBufferLayout : JsAny {
@@ -129,8 +129,8 @@ external interface GPUVertexAttribute : JsAny {
 
 external interface GPUProgrammableStage : JsAny {
     var module: GPUShaderModule
-    var entryPoint: JsString?
-    var constants: JsAny? //Map<JsString, JsNumber>?
+    var entryPoint: JsString
+    var constants: JsAny //Map<JsString, JsNumber>?
 }
 
 external interface GPURenderPipeline : GPUObjectBase, GPUPipelineBase
