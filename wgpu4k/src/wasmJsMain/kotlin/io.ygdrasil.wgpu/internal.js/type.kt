@@ -1,10 +1,23 @@
 package io.ygdrasil.wgpu.internal.js
 
-import io.ygdrasil.wgpu.GPUTextureUsageFlags
+import io.ygdrasil.wgpu.GPUColorWriteFlags
+import org.w3c.dom.HTMLCanvasElement
 import kotlin.js.Promise
 
+fun <T : JsAny>createJsObject(): T =
+    js("({ })")
+
+fun <T : JsAny> List<T>.toJsArray(): JsArray<JsAny> {
+    val output: JsArray<JsAny> = JsArray()
+    forEachIndexed { index, value ->
+        output[index] = value
+    }
+    return output
+}
+
+
 external interface GPUCanvasContext {
-    var canvas: JsAny /* HTMLCanvasElement | OffscreenCanvas */
+    var canvas: HTMLCanvasElement
     fun configure(configuration: GPUCanvasConfiguration)
     fun unconfigure()
     fun getCurrentTexture(): GPUTexture
@@ -28,19 +41,146 @@ external interface GPUAdapter : JsAny {
 
 }
 
-external class GPUDevice : JsAny
+external class GPUDevice : JsAny {
+    fun createRenderPipeline(canvasConfiguration: GPURenderPipelineDescriptor): GPURenderPipeline
+}
+
+external interface GPURenderPipelineDescriptor : GPUPipelineDescriptorBase {
+    var vertex: GPUVertexState
+    var primitive: GPUPrimitiveState?
+    var depthStencil: GPUDepthStencilState?
+    var multisample: GPUMultisampleState?
+    var fragment: GPUFragmentState?
+}
+
+external interface GPUFragmentState : GPUProgrammableStage {
+    var targets: JsArray<GPUColorTargetState?>
+}
+
+external interface GPUColorTargetState: JsAny {
+    var format: String
+    var blend: GPUBlendState?
+    var writeMask: GPUColorWriteFlags?
+}
+
+external interface GPUBlendState {
+    var color: GPUBlendComponent
+    var alpha: GPUBlendComponent
+}
+
+external interface GPUBlendComponent {
+    var operation: String?
+    var srcFactor: String?
+    var dstFactor: String?
+}
+
+external interface GPUMultisampleState {
+    var count: JsNumber?
+    var mask: JsNumber?
+    var alphaToCoverageEnabled: Boolean?
+}
+
+external interface GPUDepthStencilState {
+    var format: String
+    var depthWriteEnabled: Boolean?
+    var depthCompare: String?
+    var stencilFront: GPUStencilFaceState?
+    var stencilBack: GPUStencilFaceState?
+    var stencilReadMask: JsNumber?
+    var stencilWriteMask: JsNumber?
+    var depthBias: JsNumber?
+    var depthBiasSlopeScale: Float?
+    var depthBiasClamp: Float?
+
+}
+
+external interface GPUStencilFaceState {
+    var compare: String?
+    var failOp: String?
+    var depthFailOp: String?
+    var passOp: String?
+}
+
+
+external interface GPUPrimitiveState {
+    var topology: String?
+    var stripIndexFormat: String?
+    var frontFace: String?
+    var cullMode: String?
+    var unclippedDepth: Boolean?
+}
+
+external interface GPUVertexState : GPUProgrammableStage {
+    var buffers: JsArray<GPUVertexBufferLayout>?
+}
+
+external interface GPUVertexBufferLayout : JsAny {
+    var arrayStride: JsNumber
+    var stepMode: String? /* "vertex" | "instance" */
+    var attributes: JsArray<GPUVertexAttribute>
+}
+
+external interface GPUVertexAttribute : JsAny {
+    var format: String
+    var offset: JsNumber
+    var shaderLocation: JsNumber
+}
+
+external interface GPUProgrammableStage {
+    var module: GPUShaderModule
+    var entryPoint: JsString?
+    var constants: JsAny //Map<JsString, JsNumber>?
+}
+
+external interface GPURenderPipeline : GPUObjectBase, GPUPipelineBase
+
+external interface GPUPipelineBase {
+    fun getBindGroupLayout(index: JsNumber): GPUBindGroupLayout
+}
+
+external interface GPUBindGroupLayout : GPUObjectBase
+
+external interface GPUShaderModule : GPUObjectBase {
+    fun getCompilationInfo(): Promise<GPUCompilationInfo>
+}
+
+external interface GPUCompilationInfo : JsAny {
+    var messages: JsArray<GPUCompilationMessage>
+}
+
+external interface GPUCompilationMessage : JsAny {
+    var message: String
+    var type: String
+    var lineNum: JsNumber
+    var linePos: JsNumber
+    var offset: JsNumber
+    var length: JsNumber
+}
+
+
+external interface GPUPipelineDescriptorBase : GPUObjectDescriptorBase {
+    var layout: JsAny /* GPUPipelineLayout | "auto" */
+}
+
+external interface GPUObjectDescriptorBase : JsAny {
+    var label: JsString?
+}
+
+external interface GPUObjectBase {
+    var label: JsString
+}
 
 external interface GPUDeviceDescriptor
 
 external interface GPUAdapterInfo : JsAny
 
-external interface GPUCanvasConfiguration {
+external interface GPUCanvasConfiguration : JsAny {
     var device: GPUDevice
-    var format: String
-    var usage: GPUTextureUsageFlags?
-    var viewFormats: JsArray<JsAny?>?
-    var colorSpace: JsAny?
-    var alphaMode: String?
+    var format: JsString
+    var usage: JsNumber?
+    var viewFormats: JsArray<JsAny>?
+    var colorSpace: JsString?
+    var alphaMode: JsString?
 }
 
 external interface GPUTexture

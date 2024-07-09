@@ -1,6 +1,7 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPUDevice
+import io.ygdrasil.wgpu.mapper.map
 
 actual class Device(internal val handler: GPUDevice) : AutoCloseable {
     actual val queue: Queue
@@ -18,9 +19,9 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
         TODO("Not yet implemented")
     }
 
-    actual fun createRenderPipeline(descriptor: RenderPipelineDescriptor): RenderPipeline {
-        TODO("Not yet implemented")
-    }
+    actual fun createRenderPipeline(descriptor: RenderPipelineDescriptor): RenderPipeline  = map(descriptor)
+        .let { handler.createRenderPipeline(it) }
+        .let(::RenderPipeline)
 
     actual fun createBuffer(descriptor: BufferDescriptor): Buffer {
         TODO("Not yet implemented")

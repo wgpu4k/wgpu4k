@@ -7,9 +7,9 @@ import org.w3c.dom.HTMLCanvasElement
 
 actual class Surface(internal val handler: GPUCanvasContext) : AutoCloseable {
     actual val width: Int
-        get() = TODO("Not yet implemented")
+        get() = handler.canvas.width
     actual val height: Int
-        get() = TODO("Not yet implemented")
+        get() = handler.canvas.height
     actual val textureFormat: TextureFormat by lazy {
         navigator.gpu
             ?.getPreferredCanvasFormat()
@@ -18,18 +18,21 @@ actual class Surface(internal val handler: GPUCanvasContext) : AutoCloseable {
     }
 
     actual fun getCurrentTexture(): Texture {
-        TODO("Not yet implemented")
+        return handler.getCurrentTexture()
+            .let(::Texture)
     }
 
     actual fun present() {
-        TODO("Not yet implemented")
+        // Nothing to do on js
     }
 
     actual fun configure(canvasConfiguration: CanvasConfiguration)  {
-        handler.configure(map(canvasConfiguration, textureFormat))
+        map(canvasConfiguration)
+            .let { handler.configure(it) }
     }
 
     actual override fun close() {
+        // Nothing to do on js
     }
 
 }
