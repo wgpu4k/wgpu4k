@@ -30,9 +30,9 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
         .let { handler.createRenderPipeline(it) }
         .let(::RenderPipeline)
 
-    actual fun createBuffer(descriptor: BufferDescriptor): Buffer {
-        TODO("Not yet implemented")
-    }
+    actual fun createBuffer(descriptor: BufferDescriptor): Buffer = map(descriptor)
+        .let { handler.createBuffer(it) }
+        .let(::Buffer)
 
     actual fun createTexture(descriptor: TextureDescriptor): Texture = map(descriptor)
         .let { handler.createTexture(it) }

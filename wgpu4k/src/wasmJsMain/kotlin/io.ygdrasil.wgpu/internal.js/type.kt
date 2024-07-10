@@ -1,6 +1,7 @@
 package io.ygdrasil.wgpu.internal.js
 
 import io.ygdrasil.wgpu.*
+import org.khronos.webgl.ArrayBuffer
 import org.w3c.dom.HTMLCanvasElement
 import kotlin.js.Promise
 
@@ -32,6 +33,7 @@ external interface GPUAdapter : JsAny {
 external class GPUDevice : JsAny {
     var queue: GPUQueue
     fun createTexture(descriptor: GPUTextureDescriptor): GPUTexture
+    fun createBuffer(descriptor: GPUBufferDescriptor): GPUBuffer
     fun createRenderPipeline(canvasConfiguration: GPURenderPipelineDescriptor): GPURenderPipeline
     fun createShaderModule(descriptor: GPUShaderModuleDescriptor): GPUShaderModule
     fun createCommandEncoder(descriptor: GPUCommandEncoderDescriptor = definedExternally): GPUCommandEncoder
@@ -46,8 +48,21 @@ external interface GPURenderPassEncoder : GPUObjectBase, GPUCommandsMixin, GPUDe
     GPUBindingCommandsMixin, GPURenderCommandsMixin {
 
     fun end()
+}
 
+external interface GPUBufferDescriptor : GPUObjectDescriptorBase {
+    var size: GPUSize64
+    var usage: GPUBufferUsageFlags
+    var mappedAtCreation: Boolean
+}
 
+external interface GPUBuffer : GPUObjectBase {
+    var size: GPUSize64Out
+    var usage: GPUFlagsConstant
+    var mapState: String /* "unmapped" | "pending" | "mapped" */
+    fun mapAsync(mode: GPUMapModeFlags, offset: GPUSize64, size: GPUSize64): Promise<JsAny?>
+    fun getMappedRange(offset: GPUSize64 = definedExternally, size: GPUSize64 = definedExternally): ArrayBuffer
+    fun unmap()
 }
 
 external interface GPUTextureDescriptor : GPUObjectDescriptorBase {

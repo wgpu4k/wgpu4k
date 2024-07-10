@@ -6,6 +6,7 @@ actual class ComputePipeline : AutoCloseable {
     }
 
     actual override fun close() {
+        // Nothing to do on JS
     }
 
 }

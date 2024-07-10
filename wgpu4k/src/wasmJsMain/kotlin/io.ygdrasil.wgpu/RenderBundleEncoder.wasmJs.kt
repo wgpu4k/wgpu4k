@@ -31,6 +31,6 @@ actual class RenderBundleEncoder : AutoCloseable {
     }
 
     actual override fun close() {
-        TODO("Not yet implemented")
+        // Nothing to do on JS
     }
 }

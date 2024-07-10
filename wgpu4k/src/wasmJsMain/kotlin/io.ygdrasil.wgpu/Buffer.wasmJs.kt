@@ -1,13 +1,15 @@
 package io.ygdrasil.wgpu
 
-actual class Buffer : AutoCloseable {
+import io.ygdrasil.wgpu.internal.js.GPUBuffer
+
+actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
 
     actual val size: GPUSize64
-        get() = TODO("Not yet implemented")
+        get() = handler.size
     actual val usage: Set<BufferUsage>
-        get() = TODO("Not yet implemented")
+        get() = BufferUsage.entries.filter { it.value and handler.usage != 0 }.toSet()
     actual val mapState: BufferMapState
-        get() = TODO("Not yet implemented")
+        get() = BufferMapState.of(handler.mapState) ?: error("fail to get MapState")
 
     actual fun unmap() {
         TODO("Not yet implemented")
@@ -30,6 +32,6 @@ actual class Buffer : AutoCloseable {
     }
 
     actual override fun close() {
-        TODO("Not yet implemented")
+        // Nothing to do on JS
     }
 }

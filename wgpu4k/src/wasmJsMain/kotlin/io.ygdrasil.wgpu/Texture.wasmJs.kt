@@ -17,7 +17,6 @@ actual class Texture(internal val handler: GPUTexture) : AutoCloseable {
         get() = handler.sampleCount
     actual val dimension: TextureDimension
         get() = TextureDimension.of(handler.dimension) ?: error("unsuported texture dimension $dimension")
-
     actual val format: TextureFormat
         get() = TextureFormat.of(handler.format) ?: error("unsuported texture format $format")
     actual val usage: GPUFlagsConstant

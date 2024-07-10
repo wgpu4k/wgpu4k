@@ -15,6 +15,7 @@ actual class Adapter(internal val handler: GPUAdapter) : AutoCloseable {
     }
 
     actual override fun close() {
+        // Nothing to do on JS
     }
 
 }
