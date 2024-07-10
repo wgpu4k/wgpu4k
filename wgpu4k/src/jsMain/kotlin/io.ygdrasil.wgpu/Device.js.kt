@@ -1,6 +1,9 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.js.*
+import io.ygdrasil.wgpu.internal.js.GPUBindGroupLayout
+import io.ygdrasil.wgpu.internal.js.GPUDevice
+import io.ygdrasil.wgpu.internal.js.GPUPipelineLayoutDescriptor
+import io.ygdrasil.wgpu.internal.js.GPUSamplerDescriptor
 import io.ygdrasil.wgpu.mapper.map
 import kotlinx.coroutines.await
 
@@ -50,7 +53,7 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
             .let(::Sampler)
 
     actual fun createComputePipeline(descriptor: ComputePipelineDescriptor): ComputePipeline =
-        descriptor.convert()
+        map(descriptor)
             .let { handler.createComputePipeline(it) }
             .let(::ComputePipeline)
 
@@ -77,25 +80,6 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
         // Nothing on JS
     }
 }
-
-
-
-private fun ComputePipelineDescriptor.convert(): GPUComputePipelineDescriptor = object : GPUComputePipelineDescriptor {
-    override var compute: GPUProgrammableStage = this@convert.compute.convert()
-    override var layout: dynamic = this@convert.layout?.convert() ?: "auto"
-    override var label: String? = this@convert.label ?: undefined
-}
-
-private fun PipelineLayout.convert(): dynamic {
-    TODO()
-}
-
-private fun ComputePipelineDescriptor.ProgrammableStage.convert(): GPUProgrammableStage =
-    object : GPUProgrammableStage {
-        override var module: GPUShaderModule = this@convert.module.handler
-        override var entryPoint: String? = this@convert.entryPoint ?: undefined
-        override var constants: Map<String, GPUPipelineConstantValue>? = undefined//this@convert.constants
-    }
 
 private fun SamplerDescriptor.convert(): GPUSamplerDescriptor = object : GPUSamplerDescriptor {
     override var label: String? = this@convert.label ?: undefined
