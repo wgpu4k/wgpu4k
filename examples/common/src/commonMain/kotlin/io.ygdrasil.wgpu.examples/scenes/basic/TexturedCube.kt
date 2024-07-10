@@ -42,10 +42,10 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
                             code = basicVertexShader
                         )
                     ).bind(), // bind to autoClosableContext to release it later
-                    buffers = arrayOf(
+                    buffers = listOf(
                         RenderPipelineDescriptor.VertexState.VertexBufferLayout(
                             arrayStride = Cube.cubeVertexSize,
-                            attributes = arrayOf(
+                            attributes = listOf(
                                 RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
                                     shaderLocation = 0,
                                     offset = Cube.cubePositionOffset,
@@ -66,7 +66,7 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
                             code = sampleTextureMixColorShader
                         )
                     ).bind(), // bind to autoClosableContext to release it later
-                    targets = arrayOf(
+                    targets = listOf(
                         RenderPipelineDescriptor.FragmentState.ColorTargetState(
                             format = renderingContext.textureFormat
                         )

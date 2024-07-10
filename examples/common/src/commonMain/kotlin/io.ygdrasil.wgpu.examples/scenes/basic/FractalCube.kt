@@ -49,10 +49,10 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 							code = basicVertexShader
 						)
 					).bind(), // bind to autoClosableContext to release it later
-					buffers = arrayOf(
+					buffers = listOf(
 						RenderPipelineDescriptor.VertexState.VertexBufferLayout(
 							arrayStride = cubeVertexSize,
-							attributes = arrayOf(
+							attributes = listOf(
 								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
 									shaderLocation = 0,
 									offset = cubePositionOffset,
@@ -73,7 +73,7 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 							code = sampleSelfShader
 						)
 					).bind(), // bind to autoClosableContext to release it later
-					targets = arrayOf(
+					targets = listOf(
 						RenderPipelineDescriptor.FragmentState.ColorTargetState(
 							format = renderingContext.textureFormat
 						)

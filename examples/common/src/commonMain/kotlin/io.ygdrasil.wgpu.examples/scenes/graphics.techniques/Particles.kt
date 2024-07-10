@@ -60,13 +60,13 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                             code = particlesShaderFixed,
                         )
                     ).bind(),
-                    buffers = arrayOf(
+                    buffers = listOf(
                         RenderPipelineDescriptor.VertexState.VertexBufferLayout
                             (
                             // instanced particles buffer
                             arrayStride = particleInstanceByteSize.toLong(),
                             stepMode = VertexStepMode.instance,
-                            attributes = arrayOf(
+                            attributes = listOf(
                                 RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
                                     // position
                                     shaderLocation = 0,
@@ -85,7 +85,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                             // quad vertex buffer
                             arrayStride = 2 * 4, // vec2f
                             stepMode = VertexStepMode.vertex,
-                            attributes = arrayOf(
+                            attributes = listOf(
                                 RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
                                     // vertex positions
                                     shaderLocation = 2,
@@ -103,7 +103,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                             code = particlesShaderFixed,
                         )
                     ).bind(),
-                    targets = arrayOf(
+                    targets = listOf(
                         RenderPipelineDescriptor.FragmentState.ColorTargetState(
                             format = renderingContext.textureFormat,
                             blend = RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState(

@@ -1,9 +1,6 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUBindGroupLayout
 import io.ygdrasil.wgpu.internal.js.GPUDevice
-import io.ygdrasil.wgpu.internal.js.GPUPipelineLayoutDescriptor
-import io.ygdrasil.wgpu.internal.js.GPUSamplerDescriptor
 import io.ygdrasil.wgpu.mapper.map
 import kotlinx.coroutines.await
 
@@ -27,7 +24,7 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
     }
 
     actual fun createPipelineLayout(descriptor: PipelineLayoutDescriptor): PipelineLayout = handler
-        .createPipelineLayout(descriptor.convert())
+        .createPipelineLayout(map(descriptor))
         .let(::PipelineLayout)
 
     actual fun createRenderPipeline(descriptor: RenderPipelineDescriptor): RenderPipeline = map(descriptor)
@@ -48,7 +45,7 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
         .let(::BindGroup)
 
     actual fun createSampler(descriptor: SamplerDescriptor): Sampler =
-        descriptor.convert()
+        map(descriptor)
             .let { handler.createSampler(it) }
             .let(::Sampler)
 
@@ -81,27 +78,8 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
     }
 }
 
-private fun SamplerDescriptor.convert(): GPUSamplerDescriptor = object : GPUSamplerDescriptor {
-    override var label: String? = this@convert.label ?: undefined
-    override var addressModeU: String? = this@convert.addressModeU.stringValue
-    override var addressModeV: String? = this@convert.addressModeV.stringValue
-    override var addressModeW: String? = this@convert.addressModeW.stringValue
-    override var magFilter: String? = this@convert.magFilter.name
-    override var minFilter: String? = this@convert.minFilter.name
-    override var mipmapFilter: String? = this@convert.mipmapFilter.name
-    override var lodMinClamp: Number? = this@convert.lodMinClamp
-    override var lodMaxClamp: Number? = this@convert.lodMaxClamp
-    override var compare: String? = this@convert.compare?.stringValue ?: undefined
-    override var maxAnisotropy: Number? = this@convert.maxAnisotropy
-}
 
-/*** PipelineLayoutDescriptor ***/
 
-private fun PipelineLayoutDescriptor.convert(): GPUPipelineLayoutDescriptor = object : GPUPipelineLayoutDescriptor {
-    override var label: String? = this@convert.label ?: undefined
-    override var bindGroupLayouts: Array<GPUBindGroupLayout> = this@convert.bindGroupLayouts
-        .map { it.handler }.toTypedArray()
-}
 
 
 

@@ -38,7 +38,7 @@ class GLTFPrimitive(
         val vertexBuffers = mutableListOf(
             VertexBufferLayout(
                 arrayStride = positions.byteStride.toLong(),
-                attributes = arrayOf(
+                attributes = listOf(
                     VertexBufferLayout.VertexAttribute(
                         format = VertexFormat.float32x3,
                         offset = 0,
@@ -52,7 +52,7 @@ class GLTFPrimitive(
             vertexBuffers.add(
                 VertexBufferLayout(
                     arrayStride = normals.byteStride.toLong(),
-                    attributes = arrayOf(
+                    attributes = listOf(
                         VertexBufferLayout.VertexAttribute(
                             format = VertexFormat.float32x3,
                             offset = 0,
@@ -68,7 +68,7 @@ class GLTFPrimitive(
             vertexBuffers.add(
                 VertexBufferLayout(
                     arrayStride = texcoords[0].byteStride.toLong(),
-                    attributes = arrayOf(
+                    attributes = listOf(
                         VertexBufferLayout.VertexAttribute(
                             format = VertexFormat.float32x2,
                             offset = 0,
@@ -81,7 +81,7 @@ class GLTFPrimitive(
 
         val layout = device.createPipelineLayout(
             PipelineLayoutDescriptor(
-                bindGroupLayouts = arrayOf(
+                bindGroupLayouts = listOf(
                     bindGroupLayouts[0],
                     bindGroupLayouts[1],
                     material.bindGroupLayout
@@ -92,13 +92,13 @@ class GLTFPrimitive(
         val vertexStage = RenderPipelineDescriptor.VertexState(
             module = shaderModule,
             entryPoint = "vertex_main",
-            buffers = vertexBuffers.toTypedArray()
+            buffers = vertexBuffers
         )
 
         val fragmentStage = FragmentState(
             module = shaderModule,
             entryPoint = "fragment_main",
-            targets = arrayOf(
+            targets = listOf(
                 FragmentState.ColorTargetState(
                     format = TextureFormat.of(swapChainFormat) ?: error("fail to get texture format $swapChainFormat")
                 )

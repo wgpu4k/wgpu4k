@@ -11,7 +11,7 @@ expect class RenderPipeline : AutoCloseable {
 }
 
 data class PipelineLayoutDescriptor(
-    val bindGroupLayouts: Array<BindGroupLayout> = arrayOf(),
+    val bindGroupLayouts: List<BindGroupLayout> = listOf(),
     val label: String? = null
 )
 
@@ -29,11 +29,11 @@ data class RenderPipelineDescriptor(
         val module: ShaderModule,
         val entryPoint: String = "main",
         val constants: Map<String, GPUPipelineConstantValue>? = null,
-        val buffers: Array<VertexBufferLayout> = arrayOf(),
+        val buffers: List<VertexBufferLayout> = listOf(),
     ) {
         data class VertexBufferLayout(
             val arrayStride: GPUSize64,
-            val attributes: Array<VertexAttribute> = arrayOf(),
+            val attributes: List<VertexAttribute> = listOf(),
             val stepMode: VertexStepMode = VertexStepMode.vertex,
         ) {
             data class VertexAttribute(
@@ -82,7 +82,7 @@ data class RenderPipelineDescriptor(
 
     data class FragmentState(
         val module: ShaderModule,
-        val targets: Array<ColorTargetState> = arrayOf(),
+        val targets: List<ColorTargetState> = listOf(),
         val entryPoint: String = "main"
     ) {
 

@@ -29,7 +29,7 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
                             code = redFragmentShader
                         )
                     ).bind(),
-                    targets = arrayOf(
+                    targets = listOf(
                         RenderPipelineDescriptor.FragmentState.ColorTargetState(
                             format = renderingContext.textureFormat
                         )
