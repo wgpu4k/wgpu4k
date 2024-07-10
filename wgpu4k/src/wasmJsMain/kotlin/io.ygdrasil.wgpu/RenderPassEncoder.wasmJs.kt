@@ -1,13 +1,15 @@
 package io.ygdrasil.wgpu
 
-actual class RenderPassEncoder: AutoCloseable {
+import io.ygdrasil.wgpu.internal.js.GPURenderPassEncoder
+
+actual class RenderPassEncoder(internal val handler: GPURenderPassEncoder): AutoCloseable {
 
     actual fun end() {
-        TODO("Not yet implemented")
+        handler.end()
     }
 
     actual fun setPipeline(renderPipeline: RenderPipeline) {
-        TODO("Not yet implemented")
+        handler.setPipeline(renderPipeline.handler)
     }
 
     actual fun draw(
@@ -16,7 +18,12 @@ actual class RenderPassEncoder: AutoCloseable {
         firstVertex: GPUSize32,
         firstInstance: GPUSize32
     ) {
-        TODO("Not yet implemented")
+        handler.draw(
+            vertexCount,
+            instanceCount,
+            firstVertex,
+            firstInstance
+        )
     }
 
     actual fun setBindGroup(index: Int, bindGroup: BindGroup) {

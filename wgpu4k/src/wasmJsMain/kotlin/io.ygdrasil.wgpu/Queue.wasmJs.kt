@@ -1,11 +1,12 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPUQueue
+import io.ygdrasil.wgpu.internal.js.toJsArray
 
 actual class Queue(internal val handler: GPUQueue) {
 
     actual fun submit(commandsBuffer: Array<CommandBuffer>) {
-        TODO("Not yet implemented")
+        handler.submit(commandsBuffer.map { it.handler }.toJsArray())
     }
 
     actual fun writeBuffer(

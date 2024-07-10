@@ -5,7 +5,6 @@ import org.w3c.dom.HTMLCanvasElement
 import kotlin.js.Promise
 
 
-
 external interface GPUCanvasContext {
     var canvas: HTMLCanvasElement
     fun configure(configuration: GPUCanvasConfiguration)
@@ -37,7 +36,28 @@ external class GPUDevice : JsAny {
     fun createCommandEncoder(descriptor: GPUCommandEncoderDescriptor = definedExternally): GPUCommandEncoder
 }
 
-external interface GPUCommandEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin
+external interface GPUCommandEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin {
+    fun beginRenderPass(descriptor: GPURenderPassDescriptor): GPURenderPassEncoder
+    fun finish(descriptor: GPUCommandBufferDescriptor = definedExternally): GPUCommandBuffer
+}
+
+external interface GPURenderPassEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin,
+    GPUBindingCommandsMixin, GPURenderCommandsMixin {
+
+    fun end()
+
+
+}
+
+typealias GPUCommandBufferDescriptor = GPUObjectDescriptorBase
+
+external interface GPUCommandBuffer : GPUObjectBase
+
+external interface GPUBindingCommandsMixin
+
+external interface GPURenderCommandsMixin {
+    fun setPipeline(pipeline: GPURenderPipeline)
+}
 
 external interface GPUDebugCommandsMixin {
     fun pushDebugGroup(groupLabel: String)
@@ -48,9 +68,9 @@ external interface GPUDebugCommandsMixin {
 external interface GPURenderPassDescriptor : GPUObjectDescriptorBase {
     var colorAttachments: JsArray<GPURenderPassColorAttachment>
     var depthStencilAttachment: GPURenderPassDepthStencilAttachment
-    var occlusionQuerySet: GPUQuerySet?
+    var occlusionQuerySet: GPUQuerySet
     var timestampWrites: GPURenderPassTimestampWrites
-    var maxDrawCount: GPUSize64?
+    var maxDrawCount: JsNumber
 }
 
 external interface GPURenderPassTimestampWrites {
@@ -59,7 +79,7 @@ external interface GPURenderPassTimestampWrites {
     var endOfPassWriteIndex: GPUSize32
 }
 
-external interface GPURenderPassColorAttachment : JsAny{
+external interface GPURenderPassColorAttachment : JsAny {
     var view: GPUTextureView
     var depthSlice: GPUIntegerCoordinate
     var resolveTarget: GPUTextureView
@@ -96,9 +116,18 @@ external interface GPUQuerySet : GPUObjectBase {
 
 external interface GPUTextureView : GPUObjectBase
 
-external interface GPUQueue : GPUObjectBase
+external interface GPUQueue : GPUObjectBase {
+    fun submit(commandBuffers: JsArray<GPUCommandBuffer>)
+}
 
-external interface GPUCommandsMixin
+external interface GPUCommandsMixin {
+    fun draw(
+        vertexCount: GPUSize32,
+        instanceCount: GPUSize32 = definedExternally,
+        firstVertex: GPUSize32 = definedExternally,
+        firstInstance: GPUSize32 = definedExternally,
+    )
+}
 
 external interface GPURenderPipelineDescriptor : GPUPipelineDescriptorBase {
     var vertex: GPUVertexState
@@ -108,11 +137,21 @@ external interface GPURenderPipelineDescriptor : GPUPipelineDescriptorBase {
     var fragment: GPUFragmentState
 }
 
+external interface GPUTextureViewDescriptor : GPUObjectDescriptorBase {
+    var format: String
+    var dimension: String
+    var aspect: String
+    var baseMipLevel: GPUIntegerCoordinate?
+    var mipLevelCount: GPUIntegerCoordinate?
+    var baseArrayLayer: GPUIntegerCoordinate?
+    var arrayLayerCount: GPUIntegerCoordinate?
+}
+
 external interface GPUFragmentState : GPUProgrammableStage {
     var targets: JsArray<GPUColorTargetState>
 }
 
-external interface GPUColorTargetState: JsAny {
+external interface GPUColorTargetState : JsAny {
     var format: JsString
     var blend: GPUBlendState
     var writeMask: GPUColorWriteFlags
@@ -252,6 +291,17 @@ external interface GPUCanvasConfiguration : JsAny {
 
 external interface GPUPipelineLayout : GPUObjectBase
 
-external interface GPUTexture
+external interface GPUTexture {
+    fun createView(descriptor: GPUTextureViewDescriptor = definedExternally): GPUTextureView
+
+    var width: GPUIntegerCoordinateOut
+    var height: GPUIntegerCoordinateOut
+    var depthOrArrayLayers: GPUIntegerCoordinateOut
+    var mipLevelCount: GPUIntegerCoordinateOut
+    var sampleCount: GPUSize32Out
+    var dimension: String
+    var format: String
+    var usage: GPUFlagsConstant
+}
 
 external interface GPURequestAdapterOptions

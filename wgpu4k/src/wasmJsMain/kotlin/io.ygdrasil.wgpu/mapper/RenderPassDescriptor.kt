@@ -11,7 +11,7 @@ internal fun map(input: RenderPassDescriptor): GPURenderPassDescriptor =
         if (input.depthStencilAttachment != null) depthStencilAttachment = map(input.depthStencilAttachment)
         // TODO map this occlusionQuerySet
         // TODO map this timestampWrites
-        maxDrawCount = input.maxDrawCount
+        maxDrawCount = input.maxDrawCount.toJsNumber()
     }
 
 private fun map(input: RenderPassDescriptor.RenderPassDepthStencilAttachment): GPURenderPassDepthStencilAttachment =

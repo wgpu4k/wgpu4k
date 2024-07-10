@@ -1,31 +1,38 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPUTexture
+import io.ygdrasil.wgpu.mapper.map
 
-actual class Texture(gpuTexture: GPUTexture) : AutoCloseable {
+actual class Texture(internal val handler: GPUTexture) : AutoCloseable {
 
     actual val width: GPUIntegerCoordinateOut
-        get() = TODO("Not yet implemented")
+        get() = handler.width
     actual val height: GPUIntegerCoordinateOut
-        get() = TODO("Not yet implemented")
+        get() = handler.height
     actual val depthOrArrayLayers: GPUIntegerCoordinateOut
-        get() = TODO("Not yet implemented")
+        get() = handler.depthOrArrayLayers
     actual val mipLevelCount: GPUIntegerCoordinateOut
-        get() = TODO("Not yet implemented")
+        get() = handler.mipLevelCount
     actual val sampleCount: GPUSize32Out
-        get() = TODO("Not yet implemented")
+        get() = handler.sampleCount
     actual val dimension: TextureDimension
-        get() = TODO("Not yet implemented")
+        get() = TextureDimension.of(handler.dimension) ?: error("unsuported texture dimension $dimension")
+
     actual val format: TextureFormat
-        get() = TODO("Not yet implemented")
+        get() = TextureFormat.of(handler.format) ?: error("unsuported texture format $format")
     actual val usage: GPUFlagsConstant
-        get() = TODO("Not yet implemented")
+        get() = handler.usage
 
     actual fun createView(descriptor: TextureViewDescriptor?): TextureView {
-        TODO("Not yet implemented")
+        return TextureView(
+            when (descriptor) {
+                null -> handler.createView()
+                else -> handler.createView(map(descriptor))
+            }
+        )
     }
 
     actual override fun close() {
-        TODO("Not yet implemented")
+        // nothing to do
     }
 }

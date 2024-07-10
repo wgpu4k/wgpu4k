@@ -1,7 +1,11 @@
 package io.ygdrasil.wgpu
 
-actual class CommandBuffer : AutoCloseable {
+import io.ygdrasil.wgpu.internal.js.GPUCommandBuffer
+
+actual class CommandBuffer(internal val handler: GPUCommandBuffer) : AutoCloseable {
+
     actual override fun close() {
+        // nothing to do on Js
     }
 
 }
