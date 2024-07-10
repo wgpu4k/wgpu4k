@@ -65,7 +65,7 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
             .let(::RenderBundleEncoder)
 
     actual fun createQuerySet(descriptor: QuerySetDescriptor): QuerySet =
-        descriptor.convert()
+        map(descriptor)
             .let { handler.createQuerySet(it) }
             .let(::QuerySet)
 
@@ -78,9 +78,7 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
     }
 }
 
-private fun QuerySetDescriptor.convert(): GPUQuerySetDescriptor {
-    TODO("Not yet implemented")
-}
+
 
 private fun ComputePipelineDescriptor.convert(): GPUComputePipelineDescriptor = object : GPUComputePipelineDescriptor {
     override var compute: GPUProgrammableStage = this@convert.compute.convert()

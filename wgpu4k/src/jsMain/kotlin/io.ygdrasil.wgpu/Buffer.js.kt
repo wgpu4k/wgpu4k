@@ -43,5 +43,4 @@ actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
 		//Nothing to do on JS
 	}
 
-
 }

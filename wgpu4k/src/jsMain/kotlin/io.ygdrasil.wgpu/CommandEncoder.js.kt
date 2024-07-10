@@ -1,7 +1,6 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPUCommandEncoder
-import io.ygdrasil.wgpu.internal.js.GPUComputePassDescriptor
 import io.ygdrasil.wgpu.mapper.map
 
 actual class CommandEncoder(private val handler: GPUCommandEncoder) : AutoCloseable {
@@ -42,7 +41,7 @@ actual class CommandEncoder(private val handler: GPUCommandEncoder) : AutoClosea
     }
 
     actual fun beginComputePass(descriptor: ComputePassDescriptor?): ComputePassEncoder =
-        descriptor?.convert()
+        descriptor?.let { map(it) }
             .let { handler.beginComputePass(it ?: undefined) }
             .let { ComputePassEncoder(it) }
 
@@ -50,9 +49,3 @@ actual class CommandEncoder(private val handler: GPUCommandEncoder) : AutoClosea
         // Nothing to do
     }
 }
-
-private fun ComputePassDescriptor?.convert(): GPUComputePassDescriptor {
-    TODO()
-}
-
-

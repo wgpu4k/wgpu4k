@@ -84,6 +84,10 @@ data class RenderBundleEncoderDescriptor(
     val stencilReadOnly: Boolean = false,
 )
 
-// TODO
-data class QuerySetDescriptor(val label: String? = null)
+data class QuerySetDescriptor(
+    val label: String? = null,
+    val type: QueryType,
+    val count: GPUSize32
+)
+
 data class CommandEncoderDescriptor(val label: String? = null)
