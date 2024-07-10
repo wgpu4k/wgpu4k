@@ -66,7 +66,7 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
         val transformationMatrix = Matrix4
             .rotation(Angle.fromDegrees(frame), .0, .0, 1.0)
             .copyToColumns()
-        println("test")
+
         device.queue.writeBuffer(
             uniformBuffer,
             0,
@@ -74,13 +74,13 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
             0,
             transformationMatrix.size.toLong()
         )
-        println("test")
+
         val encoder = device.createCommandEncoder()
             .bind()
 
         val texture = renderingContext.getCurrentTexture()
             .bind()
-        println("test")
+
         val renderPassEncoder = encoder.beginRenderPass(
             RenderPassDescriptor(
                 colorAttachments = arrayOf(
