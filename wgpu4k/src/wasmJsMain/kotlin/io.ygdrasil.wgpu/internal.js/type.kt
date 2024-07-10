@@ -31,6 +31,7 @@ external interface GPUAdapter : JsAny {
 
 external class GPUDevice : JsAny {
     var queue: GPUQueue
+    fun createTexture(descriptor: GPUTextureDescriptor): GPUTexture
     fun createRenderPipeline(canvasConfiguration: GPURenderPipelineDescriptor): GPURenderPipeline
     fun createShaderModule(descriptor: GPUShaderModuleDescriptor): GPUShaderModule
     fun createCommandEncoder(descriptor: GPUCommandEncoderDescriptor = definedExternally): GPUCommandEncoder
@@ -47,6 +48,22 @@ external interface GPURenderPassEncoder : GPUObjectBase, GPUCommandsMixin, GPUDe
     fun end()
 
 
+}
+
+external interface GPUTextureDescriptor : GPUObjectDescriptorBase {
+    var size: GPUExtent3DDict
+    var mipLevelCount: GPUIntegerCoordinate
+    var sampleCount: GPUSize32
+    var dimension: String
+    var format: String
+    var usage: GPUTextureUsageFlags
+    var viewFormats: JsArray<JsString>
+}
+
+external interface GPUExtent3DDict : JsAny {
+    var width: GPUIntegerCoordinate
+    var height: GPUIntegerCoordinate
+    var depthOrArrayLayers: GPUIntegerCoordinate
 }
 
 typealias GPUCommandBufferDescriptor = GPUObjectDescriptorBase

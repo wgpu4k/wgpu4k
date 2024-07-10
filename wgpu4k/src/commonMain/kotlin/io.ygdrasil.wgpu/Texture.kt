@@ -20,14 +20,14 @@ expect class Texture: AutoCloseable {
  * @see https://www.w3.org/TR/webgpu/#gputexturedescriptor
  */
 data class TextureDescriptor(
-    var size: Size3D,
-    var format: TextureFormat,
-    var usage: Set<TextureUsage>,
-    var mipLevelCount: GPUIntegerCoordinate = 1,
-    var sampleCount: GPUSize32 = 1,
-    var dimension: TextureDimension = TextureDimension._2d,
-    var viewFormats: Array<TextureFormat> = arrayOf(),
-    var label: String? = null
+    val size: Size3D,
+    val format: TextureFormat,
+    val usage: Set<TextureUsage>,
+    val mipLevelCount: GPUIntegerCoordinate = 1,
+    val sampleCount: GPUSize32 = 1,
+    val dimension: TextureDimension = TextureDimension._2d,
+    val viewFormats: List<TextureFormat> = listOf(),
+    val label: String? = null
 )
 
 // Todo double check this

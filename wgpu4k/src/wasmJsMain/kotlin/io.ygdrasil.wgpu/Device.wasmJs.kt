@@ -34,9 +34,9 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
         TODO("Not yet implemented")
     }
 
-    actual fun createTexture(descriptor: TextureDescriptor): Texture {
-        TODO("Not yet implemented")
-    }
+    actual fun createTexture(descriptor: TextureDescriptor): Texture = map(descriptor)
+        .let { handler.createTexture(it) }
+        .let(::Texture)
 
     actual fun createBindGroup(descriptor: BindGroupDescriptor): BindGroup {
         TODO("Not yet implemented")

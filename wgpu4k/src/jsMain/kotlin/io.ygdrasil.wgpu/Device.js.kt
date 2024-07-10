@@ -36,8 +36,8 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
         .createBuffer(descriptor.convert())
         .let(::Buffer)
 
-    actual fun createTexture(descriptor: TextureDescriptor): Texture = handler
-        .createTexture(map(descriptor))
+    actual fun createTexture(descriptor: TextureDescriptor): Texture = map(descriptor)
+        .let { handler.createTexture(it) }
         .let(::Texture)
 
     actual fun createBindGroup(descriptor: BindGroupDescriptor): BindGroup =
@@ -141,7 +141,6 @@ private fun BufferDescriptor.convert(): GPUBufferDescriptor = object : GPUBuffer
     override var mappedAtCreation: Boolean? = this@convert.mappedAtCreation
     override var label: String? = this@convert.label ?: undefined
 }
-
 
 
 /*** PipelineLayoutDescriptor ***/
