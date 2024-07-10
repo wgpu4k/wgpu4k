@@ -1,6 +1,8 @@
 package io.ygdrasil.wgpu
 
-actual class Queue {
+import io.ygdrasil.wgpu.internal.js.GPUQueue
+
+actual class Queue(internal val handler: GPUQueue) {
 
     actual fun submit(commandsBuffer: Array<CommandBuffer>) {
         TODO("Not yet implemented")

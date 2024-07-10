@@ -1,6 +1,8 @@
 package io.ygdrasil.wgpu
 
-actual class CommandEncoder : AutoCloseable {
+import io.ygdrasil.wgpu.internal.js.GPUCommandEncoder
+
+actual class CommandEncoder(internal val handler: GPUCommandEncoder) : AutoCloseable {
     actual fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder {
         TODO("Not yet implemented")
     }
@@ -14,6 +16,7 @@ actual class CommandEncoder : AutoCloseable {
         destination: ImageCopyTexture,
         copySize: Size3D,
     ) {
+        TODO("Not yet implemented")
     }
 
     actual fun beginComputePass(descriptor: ComputePassDescriptor?): ComputePassEncoder {
@@ -25,6 +28,7 @@ actual class CommandEncoder : AutoCloseable {
         destination: ImageCopyBuffer,
         copySize: Size3D,
     ) {
+        TODO("Not yet implemented")
     }
 
     actual fun copyBufferToTexture(
@@ -32,9 +36,11 @@ actual class CommandEncoder : AutoCloseable {
         destination: ImageCopyTexture,
         copySize: Size3D,
     ) {
+        TODO("Not yet implemented")
     }
 
     actual override fun close() {
+        // nothing to do here
     }
 
 }

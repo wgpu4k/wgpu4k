@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu.internal.js
 
-import io.ygdrasil.wgpu.GPUColorWriteFlags
+import io.ygdrasil.wgpu.*
 import org.w3c.dom.HTMLCanvasElement
 import kotlin.js.Promise
 
@@ -28,13 +28,77 @@ external interface GPUAdapter : JsAny {
     var isFallbackAdapter: Boolean
     fun requestDevice(descriptor: GPUDeviceDescriptor = definedExternally): Promise<GPUDevice>
     fun requestAdapterInfo(): Promise<GPUAdapterInfo>
-
 }
 
 external class GPUDevice : JsAny {
+    var queue: GPUQueue
     fun createRenderPipeline(canvasConfiguration: GPURenderPipelineDescriptor): GPURenderPipeline
     fun createShaderModule(descriptor: GPUShaderModuleDescriptor): GPUShaderModule
+    fun createCommandEncoder(descriptor: GPUCommandEncoderDescriptor = definedExternally): GPUCommandEncoder
 }
+
+external interface GPUCommandEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin
+
+external interface GPUDebugCommandsMixin {
+    fun pushDebugGroup(groupLabel: String)
+    fun popDebugGroup()
+    fun insertDebugMarker(markerLabel: String)
+}
+
+external interface GPURenderPassDescriptor : GPUObjectDescriptorBase {
+    var colorAttachments: JsArray<GPURenderPassColorAttachment>
+    var depthStencilAttachment: GPURenderPassDepthStencilAttachment
+    var occlusionQuerySet: GPUQuerySet?
+    var timestampWrites: GPURenderPassTimestampWrites
+    var maxDrawCount: GPUSize64?
+}
+
+external interface GPURenderPassTimestampWrites {
+    var querySet: GPUQuerySet
+    var beginningOfPassWriteIndex: GPUSize32
+    var endOfPassWriteIndex: GPUSize32
+}
+
+external interface GPURenderPassColorAttachment : JsAny{
+    var view: GPUTextureView
+    var depthSlice: GPUIntegerCoordinate
+    var resolveTarget: GPUTextureView
+    var clearValue: GPUColorDict
+    var loadOp: String /* "load" | "clear" */
+    var storeOp: String /* "store" | "discard" */
+}
+
+external interface GPUColorDict : JsAny {
+    var r: JsNumber
+    var g: JsNumber
+    var b: JsNumber
+    var a: JsNumber
+}
+
+external interface GPURenderPassDepthStencilAttachment : JsAny {
+    var view: GPUTextureView
+    var depthClearValue: Float
+    var depthLoadOp: String? /* "load" | "clear" */
+    var depthStoreOp: String? /* "store" | "discard" */
+    var depthReadOnly: Boolean?
+    var stencilClearValue: GPUStencilValue
+    var stencilLoadOp: String? /* "load" | "clear" */
+    var stencilStoreOp: String? /* "store" | "discard" */
+    var stencilReadOnly: Boolean?
+
+}
+
+external interface GPUQuerySet : GPUObjectBase {
+    fun destroy()
+    var type: String /* "occlusion" | "timestamp" */
+    var count: GPUSize32Out
+}
+
+external interface GPUTextureView : GPUObjectBase
+
+external interface GPUQueue : GPUObjectBase
+
+external interface GPUCommandsMixin
 
 external interface GPURenderPipelineDescriptor : GPUPipelineDescriptorBase {
     var vertex: GPUVertexState
@@ -132,6 +196,8 @@ external interface GPUProgrammableStage : JsAny {
     var entryPoint: JsString
     var constants: JsAny //Map<JsString, JsNumber>?
 }
+
+typealias GPUCommandEncoderDescriptor = GPUObjectDescriptorBase
 
 external interface GPURenderPipeline : GPUObjectBase, GPUPipelineBase
 

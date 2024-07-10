@@ -1,7 +1,11 @@
 package io.ygdrasil.wgpu
 
-actual class TextureView : AutoCloseable {
+import io.ygdrasil.wgpu.internal.js.GPUTextureView
+
+actual class TextureView(internal val handler: GPUTextureView) : AutoCloseable {
+
     actual override fun close() {
+        // Nothing to do here
     }
 
 }

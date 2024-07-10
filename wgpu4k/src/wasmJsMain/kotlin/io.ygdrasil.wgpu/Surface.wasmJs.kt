@@ -14,7 +14,7 @@ actual class Surface(internal val handler: GPUCanvasContext) : AutoCloseable {
         navigator.gpu
             ?.getPreferredCanvasFormat()
             ?.let { TextureFormat.of(it) }
-            ?: error("fail to get canvas prefered format")
+            ?: error("fail to get canvas preferred format")
     }
 
     actual fun getCurrentTexture(): Texture {

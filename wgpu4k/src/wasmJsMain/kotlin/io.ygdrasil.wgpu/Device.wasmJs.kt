@@ -5,11 +5,15 @@ import io.ygdrasil.wgpu.mapper.map
 
 
 actual class Device(internal val handler: GPUDevice) : AutoCloseable {
-    actual val queue: Queue
-        get() = TODO("Not yet implemented")
+    actual val queue: Queue by lazy { Queue(handler.queue) }
 
     actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder {
-        TODO("Not yet implemented")
+        return CommandEncoder(
+            when (descriptor) {
+                null -> handler.createCommandEncoder()
+                else -> handler.createCommandEncoder(map(descriptor))
+            }
+        )
     }
 
     actual fun createShaderModule(descriptor: ShaderModuleDescriptor): ShaderModule {

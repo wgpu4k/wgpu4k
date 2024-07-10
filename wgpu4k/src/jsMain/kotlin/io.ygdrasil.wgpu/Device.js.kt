@@ -12,7 +12,7 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
         return CommandEncoder(
             when (descriptor) {
                 null -> handler.createCommandEncoder()
-                else -> handler.createCommandEncoder(descriptor.convert())
+                else -> handler.createCommandEncoder(map(descriptor))
             }
         )
     }
@@ -152,7 +152,5 @@ private fun PipelineLayoutDescriptor.convert(): GPUPipelineLayoutDescriptor = ob
         .map { it.handler }.toTypedArray()
 }
 
-private fun CommandEncoderDescriptor.convert(): GPUCommandEncoderDescriptor = object : GPUCommandEncoderDescriptor {
-    override var label: String? = this@convert.label ?: undefined
-}
+
 
