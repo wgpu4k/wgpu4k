@@ -31,6 +31,6 @@ data class RenderPassDescriptor(
 		val storeOp: StoreOp,
 		val depthSlice: GPUIntegerCoordinate? = null,
 		val resolveTarget: TextureView? = null,
-		val clearValue: Array<Number> = arrayOf(0, 0, 0, 0),
+		val clearValue: Color = Color(.0, .0, .0, .0),
 	)
 }

@@ -3,10 +3,7 @@ package io.ygdrasil.wgpu.mapper
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import io.ygdrasil.wgpu.LoadOp
-import io.ygdrasil.wgpu.RenderPassDescriptor
-import io.ygdrasil.wgpu.StoreOp
-import io.ygdrasil.wgpu.TextureView
+import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUColor
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPassColorAttachment
@@ -26,7 +23,7 @@ class RenderPassDescriptorMappingTest : FreeSpec({
                     RenderPassDescriptor.ColorAttachment(
                         view = TextureView(MemorySegment.NULL),
                         loadOp = LoadOp.clear,
-                        clearValue = arrayOf(0.5, 0.6, 0.7, 1.0),
+                        clearValue = Color(0.5, 0.6, 0.7, 1.0),
                         storeOp = StoreOp.store,
                     )
                 ),

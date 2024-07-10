@@ -40,7 +40,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
                 ColorAttachment(
                     view = dummyTexture.createView().bind(),
                     loadOp = LoadOp.clear,
-                    clearValue = arrayOf(0.3, 0.3, 0.3, 1),
+                    clearValue = Color(0.3, 0.3, 0.3, 1.0),
                     storeOp = StoreOp.store
                 )
             ),

@@ -182,7 +182,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 				RenderPassDescriptor.ColorAttachment(
 					view = dummyTexture.createView().bind(), // Assigned later
 					loadOp = LoadOp.clear,
-					clearValue = arrayOf(0.5, 0.5, 0.5, 1.0),
+					clearValue = Color(0.5, 0.5, 0.5, 1.0),
 					storeOp = StoreOp.store,
 				)
 			),

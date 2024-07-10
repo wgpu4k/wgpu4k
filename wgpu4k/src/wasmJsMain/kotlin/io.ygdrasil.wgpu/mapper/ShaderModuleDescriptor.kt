@@ -10,10 +10,7 @@ fun map(input: ShaderModuleDescriptor): GPUShaderModuleDescriptor = createJsObje
     code = input.code.toJsString()
     // TODO map this
     // sourceMap = input.sourceMap
-    compilationHints = input
-        .compilationHints
-        ?.map { map(it) }
-        ?.toJsArray()
+    if (input.compilationHints != null) compilationHints = input.compilationHints.map { map(it) }.toJsArray()
     label = input.label?.toJsString()
 }
 

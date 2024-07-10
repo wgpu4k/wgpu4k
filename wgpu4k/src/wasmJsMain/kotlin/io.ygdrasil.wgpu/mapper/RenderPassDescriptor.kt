@@ -1,5 +1,6 @@
 package io.ygdrasil.wgpu.mapper
 
+import io.ygdrasil.wgpu.Color
 import io.ygdrasil.wgpu.RenderPassDescriptor
 import io.ygdrasil.wgpu.internal.js.*
 
@@ -36,9 +37,9 @@ private fun map(input: RenderPassDescriptor.ColorAttachment): GPURenderPassColor
         clearValue = map(input.clearValue)
     }
 
-private fun map(input: Array<Number>): GPUColorDict = createJsObject<GPUColorDict>().apply {
-    r = input[0]
-    g = input[1]
-    b = input[2]
-    a = input[3]
+private fun map(input: Color): GPUColorDict = createJsObject<GPUColorDict>().apply {
+    r = input.red
+    g = input.green
+    b = input.blue
+    a = input.alpha
 }

@@ -172,7 +172,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
             colorAttachments = arrayOf(
                 RenderPassDescriptor.ColorAttachment(
                     view = dummyTexture.createView().bind(), // Assigned later
-                    clearValue = arrayOf(0.0, 0.0, 0.0, 1.0),
+                    clearValue = Color(.0, .0, .0, 1.0),
                     loadOp = LoadOp.clear,
                     storeOp = StoreOp.store,
                 ),

@@ -66,7 +66,7 @@ class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
                         view = textureView,
                         resolveTarget = renderingContext.getCurrentTexture().createView().bind(),
                         loadOp = LoadOp.clear,
-                        clearValue = arrayOf(0, 0, 0, 1.0),
+                        clearValue = Color(.0, .0, .0, 1.0),
                         storeOp = StoreOp.discard
                     )
                 )

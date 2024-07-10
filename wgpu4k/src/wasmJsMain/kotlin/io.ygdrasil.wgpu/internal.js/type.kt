@@ -69,10 +69,10 @@ external interface GPURenderPassColorAttachment : JsAny{
 }
 
 external interface GPUColorDict : JsAny {
-    var r: JsNumber
-    var g: JsNumber
-    var b: JsNumber
-    var a: JsNumber
+    var r: Double
+    var g: Double
+    var b: Double
+    var a: Double
 }
 
 external interface GPURenderPassDepthStencilAttachment : JsAny {
