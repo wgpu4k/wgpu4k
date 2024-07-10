@@ -1,6 +1,7 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPURenderPassEncoder
+import io.ygdrasil.wgpu.internal.js.toJsArray
 
 actual class RenderPassEncoder(internal val handler: GPURenderPassEncoder): AutoCloseable {
 
@@ -27,19 +28,19 @@ actual class RenderPassEncoder(internal val handler: GPURenderPassEncoder): Auto
     }
 
     actual fun setBindGroup(index: Int, bindGroup: BindGroup) {
-        TODO("Not yet implemented")
+        handler.setBindGroup(index, bindGroup.handler)
     }
 
     actual fun setVertexBuffer(slot: Int, buffer: Buffer) {
-        TODO("Not yet implemented")
+        handler.setVertexBuffer(slot, buffer.handler)
     }
 
     actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
-        TODO("Not yet implemented")
+        handler.setIndexBuffer(buffer.handler, indexFormat.name, offset, size)
     }
 
-    actual fun executeBundles(bundles: Array<RenderBundle>) {
-        TODO("Not yet implemented")
+    actual fun executeBundles(bundles: List<RenderBundle>) {
+        handler.executeBundles(bundles.map { it.handler }.toJsArray())
     }
 
     actual override fun close() {

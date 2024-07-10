@@ -21,7 +21,7 @@ expect class RenderPassEncoder: AutoCloseable {
 
 	fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat , offset: GPUSize64 = 0, size: GPUSize64 = buffer.size)
 
-	fun executeBundles(bundles: Array<RenderBundle>)
+	fun executeBundles(bundles: List<RenderBundle>)
 	/* TODO
 	fun setViewport(x: Number, y: Number, width: Number, height: Number, minDepth: Number, maxDepth: Number): Nothing?
     fun setScissorRect(x: GPUIntegerCoordinate, y: GPUIntegerCoordinate, width: GPUIntegerCoordinate, height: GPUIntegerCoordinate): Nothing?

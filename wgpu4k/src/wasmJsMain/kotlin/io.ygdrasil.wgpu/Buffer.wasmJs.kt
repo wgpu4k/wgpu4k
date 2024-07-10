@@ -5,7 +5,7 @@ import io.ygdrasil.wgpu.internal.js.GPUBuffer
 actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
 
     actual val size: GPUSize64
-        get() = handler.size
+        get() = handler.size.toLong()
     actual val usage: Set<BufferUsage>
         get() = BufferUsage.entries.filter { it.value and handler.usage != 0 }.toSet()
     actual val mapState: BufferMapState

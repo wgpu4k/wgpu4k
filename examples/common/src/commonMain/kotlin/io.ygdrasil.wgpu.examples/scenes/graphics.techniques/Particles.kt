@@ -157,7 +157,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         uniformBindGroup = device.createBindGroup(
             BindGroupDescriptor(
                 layout = renderPipeline.getBindGroupLayout(0),
-                entries = arrayOf(
+                entries = listOf(
                     BindGroupDescriptor.BindGroupEntry(
                         binding = 0,
                         resource = BindGroupDescriptor.BufferBinding(
@@ -304,7 +304,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
             val probabilityMapBindGroup = device.createBindGroup(
                 BindGroupDescriptor(
                     layout = pipeline,
-                    entries = arrayOf(
+                    entries = listOf(
                         BindGroupDescriptor.BindGroupEntry(
                             // ubo
                             binding = 0,
@@ -385,7 +385,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         computeBindGroup = device.createBindGroup(
             BindGroupDescriptor(
                 layout = computePipeline.getBindGroupLayout(0),
-                entries = arrayOf(
+                entries = listOf(
                     BindGroupDescriptor.BindGroupEntry(
                         binding = 0,
                         resource = BindGroupDescriptor.BufferBinding(

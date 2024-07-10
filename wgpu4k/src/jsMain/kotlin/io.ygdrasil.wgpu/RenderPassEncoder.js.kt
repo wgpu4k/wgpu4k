@@ -40,7 +40,7 @@ actual class RenderPassEncoder(private val handler: GPURenderPassEncoder) : Auto
 		handler.setIndexBuffer(buffer.handler, indexFormat.name, offset, size)
 	}
 
-	actual fun executeBundles(bundles: Array<RenderBundle>) {
+	actual fun executeBundles(bundles: List<RenderBundle>) {
 		handler.executeBundles(bundles.map { it.handler }.toTypedArray())
 	}
 

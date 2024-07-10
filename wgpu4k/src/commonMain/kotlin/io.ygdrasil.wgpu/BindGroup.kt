@@ -9,7 +9,7 @@ expect class BindGroup : AutoCloseable {
 
 data class BindGroupDescriptor(
 	val layout: BindGroupLayout,
-	val entries: Array<BindGroupEntry>,
+	val entries: List<BindGroupEntry>,
 	val label: String? = null
 ) {
 

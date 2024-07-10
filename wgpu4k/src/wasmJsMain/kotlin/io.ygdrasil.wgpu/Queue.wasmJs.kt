@@ -2,6 +2,9 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPUQueue
 import io.ygdrasil.wgpu.internal.js.toJsArray
+import io.ygdrasil.wgpu.internal.js.toJsNumber
+import org.khronos.webgl.Float32Array
+import org.khronos.webgl.Int32Array
 
 actual class Queue(internal val handler: GPUQueue) {
 
@@ -16,7 +19,13 @@ actual class Queue(internal val handler: GPUQueue) {
         dataOffset: GPUSize64,
         size: GPUSize64
     ) {
-        TODO("Not yet implemented")
+        handler.writeBuffer(
+            buffer.handler,
+            bufferOffset,
+            Float32Array(data.map { it.toJsNumber() }.toJsArray()),
+            dataOffset,
+            size
+        )
     }
 
     actual fun writeBuffer(
@@ -26,7 +35,13 @@ actual class Queue(internal val handler: GPUQueue) {
         dataOffset: GPUSize64,
         size: GPUSize64
     ) {
-        TODO("Not yet implemented")
+        handler.writeBuffer(
+            buffer.handler,
+            bufferOffset,
+            Int32Array(data.map { it.toJsNumber() }.toJsArray()),
+            dataOffset,
+            size
+        )
     }
 
     actual fun copyExternalImageToTexture(

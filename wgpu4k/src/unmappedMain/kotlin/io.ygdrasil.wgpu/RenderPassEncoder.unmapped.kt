@@ -31,7 +31,7 @@ actual class RenderPassEncoder: AutoCloseable {
         TODO("Not yet implemented")
     }
 
-    actual fun executeBundles(bundles: Array<RenderBundle>) {
+    actual fun executeBundles(bundles: List<RenderBundle>) {
         TODO("Not yet implemented")
     }
 

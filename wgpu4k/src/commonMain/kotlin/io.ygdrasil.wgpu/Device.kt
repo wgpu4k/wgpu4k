@@ -39,7 +39,7 @@ expect class Device : AutoCloseable {
  *
  */
 data class BindGroupLayoutDescriptor(
-    val entries: Array<Entry>,
+    val entries: List<Entry>,
     val label: String? = null,
 ) {
     data class Entry(
@@ -51,25 +51,25 @@ data class BindGroupLayoutDescriptor(
         sealed interface BindingType
 
         data class BufferBindingLayout(
-            var type: BufferBindingType = BufferBindingType.uniform,
-            var hasDynamicOffset: Boolean = false,
-            var minBindingSize: GPUSize64 = 0,
+            val type: BufferBindingType = BufferBindingType.uniform,
+            val hasDynamicOffset: Boolean = false,
+            val minBindingSize: GPUSize64 = 0,
         ) : BindingType
 
         data class SamplerBindingLayout(
-            var type: SamplerBindingType = SamplerBindingType.filtering,
+            val type: SamplerBindingType = SamplerBindingType.filtering,
         ) : BindingType
 
         data class TextureBindingLayout(
-            var sampleType: TextureSampleType = TextureSampleType.float,
-            var viewDimension: TextureViewDimension = TextureViewDimension._2d,
-            var multisampled: Boolean = false,
+            val sampleType: TextureSampleType = TextureSampleType.float,
+            val viewDimension: TextureViewDimension = TextureViewDimension._2d,
+            val multisampled: Boolean = false,
         ) : BindingType
 
         data class StorageTextureBindingLayout(
-            var format: TextureFormat,
-            var access: StorageTextureAccess = StorageTextureAccess.writeonly,
-            var viewDimension: TextureViewDimension = TextureViewDimension._2d,
+            val format: TextureFormat,
+            val access: StorageTextureAccess = StorageTextureAccess.writeonly,
+            val viewDimension: TextureViewDimension = TextureViewDimension._2d,
         ) : BindingType
 
     }

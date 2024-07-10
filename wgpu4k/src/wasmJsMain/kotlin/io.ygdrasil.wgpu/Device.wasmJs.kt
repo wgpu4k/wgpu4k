@@ -1,8 +1,19 @@
 package io.ygdrasil.wgpu
 
+import io.ygdrasil.wgpu.internal.js.GPUBindGroup
+import io.ygdrasil.wgpu.internal.js.GPUBindGroupDescriptor
 import io.ygdrasil.wgpu.internal.js.GPUDevice
 import io.ygdrasil.wgpu.mapper.map
 
+private fun debug(handler: GPUDevice, it: GPUBindGroupDescriptor): GPUBindGroup = js(
+    """{
+    try {
+      return handler.createBindGroup(it);
+    } catch (error) {
+      console.log('Caught an error:', error);
+    }
+}"""
+)
 
 actual class Device(internal val handler: GPUDevice) : AutoCloseable {
     actual val queue: Queue by lazy { Queue(handler.queue) }
@@ -38,9 +49,9 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
         .let { handler.createTexture(it) }
         .let(::Texture)
 
-    actual fun createBindGroup(descriptor: BindGroupDescriptor): BindGroup {
-        TODO("Not yet implemented")
-    }
+    actual fun createBindGroup(descriptor: BindGroupDescriptor): BindGroup = map(descriptor)
+        .let { handler.createBindGroup(it) }
+        .let(::BindGroup)
 
     actual fun createSampler(descriptor: SamplerDescriptor): Sampler {
         TODO("Not yet implemented")
@@ -63,9 +74,11 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
     }
 
     actual suspend fun poll() {
+        TODO("Not yet implemented")
     }
 
     actual override fun close() {
+        // Nothing to do Js
     }
 
 }

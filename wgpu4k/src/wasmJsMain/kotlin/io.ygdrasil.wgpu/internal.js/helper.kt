@@ -1,9 +1,17 @@
 package io.ygdrasil.wgpu.internal.js
 
 private fun infer(value: UInt): JsNumber = js("value")
+private fun infer(value: Float): JsNumber = js("value")
+private fun infer(value: Double): JsNumber = js("value")
 private fun infer(value: Long): JsNumber = js("Number(value)")
 
 private fun inferBig(value: Long): JsBigInt = js("BigInt(value)")
+
+fun Double.toJsNumber(): JsNumber =
+    infer(this)
+
+fun Float.toJsNumber(): JsNumber =
+    infer(this)
 
 fun UInt.toJsNumber(): JsNumber =
     infer(this)

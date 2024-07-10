@@ -1,6 +1,9 @@
 package io.ygdrasil.wgpu
 
-actual class BindGroup : AutoCloseable {
+import io.ygdrasil.wgpu.internal.js.GPUBindGroup
+
+actual class BindGroup(internal val handler: GPUBindGroup) : AutoCloseable {
+
     actual override fun close() {
         // Nothing to do on JS
     }

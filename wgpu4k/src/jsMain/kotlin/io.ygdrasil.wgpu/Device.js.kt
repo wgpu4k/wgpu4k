@@ -40,10 +40,9 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
         .let { handler.createTexture(it) }
         .let(::Texture)
 
-    actual fun createBindGroup(descriptor: BindGroupDescriptor): BindGroup =
-        descriptor.convert()
-            .let { handler.createBindGroup(it) }
-            .let(::BindGroup)
+    actual fun createBindGroup(descriptor: BindGroupDescriptor): BindGroup = map(descriptor)
+        .let { handler.createBindGroup(it) }
+        .let(::BindGroup)
 
     actual fun createSampler(descriptor: SamplerDescriptor): Sampler =
         descriptor.convert()
@@ -112,27 +111,6 @@ private fun SamplerDescriptor.convert(): GPUSamplerDescriptor = object : GPUSamp
     override var lodMaxClamp: Number? = this@convert.lodMaxClamp
     override var compare: String? = this@convert.compare?.stringValue ?: undefined
     override var maxAnisotropy: Number? = this@convert.maxAnisotropy
-}
-
-private fun BindGroupDescriptor.convert(): GPUBindGroupDescriptor = object : GPUBindGroupDescriptor {
-    override var label: String? = this@convert.label ?: undefined
-    override var layout: GPUBindGroupLayout = this@convert.layout.handler
-    override var entries: Array<GPUBindGroupEntry> = this@convert.entries.map { it.convert() }.toTypedArray()
-}
-
-private fun BindGroupDescriptor.BindGroupEntry.convert(): GPUBindGroupEntry = object : GPUBindGroupEntry {
-    override var binding: GPUIndex32 = this@convert.binding
-    override var resource: dynamic = when (val localResource = this@convert.resource) {
-        is BindGroupDescriptor.SamplerBinding -> localResource.sampler.handler
-        is BindGroupDescriptor.BufferBinding -> object : GPUBufferBinding {
-            override var buffer: GPUBuffer = localResource.buffer.handler
-            override var offset: GPUSize64? = localResource.offset
-            override var size: GPUSize64? = localResource.size
-        }
-
-        is BindGroupDescriptor.TextureViewBinding -> localResource.view.handler
-        else -> null
-    }
 }
 
 /*** PipelineLayoutDescriptor ***/

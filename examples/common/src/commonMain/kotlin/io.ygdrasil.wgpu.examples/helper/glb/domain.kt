@@ -248,14 +248,14 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
 
         val bindGroupLayout = device.createBindGroupLayout(
             BindGroupLayoutDescriptor(
-                entries = layoutEntries.toTypedArray()
+                entries = layoutEntries
             )
         )
 
         bindGroup = device.createBindGroup(
             BindGroupDescriptor(
                 layout = bindGroupLayout,
-                entries = bindGroupEntries.toTypedArray()
+                entries = bindGroupEntries
             )
         )
 
@@ -329,7 +329,7 @@ class GLBModel(val nodes: List<GLTFNode>) {
         viewParamsLayout: BindGroupLayout,
         viewParamsBindGroup: BindGroup,
         swapChainFormat: String,
-    ): Array<RenderBundle> {
+    ): List<RenderBundle> {
         val renderBundles = mutableListOf<RenderBundle>()
         nodes.forEach { node ->
             val bundle = node.buildRenderBundle(
@@ -342,7 +342,7 @@ class GLBModel(val nodes: List<GLTFNode>) {
             )
             renderBundles.add(bundle)
         }
-        return renderBundles.toTypedArray()
+        return renderBundles
     }
 }
 
@@ -372,7 +372,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
     ): RenderBundle {
         val nodeParamsLayout = device.createBindGroupLayout(
             BindGroupLayoutDescriptor(
-                entries = arrayOf(
+                entries = listOf(
                     Entry(
                         binding = 0,
                         visibility = setOf(ShaderStage.vertex),
@@ -385,7 +385,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
         bindGroup = device.createBindGroup(
             BindGroupDescriptor(
                 layout = nodeParamsLayout,
-                entries = arrayOf(
+                entries = listOf(
                     BindGroupEntry(
                         binding = 0,
                         resource = BufferBinding(

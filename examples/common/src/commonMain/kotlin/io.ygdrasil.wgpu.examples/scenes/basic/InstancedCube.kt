@@ -110,7 +110,7 @@ class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		uniformBindGroup = device.createBindGroup(
 			BindGroupDescriptor(
 				layout = renderPipeline.getBindGroupLayout(0),
-				entries = arrayOf(
+				entries = listOf(
 					BindGroupDescriptor.BindGroupEntry(
 						binding = 0,
 						resource = BindGroupDescriptor.BufferBinding(

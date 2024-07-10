@@ -17,7 +17,7 @@ import kotlin.math.PI
 
 class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene(wgpuContext), AssetManager by assetManager {
 
-    internal lateinit var renderBundles: Array<RenderBundle>
+    internal lateinit var renderBundles: List<RenderBundle>
     internal lateinit var viewParamBuf: Buffer
     internal lateinit var projectionMatrix: Matrix4
     internal lateinit var renderPassDesc: RenderPassDescriptor
@@ -57,7 +57,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
 
         val viewParamsLayout = device.createBindGroupLayout(
             BindGroupLayoutDescriptor(
-                entries = arrayOf(
+                entries = listOf(
                     Entry(
                         binding = 0,
                         visibility = setOf(ShaderStage.vertex),
@@ -76,7 +76,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
         val viewParamsBindGroup = device.createBindGroup(
             BindGroupDescriptor(
                 layout = viewParamsLayout,
-                entries = arrayOf(
+                entries = listOf(
                     BindGroupEntry(
                         binding = 0,
                         resource = BindGroupDescriptor.BufferBinding(buffer = viewParamBuf)

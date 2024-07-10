@@ -2,6 +2,7 @@ package io.ygdrasil.wgpu.internal.js
 
 import io.ygdrasil.wgpu.*
 import org.khronos.webgl.ArrayBuffer
+import org.khronos.webgl.ArrayBufferView
 import org.w3c.dom.HTMLCanvasElement
 import kotlin.js.Promise
 
@@ -32,6 +33,7 @@ external interface GPUAdapter : JsAny {
 
 external class GPUDevice : JsAny {
     var queue: GPUQueue
+    fun createBindGroup(descriptor: GPUBindGroupDescriptor): GPUBindGroup
     fun createTexture(descriptor: GPUTextureDescriptor): GPUTexture
     fun createBuffer(descriptor: GPUBufferDescriptor): GPUBuffer
     fun createRenderPipeline(canvasConfiguration: GPURenderPipelineDescriptor): GPURenderPipeline
@@ -47,17 +49,27 @@ external interface GPUCommandEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebug
 external interface GPURenderPassEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin,
     GPUBindingCommandsMixin, GPURenderCommandsMixin {
 
+    fun executeBundles(bundles: JsArray<GPURenderBundle>)
     fun end()
 }
 
+external interface GPUBindGroupDescriptor : GPUObjectDescriptorBase {
+    var layout: GPUBindGroupLayout
+    var entries: JsArray<GPUBindGroupEntry>
+}
+external interface GPUBindGroupEntry : JsAny {
+    var binding: GPUIndex32
+    var resource: JsAny
+}
+
 external interface GPUBufferDescriptor : GPUObjectDescriptorBase {
-    var size: GPUSize64
+    var size: JsNumber
     var usage: GPUBufferUsageFlags
     var mappedAtCreation: Boolean
 }
 
 external interface GPUBuffer : GPUObjectBase {
-    var size: GPUSize64Out
+    var size: JsBigInt
     var usage: GPUFlagsConstant
     var mapState: String /* "unmapped" | "pending" | "mapped" */
     fun mapAsync(mode: GPUMapModeFlags, offset: GPUSize64, size: GPUSize64): Promise<JsAny?>
@@ -81,14 +93,39 @@ external interface GPUExtent3DDict : JsAny {
     var depthOrArrayLayers: GPUIntegerCoordinate
 }
 
+external interface GPURenderBundle : GPUObjectBase
+external interface GPUBindGroup : GPUObjectBase
+
 typealias GPUCommandBufferDescriptor = GPUObjectDescriptorBase
 
 external interface GPUCommandBuffer : GPUObjectBase
 
-external interface GPUBindingCommandsMixin
+external interface GPUBindingCommandsMixin {
+    fun setBindGroup(index: GPUIndex32, bindGroup: GPUBindGroup?)
+}
 
 external interface GPURenderCommandsMixin {
     fun setPipeline(pipeline: GPURenderPipeline)
+
+    fun setVertexBuffer(
+        slot: GPUIndex32,
+        buffer: GPUBuffer?,
+        offset: GPUSize64 = definedExternally,
+        size: GPUSize64 = definedExternally,
+    )
+
+    fun setIndexBuffer(
+        buffer: GPUBuffer,
+        indexFormat: String, /* "uint16" | "uint32" */
+        offset: GPUSize64 = definedExternally,
+        size: GPUSize64 = definedExternally,
+    )
+    fun draw(
+        vertexCount: GPUSize32,
+        instanceCount: GPUSize32 = definedExternally,
+        firstVertex: GPUSize32 = definedExternally,
+        firstInstance: GPUSize32 = definedExternally,
+    )
 }
 
 external interface GPUDebugCommandsMixin {
@@ -150,15 +187,17 @@ external interface GPUTextureView : GPUObjectBase
 
 external interface GPUQueue : GPUObjectBase {
     fun submit(commandBuffers: JsArray<GPUCommandBuffer>)
+    fun writeBuffer(
+        buffer: GPUBuffer,
+        bufferOffset: GPUSize64,
+        data: ArrayBufferView,
+        dataOffset: GPUSize64 = definedExternally,
+        size: GPUSize64 = definedExternally,
+    )
 }
 
 external interface GPUCommandsMixin {
-    fun draw(
-        vertexCount: GPUSize32,
-        instanceCount: GPUSize32 = definedExternally,
-        firstVertex: GPUSize32 = definedExternally,
-        firstInstance: GPUSize32 = definedExternally,
-    )
+
 }
 
 external interface GPURenderPipelineDescriptor : GPUPipelineDescriptorBase {
@@ -295,6 +334,11 @@ external interface GPUCompilationMessage : JsAny {
     var length: JsNumber
 }
 
+external interface GPUBufferBinding : JsAny {
+    var buffer: GPUBuffer
+    var offset: JsNumber
+    var size: JsNumber
+}
 
 external interface GPUPipelineDescriptorBase : GPUObjectDescriptorBase {
     var layout: JsAny /* GPUPipelineLayout | "auto" */
@@ -337,3 +381,5 @@ external interface GPUTexture {
 }
 
 external interface GPURequestAdapterOptions
+
+external interface GPUSampler : GPUObjectBase
