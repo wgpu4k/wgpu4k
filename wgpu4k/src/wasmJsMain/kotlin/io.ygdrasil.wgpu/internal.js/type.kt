@@ -69,11 +69,11 @@ external interface GPUBufferDescriptor : GPUObjectDescriptorBase {
 }
 
 external interface GPUBuffer : GPUObjectBase {
-    var size: JsBigInt
+    var size: JsNumber
     var usage: GPUFlagsConstant
     var mapState: String /* "unmapped" | "pending" | "mapped" */
-    fun mapAsync(mode: GPUMapModeFlags, offset: GPUSize64, size: GPUSize64): Promise<JsAny?>
-    fun getMappedRange(offset: GPUSize64 = definedExternally, size: GPUSize64 = definedExternally): ArrayBuffer
+    fun mapAsync(mode: GPUMapModeFlags, offset: JsNumber, size: JsNumber): Promise<JsAny?>
+    fun getMappedRange(offset: JsNumber = definedExternally, size: JsNumber = definedExternally): ArrayBuffer
     fun unmap()
 }
 
@@ -110,15 +110,15 @@ external interface GPURenderCommandsMixin {
     fun setVertexBuffer(
         slot: GPUIndex32,
         buffer: GPUBuffer?,
-        offset: GPUSize64 = definedExternally,
-        size: GPUSize64 = definedExternally,
+        offset: JsNumber = definedExternally,
+        size: JsNumber = definedExternally,
     )
 
     fun setIndexBuffer(
         buffer: GPUBuffer,
         indexFormat: String, /* "uint16" | "uint32" */
-        offset: GPUSize64 = definedExternally,
-        size: GPUSize64 = definedExternally,
+        offset: JsNumber = definedExternally,
+        size: JsNumber = definedExternally,
     )
     fun draw(
         vertexCount: GPUSize32,
@@ -150,7 +150,7 @@ external interface GPURenderPassTimestampWrites {
 
 external interface GPURenderPassColorAttachment : JsAny {
     var view: GPUTextureView
-    var depthSlice: GPUIntegerCoordinate
+    var depthSlice: JsNumber
     var resolveTarget: GPUTextureView
     var clearValue: GPUColorDict
     var loadOp: String /* "load" | "clear" */
@@ -167,12 +167,12 @@ external interface GPUColorDict : JsAny {
 external interface GPURenderPassDepthStencilAttachment : JsAny {
     var view: GPUTextureView
     var depthClearValue: Float
-    var depthLoadOp: String? /* "load" | "clear" */
-    var depthStoreOp: String? /* "store" | "discard" */
+    var depthLoadOp: String
+    var depthStoreOp: String
     var depthReadOnly: Boolean?
-    var stencilClearValue: GPUStencilValue
-    var stencilLoadOp: String? /* "load" | "clear" */
-    var stencilStoreOp: String? /* "store" | "discard" */
+    var stencilClearValue: JsNumber
+    var stencilLoadOp: String
+    var stencilStoreOp: String
     var stencilReadOnly: Boolean?
 
 }
@@ -251,8 +251,8 @@ external interface GPUDepthStencilState : JsAny {
     var depthCompare: JsString
     var stencilFront: GPUStencilFaceState
     var stencilBack: GPUStencilFaceState
-    var stencilReadMask: JsBigInt
-    var stencilWriteMask: JsBigInt
+    var stencilReadMask: JsNumber
+    var stencilWriteMask: JsNumber
     var depthBias: JsNumber
     var depthBiasSlopeScale: Float
     var depthBiasClamp: Float
@@ -290,14 +290,14 @@ external interface GPUVertexState : GPUProgrammableStage {
 }
 
 external interface GPUVertexBufferLayout : JsAny {
-    var arrayStride: JsBigInt
+    var arrayStride: JsNumber
     var stepMode: String /* "vertex" | "instance" */
     var attributes: JsArray<GPUVertexAttribute>
 }
 
 external interface GPUVertexAttribute : JsAny {
     var format: String
-    var offset: JsBigInt
+    var offset: JsNumber
     var shaderLocation: JsNumber
 }
 

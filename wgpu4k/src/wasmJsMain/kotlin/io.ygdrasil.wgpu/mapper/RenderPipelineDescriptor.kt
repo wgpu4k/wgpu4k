@@ -25,7 +25,7 @@ private fun map(input: RenderPipelineDescriptor.VertexState): GPUVertexState = c
 
 private fun map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout): GPUVertexBufferLayout =
     createJsObject<GPUVertexBufferLayout>().apply {
-        arrayStride = input.arrayStride.toJsBigInt()
+        arrayStride = input.arrayStride.toJsNumber()
         attributes = input.attributes.map { map(it) }.toJsArray()
         stepMode = input.stepMode.name
     }
@@ -33,7 +33,7 @@ private fun map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout):
 private fun map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute): GPUVertexAttribute =
     createJsObject<GPUVertexAttribute>().apply {
         format = input.format.name
-        offset = input.offset.toJsBigInt()
+        offset = input.offset.toJsNumber()
         shaderLocation = input.shaderLocation.toJsNumber()
     }
 
@@ -53,8 +53,8 @@ private fun map(input: RenderPipelineDescriptor.DepthStencilState): GPUDepthSten
         if (input.depthCompare?.stringValue != null) depthCompare = input.depthCompare.stringValue.toJsString()
         stencilFront = map(input.stencilFront)
         stencilBack = map(input.stencilBack)
-        stencilReadMask = input.stencilReadMask.toJsBigInt()
-        stencilWriteMask = input.stencilWriteMask.toJsBigInt()
+        stencilReadMask = input.stencilReadMask.toJsNumber()
+        stencilWriteMask = input.stencilWriteMask.toJsNumber()
         depthBias = input.depthBias.toJsNumber()
         depthBiasSlopeScale = input.depthBiasSlopeScale
         depthBiasClamp = input.depthBiasClamp

@@ -152,6 +152,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			frame / 100.0,
 			projectionMatrix
 		)
+
 		device.queue.writeBuffer(
 			uniformBuffer,
 			0,
@@ -175,6 +176,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 		val renderPassEncoder = encoder.beginRenderPass(renderPassDescriptor)
 			.bind()
+
 		renderPassEncoder.setPipeline(renderPipeline)
 		renderPassEncoder.setBindGroup(0, uniformBindGroup)
 		renderPassEncoder.setVertexBuffer(0, verticesBuffer)

@@ -2,6 +2,7 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPURenderPassEncoder
 import io.ygdrasil.wgpu.internal.js.toJsArray
+import io.ygdrasil.wgpu.internal.js.toJsNumber
 
 actual class RenderPassEncoder(internal val handler: GPURenderPassEncoder): AutoCloseable {
 
@@ -36,7 +37,7 @@ actual class RenderPassEncoder(internal val handler: GPURenderPassEncoder): Auto
     }
 
     actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
-        handler.setIndexBuffer(buffer.handler, indexFormat.name, offset, size)
+        handler.setIndexBuffer(buffer.handler, indexFormat.name, offset.toJsNumber(), size.toJsNumber())
     }
 
     actual fun executeBundles(bundles: List<RenderBundle>) {

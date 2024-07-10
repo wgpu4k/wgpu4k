@@ -21,7 +21,7 @@ private fun map(input: RenderPassDescriptor.RenderPassDepthStencilAttachment): G
         if (input.depthLoadOp != null) depthLoadOp = input.depthLoadOp.name
         if (input.depthStoreOp != null) depthStoreOp = input.depthStoreOp.name
         depthReadOnly = input.depthReadOnly
-        stencilClearValue = input.stencilClearValue
+        stencilClearValue = input.stencilClearValue.toJsNumber()
         if (input.stencilLoadOp != null) stencilLoadOp = input.stencilLoadOp.name
         if (input.stencilStoreOp != null) stencilStoreOp = input.stencilStoreOp.name
         stencilReadOnly = input.stencilReadOnly
@@ -32,7 +32,7 @@ private fun map(input: RenderPassDescriptor.ColorAttachment): GPURenderPassColor
         view = input.view.handler
         loadOp = input.loadOp.name
         storeOp = input.storeOp.name
-        if (input.depthSlice != null) depthSlice = input.depthSlice
+        if (input.depthSlice != null) depthSlice = input.depthSlice.toJsNumber()
         if (input.resolveTarget != null) resolveTarget = input.resolveTarget.handler
         clearValue = map(input.clearValue)
     }
