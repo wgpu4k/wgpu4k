@@ -189,10 +189,10 @@ external interface GPUQueue : GPUObjectBase {
     fun submit(commandBuffers: JsArray<GPUCommandBuffer>)
     fun writeBuffer(
         buffer: GPUBuffer,
-        bufferOffset: GPUSize64,
+        bufferOffset: JsNumber,
         data: ArrayBufferView,
-        dataOffset: GPUSize64 = definedExternally,
-        size: GPUSize64 = definedExternally,
+        dataOffset: JsNumber = definedExternally,
+        size: JsNumber = definedExternally,
     )
 }
 

@@ -21,10 +21,10 @@ actual class Queue(internal val handler: GPUQueue) {
     ) {
         handler.writeBuffer(
             buffer.handler,
-            bufferOffset,
+            bufferOffset.toJsNumber(),
             Float32Array(data.map { it.toJsNumber() }.toJsArray()),
-            dataOffset,
-            size
+            dataOffset.toJsNumber(),
+            size.toJsNumber()
         )
     }
 
@@ -37,10 +37,10 @@ actual class Queue(internal val handler: GPUQueue) {
     ) {
         handler.writeBuffer(
             buffer.handler,
-            bufferOffset,
+            bufferOffset.toJsNumber(),
             Int32Array(data.map { it.toJsNumber() }.toJsArray()),
-            dataOffset,
-            size
+            dataOffset.toJsNumber(),
+            size.toJsNumber()
         )
     }
 
