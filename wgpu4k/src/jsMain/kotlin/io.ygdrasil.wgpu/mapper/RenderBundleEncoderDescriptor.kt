@@ -1,14 +1,14 @@
 package io.ygdrasil.wgpu.mapper
 
-import io.ygdrasil.wgpu.GPUSize32
 import io.ygdrasil.wgpu.RenderBundleEncoderDescriptor
 import io.ygdrasil.wgpu.internal.js.GPURenderBundleEncoderDescriptor
+import io.ygdrasil.wgpu.internal.js.createJsObject
 
-internal fun map(input: RenderBundleEncoderDescriptor): GPURenderBundleEncoderDescriptor = object : GPURenderBundleEncoderDescriptor{
-    override var depthReadOnly: Boolean? = input.depthReadOnly
-    override var stencilReadOnly: Boolean? = input.stencilReadOnly
-    override var colorFormats: Array<String> = input.colorFormats.map { it.actualName }.toTypedArray()
-    override var depthStencilFormat: String? = input.depthStencilFormat.actualName
-    override var sampleCount: GPUSize32? = input.sampleCount
-    override var label: String? = input.label ?: undefined
+internal fun map(input: RenderBundleEncoderDescriptor): GPURenderBundleEncoderDescriptor = createJsObject<GPURenderBundleEncoderDescriptor>().apply{
+    depthReadOnly = input.depthReadOnly
+    stencilReadOnly = input.stencilReadOnly
+    colorFormats = input.colorFormats.map { it.actualName }.toTypedArray()
+    depthStencilFormat = input.depthStencilFormat.actualName
+    sampleCount = input.sampleCount
+    if (input.label != null) label = input.label
 }

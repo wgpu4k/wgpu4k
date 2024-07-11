@@ -48,5 +48,4 @@ actual class RenderPassEncoder(private val handler: GPURenderPassEncoder) : Auto
 		// Nothing to do
 	}
 
-
 }
