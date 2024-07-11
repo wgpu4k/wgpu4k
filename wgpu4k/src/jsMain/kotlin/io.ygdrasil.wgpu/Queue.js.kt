@@ -58,26 +58,25 @@ actual class Queue(internal val handler: GPUQueue) {
 		val bytePerPixel = destination.texture.format.getBytesPerPixel()
 
 		handler.writeTexture(
-			object : GPUImageCopyTexture {
-				override var texture: GPUTexture = destination.texture.handler
-				override var mipLevel: GPUIntegerCoordinate = destination.mipLevel
-				override var origin: Array<GPUIntegerCoordinate> = destination.origin.toArray()
-				override var aspect: String = destination.aspect.stringValue
+			createJsObject<GPUImageCopyTexture>().apply {
+				texture = destination.texture.handler
+				mipLevel = destination.mipLevel
+				origin = destination.origin.toArray()
+				aspect= destination.aspect.stringValue
 			},
 			image.data.unsafeCast<ArrayBuffer>(),
-			object : GPUImageDataLayout {
-				override var offset: GPUSize64? = 0
-				override var bytesPerRow: GPUSize32? = image.width * bytePerPixel
-				override var rowsPerImage: GPUSize32? = image.height
+			createJsObject<GPUImageDataLayout>().apply {
+				offset = 0
+				bytesPerRow = image.width * bytePerPixel
+				rowsPerImage = image.height
 			},
-			object : GPUExtent3DDict {
-				override var width: GPUIntegerCoordinate = image.width
-				override var height: GPUIntegerCoordinate? = image.height
-				override var depthOrArrayLayers: GPUIntegerCoordinate? = 1
+			createJsObject<GPUExtent3DDict>().apply {
+				width = image.width
+				height = image.height
+				depthOrArrayLayers = 1
 			}
 		)
 	}
-
 }
 
 

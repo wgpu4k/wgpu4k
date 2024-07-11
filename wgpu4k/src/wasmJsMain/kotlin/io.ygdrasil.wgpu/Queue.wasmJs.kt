@@ -1,10 +1,9 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUQueue
-import io.ygdrasil.wgpu.internal.js.toJsArray
-import io.ygdrasil.wgpu.internal.js.toJsNumber
+import io.ygdrasil.wgpu.internal.js.*
 import org.khronos.webgl.Float32Array
 import org.khronos.webgl.Int32Array
+import org.khronos.webgl.Int8Array
 
 actual class Queue(internal val handler: GPUQueue) {
 
@@ -49,9 +48,35 @@ actual class Queue(internal val handler: GPUQueue) {
         destination: ImageCopyTextureTagged,
         copySize: GPUIntegerCoordinates
     ) {
-        TODO("Not yet implemented")
-    }
+        if (destination.texture.format !in listOf(TextureFormat.rgba8unorm, TextureFormat.rgba8unormsrgb)) {
+            error("rgba8unorm asnd rgba8unormsrgb are the only supported texture format supported")
+        }
 
+        val image = (source.source as? ImageBitmapHolder)
+        if (image == null) error("ImageBitmapHolder required as source")
+
+        val bytePerPixel = destination.texture.format.getBytesPerPixel()
+
+        handler.writeTexture(
+            createJsObject<GPUImageCopyTexture>().apply {
+                texture = destination.texture.handler
+                mipLevel = destination.mipLevel
+                origin = destination.origin.toArray().map { it.toJsNumber() }.toJsArray()
+                aspect= destination.aspect.stringValue
+            },
+            Int8Array(image.data.map { it.toJsNumber() }.toJsArray()).buffer,
+            createJsObject<GPUImageDataLayout>().apply {
+                offset = 0.toJsNumber()
+                bytesPerRow = image.width * bytePerPixel
+                rowsPerImage = image.height
+            },
+            createJsObject<GPUExtent3DDict>().apply {
+                width = image.width
+                height = image.height
+                depthOrArrayLayers = 1
+            }
+        )
+    }
 }
 
 actual sealed interface DrawableHolder

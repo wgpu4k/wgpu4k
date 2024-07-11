@@ -1,6 +1,7 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPUCommandEncoder
+import io.ygdrasil.wgpu.internal.js.toJsArray
 import io.ygdrasil.wgpu.mapper.map
 
 actual class CommandEncoder(internal val handler: GPUCommandEncoder) : AutoCloseable {
@@ -16,28 +17,33 @@ actual class CommandEncoder(internal val handler: GPUCommandEncoder) : AutoClose
         destination: ImageCopyTexture,
         copySize: Size3D,
     ) {
-        TODO("Not yet implemented")
+        handler.copyTextureToTexture(
+            map(source),
+            map(destination),
+            copySize.toArray().map { it.toJsNumber() }.toJsArray()
+        )
     }
 
-    actual fun beginComputePass(descriptor: ComputePassDescriptor?): ComputePassEncoder {
-        TODO("Not yet implemented")
+    actual fun copyTextureToBuffer(source: ImageCopyTexture, destination: ImageCopyBuffer, copySize: Size3D) {
+        handler.copyTextureToBuffer(
+            map(source),
+            map(destination),
+            copySize.toArray().map { it.toJsNumber() }.toJsArray()
+        )
     }
 
-    actual fun copyTextureToBuffer(
-        source: ImageCopyTexture,
-        destination: ImageCopyBuffer,
-        copySize: Size3D,
-    ) {
-        TODO("Not yet implemented")
+    actual fun copyBufferToTexture(source: ImageCopyBuffer, destination: ImageCopyTexture, copySize: Size3D) {
+        handler.copyBufferToTexture(
+            map(source),
+            map(destination),
+            copySize.toArray().map { it.toJsNumber() }.toJsArray()
+        )
     }
 
-    actual fun copyBufferToTexture(
-        source: ImageCopyBuffer,
-        destination: ImageCopyTexture,
-        copySize: Size3D,
-    ) {
-        TODO("Not yet implemented")
-    }
+    actual fun beginComputePass(descriptor: ComputePassDescriptor?): ComputePassEncoder =
+        descriptor?.let { map(it) }
+            .let { if (it != null) handler.beginComputePass(it) else handler.beginComputePass() }
+            .let { ComputePassEncoder(it) }
 
     actual override fun close() {
         // nothing to do here

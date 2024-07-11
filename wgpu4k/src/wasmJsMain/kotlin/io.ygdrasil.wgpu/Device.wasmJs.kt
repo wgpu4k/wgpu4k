@@ -2,6 +2,7 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPUDevice
 import io.ygdrasil.wgpu.mapper.map
+import kotlinx.coroutines.await
 
 actual class Device(internal val handler: GPUDevice) : AutoCloseable {
     actual val queue: Queue by lazy { Queue(handler.queue) }
@@ -41,28 +42,33 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
         .let { handler.createBindGroup(it) }
         .let(::BindGroup)
 
-    actual fun createSampler(descriptor: SamplerDescriptor): Sampler {
-        TODO("Not yet implemented")
-    }
+    actual fun createSampler(descriptor: SamplerDescriptor): Sampler =
+        map(descriptor)
+            .let { handler.createSampler(it) }
+            .let(::Sampler)
 
-    actual fun createComputePipeline(descriptor: ComputePipelineDescriptor): ComputePipeline {
-        TODO("Not yet implemented")
-    }
+    actual fun createComputePipeline(descriptor: ComputePipelineDescriptor): ComputePipeline =
+        map(descriptor)
+            .let { handler.createComputePipeline(it) }
+            .let(::ComputePipeline)
 
-    actual fun createBindGroupLayout(descriptor: BindGroupLayoutDescriptor): BindGroupLayout {
-        TODO("Not yet implemented")
-    }
+    actual fun createBindGroupLayout(descriptor: BindGroupLayoutDescriptor): BindGroupLayout =
+        map(descriptor)
+            .let { handler.createBindGroupLayout(it) }
+            .let(::BindGroupLayout)
 
-    actual fun createRenderBundleEncoder(descriptor: RenderBundleEncoderDescriptor): RenderBundleEncoder {
-        TODO("Not yet implemented")
-    }
+    actual fun createRenderBundleEncoder(descriptor: RenderBundleEncoderDescriptor): RenderBundleEncoder =
+        map(descriptor)
+            .let { handler.createRenderBundleEncoder(it) }
+            .let(::RenderBundleEncoder)
 
-    actual fun createQuerySet(descriptor: QuerySetDescriptor): QuerySet {
-        TODO("Not yet implemented")
-    }
+    actual fun createQuerySet(descriptor: QuerySetDescriptor): QuerySet =
+        map(descriptor)
+            .let { handler.createQuerySet(it) }
+            .let(::QuerySet)
 
     actual suspend fun poll() {
-        TODO("Not yet implemented")
+        queue.handler.onSubmittedWorkDone().await<Nothing>()
     }
 
     actual override fun close() {

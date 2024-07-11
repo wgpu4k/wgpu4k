@@ -3,6 +3,7 @@ package io.ygdrasil.wgpu.internal.js
 import io.ygdrasil.wgpu.*
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.ArrayBufferView
+import org.khronos.webgl.Uint32Array
 import org.w3c.dom.HTMLCanvasElement
 import kotlin.js.Promise
 
@@ -39,11 +40,89 @@ external class GPUDevice : JsAny {
     fun createRenderPipeline(canvasConfiguration: GPURenderPipelineDescriptor): GPURenderPipeline
     fun createShaderModule(descriptor: GPUShaderModuleDescriptor): GPUShaderModule
     fun createCommandEncoder(descriptor: GPUCommandEncoderDescriptor = definedExternally): GPUCommandEncoder
+    fun createSampler(descriptor: GPUSamplerDescriptor = definedExternally): GPUSampler
+    fun createComputePipeline(descriptor: GPUComputePipelineDescriptor): GPUComputePipeline
+    fun createBindGroupLayout(descriptor: GPUBindGroupLayoutDescriptor): GPUBindGroupLayout
+    fun createRenderBundleEncoder(descriptor: GPURenderBundleEncoderDescriptor): GPURenderBundleEncoder
+    fun createQuerySet(descriptor: GPUQuerySetDescriptor): GPUQuerySet
 }
+
+external interface GPUQuerySetDescriptor : GPUObjectDescriptorBase {
+    var type: String
+    var count: GPUSize32
+}
+
+external interface GPUComputePipelineDescriptor : GPUPipelineDescriptorBase {
+    var compute: GPUProgrammableStage
+}
+
+external interface GPURenderBundleEncoderDescriptor : GPURenderPassLayout {
+    var depthReadOnly: Boolean
+    var stencilReadOnly: Boolean
+}
+
+external interface GPURenderPassLayout : GPUObjectDescriptorBase {
+    var colorFormats: JsArray<JsString>
+    var depthStencilFormat: String
+    var sampleCount: GPUSize32
+}
+
+external interface GPURenderBundleEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin,
+    GPUBindingCommandsMixin, GPURenderCommandsMixin {
+
+    fun finish(descriptor: GPURenderBundleDescriptor = definedExternally): GPURenderBundle
+}
+
+external interface GPUComputePipeline : GPUObjectBase, GPUPipelineBase
 
 external interface GPUCommandEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin {
     fun beginRenderPass(descriptor: GPURenderPassDescriptor): GPURenderPassEncoder
+    fun beginComputePass(descriptor: GPUComputePassDescriptor? = definedExternally): GPUComputePassEncoder
     fun finish(descriptor: GPUCommandBufferDescriptor = definedExternally): GPUCommandBuffer
+
+    fun copyTextureToTexture(
+        source: GPUImageCopyTexture,
+        destination: GPUImageCopyTexture,
+        copySize: JsArray<JsNumber>,
+    )
+
+    fun copyTextureToBuffer(
+        source: GPUImageCopyTexture,
+        destination: GPUImageCopyBuffer,
+        copySize: JsArray<JsNumber>,
+    )
+
+    fun copyBufferToTexture(
+        source: GPUImageCopyBuffer,
+        destination: GPUImageCopyTexture,
+        copySize: JsArray<JsNumber>,
+    )
+}
+
+external interface GPUComputePassEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin, GPUBindingCommandsMixin {
+    fun setPipeline(pipeline: GPUComputePipeline)
+    fun dispatchWorkgroups(
+        workgroupCountX: GPUSize32,
+        workgroupCountY: GPUSize32 = definedExternally,
+        workgroupCountZ: GPUSize32 = definedExternally,
+    )
+
+    fun dispatchWorkgroupsIndirect(indirectBuffer: GPUBuffer, indirectOffset: JsNumber)
+    fun end()
+}
+
+external interface GPUComputePassDescriptor : GPUObjectDescriptorBase {
+    var timestampWrites: GPUComputePassTimestampWrites
+}
+
+external interface GPUComputePassTimestampWrites {
+    var querySet: GPUQuerySet
+    var beginningOfPassWriteIndex: GPUSize32
+    var endOfPassWriteIndex: GPUSize32
+}
+
+external interface GPUImageCopyBuffer : GPUImageDataLayout {
+    var buffer: GPUBuffer
 }
 
 external interface GPURenderPassEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin,
@@ -51,6 +130,19 @@ external interface GPURenderPassEncoder : GPUObjectBase, GPUCommandsMixin, GPUDe
 
     fun executeBundles(bundles: JsArray<GPURenderBundle>)
     fun end()
+}
+
+external interface GPUSamplerDescriptor : GPUObjectDescriptorBase {
+    var addressModeU: String
+    var addressModeV: String
+    var addressModeW: String
+    var magFilter: String
+    var minFilter: String
+    var mipmapFilter: String
+    var lodMinClamp: JsNumber
+    var lodMaxClamp: JsNumber
+    var compare: String
+    var maxAnisotropy: JsNumber
 }
 
 external interface GPUBindGroupDescriptor : GPUObjectDescriptorBase {
@@ -102,6 +194,20 @@ external interface GPUCommandBuffer : GPUObjectBase
 
 external interface GPUBindingCommandsMixin {
     fun setBindGroup(index: GPUIndex32, bindGroup: GPUBindGroup?)
+
+    fun setBindGroup(
+        index: GPUIndex32,
+        bindGroup: GPUBindGroup?,
+        dynamicOffsets: JsArray<JsNumber>,
+    )
+
+    fun setBindGroup(
+        index: GPUIndex32,
+        bindGroup: GPUBindGroup?,
+        dynamicOffsetsData: Uint32Array,
+        dynamicOffsetsDataStart: JsNumber,
+        dynamicOffsetsDataLength: GPUSize32,
+    )
 }
 
 external interface GPURenderCommandsMixin {
@@ -126,7 +232,17 @@ external interface GPURenderCommandsMixin {
         firstVertex: GPUSize32 = definedExternally,
         firstInstance: GPUSize32 = definedExternally,
     )
+
+    fun drawIndexed(
+        indexCount: GPUSize32,
+        instanceCount: GPUSize32 = definedExternally,
+        firstIndex: GPUSize32 = definedExternally,
+        baseVertex: GPUSignedOffset32 = definedExternally,
+        firstInstance: GPUSize32 = definedExternally,
+    )
 }
+
+typealias GPURenderBundleDescriptor = GPUObjectDescriptorBase
 
 external interface GPUDebugCommandsMixin {
     fun pushDebugGroup(groupLabel: String)
@@ -194,11 +310,68 @@ external interface GPUQueue : GPUObjectBase {
         dataOffset: JsNumber = definedExternally,
         size: JsNumber = definedExternally,
     )
+
+    fun writeTexture(
+        destination: GPUImageCopyTexture,
+        data: ArrayBuffer,
+        dataLayout: GPUImageDataLayout,
+        size: GPUExtent3DDict,
+    )
+    fun onSubmittedWorkDone(): Promise<Nothing?>
 }
 
-external interface GPUCommandsMixin {
-
+external interface GPUImageDataLayout : JsAny {
+    var offset: JsNumber
+    var bytesPerRow: GPUSize32
+    var rowsPerImage: GPUSize32
 }
+
+external interface GPUImageCopyTexture : JsAny {
+    var texture: GPUTexture
+    var mipLevel: GPUIntegerCoordinate
+    var origin: JsArray<JsNumber>
+    var aspect: String
+}
+
+external interface GPUBindGroupLayoutDescriptor : GPUObjectDescriptorBase {
+    var entries: JsArray<GPUBindGroupLayoutEntry>
+}
+
+external interface GPUBindGroupLayoutEntry : JsAny {
+    var binding: GPUIndex32
+    var visibility: GPUShaderStageFlags
+    var buffer: GPUBufferBindingLayout
+    var sampler: GPUSamplerBindingLayout
+    var texture: GPUTextureBindingLayout
+    var storageTexture: GPUStorageTextureBindingLayout
+    var externalTexture: GPUExternalTextureBindingLayout
+}
+
+external interface GPUExternalTextureBindingLayout
+
+external interface GPUStorageTextureBindingLayout : JsAny {
+    var access: String
+    var format: String
+    var viewDimension: String
+}
+
+external interface GPUTextureBindingLayout : JsAny {
+    var sampleType: String
+    var viewDimension: String
+    var multisampled: Boolean
+}
+
+external interface GPUSamplerBindingLayout : JsAny {
+    var type: String
+}
+
+external interface GPUBufferBindingLayout : JsAny {
+    var type: String
+    var hasDynamicOffset: Boolean
+    var minBindingSize: JsNumber
+}
+
+external interface GPUCommandsMixin
 
 external interface GPURenderPipelineDescriptor : GPUPipelineDescriptorBase {
     var vertex: GPUVertexState

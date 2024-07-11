@@ -5,6 +5,7 @@ import io.ygdrasil.wgpu.internal.js.toJsArray
 import io.ygdrasil.wgpu.internal.js.toJsNumber
 import org.khronos.webgl.Float32Array
 import org.khronos.webgl.Int8Array
+import org.khronos.webgl.get
 
 actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
 
@@ -30,7 +31,10 @@ actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
     }
 
     actual fun mapInto(buffer: ByteArray, offset: Int) {
-        TODO("Not yet implemented")
+        Int8Array(handler.getMappedRange(offset.toLong().toJsNumber(), buffer.size.toLong().toJsNumber()))
+            .also { remoteBuffer ->
+                buffer.indices.forEach { index -> buffer[index] = remoteBuffer.get(index) }
+            }
     }
 
     actual suspend fun map(mode: Set<MapMode>, offset: GPUSize64, size: GPUSize64) {

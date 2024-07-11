@@ -1,23 +1,25 @@
 package io.ygdrasil.wgpu
 
-actual class ComputePassEncoder : AutoCloseable {
+import io.ygdrasil.wgpu.internal.js.GPUComputePassEncoder
+import io.ygdrasil.wgpu.internal.js.toJsArray
+import io.ygdrasil.wgpu.internal.js.toJsNumber
+import org.khronos.webgl.Uint32Array
 
-    actual fun setPipeline(pipeline: ComputePipeline) {
-        TODO("Not yet implemented")
-    }
-    actual fun dispatchWorkgroups(workgroupCountX: GPUSize32, workgroupCountY: GPUSize32, workgroupCountZ: GPUSize32) {
-        TODO("Not yet implemented")
-    }
-    actual fun dispatchWorkgroupsIndirect(indirectBuffer: Buffer, indirectOffset: GPUSize64) {
-        TODO("Not yet implemented")
-    }
+actual class ComputePassEncoder(internal val handler: GPUComputePassEncoder) : AutoCloseable {
 
-    actual fun setBindGroup(index: GPUIndex32, bindGroup: BindGroup?, dynamicOffsets: Array<GPUBufferDynamicOffset>) {
-        TODO("Not yet implemented")
-    }
-    actual fun setBindGroup(index: GPUIndex32, bindGroup: BindGroup?) {
-        TODO("Not yet implemented")
-    }
+    actual fun setPipeline(pipeline: ComputePipeline) = handler.setPipeline(pipeline.handler)
+
+    actual fun dispatchWorkgroups(workgroupCountX: GPUSize32, workgroupCountY: GPUSize32, workgroupCountZ: GPUSize32) =
+        handler.dispatchWorkgroups(workgroupCountX, workgroupCountY, workgroupCountZ)
+
+    actual fun dispatchWorkgroupsIndirect(indirectBuffer: Buffer, indirectOffset: GPUSize64) =
+        handler.dispatchWorkgroupsIndirect(indirectBuffer.handler, indirectOffset.toJsNumber())
+
+    actual fun setBindGroup(index: GPUIndex32, bindGroup: BindGroup?, dynamicOffsets: Array<GPUBufferDynamicOffset>) =
+        handler.setBindGroup(index, bindGroup?.handler, dynamicOffsets.map { it.toJsNumber() }.toJsArray())
+
+    actual fun setBindGroup(index: GPUIndex32, bindGroup: BindGroup?) = handler.setBindGroup(index, bindGroup?.handler)
+
     actual fun setBindGroup(
         index: GPUIndex32,
         bindGroup: BindGroup?,
@@ -25,12 +27,16 @@ actual class ComputePassEncoder : AutoCloseable {
         dynamicOffsetsDataStart: GPUSize64,
         dynamicOffsetsDataLength: GPUSize32
     ) {
-        TODO("Not yet implemented")
+        handler.setBindGroup(
+            index,
+            bindGroup?.handler,
+            Uint32Array(dynamicOffsetsData.map { it.toJsNumber() }.toJsArray()),
+            dynamicOffsetsDataStart.toJsNumber(),
+            dynamicOffsetsDataLength
+        )
     }
 
-    actual fun end() {
-        TODO("Not yet implemented")
-    }
+    actual fun end() = handler.end()
 
     actual override fun close() {
         // Nothing to do on JS

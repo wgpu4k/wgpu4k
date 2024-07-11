@@ -1,33 +1,38 @@
 package io.ygdrasil.wgpu
 
-actual class RenderBundleEncoder : AutoCloseable {
+import io.ygdrasil.wgpu.internal.js.GPURenderBundleEncoder
+import io.ygdrasil.wgpu.internal.js.toJsNumber
+import io.ygdrasil.wgpu.mapper.map
 
-    actual fun finish(descriptor: RenderBundleDescriptor): RenderBundle {
-        TODO("Not yet implemented")
-    }
+actual class RenderBundleEncoder(internal val handler: GPURenderBundleEncoder) : AutoCloseable {
+
+    actual fun finish(descriptor: RenderBundleDescriptor): RenderBundle =
+        map(descriptor)
+            .let { handler.finish(it) }
+            .let(::RenderBundle)
 
     actual fun setBindGroup(index: GPUIndex32, bindGroup: BindGroup) {
-        TODO("Not yet implemented")
+        handler.setBindGroup(index, bindGroup.handler)
     }
 
     actual fun setPipeline(renderPipeline: RenderPipeline) {
-        TODO("Not yet implemented")
+        handler.setPipeline(renderPipeline.handler)
     }
 
     actual fun setVertexBuffer(slot: GPUIndex32, buffer: Buffer, offset: GPUSize64, size: GPUSize64) {
-        TODO("Not yet implemented")
+        handler.setVertexBuffer(slot, buffer.handler, offset.toJsNumber(), size.toJsNumber())
     }
 
     actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
-        TODO("Not yet implemented")
+        handler.setIndexBuffer(buffer.handler, indexFormat.name, offset.toJsNumber(), size.toJsNumber())
     }
 
     actual fun drawIndexed(indexCount: GPUSize32, instanceCount: GPUSize32, firstIndex: GPUSize32, baseVertex: GPUSignedOffset32, firstInstance: GPUSize32) {
-        TODO("Not yet implemented")
+        handler.drawIndexed(indexCount, instanceCount, firstIndex, baseVertex, firstInstance)
     }
 
     actual fun draw(vertexCount: GPUSize32, instanceCount: GPUSize32, firstVertex: GPUSize32, firstInstance: GPUSize32) {
-        TODO("Not yet implemented")
+        handler.draw(vertexCount, instanceCount, firstVertex, firstInstance)
     }
 
     actual override fun close() {

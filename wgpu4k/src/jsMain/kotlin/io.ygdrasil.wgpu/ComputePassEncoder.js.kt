@@ -8,6 +8,7 @@ import org.khronos.webgl.Uint32Array
 actual class ComputePassEncoder(internal val handler: GPUComputePassEncoder) : AutoCloseable {
 
     actual fun setPipeline(pipeline: ComputePipeline) = handler.setPipeline(pipeline.handler)
+
     actual fun dispatchWorkgroups(workgroupCountX: GPUSize32, workgroupCountY: GPUSize32, workgroupCountZ: GPUSize32) =
         handler.dispatchWorkgroups(workgroupCountX, workgroupCountY, workgroupCountZ)
 

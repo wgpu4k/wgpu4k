@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-typealias GPUBufferDynamicOffset = Number
+typealias GPUBufferDynamicOffset = ULong
 
 typealias GPUBufferUsageFlags = Int
 
