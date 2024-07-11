@@ -55,7 +55,7 @@ suspend fun captureScene() {
                     )
                 )
 
-                context.device.queue.submit(arrayOf(commandEncoder.finish()))
+                context.device.queue.submit(listOf(commandEncoder.finish()))
                 outputStagingBuffer.map(setOf(MapMode.read))
                 // Complete async work
                 context.device.poll()

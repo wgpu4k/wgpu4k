@@ -2,14 +2,8 @@ package io.ygdrasil.wgpu.mapper
 
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
-import io.ygdrasil.wgpu.BindGroupDescriptor
-import io.ygdrasil.wgpu.BindGroupDescriptor.BufferBinding
-import io.ygdrasil.wgpu.BindGroupDescriptor.SamplerBinding
-import io.ygdrasil.wgpu.BindGroupDescriptor.TextureViewBinding
-import io.ygdrasil.wgpu.BindGroupLayout
-import io.ygdrasil.wgpu.Buffer
-import io.ygdrasil.wgpu.Sampler
-import io.ygdrasil.wgpu.TextureView
+import io.ygdrasil.wgpu.*
+import io.ygdrasil.wgpu.BindGroupDescriptor.*
 import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUBindGroupDescriptor
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUBindGroupEntry
@@ -25,7 +19,7 @@ class BindGroupDescriptorTest : FreeSpec({
             val bindGroupDescriptor = BindGroupDescriptor(
                 label = "bindGroupDescriptor",
                 layout = BindGroupLayout(dummyMemory),
-                entries = arrayOf(
+                entries = listOf(
                     BindGroupDescriptor.BindGroupEntry(
                         binding = 1,
                         resource = BufferBinding(

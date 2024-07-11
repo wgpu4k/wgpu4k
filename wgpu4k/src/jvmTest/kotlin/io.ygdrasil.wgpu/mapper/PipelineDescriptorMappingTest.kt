@@ -20,10 +20,10 @@ class PipelineDescriptorMappingTest : FreeSpec({
             val descriptor = RenderPipelineDescriptor(
                 vertex = RenderPipelineDescriptor.VertexState(
                     module = ShaderModule(MemorySegment.NULL), // bind to autoClosableContext to release it later
-                    buffers = arrayOf(
+                    buffers = listOf(
                         RenderPipelineDescriptor.VertexState.VertexBufferLayout(
                             arrayStride = cubeVertexSize,
-                            attributes = arrayOf(
+                            attributes = listOf(
                                 RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
                                     shaderLocation = 0,
                                     offset = cubePositionOffset,
@@ -40,7 +40,7 @@ class PipelineDescriptorMappingTest : FreeSpec({
                 ),
                 fragment = RenderPipelineDescriptor.FragmentState(
                     module = ShaderModule(MemorySegment.NULL),
-                    targets = arrayOf(
+                    targets = listOf(
                         RenderPipelineDescriptor.FragmentState.ColorTargetState(
                             format = TextureFormat.rgba8unorm
                         )

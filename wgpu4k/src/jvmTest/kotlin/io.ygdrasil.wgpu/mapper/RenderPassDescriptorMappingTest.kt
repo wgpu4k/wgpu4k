@@ -19,7 +19,7 @@ class RenderPassDescriptorMappingTest : FreeSpec({
             // Given
             val renderPassDescriptor = RenderPassDescriptor(
                 label = "RenderPassDescriptor",
-                colorAttachments = arrayOf(
+                colorAttachments = listOf(
                     RenderPassDescriptor.ColorAttachment(
                         view = TextureView(MemorySegment.NULL),
                         loadOp = LoadOp.clear,

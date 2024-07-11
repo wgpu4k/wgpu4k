@@ -22,7 +22,7 @@ class DeviceDescriptionMapping : FreeSpec({
                 size = Size3D(100, 150, 5),
                 format = TextureFormat.depth24plus,
                 usage = setOf(TextureUsage.renderattachment, TextureUsage.storagebinding),
-                viewFormats = arrayOf(TextureFormat.astc4x4unorm, TextureFormat.astc10x10unorm)
+                viewFormats = listOf(TextureFormat.astc4x4unorm, TextureFormat.astc10x10unorm)
             )
 
 
