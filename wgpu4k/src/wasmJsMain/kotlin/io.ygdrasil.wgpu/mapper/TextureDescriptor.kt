@@ -3,7 +3,7 @@ package io.ygdrasil.wgpu.mapper
 import io.ygdrasil.wgpu.TextureDescriptor
 import io.ygdrasil.wgpu.internal.js.GPUTextureDescriptor
 import io.ygdrasil.wgpu.internal.js.createJsObject
-import io.ygdrasil.wgpu.internal.js.toJsArray
+import io.ygdrasil.wgpu.internal.js.mapJsArray
 import io.ygdrasil.wgpu.toFlagInt
 
 internal fun map(input: TextureDescriptor): GPUTextureDescriptor = createJsObject<GPUTextureDescriptor>().apply {
@@ -14,5 +14,5 @@ internal fun map(input: TextureDescriptor): GPUTextureDescriptor = createJsObjec
     dimension = input.dimension.stringValue
     format = input.format.actualName
     usage = input.usage.toFlagInt()
-    viewFormats = input.viewFormats.map { it.actualName.toJsString() }.toJsArray()
+    viewFormats = input.viewFormats.mapJsArray { it.actualName.toJsString() }
 }

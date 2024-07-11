@@ -1,7 +1,7 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPUComputePassEncoder
-import io.ygdrasil.wgpu.internal.js.toJsArray
+import io.ygdrasil.wgpu.internal.js.mapJsArray
 import io.ygdrasil.wgpu.internal.js.toJsNumber
 import org.khronos.webgl.Uint32Array
 
@@ -16,7 +16,7 @@ actual class ComputePassEncoder(internal val handler: GPUComputePassEncoder) : A
         handler.dispatchWorkgroupsIndirect(indirectBuffer.handler, indirectOffset.toJsNumber())
 
     actual fun setBindGroup(index: GPUIndex32, bindGroup: BindGroup?, dynamicOffsets: Array<GPUBufferDynamicOffset>) =
-        handler.setBindGroup(index, bindGroup?.handler, dynamicOffsets.map { it.toJsNumber() }.toJsArray())
+        handler.setBindGroup(index, bindGroup?.handler, dynamicOffsets.mapJsArray { it.toJsNumber() })
 
     actual fun setBindGroup(index: GPUIndex32, bindGroup: BindGroup?) = handler.setBindGroup(index, bindGroup?.handler)
 
@@ -30,7 +30,7 @@ actual class ComputePassEncoder(internal val handler: GPUComputePassEncoder) : A
         handler.setBindGroup(
             index,
             bindGroup?.handler,
-            Uint32Array(dynamicOffsetsData.map { it.toJsNumber() }.toJsArray()),
+            Uint32Array(dynamicOffsetsData.mapJsArray { it.toJsNumber() }),
             dynamicOffsetsDataStart.toJsNumber(),
             dynamicOffsetsDataLength
         )

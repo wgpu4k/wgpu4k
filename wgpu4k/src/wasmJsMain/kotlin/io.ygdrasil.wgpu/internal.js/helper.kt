@@ -33,10 +33,51 @@ fun Long.toJsBigInt(): JsBigInt =
 fun <T : JsAny>createJsObject(): T =
     js("({ })")
 
-fun <T : JsAny> List<T>.toJsArray(): JsArray<T> {
-    val output: JsArray<T> = JsArray()
+fun <A, B : JsAny> List<A>.mapJsArray(converter: (A) -> B): JsArray<B> {
+    val output: JsArray<B> = JsArray()
     forEachIndexed { index, value ->
-        output[index] = value
+        output[index] = converter(value)
     }
     return output
 }
+
+fun <A, B : JsAny> Array<A>.mapJsArray(converter: (A) -> B): JsArray<B> {
+    val output: JsArray<B> = JsArray()
+    forEachIndexed { index, value ->
+        output[index] = converter(value)
+    }
+    return output
+}
+
+fun <B : JsAny> FloatArray.mapJsArray(converter: (Float) -> B): JsArray<B> {
+    val output: JsArray<B> = JsArray()
+    forEachIndexed { index, value ->
+        output[index] = converter(value)
+    }
+    return output
+}
+
+fun <B : JsAny> ByteArray.mapJsArray(converter: (Byte) -> B): JsArray<B> {
+    val output: JsArray<B> = JsArray()
+    forEachIndexed { index, value ->
+        output[index] = converter(value)
+    }
+    return output
+}
+
+fun <B : JsAny> IntArray.mapJsArray(converter: (Int) -> B): JsArray<B> {
+    val output: JsArray<B> = JsArray()
+    forEachIndexed { index, value ->
+        output[index] = converter(value)
+    }
+    return output
+}
+
+fun <B : JsAny> UIntArray.mapJsArray(converter: (UInt) -> B): JsArray<B> {
+    val output: JsArray<B> = JsArray()
+    forEachIndexed { index, value ->
+        output[index] = converter(value)
+    }
+    return output
+}
+

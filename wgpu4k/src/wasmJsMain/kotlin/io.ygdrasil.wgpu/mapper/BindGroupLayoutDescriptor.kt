@@ -9,7 +9,7 @@ import io.ygdrasil.wgpu.toFlagInt
 internal fun map(input: BindGroupLayoutDescriptor): GPUBindGroupLayoutDescriptor =
     createJsObject<GPUBindGroupLayoutDescriptor>().apply {
         if (input.label != null) label = input.label.toJsString()
-        entries = input.entries.map { map(it) }.toJsArray()
+        entries = input.entries.mapJsArray { map(it) }
     }
 
 private fun map(input: BindGroupLayoutDescriptor.Entry): GPUBindGroupLayoutEntry =

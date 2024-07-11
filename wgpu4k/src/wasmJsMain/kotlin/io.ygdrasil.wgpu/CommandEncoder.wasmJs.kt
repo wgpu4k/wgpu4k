@@ -1,7 +1,7 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPUCommandEncoder
-import io.ygdrasil.wgpu.internal.js.toJsArray
+import io.ygdrasil.wgpu.internal.js.mapJsArray
 import io.ygdrasil.wgpu.mapper.map
 
 actual class CommandEncoder(internal val handler: GPUCommandEncoder) : AutoCloseable {
@@ -20,7 +20,7 @@ actual class CommandEncoder(internal val handler: GPUCommandEncoder) : AutoClose
         handler.copyTextureToTexture(
             map(source),
             map(destination),
-            copySize.toArray().map { it.toJsNumber() }.toJsArray()
+            copySize.toArray().mapJsArray { it.toJsNumber() }
         )
     }
 
@@ -28,7 +28,7 @@ actual class CommandEncoder(internal val handler: GPUCommandEncoder) : AutoClose
         handler.copyTextureToBuffer(
             map(source),
             map(destination),
-            copySize.toArray().map { it.toJsNumber() }.toJsArray()
+            copySize.toArray().mapJsArray { it.toJsNumber() }
         )
     }
 
@@ -36,7 +36,7 @@ actual class CommandEncoder(internal val handler: GPUCommandEncoder) : AutoClose
         handler.copyBufferToTexture(
             map(source),
             map(destination),
-            copySize.toArray().map { it.toJsNumber() }.toJsArray()
+            copySize.toArray().mapJsArray { it.toJsNumber() }
         )
     }
 

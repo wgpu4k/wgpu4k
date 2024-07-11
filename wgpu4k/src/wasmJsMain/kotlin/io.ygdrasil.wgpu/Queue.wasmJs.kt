@@ -8,7 +8,7 @@ import org.khronos.webgl.Int8Array
 actual class Queue(internal val handler: GPUQueue) {
 
     actual fun submit(commandsBuffer: List<CommandBuffer>) {
-        handler.submit(commandsBuffer.map { it.handler }.toJsArray())
+        handler.submit(commandsBuffer.mapJsArray { it.handler })
     }
 
     actual fun writeBuffer(
@@ -21,7 +21,7 @@ actual class Queue(internal val handler: GPUQueue) {
         handler.writeBuffer(
             buffer.handler,
             bufferOffset.toJsNumber(),
-            Float32Array(data.map { it.toJsNumber() }.toJsArray()),
+            Float32Array(data.mapJsArray { it.toJsNumber() }),
             dataOffset.toJsNumber(),
             size.toJsNumber()
         )
@@ -37,7 +37,7 @@ actual class Queue(internal val handler: GPUQueue) {
         handler.writeBuffer(
             buffer.handler,
             bufferOffset.toJsNumber(),
-            Int32Array(data.map { it.toJsNumber() }.toJsArray()),
+            Int32Array(data.mapJsArray { it.toJsNumber() }),
             dataOffset.toJsNumber(),
             size.toJsNumber()
         )
@@ -61,10 +61,10 @@ actual class Queue(internal val handler: GPUQueue) {
             createJsObject<GPUImageCopyTexture>().apply {
                 texture = destination.texture.handler
                 mipLevel = destination.mipLevel
-                origin = destination.origin.toArray().map { it.toJsNumber() }.toJsArray()
+                origin = destination.origin.toArray().mapJsArray { it.toJsNumber() }
                 aspect= destination.aspect.stringValue
             },
-            Int8Array(image.data.map { it.toJsNumber() }.toJsArray()).buffer,
+            Int8Array(image.data.mapJsArray { it.toJsNumber() }).buffer,
             createJsObject<GPUImageDataLayout>().apply {
                 offset = 0.toJsNumber()
                 bytesPerRow = image.width * bytePerPixel

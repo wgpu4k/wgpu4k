@@ -20,13 +20,13 @@ private fun map(input: RenderPipelineDescriptor.VertexState): GPUVertexState = c
 
     // TODO map this
     //constants = null
-    buffers = input.buffers.map { map(it) }.toJsArray()
+    buffers = input.buffers.mapJsArray { map(it) }
 }
 
 private fun map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout): GPUVertexBufferLayout =
     createJsObject<GPUVertexBufferLayout>().apply {
         arrayStride = input.arrayStride.toJsNumber()
-        attributes = input.attributes.map { map(it) }.toJsArray()
+        attributes = input.attributes.mapJsArray { map(it) }
         stepMode = input.stepMode.name
     }
 
@@ -77,7 +77,7 @@ private fun map(input: RenderPipelineDescriptor.MultisampleState): GPUMultisampl
 
 private fun map(input: RenderPipelineDescriptor.FragmentState): GPUFragmentState =
     createJsObject<GPUFragmentState>().apply {
-        targets = input.targets.map { map(it) }.toJsArray()
+        targets = input.targets.mapJsArray { map(it) }
         module = input.module.handler
         entryPoint = input.entryPoint.toJsString()
 

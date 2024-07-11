@@ -7,7 +7,7 @@ internal fun map(input: BindGroupDescriptor): GPUBindGroupDescriptor {
     return createJsObject<GPUBindGroupDescriptor>().apply {
         if (input.label != null) label = input.label.toJsString()
         layout = input.layout.handler
-        entries = input.entries.map { map(it) }.toJsArray()
+        entries = input.entries.mapJsArray { map(it) }
     }
 }
 

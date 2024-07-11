@@ -6,7 +6,7 @@ import io.ygdrasil.wgpu.internal.js.*
 
 internal fun map(input: RenderPassDescriptor): GPURenderPassDescriptor =
     createJsObject<GPURenderPassDescriptor>().apply {
-        colorAttachments = input.colorAttachments.map { map(it) }.toJsArray()
+        colorAttachments = input.colorAttachments.mapJsArray { map(it) }
         if (input.label != null) label = input.label.toJsString()
         if (input.depthStencilAttachment != null) depthStencilAttachment = map(input.depthStencilAttachment)
         // TODO map this occlusionQuerySet

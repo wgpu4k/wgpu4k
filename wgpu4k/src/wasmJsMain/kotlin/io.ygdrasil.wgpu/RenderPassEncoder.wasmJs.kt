@@ -1,7 +1,7 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPURenderPassEncoder
-import io.ygdrasil.wgpu.internal.js.toJsArray
+import io.ygdrasil.wgpu.internal.js.mapJsArray
 import io.ygdrasil.wgpu.internal.js.toJsNumber
 
 actual class RenderPassEncoder(internal val handler: GPURenderPassEncoder): AutoCloseable {
@@ -41,7 +41,7 @@ actual class RenderPassEncoder(internal val handler: GPURenderPassEncoder): Auto
     }
 
     actual fun executeBundles(bundles: List<RenderBundle>) {
-        handler.executeBundles(bundles.map { it.handler }.toJsArray())
+        handler.executeBundles(bundles.mapJsArray { it.handler })
     }
 
     actual override fun close() {
