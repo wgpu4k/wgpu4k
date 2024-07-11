@@ -6,7 +6,7 @@ import org.khronos.webgl.Float32Array
 import org.khronos.webgl.Int32Array
 
 actual class Queue(internal val handler: GPUQueue) {
-	actual fun submit(commandsBuffer: Array<CommandBuffer>) {
+	actual fun submit(commandsBuffer: List<CommandBuffer>) {
 		handler.submit(commandsBuffer.map { it.handler }.toTypedArray())
 	}
 

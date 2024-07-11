@@ -169,7 +169,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         ).bind()
 
         renderPassDescriptor = RenderPassDescriptor(
-            colorAttachments = arrayOf(
+            colorAttachments = listOf(
                 RenderPassDescriptor.ColorAttachment(
                     view = dummyTexture.createView().bind(), // Assigned later
                     clearValue = Color(.0, .0, .0, 1.0),
@@ -353,7 +353,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                 passEncoder.end()
             }
         }
-        device.queue.submit(arrayOf(commandEncoder.finish()));
+        device.queue.submit(listOf(commandEncoder.finish()));
         //////////////////////////////////////////////////////////////////////////////
         // Simulation compute pipeline
         //////////////////////////////////////////////////////////////////////////////
@@ -457,7 +457,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         )
 
         renderPassDescriptor = renderPassDescriptor.copy(
-            colorAttachments = arrayOf(
+            colorAttachments = listOf(
                 renderPassDescriptor.colorAttachments[0].copy(
                     view = renderingContext.getCurrentTexture()
                         .bind()
@@ -484,7 +484,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
             end()
         }
 
-        device.queue.submit(arrayOf(commandEncoder.finish()))
+        device.queue.submit(listOf(commandEncoder.finish()))
 
     }
 }

@@ -2,7 +2,7 @@ package io.ygdrasil.wgpu
 
 expect class Queue {
 
-    fun submit(commandsBuffer: Array<CommandBuffer> = arrayOf())
+    fun submit(commandsBuffer: List<CommandBuffer> = listOf())
 
     fun writeBuffer(
         buffer: Buffer,

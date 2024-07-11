@@ -153,7 +153,7 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
         )
 
         renderPassDescriptor = RenderPassDescriptor(
-            colorAttachments = arrayOf(
+            colorAttachments = listOf(
                 RenderPassDescriptor.ColorAttachment(
                     view = dummyTexture.createView().bind(), // Assigned later
                     loadOp = LoadOp.clear,
@@ -190,7 +190,7 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
         )
 
         renderPassDescriptor = renderPassDescriptor.copy(
-            colorAttachments = arrayOf(
+            colorAttachments = listOf(
                 renderPassDescriptor.colorAttachments[0].copy(
                     view = renderingContext.getCurrentTexture()
                         .bind()
@@ -213,7 +213,7 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
         val commandBuffer = encoder.finish()
             .bind()
 
-        device.queue.submit(arrayOf(commandBuffer))
+        device.queue.submit(listOf(commandBuffer))
 
 
     }

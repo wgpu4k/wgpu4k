@@ -29,8 +29,8 @@ data class ImageCopyTexture(
 )
 
 data class ImageCopyBuffer(
-    var buffer: Buffer,
-    var offset: GPUSize64,
-    var bytesPerRow: GPUSize32,
-    var rowsPerImage: GPUSize32
+    val buffer: Buffer,
+    val offset: GPUSize64,
+    val bytesPerRow: GPUSize32,
+    val rowsPerImage: GPUSize32
 )

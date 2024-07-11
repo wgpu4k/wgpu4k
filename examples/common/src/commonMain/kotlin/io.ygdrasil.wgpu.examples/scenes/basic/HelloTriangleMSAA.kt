@@ -61,7 +61,7 @@ class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
         val renderPassEncoder = encoder.beginRenderPass(
             RenderPassDescriptor(
-                colorAttachments = arrayOf(
+                colorAttachments = listOf(
                     RenderPassDescriptor.ColorAttachment(
                         view = textureView,
                         resolveTarget = renderingContext.getCurrentTexture().createView().bind(),
@@ -80,7 +80,7 @@ class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
         val commandBuffer = encoder.finish()
             .bind()
 
-        device.queue.submit(arrayOf(commandBuffer))
+        device.queue.submit(listOf(commandBuffer))
 
     }
 }

@@ -153,7 +153,7 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		)
 
 		renderPassDescriptor = RenderPassDescriptor(
-			colorAttachments = arrayOf(
+			colorAttachments = listOf(
 				RenderPassDescriptor.ColorAttachment(
 					view = dummyTexture.createView().bind(), // Assigned later
 					loadOp = LoadOp.clear,
@@ -192,7 +192,7 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		val swapChainTexture = renderingContext.getCurrentTexture()
 
 		renderPassDescriptor = renderPassDescriptor.copy(
-			colorAttachments = arrayOf(
+			colorAttachments = listOf(
 				renderPassDescriptor.colorAttachments[0].copy(
 					view = swapChainTexture
 						.bind()
@@ -221,7 +221,7 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		val commandBuffer = encoder.finish()
 			.bind()
 
-		device.queue.submit(arrayOf(commandBuffer))
+		device.queue.submit(listOf(commandBuffer))
 
 	}
 

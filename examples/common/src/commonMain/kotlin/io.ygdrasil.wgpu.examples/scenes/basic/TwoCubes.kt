@@ -143,7 +143,7 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		)
 
 		renderPassDescriptor = RenderPassDescriptor(
-			colorAttachments = arrayOf(
+			colorAttachments = listOf(
 				RenderPassDescriptor.ColorAttachment(
 					view = dummyTexture.createView().bind(), // Assigned later
 					loadOp = LoadOp.clear,
@@ -194,7 +194,7 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		)
 
 		renderPassDescriptor = renderPassDescriptor.copy(
-			colorAttachments = arrayOf(
+			colorAttachments = listOf(
 				renderPassDescriptor.colorAttachments[0].copy(
 					view = renderingContext.getCurrentTexture()
 						.bind()
@@ -224,7 +224,7 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		val commandBuffer = encoder.finish()
 			.bind()
 
-		device.queue.submit(arrayOf(commandBuffer))
+		device.queue.submit(listOf(commandBuffer))
 
 	}
 

@@ -77,7 +77,7 @@ data class BindGroupLayoutDescriptor(
 
 data class RenderBundleEncoderDescriptor(
     val label: String? = null,
-    val colorFormats: Array<TextureFormat>,
+    val colorFormats: List<TextureFormat>,
     val depthStencilFormat: TextureFormat,
     val sampleCount: GPUSize32 = 1,
     val depthReadOnly: Boolean = false,

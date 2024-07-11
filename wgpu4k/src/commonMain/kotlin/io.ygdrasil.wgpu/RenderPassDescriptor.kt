@@ -5,7 +5,7 @@ package io.ygdrasil.wgpu
 class RenderPassTimestampWrites
 
 data class RenderPassDescriptor(
-	val colorAttachments: Array<ColorAttachment> = arrayOf(),
+	val colorAttachments: List<ColorAttachment> = listOf(),
 	val depthStencilAttachment: RenderPassDepthStencilAttachment? = null,
 	val occlusionQuerySet: QuerySet? = null,
 	val timestampWrites: RenderPassTimestampWrites? = null,

@@ -178,7 +178,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 		)
 
 		renderPassDescriptor = RenderPassDescriptor(
-			colorAttachments = arrayOf(
+			colorAttachments = listOf(
 				RenderPassDescriptor.ColorAttachment(
 					view = dummyTexture.createView().bind(), // Assigned later
 					loadOp = LoadOp.clear,
@@ -217,7 +217,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 		)
 
 		renderPassDescriptor = renderPassDescriptor.copy(
-			colorAttachments = arrayOf(
+			colorAttachments = listOf(
 				renderPassDescriptor.colorAttachments[0].copy(
 					view = renderingContext.getCurrentTexture()
 						.bind()
@@ -240,7 +240,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 		val commandBuffer = encoder.finish()
 			.bind()
 
-		device.queue.submit(arrayOf(commandBuffer))
+		device.queue.submit(listOf(commandBuffer))
 	}
 
 	override fun close() {

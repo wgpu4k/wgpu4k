@@ -400,7 +400,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
 
         val bundleEncoder = device.createRenderBundleEncoder(
             RenderBundleEncoderDescriptor(
-                colorFormats = arrayOf(
+                colorFormats = listOf(
                     TextureFormat.of(swapChainFormat) ?: error("fail to get texture format $swapChainFormat")
                 ),
                 depthStencilFormat = TextureFormat.of(depthFormat) ?: error("fail to get texture format $depthFormat")

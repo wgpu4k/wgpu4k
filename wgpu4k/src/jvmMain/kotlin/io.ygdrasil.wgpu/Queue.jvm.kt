@@ -1,10 +1,11 @@
 package io.ygdrasil.wgpu
 
 
-import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUExtent3D
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUTextureDataLayout
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
+import io.ygdrasil.wgpu.internal.jvm.toPointerArray
 import io.ygdrasil.wgpu.mapper.map
 import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
@@ -12,7 +13,7 @@ import java.lang.foreign.ValueLayout
 
 actual class Queue(internal val handler: MemorySegment) {
 
-    actual fun submit(commandsBuffer: Array<CommandBuffer>) = confined { arena ->
+    actual fun submit(commandsBuffer: List<CommandBuffer>) = confined { arena ->
         if (commandsBuffer.isNotEmpty()) {
 
             val commands = commandsBuffer.map { it.handler }.toPointerArray(arena)
