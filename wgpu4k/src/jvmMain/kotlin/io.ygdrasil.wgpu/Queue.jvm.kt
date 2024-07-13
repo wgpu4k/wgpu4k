@@ -77,7 +77,7 @@ actual class Queue(internal val handler: MemorySegment) {
         }
 
         val image = (source.source as? ImageBitmapHolder)
-        if (image == null) error("ImageBitmapHolder required as source")
+            ?: error("ImageBitmapHolder required as source")
 
         val bytePerPixel = destination.texture.format.getBytesPerPixel()
 
