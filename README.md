@@ -33,7 +33,8 @@ git clone https://github.com/wgpu4k/wgpu4k.git
 cd wgpu4k
 ```
 - On desktop: `./gradlew examples:glfw:run`
-- On web: `./gradlew examples:web-js:jsBrowserRun`
+- On web js: `./gradlew examples:web-js:jsBrowserRun`
+- On web wasm: `./gradlew examples:web-js:wasmJsBrowserRun`
 
 Use `page down` and `page up` on your keyboard to switch scene.
 
