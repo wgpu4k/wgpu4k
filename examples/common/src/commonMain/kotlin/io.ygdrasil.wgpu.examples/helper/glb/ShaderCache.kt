@@ -19,6 +19,7 @@ class ShaderCache(private val device: Device) {
         }
         if (!shaderCache.containsKey(shaderID)) {
             val shaderSource = generateGLTFShader(hasNormals, hasUVs, hasColorTexture)
+            println("new shader added with id $shaderID and code $shaderSource")
             shaderCache[shaderID] = device.createShaderModule(ShaderModuleDescriptor(code = shaderSource))
         }
         return shaderCache[shaderID]!!

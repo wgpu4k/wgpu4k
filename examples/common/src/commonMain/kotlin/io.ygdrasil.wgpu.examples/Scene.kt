@@ -2,6 +2,7 @@ package io.ygdrasil.wgpu.examples
 
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.scenes.basic.*
+import io.ygdrasil.wgpu.examples.scenes.graphics.techniques.SkinnedMeshScene
 
 suspend fun loadScenes(wgpuContext: WGPUContext): List<Scene> {
     val assetManager = genericAssetManager()
@@ -15,8 +16,8 @@ suspend fun loadScenes(wgpuContext: WGPUContext): List<Scene> {
         FractalCubeScene(wgpuContext),
         InstancedCubeScene(wgpuContext),
         TexturedCubeScene(wgpuContext, assetManager),
+        SkinnedMeshScene(wgpuContext, assetManager),
         // TODO: Not working test on wgpu new releases ParticlesScene(),
-        // TODO: fix it SkinnedMeshScene(),
     )
 }
 

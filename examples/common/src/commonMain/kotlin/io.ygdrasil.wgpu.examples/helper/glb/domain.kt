@@ -128,6 +128,7 @@ class GLTFPrimitive(
             )
         )
 
+        println(pipelineDescriptor)
         val renderPipeline = device.createRenderPipeline(pipelineDescriptor)
 
         bundleEncoder.setBindGroup(2, material.bindGroup)

@@ -2,7 +2,6 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUCommandEncoderDescriptor
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUPipelineLayoutDescriptor
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.mapper.map
 import java.lang.foreign.MemorySegment
@@ -24,7 +23,7 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
     }
 
     actual fun createPipelineLayout(descriptor: PipelineLayoutDescriptor): PipelineLayout = confined { arena ->
-        WGPUPipelineLayoutDescriptor.allocate(arena)
+        arena.map(descriptor)
             .let { wgpu_h.wgpuDeviceCreatePipelineLayout(handler, it) }
             ?.let(::PipelineLayout) ?: error("fail to create pipeline layout")
 }
