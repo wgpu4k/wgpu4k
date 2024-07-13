@@ -1,5 +1,8 @@
 package io.ygdrasil.wgpu.internal.js
 
+import org.khronos.webgl.Int8Array
+import org.khronos.webgl.set
+
 private fun infer(value: Byte): JsNumber = js("value")
 private fun infer(value: UInt): JsNumber = js("value")
 private fun infer(value: Float): JsNumber = js("value")
@@ -9,31 +12,31 @@ private fun infer(value: ULong): JsNumber = js("Number(value)")
 
 private fun inferBig(value: Long): JsBigInt = js("BigInt(value)")
 
-fun Double.toJsNumber(): JsNumber =
+internal fun Double.toJsNumber(): JsNumber =
     infer(this)
 
-fun Float.toJsNumber(): JsNumber =
+internal fun Float.toJsNumber(): JsNumber =
     infer(this)
 
-fun UInt.toJsNumber(): JsNumber =
+internal fun UInt.toJsNumber(): JsNumber =
     infer(this)
 
-fun Byte.toJsNumber(): JsNumber =
+internal fun Byte.toJsNumber(): JsNumber =
     infer(this)
 
-fun Long.toJsNumber(): JsNumber =
+internal fun Long.toJsNumber(): JsNumber =
     infer(this)
 
-fun ULong.toJsNumber(): JsNumber =
+internal fun ULong.toJsNumber(): JsNumber =
     infer(this)
 
-fun Long.toJsBigInt(): JsBigInt =
+internal fun Long.toJsBigInt(): JsBigInt =
     inferBig(this)
 
-fun <T : JsAny>createJsObject(): T =
+internal fun <T : JsAny>createJsObject(): T =
     js("({ })")
 
-fun <A, B : JsAny> List<A>.mapJsArray(converter: (A) -> B): JsArray<B> {
+internal fun <A, B : JsAny> List<A>.mapJsArray(converter: (A) -> B): JsArray<B> {
     val output: JsArray<B> = JsArray()
     forEachIndexed { index, value ->
         output[index] = converter(value)
@@ -41,7 +44,7 @@ fun <A, B : JsAny> List<A>.mapJsArray(converter: (A) -> B): JsArray<B> {
     return output
 }
 
-fun <A, B : JsAny> Array<A>.mapJsArray(converter: (A) -> B): JsArray<B> {
+internal fun <A, B : JsAny> Array<A>.mapJsArray(converter: (A) -> B): JsArray<B> {
     val output: JsArray<B> = JsArray()
     forEachIndexed { index, value ->
         output[index] = converter(value)
@@ -49,7 +52,7 @@ fun <A, B : JsAny> Array<A>.mapJsArray(converter: (A) -> B): JsArray<B> {
     return output
 }
 
-fun <B : JsAny> FloatArray.mapJsArray(converter: (Float) -> B): JsArray<B> {
+internal fun <B : JsAny> FloatArray.mapJsArray(converter: (Float) -> B): JsArray<B> {
     val output: JsArray<B> = JsArray()
     forEachIndexed { index, value ->
         output[index] = converter(value)
@@ -57,7 +60,7 @@ fun <B : JsAny> FloatArray.mapJsArray(converter: (Float) -> B): JsArray<B> {
     return output
 }
 
-fun <B : JsAny> ByteArray.mapJsArray(converter: (Byte) -> B): JsArray<B> {
+internal fun <B : JsAny> ByteArray.mapJsArray(converter: (Byte) -> B): JsArray<B> {
     val output: JsArray<B> = JsArray()
     forEachIndexed { index, value ->
         output[index] = converter(value)
@@ -65,7 +68,7 @@ fun <B : JsAny> ByteArray.mapJsArray(converter: (Byte) -> B): JsArray<B> {
     return output
 }
 
-fun <B : JsAny> IntArray.mapJsArray(converter: (Int) -> B): JsArray<B> {
+internal fun <B : JsAny> IntArray.mapJsArray(converter: (Int) -> B): JsArray<B> {
     val output: JsArray<B> = JsArray()
     forEachIndexed { index, value ->
         output[index] = converter(value)
@@ -73,7 +76,7 @@ fun <B : JsAny> IntArray.mapJsArray(converter: (Int) -> B): JsArray<B> {
     return output
 }
 
-fun <B : JsAny> UIntArray.mapJsArray(converter: (UInt) -> B): JsArray<B> {
+internal fun <B : JsAny> UIntArray.mapJsArray(converter: (UInt) -> B): JsArray<B> {
     val output: JsArray<B> = JsArray()
     forEachIndexed { index, value ->
         output[index] = converter(value)
@@ -81,3 +84,8 @@ fun <B : JsAny> UIntArray.mapJsArray(converter: (UInt) -> B): JsArray<B> {
     return output
 }
 
+internal fun ByteArray.toInt8Array(): Int8Array {
+    val out = Int8Array(this.size)
+    for (n in 0 until out.length) out[n] = this[n]
+    return out
+}

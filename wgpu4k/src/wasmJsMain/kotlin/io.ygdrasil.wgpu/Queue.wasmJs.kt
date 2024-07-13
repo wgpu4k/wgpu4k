@@ -3,7 +3,6 @@ package io.ygdrasil.wgpu
 import io.ygdrasil.wgpu.internal.js.*
 import org.khronos.webgl.Float32Array
 import org.khronos.webgl.Int32Array
-import org.khronos.webgl.Int8Array
 
 actual class Queue(internal val handler: GPUQueue) {
 
@@ -64,7 +63,7 @@ actual class Queue(internal val handler: GPUQueue) {
                 origin = destination.origin.toArray().mapJsArray { it.toJsNumber() }
                 aspect= destination.aspect.stringValue
             },
-            Int8Array(image.data.mapJsArray { it.toJsNumber() }).buffer,
+            image.data.toInt8Array().buffer,
             createJsObject<GPUImageDataLayout>().apply {
                 offset = 0.toJsNumber()
                 bytesPerRow = image.width * bytePerPixel
