@@ -25,7 +25,7 @@ class HelloTriangleScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
                             code = redFragmentShader
                         )
                     ).bind(),
-                    targets = arrayOf(
+                    targets = listOf(
                         RenderPipelineDescriptor.FragmentState.ColorTargetState(
                             format = renderingContext.textureFormat
                         )
@@ -46,11 +46,11 @@ class HelloTriangleScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
         val renderPassEncoder = encoder.beginRenderPass(
             RenderPassDescriptor(
-                colorAttachments = arrayOf(
+                colorAttachments = listOf(
                     RenderPassDescriptor.ColorAttachment(
-                        view =  texture.createView().bind(),
+                        view = texture.createView().bind(),
                         loadOp = LoadOp.load,
-                        clearValue = arrayOf(0, 0, 0, 1.0),
+                        clearValue = Color(.0, .0, .0, 1.0),
                         storeOp = StoreOp.store
                     )
                 )
@@ -64,7 +64,7 @@ class HelloTriangleScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
         val commandBuffer = encoder.finish()
             .bind()
 
-        device.queue.submit(arrayOf(commandBuffer))
+        device.queue.submit(listOf(commandBuffer))
 
     }
 }

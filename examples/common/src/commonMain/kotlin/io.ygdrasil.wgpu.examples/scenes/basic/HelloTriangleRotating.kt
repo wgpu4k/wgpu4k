@@ -29,7 +29,7 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
                             code = redFragmentShader
                         )
                     ).bind(),
-                    targets = arrayOf(
+                    targets = listOf(
                         RenderPipelineDescriptor.FragmentState.ColorTargetState(
                             format = renderingContext.textureFormat
                         )
@@ -48,8 +48,8 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
 
         uniformBindGroup = device.createBindGroup(
             BindGroupDescriptor(
-                layout = renderPipeline.getBindGroupLayout(0),
-                entries = arrayOf(
+                layout = renderPipeline.getBindGroupLayout(0).bind(),
+                entries = listOf(
                     BindGroupDescriptor.BindGroupEntry(
                         binding = 0,
                         resource = BindGroupDescriptor.BufferBinding(
@@ -58,7 +58,7 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
                     )
                 )
             )
-        )
+        ).bind()
     }
 
     override fun AutoClosableContext.render() {
@@ -83,11 +83,11 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
 
         val renderPassEncoder = encoder.beginRenderPass(
             RenderPassDescriptor(
-                colorAttachments = arrayOf(
+                colorAttachments = listOf(
                     RenderPassDescriptor.ColorAttachment(
                         view =  texture.createView().bind(),
                         loadOp = LoadOp.clear,
-                        clearValue = arrayOf(0, 0, 0, 1.0),
+                        clearValue = Color(.0, .0, .0, 1.0),
                         storeOp = StoreOp.store
                     )
                 )
@@ -102,7 +102,7 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
         val commandBuffer = encoder.finish()
             .bind()
 
-        device.queue.submit(arrayOf(commandBuffer))
+        device.queue.submit(listOf(commandBuffer))
 
     }
 }

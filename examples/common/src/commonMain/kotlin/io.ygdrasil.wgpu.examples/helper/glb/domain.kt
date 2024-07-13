@@ -38,7 +38,7 @@ class GLTFPrimitive(
         val vertexBuffers = mutableListOf(
             VertexBufferLayout(
                 arrayStride = positions.byteStride.toLong(),
-                attributes = arrayOf(
+                attributes = listOf(
                     VertexBufferLayout.VertexAttribute(
                         format = VertexFormat.float32x3,
                         offset = 0,
@@ -52,7 +52,7 @@ class GLTFPrimitive(
             vertexBuffers.add(
                 VertexBufferLayout(
                     arrayStride = normals.byteStride.toLong(),
-                    attributes = arrayOf(
+                    attributes = listOf(
                         VertexBufferLayout.VertexAttribute(
                             format = VertexFormat.float32x3,
                             offset = 0,
@@ -68,7 +68,7 @@ class GLTFPrimitive(
             vertexBuffers.add(
                 VertexBufferLayout(
                     arrayStride = texcoords[0].byteStride.toLong(),
-                    attributes = arrayOf(
+                    attributes = listOf(
                         VertexBufferLayout.VertexAttribute(
                             format = VertexFormat.float32x2,
                             offset = 0,
@@ -81,7 +81,7 @@ class GLTFPrimitive(
 
         val layout = device.createPipelineLayout(
             PipelineLayoutDescriptor(
-                bindGroupLayouts = arrayOf(
+                bindGroupLayouts = listOf(
                     bindGroupLayouts[0],
                     bindGroupLayouts[1],
                     material.bindGroupLayout
@@ -92,13 +92,13 @@ class GLTFPrimitive(
         val vertexStage = RenderPipelineDescriptor.VertexState(
             module = shaderModule,
             entryPoint = "vertex_main",
-            buffers = vertexBuffers.toTypedArray()
+            buffers = vertexBuffers
         )
 
         val fragmentStage = FragmentState(
             module = shaderModule,
             entryPoint = "fragment_main",
-            targets = arrayOf(
+            targets = listOf(
                 FragmentState.ColorTargetState(
                     format = TextureFormat.of(swapChainFormat) ?: error("fail to get texture format $swapChainFormat")
                 )
@@ -128,6 +128,7 @@ class GLTFPrimitive(
             )
         )
 
+        println(pipelineDescriptor)
         val renderPipeline = device.createRenderPipeline(pipelineDescriptor)
 
         bundleEncoder.setBindGroup(2, material.bindGroup)
@@ -248,14 +249,14 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
 
         val bindGroupLayout = device.createBindGroupLayout(
             BindGroupLayoutDescriptor(
-                entries = layoutEntries.toTypedArray()
+                entries = layoutEntries
             )
         )
 
         bindGroup = device.createBindGroup(
             BindGroupDescriptor(
                 layout = bindGroupLayout,
-                entries = bindGroupEntries.toTypedArray()
+                entries = bindGroupEntries
             )
         )
 
@@ -329,7 +330,7 @@ class GLBModel(val nodes: List<GLTFNode>) {
         viewParamsLayout: BindGroupLayout,
         viewParamsBindGroup: BindGroup,
         swapChainFormat: String,
-    ): Array<RenderBundle> {
+    ): List<RenderBundle> {
         val renderBundles = mutableListOf<RenderBundle>()
         nodes.forEach { node ->
             val bundle = node.buildRenderBundle(
@@ -342,7 +343,7 @@ class GLBModel(val nodes: List<GLTFNode>) {
             )
             renderBundles.add(bundle)
         }
-        return renderBundles.toTypedArray()
+        return renderBundles
     }
 }
 
@@ -372,7 +373,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
     ): RenderBundle {
         val nodeParamsLayout = device.createBindGroupLayout(
             BindGroupLayoutDescriptor(
-                entries = arrayOf(
+                entries = listOf(
                     Entry(
                         binding = 0,
                         visibility = setOf(ShaderStage.vertex),
@@ -385,7 +386,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
         bindGroup = device.createBindGroup(
             BindGroupDescriptor(
                 layout = nodeParamsLayout,
-                entries = arrayOf(
+                entries = listOf(
                     BindGroupEntry(
                         binding = 0,
                         resource = BufferBinding(
@@ -400,7 +401,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
 
         val bundleEncoder = device.createRenderBundleEncoder(
             RenderBundleEncoderDescriptor(
-                colorFormats = arrayOf(
+                colorFormats = listOf(
                     TextureFormat.of(swapChainFormat) ?: error("fail to get texture format $swapChainFormat")
                 ),
                 depthStencilFormat = TextureFormat.of(depthFormat) ?: error("fail to get texture format $depthFormat")

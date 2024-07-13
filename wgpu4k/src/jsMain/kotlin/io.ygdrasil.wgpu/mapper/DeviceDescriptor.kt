@@ -5,18 +5,19 @@ import io.ygdrasil.wgpu.GPUSize64
 import io.ygdrasil.wgpu.QueueDescriptor
 import io.ygdrasil.wgpu.internal.js.GPUDeviceDescriptor
 import io.ygdrasil.wgpu.internal.js.GPUQueueDescriptor
+import io.ygdrasil.wgpu.internal.js.createJsObject
 import js.objects.Record
 
 // TODO: add unit test
-internal fun map(input: DeviceDescriptor): GPUDeviceDescriptor = object : GPUDeviceDescriptor {
-    override var requiredFeatures: Array<String?>? = input.requiredFeatures.map { it.actualName }.toTypedArray()
-    override var requiredLimits: Record<String, GPUSize64>? = map(input.requiredLimits)
-    override var defaultQueue: GPUQueueDescriptor? = map(input.defaultQueue)
-    override var label: String? = input.label ?: undefined
+internal fun map(input: DeviceDescriptor): GPUDeviceDescriptor = createJsObject<GPUDeviceDescriptor>().apply {
+    requiredFeatures = input.requiredFeatures.map { it.actualName }.toTypedArray()
+    requiredLimits = map(input.requiredLimits)
+    defaultQueue = map(input.defaultQueue)
+    if (input.label != null) label = input.label
 }
 
-private fun map(input: QueueDescriptor): GPUQueueDescriptor = object : GPUQueueDescriptor {
-    override var label: String? = input.label ?: undefined
+private fun map(input: QueueDescriptor): GPUQueueDescriptor = createJsObject<GPUQueueDescriptor>().apply {
+    if (input.label != null) label = input.label
 }
 
 private fun map(input: Map<String, GPUSize64>): Record<String, GPUSize64> {

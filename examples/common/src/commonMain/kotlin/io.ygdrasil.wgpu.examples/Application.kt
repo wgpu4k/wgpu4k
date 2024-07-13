@@ -30,10 +30,6 @@ class Application internal constructor(
     var frame = 0
         private set
 
-    fun configureRenderingContext() {
-        wgpuContext.configureRenderingContext()
-    }
-
     suspend fun changeScene(nextScene: Scene) {
         println("switch to scene ${nextScene::class.simpleName}")
         with(nextScene) {
@@ -76,6 +72,7 @@ private fun WGPUContext.configureRenderingContext() {
     surface.configure(
         CanvasConfiguration(
             device = device,
+            format = surface.textureFormat,
             usage = setOf(TextureUsage.renderattachment, TextureUsage.copysrc)
         )
     )

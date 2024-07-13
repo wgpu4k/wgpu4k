@@ -60,13 +60,13 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                             code = particlesShaderFixed,
                         )
                     ).bind(),
-                    buffers = arrayOf(
+                    buffers = listOf(
                         RenderPipelineDescriptor.VertexState.VertexBufferLayout
                             (
                             // instanced particles buffer
                             arrayStride = particleInstanceByteSize.toLong(),
                             stepMode = VertexStepMode.instance,
-                            attributes = arrayOf(
+                            attributes = listOf(
                                 RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
                                     // position
                                     shaderLocation = 0,
@@ -85,7 +85,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                             // quad vertex buffer
                             arrayStride = 2 * 4, // vec2f
                             stepMode = VertexStepMode.vertex,
-                            attributes = arrayOf(
+                            attributes = listOf(
                                 RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
                                     // vertex positions
                                     shaderLocation = 2,
@@ -103,7 +103,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                             code = particlesShaderFixed,
                         )
                     ).bind(),
-                    targets = arrayOf(
+                    targets = listOf(
                         RenderPipelineDescriptor.FragmentState.ColorTargetState(
                             format = renderingContext.textureFormat,
                             blend = RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState(
@@ -157,7 +157,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         uniformBindGroup = device.createBindGroup(
             BindGroupDescriptor(
                 layout = renderPipeline.getBindGroupLayout(0),
-                entries = arrayOf(
+                entries = listOf(
                     BindGroupDescriptor.BindGroupEntry(
                         binding = 0,
                         resource = BindGroupDescriptor.BufferBinding(
@@ -169,10 +169,10 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         ).bind()
 
         renderPassDescriptor = RenderPassDescriptor(
-            colorAttachments = arrayOf(
+            colorAttachments = listOf(
                 RenderPassDescriptor.ColorAttachment(
                     view = dummyTexture.createView().bind(), // Assigned later
-                    clearValue = arrayOf(0.0, 0.0, 0.0, 1.0),
+                    clearValue = Color(.0, .0, .0, 1.0),
                     loadOp = LoadOp.clear,
                     storeOp = StoreOp.store,
                 ),
@@ -304,7 +304,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
             val probabilityMapBindGroup = device.createBindGroup(
                 BindGroupDescriptor(
                     layout = pipeline,
-                    entries = arrayOf(
+                    entries = listOf(
                         BindGroupDescriptor.BindGroupEntry(
                             // ubo
                             binding = 0,
@@ -353,7 +353,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                 passEncoder.end()
             }
         }
-        device.queue.submit(arrayOf(commandEncoder.finish()));
+        device.queue.submit(listOf(commandEncoder.finish()));
         //////////////////////////////////////////////////////////////////////////////
         // Simulation compute pipeline
         //////////////////////////////////////////////////////////////////////////////
@@ -385,7 +385,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         computeBindGroup = device.createBindGroup(
             BindGroupDescriptor(
                 layout = computePipeline.getBindGroupLayout(0),
-                entries = arrayOf(
+                entries = listOf(
                     BindGroupDescriptor.BindGroupEntry(
                         binding = 0,
                         resource = BindGroupDescriptor.BufferBinding(
@@ -457,7 +457,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         )
 
         renderPassDescriptor = renderPassDescriptor.copy(
-            colorAttachments = arrayOf(
+            colorAttachments = listOf(
                 renderPassDescriptor.colorAttachments[0].copy(
                     view = renderingContext.getCurrentTexture()
                         .bind()
@@ -484,7 +484,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
             end()
         }
 
-        device.queue.submit(arrayOf(commandEncoder.finish()))
+        device.queue.submit(listOf(commandEncoder.finish()))
 
     }
 }

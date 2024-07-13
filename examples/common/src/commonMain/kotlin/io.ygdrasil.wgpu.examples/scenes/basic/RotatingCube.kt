@@ -47,10 +47,10 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 							code = basicVertexShader
 						)
 					).bind(), // bind to autoClosableContext to release it later
-					buffers = arrayOf(
+					buffers = listOf(
 						RenderPipelineDescriptor.VertexState.VertexBufferLayout(
 							arrayStride = cubeVertexSize,
-							attributes = arrayOf(
+							attributes = listOf(
 								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
 									shaderLocation = 0,
 									offset = cubePositionOffset,
@@ -71,7 +71,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 							code = vertexPositionColorShader
 						)
 					).bind(), // bind to autoClosableContext to release it later
-					targets = arrayOf(
+					targets = listOf(
 						RenderPipelineDescriptor.FragmentState.ColorTargetState(
 							format = renderingContext.textureFormat
 						)
@@ -112,7 +112,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		uniformBindGroup = device.createBindGroup(
 			BindGroupDescriptor(
 				layout = renderPipeline.getBindGroupLayout(0),
-				entries = arrayOf(
+				entries = listOf(
 					BindGroupDescriptor.BindGroupEntry(
 						binding = 0,
 						resource = BindGroupDescriptor.BufferBinding(
@@ -124,11 +124,11 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		).bind()
 
 		renderPassDescriptor = RenderPassDescriptor(
-			colorAttachments = arrayOf(
+			colorAttachments = listOf(
 				RenderPassDescriptor.ColorAttachment(
 					view = dummyTexture.createView().bind(), // Assigned later
 					loadOp = LoadOp.clear,
-					clearValue = arrayOf(0.5, 0.5, 0.5, 1.0),
+					clearValue = Color(0.5, 0.5, 0.5, 1.0),
 					storeOp = StoreOp.store,
 				)
 			),
@@ -152,6 +152,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			frame / 100.0,
 			projectionMatrix
 		)
+
 		device.queue.writeBuffer(
 			uniformBuffer,
 			0,
@@ -161,7 +162,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		)
 
 		renderPassDescriptor = renderPassDescriptor.copy(
-			colorAttachments = arrayOf(
+			colorAttachments = listOf(
 				renderPassDescriptor.colorAttachments[0].copy(
 					view = renderingContext.getCurrentTexture()
 						.bind()
@@ -175,6 +176,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 		val renderPassEncoder = encoder.beginRenderPass(renderPassDescriptor)
 			.bind()
+
 		renderPassEncoder.setPipeline(renderPipeline)
 		renderPassEncoder.setBindGroup(0, uniformBindGroup)
 		renderPassEncoder.setVertexBuffer(0, verticesBuffer)
@@ -184,7 +186,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		val commandBuffer = encoder.finish()
 			.bind()
 
-		device.queue.submit(arrayOf(commandBuffer))
+		device.queue.submit(listOf(commandBuffer))
 
 	}
 

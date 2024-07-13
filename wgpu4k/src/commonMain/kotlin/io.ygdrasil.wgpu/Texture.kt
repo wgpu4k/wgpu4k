@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-expect class Texture: AutoCloseable {
+expect class Texture : AutoCloseable {
 
     val width: GPUIntegerCoordinateOut
     val height: GPUIntegerCoordinateOut
@@ -11,7 +11,7 @@ expect class Texture: AutoCloseable {
     val format: TextureFormat
     val usage: GPUFlagsConstant
 
-	fun createView(descriptor: TextureViewDescriptor? = null): TextureView
+    fun createView(descriptor: TextureViewDescriptor? = null): TextureView
 
     override fun close()
 }
@@ -20,14 +20,14 @@ expect class Texture: AutoCloseable {
  * @see https://www.w3.org/TR/webgpu/#gputexturedescriptor
  */
 data class TextureDescriptor(
-    var size: Size3D,
-    var format: TextureFormat,
-    var usage: Set<TextureUsage>,
-    var mipLevelCount: GPUIntegerCoordinate = 1,
-    var sampleCount: GPUSize32 = 1,
-    var dimension: TextureDimension = TextureDimension._2d,
-    var viewFormats: Array<TextureFormat> = arrayOf(),
-    var label: String? = null
+    val size: Size3D,
+    val format: TextureFormat,
+    val usage: Set<TextureUsage>,
+    val mipLevelCount: GPUIntegerCoordinate = 1,
+    val sampleCount: GPUSize32 = 1,
+    val dimension: TextureDimension = TextureDimension._2d,
+    val viewFormats: List<TextureFormat> = listOf(),
+    val label: String? = null,
 )
 
 // Todo double check this
@@ -38,7 +38,8 @@ fun TextureFormat.getBytesPerPixel(): Int {
         TextureFormat.r8snorm,
         TextureFormat.r8uint,
         TextureFormat.r8sint,
-        TextureFormat.stencil8 -> 1
+        TextureFormat.stencil8,
+        -> 1
 
         // Formats with 2 bytes per pixel
         TextureFormat.rg8unorm,
@@ -48,7 +49,8 @@ fun TextureFormat.getBytesPerPixel(): Int {
         TextureFormat.r16uint,
         TextureFormat.r16sint,
         TextureFormat.depth16unorm,
-        TextureFormat.r16float -> 2
+        TextureFormat.r16float,
+        -> 2
 
         // 24 bit depth is typically 3 bytes. But note that 'plus' might imply additional data
         TextureFormat.depth24plus -> 3
@@ -70,7 +72,7 @@ fun TextureFormat.getBytesPerPixel(): Int {
         TextureFormat.depth24plusstencil8,
         TextureFormat.rg16uint,
         TextureFormat.rg16sint,
-        TextureFormat.depth32float
+        TextureFormat.depth32float,
         -> 4
 
         // 4 bytes for float, 1 byte for stencil
@@ -78,7 +80,8 @@ fun TextureFormat.getBytesPerPixel(): Int {
 
         // Formats with 6 bytes per pixel
         TextureFormat.rg11b10ufloat,
-        TextureFormat.rgb9e5ufloat -> 6
+        TextureFormat.rgb9e5ufloat,
+        -> 6
 
         // Formats with 4 bytes per pixel (compressed)
         TextureFormat.etc2rgb8unorm,
@@ -129,12 +132,14 @@ fun TextureFormat.getBytesPerPixel(): Int {
         TextureFormat.rg32float,
         TextureFormat.rgba16uint,
         TextureFormat.rgba16sint,
-        TextureFormat.rgba16float -> 8
+        TextureFormat.rgba16float,
+        -> 8
 
         // Formats with 16 bytes per pixel
         TextureFormat.rgba32uint,
         TextureFormat.rgba32sint,
-        TextureFormat.rgba32float -> 16
+        TextureFormat.rgba32float,
+        -> 16
 
         // Compressed formats
         TextureFormat.bc1rgbaunorm,

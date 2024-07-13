@@ -1,10 +1,12 @@
 package io.ygdrasil.wgpu.mapper
 
-import io.ygdrasil.wgpu.*
+import io.ygdrasil.wgpu.Color
+import io.ygdrasil.wgpu.RenderPassDescriptor
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUColor
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPassColorAttachment
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPassDepthStencilAttachment
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPassDescriptor
+import io.ygdrasil.wgpu.toInt
 import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 
@@ -48,12 +50,11 @@ internal fun Arena.map(input: RenderPassDescriptor.ColorAttachment, output: Memo
     map(input.clearValue, WGPURenderPassColorAttachment.clearValue(output))
 }
 
-internal fun Arena.map(input: Array<Number>, output: MemorySegment) = input.map { it.toDouble() }
-    .also { (r, g, b, a) ->
-        WGPUColor.r(output, r)
-        WGPUColor.g(output, g)
-        WGPUColor.b(output, b)
-        WGPUColor.a(output, a)
+internal fun Arena.map(input: Color, output: MemorySegment) {
+        WGPUColor.r(output, input.red)
+        WGPUColor.g(output, input.green)
+        WGPUColor.b(output, input.blue)
+        WGPUColor.a(output, input.alpha)
     }
 
 

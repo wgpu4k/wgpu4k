@@ -1,106 +1,106 @@
 package io.ygdrasil.wgpu.mapper
 
-import io.ygdrasil.wgpu.*
+import io.ygdrasil.wgpu.RenderPipelineDescriptor
 import io.ygdrasil.wgpu.internal.js.*
 
-internal fun map(input: RenderPipelineDescriptor): GPURenderPipelineDescriptor = object : GPURenderPipelineDescriptor {
-    override var vertex: GPUVertexState = input.vertex.convert()
-    override var layout: dynamic = input.layout?.handler ?: "auto"
-    override var label: dynamic = input.label ?: undefined
-    override var primitive: GPUPrimitiveState? = input.primitive.convert()
-    override var depthStencil: GPUDepthStencilState? = input.depthStencil?.convert() ?: undefined
-    override var fragment: GPUFragmentState? = input.fragment?.convert() ?: undefined
-    override var multisample: GPUMultisampleState? = input.multisample.convert()
+internal fun map(input: RenderPipelineDescriptor): GPURenderPipelineDescriptor =
+    createJsObject<GPURenderPipelineDescriptor>().apply {
+        vertex = map(input.vertex)
+        layout = input.layout?.handler ?: "auto"
+        label = input.label ?: undefined
+        primitive = map(input.primitive)
+        depthStencil = input.depthStencil?.let { map(it) } ?: undefined
+        fragment = input.fragment?.let { map(it) } ?: undefined
+        multisample = map(input.multisample)
+    }
+
+private fun map(input: RenderPipelineDescriptor.VertexState): GPUVertexState = createJsObject<GPUVertexState>().apply {
+    module = input.module.handler
+    entryPoint = input.entryPoint
+
+    // TODO map this
+    constants = undefined
+    buffers = input.buffers.map { map(it) }.toTypedArray()
 }
 
-private fun RenderPipelineDescriptor.VertexState.convert(): GPUVertexState =
-    object : GPUVertexState {
-        override var module: GPUShaderModule = this@convert.module.handler
-        override var entryPoint: String? = this@convert.entryPoint
-        // TODO map this
-        override var constants: Map<String, GPUPipelineConstantValue>? = undefined
-        override var buffers: Array<GPUVertexBufferLayout?>? = this@convert.buffers
-            .map { it.convert() }.toTypedArray()
+private fun map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout): GPUVertexBufferLayout =
+    createJsObject<GPUVertexBufferLayout>().apply {
+        arrayStride = input.arrayStride
+        attributes = input.attributes.map { map(it) }.toTypedArray()
+        stepMode = input.stepMode.name
     }
 
-private fun RenderPipelineDescriptor.VertexState.VertexBufferLayout.convert(): GPUVertexBufferLayout =
-    object : GPUVertexBufferLayout {
-        override var arrayStride: GPUSize64 = this@convert.arrayStride
-        override var attributes: Array<GPUVertexAttribute> = this@convert.attributes
-            .map { it.convert() }.toTypedArray()
-        override var stepMode: String? = this@convert.stepMode.name
+private fun map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute): GPUVertexAttribute =
+    createJsObject<GPUVertexAttribute>().apply {
+        format = input.format.name
+        offset = input.offset
+        shaderLocation = input.shaderLocation
     }
 
-private fun RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute.convert(): GPUVertexAttribute =
-    object : GPUVertexAttribute {
-        override var format: String = this@convert.format.name
-        override var offset: GPUSize64 = this@convert.offset
-        override var shaderLocation: GPUIndex32 = this@convert.shaderLocation
+private fun map(input: RenderPipelineDescriptor.PrimitiveState): GPUPrimitiveState =
+    createJsObject<GPUPrimitiveState>().apply {
+        topology = input.topology.stringValue
+        stripIndexFormat = input.stripIndexFormat?.name ?: undefined
+        frontFace = input.frontFace.name
+        cullMode = input.cullMode.name
+        unclippedDepth = input.unclippedDepth
     }
 
-private fun RenderPipelineDescriptor.PrimitiveState.convert(): GPUPrimitiveState =
-    object : GPUPrimitiveState {
-        override var topology: String? = this@convert.topology.stringValue
-        override var stripIndexFormat: String? = this@convert.stripIndexFormat?.name ?: undefined
-        override var frontFace: String? = this@convert.frontFace.name
-        override var cullMode: String? = this@convert.cullMode.name
-        override var unclippedDepth: Boolean? = this@convert.unclippedDepth
+private fun map(input: RenderPipelineDescriptor.DepthStencilState): GPUDepthStencilState =
+    createJsObject<GPUDepthStencilState>().apply {
+        format = input.format.actualName
+        depthWriteEnabled = input.depthWriteEnabled ?: undefined
+        depthCompare = input.depthCompare?.stringValue ?: undefined
+        stencilFront = map(input.stencilFront)
+        stencilBack = map(input.stencilBack)
+        stencilReadMask = input.stencilReadMask
+        stencilWriteMask = input.stencilWriteMask
+        depthBias = input.depthBias
+        depthBiasSlopeScale = input.depthBiasSlopeScale
+        depthBiasClamp = input.depthBiasClamp
     }
 
-private fun RenderPipelineDescriptor.DepthStencilState.convert(): GPUDepthStencilState =
-    object : GPUDepthStencilState {
-        override var format: String = this@convert.format.actualName
-        override var depthWriteEnabled: Boolean? = this@convert.depthWriteEnabled ?: undefined
-        override var depthCompare: String? = this@convert.depthCompare?.stringValue ?: undefined
-        override var stencilFront: GPUStencilFaceState? = this@convert.stencilFront.convert()
-        override var stencilBack: GPUStencilFaceState? = this@convert.stencilBack.convert()
-        override var stencilReadMask: GPUStencilValue? = this@convert.stencilReadMask
-        override var stencilWriteMask: GPUStencilValue? = this@convert.stencilWriteMask
-        override var depthBias: GPUDepthBias? = this@convert.depthBias
-        override var depthBiasSlopeScale: Float? = this@convert.depthBiasSlopeScale
-        override var depthBiasClamp: Float? = this@convert.depthBiasClamp
+private fun map(input: RenderPipelineDescriptor.DepthStencilState.StencilFaceState): GPUStencilFaceState =
+    createJsObject<GPUStencilFaceState>().apply {
+        compare = input.compare.stringValue
+        failOp = input.failOp.stringValue
+        depthFailOp = input.depthFailOp.stringValue
+        passOp = input.passOp.stringValue
     }
 
-private fun RenderPipelineDescriptor.DepthStencilState.StencilFaceState.convert(): GPUStencilFaceState =
-    object : GPUStencilFaceState {
-        override var compare: String? = this@convert.compare.stringValue
-        override var failOp: String? = this@convert.failOp.stringValue
-        override var depthFailOp: String? = this@convert.depthFailOp.stringValue
-        override var passOp: String? = this@convert.passOp.stringValue
+private fun map(input: RenderPipelineDescriptor.MultisampleState): GPUMultisampleState =
+    createJsObject<GPUMultisampleState>().apply {
+        count = input.count
+        mask = input.mask
+        alphaToCoverageEnabled = input.alphaToCoverageEnabled
     }
 
-private fun RenderPipelineDescriptor.MultisampleState.convert(): GPUMultisampleState =
-    object : GPUMultisampleState {
-        override var count: dynamic = this@convert.count
-        override var mask: dynamic = this@convert.mask
-        override var alphaToCoverageEnabled: dynamic = this@convert.alphaToCoverageEnabled
-    }
+private fun map(input: RenderPipelineDescriptor.FragmentState): GPUFragmentState =
+    createJsObject<GPUFragmentState>().apply {
+        targets = input.targets.map { map(it) }.toTypedArray()
+        module = input.module.handler
+        entryPoint = input.entryPoint
 
-private fun RenderPipelineDescriptor.FragmentState.convert(): GPUFragmentState =
-    object : GPUFragmentState {
-        override var targets: Array<GPUColorTargetState?> = this@convert.targets.map { it.convert() }.toTypedArray()
-        override var module: GPUShaderModule = this@convert.module.handler
-        override var entryPoint: String? = this@convert.entryPoint
         // TODO not sure how to map this
-        override var constants: Map<String, GPUPipelineConstantValue>? = undefined
+        constants = undefined
     }
 
-private fun RenderPipelineDescriptor.FragmentState.ColorTargetState.convert(): GPUColorTargetState =
-    object : GPUColorTargetState {
-        override var format: String = this@convert.format.actualName
-        override var blend: GPUBlendState? = this@convert.blend.convert()
-        override var writeMask: GPUColorWriteFlags? = this@convert.writeMask.value
+private fun map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState): GPUColorTargetState =
+    createJsObject<GPUColorTargetState>().apply {
+        format = input.format.actualName
+        blend = map(input.blend)
+        writeMask = input.writeMask.value
     }
 
-private fun RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.convert(): GPUBlendState =
-    object : GPUBlendState {
-        override var color: GPUBlendComponent = this@convert.color.convert()
-        override var alpha: GPUBlendComponent = this@convert.alpha.convert()
+private fun map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState): GPUBlendState =
+    createJsObject<GPUBlendState>().apply {
+        color = map(input.color)
+        alpha = map(input.alpha)
     }
 
-private fun RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent.convert(): GPUBlendComponent =
-    object : GPUBlendComponent {
-        override var operation: String? = this@convert.operation.stringValue
-        override var srcFactor: String? = this@convert.srcFactor.stringValue
-        override var dstFactor: String? = this@convert.dstFactor.stringValue
+private fun map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent): GPUBlendComponent =
+    createJsObject<GPUBlendComponent>().apply {
+        operation = input.operation.stringValue
+        srcFactor = input.srcFactor.stringValue
+        dstFactor = input.dstFactor.stringValue
     }

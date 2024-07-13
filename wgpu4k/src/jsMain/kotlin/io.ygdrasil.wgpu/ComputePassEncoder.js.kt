@@ -1,5 +1,3 @@
-
-
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPUComputePassEncoder
@@ -8,6 +6,7 @@ import org.khronos.webgl.Uint32Array
 actual class ComputePassEncoder(internal val handler: GPUComputePassEncoder) : AutoCloseable {
 
     actual fun setPipeline(pipeline: ComputePipeline) = handler.setPipeline(pipeline.handler)
+
     actual fun dispatchWorkgroups(workgroupCountX: GPUSize32, workgroupCountY: GPUSize32, workgroupCountZ: GPUSize32) =
         handler.dispatchWorkgroups(workgroupCountX, workgroupCountY, workgroupCountZ)
 
@@ -23,7 +22,7 @@ actual class ComputePassEncoder(internal val handler: GPUComputePassEncoder) : A
         bindGroup: BindGroup?,
         dynamicOffsetsData: UIntArray,
         dynamicOffsetsDataStart: GPUSize64,
-        dynamicOffsetsDataLength: GPUSize32
+        dynamicOffsetsDataLength: GPUSize32,
     ) = handler.setBindGroup(
         index,
         bindGroup?.handler,

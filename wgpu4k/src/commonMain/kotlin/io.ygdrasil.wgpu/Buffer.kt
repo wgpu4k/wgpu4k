@@ -1,29 +1,27 @@
-
-
 package io.ygdrasil.wgpu
 
 expect class Buffer : AutoCloseable {
 
-	val size: GPUSize64
-	val usage: Set<BufferUsage>
-	val mapState: BufferMapState
+    val size: GPUSize64
+    val usage: Set<BufferUsage>
+    val mapState: BufferMapState
 
-	fun unmap()
+    fun unmap()
 
-	fun mapFrom(buffer: FloatArray, offset: Int = 0)
+    fun mapFrom(buffer: FloatArray, offset: Int = 0)
 
-	fun mapFrom(buffer: ByteArray, offset: Int = 0)
+    fun mapFrom(buffer: ByteArray, offset: Int = 0)
 
-	fun mapInto(buffer: ByteArray, offset: Int)
+    fun mapInto(buffer: ByteArray, offset: Int)
 
-	suspend fun map(mode: Set<MapMode>, offset: GPUSize64 = 0, size: GPUSize64 = this.size)
+    suspend fun map(mode: Set<MapMode>, offset: GPUSize64 = 0, size: GPUSize64 = this.size)
 
-	override fun close()
+    override fun close()
 }
 
 data class BufferDescriptor(
-	val size: GPUSize64,
-	val usage: Set<BufferUsage>,
-	val mappedAtCreation: Boolean = false,
-	val label: String? = null
+    val size: GPUSize64,
+    val usage: Set<BufferUsage>,
+    val mappedAtCreation: Boolean = false,
+    val label: String? = null,
 )

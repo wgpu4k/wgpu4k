@@ -1,14 +1,12 @@
 package io.ygdrasil.wgpu.mapper
 
-import io.ygdrasil.wgpu.GPUSize32
-import io.ygdrasil.wgpu.GPUSize64
 import io.ygdrasil.wgpu.ImageCopyBuffer
-import io.ygdrasil.wgpu.internal.js.GPUBuffer
 import io.ygdrasil.wgpu.internal.js.GPUImageCopyBuffer
+import io.ygdrasil.wgpu.internal.js.createJsObject
 
-internal fun map(input: ImageCopyBuffer): GPUImageCopyBuffer = object : GPUImageCopyBuffer {
-    override var buffer: GPUBuffer = input.buffer.handler
-    override var offset: GPUSize64?= input.offset
-    override var bytesPerRow: GPUSize32?= input.bytesPerRow
-    override var rowsPerImage: GPUSize32?= input.rowsPerImage
+internal fun map(input: ImageCopyBuffer): GPUImageCopyBuffer = createJsObject<GPUImageCopyBuffer>().apply {
+    buffer = input.buffer.handler
+    offset = input.offset
+    bytesPerRow = input.bytesPerRow
+    rowsPerImage = input.rowsPerImage
 }

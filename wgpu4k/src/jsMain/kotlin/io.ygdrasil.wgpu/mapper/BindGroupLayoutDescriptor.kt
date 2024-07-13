@@ -1,43 +1,45 @@
 package io.ygdrasil.wgpu.mapper
 
-import io.ygdrasil.wgpu.*
+import io.ygdrasil.wgpu.BindGroupLayoutDescriptor
 import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.*
 import io.ygdrasil.wgpu.internal.js.*
+import io.ygdrasil.wgpu.toFlagInt
 
 // TODO: add unit test
-internal fun map(input: BindGroupLayoutDescriptor): GPUBindGroupLayoutDescriptor = object : GPUBindGroupLayoutDescriptor {
-    override var label: String? = input.label ?: undefined
-    override var entries: Array<GPUBindGroupLayoutEntry> = input.entries.map { map(it) }.toTypedArray()
-}
+internal fun map(input: BindGroupLayoutDescriptor): GPUBindGroupLayoutDescriptor =
+    createJsObject<GPUBindGroupLayoutDescriptor>().apply {
+        if (input.label != null) label = input.label
+        entries = input.entries.map { map(it) }.toTypedArray()
+    }
 
-private fun map(input: BindGroupLayoutDescriptor.Entry): GPUBindGroupLayoutEntry = object : GPUBindGroupLayoutEntry {
-    override var binding: GPUIndex32 = input.binding
-    override var visibility: GPUShaderStageFlags = input.visibility.toFlagInt()
-    override var buffer: GPUBufferBindingLayout? = if (input.bindingType is BufferBindingLayout) {
-        object : GPUBufferBindingLayout {
-            override var type: String? = input.bindingType.type.stringValue
-            override var hasDynamicOffset: Boolean? = input.bindingType.hasDynamicOffset
-            override var minBindingSize: GPUSize64? = input.bindingType.minBindingSize
+private fun map(input: BindGroupLayoutDescriptor.Entry): GPUBindGroupLayoutEntry =
+    createJsObject<GPUBindGroupLayoutEntry>().apply {
+        binding = input.binding
+        visibility = input.visibility.toFlagInt()
+        if (input.bindingType is BufferBindingLayout) {
+            buffer = createJsObject<GPUBufferBindingLayout>().apply {
+                type = input.bindingType.type.stringValue
+                hasDynamicOffset = input.bindingType.hasDynamicOffset
+                minBindingSize = input.bindingType.minBindingSize
+            }
         }
-    } else undefined
-    override var sampler: GPUSamplerBindingLayout? = if (input.bindingType is SamplerBindingLayout) {
-        object : GPUSamplerBindingLayout {
-            override var type: String? = input.bindingType.type.stringValue
+        if (input.bindingType is SamplerBindingLayout) {
+            sampler = createJsObject<GPUSamplerBindingLayout>().apply {
+                type = input.bindingType.type.stringValue
+            }
         }
-    } else undefined
-    override var texture: GPUTextureBindingLayout?  = if (input.bindingType is TextureBindingLayout) {
-        object : GPUTextureBindingLayout {
-            override var sampleType: String? = input.bindingType.sampleType.stringValue
-            override var viewDimension: String? = input.bindingType.viewDimension.stringValue
-            override var multisampled: Boolean? = input.bindingType.multisampled
+        if (input.bindingType is TextureBindingLayout) {
+            texture = createJsObject<GPUTextureBindingLayout>().apply {
+                sampleType = input.bindingType.sampleType.stringValue
+                viewDimension = input.bindingType.viewDimension.stringValue
+                multisampled = input.bindingType.multisampled
+            }
         }
-    } else undefined
-    override var storageTexture: GPUStorageTextureBindingLayout? = if (input.bindingType is StorageTextureBindingLayout) {
-        object : GPUStorageTextureBindingLayout {
-            override var access: String? = input.bindingType.access.stringValue
-            override var format: String = input.bindingType.format.actualName
-            override var viewDimension: String? = input.bindingType.viewDimension.stringValue
+        if (input.bindingType is StorageTextureBindingLayout) {
+            storageTexture = createJsObject<GPUStorageTextureBindingLayout>().apply {
+                access = input.bindingType.access.stringValue
+                format = input.bindingType.format.actualName
+                viewDimension = input.bindingType.viewDimension.stringValue
+            }
         }
-    } else undefined
-    override var externalTexture: GPUExternalTextureBindingLayout? = undefined
-}
+    }

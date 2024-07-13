@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-typealias GPUBufferDynamicOffset = Number
+typealias GPUBufferDynamicOffset = ULong
 
 typealias GPUBufferUsageFlags = Int
 
@@ -41,21 +41,21 @@ typealias GPUStencilValue = Long
 typealias GPUTextureUsageFlags = Int
 
 data class Size3D(
-	var width: Int,
-	var height: Int = 1,
-	var depthOrArrayLayers: Int = 1
+	val width: Int,
+	val height: Int = 1,
+	val depthOrArrayLayers: Int = 1,
 ) {
-	fun toArray() = arrayOf(width, height, depthOrArrayLayers)
+    fun toArray() = arrayOf(width, height, depthOrArrayLayers)
 }
 
 data class Origin3D(
-	var x: GPUIntegerCoordinate = 0,
-	var y: GPUIntegerCoordinate = 0,
-	var z: GPUIntegerCoordinate = 0
+	val x: GPUIntegerCoordinate = 0,
+	val y: GPUIntegerCoordinate = 0,
+	val z: GPUIntegerCoordinate = 0,
 ) {
-	fun toArray() = arrayOf(x, y, z)
+    fun toArray() = arrayOf(x, y, z)
 
-	companion object {
-		val Zero = Origin3D(0, 0, 0)
-	}
+    companion object {
+        val Zero = Origin3D(0, 0, 0)
+    }
 }

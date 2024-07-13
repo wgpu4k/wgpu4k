@@ -47,7 +47,7 @@ actual class RenderPassEncoder(private val handler: MemorySegment) : AutoCloseab
     actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
         wgpu_h.wgpuRenderPassEncoderSetIndexBuffer(handler, buffer.handler, indexFormat.value, offset, size)
     }
-    actual fun executeBundles(bundles: Array<RenderBundle>) = confined { arena ->
+    actual fun executeBundles(bundles: List<RenderBundle>) = confined { arena ->
         wgpu_h.wgpuRenderPassEncoderExecuteBundles(
             handler,
             bundles.size.toLong(),

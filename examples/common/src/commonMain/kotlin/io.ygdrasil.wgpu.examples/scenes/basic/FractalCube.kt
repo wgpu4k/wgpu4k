@@ -49,10 +49,10 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 							code = basicVertexShader
 						)
 					).bind(), // bind to autoClosableContext to release it later
-					buffers = arrayOf(
+					buffers = listOf(
 						RenderPipelineDescriptor.VertexState.VertexBufferLayout(
 							arrayStride = cubeVertexSize,
-							attributes = arrayOf(
+							attributes = listOf(
 								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
 									shaderLocation = 0,
 									offset = cubePositionOffset,
@@ -73,7 +73,7 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 							code = sampleSelfShader
 						)
 					).bind(), // bind to autoClosableContext to release it later
-					targets = arrayOf(
+					targets = listOf(
 						RenderPipelineDescriptor.FragmentState.ColorTargetState(
 							format = renderingContext.textureFormat
 						)
@@ -129,7 +129,7 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		uniformBindGroup = device.createBindGroup(
 			BindGroupDescriptor(
 				layout = renderPipeline.getBindGroupLayout(0),
-				entries = arrayOf(
+				entries = listOf(
 					BindGroupDescriptor.BindGroupEntry(
 						binding = 0,
 						resource = BindGroupDescriptor.BufferBinding(
@@ -153,11 +153,11 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		)
 
 		renderPassDescriptor = RenderPassDescriptor(
-			colorAttachments = arrayOf(
+			colorAttachments = listOf(
 				RenderPassDescriptor.ColorAttachment(
 					view = dummyTexture.createView().bind(), // Assigned later
 					loadOp = LoadOp.clear,
-					clearValue = arrayOf(0.5, 0.5, 0.5, 1.0),
+					clearValue = Color(0.5, 0.5, 0.5, 1.0),
 					storeOp = StoreOp.store,
 				)
 			),
@@ -192,7 +192,7 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		val swapChainTexture = renderingContext.getCurrentTexture()
 
 		renderPassDescriptor = renderPassDescriptor.copy(
-			colorAttachments = arrayOf(
+			colorAttachments = listOf(
 				renderPassDescriptor.colorAttachments[0].copy(
 					view = swapChainTexture
 						.bind()
@@ -221,7 +221,7 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		val commandBuffer = encoder.finish()
 			.bind()
 
-		device.queue.submit(arrayOf(commandBuffer))
+		device.queue.submit(listOf(commandBuffer))
 
 	}
 

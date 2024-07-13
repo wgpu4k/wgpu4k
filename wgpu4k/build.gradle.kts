@@ -1,5 +1,6 @@
 import de.undercouch.gradle.tasks.download.Download
 import io.github.krakowski.jextract.JextractTask
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 import org.jreleaser.model.Active
 
 
@@ -34,7 +35,6 @@ val jextract = tasks.withType<JextractTask> {
 kotlin {
 
     js {
-        binaries.executable()
         browser()
         nodejs()
     }
@@ -42,7 +42,22 @@ kotlin {
         withJava()
     }
 
-    sourceSets {
+	androidNativeX64()
+	androidNativeArm64()
+	iosX64()
+	iosArm64()
+	linuxArm64()
+	linuxX64()
+	macosArm64()
+	macosX64()
+
+	@OptIn(ExperimentalWasmDsl::class)
+	wasmJs {
+		browser()
+		nodejs()
+	}
+
+	sourceSets {
 
         all {
             languageSettings.optIn("kotlin.ExperimentalStdlibApi")
@@ -82,8 +97,21 @@ kotlin {
             dependencies {
                 implementation(libs.kotest.runner.junit5)
             }
-
         }
+
+		val unmappedMain by creating {
+			dependsOn(commonMain)
+		}
+
+		val macosX64Main by getting { dependsOn(unmappedMain) }
+		val macosArm64Main by getting { dependsOn(unmappedMain) }
+		val linuxArm64Main by getting { dependsOn(unmappedMain) }
+		val linuxX64Main by getting { dependsOn(unmappedMain) }
+		val iosX64Main by getting { dependsOn(unmappedMain) }
+		val iosArm64Main by getting { dependsOn(unmappedMain) }
+		val androidNativeX64Main by getting { dependsOn(unmappedMain) }
+		val androidNativeArm64Main by getting { dependsOn(unmappedMain) }
+
     }
     compilerOptions {
         allWarningsAsErrors = true

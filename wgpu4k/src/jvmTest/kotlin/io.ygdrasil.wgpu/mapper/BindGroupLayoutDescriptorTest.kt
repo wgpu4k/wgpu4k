@@ -18,7 +18,7 @@ class BindGroupLayoutDescriptorTest : FreeSpec({
         confined { arena ->
             val bufferDescriptor = BindGroupLayoutDescriptor(
                 label = "BindGroupLayoutDescriptor",
-                entries = arrayOf(
+                entries = listOf(
                     BindGroupLayoutDescriptor.Entry(
                         binding = 0,
                         visibility = setOf(ShaderStage.vertex),

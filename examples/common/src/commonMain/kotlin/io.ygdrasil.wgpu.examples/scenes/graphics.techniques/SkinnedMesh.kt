@@ -17,7 +17,7 @@ import kotlin.math.PI
 
 class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene(wgpuContext), AssetManager by assetManager {
 
-    internal lateinit var renderBundles: Array<RenderBundle>
+    internal lateinit var renderBundles: List<RenderBundle>
     internal lateinit var viewParamBuf: Buffer
     internal lateinit var projectionMatrix: Matrix4
     internal lateinit var renderPassDesc: RenderPassDescriptor
@@ -36,11 +36,11 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
         ).bind()
 
         renderPassDesc = RenderPassDescriptor(
-            colorAttachments = arrayOf(
+            colorAttachments = listOf(
                 ColorAttachment(
                     view = dummyTexture.createView().bind(),
                     loadOp = LoadOp.clear,
-                    clearValue = arrayOf(0.3, 0.3, 0.3, 1),
+                    clearValue = Color(0.3, 0.3, 0.3, 1.0),
                     storeOp = StoreOp.store
                 )
             ),
@@ -57,7 +57,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
 
         val viewParamsLayout = device.createBindGroupLayout(
             BindGroupLayoutDescriptor(
-                entries = arrayOf(
+                entries = listOf(
                     Entry(
                         binding = 0,
                         visibility = setOf(ShaderStage.vertex),
@@ -76,7 +76,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
         val viewParamsBindGroup = device.createBindGroup(
             BindGroupDescriptor(
                 layout = viewParamsLayout,
-                entries = arrayOf(
+                entries = listOf(
                     BindGroupEntry(
                         binding = 0,
                         resource = BindGroupDescriptor.BufferBinding(buffer = viewParamBuf)
@@ -101,7 +101,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
     override fun AutoClosableContext.render() {
 
         val renderPassDesc = renderPassDesc.copy(
-            colorAttachments = arrayOf(
+            colorAttachments = listOf(
                 renderPassDesc.colorAttachments[0].copy(
                     view = renderingContext.getCurrentTexture().createView().bind()
                 )
@@ -126,7 +126,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
         renderPass.executeBundles(renderBundles)
 
         renderPass.end()
-        device.queue.submit(arrayOf(commandEncoder.finish()))
+        device.queue.submit(listOf(commandEncoder.finish()))
 
     }
 

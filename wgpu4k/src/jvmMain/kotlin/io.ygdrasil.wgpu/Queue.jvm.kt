@@ -1,18 +1,21 @@
 package io.ygdrasil.wgpu
 
 
-import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUExtent3D
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUTextureDataLayout
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
+import io.ygdrasil.wgpu.internal.jvm.toPointerArray
 import io.ygdrasil.wgpu.mapper.map
 import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.ValueLayout
 
+private val supportedFormatOncopyExternalImageToTexture = listOf(TextureFormat.rgba8unorm, TextureFormat.rgba8unormsrgb)
+
 actual class Queue(internal val handler: MemorySegment) {
 
-    actual fun submit(commandsBuffer: Array<CommandBuffer>) = confined { arena ->
+    actual fun submit(commandsBuffer: List<CommandBuffer>) = confined { arena ->
         if (commandsBuffer.isNotEmpty()) {
 
             val commands = commandsBuffer.map { it.handler }.toPointerArray(arena)
@@ -69,12 +72,12 @@ actual class Queue(internal val handler: MemorySegment) {
         destination: ImageCopyTextureTagged,
         copySize: GPUIntegerCoordinates
     ) = confined { arena ->
-        assert(destination.texture.format == TextureFormat.rgba8unorm) {
-            error("rgba8unorm is the only supported texture format supported")
+        check(destination.texture.format in supportedFormatOncopyExternalImageToTexture) {
+            "(${supportedFormatOncopyExternalImageToTexture.map { it.actualName }.joinToString (", ")})are the only supported texture format supported, found ${destination.texture.format}"
         }
 
         val image = (source.source as? ImageBitmapHolder)
-        if (image == null) error("ImageBitmapHolder required as source")
+            ?: error("ImageBitmapHolder required as source")
 
         val bytePerPixel = destination.texture.format.getBytesPerPixel()
 
