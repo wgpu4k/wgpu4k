@@ -26,7 +26,7 @@ actual class Surface(internal val handler: GPUCanvasContext) : AutoCloseable {
         // Nothing to do on js
     }
 
-    actual fun configure(canvasConfiguration: CanvasConfiguration)  {
+    actual fun configure(canvasConfiguration: CanvasConfiguration) {
         map(canvasConfiguration)
             .let { handler.configure(it) }
     }

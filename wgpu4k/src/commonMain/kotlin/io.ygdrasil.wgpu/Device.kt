@@ -87,7 +87,7 @@ data class RenderBundleEncoderDescriptor(
 data class QuerySetDescriptor(
     val label: String? = null,
     val type: QueryType,
-    val count: GPUSize32
+    val count: GPUSize32,
 )
 
 data class CommandEncoderDescriptor(val label: String? = null)

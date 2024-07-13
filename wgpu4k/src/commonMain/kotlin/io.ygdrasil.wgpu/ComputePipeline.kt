@@ -1,5 +1,3 @@
-
-
 package io.ygdrasil.wgpu
 
 expect class ComputePipeline : AutoCloseable {
@@ -11,7 +9,7 @@ expect class ComputePipeline : AutoCloseable {
 data class ComputePipelineDescriptor(
     val compute: ProgrammableStage,
     val layout: PipelineLayout? = null,
-    val label: String? = null
+    val label: String? = null,
 ) {
     data class ProgrammableStage(
         val module: ShaderModule,

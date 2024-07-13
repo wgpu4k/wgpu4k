@@ -2,7 +2,7 @@ package io.ygdrasil.wgpu
 
 enum class TextureFormat(
     override val value: Int,
-    private val extraName: String? = null
+    private val extraName: String? = null,
 ) : EnumerationWithValue {
     r8unorm(1),
     r8snorm(2),

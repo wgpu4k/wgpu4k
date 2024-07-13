@@ -1,5 +1,3 @@
-
-
 package io.ygdrasil.wgpu
 
 expect class PipelineLayout
@@ -12,7 +10,7 @@ expect class RenderPipeline : AutoCloseable {
 
 data class PipelineLayoutDescriptor(
     val bindGroupLayouts: List<BindGroupLayout> = listOf(),
-    val label: String? = null
+    val label: String? = null,
 )
 
 data class RenderPipelineDescriptor(
@@ -77,28 +75,28 @@ data class RenderPipelineDescriptor(
     data class MultisampleState(
         val count: GPUSize32 = 1,
         val mask: GPUSampleMask = 0xFFFFFFFFu,
-        val alphaToCoverageEnabled: Boolean = false
+        val alphaToCoverageEnabled: Boolean = false,
     )
 
     data class FragmentState(
         val module: ShaderModule,
         val targets: List<ColorTargetState> = listOf(),
-        val entryPoint: String = "main"
+        val entryPoint: String = "main",
     ) {
 
         data class ColorTargetState(
             val format: TextureFormat,
             val writeMask: ColorWriteMask = ColorWriteMask.all,
-            val blend: BlendState = BlendState()
+            val blend: BlendState = BlendState(),
         ) {
             data class BlendState(
                 val color: BlendComponent = BlendComponent(),
-                val alpha: BlendComponent = BlendComponent()
+                val alpha: BlendComponent = BlendComponent(),
             ) {
                 data class BlendComponent(
                     val operation: BlendOperation = BlendOperation.add,
                     val srcFactor: BlendFactor = BlendFactor.one,
-                    val dstFactor: BlendFactor = BlendFactor.zero
+                    val dstFactor: BlendFactor = BlendFactor.zero,
                 )
             }
         }

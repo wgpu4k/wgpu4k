@@ -1,5 +1,3 @@
-
-
 package io.ygdrasil.wgpu
 
 expect class ComputePassEncoder : AutoCloseable {
@@ -15,7 +13,7 @@ expect class ComputePassEncoder : AutoCloseable {
         bindGroup: BindGroup?,
         dynamicOffsetsData: UIntArray,
         dynamicOffsetsDataStart: GPUSize64,
-        dynamicOffsetsDataLength: GPUSize32
+        dynamicOffsetsDataLength: GPUSize32,
     )
 
     fun end()
@@ -25,7 +23,7 @@ expect class ComputePassEncoder : AutoCloseable {
 
 data class ComputePassDescriptor(
     val label: String? = null,
-    val timestampWrites: ComputePassTimestampWrites? = null
+    val timestampWrites: ComputePassTimestampWrites? = null,
 ) {
     data class ComputePassTimestampWrites(
         val querySet: QuerySet,

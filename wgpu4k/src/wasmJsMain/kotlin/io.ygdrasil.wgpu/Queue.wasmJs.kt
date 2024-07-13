@@ -15,7 +15,7 @@ actual class Queue(internal val handler: GPUQueue) {
         bufferOffset: GPUSize64,
         data: FloatArray,
         dataOffset: GPUSize64,
-        size: GPUSize64
+        size: GPUSize64,
     ) {
         handler.writeBuffer(
             buffer.handler,
@@ -31,7 +31,7 @@ actual class Queue(internal val handler: GPUQueue) {
         bufferOffset: GPUSize64,
         data: IntArray,
         dataOffset: GPUSize64,
-        size: GPUSize64
+        size: GPUSize64,
     ) {
         handler.writeBuffer(
             buffer.handler,
@@ -45,7 +45,7 @@ actual class Queue(internal val handler: GPUQueue) {
     actual fun copyExternalImageToTexture(
         source: ImageCopyExternalImage,
         destination: ImageCopyTextureTagged,
-        copySize: GPUIntegerCoordinates
+        copySize: GPUIntegerCoordinates,
     ) {
         if (destination.texture.format !in listOf(TextureFormat.rgba8unorm, TextureFormat.rgba8unormsrgb)) {
             error("rgba8unorm asnd rgba8unormsrgb are the only supported texture format supported")
@@ -61,7 +61,7 @@ actual class Queue(internal val handler: GPUQueue) {
                 texture = destination.texture.handler
                 mipLevel = destination.mipLevel
                 origin = destination.origin.toArray().mapJsArray { it.toJsNumber() }
-                aspect= destination.aspect.stringValue
+                aspect = destination.aspect.stringValue
             },
             image.data.toInt8Array().buffer,
             createJsObject<GPUImageDataLayout>().apply {
@@ -82,5 +82,5 @@ actual sealed interface DrawableHolder
 actual class ImageBitmapHolder(
     actual val width: Int,
     actual val height: Int,
-    val data: ByteArray
+    val data: ByteArray,
 ) : DrawableHolder

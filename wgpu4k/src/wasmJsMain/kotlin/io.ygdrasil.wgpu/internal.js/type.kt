@@ -99,7 +99,8 @@ external interface GPUCommandEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebug
     )
 }
 
-external interface GPUComputePassEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin, GPUBindingCommandsMixin {
+external interface GPUComputePassEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin,
+    GPUBindingCommandsMixin {
     fun setPipeline(pipeline: GPUComputePipeline)
     fun dispatchWorkgroups(
         workgroupCountX: GPUSize32,
@@ -149,6 +150,7 @@ external interface GPUBindGroupDescriptor : GPUObjectDescriptorBase {
     var layout: GPUBindGroupLayout
     var entries: JsArray<GPUBindGroupEntry>
 }
+
 external interface GPUBindGroupEntry : JsAny {
     var binding: GPUIndex32
     var resource: JsAny
@@ -226,6 +228,7 @@ external interface GPURenderCommandsMixin {
         offset: JsNumber = definedExternally,
         size: JsNumber = definedExternally,
     )
+
     fun draw(
         vertexCount: GPUSize32,
         instanceCount: GPUSize32 = definedExternally,
@@ -317,6 +320,7 @@ external interface GPUQueue : GPUObjectBase {
         dataLayout: GPUImageDataLayout,
         size: GPUExtent3DDict,
     )
+
     fun onSubmittedWorkDone(): Promise<Nothing?>
 }
 

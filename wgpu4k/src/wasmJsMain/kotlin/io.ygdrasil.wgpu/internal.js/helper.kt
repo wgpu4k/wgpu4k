@@ -33,7 +33,7 @@ internal fun ULong.toJsNumber(): JsNumber =
 internal fun Long.toJsBigInt(): JsBigInt =
     inferBig(this)
 
-internal fun <T : JsAny>createJsObject(): T =
+internal fun <T : JsAny> createJsObject(): T =
     js("({ })")
 
 internal fun <A, B : JsAny> List<A>.mapJsArray(converter: (A) -> B): JsArray<B> {

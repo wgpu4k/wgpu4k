@@ -32,5 +32,5 @@ data class ImageCopyBuffer(
     val buffer: Buffer,
     val offset: GPUSize64,
     val bytesPerRow: GPUSize32,
-    val rowsPerImage: GPUSize32
+    val rowsPerImage: GPUSize32,
 )

@@ -1,5 +1,3 @@
-
-
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPUComputePipeline

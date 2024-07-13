@@ -5,7 +5,7 @@ import io.ygdrasil.wgpu.internal.js.GPUImageCopyTexture
 import io.ygdrasil.wgpu.internal.js.createJsObject
 import io.ygdrasil.wgpu.internal.js.mapJsArray
 
-internal fun map(input: ImageCopyTexture): GPUImageCopyTexture = createJsObject<GPUImageCopyTexture>().apply  {
+internal fun map(input: ImageCopyTexture): GPUImageCopyTexture = createJsObject<GPUImageCopyTexture>().apply {
     texture = input.texture.handler
     mipLevel = input.mipLevel
     origin = input.origin.toArray().mapJsArray { it.toJsNumber() }

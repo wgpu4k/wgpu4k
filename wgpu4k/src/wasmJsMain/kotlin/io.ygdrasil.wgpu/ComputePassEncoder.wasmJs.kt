@@ -25,7 +25,7 @@ actual class ComputePassEncoder(internal val handler: GPUComputePassEncoder) : A
         bindGroup: BindGroup?,
         dynamicOffsetsData: UIntArray,
         dynamicOffsetsDataStart: GPUSize64,
-        dynamicOffsetsDataLength: GPUSize32
+        dynamicOffsetsDataLength: GPUSize32,
     ) {
         handler.setBindGroup(
             index,

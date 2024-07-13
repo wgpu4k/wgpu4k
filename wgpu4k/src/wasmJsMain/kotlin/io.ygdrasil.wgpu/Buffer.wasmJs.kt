@@ -21,7 +21,12 @@ actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
     }
 
     actual fun mapFrom(buffer: FloatArray, offset: Int) {
-        Float32Array(handler.getMappedRange(offset.toJsNumber(), (buffer.size.toLong() * Float.SIZE_BYTES).toJsNumber()))
+        Float32Array(
+            handler.getMappedRange(
+                offset.toJsNumber(),
+                (buffer.size.toLong() * Float.SIZE_BYTES).toJsNumber()
+            )
+        )
             .set(buffer.mapJsArray { it.toJsNumber() }, 0)
     }
 

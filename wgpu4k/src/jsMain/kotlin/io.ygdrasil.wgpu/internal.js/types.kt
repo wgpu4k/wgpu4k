@@ -12,7 +12,7 @@ import org.w3c.dom.events.EventTarget
 import web.errors.DOMException
 import kotlin.js.Promise
 
-fun <T>createJsObject(): T =
+fun <T> createJsObject(): T =
     js("({ })")
 
 external interface GPUBindGroupDescriptor : GPUObjectDescriptorBase {
@@ -151,6 +151,7 @@ external interface GPUImageCopyBuffer : GPUImageDataLayout {
 
 external interface GPUImageCopyExternalImage {
     var source: Any
+
     /* ImageBitmap | ImageData | HTMLImageElement | HTMLVideoElement | VideoFrame | HTMLCanvasElement | OffscreenCanvas */
     var origin: GPUOrigin2DDict
     var flipY: Boolean
@@ -176,6 +177,7 @@ external interface GPUImageDataLayout {
 
 external interface GPUMultisampleState {
     var count: GPUSize32?
+
     @Suppress("INLINE_CLASS_IN_EXTERNAL_DECLARATION_WARNING")
     var mask: dynamic
     var alphaToCoverageEnabled: Boolean?

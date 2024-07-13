@@ -27,11 +27,22 @@ actual class RenderBundleEncoder(internal val handler: GPURenderBundleEncoder) :
         handler.setIndexBuffer(buffer.handler, indexFormat.name, offset.toJsNumber(), size.toJsNumber())
     }
 
-    actual fun drawIndexed(indexCount: GPUSize32, instanceCount: GPUSize32, firstIndex: GPUSize32, baseVertex: GPUSignedOffset32, firstInstance: GPUSize32) {
+    actual fun drawIndexed(
+        indexCount: GPUSize32,
+        instanceCount: GPUSize32,
+        firstIndex: GPUSize32,
+        baseVertex: GPUSignedOffset32,
+        firstInstance: GPUSize32,
+    ) {
         handler.drawIndexed(indexCount, instanceCount, firstIndex, baseVertex, firstInstance)
     }
 
-    actual fun draw(vertexCount: GPUSize32, instanceCount: GPUSize32, firstVertex: GPUSize32, firstInstance: GPUSize32) {
+    actual fun draw(
+        vertexCount: GPUSize32,
+        instanceCount: GPUSize32,
+        firstVertex: GPUSize32,
+        firstInstance: GPUSize32,
+    ) {
         handler.draw(vertexCount, instanceCount, firstVertex, firstInstance)
     }
 

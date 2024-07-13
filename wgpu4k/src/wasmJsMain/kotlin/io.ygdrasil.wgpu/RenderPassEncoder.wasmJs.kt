@@ -4,7 +4,7 @@ import io.ygdrasil.wgpu.internal.js.GPURenderPassEncoder
 import io.ygdrasil.wgpu.internal.js.mapJsArray
 import io.ygdrasil.wgpu.internal.js.toJsNumber
 
-actual class RenderPassEncoder(internal val handler: GPURenderPassEncoder): AutoCloseable {
+actual class RenderPassEncoder(internal val handler: GPURenderPassEncoder) : AutoCloseable {
 
     actual fun end() {
         handler.end()
@@ -18,7 +18,7 @@ actual class RenderPassEncoder(internal val handler: GPURenderPassEncoder): Auto
         vertexCount: GPUSize32,
         instanceCount: GPUSize32,
         firstVertex: GPUSize32,
-        firstInstance: GPUSize32
+        firstInstance: GPUSize32,
     ) {
         handler.draw(
             vertexCount,

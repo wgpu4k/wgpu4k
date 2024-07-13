@@ -1,5 +1,3 @@
-
-
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPUTexture
@@ -24,14 +22,14 @@ actual class Texture(internal val handler: GPUTexture) : AutoCloseable {
     actual val usage: GPUFlagsConstant
         get() = handler.usage
 
-	actual fun createView(descriptor: TextureViewDescriptor?): TextureView {
-		return TextureView(
-			when (descriptor) {
-				null -> handler.createView()
-				else -> handler.createView(map(descriptor))
-			}
-		)
-	}
+    actual fun createView(descriptor: TextureViewDescriptor?): TextureView {
+        return TextureView(
+            when (descriptor) {
+                null -> handler.createView()
+                else -> handler.createView(map(descriptor))
+            }
+        )
+    }
 
     actual override fun close() {
         // nothing to do

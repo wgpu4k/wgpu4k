@@ -1,5 +1,3 @@
-
-
 package io.ygdrasil.wgpu
 
 interface EnumerationWithValue {
@@ -349,7 +347,7 @@ enum class ErrorType(
 
 enum class FeatureName(
     override val value: Int,
-    private val extraName: String? = null
+    private val extraName: String? = null,
 ) : EnumerationWithValue {
     depthClipControl(1, "depth-clip-control"),
     depth32floatStencil8(2, "depth32float-stencil8"),
@@ -441,7 +439,7 @@ enum class MipmapFilterMode(
 
 enum class PowerPreference(
     override val value: Int,
-     val stringValue: String?,
+    val stringValue: String?,
 ) : EnumerationWithValue {
 
     lowPower(1, "low-power"),
@@ -456,7 +454,7 @@ enum class PowerPreference(
 
 enum class PresentMode(
     override val value: Int,
-) : EnumerationWithValue{
+) : EnumerationWithValue {
     fifo(0),
     fiforelaxed(1),
     immediate(2),
@@ -587,7 +585,7 @@ enum class SType(
 enum class SamplerBindingType(
     override val value: Int,
     val stringValue: String,
-) : EnumerationWithValue{
+) : EnumerationWithValue {
     filtering(1, "filtering"),
     nonfiltering(2, "non-filtering"),
     comparison(3, "comparison");
@@ -686,7 +684,7 @@ enum class TextureAspect(
 
 enum class TextureDimension(
     override val value: Int,
-    val stringValue: String
+    val stringValue: String,
 ) : EnumerationWithValue {
     _1d(0, "1d"),
     _2d(1, "2d"),
@@ -707,7 +705,7 @@ enum class TextureDimension(
 
 enum class TextureSampleType(
     override val value: Int,
-    val stringValue: String
+    val stringValue: String,
 ) : EnumerationWithValue {
     float(1, "float"),
     unfilterablefloat(2, "unfilterable-float"),
