@@ -1,8 +1,7 @@
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
+    id(libs.plugins.kotlin.multiplatform.get().pluginId)
 	alias(libs.plugins.kotest)
-	alias(libs.plugins.download)
     `maven-publish`
 }
 

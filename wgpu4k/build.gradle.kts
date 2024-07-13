@@ -5,13 +5,14 @@ import org.jreleaser.model.Active
 
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
+    id(libs.plugins.kotlin.multiplatform.get().pluginId)
     alias(libs.plugins.kotest)
     id("io.github.krakowski.jextract") version "0.5.0" apply false
-    alias(libs.plugins.download)
     `maven-publish`
     id("org.jreleaser") version "1.13.1"
 }
+
+val buildNativeResourcesDirectory = project.file("build").resolve("native")
 
 java {
     toolchain {
