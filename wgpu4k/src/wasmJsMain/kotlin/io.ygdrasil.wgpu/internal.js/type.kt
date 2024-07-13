@@ -38,6 +38,7 @@ external class GPUDevice : JsAny {
     fun createTexture(descriptor: GPUTextureDescriptor): GPUTexture
     fun createBuffer(descriptor: GPUBufferDescriptor): GPUBuffer
     fun createRenderPipeline(canvasConfiguration: GPURenderPipelineDescriptor): GPURenderPipeline
+    fun createPipelineLayout(descriptor: GPUPipelineLayoutDescriptor): GPUPipelineLayout
     fun createShaderModule(descriptor: GPUShaderModuleDescriptor): GPUShaderModule
     fun createCommandEncoder(descriptor: GPUCommandEncoderDescriptor = definedExternally): GPUCommandEncoder
     fun createSampler(descriptor: GPUSamplerDescriptor = definedExternally): GPUSampler
@@ -45,6 +46,10 @@ external class GPUDevice : JsAny {
     fun createBindGroupLayout(descriptor: GPUBindGroupLayoutDescriptor): GPUBindGroupLayout
     fun createRenderBundleEncoder(descriptor: GPURenderBundleEncoderDescriptor): GPURenderBundleEncoder
     fun createQuerySet(descriptor: GPUQuerySetDescriptor): GPUQuerySet
+}
+
+external interface GPUPipelineLayoutDescriptor : GPUObjectDescriptorBase {
+    var bindGroupLayouts: JsArray<GPUBindGroupLayout>
 }
 
 external interface GPUQuerySetDescriptor : GPUObjectDescriptorBase {
