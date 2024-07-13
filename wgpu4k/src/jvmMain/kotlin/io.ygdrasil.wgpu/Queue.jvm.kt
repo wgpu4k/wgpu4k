@@ -11,6 +11,8 @@ import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.ValueLayout
 
+private val supportedFormatOncopyExternalImageToTexture = listOf(TextureFormat.rgba8unorm, TextureFormat.rgba8unormsrgb)
+
 actual class Queue(internal val handler: MemorySegment) {
 
     actual fun submit(commandsBuffer: List<CommandBuffer>) = confined { arena ->
@@ -70,8 +72,8 @@ actual class Queue(internal val handler: MemorySegment) {
         destination: ImageCopyTextureTagged,
         copySize: GPUIntegerCoordinates
     ) = confined { arena ->
-        assert(destination.texture.format == TextureFormat.rgba8unorm) {
-            error("rgba8unorm is the only supported texture format supported")
+        check(destination.texture.format in supportedFormatOncopyExternalImageToTexture) {
+            "(${supportedFormatOncopyExternalImageToTexture.map { it.actualName }.joinToString (", ")})are the only supported texture format supported, found ${destination.texture.format}"
         }
 
         val image = (source.source as? ImageBitmapHolder)
