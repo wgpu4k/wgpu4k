@@ -65,7 +65,7 @@ kotlin {
             languageSettings.optIn("kotlin.js.ExperimentalJsExport")
         }
 
-        val kotlinWrappersVersion = "1.0.0-pre.769"
+        val kotlinWrappersVersion = "1.0.0-pre.774"
 
         val jsMain by getting {
             dependencies {
