@@ -3,34 +3,13 @@ import io.github.krakowski.jextract.JextractTask
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 import org.jreleaser.model.Active
 
-
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
+    id("com.android.library")
     alias(libs.plugins.kotest)
     id("io.github.krakowski.jextract") version "0.5.0" apply false
     `maven-publish`
     id("org.jreleaser") version "1.13.1"
-}
-
-val buildNativeResourcesDirectory = project.file("build").resolve("native")
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(22))
-    }
-}
-
-// You need to use a JDK version with jextract from here
-// https://jdk.java.net/jextract/
-val jextract = tasks.withType<JextractTask> {
-    header("${project.projectDir}/../headers/wgpu.h") {
-
-        // The package under which all source files will be generated
-        targetPackage = "io.ygdrasil.wgpu.internal.jvm.panama"
-
-        outputDir = project.objects.directoryProperty()
-            .convention(project.layout.projectDirectory.dir("src/jvmMain"))
-    }
 }
 
 kotlin {
@@ -43,14 +22,22 @@ kotlin {
         withJava()
     }
 
-	androidNativeX64()
-	androidNativeArm64()
-	iosX64()
-	iosArm64()
-	linuxArm64()
-	linuxX64()
-	macosArm64()
-	macosX64()
+    val unimplementedTarget = listOf(
+        androidNativeX64(),
+        androidNativeArm64(),
+        androidTarget(),
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64(),
+        tvosArm64(),
+        tvosX64(),
+        tvosSimulatorArm64(),
+        linuxArm64(),
+        linuxX64(),
+        macosArm64(),
+        macosX64(),
+        mingwX64(),
+    )
 
 	@OptIn(ExperimentalWasmDsl::class)
 	wasmJs {
@@ -104,7 +91,11 @@ kotlin {
 			dependsOn(commonMain)
 		}
 
-		val macosX64Main by getting { dependsOn(unmappedMain) }
+        unimplementedTarget.forEach { target ->
+            getByName("${target.name}Main")
+                .dependsOn(unmappedMain)
+        }
+		/*val macosX64Main by getting { dependsOn(unmappedMain) }
 		val macosArm64Main by getting { dependsOn(unmappedMain) }
 		val linuxArm64Main by getting { dependsOn(unmappedMain) }
 		val linuxX64Main by getting { dependsOn(unmappedMain) }
@@ -112,11 +103,44 @@ kotlin {
 		val iosArm64Main by getting { dependsOn(unmappedMain) }
 		val androidNativeX64Main by getting { dependsOn(unmappedMain) }
 		val androidNativeArm64Main by getting { dependsOn(unmappedMain) }
+        val androidTarget by getting { dependsOn(unmappedMain) }*/
 
     }
     compilerOptions {
         allWarningsAsErrors = true
         freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
+}
+
+android {
+    namespace = "io.ygdrasil.wgpu4k"
+    compileSdk = 34
+
+    defaultConfig {
+        minSdk = 28
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(22))
+    }
+}
+
+// You need to use a JDK version with jextract from here
+// https://jdk.java.net/jextract/
+val jextract = tasks.withType<JextractTask> {
+    header("${project.projectDir}/../headers/wgpu.h") {
+
+        // The package under which all source files will be generated
+        targetPackage = "io.ygdrasil.wgpu.internal.jvm.panama"
+
+        outputDir = project.objects.directoryProperty()
+            .convention(project.layout.projectDirectory.dir("src/jvmMain"))
     }
 }
 

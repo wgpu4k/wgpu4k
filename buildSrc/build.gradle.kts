@@ -5,6 +5,7 @@ plugins {
 
 repositories {
 	mavenCentral()
+	google()
 	maven( url = "https://jitpack.io" )
 }
 
@@ -17,4 +18,5 @@ dependencies {
 	implementation(libs.korge.core)
 	implementation(libs.coroutines)
 	implementation(libs.kotlin.multiplatform)
+	implementation(libs.android.library)
 }

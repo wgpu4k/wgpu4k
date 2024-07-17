@@ -4,9 +4,18 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 pluginManagement {
 	repositories {
 		gradlePluginPortal()
+		google()
 		mavenCentral()
 		mavenLocal()
 		maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+	}
+}
+
+dependencyResolutionManagement {
+	repositories {
+		google()
+		mavenLocal()
+		mavenCentral()
 	}
 }
 
