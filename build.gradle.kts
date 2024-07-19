@@ -8,6 +8,7 @@ allprojects {
 
 	repositories {
 		mavenLocal()
+		google()
 		mavenCentral()
 		// Use by rococoa
 		maven {
