@@ -1,0 +1,8 @@
+
+staticLibraries.macos_arm64 = libWGPU.a
+libraryPaths.macos_arm64 = ./build/native/darwin-aarch64/
+staticLibraries.macos_x64 = libWGPU.a
+libraryPaths.macos_x64 = ./build/native/darwin-x64/
+
+linkerOpts.macos_arm64 = -framework QuartzCore -framework Metal
+linkerOpts.macos_x64 = -framework QuartzCore -framework Metal

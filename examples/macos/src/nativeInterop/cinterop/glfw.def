@@ -1,0 +1,12 @@
+
+staticLibraries.macos_arm64 = libglfw3.a
+libraryPaths.macos_arm64 = ./build/native/darwin/
+staticLibraries.macos_x64 = libglfw3.a
+libraryPaths.macos_x64 = ./build/native/darwin/
+
+linkerOpts.macos_arm64 = -framework IOKit
+linkerOpts.macos_x64 = -framework IOKit
+
+---
+
+void* glfwGetCocoaWindow(GLFWwindow* window);
