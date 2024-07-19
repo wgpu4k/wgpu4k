@@ -2,7 +2,7 @@
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
 	alias(libs.plugins.kotest)
-    `maven-publish`
+    id("publish")
 }
 
 java {
@@ -87,24 +87,4 @@ tasks.named<Test>("jvmTest") {
 		)
 		exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 	}
-}
-
-publishing {
-    repositories {
-        maven {
-            if (isSnapshot()) {
-                name = "GitLab"
-                url = uri("https://gitlab.com/api/v4/projects/25805863/packages/maven")
-                credentials(HttpHeaderCredentials::class) {
-                    name = "Authorization"
-                    value = "Bearer ${System.getenv("GITLAB_TOKEN")}"
-                }
-                authentication {
-                    create<HttpHeaderAuthentication>("header")
-                }
-            } else {
-                url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
-            }
-        }
-    }
 }

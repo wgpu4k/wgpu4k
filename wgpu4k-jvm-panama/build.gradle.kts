@@ -3,6 +3,7 @@ import io.github.krakowski.jextract.JextractTask
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
     id("io.github.krakowski.jextract") version "0.5.0" apply false
+    id("publish")
 }
 
 kotlin {

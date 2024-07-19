@@ -4,8 +4,9 @@ plugins {
 
 
 repositories {
-	mavenCentral()
+	gradlePluginPortal()
 	google()
+	mavenCentral()
 	maven( url = "https://jitpack.io" )
 }
 
@@ -19,4 +20,5 @@ dependencies {
 	implementation(libs.coroutines)
 	implementation(libs.kotlin.multiplatform)
 	implementation(libs.android.library)
+	implementation(libs.jreleaser.plugin)
 }
