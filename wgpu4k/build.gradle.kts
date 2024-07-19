@@ -1,5 +1,4 @@
 import de.undercouch.gradle.tasks.download.Download
-import io.github.krakowski.jextract.JextractTask
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 import org.jreleaser.model.Active
 
@@ -7,7 +6,6 @@ plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
     id("com.android.library")
     alias(libs.plugins.kotest)
-    id("io.github.krakowski.jextract") version "0.5.0" apply false
     `maven-publish`
     id("org.jreleaser") version "1.13.1"
 }
@@ -18,9 +16,7 @@ kotlin {
         browser()
         nodejs()
     }
-    jvm {
-        withJava()
-    }
+    jvm()
 
     val unimplementedTarget = listOf(
         androidNativeX64(),
@@ -65,7 +61,7 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
-                kotlin.srcDirs("src/jvmMain/kotlin", "src/jvmMain/java")
+                api(projects.wgpu4kJvmPanama)
             }
         }
 
@@ -125,22 +121,15 @@ android {
     }
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    //sourceCompatibility = JavaVersion.VERSION_11
+    //targetCompatibility = JavaVersion.VERSION_11
+    kotlinOptions.jvmTarget = "11"
+}
+
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(22))
-    }
-}
-
-// You need to use a JDK version with jextract from here
-// https://jdk.java.net/jextract/
-val jextract = tasks.withType<JextractTask> {
-    header("${project.projectDir}/../headers/wgpu.h") {
-
-        // The package under which all source files will be generated
-        targetPackage = "io.ygdrasil.wgpu.internal.jvm.panama"
-
-        outputDir = project.objects.directoryProperty()
-            .convention(project.layout.projectDirectory.dir("src/jvmMain"))
     }
 }
 

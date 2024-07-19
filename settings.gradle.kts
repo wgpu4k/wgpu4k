@@ -19,6 +19,7 @@ dependencyResolutionManagement {
 	}
 }
 
+include("wgpu4k-jvm-panama")
 include("wgpu4k")
 include("wgpu4k-toolkit")
 include("librococoa")
