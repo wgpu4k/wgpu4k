@@ -31,6 +31,7 @@ kotlin {
         linuxX64(),
         mingwX64(),
     )
+
     val nativeTargets = listOf<KotlinNativeTarget>(
         macosArm64(),
         macosX64(),
