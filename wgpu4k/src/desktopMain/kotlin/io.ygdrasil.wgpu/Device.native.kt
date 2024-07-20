@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-import webgpu.*
+import webgpu.WGPUDevice
 
 actual class Device(internal val handler: WGPUDevice) : AutoCloseable {
     actual val queue: Queue

@@ -53,7 +53,7 @@ actual class Surface(
         wgpuSurfaceRelease(handler)
     }
 
-    private fun CanvasConfiguration.convert(): CValue<WGPUSurfaceConfiguration> = cValue<WGPUSurfaceConfiguration>() {
+    private fun CanvasConfiguration.convert(): CValue<WGPUSurfaceConfiguration> = cValue<WGPUSurfaceConfiguration> {
         device = this@convert.device.handler
         usage = this@convert.usage.toFlagInt().toUInt()
         format = this@convert.format.value.toUInt()

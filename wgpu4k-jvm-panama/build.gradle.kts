@@ -13,10 +13,8 @@ kotlin {
     }
 
 	sourceSets {
-        val jvmMain by getting {
-            dependencies {
-                kotlin.srcDirs("src/jvmMain/kotlin", "src/jvmMain/java")
-            }
+        jvmMain {
+            kotlin.srcDirs("src/jvmMain/kotlin", "src/jvmMain/java")
         }
 
     }

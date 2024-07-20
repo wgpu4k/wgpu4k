@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
-    id("com.android.library")
+    id(libs.plugins.android.library.get().pluginId)
     alias(libs.plugins.kotest)
     id("publish")
 }
@@ -19,8 +19,8 @@ kotlin {
     }
     jvm()
 
-    val unimplementedTarget = listOf<KotlinNativeTarget>(
-        /*androidNativeX64(),
+    val unimplementedTarget = listOf(
+        androidNativeX64(),
         androidNativeArm64(),
         androidTarget(),
         iosX64(),
@@ -29,16 +29,24 @@ kotlin {
         tvosX64(),
         linuxArm64(),
         linuxX64(),
-        mingwX64(),*/
+        mingwX64(),
     )
-    val nativeTarget = setOf(
+    val nativeTargets = listOf<KotlinNativeTarget>(
         macosArm64(),
         macosX64(),
     )
 
-
-    nativeTarget.forEach { target ->
+    nativeTargets.forEach { target ->
         val main by target.compilations.getting {
+
+            defaultSourceSet {
+
+                languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
+
+                kotlin.srcDir(
+                    "src/desktopMain/kotlin"
+                )
+            }
 
             cinterops.create("webgpu") {
                 header(buildNativeResourcesDirectory.resolve("wgpu.h"))
@@ -46,24 +54,23 @@ kotlin {
         }
     }
 
-	@OptIn(ExperimentalWasmDsl::class)
-	wasmJs {
-		browser()
-		nodejs()
-	}
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+        nodejs()
+    }
 
-	sourceSets {
+    sourceSets {
 
         all {
             languageSettings.optIn("kotlin.ExperimentalStdlibApi")
             languageSettings.optIn("kotlin.ExperimentalUnsignedTypes")
             languageSettings.optIn("kotlin.js.ExperimentalJsExport")
-            languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
         }
 
         val kotlinWrappersVersion = "1.0.0-pre.780"
 
-        val jsMain by getting {
+        jsMain {
             dependencies {
                 implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:$kotlinWrappersVersion"))
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-js")
@@ -71,64 +78,41 @@ kotlin {
             }
         }
 
-        val jvmMain by getting {
+        jvmMain {
             dependencies {
                 api(projects.wgpu4kJvmPanama)
             }
         }
 
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation(kotlin("stdlib-common"))
                 implementation(libs.coroutines)
             }
         }
-        val commonTest by getting {
+
+        commonTest {
             dependencies {
                 implementation(libs.bundles.kotest)
             }
         }
 
-        val jvmTest by getting {
+        jvmTest {
             dependencies {
                 implementation(libs.kotest.runner.junit5)
             }
         }
 
-        nativeTarget.forEach { target ->
-            println("will configure ${target.name}")
-            getByName("${target.name}Main").apply {
-                dependencies {
-                    implementation(
-                        files(
-                            project.file("build")
-                                .resolve("classes")
-                                .resolve(target.name)
-                                .resolve("main")
-                                .resolve("cinterop")
-                                .resolve("wgpu4k-cinterop-webgpu.klib")
-                        )
-                    )
-                }
-            }
+        val commonMain by getting { }
 
-        }
-
-
-        /*
-		val unmappedMain by creating {
-			dependsOn(commonMain)
-		}
-
-        val nativeMain by creating {
+        val unmappedMain by creating {
             dependsOn(commonMain)
         }
-
 
         unimplementedTarget.forEach { target ->
             getByName("${target.name}Main")
                 .dependsOn(unmappedMain)
-        }*/
+        }
 
     }
     compilerOptions {

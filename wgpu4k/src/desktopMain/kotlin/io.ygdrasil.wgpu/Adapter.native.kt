@@ -10,7 +10,7 @@ val deviceState = MutableStateFlow<WGPUDevice?>(null)
 actual class Adapter(val handler: WGPUAdapter) : AutoCloseable {
     actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? {
 
-        val handleRequestDevice:WGPURequestDeviceCallback =
+        val handleRequestDevice: WGPURequestDeviceCallback =
             staticCFunction<WGPURequestDeviceStatus, WGPUDevice?, CPointer<ByteVar>?, COpaquePointer?, Unit> { status, device, message, _ ->
                 if (status == WGPURequestDeviceStatus_Success) {
                     deviceState.update { device }

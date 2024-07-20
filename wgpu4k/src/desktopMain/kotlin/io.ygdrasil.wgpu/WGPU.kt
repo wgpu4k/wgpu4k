@@ -1,11 +1,9 @@
 package io.ygdrasil.wgpu
 
 import kotlinx.cinterop.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
 import webgpu.*
 
-class WGPU(val handler: WGPUInstance): AutoCloseable {
+class WGPU(val handler: WGPUInstance) : AutoCloseable {
 
     fun requestAdapter(
         renderingContext: Surface,
@@ -18,7 +16,7 @@ class WGPU(val handler: WGPUInstance): AutoCloseable {
 
         val ptrPtr = cValue<WGPUAdapterVar>()
 
-        val handleRequestAdapter:WGPURequestAdapterCallback =
+        val handleRequestAdapter: WGPURequestAdapterCallback =
             staticCFunction<WGPURequestAdapterStatus, WGPUAdapter, CPointer<ByteVar>?, COpaquePointer, Unit> { status, adapter, message, userData ->
                 if (status == WGPURequestAdapterStatus_Success) {
                     val adapterState = userData.reinterpret<WGPUAdapterVar>()

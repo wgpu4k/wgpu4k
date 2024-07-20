@@ -22,11 +22,22 @@ actual class RenderBundleEncoder : AutoCloseable {
         TODO("Not yet implemented")
     }
 
-    actual fun drawIndexed(indexCount: GPUSize32, instanceCount: GPUSize32, firstIndex: GPUSize32, baseVertex: GPUSignedOffset32, firstInstance: GPUSize32) {
+    actual fun drawIndexed(
+        indexCount: GPUSize32,
+        instanceCount: GPUSize32,
+        firstIndex: GPUSize32,
+        baseVertex: GPUSignedOffset32,
+        firstInstance: GPUSize32
+    ) {
         TODO("Not yet implemented")
     }
 
-    actual fun draw(vertexCount: GPUSize32, instanceCount: GPUSize32, firstVertex: GPUSize32, firstInstance: GPUSize32) {
+    actual fun draw(
+        vertexCount: GPUSize32,
+        instanceCount: GPUSize32,
+        firstVertex: GPUSize32,
+        firstInstance: GPUSize32
+    ) {
         TODO("Not yet implemented")
     }
 
