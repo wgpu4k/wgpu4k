@@ -1,6 +1,8 @@
 package io.ygdrasil.wgpu
 
-actual class Texture: AutoCloseable {
+import webgpu.WGPUTexture
+
+actual class Texture(internal val handler: WGPUTexture) : AutoCloseable {
 
     actual val width: GPUIntegerCoordinateOut
         get() = TODO("Not yet implemented")

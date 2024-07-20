@@ -3,18 +3,18 @@ package io.ygdrasil.wgpu
 import kotlinx.cinterop.*
 import webgpu.*
 
-actual class Surface : AutoCloseable(
+actual class Surface(
     internal val handler: WGPUSurface,
-    private val sizeProvider: () -> Pair<Int, Int>
+    internal val sizeProvider: () -> Pair<Int, Int>
 ) : AutoCloseable {
 
     private var _textureFormat: TextureFormat? = null
     private var _alphaMode: UInt? = null
 
     actual val width: Int
-    get() = sizeProvider().first
+        get() = sizeProvider().first
     actual val height: Int
-    get() = sizeProvider().second
+        get() = sizeProvider().second
 
     actual val textureFormat: TextureFormat by lazy {
         _textureFormat ?: error("call first computeSurfaceCapabilities")
@@ -55,12 +55,12 @@ actual class Surface : AutoCloseable(
 
     private fun CanvasConfiguration.convert(): CValue<WGPUSurfaceConfiguration> = cValue<WGPUSurfaceConfiguration>() {
         device = this@convert.device.handler
-        usage = this@convert.usage.toUInt()
-        format = (this@convert.format?.value ?: _textureFormat!!.value).toUInt()
+        usage = this@convert.usage.toFlagInt().toUInt()
+        format = this@convert.format.value.toUInt()
         presentMode = WGPUPresentMode_Fifo
-        alphaMode = this@convert.alphaMode?.value?.toUInt() ?: _alphaMode ?: error("")
-        width = this@RenderingContext.width.toUInt()
-        height = this@RenderingContext.height.toUInt()
+        alphaMode = this@convert.alphaMode.value.toUInt()
+        width = this@Surface.width.toUInt()
+        height = this@Surface.height.toUInt()
     }
 
 }

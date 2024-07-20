@@ -1,29 +1,39 @@
 package io.ygdrasil.wgpu
 
+import kotlinx.cinterop.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
+import webgpu.*
+
 class WGPU(val handler: WGPUInstance): AutoCloseable {
 
     fun requestAdapter(
-        renderingContext: RenderingContext,
+        renderingContext: Surface,
         powerPreference: WGPUPowerPreference = WGPUPowerPreference_Undefined
-    ): Adapter? {
+    ): Adapter? = memScoped {
         val options = cValue<WGPURequestAdapterOptions> {
             compatibleSurface = renderingContext.handler
             this.powerPreference = powerPreference
         }
 
+        val ptrPtr = cValue<WGPUAdapterVar>()
+
         val handleRequestAdapter:WGPURequestAdapterCallback =
-            staticCFunction<WGPURequestAdapterStatus, WGPUAdapter, CPointer<ByteVar>?, COpaquePointer, Unit> { status, adapter, message, _ ->
+            staticCFunction<WGPURequestAdapterStatus, WGPUAdapter, CPointer<ByteVar>?, COpaquePointer, Unit> { status, adapter, message, userData ->
                 if (status == WGPURequestAdapterStatus_Success) {
-                    adapterState.update { adapter }
+                    val adapterState = userData.reinterpret<WGPUAdapterVar>()
+                    adapterState[0] = adapter
                 } else {
                     println("request_adapter status=$status message=${message?.toKStringFromUtf8()}\n")
                 }
 
             }.reinterpret()
 
-        wgpuInstanceRequestAdapter(handler, options, handleRequestAdapter, null)
+        wgpuInstanceRequestAdapter(handler, options, handleRequestAdapter, ptrPtr)
 
-        return adapterState.value?.let { Adapter(it) }
+
+        return ptrPtr.ptr[0]
+            ?.let { Adapter(it) }
     }
 
     fun getSurfaceFromMetalLayer(metalLayer: COpaquePointer): WGPUSurface? = memScoped {

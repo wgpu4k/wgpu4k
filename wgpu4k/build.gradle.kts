@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
@@ -18,8 +19,8 @@ kotlin {
     }
     jvm()
 
-    val unimplementedTarget = listOf(
-        androidNativeX64(),
+    val unimplementedTarget = listOf<KotlinNativeTarget>(
+        /*androidNativeX64(),
         androidNativeArm64(),
         androidTarget(),
         iosX64(),
@@ -28,9 +29,8 @@ kotlin {
         tvosX64(),
         linuxArm64(),
         linuxX64(),
-        mingwX64(),
+        mingwX64(),*/
     )
-
     val nativeTarget = setOf(
         macosArm64(),
         macosX64(),
@@ -58,6 +58,7 @@ kotlin {
             languageSettings.optIn("kotlin.ExperimentalStdlibApi")
             languageSettings.optIn("kotlin.ExperimentalUnsignedTypes")
             languageSettings.optIn("kotlin.js.ExperimentalJsExport")
+            languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
         }
 
         val kotlinWrappersVersion = "1.0.0-pre.780"
@@ -94,6 +95,27 @@ kotlin {
             }
         }
 
+        nativeTarget.forEach { target ->
+            println("will configure ${target.name}")
+            getByName("${target.name}Main").apply {
+                dependencies {
+                    implementation(
+                        files(
+                            project.file("build")
+                                .resolve("classes")
+                                .resolve(target.name)
+                                .resolve("main")
+                                .resolve("cinterop")
+                                .resolve("wgpu4k-cinterop-webgpu.klib")
+                        )
+                    )
+                }
+            }
+
+        }
+
+
+        /*
 		val unmappedMain by creating {
 			dependsOn(commonMain)
 		}
@@ -102,15 +124,11 @@ kotlin {
             dependsOn(commonMain)
         }
 
-        nativeTarget.forEach { target ->
-            getByName("${target.name}Main")
-                .dependsOn(nativeMain)
-        }
 
         unimplementedTarget.forEach { target ->
             getByName("${target.name}Main")
                 .dependsOn(unmappedMain)
-        }
+        }*/
 
     }
     compilerOptions {
