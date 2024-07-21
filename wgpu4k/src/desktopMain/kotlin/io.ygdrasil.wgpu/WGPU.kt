@@ -3,24 +3,26 @@ package io.ygdrasil.wgpu
 import kotlinx.cinterop.*
 import webgpu.*
 
+private var lastFindAdapter: WGPUAdapter? = null
+
 class WGPU(val handler: WGPUInstance) : AutoCloseable {
 
     fun requestAdapter(
         renderingContext: Surface,
         powerPreference: WGPUPowerPreference = WGPUPowerPreference_Undefined
-    ): Adapter? = memScoped {
+    ): Adapter? {
+        lastFindAdapter = null
         val options = cValue<WGPURequestAdapterOptions> {
             compatibleSurface = renderingContext.handler
             this.powerPreference = powerPreference
         }
 
         val ptrPtr = cValue<WGPUAdapterVar>()
-
         val handleRequestAdapter: WGPURequestAdapterCallback =
             staticCFunction<WGPURequestAdapterStatus, WGPUAdapter, CPointer<ByteVar>?, COpaquePointer, Unit> { status, adapter, message, userData ->
+                println("WGPURequestAdapterCallback ${userData} ${adapter}")
                 if (status == WGPURequestAdapterStatus_Success) {
-                    val adapterState = userData.reinterpret<WGPUAdapterVar>()
-                    adapterState[0] = adapter
+                    lastFindAdapter = adapter
                 } else {
                     println("request_adapter status=$status message=${message?.toKStringFromUtf8()}\n")
                 }
@@ -29,9 +31,7 @@ class WGPU(val handler: WGPUInstance) : AutoCloseable {
 
         wgpuInstanceRequestAdapter(handler, options, handleRequestAdapter, ptrPtr)
 
-
-        return ptrPtr.ptr[0]
-            ?.let { Adapter(it) }
+        return lastFindAdapter?.let { Adapter(it) }
     }
 
     fun getSurfaceFromMetalLayer(metalLayer: COpaquePointer): WGPUSurface? = memScoped {
