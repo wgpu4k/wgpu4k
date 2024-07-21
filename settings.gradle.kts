@@ -19,6 +19,8 @@ dependencyResolutionManagement {
 	}
 }
 
+val hostOs = System.getProperty("os.name")
+
 include("wgpu4k-jvm-panama")
 include("wgpu4k")
 include("wgpu4k-toolkit")
@@ -30,5 +32,6 @@ include("examples:compose")
 include("examples:web-js")
 include("examples:glfw")
 include("examples:headless")
-include("examples:native")
+// right now only running on OSX
+if (hostOs == "Mac OS X") include("examples:native")
 include("webgpu-samples-ts")
