@@ -29,7 +29,7 @@ js {
 				implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
 				api(projects.wgpu4kToolkit)
 				api(libs.coroutines)
-				api(libs.korge.foundation)
+				//api(libs.korge.foundation)
 				api(libs.korge.core)
 			}
 		}
