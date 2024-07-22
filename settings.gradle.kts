@@ -32,6 +32,7 @@ include("examples:compose")
 include("examples:web-js")
 include("examples:glfw")
 include("examples:headless")
+if (hostOs == "Mac OS X") include("examples:iOS")
 // right now only running on OSX
 if (hostOs == "Mac OS X") include("examples:native")
 include("webgpu-samples-ts")

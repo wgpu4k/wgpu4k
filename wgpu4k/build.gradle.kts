@@ -28,8 +28,6 @@ kotlin {
     }
 
     val unimplementedTarget = listOf(
-        iosX64(),
-        iosArm64(),
         tvosArm64(),
         tvosX64(),
         linuxArm64(),
@@ -42,6 +40,8 @@ kotlin {
     ) else listOf()
 
     val nativeTargets = listOf<KotlinNativeTarget>(
+        iosX64(),
+        iosArm64(),
         macosArm64(),
         macosX64(),
     )
