@@ -17,18 +17,14 @@ val buildNativeResourcesDirectory = project.file("build").resolve("native")
 
 kotlin {
 
-    iosX64 {
-        binaries {
-            executable {
-                // Binary configuration.
-            }
-        }
-    }
-    iosArm64 {
-        binaries {
-            executable {
-                // Binary configuration.
-            }
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "WgpuApp"
+            isStatic = true
         }
     }
 

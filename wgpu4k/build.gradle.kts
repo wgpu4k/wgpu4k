@@ -1,6 +1,5 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
@@ -39,9 +38,10 @@ kotlin {
         androidTarget(),
     ) else listOf()
 
-    val nativeTargets = listOf<KotlinNativeTarget>(
+    val nativeTargets = listOf(
         iosX64(),
         iosArm64(),
+        iosSimulatorArm64(),
         macosArm64(),
         macosX64(),
     )
