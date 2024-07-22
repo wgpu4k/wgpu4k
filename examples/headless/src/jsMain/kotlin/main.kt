@@ -1,5 +1,6 @@
-import korlibs.io.async.launch
+
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 fun main() {
 

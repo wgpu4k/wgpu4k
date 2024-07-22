@@ -39,7 +39,7 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
                 api(projects.wgpu4kToolkit)
                 api(libs.coroutines)
-                implementation(libs.bundles.korlibs)
+                api(libs.bundles.korlibs)
             }
         }
 
