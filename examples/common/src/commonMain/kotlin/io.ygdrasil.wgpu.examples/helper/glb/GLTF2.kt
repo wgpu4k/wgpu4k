@@ -22,6 +22,7 @@ import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
 import kotlin.jvm.JvmInline
+import kotlin.time.measureTimedValue
 
 suspend fun VfsFile.readGLB(options: GLTF2.ReadOptions = GLTF2.ReadOptions.DEFAULT): GLTF2 =
     GLTF2.readGLB(this, options = options)
@@ -68,7 +69,7 @@ data class GLTF2(
         for (buffer in buffers) {
             if (buffer.optBuffer == null) {
                 val vfile = buffer.uri?.let { resolveUri(file, it) }?.readBytes()
-                val (bytes, time) = measureTimeWithResult {
+                val (bytes, time) = measureTimedValue {
                     vfile
                         ?: bin
                         ?: error("Couldn't load buffer : $buffer")
@@ -85,11 +86,11 @@ data class GLTF2(
 
                 val vfile = image.uri?.let { resolveUri(file, it) }
 
-                val (buffer, time) = measureTimeWithResult {
+                val (buffer, time) = measureTimedValue {
                     (vfile ?: (if (image.bufferView >= 0) bufferViews[image.bufferView].slice(this).asInt8().getArray().asMemoryVfsFile() else null))
 
                 }
-                val (bitmap, timeBitmap) = measureTimeWithResult {
+                val (bitmap, timeBitmap) = measureTimedValue {
                     buffer?.let { nativeImageFormatProvider.decode(it) } ?: Bitmaps.transparent.bmp
                     //buffer?.readBitmap() ?: Bitmaps.transparent.bmp
                 }
@@ -641,7 +642,7 @@ data class GLTF2(
          * <https://github.com/KhronosGroup/glTF/blob/main/specification/2.0/schema/textureInfo.schema.json>
          */
         @Serializable
-        abstract class BaseTextureInfo() : GLTFProperty() {
+        abstract class BaseTextureInfo : GLTFProperty() {
             abstract val index: Int
             abstract val texCoord: Int
             fun getTexture(gltf: GLTF2): Bitmap? = gltf.textures[index].getImage(gltf).bitmap
@@ -654,8 +655,7 @@ data class GLTF2(
             override val texCoord: Int = -1,
             override val extensions: JsonElement? = null,
             override val extras: JsonElement? = null,
-        ) : BaseTextureInfo() {
-        }
+        ) : BaseTextureInfo()
 
         /**
          * https://github.com/KhronosGroup/glTF/blob/main/specification/2.0/schema/material.occlusionTextureInfo.schema.json
@@ -671,9 +671,7 @@ data class GLTF2(
             val strength: Float = 1f,
             override val extensions: JsonElement? = null,
             override val extras: JsonElement? = null,
-        ) : BaseTextureInfo() {
-
-        }
+        ) : BaseTextureInfo()
 
         /**
          * <https://github.com/KhronosGroup/glTF/blob/main/specification/2.0/schema/material.normalTextureInfo.schema.json>
@@ -689,8 +687,7 @@ data class GLTF2(
             val scale: Float = 1f,
             override val extensions: JsonElement? = null,
             override val extras: JsonElement? = null,
-        ) : BaseTextureInfo() {
-        }
+        ) : BaseTextureInfo()
     }
     @Serializable
     data class Texture(
@@ -933,8 +930,8 @@ interface GLTF2Holder {
     val GLTF2.Scene.childrenNodes: List<GLTF2.Node> get() = this.childrenNodes(gltf) ?: emptyList()
 }
 
-fun GLTF2.Node.childrenNodes(gltf: GLTF2): List<GLTF2.Node>? = this.children?.map { gltf.nodes[it] }
-fun GLTF2.Scene.childrenNodes(gltf: GLTF2): List<GLTF2.Node>? = this.nodes?.map { gltf.nodes[it] }
+fun GLTF2.Node.childrenNodes(gltf: GLTF2): List<GLTF2.Node>? = this.children.map { gltf.nodes[it] }
+fun GLTF2.Scene.childrenNodes(gltf: GLTF2): List<GLTF2.Node>? = this.nodes.map { gltf.nodes[it] }
 fun GLTF2.Node.mesh(gltf: GLTF2): GLTF2.Mesh = gltf.meshes[this.mesh ?: error("cannot get mesh")]
 
 enum class GLTFRenderMode(val value: Int) {
