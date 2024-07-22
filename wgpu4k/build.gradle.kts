@@ -5,9 +5,9 @@ import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
-    id(libs.plugins.android.library.get().pluginId)
     alias(libs.plugins.kotest)
     id("publish")
+    if (isAndroidConfigured) id("android")
 }
 
 val buildNativeResourcesDirectory = project.file("build").resolve("native")
@@ -28,9 +28,6 @@ kotlin {
     }
 
     val unimplementedTarget = listOf(
-        androidNativeX64(),
-        androidNativeArm64(),
-        androidTarget(),
         iosX64(),
         iosArm64(),
         tvosArm64(),
@@ -38,7 +35,11 @@ kotlin {
         linuxArm64(),
         linuxX64(),
         mingwX64(),
-    )
+    ) + if (isAndroidConfigured) listOf(
+        androidNativeX64(),
+        androidNativeArm64(),
+        androidTarget(),
+    ) else listOf()
 
     val nativeTargets = listOf<KotlinNativeTarget>(
         macosArm64(),
@@ -128,15 +129,6 @@ kotlin {
     compilerOptions {
         allWarningsAsErrors = true
         freeCompilerArgs.add("-Xexpect-actual-classes")
-    }
-}
-
-android {
-    namespace = "io.ygdrasil.wgpu4k"
-    compileSdk = 34
-
-    defaultConfig {
-        minSdk = 28
     }
 }
 

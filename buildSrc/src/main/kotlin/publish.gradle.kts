@@ -1,6 +1,4 @@
-import org.gradle.kotlin.dsl.*
 import org.jreleaser.model.Active
-import java.io.File
 
 plugins {
     `maven-publish`

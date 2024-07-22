@@ -1,5 +1,6 @@
 import de.undercouch.gradle.tasks.download.Download
 import org.jetbrains.kotlin.com.google.common.io.Files
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
@@ -108,6 +109,8 @@ kotlin {
 
         }
     }
+
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
         allWarningsAsErrors = true
         freeCompilerArgs.add("-Xexpect-actual-classes")
