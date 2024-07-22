@@ -1,6 +1,7 @@
 import de.undercouch.gradle.tasks.download.Download
 import org.jetbrains.kotlin.com.google.common.io.Files
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
@@ -35,6 +36,7 @@ kotlin {
     }
     jvm()
 
+    @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         binaries.executable()
         browser()

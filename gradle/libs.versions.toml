@@ -17,13 +17,12 @@ kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref =
 jna = { module = "net.java.dev.jna:jna", version.ref = "jna" }
 jnaPlatform = { module = "net.java.dev.jna:jna-platform", version.ref = "jna" }
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
-korge-foundation = { module = "com.soywiz.korge:korge-foundation", version.ref = "korge" }
-korge-core = { module = "com.soywiz.korge:korge-core", version.ref = "korge" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 download = { module = "de.undercouch.download:de.undercouch.download.gradle.plugin", version.ref = "download" }
 kotlin-multiplatform = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 android-library = { module = "com.android.library:com.android.library.gradle.plugin", version.ref = "agp" }
 jreleaser-plugin = { module = "org.jreleaser:org.jreleaser.gradle.plugin", version.ref = "jreleaser" }
+korlibs-image = { module = "com.soywiz:korlibs-image", version.ref = "korge" }
 
 
 [plugins]
@@ -40,3 +39,4 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 
 [bundles]
 kotest = ["kotest-core", "kotest-assertions"]
+korlibs = ["korlibs-image"]
