@@ -15,6 +15,7 @@ internal fun exportAndLoadLibrary() {
             val libraryFile = libraryFiles.firstOrNull { it.exists() } ?: libraryFiles.firstOrNull { path ->
                 extractResourceToTemp(libraryPath, path)
             } ?: error("Could not find temporary resource for path: $libraryPath")
+            println("will load library at path ${libraryFile.absolutePath}")
             System.loadLibrary(libraryFile.nameWithoutExtension)
         }
 
@@ -23,12 +24,14 @@ internal fun exportAndLoadLibrary() {
             val libraryFile = libraryFiles.firstOrNull { it.exists() } ?: libraryFiles.firstOrNull { path ->
                 extractResourceToTemp(libraryPath, path)
             } ?: error("Could not find temporary resource for path: $libraryPath")
+            println("will load library at path ${libraryFile.absolutePath}")
             System.loadLibrary(libraryFile.nameWithoutExtension.removePrefix("lib"))
         }
 
         Os.Linux -> {
             val libraryFile = generateTempFile()
             extractResourceToTemp(libraryPath, libraryFile)
+            println("will load library at path ${libraryFile.absolutePath}")
             System.load(libraryFile.absolutePath)
         }
     }
