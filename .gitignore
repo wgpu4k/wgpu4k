@@ -32,3 +32,5 @@ gradle-app.setting
 /.kotlin/
 /wgpu4k-e2e/jvm/
 /wgpu4k-e2e/js-chromium/
+/local.properties
+/examples/iosApp/iOSApp.xcodeproj/xcuserdata/

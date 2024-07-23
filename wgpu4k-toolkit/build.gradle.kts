@@ -1,10 +1,26 @@
+import de.undercouch.gradle.tasks.download.Download
+import org.jetbrains.kotlin.com.google.common.io.Files
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-	alias(libs.plugins.kotest)
-	alias(libs.plugins.download)
-    `maven-publish`
+    id(libs.plugins.kotlin.multiplatform.get().pluginId)
+    id("publish")
 }
+
+val commonResourcesFile = getCommonProject()
+    .projectDir
+    .resolve("src")
+    .resolve("commonMain")
+    .resolve("resources")
+
+assert(commonResourcesFile.isDirectory) { "$commonResourcesFile is not a directory" }
+assert(commonResourcesFile.isNotEmpty) { "$commonResourcesFile is empty" }
+
+val resourcesDirectory = project.file("src").resolve("jvmMain").resolve("resources")
+
+val buildNativeResourcesDirectory = project.file("build").resolve("native")
 
 java {
 	toolchain {
@@ -21,9 +37,34 @@ kotlin {
     }
     jvm()
 
+    @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         binaries.executable()
         browser()
+    }
+
+    val nativeTargets = listOf<KotlinNativeTarget>(
+        macosArm64(),
+        macosX64(),
+    )
+
+    nativeTargets.forEach { target ->
+        val main by target.compilations.getting {
+
+            defaultSourceSet {
+
+                languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
+
+                kotlin.srcDir(
+                    //"src/${target.name}Main/kotlin",
+                    "src/desktopMain/kotlin"
+                )
+            }
+
+            cinterops.create("glfw") {
+                header(buildNativeResourcesDirectory.resolve("glfw3.h"))
+            }
+        }
     }
 
     sourceSets {
@@ -68,44 +109,48 @@ kotlin {
 
         }
     }
+
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
         allWarningsAsErrors = true
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 }
 
-tasks.named<Test>("jvmTest") {
-	useJUnitPlatform()
-	filter {
-		isFailOnNoMatchingTests = false
-	}
-	testLogging {
-		showExceptions = true
-		showStandardStreams = true
-		events = setOf(
-			org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED,
-			org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED
-		)
-		exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-	}
-}
+configureDownloadTasks {
+    baseUrl = "https://github.com/glfw/glfw/releases/download/3.3.10/"
 
-publishing {
-    repositories {
-        maven {
-            if (isSnapshot()) {
-                name = "GitLab"
-                url = uri("https://gitlab.com/api/v4/projects/25805863/packages/maven")
-                credentials(HttpHeaderCredentials::class) {
-                    name = "Authorization"
-                    value = "Bearer ${System.getenv("GITLAB_TOKEN")}"
-                }
-                authentication {
-                    create<HttpHeaderAuthentication>("header")
-                }
-            } else {
-                url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
-            }
+    download("glfw-3.3.10.bin.MACOS.zip") {
+        extract("**/include/GLFW/glfw3.h", buildNativeResourcesDirectory.resolve("glfw3.h")).doLast {
+            Files.move(
+                buildNativeResourcesDirectory.resolve("glfw-3.3.10.bin.MACOS").resolve("include").resolve("GLFW")
+                    .resolve("glfw3.h"), buildNativeResourcesDirectory.resolve("glfw3.h")
+            )
+            buildNativeResourcesDirectory.resolve("glfw-3.3.10.bin.MACOS").deleteRecursively()
+        }
+        extract(
+            "**/lib-universal/libglfw3.a",
+            buildNativeResourcesDirectory.resolve("darwin").resolve("libglfw3.a")
+        ).doLast {
+            Files.move(
+                buildNativeResourcesDirectory.resolve("darwin").resolve("glfw-3.3.10.bin.MACOS")
+                    .resolve("lib-universal")
+                    .resolve("libglfw3.a"), buildNativeResourcesDirectory.resolve("darwin").resolve("libglfw3.a")
+            )
+            buildNativeResourcesDirectory.resolve("darwin").resolve("glfw-3.3.10.bin.MACOS").deleteRecursively()
         }
     }
 }
+
+
+tasks.create<Download>("downloadFile") {
+    src("https://github.com/glfw/glfw/releases/download/3.3.10/glfw-3.3.10.bin.MACOS.zip")
+    dest(layout.buildDirectory)
+}
+
+
+fun getCommonProject() = projects.examples.common.identityPath.path
+    ?.let(::project) ?: error("Could not find project path")
+
+val File.isNotEmpty: Boolean
+    get() = this.listFiles()?.isNotEmpty() ?: false

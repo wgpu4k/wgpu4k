@@ -39,7 +39,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           gradle wrapper
-          ./gradlew build check --stacktrace
+          ./gradlew fetch-native-dependencies build check --stacktrace
       - name: package
         run: ./gradlew assemble --stacktrace
       - name: Run e2e tests

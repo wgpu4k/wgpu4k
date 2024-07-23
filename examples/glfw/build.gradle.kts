@@ -31,5 +31,11 @@ kotlin {
 	}
 }
 
+java {
+	toolchain {
+		languageVersion.set(JavaLanguageVersion.of(22))
+	}
+}
+
 fun getLibraryProject() = projects.wgpu4k.identityPath.path
 	?.let(::project) ?: error("Could not find project path")

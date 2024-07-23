@@ -1,5 +1,7 @@
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
+
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
+    id(libs.plugins.kotlin.multiplatform.get().pluginId)
 }
 
 val commonResourcesFile = getCommonProject()
@@ -17,6 +19,7 @@ kotlin {
         browser()
     }
 
+    @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         binaries.executable()
         browser()
