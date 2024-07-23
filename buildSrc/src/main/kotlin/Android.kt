@@ -1,2 +1,2 @@
 val isAndroidConfigured: Boolean
-    get() = System.getenv("ANDROID_HOME") != null
+    get() = false//System.getenv("ANDROID_HOME") != null

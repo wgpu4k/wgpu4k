@@ -40,6 +40,8 @@ kotlin {
     androidNativeX64()
     androidNativeArm64()
 
+    if (isAndroidConfigured) androidTarget()
+
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
@@ -50,7 +52,6 @@ kotlin {
     sourceSets {
 
         all {
-            //languageSettings.optIn("kotlin.ExperimentalStdlibApi")
             languageSettings.optIn("kotlin.ExperimentalUnsignedTypes")
         }
 
