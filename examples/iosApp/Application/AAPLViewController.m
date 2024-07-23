@@ -7,6 +7,7 @@ Implementation of our cross-platform view controller
 
 #import "AAPLViewController.h"
 #import "AAPLRenderer.h"
+#import <WgpuApp/WgpuApp.h>
 
 @implementation AAPLViewController
 {
@@ -21,6 +22,10 @@ Implementation of our cross-platform view controller
 
     // Set the view to use the default device
     _view = (MTKView *)self.view;
+    
+    [WgpuAppMainKt nothing];
+    //Need to build rust library to iOs
+    //[WgpuAppMainKt initwgpuMetalLayer:(__bridge void *)_view.layer];
     
     _view.device = MTLCreateSystemDefaultDevice();
     

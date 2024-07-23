@@ -14,3 +14,7 @@ actual fun initwgpu(metalLayer: COpaquePointer) {
         ?.let { Surface(it, sizeProvider) } ?: error("Can't create Surface")
     val adapter = instance.requestAdapter(surface) ?: error("Can't create Adapter")
 }
+
+actual fun nothing() {
+    println("nothing")
+}
