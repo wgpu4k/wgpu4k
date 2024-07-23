@@ -1,3 +1,5 @@
+@file:OptIn(kotlinx.cinterop.ExperimentalForeignApi::class)
+
 package io.ygdrasil.wgpu
 
 import kotlinx.cinterop.*

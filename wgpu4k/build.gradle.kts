@@ -26,43 +26,20 @@ kotlin {
         }
     }
 
-    val unimplementedTarget = listOf(
-        tvosArm64(),
-        tvosX64(),
-        linuxArm64(),
-        linuxX64(),
-        mingwX64(),
-    ) + if (isAndroidConfigured) listOf(
-        androidNativeX64(),
-        androidNativeArm64(),
-        androidTarget(),
-    ) else listOf()
 
-    val nativeTargets = listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64(),
-        macosArm64(),
-        macosX64(),
-    )
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+    macosArm64()
+    macosX64()
+    tvosArm64()
+    tvosX64()
+    linuxArm64()
+    linuxX64()
+    mingwX64()
+    androidNativeX64()
+    androidNativeArm64()
 
-    nativeTargets.forEach { target ->
-        val main by target.compilations.getting {
-
-            defaultSourceSet {
-
-                languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
-
-                kotlin.srcDir(
-                    "src/desktopMain/kotlin"
-                )
-            }
-
-            cinterops.create("webgpu") {
-                header(buildNativeResourcesDirectory.resolve("wgpu.h"))
-            }
-        }
-    }
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
@@ -73,9 +50,8 @@ kotlin {
     sourceSets {
 
         all {
-            languageSettings.optIn("kotlin.ExperimentalStdlibApi")
+            //languageSettings.optIn("kotlin.ExperimentalStdlibApi")
             languageSettings.optIn("kotlin.ExperimentalUnsignedTypes")
-            languageSettings.optIn("kotlin.js.ExperimentalJsExport")
         }
 
         val kotlinWrappersVersion = "1.0.0-pre.780"
@@ -89,6 +65,10 @@ kotlin {
         }
 
         jvmMain {
+            sourceSets {
+                languageSettings.optIn("kotlin.js.ExperimentalJsExport")
+            }
+
             dependencies {
                 api(projects.wgpu4kJvmPanama)
             }
@@ -113,15 +93,14 @@ kotlin {
             }
         }
 
-        val commonMain by getting { }
+        nativeMain {
+            sourceSets {
+                //languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
+            }
 
-        val unmappedMain by creating {
-            dependsOn(commonMain)
-        }
-
-        unimplementedTarget.forEach { target ->
-            getByName("${target.name}Main")
-                .dependsOn(unmappedMain)
+            dependencies {
+                implementation(projects.wgpu4kNative)
+            }
         }
 
     }
@@ -138,20 +117,15 @@ java {
     }
 }
 
-
 configureDownloadTasks {
     baseUrl = "https://github.com/gfx-rs/wgpu-native/releases/download/${libs.versions.wgpu.get()}/"
 
     download("wgpu-macos-aarch64-release.zip") {
         extract("libwgpu_native.dylib", resourcesDirectory.resolve("darwin-aarch64").resolve("libWGPU.dylib"))
-        extract("webgpu.h", buildNativeResourcesDirectory.resolve("webgpu.h"))
-        extract("wgpu.h", buildNativeResourcesDirectory.resolve("wgpu.h"))
-        extract("libwgpu_native.a", buildNativeResourcesDirectory.resolve("darwin-aarch64").resolve("libWGPU.a"))
     }
 
     download("wgpu-macos-x86_64-release.zip") {
         extract("libwgpu_native.dylib", resourcesDirectory.resolve("darwin-x86-64").resolve("libWGPU.dylib"))
-        extract("libwgpu_native.a", buildNativeResourcesDirectory.resolve("darwin-x64").resolve("libWGPU.a"))
     }
 
     download("wgpu-windows-x86_64-release.zip") {
