@@ -2,6 +2,7 @@ package io.ygdrasil.wgpu.internal.jvm
 
 import io.ygdrasil.wgpu.WGPU
 import java.io.File
+import java.io.IOException
 import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
@@ -10,38 +11,39 @@ internal fun exportAndLoadLibrary() {
     val libraryPath = findLibraryPath()
     when (Platform.os) {
         Os.Windows -> {
-            val libraryFile = inferWindowsWGPUPossiblePath()
-            extractResourceToTemp(libraryPath, libraryFile)
+            val libraryFiles = inferWindowsWGPUPossiblePath()
+            val libraryFile = libraryFiles.firstOrNull { it.exists() } ?: libraryFiles.firstOrNull { path ->
+                extractResourceToTemp(libraryPath, path)
+            } ?: error("Could not find temporary resource for path: $libraryPath")
+            println("will load library at path ${libraryFile.absolutePath}")
             System.loadLibrary(libraryFile.nameWithoutExtension)
         }
+
         Os.MacOs -> {
-            val libraryFile = inferDarwinWGPUPossiblePath()
-            extractResourceToTemp(libraryPath, libraryFile)
+            val libraryFiles = inferDarwinWGPUPossiblePath()
+            val libraryFile = libraryFiles.firstOrNull { it.exists() } ?: libraryFiles.firstOrNull { path ->
+                extractResourceToTemp(libraryPath, path)
+            } ?: error("Could not find temporary resource for path: $libraryPath")
+            println("will load library at path ${libraryFile.absolutePath}")
             System.loadLibrary(libraryFile.nameWithoutExtension.removePrefix("lib"))
         }
+
         Os.Linux -> {
             val libraryFile = generateTempFile()
             extractResourceToTemp(libraryPath, libraryFile)
+            println("will load library at path ${libraryFile.absolutePath}")
             System.load(libraryFile.absolutePath)
         }
     }
 }
 
-private fun inferDarwinWGPUPossiblePath(): File = inferWGPUPossiblePath("lib", "dylib")
+private fun inferDarwinWGPUPossiblePath(): List<File> = inferWGPUPossiblePath("lib", "dylib")
 
-private fun inferWindowsWGPUPossiblePath(): File = inferWGPUPossiblePath("", "dll")
+private fun inferWindowsWGPUPossiblePath(): List<File> = inferWGPUPossiblePath("", "dll")
 
-private fun inferWGPUPossiblePath(prefix: String, extension: String): File {
-    val possiblePaths = libraryPaths().map { File(it) }
-    listWritablePathOn(possiblePaths).forEach { path ->
-        (0 until 100).forEach { index ->
-            path.resolve("${prefix}WGPU$index.$extension")
-                .takeIf { it.exists().not() }
-                ?.let { return it }
-        }
-    }
-
-    error("fail to find writable path, put one java.library.path")
+private fun inferWGPUPossiblePath(prefix: String, extension: String): List<File> {
+    return libraryPaths().map { File(it) }
+        .map { it.resolve("${prefix}WGPU.$extension") }
 }
 
 private fun libraryPaths() = System.getProperty("java.library.path").split(File.pathSeparator)
@@ -81,17 +83,24 @@ private fun generateTempFile(): File {
     return tempFile
 }
 
-private fun extractResourceToTemp(fileOnClasspath: String, target: File) {
+private fun extractResourceToTemp(fileOnClasspath: String, target: File): Boolean {
     println("will extract library to path ${target.absolutePath}")
 
-    // fetch file from the classpath
-    val resourceAsStream: InputStream? = WGPU::class.java.getResourceAsStream(fileOnClasspath)
+    try {
+        // fetch file from the classpath
+        val resourceAsStream: InputStream? = WGPU::class.java.getResourceAsStream(fileOnClasspath)
 
-    if (resourceAsStream == null) {
-        error("Could not find file $fileOnClasspath on the classpath")
+        if (resourceAsStream == null) {
+            error("Could not find file $fileOnClasspath on the classpath")
+        }
+
+        // copy the file to the temp directory
+        Files.copy(resourceAsStream, target.toPath(), StandardCopyOption.REPLACE_EXISTING)
+        target.deleteOnExit()
+    } catch (exception: IOException) {
+        println("fail to extract to path ${target.absolutePath} with reason ${exception.message}")
+        return false
     }
 
-    // copy the file to the temp directory
-    Files.copy(resourceAsStream, target.toPath(), StandardCopyOption.REPLACE_EXISTING)
-    target.deleteOnExit()
+    return true
 }
