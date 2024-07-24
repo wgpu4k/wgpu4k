@@ -1,3 +1,5 @@
+
+
 staticLibraries.macos_arm64 = libglfw3.a
 libraryPaths.macos_arm64 = ./build/native/darwin/
 staticLibraries.macos_x64 = libglfw3.a
