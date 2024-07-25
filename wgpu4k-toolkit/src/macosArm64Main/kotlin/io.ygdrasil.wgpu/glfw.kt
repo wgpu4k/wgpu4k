@@ -6,7 +6,7 @@ import kotlinx.cinterop.*
 import platform.AppKit.NSWindow
 import platform.QuartzCore.CAMetalLayer
 
-fun WGPU.getSurface(window: CPointer<GLFWwindow>, sizeProvider: () -> Pair<Int, Int>): Surface {
+actual fun WGPU.getSurface(window: CPointer<GLFWwindow>, sizeProvider: () -> Pair<Int, Int>): Surface {
 
     val nsWindow = interpretObjCPointer<NSWindow>(glfwGetCocoaWindow(window).rawValue)
     nsWindow.contentView()?.setWantsLayer(true)

@@ -62,6 +62,12 @@ kotlin {
             languageSettings.optIn("kotlin.js.ExperimentalJsExport")
         }
 
+        nativeMain {
+            dependencies {
+                api(projects.wgpu4kGlfwNative)
+            }
+        }
+
         val commonMain by getting {
             dependencies {
                 api(projects.wgpu4k)
