@@ -2,16 +2,18 @@
 
 package io.ygdrasil.wgpu.mapper
 
+import io.ygdrasil.wgpu.Color
+import io.ygdrasil.wgpu.RenderPassDescriptor
 import kotlinx.cinterop.*
 import webgpu.*
 
-internal fun Arena.map(input: RenderPassDescriptor): MemorySegment =
-    WGPURenderPassDescriptor.allocate(this).also { renderPassDescriptor ->
-        println("render pass descriptor $renderPassDescriptor")
-        if (input.label != null) WGPURenderPassDescriptor.label(renderPassDescriptor, allocateFrom(input.label))
+internal fun Arena.map(input: RenderPassDescriptor) =
+    alloc<WGPURenderPassDescriptor>().also { output ->
+        println("render pass descriptor $output")
+        if (input.label != null) output.label = input.label.cstr.getPointer(this)
 
         if (input.colorAttachments.isNotEmpty()) {
-            WGPURenderPassDescriptor.colorAttachmentCount(renderPassDescriptor, input.colorAttachments.size.toLong())
+            WGPURenderPassDescriptor.colorAttachmentCount(output, input.colorAttachments.size.toLong())
             val colorAttachments =
                 WGPURenderPassColorAttachment.allocateArray(input.colorAttachments.size.toLong(), this)
             println("color attachments $colorAttachments")
@@ -20,12 +22,12 @@ internal fun Arena.map(input: RenderPassDescriptor): MemorySegment =
                 map(colorAttachment, WGPURenderPassColorAttachment.asSlice(colorAttachments, index.toLong()))
             }
 
-            WGPURenderPassDescriptor.colorAttachments(renderPassDescriptor, colorAttachments)
+            WGPURenderPassDescriptor.colorAttachments(output, colorAttachments)
 
         }
 
         if (input.depthStencilAttachment != null) WGPURenderPassDescriptor.depthStencilAttachment(
-            renderPassDescriptor,
+            output,
             map(input.depthStencilAttachment)
         )
         //TODO map this var occlusionQuerySet: GPUQuerySet?
@@ -34,7 +36,7 @@ internal fun Arena.map(input: RenderPassDescriptor): MemorySegment =
         // check WGPURenderPassDescriptorMaxDrawCount
     }
 
-internal fun Arena.map(input: RenderPassDescriptor.ColorAttachment, output: MemorySegment) {
+internal fun Arena.map(input: RenderPassDescriptor.ColorAttachment, output: WGPURenderPassColorAttachment) {
     println("color attachment $output")
     WGPURenderPassColorAttachment.view(output, input.view.handler)
     WGPURenderPassColorAttachment.loadOp(output, input.loadOp.value)
@@ -45,16 +47,16 @@ internal fun Arena.map(input: RenderPassDescriptor.ColorAttachment, output: Memo
     map(input.clearValue, WGPURenderPassColorAttachment.clearValue(output))
 }
 
-internal fun Arena.map(input: Color, output: MemorySegment) {
-    WGPUColor.r(output, input.red)
-    WGPUColor.g(output, input.green)
-    WGPUColor.b(output, input.blue)
-    WGPUColor.a(output, input.alpha)
+internal fun Arena.map(input: Color, output: WGPUColor) {
+    output.r = input.red
+    output.g = input.green
+    output.b = input.blue
+    output.a = input.alpha
 }
 
 
-internal fun Arena.map(input: RenderPassDescriptor.RenderPassDepthStencilAttachment): MemorySegment =
-    WGPURenderPassDepthStencilAttachment.allocate(this).also { depthStencilAttachment ->
+internal fun Arena.map(input: RenderPassDescriptor.RenderPassDepthStencilAttachment) =
+    alloc<WGPURenderPassDepthStencilAttachment>().also { depthStencilAttachment ->
         WGPURenderPassDepthStencilAttachment.view(depthStencilAttachment, input.view.handler)
         if (input.depthClearValue != null) WGPURenderPassDepthStencilAttachment.depthClearValue(
             depthStencilAttachment,

@@ -4,18 +4,20 @@ package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.BindGroupDescriptor
 import kotlinx.cinterop.*
-import webgpu.*
+import webgpu.WGPUBindGroupDescriptor
+import webgpu.WGPUBindGroupEntry
 
 
-internal fun Arena.map(input: BindGroupDescriptor) = alloc<WGPUBindGroupDescriptor> {
-    if (input.label != null) label = input.label.cstr.getPointer(this@map)
-    layout = input.layout.handler
+internal fun Arena.map(input: BindGroupDescriptor) = alloc<WGPUBindGroupDescriptor>().also { output ->
+    if (input.label != null) output.label = input.label.cstr.getPointer(this@map)
+    output.layout = input.layout.handler
     if (input.entries.isNotEmpty()) {
-        entryCount = input.entries.size.toULong()
-        entries = this@map.allocArray<WGPUBindGroupEntry>(input.entries.size)
+        output.entryCount = input.entries.size.toULong()
+        val entries = allocArray<WGPUBindGroupEntry>(input.entries.size)
         input.entries.forEachIndexed { index, entry ->
-            map(entry, entries!![index])
+            map(entry, entries[index])
         }
+        output.entries = entries
     }
 }
 

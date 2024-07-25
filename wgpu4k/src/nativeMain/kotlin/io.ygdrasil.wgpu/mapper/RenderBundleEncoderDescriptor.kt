@@ -2,36 +2,31 @@
 
 package io.ygdrasil.wgpu.mapper
 
+import io.ygdrasil.wgpu.RenderBundleEncoderDescriptor
+import io.ygdrasil.wgpu.internal.toUInt
 import kotlinx.cinterop.*
-import webgpu.*
+import webgpu.WGPURenderBundleEncoderDescriptor
+import webgpu.WGPUTextureFormatVar
 
-fun Arena.map(input: RenderBundleEncoderDescriptor): MemorySegment =
-    WGPURenderBundleEncoderDescriptor.allocate(this).also { renderBundleEncoderDescriptor ->
-        if (input.label != null) WGPURenderBundleEncoderDescriptor.label(
-            renderBundleEncoderDescriptor,
-            allocateFrom(input.label)
-        )
+fun Arena.map(input: RenderBundleEncoderDescriptor) =
+    alloc<WGPURenderBundleEncoderDescriptor>().also { output ->
+        if (input.label != null) output.label = input.label.cstr.getPointer(this)
 
         if (input.colorFormats.isNotEmpty()) {
-            WGPURenderBundleEncoderDescriptor.colorFormatCount(
-                renderBundleEncoderDescriptor,
-                input.colorFormats.size.toLong()
-            )
-            val colorFormats = allocate(ValueLayout.JAVA_INT, input.colorFormats.size.toLong())
+            output.colorFormatCount = input.colorFormats.size.toULong()
+
+            val colorFormats = allocArray<WGPUTextureFormatVar>(input.colorFormats.size)
             println("color formats $colorFormats")
 
             input.colorFormats.forEachIndexed { index, colorAttachment ->
-                colorFormats.setAtIndex(ValueLayout.JAVA_INT, index.toLong(), colorAttachment.value)
+                colorFormats[index] = colorAttachment.value.toUInt()
             }
 
-            WGPURenderBundleEncoderDescriptor.colorFormats(renderBundleEncoderDescriptor, colorFormats)
+            output.colorFormats = colorFormats
         }
 
-        WGPURenderBundleEncoderDescriptor.depthStencilFormat(
-            renderBundleEncoderDescriptor,
-            input.depthStencilFormat.value
-        )
-        WGPURenderBundleEncoderDescriptor.sampleCount(renderBundleEncoderDescriptor, input.sampleCount)
-        WGPURenderBundleEncoderDescriptor.depthReadOnly(renderBundleEncoderDescriptor, input.depthReadOnly.toInt())
-        WGPURenderBundleEncoderDescriptor.stencilReadOnly(renderBundleEncoderDescriptor, input.stencilReadOnly.toInt())
+        output.depthStencilFormat = input.depthStencilFormat.value.toUInt()
+        output.sampleCount = input.sampleCount.toUInt()
+        output.depthReadOnly = input.depthReadOnly.toUInt()
+        output.stencilReadOnly = input.stencilReadOnly.toUInt()
     }

@@ -3,11 +3,13 @@
 package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.GPUIntegerCoordinates
-import kotlinx.cinterop.*
-import webgpu.*
+import kotlinx.cinterop.Arena
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.alloc
+import webgpu.WGPUOrigin3D
 
-internal fun Arena.map(input: GPUIntegerCoordinates) = WGPUOrigin3D.allocate(this).also { output ->
-    WGPUOrigin3D.x(output, input.first)
-    WGPUOrigin3D.y(output, input.second)
-    WGPUOrigin3D.z(output, 0)
+internal fun Arena.map(input: GPUIntegerCoordinates) = alloc<WGPUOrigin3D>().also { output ->
+    output.x = input.first.toUInt()
+    output.y = input.second.toUInt()
+    output.z = 0.toUInt()
 }

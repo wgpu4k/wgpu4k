@@ -3,19 +3,20 @@
 package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.DeviceDescriptor
+import io.ygdrasil.wgpu.QueueDescriptor
 import kotlinx.cinterop.*
 import webgpu.*
 
 // TODO add unit tests
-internal fun Arena.map(input: DeviceDescriptor): MemorySegment = WGPUDeviceDescriptor.allocate(this).also { output ->
-    if (input.label != null) WGPUDeviceDescriptor.label(output, allocateFrom(input.label))
+internal fun Arena.map(input: DeviceDescriptor) = alloc<WGPUDeviceDescriptor>().also { output ->
+    if (input.label != null) output.label = input.label.cstr.getPointer(this)
     // TODO map this
     // val requiredFeatures: Set<FeatureName> = setOf(),
     // TODO map this
     // val requiredLimits: Map<String, GPUSize64> = mapOf(),
-    map(input.defaultQueue, WGPUDeviceDescriptor.defaultQueue(output))
+    map(input.defaultQueue, output.defaultQueue)
 }
 
-fun Arena.map(input: QueueDescriptor, output: MemorySegment) {
-    if (input.label != null) WGPUQueueDescriptor.label(output, allocateFrom(input.label))
+fun Arena.map(input: QueueDescriptor, output: WGPUDeviceDescriptor) {
+    if (input.label != null) output.label = input.label.cstr.getPointer(this)
 }

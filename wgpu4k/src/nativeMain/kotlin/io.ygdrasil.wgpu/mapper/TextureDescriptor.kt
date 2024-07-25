@@ -2,10 +2,11 @@
 
 package io.ygdrasil.wgpu.mapper
 
+import io.ygdrasil.wgpu.TextureDescriptor
 import kotlinx.cinterop.*
 import webgpu.*
 
-internal fun Arena.map(input: TextureDescriptor) = WGPUTextureDescriptor.allocate(this).also { output ->
+internal fun Arena.map(input: TextureDescriptor) = alloc<WGPUTextureDescriptor>().also { output ->
     if (input.label != null) WGPUTextureDescriptor.label(output, allocateFrom(input.label))
     map(input.size, WGPUTextureDescriptor.size(output))
     WGPUTextureDescriptor.format(output, input.format.value)

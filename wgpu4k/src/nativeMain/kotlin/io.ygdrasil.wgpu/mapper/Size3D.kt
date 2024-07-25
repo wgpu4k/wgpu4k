@@ -2,15 +2,18 @@
 
 package io.ygdrasil.wgpu.mapper
 
-import kotlinx.cinterop.*
-import webgpu.*
+import io.ygdrasil.wgpu.Size3D
+import kotlinx.cinterop.Arena
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.alloc
+import webgpu.WGPUExtent3D
 
-internal fun Arena.map(input: Size3D) = WGPUExtent3D.allocate(this).also { output ->
+internal fun Arena.map(input: Size3D) = alloc<WGPUExtent3D>().also { output ->
     map(input, output)
 }
 
-internal fun map(input: Size3D, output: MemorySegment) {
-    WGPUExtent3D.width(output, input.width)
-    WGPUExtent3D.height(output, input.height)
-    WGPUExtent3D.depthOrArrayLayers(output, input.depthOrArrayLayers)
+internal fun map(input: Size3D, output: WGPUExtent3D) {
+    output.width = input.width.toUInt()
+    output.height = input.height.toUInt()
+    output.depthOrArrayLayers = input.depthOrArrayLayers.toUInt()
 }

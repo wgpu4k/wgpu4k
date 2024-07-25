@@ -2,10 +2,11 @@
 
 package io.ygdrasil.wgpu.mapper
 
+import io.ygdrasil.wgpu.SamplerDescriptor
 import kotlinx.cinterop.*
 import webgpu.*
 
-internal fun Arena.map(input: SamplerDescriptor): MemorySegment = WGPUSamplerDescriptor.allocate(this).also { output ->
+internal fun Arena.map(input: SamplerDescriptor) = alloc<WGPUSamplerDescriptor>().also { output ->
     if (input.label != null) WGPUSamplerDescriptor.label(output, allocateFrom(input.label))
 
     WGPUSamplerDescriptor.addressModeU(output, input.addressModeU.value)

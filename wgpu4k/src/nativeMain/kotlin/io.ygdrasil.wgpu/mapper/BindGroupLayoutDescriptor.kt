@@ -6,17 +6,21 @@ import io.ygdrasil.wgpu.BindGroupLayoutDescriptor
 import io.ygdrasil.wgpu.internal.toUInt
 import io.ygdrasil.wgpu.toFlagUInt
 import kotlinx.cinterop.*
-import webgpu.*
+import webgpu.WGPUBindGroupLayoutDescriptor
+import webgpu.WGPUBindGroupLayoutEntry
+import webgpu.WGPUChainedStruct
+import webgpu.WGPUSType_BindGroupEntryExtras
 
-internal fun Arena.map(input: BindGroupLayoutDescriptor) = alloc<WGPUBindGroupLayoutDescriptor> {
-    if (input.label != null) label = input.label.cstr.getPointer(this@map)
+internal fun Arena.map(input: BindGroupLayoutDescriptor) = alloc<WGPUBindGroupLayoutDescriptor>().also { output ->
+    if (input.label != null) output.label = input.label.cstr.getPointer(this)
 
     if (input.entries.isNotEmpty()) {
-        entryCount = input.entries.size.toULong()
-        entries = this@map.allocArray<WGPUBindGroupLayoutEntry>(input.entries.size)
+        output.entryCount = input.entries.size.toULong()
+        val entries = allocArray<WGPUBindGroupLayoutEntry>(input.entries.size)
         input.entries.forEachIndexed { index, entry ->
-            map(entry, entries!![index])
+            map(entry, entries[index])
         }
+        output.entries = entries
     }
 }
 

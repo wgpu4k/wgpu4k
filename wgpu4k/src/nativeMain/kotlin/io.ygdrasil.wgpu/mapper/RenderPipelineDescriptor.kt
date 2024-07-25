@@ -2,12 +2,13 @@
 
 package io.ygdrasil.wgpu.mapper
 
+import io.ygdrasil.wgpu.RenderPipelineDescriptor
 import kotlinx.cinterop.*
 import webgpu.*
 
-internal fun Arena.map(input: RenderPipelineDescriptor) = WGPURenderPipelineDescriptor.allocate(this).also { output ->
+internal fun Arena.map(input: RenderPipelineDescriptor) = alloc<WGPURenderPipelineDescriptor>().also { output ->
+    if (input.label != null) output.label = input.label.cstr.getPointer(this)
     map(input.vertex, WGPURenderPipelineDescriptor.vertex(output))
-    if (input.label != null) WGPURenderPipelineDescriptor.label(output, allocateFrom(input.label))
     if (input.layout != null) WGPURenderPipelineDescriptor.layout(output, input.layout.handler)
     map(input.primitive, WGPURenderPipelineDescriptor.primitive(output))
     if (input.depthStencil != null) WGPURenderPipelineDescriptor.depthStencil(output, map(input.depthStencil))
@@ -15,15 +16,15 @@ internal fun Arena.map(input: RenderPipelineDescriptor) = WGPURenderPipelineDesc
     map(input.multisample, WGPURenderPipelineDescriptor.multisample(output))
 }
 
-fun Arena.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState, output: MemorySegment) {
+fun Arena.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState, output: WGPUColorTargetState) {
     println("colorTargetState $output")
     WGPUColorTargetState.format(output, input.format.value)
     WGPUColorTargetState.writeMask(output, input.writeMask.value)
     WGPUColorTargetState.blend(output, map(input.blend))
 }
 
-fun Arena.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState): MemorySegment = WGPUBlendState
-    .allocate(this).also { output ->
+fun Arena.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState) =
+    alloc<WGPUBlendState>().also { output ->
         println("blend state $output")
         map(input.color, WGPUBlendState.color(output))
         map(input.alpha, WGPUBlendState.alpha(output))
@@ -32,7 +33,7 @@ fun Arena.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState.Ble
 
 fun map(
     input: RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent,
-    output: MemorySegment
+    output: WGPUBlendComponent
 ) {
     println("blend component $output")
     WGPUBlendComponent.operation(output, input.operation.value)
@@ -40,9 +41,8 @@ fun map(
     WGPUBlendComponent.dstFactor(output, input.dstFactor.value)
 }
 
-private fun Arena.map(input: RenderPipelineDescriptor.FragmentState): MemorySegment =
-    WGPUFragmentState.allocate(this)
-        .also { fragmentState ->
+private fun Arena.map(input: RenderPipelineDescriptor.FragmentState): WGPUFragmentState =
+    alloc<WGPUFragmentState>().also { fragmentState ->
             println("fragment $fragmentState")
             WGPUFragmentState.module(fragmentState, input.module.handler)
             WGPUFragmentState.entryPoint(fragmentState, allocateFrom(input.entryPoint))
@@ -57,8 +57,8 @@ private fun Arena.map(input: RenderPipelineDescriptor.FragmentState): MemorySegm
             }
         }
 
-private fun Arena.map(input: RenderPipelineDescriptor.DepthStencilState): MemorySegment =
-    WGPUDepthStencilState.allocate(this)
+private fun Arena.map(input: RenderPipelineDescriptor.DepthStencilState): WGPUDepthStencilState =
+    alloc<WGPUDepthStencilState>()
         .also { depthStencilState ->
             WGPUDepthStencilState.format(depthStencilState, input.format.value)
             if (input.depthWriteEnabled != null) WGPUDepthStencilState.depthWriteEnabled(
@@ -78,20 +78,20 @@ private fun Arena.map(input: RenderPipelineDescriptor.DepthStencilState): Memory
             WGPUDepthStencilState.depthBiasClamp(depthStencilState, input.depthBiasClamp)
         }
 
-fun map(input: RenderPipelineDescriptor.DepthStencilState.StencilFaceState, output: MemorySegment?) {
+fun map(input: RenderPipelineDescriptor.DepthStencilState.StencilFaceState, output: WGPUStencilFaceState?) {
     WGPUStencilFaceState.compare(output, input.compare.value)
     WGPUStencilFaceState.failOp(output, input.failOp.value)
     WGPUStencilFaceState.depthFailOp(output, input.depthFailOp.value)
     WGPUStencilFaceState.passOp(output, input.passOp.value)
 }
 
-private fun map(input: RenderPipelineDescriptor.MultisampleState, output: MemorySegment) {
+private fun map(input: RenderPipelineDescriptor.MultisampleState, output: WGPUMultisampleState) {
     WGPUMultisampleState.count(output, input.count)
     WGPUMultisampleState.mask(output, input.mask.toInt())
     WGPUMultisampleState.alphaToCoverageEnabled(output, input.alphaToCoverageEnabled.toInt())
 }
 
-private fun map(input: RenderPipelineDescriptor.PrimitiveState, output: MemorySegment) {
+private fun map(input: RenderPipelineDescriptor.PrimitiveState, output: WGPUPrimitiveState) {
     WGPUPrimitiveState.topology(output, input.topology.value)
     if (input.stripIndexFormat != null) WGPUPrimitiveState.stripIndexFormat(output, input.stripIndexFormat.value)
     WGPUPrimitiveState.frontFace(output, input.frontFace.value)
@@ -99,7 +99,7 @@ private fun map(input: RenderPipelineDescriptor.PrimitiveState, output: MemorySe
     //TODO check how to map unclippedDepth https://docs.rs/wgpu/latest/wgpu/struct.PrimitiveState.html
 }
 
-private fun Arena.map(input: RenderPipelineDescriptor.VertexState, output: MemorySegment) {
+private fun Arena.map(input: RenderPipelineDescriptor.VertexState, output: WGPUVertexState) {
     println("vertex $output")
     WGPUVertexState.module(output, input.module.handler)
     WGPUVertexState.entryPoint(output, allocateFrom(input.entryPoint))
@@ -119,7 +119,7 @@ private fun Arena.map(input: RenderPipelineDescriptor.VertexState, output: Memor
 
 private fun map(
     input: RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute,
-    output: MemorySegment
+    output: WGPUVertexAttribute
 ) {
     println("attribute $output")
     WGPUVertexAttribute.format(output, input.format.value)
@@ -127,7 +127,7 @@ private fun map(
     WGPUVertexAttribute.shaderLocation(output, input.shaderLocation)
 }
 
-private fun Arena.map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout, output: MemorySegment) {
+private fun Arena.map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout, output: WGPUVertexBufferLayout) {
     println("buffer $output")
     WGPUVertexBufferLayout.arrayStride(output, input.arrayStride)
     if (input.attributes.isNotEmpty()) {

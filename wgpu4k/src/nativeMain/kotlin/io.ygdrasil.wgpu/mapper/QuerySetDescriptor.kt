@@ -2,9 +2,11 @@
 
 package io.ygdrasil.wgpu.mapper
 
-import kotlinx.cinterop.*
-import webgpu.*
+import io.ygdrasil.wgpu.QuerySetDescriptor
+import kotlinx.cinterop.Arena
+import kotlinx.cinterop.ExperimentalForeignApi
+import webgpu.WGPUQuerySetDescriptor
 
-internal fun Arena.map(input: QuerySetDescriptor): MemorySegment {
+internal fun Arena.map(input: QuerySetDescriptor): WGPUQuerySetDescriptor {
     TODO()
 }

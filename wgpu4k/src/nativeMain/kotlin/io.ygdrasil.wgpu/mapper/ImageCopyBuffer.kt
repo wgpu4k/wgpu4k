@@ -3,17 +3,20 @@
 package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.ImageCopyBuffer
-import kotlinx.cinterop.*
-import webgpu.*
+import kotlinx.cinterop.Arena
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.alloc
+import webgpu.WGPUImageCopyBuffer
+import webgpu.WGPUTextureDataLayout
 
-internal fun Arena.map(input: ImageCopyBuffer) = WGPUImageCopyBuffer.allocate(this).also { output ->
-    WGPUImageCopyBuffer.buffer(output, input.buffer.handler)
-    map(input, WGPUImageCopyBuffer.layout(output))
+internal fun Arena.map(input: ImageCopyBuffer) = alloc<WGPUImageCopyBuffer>().also { output ->
+    output.buffer = input.buffer.handler
+    map(input, output.layout)
 }
 
-private fun map(input: ImageCopyBuffer, output: MemorySegment) {
-    WGPUTextureDataLayout.offset(output, input.offset)
-    WGPUTextureDataLayout.bytesPerRow(output, input.bytesPerRow)
-    WGPUTextureDataLayout.rowsPerImage(output, input.rowsPerImage)
+private fun map(input: ImageCopyBuffer, output: WGPUTextureDataLayout) {
+    output.offset = input.offset.toULong()
+    output.bytesPerRow = input.bytesPerRow.toUInt()
+    output.rowsPerImage = input.rowsPerImage.toUInt()
 }
 

@@ -4,22 +4,18 @@ package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.ComputePassDescriptor
 import kotlinx.cinterop.*
-import webgpu.*
+import webgpu.WGPUComputePassDescriptor
+import webgpu.WGPUComputePassTimestampWrites
 
-internal fun Arena.map(input: ComputePassDescriptor) = WGPUComputePassDescriptor.allocate(this).also { output ->
-    if (input.label != null) WGPUComputePassDescriptor.label(output, allocateFrom(input.label))
-    if (input.timestampWrites != null) WGPUComputePassDescriptor.timestampWrites(output, map(input.timestampWrites))
+internal fun Arena.map(input: ComputePassDescriptor) = alloc<WGPUComputePassDescriptor>().also { output ->
+    if (input.label != null) output.label = input.label.cstr.getPointer(this)
+    if (input.timestampWrites != null) output.timestampWrites = map(input.timestampWrites).ptr
 }
 
-private fun Arena.map(input: ComputePassDescriptor.ComputePassTimestampWrites) =
-    WGPUComputePassTimestampWrites.allocate(this).also { output ->
-        WGPUComputePassTimestampWrites.querySet(output, input.querySet.handler)
-        if (input.beginningOfPassWriteIndex != null) WGPUComputePassTimestampWrites.beginningOfPassWriteIndex(
-            output,
-            input.beginningOfPassWriteIndex
-        )
-        if (input.endOfPassWriteIndex != null) WGPUComputePassTimestampWrites.endOfPassWriteIndex(
-            output,
-            input.endOfPassWriteIndex
-        )
+private fun Arena.map(input: ComputePassDescriptor.ComputePassTimestampWrites): WGPUComputePassTimestampWrites =
+    alloc<WGPUComputePassTimestampWrites>().also { output ->
+        output.querySet = input.querySet.handler
+        if (input.beginningOfPassWriteIndex != null) output.beginningOfPassWriteIndex =
+            input.beginningOfPassWriteIndex.toUInt()
+        if (input.endOfPassWriteIndex != null) output.endOfPassWriteIndex = input.endOfPassWriteIndex.toUInt()
     }
