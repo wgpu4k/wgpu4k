@@ -4,21 +4,23 @@ package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.ShaderModuleDescriptor
 import kotlinx.cinterop.*
-import webgpu.*
+import webgpu.WGPUSType_ShaderModuleWGSLDescriptor
+import webgpu.WGPUShaderModuleCompilationHint
+import webgpu.WGPUShaderModuleDescriptor
+import webgpu.WGPUShaderModuleWGSLDescriptor
 
 internal fun Arena.map(input: ShaderModuleDescriptor) =
     alloc<WGPUShaderModuleDescriptor>().also { output ->
         if (input.label != null) output.label = input.label.cstr.getPointer(this)
-        output.nextInChain = mapCode(input.code)
+        output.nextInChain = mapCode(input.code).ptr.reinterpret()
         if (input.compilationHints != null && input.compilationHints.isNotEmpty()) {
-            WGPUShaderModuleDescriptor.hintCount(output, input.compilationHints.size.toLong())
-            val hints = WGPUShaderModuleCompilationHint.allocateArray(input.compilationHints.size.toLong(), this)
+            output.hintCount = input.compilationHints.size.toULong()
+            val hints = allocArray<WGPUShaderModuleCompilationHint>(input.compilationHints.size.toLong())
             input.compilationHints.forEachIndexed { index, hint ->
-                map(hint, WGPUShaderModuleDescriptor.asSlice(hints, index.toLong()))
+                map(hint, hints[index])
             }
-            WGPUShaderModuleDescriptor.hints(output, hints)
+            output.hints = hints
         }
-
     }
 
 private fun Arena.map(input: ShaderModuleDescriptor.CompilationHint, output: WGPUShaderModuleCompilationHint) {
