@@ -1,6 +1,11 @@
+@file:OptIn(ExperimentalForeignApi::class)
+
 package io.ygdrasil.wgpu
 
-actual class Buffer : AutoCloseable {
+import kotlinx.cinterop.ExperimentalForeignApi
+import webgpu.WGPUBuffer
+
+actual class Buffer(internal val handler: WGPUBuffer) : AutoCloseable {
 
     actual val size: GPUSize64
         get() = TODO("Not yet implemented")

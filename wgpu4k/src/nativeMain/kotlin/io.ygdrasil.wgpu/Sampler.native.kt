@@ -1,6 +1,11 @@
+@file:OptIn(ExperimentalForeignApi::class)
+
 package io.ygdrasil.wgpu
 
-actual class Sampler : AutoCloseable {
+import kotlinx.cinterop.ExperimentalForeignApi
+import webgpu.WGPUSampler
+
+actual class Sampler(internal val handler: WGPUSampler) : AutoCloseable {
     actual override fun close() {
     }
 

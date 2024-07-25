@@ -13,6 +13,12 @@ internal fun Set<EnumerationWithValue>.toFlagInt(): Int = when (size) {
     else -> fold(0) { acc, enumerationWithValue -> acc or enumerationWithValue.value }
 }
 
+internal fun Set<EnumerationWithValue>.toFlagUInt(): UInt = when (size) {
+    0 -> 0u
+    1 -> first().value.toUInt()
+    else -> fold(0u) { acc, enumerationWithValue -> acc or enumerationWithValue.value.toUInt() }
+}
+
 enum class AdapterType(
     val value: Int,
 ) {
