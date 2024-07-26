@@ -3,24 +3,27 @@
 package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.SamplerDescriptor
-import kotlinx.cinterop.*
-import webgpu.*
+import kotlinx.cinterop.Arena
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.alloc
+import kotlinx.cinterop.cstr
+import webgpu.WGPUSamplerDescriptor
 
 internal fun Arena.map(input: SamplerDescriptor) = alloc<WGPUSamplerDescriptor>().also { output ->
-    if (input.label != null) WGPUSamplerDescriptor.label(output, allocateFrom(input.label))
+    if (input.label != null) output.label = input.label.cstr.getPointer(this)
 
-    WGPUSamplerDescriptor.addressModeU(output, input.addressModeU.value)
-    WGPUSamplerDescriptor.addressModeV(output, input.addressModeV.value)
-    WGPUSamplerDescriptor.addressModeW(output, input.addressModeW.value)
+    output.addressModeU = input.addressModeU.uValue
+    output.addressModeV = input.addressModeV.uValue
+    output.addressModeW = input.addressModeW.uValue
 
-    WGPUSamplerDescriptor.magFilter(output, input.magFilter.value)
-    WGPUSamplerDescriptor.minFilter(output, input.minFilter.value)
-    WGPUSamplerDescriptor.mipmapFilter(output, input.mipmapFilter.value)
+    output.magFilter = input.magFilter.uValue
+    output.minFilter = input.minFilter.uValue
+    output.mipmapFilter = input.mipmapFilter.uValue
 
-    WGPUSamplerDescriptor.lodMinClamp(output, input.lodMinClamp)
-    WGPUSamplerDescriptor.lodMaxClamp(output, input.lodMaxClamp)
+    output.lodMinClamp = input.lodMinClamp
+    output.lodMaxClamp = input.lodMaxClamp
 
-    if (input.compare != null) WGPUSamplerDescriptor.compare(output, input.compare.value)
-    WGPUSamplerDescriptor.maxAnisotropy(output, input.maxAnisotropy.toShort())
+    if (input.compare != null) output.compare = input.compare.uValue
+    output.maxAnisotropy = input.maxAnisotropy.toUShort()
 
 }

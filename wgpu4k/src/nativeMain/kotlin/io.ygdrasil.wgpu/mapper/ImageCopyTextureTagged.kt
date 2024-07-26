@@ -11,7 +11,7 @@ import webgpu.WGPUImageCopyTexture
 internal fun Arena.map(input: ImageCopyTextureTagged) = alloc<WGPUImageCopyTexture>().also { output ->
     output.texture = input.texture.handler
     output.mipLevel = input.mipLevel.toUInt()
-    output.origin = map(input.origin)
-    output.aspect = input.aspect.value
+    map(input.origin, output.origin)
+    output.aspect = input.aspect.uValue
 }
 

@@ -3,32 +3,32 @@
 package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.RenderPipelineDescriptor
+import io.ygdrasil.wgpu.internal.toUInt
 import kotlinx.cinterop.*
 import webgpu.*
 
 internal fun Arena.map(input: RenderPipelineDescriptor) = alloc<WGPURenderPipelineDescriptor>().also { output ->
     if (input.label != null) output.label = input.label.cstr.getPointer(this)
-    map(input.vertex, WGPURenderPipelineDescriptor.vertex(output))
-    if (input.layout != null) WGPURenderPipelineDescriptor.layout(output, input.layout.handler)
-    map(input.primitive, WGPURenderPipelineDescriptor.primitive(output))
-    if (input.depthStencil != null) WGPURenderPipelineDescriptor.depthStencil(output, map(input.depthStencil))
-    if (input.fragment != null) WGPURenderPipelineDescriptor.fragment(output, map(input.fragment))
-    map(input.multisample, WGPURenderPipelineDescriptor.multisample(output))
+    map(input.vertex, output.vertex)
+    if (input.layout != null) output.layout = input.layout.handler
+    map(input.primitive, output.primitive)
+    if (input.depthStencil != null) output.depthStencil = map(input.depthStencil).ptr
+    if (input.fragment != null) output.fragment = map(input.fragment).ptr
+    map(input.multisample, output.multisample)
 }
 
 fun Arena.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState, output: WGPUColorTargetState) {
     println("colorTargetState $output")
-    WGPUColorTargetState.format(output, input.format.value)
-    WGPUColorTargetState.writeMask(output, input.writeMask.value)
-    WGPUColorTargetState.blend(output, map(input.blend))
+    output.format = input.format.uValue
+    output.writeMask = input.writeMask.uValue
+    output.blend = map(input.blend).ptr
 }
 
 fun Arena.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState) =
     alloc<WGPUBlendState>().also { output ->
         println("blend state $output")
-        map(input.color, WGPUBlendState.color(output))
-        map(input.alpha, WGPUBlendState.alpha(output))
-
+        map(input.color, output.color)
+        map(input.alpha, output.alpha)
     }
 
 fun map(
@@ -36,84 +36,78 @@ fun map(
     output: WGPUBlendComponent
 ) {
     println("blend component $output")
-    WGPUBlendComponent.operation(output, input.operation.value)
-    WGPUBlendComponent.srcFactor(output, input.srcFactor.value)
-    WGPUBlendComponent.dstFactor(output, input.dstFactor.value)
+    output.operation = input.operation.uValue
+    output.srcFactor = input.srcFactor.uValue
+    output.dstFactor = input.dstFactor.uValue
 }
 
 private fun Arena.map(input: RenderPipelineDescriptor.FragmentState): WGPUFragmentState =
-    alloc<WGPUFragmentState>().also { fragmentState ->
-            println("fragment $fragmentState")
-            WGPUFragmentState.module(fragmentState, input.module.handler)
-            WGPUFragmentState.entryPoint(fragmentState, allocateFrom(input.entryPoint))
-            if (input.targets.isNotEmpty()) {
-                WGPUFragmentState.targetCount(fragmentState, input.targets.size.toLong())
-                val colorTargets = WGPUColorTargetState.allocateArray(input.targets.size.toLong(), this)
-                println("colorTargets $colorTargets")
-                input.targets.forEachIndexed { index, colorTargetState ->
-                    map(colorTargetState, WGPUColorTargetState.asSlice(colorTargets, index.toLong()))
-                }
-                WGPUFragmentState.targets(fragmentState, colorTargets)
+    alloc<WGPUFragmentState>().also { output ->
+        println("fragment $output")
+        output.module = input.module.handler
+        output.entryPoint = input.entryPoint.cstr.getPointer(this)
+        if (input.targets.isNotEmpty()) {
+            output.targetCount = input.targets.size.toULong()
+            val colorTargets = allocArray<WGPUColorTargetState>(input.targets.size)
+            println("colorTargets $colorTargets")
+            input.targets.forEachIndexed { index, colorTargetState ->
+                map(colorTargetState, colorTargets[index])
             }
+            output.targets = colorTargets
         }
+    }
 
 private fun Arena.map(input: RenderPipelineDescriptor.DepthStencilState): WGPUDepthStencilState =
     alloc<WGPUDepthStencilState>()
-        .also { depthStencilState ->
-            WGPUDepthStencilState.format(depthStencilState, input.format.value)
-            if (input.depthWriteEnabled != null) WGPUDepthStencilState.depthWriteEnabled(
-                depthStencilState,
-                input.depthWriteEnabled.toInt()
-            )
-            if (input.depthCompare != null) WGPUDepthStencilState.depthCompare(
-                depthStencilState,
-                input.depthCompare.value
-            )
-            map(input.stencilFront, WGPUDepthStencilState.stencilFront(depthStencilState))
-            map(input.stencilBack, WGPUDepthStencilState.stencilBack(depthStencilState))
-            WGPUDepthStencilState.stencilReadMask(depthStencilState, input.stencilReadMask.toInt())
-            WGPUDepthStencilState.stencilWriteMask(depthStencilState, input.stencilWriteMask.toInt())
-            WGPUDepthStencilState.depthBias(depthStencilState, input.depthBias)
-            WGPUDepthStencilState.depthBiasSlopeScale(depthStencilState, input.depthBiasSlopeScale)
-            WGPUDepthStencilState.depthBiasClamp(depthStencilState, input.depthBiasClamp)
+        .also { output ->
+            output.format = input.format.uValue
+            if (input.depthWriteEnabled != null) output.depthWriteEnabled = input.depthWriteEnabled.toUInt()
+            if (input.depthCompare != null) output.depthCompare = input.depthCompare.uValue
+            map(input.stencilFront, output.stencilFront)
+            map(input.stencilBack, output.stencilBack)
+            output.stencilReadMask = input.stencilReadMask.toUInt()
+            output.stencilWriteMask = input.stencilWriteMask.toUInt()
+            output.depthBias = input.depthBias
+            output.depthBiasSlopeScale = input.depthBiasSlopeScale
+            output.depthBiasClamp = input.depthBiasClamp
         }
 
-fun map(input: RenderPipelineDescriptor.DepthStencilState.StencilFaceState, output: WGPUStencilFaceState?) {
-    WGPUStencilFaceState.compare(output, input.compare.value)
-    WGPUStencilFaceState.failOp(output, input.failOp.value)
-    WGPUStencilFaceState.depthFailOp(output, input.depthFailOp.value)
-    WGPUStencilFaceState.passOp(output, input.passOp.value)
+fun map(input: RenderPipelineDescriptor.DepthStencilState.StencilFaceState, output: WGPUStencilFaceState) {
+    output.compare = input.compare.uValue
+    output.failOp = input.failOp.uValue
+    output.depthFailOp = input.depthFailOp.uValue
+    output.passOp = input.passOp.uValue
 }
 
 private fun map(input: RenderPipelineDescriptor.MultisampleState, output: WGPUMultisampleState) {
-    WGPUMultisampleState.count(output, input.count)
-    WGPUMultisampleState.mask(output, input.mask.toInt())
-    WGPUMultisampleState.alphaToCoverageEnabled(output, input.alphaToCoverageEnabled.toInt())
+    output.count = input.count.toUInt()
+    output.mask = input.mask
+    output.alphaToCoverageEnabled = input.alphaToCoverageEnabled.toUInt()
 }
 
 private fun map(input: RenderPipelineDescriptor.PrimitiveState, output: WGPUPrimitiveState) {
-    WGPUPrimitiveState.topology(output, input.topology.value)
-    if (input.stripIndexFormat != null) WGPUPrimitiveState.stripIndexFormat(output, input.stripIndexFormat.value)
-    WGPUPrimitiveState.frontFace(output, input.frontFace.value)
-    WGPUPrimitiveState.cullMode(output, input.cullMode.value)
+    output.topology = input.topology.uValue
+    if (input.stripIndexFormat != null) output.stripIndexFormat = input.stripIndexFormat.uValue
+    output.frontFace = input.frontFace.uValue
+    output.cullMode = input.cullMode.uValue
     //TODO check how to map unclippedDepth https://docs.rs/wgpu/latest/wgpu/struct.PrimitiveState.html
 }
 
 private fun Arena.map(input: RenderPipelineDescriptor.VertexState, output: WGPUVertexState) {
     println("vertex $output")
-    WGPUVertexState.module(output, input.module.handler)
-    WGPUVertexState.entryPoint(output, allocateFrom(input.entryPoint))
+    output.module = input.module.handler
+    output.entryPoint = input.entryPoint.cstr.getPointer(this)
     // TODO learn how to map this
-    WGPUVertexState.constants(output, MemorySegment.NULL)
-    WGPUVertexState.constantCount(output, 0L)
+    output.constants = null
+    output.constantCount = 0uL
     if (input.buffers.isNotEmpty()) {
-        val buffers = WGPUVertexBufferLayout.allocateArray(input.buffers.size.toLong(), this)
+        val buffers = allocArray<WGPUVertexBufferLayout>(input.buffers.size)
         println("buffers $buffers")
         input.buffers.forEachIndexed { index, vertexBufferLayout ->
-            map(vertexBufferLayout, WGPUVertexBufferLayout.asSlice(buffers, index.toLong()))
+            map(vertexBufferLayout, buffers[index])
         }
-        WGPUVertexState.buffers(output, buffers)
-        WGPUVertexState.bufferCount(output, input.buffers.size.toLong())
+        output.buffers = buffers
+        output.bufferCount = input.buffers.size.toULong()
     }
 }
 
@@ -122,23 +116,23 @@ private fun map(
     output: WGPUVertexAttribute
 ) {
     println("attribute $output")
-    WGPUVertexAttribute.format(output, input.format.value)
-    WGPUVertexAttribute.offset(output, input.offset)
-    WGPUVertexAttribute.shaderLocation(output, input.shaderLocation)
+    output.format = input.format.uValue
+    output.offset = input.offset.toULong()
+    output.shaderLocation = input.shaderLocation.toUInt()
 }
 
 private fun Arena.map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout, output: WGPUVertexBufferLayout) {
     println("buffer $output")
-    WGPUVertexBufferLayout.arrayStride(output, input.arrayStride)
+    output.arrayStride = input.arrayStride.toULong()
     if (input.attributes.isNotEmpty()) {
-        val attributes = WGPUVertexAttribute.allocateArray(input.attributes.size.toLong(), this)
+        val attributes = allocArray<WGPUVertexAttribute>(input.attributes.size)
         println("attributes $attributes")
         input.attributes.forEachIndexed { index, vertexAttribute ->
-            map(vertexAttribute, WGPUVertexAttribute.asSlice(attributes, index.toLong()))
+            map(vertexAttribute, attributes[index])
         }
-        WGPUVertexBufferLayout.attributes(output, attributes)
-        WGPUVertexBufferLayout.attributeCount(output, input.attributes.size.toLong())
+        output.attributes = attributes
+        output.attributeCount = input.attributes.size.toULong()
     }
-    WGPUVertexBufferLayout.stepMode(output, input.stepMode.value)
+    output.stepMode = input.stepMode.uValue
 }
 

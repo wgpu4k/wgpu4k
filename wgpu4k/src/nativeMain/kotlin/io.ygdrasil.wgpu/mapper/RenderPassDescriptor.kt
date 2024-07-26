@@ -4,8 +4,12 @@ package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.Color
 import io.ygdrasil.wgpu.RenderPassDescriptor
+import io.ygdrasil.wgpu.internal.toUInt
 import kotlinx.cinterop.*
-import webgpu.*
+import webgpu.WGPUColor
+import webgpu.WGPURenderPassColorAttachment
+import webgpu.WGPURenderPassDepthStencilAttachment
+import webgpu.WGPURenderPassDescriptor
 
 internal fun Arena.map(input: RenderPassDescriptor) =
     alloc<WGPURenderPassDescriptor>().also { output ->
@@ -13,23 +17,19 @@ internal fun Arena.map(input: RenderPassDescriptor) =
         if (input.label != null) output.label = input.label.cstr.getPointer(this)
 
         if (input.colorAttachments.isNotEmpty()) {
-            WGPURenderPassDescriptor.colorAttachmentCount(output, input.colorAttachments.size.toLong())
-            val colorAttachments =
-                WGPURenderPassColorAttachment.allocateArray(input.colorAttachments.size.toLong(), this)
+            output.colorAttachmentCount = input.colorAttachments.size.toULong()
+            val colorAttachments = allocArray<WGPURenderPassColorAttachment>(input.colorAttachments.size)
             println("color attachments $colorAttachments")
 
             input.colorAttachments.forEachIndexed { index, colorAttachment ->
-                map(colorAttachment, WGPURenderPassColorAttachment.asSlice(colorAttachments, index.toLong()))
+                map(colorAttachment, colorAttachments[index])
             }
 
-            WGPURenderPassDescriptor.colorAttachments(output, colorAttachments)
+            output.colorAttachments = colorAttachments
 
         }
 
-        if (input.depthStencilAttachment != null) WGPURenderPassDescriptor.depthStencilAttachment(
-            output,
-            map(input.depthStencilAttachment)
-        )
+        if (input.depthStencilAttachment != null) output.depthStencilAttachment = map(input.depthStencilAttachment).ptr
         //TODO map this var occlusionQuerySet: GPUQuerySet?
         //TODO map this var timestampWrites: GPURenderPassTimestampWrites?
         //TODO map this var maxDrawCount: GPUSize64
@@ -38,13 +38,13 @@ internal fun Arena.map(input: RenderPassDescriptor) =
 
 internal fun Arena.map(input: RenderPassDescriptor.ColorAttachment, output: WGPURenderPassColorAttachment) {
     println("color attachment $output")
-    WGPURenderPassColorAttachment.view(output, input.view.handler)
-    WGPURenderPassColorAttachment.loadOp(output, input.loadOp.value)
-    WGPURenderPassColorAttachment.storeOp(output, input.storeOp.value)
+    output.view = input.view.handler
+    output.loadOp = input.loadOp.uValue
+    output.storeOp = input.storeOp.uValue
     // TODO find how to map this
     //if (input.depthSlice != null) WGPURenderPassColorAttachment.depthSlice(output, input.depthSlice)
-    if (input.resolveTarget != null) WGPURenderPassColorAttachment.resolveTarget(output, input.resolveTarget.handler)
-    map(input.clearValue, WGPURenderPassColorAttachment.clearValue(output))
+    if (input.resolveTarget != null) output.resolveTarget = input.resolveTarget.handler
+    map(input.clearValue, output.clearValue)
 }
 
 internal fun Arena.map(input: Color, output: WGPUColor) {
@@ -56,29 +56,16 @@ internal fun Arena.map(input: Color, output: WGPUColor) {
 
 
 internal fun Arena.map(input: RenderPassDescriptor.RenderPassDepthStencilAttachment) =
-    alloc<WGPURenderPassDepthStencilAttachment>().also { depthStencilAttachment ->
-        WGPURenderPassDepthStencilAttachment.view(depthStencilAttachment, input.view.handler)
-        if (input.depthClearValue != null) WGPURenderPassDepthStencilAttachment.depthClearValue(
-            depthStencilAttachment,
-            input.depthClearValue
-        )
-        if (input.depthLoadOp != null) WGPURenderPassDepthStencilAttachment.depthLoadOp(
-            depthStencilAttachment,
-            input.depthLoadOp.value
-        )
-        if (input.depthStoreOp != null) WGPURenderPassDepthStencilAttachment.depthStoreOp(
-            depthStencilAttachment,
-            input.depthStoreOp.value
-        )
-        WGPURenderPassDepthStencilAttachment.depthReadOnly(depthStencilAttachment, input.depthReadOnly.toInt())
-        WGPURenderPassDepthStencilAttachment.stencilClearValue(depthStencilAttachment, input.stencilClearValue.toInt())
-        if (input.stencilLoadOp != null) WGPURenderPassDepthStencilAttachment.stencilLoadOp(
-            depthStencilAttachment,
-            input.stencilLoadOp.value
-        )
-        if (input.stencilStoreOp != null) WGPURenderPassDepthStencilAttachment.stencilStoreOp(
-            depthStencilAttachment,
-            input.stencilStoreOp.value
-        )
-        WGPURenderPassDepthStencilAttachment.stencilReadOnly(depthStencilAttachment, input.stencilReadOnly.toInt())
+    alloc<WGPURenderPassDepthStencilAttachment>().also { output ->
+        output.view = input.view.handler
+        if (input.depthClearValue != null) output.depthClearValue = input.depthClearValue
+        if (input.depthLoadOp != null) output.depthLoadOp = input.depthLoadOp.uValue
+        if (input.depthStoreOp != null) output.depthStoreOp = input.depthStoreOp.uValue
+
+        output.depthReadOnly = input.depthReadOnly.toUInt()
+        output.stencilClearValue = input.stencilClearValue.toUInt()
+        if (input.stencilLoadOp != null) output.stencilLoadOp = input.stencilLoadOp.uValue
+        if (input.stencilStoreOp != null) output.stencilStoreOp = input.stencilStoreOp.uValue
+
+        output.stencilReadOnly = input.stencilReadOnly.toUInt()
     }

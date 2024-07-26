@@ -2,6 +2,8 @@ package io.ygdrasil.wgpu
 
 interface EnumerationWithValue {
     val value: Int
+    val uValue: UInt
+        get() = value.toUInt()
 
     infix fun or(other: Int): Int = value or other
     infix fun or(other: EnumerationWithValue): Int = value or other.value
