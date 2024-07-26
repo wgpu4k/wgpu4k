@@ -9,13 +9,13 @@ import webgpu.WGPUComputePipelineDescriptor
 import webgpu.WGPUConstantEntry
 import webgpu.WGPUProgrammableStageDescriptor
 
-internal fun Arena.map(input: ComputePipelineDescriptor) = alloc<WGPUComputePipelineDescriptor>().also { output ->
+internal fun ArenaBase.map(input: ComputePipelineDescriptor) = alloc<WGPUComputePipelineDescriptor>().also { output ->
     if (input.label != null) output.label = input.label.cstr.getPointer(this)
     if (input.layout != null) output.layout = input.layout.handler
     map(input.compute, output.compute)
 }
 
-private fun Arena.map(input: ComputePipelineDescriptor.ProgrammableStage, output: WGPUProgrammableStageDescriptor) {
+private fun ArenaBase.map(input: ComputePipelineDescriptor.ProgrammableStage, output: WGPUProgrammableStageDescriptor) {
     output.module = input.module.handler
     if (input.entryPoint != null) output.entryPoint = input.entryPoint.cstr.getPointer(this)
     if (input.constants.isNotEmpty()) {
@@ -28,7 +28,7 @@ private fun Arena.map(input: ComputePipelineDescriptor.ProgrammableStage, output
     }
 }
 
-private fun Arena.map(input: Map.Entry<String, GPUPipelineConstantValue>, output: WGPUConstantEntry) {
+private fun ArenaBase.map(input: Map.Entry<String, GPUPipelineConstantValue>, output: WGPUConstantEntry) {
     output.key = input.key.cstr.getPointer(this)
     output.value = input.value
 }

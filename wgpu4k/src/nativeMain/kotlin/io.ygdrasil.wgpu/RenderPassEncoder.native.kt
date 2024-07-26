@@ -1,6 +1,11 @@
+@file:OptIn(ExperimentalForeignApi::class)
+
 package io.ygdrasil.wgpu
 
-actual class RenderPassEncoder : AutoCloseable {
+import kotlinx.cinterop.ExperimentalForeignApi
+import webgpu.WGPURenderPassEncoder
+
+actual class RenderPassEncoder(internal val handler: WGPURenderPassEncoder) : AutoCloseable {
 
     actual fun end() {
         TODO("Not yet implemented")

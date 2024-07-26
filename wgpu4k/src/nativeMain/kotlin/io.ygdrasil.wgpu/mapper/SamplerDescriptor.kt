@@ -3,13 +3,13 @@
 package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.SamplerDescriptor
-import kotlinx.cinterop.Arena
+import kotlinx.cinterop.ArenaBase
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.cstr
 import webgpu.WGPUSamplerDescriptor
 
-internal fun Arena.map(input: SamplerDescriptor) = alloc<WGPUSamplerDescriptor>().also { output ->
+internal fun ArenaBase.map(input: SamplerDescriptor) = alloc<WGPUSamplerDescriptor>().also { output ->
     if (input.label != null) output.label = input.label.cstr.getPointer(this)
 
     output.addressModeU = input.addressModeU.uValue

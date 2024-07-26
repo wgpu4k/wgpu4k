@@ -7,12 +7,12 @@ import kotlinx.cinterop.*
 import webgpu.WGPUComputePassDescriptor
 import webgpu.WGPUComputePassTimestampWrites
 
-internal fun Arena.map(input: ComputePassDescriptor) = alloc<WGPUComputePassDescriptor>().also { output ->
+internal fun ArenaBase.map(input: ComputePassDescriptor) = alloc<WGPUComputePassDescriptor>().also { output ->
     if (input.label != null) output.label = input.label.cstr.getPointer(this)
     if (input.timestampWrites != null) output.timestampWrites = map(input.timestampWrites).ptr
 }
 
-private fun Arena.map(input: ComputePassDescriptor.ComputePassTimestampWrites): WGPUComputePassTimestampWrites =
+private fun ArenaBase.map(input: ComputePassDescriptor.ComputePassTimestampWrites): WGPUComputePassTimestampWrites =
     alloc<WGPUComputePassTimestampWrites>().also { output ->
         output.querySet = input.querySet.handler
         if (input.beginningOfPassWriteIndex != null) output.beginningOfPassWriteIndex =

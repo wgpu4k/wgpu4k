@@ -9,7 +9,7 @@ import webgpu.WGPUShaderModuleCompilationHint
 import webgpu.WGPUShaderModuleDescriptor
 import webgpu.WGPUShaderModuleWGSLDescriptor
 
-internal fun Arena.map(input: ShaderModuleDescriptor) =
+internal fun ArenaBase.map(input: ShaderModuleDescriptor) =
     alloc<WGPUShaderModuleDescriptor>().also { output ->
         if (input.label != null) output.label = input.label.cstr.getPointer(this)
         output.nextInChain = mapCode(input.code).ptr.reinterpret()
@@ -23,12 +23,12 @@ internal fun Arena.map(input: ShaderModuleDescriptor) =
         }
     }
 
-private fun Arena.map(input: ShaderModuleDescriptor.CompilationHint, output: WGPUShaderModuleCompilationHint) {
+private fun ArenaBase.map(input: ShaderModuleDescriptor.CompilationHint, output: WGPUShaderModuleCompilationHint) {
     output.entryPoint = input.entryPoint.cstr.getPointer(this)
     // TODO find how to map layout
 }
 
-private fun Arena.mapCode(input: String) = alloc<WGPUShaderModuleWGSLDescriptor>().also { output ->
+private fun ArenaBase.mapCode(input: String) = alloc<WGPUShaderModuleWGSLDescriptor>().also { output ->
     output.code = input.cstr.getPointer(this)
     output.chain.sType = WGPUSType_ShaderModuleWGSLDescriptor
 }

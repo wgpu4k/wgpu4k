@@ -11,7 +11,7 @@ import webgpu.WGPUBindGroupLayoutEntry
 import webgpu.WGPUChainedStruct
 import webgpu.WGPUSType_BindGroupEntryExtras
 
-internal fun Arena.map(input: BindGroupLayoutDescriptor) = alloc<WGPUBindGroupLayoutDescriptor>().also { output ->
+internal fun ArenaBase.map(input: BindGroupLayoutDescriptor) = alloc<WGPUBindGroupLayoutDescriptor>().also { output ->
     if (input.label != null) output.label = input.label.cstr.getPointer(this)
 
     if (input.entries.isNotEmpty()) {
@@ -24,7 +24,7 @@ internal fun Arena.map(input: BindGroupLayoutDescriptor) = alloc<WGPUBindGroupLa
     }
 }
 
-private fun Arena.map(input: BindGroupLayoutDescriptor.Entry, output: WGPUBindGroupLayoutEntry) {
+private fun ArenaBase.map(input: BindGroupLayoutDescriptor.Entry, output: WGPUBindGroupLayoutEntry) {
 
     output.binding = input.binding.toUInt()
     output.visibility = input.visibility.toFlagUInt()

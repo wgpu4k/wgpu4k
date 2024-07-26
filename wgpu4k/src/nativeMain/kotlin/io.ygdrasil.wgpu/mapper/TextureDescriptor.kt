@@ -8,7 +8,7 @@ import kotlinx.cinterop.*
 import webgpu.WGPUTextureDescriptor
 import webgpu.WGPUTextureFormatVar
 
-internal fun Arena.map(input: TextureDescriptor) = alloc<WGPUTextureDescriptor>().also { output ->
+internal fun ArenaBase.map(input: TextureDescriptor) = alloc<WGPUTextureDescriptor>().also { output ->
     if (input.label != null) output.label = input.label.cstr.getPointer(this)
     map(input.size, output.size)
     output.format = input.format.value.toUInt()

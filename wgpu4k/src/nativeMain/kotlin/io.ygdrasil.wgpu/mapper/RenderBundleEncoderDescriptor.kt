@@ -8,7 +8,7 @@ import kotlinx.cinterop.*
 import webgpu.WGPURenderBundleEncoderDescriptor
 import webgpu.WGPUTextureFormatVar
 
-fun Arena.map(input: RenderBundleEncoderDescriptor) =
+fun ArenaBase.map(input: RenderBundleEncoderDescriptor) =
     alloc<WGPURenderBundleEncoderDescriptor>().also { output ->
         if (input.label != null) output.label = input.label.cstr.getPointer(this)
 

@@ -8,7 +8,7 @@ import webgpu.WGPUBindGroupDescriptor
 import webgpu.WGPUBindGroupEntry
 
 
-internal fun Arena.map(input: BindGroupDescriptor) = alloc<WGPUBindGroupDescriptor>().also { output ->
+internal fun ArenaBase.map(input: BindGroupDescriptor) = alloc<WGPUBindGroupDescriptor>().also { output ->
     if (input.label != null) output.label = input.label.cstr.getPointer(this@map)
     output.layout = input.layout.handler
     if (input.entries.isNotEmpty()) {

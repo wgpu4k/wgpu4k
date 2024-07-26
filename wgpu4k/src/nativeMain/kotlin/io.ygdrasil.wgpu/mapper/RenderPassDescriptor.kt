@@ -11,7 +11,7 @@ import webgpu.WGPURenderPassColorAttachment
 import webgpu.WGPURenderPassDepthStencilAttachment
 import webgpu.WGPURenderPassDescriptor
 
-internal fun Arena.map(input: RenderPassDescriptor) =
+internal fun ArenaBase.map(input: RenderPassDescriptor) =
     alloc<WGPURenderPassDescriptor>().also { output ->
         println("render pass descriptor $output")
         if (input.label != null) output.label = input.label.cstr.getPointer(this)
@@ -36,7 +36,7 @@ internal fun Arena.map(input: RenderPassDescriptor) =
         // check WGPURenderPassDescriptorMaxDrawCount
     }
 
-internal fun Arena.map(input: RenderPassDescriptor.ColorAttachment, output: WGPURenderPassColorAttachment) {
+internal fun ArenaBase.map(input: RenderPassDescriptor.ColorAttachment, output: WGPURenderPassColorAttachment) {
     println("color attachment $output")
     output.view = input.view.handler
     output.loadOp = input.loadOp.uValue
@@ -47,7 +47,7 @@ internal fun Arena.map(input: RenderPassDescriptor.ColorAttachment, output: WGPU
     map(input.clearValue, output.clearValue)
 }
 
-internal fun Arena.map(input: Color, output: WGPUColor) {
+internal fun map(input: Color, output: WGPUColor) {
     output.r = input.red
     output.g = input.green
     output.b = input.blue
@@ -55,7 +55,7 @@ internal fun Arena.map(input: Color, output: WGPUColor) {
 }
 
 
-internal fun Arena.map(input: RenderPassDescriptor.RenderPassDepthStencilAttachment) =
+internal fun ArenaBase.map(input: RenderPassDescriptor.RenderPassDepthStencilAttachment) =
     alloc<WGPURenderPassDepthStencilAttachment>().also { output ->
         output.view = input.view.handler
         if (input.depthClearValue != null) output.depthClearValue = input.depthClearValue

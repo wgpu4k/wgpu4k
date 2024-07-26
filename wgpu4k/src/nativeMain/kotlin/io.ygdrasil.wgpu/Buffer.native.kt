@@ -40,8 +40,10 @@ actual class Buffer(internal val handler: WGPUBuffer) : AutoCloseable {
     }
 
     actual fun mapInto(buffer: ByteArray, offset: Int) {
-        wgpuBufferGetMappedRange(handler, offset.toULong(), buffer.size.toULong())
-        TODO("Not yet implemented")
+        (wgpuBufferGetMappedRange(handler, offset.toULong(), buffer.size.toULong())
+            ?: error("Can't get map from: $buffer"))
+            .reinterpret<ByteVar>()
+            .also { buffer.indices.forEach { index -> buffer[index] = it[index] } }
     }
 
     actual override fun close() {
