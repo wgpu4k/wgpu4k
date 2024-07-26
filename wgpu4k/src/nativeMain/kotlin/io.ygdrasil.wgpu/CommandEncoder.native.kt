@@ -74,7 +74,6 @@ actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : AutoClos
         )
     }
 
-
     actual override fun close() {
         wgpuCommandEncoderRelease(handler)
     }

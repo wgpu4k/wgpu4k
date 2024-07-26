@@ -4,8 +4,9 @@ package io.ygdrasil.wgpu
 
 import kotlinx.cinterop.ExperimentalForeignApi
 import webgpu.WGPUPipelineLayout
+import webgpu.WGPURenderPipeline
 
-actual class RenderPipeline : AutoCloseable {
+actual class RenderPipeline(internal val handler: WGPURenderPipeline) : AutoCloseable {
     actual fun getBindGroupLayout(index: Int): BindGroupLayout {
         TODO("Not yet implemented")
     }

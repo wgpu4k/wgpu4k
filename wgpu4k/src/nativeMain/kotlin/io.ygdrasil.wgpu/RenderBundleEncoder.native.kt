@@ -1,6 +1,11 @@
+@file:OptIn(ExperimentalForeignApi::class)
+
 package io.ygdrasil.wgpu
 
-actual class RenderBundleEncoder : AutoCloseable {
+import kotlinx.cinterop.ExperimentalForeignApi
+import webgpu.WGPURenderBundleEncoder
+
+actual class RenderBundleEncoder(internal val handler: WGPURenderBundleEncoder) : AutoCloseable {
 
     actual fun finish(descriptor: RenderBundleDescriptor): RenderBundle {
         TODO("Not yet implemented")

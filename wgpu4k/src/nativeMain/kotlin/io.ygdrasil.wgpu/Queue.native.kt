@@ -1,6 +1,11 @@
+@file:OptIn(ExperimentalForeignApi::class)
+
 package io.ygdrasil.wgpu
 
-actual class Queue {
+import kotlinx.cinterop.ExperimentalForeignApi
+import webgpu.WGPUQueue
+
+actual class Queue(internal val handler: WGPUQueue) {
 
     actual fun submit(commandsBuffer: List<CommandBuffer>) {
         TODO("Not yet implemented")

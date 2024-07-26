@@ -4,6 +4,8 @@ package io.ygdrasil.wgpu
 
 import kotlinx.cinterop.ExperimentalForeignApi
 import webgpu.WGPUComputePassEncoder
+import webgpu.wgpuComputePassEncoderEnd
+import webgpu.wgpuComputePassEncoderRelease
 
 actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : AutoCloseable {
 
@@ -38,10 +40,10 @@ actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : 
     }
 
     actual fun end() {
-        TODO("Not yet implemented")
+        wgpuComputePassEncoderEnd(handler)
     }
 
     actual override fun close() {
-        TODO("Not yet implemented")
+        wgpuComputePassEncoderRelease(handler)
     }
 }
