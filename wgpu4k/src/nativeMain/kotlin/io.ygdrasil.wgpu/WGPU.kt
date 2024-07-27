@@ -1,4 +1,4 @@
-@file:OptIn(kotlinx.cinterop.ExperimentalForeignApi::class)
+@file:OptIn(ExperimentalForeignApi::class)
 
 package io.ygdrasil.wgpu
 
@@ -19,7 +19,6 @@ class WGPU(val handler: WGPUInstance) : AutoCloseable {
             this.powerPreference = powerPreference
         }
 
-        val ptrPtr = cValue<WGPUAdapterVar>()
         val handleRequestAdapter: WGPURequestAdapterCallback =
             staticCFunction<WGPURequestAdapterStatus, WGPUAdapter, CPointer<ByteVar>?, COpaquePointer, Unit> { status, adapter, message, userData ->
                 println("WGPURequestAdapterCallback ${userData} ${adapter}")
@@ -31,7 +30,7 @@ class WGPU(val handler: WGPUInstance) : AutoCloseable {
 
             }.reinterpret()
 
-        wgpuInstanceRequestAdapter(handler, options, handleRequestAdapter, ptrPtr)
+        wgpuInstanceRequestAdapter(handler, options, handleRequestAdapter, null)
 
         return lastFindAdapter?.let { Adapter(it) }
     }
