@@ -6,6 +6,7 @@ import io.ygdrasil.wgpu.examples.helper.glb.readGLB
 import korlibs.image.bitmap.Bitmap32
 import korlibs.image.format.readBitmap
 import korlibs.io.file.std.resourcesVfs
+import korlibs.io.file.std.rootLocalVfs
 
 interface AssetManager {
 
@@ -23,7 +24,8 @@ interface AssetManager {
     val boxMesh: GLTF2
 }
 
-suspend fun bitmapFrom(path: String): ImageBitmapHolder = resourcesVfs[path]
+suspend fun bitmapFrom(path: String): ImageBitmapHolder = (resourcesVfs[path]
+    .takeIfExists() ?: rootLocalVfs[path])
     .readBitmap()
     .toBMP32()
     .toBitmapHolder()
@@ -33,16 +35,16 @@ suspend fun glt2From(path: String): GLTF2 = resourcesVfs[path]
 
 expect fun Bitmap32.toBitmapHolder(): ImageBitmapHolder
 
-suspend fun genericAssetManager() = GenericAssetManager(
-    bitmapFrom("assets/img/Di-3d.png"),
-    bitmapFrom("assets/img/cubemap/posx.png"),
-    bitmapFrom("assets/img/cubemap/negx.png"),
-    bitmapFrom("assets/img/cubemap/posy.png"),
-    bitmapFrom("assets/img/cubemap/negy.png"),
-    bitmapFrom("assets/img/cubemap/posz.png"),
-    bitmapFrom("assets/img/cubemap/negz.png"),
-    bitmapFrom("assets/img/webgpu4kotlin.png"),
-    glt2From("assets/gltf/DamagedHelmet.glb"),
+suspend fun genericAssetManager(resourceBasePath: String = "") = GenericAssetManager(
+    bitmapFrom("${resourceBasePath}assets/img/Di-3d.png"),
+    bitmapFrom("${resourceBasePath}assets/img/cubemap/posx.png"),
+    bitmapFrom("${resourceBasePath}assets/img/cubemap/negx.png"),
+    bitmapFrom("${resourceBasePath}assets/img/cubemap/posy.png"),
+    bitmapFrom("${resourceBasePath}assets/img/cubemap/negy.png"),
+    bitmapFrom("${resourceBasePath}assets/img/cubemap/posz.png"),
+    bitmapFrom("${resourceBasePath}assets/img/cubemap/negz.png"),
+    bitmapFrom("${resourceBasePath}assets/img/webgpu4kotlin.png"),
+    glt2From("${resourceBasePath}assets/gltf/DamagedHelmet.glb"),
 )
 
 class GenericAssetManager(

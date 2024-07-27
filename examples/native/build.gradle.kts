@@ -54,7 +54,10 @@ kotlin {
     }
 }
 
-
+tasks.named<Exec>("runDebugExecutableNative").configure {
+    println("resource path that will be used is ${commonResourcesFile.absolutePath}")
+    args(commonResourcesFile.absolutePath)
+}
 
 fun getCommonProject() = projects.examples.common.identityPath.path
     ?.let(::project) ?: error("Could not find project path")

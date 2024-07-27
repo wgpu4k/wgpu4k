@@ -22,7 +22,8 @@ fun main() = runBlocking {
     val glfwContext = glfwContextRenderer(width = 640, height = 480, title = "GLFW+WebGPU")
 
     val application = createApplication(
-        glfwContext.wgpuContext
+        glfwContext.wgpuContext,
+        resourceBasePath
     )
 
     addKeyBinding(glfwContext, application)

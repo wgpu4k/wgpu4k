@@ -4,8 +4,8 @@ import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.scenes.basic.*
 import io.ygdrasil.wgpu.examples.scenes.graphics.techniques.SkinnedMeshScene
 
-suspend fun loadScenes(wgpuContext: WGPUContext): List<Scene> {
-    val assetManager = genericAssetManager()
+suspend fun loadScenes(wgpuContext: WGPUContext, resourceBasePath: String = ""): List<Scene> {
+    val assetManager = genericAssetManager(resourceBasePath)
     return listOf(
         HelloTriangleScene(wgpuContext),
         HelloTriangleMSAAScene(wgpuContext),

@@ -15,12 +15,14 @@ import kotlinx.coroutines.runBlocking
 
 lateinit var application: Application
 
-fun main() = runBlocking {
+fun main(args: Array<String>) = runBlocking {
 
+    val resourceBasePath = "${args[0]}/"
     val glfwContext = glfwContextRenderer(width = 640, height = 480, title = "GLFW+WebGPU")
 
     application = createApplication(
-        glfwContext.wgpuContext
+        glfwContext.wgpuContext,
+        resourceBasePath
     )
 
     addKeyBinding(glfwContext)

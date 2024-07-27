@@ -2,9 +2,9 @@ package io.ygdrasil.wgpu.examples
 
 import io.ygdrasil.wgpu.*
 
-suspend fun createApplication(wgpuContext: WGPUContext): Application {
+suspend fun createApplication(wgpuContext: WGPUContext, resourceBasePath: String = ""): Application {
     wgpuContext.configureRenderingContext()
-    val availableScenes = loadScenes(wgpuContext)
+    val availableScenes = loadScenes(wgpuContext, resourceBasePath)
     val scene = availableScenes.first()
     scene.initialize()
 
