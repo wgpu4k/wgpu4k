@@ -1,11 +1,19 @@
+@file:OptIn(ExperimentalForeignApi::class)
+
 package io.ygdrasil.wgpu
 
-actual class ComputePipeline : AutoCloseable {
-    actual fun getBindGroupLayout(index: Int): BindGroupLayout {
-        TODO("Not yet implemented")
-    }
+import kotlinx.cinterop.ExperimentalForeignApi
+import webgpu.WGPUComputePipeline
+import webgpu.wgpuComputePipelineGetBindGroupLayout
+import webgpu.wgpuComputePipelineRelease
+
+actual class ComputePipeline(internal val handler: WGPUComputePipeline) : AutoCloseable {
+
+    actual fun getBindGroupLayout(index: Int): BindGroupLayout =
+        wgpuComputePipelineGetBindGroupLayout(handler, index.toUInt())
+            ?.let(::BindGroupLayout) ?: error("fail to get BindGroupLayout")
 
     actual override fun close() {
+        wgpuComputePipelineRelease(handler)
     }
-
 }

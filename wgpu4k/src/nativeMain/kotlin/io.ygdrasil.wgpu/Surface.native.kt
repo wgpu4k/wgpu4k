@@ -1,4 +1,4 @@
-@file:OptIn(kotlinx.cinterop.ExperimentalForeignApi::class)
+@file:OptIn(ExperimentalForeignApi::class)
 
 package io.ygdrasil.wgpu
 
@@ -22,10 +22,10 @@ actual class Surface(
         _textureFormat ?: error("call first computeSurfaceCapabilities")
     }
 
-    actual fun getCurrentTexture(): Texture {
-        val surfaceTexture = cValue<WGPUSurfaceTexture>()
-        wgpuSurfaceGetCurrentTexture(handler, surfaceTexture)
-        return Texture(surfaceTexture.useContents { texture } ?: error("no texture available"))
+    actual fun getCurrentTexture(): Texture = memScoped {
+        val surfaceTexture = alloc<WGPUSurfaceTexture>()
+        wgpuSurfaceGetCurrentTexture(handler, surfaceTexture.ptr)
+        return Texture(surfaceTexture.texture ?: error("no texture available"))
     }
 
     actual fun present() {
@@ -48,19 +48,19 @@ actual class Surface(
 
         if (_textureFormat == null) error("call computeSurfaceCapabilities(adapter: Adapter) before configure")
 
-        wgpuSurfaceConfigure(handler, canvasConfiguration.convert())
+        wgpuSurfaceConfigure(handler, map(canvasConfiguration))
     }
 
     actual override fun close() {
         wgpuSurfaceRelease(handler)
     }
 
-    private fun CanvasConfiguration.convert(): CValue<WGPUSurfaceConfiguration> = cValue<WGPUSurfaceConfiguration> {
-        device = this@convert.device.handler
-        usage = this@convert.usage.toFlagInt().toUInt()
-        format = this@convert.format.value.toUInt()
+    private fun map(input: CanvasConfiguration): CValue<WGPUSurfaceConfiguration> = cValue<WGPUSurfaceConfiguration> {
+        device = input.device.handler
+        usage = input.usage.toFlagInt().toUInt()
+        format = input.format.value.toUInt()
         presentMode = WGPUPresentMode_Fifo
-        alphaMode = this@convert.alphaMode.value.toUInt()
+        alphaMode = input.alphaMode.value.toUInt()
         width = this@Surface.width.toUInt()
         height = this@Surface.height.toUInt()
     }

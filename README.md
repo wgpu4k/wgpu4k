@@ -35,6 +35,7 @@ cd wgpu4k
 - On desktop: `./gradlew examples:glfw:run`
 - On web js: `./gradlew examples:web-js:jsBrowserRun`
 - On web wasm: `./gradlew examples:web-js:wasmJsBrowserRun`
+- On native (Mac only and still experimental) `./gradlew examples:web-native:runDebugExecutableNative`
 
 Use `page down` and `page up` on your keyboard to switch scene.
 
@@ -45,13 +46,13 @@ Documentation will be added later, to start you can check out the minimalist pro
 ## Compatibility
 
 | Target       | Windows | Linux | MacOs | iOS | Android |
-|--------------|---------|-------|-------|----|---------|
-| JVM x64      | ✅       | 🆗    | 🆗    | ❌  | ❌      |
-| JVM arm64    | 🛠️     | 🆗    | ✅     | ❌  | ❌       |
-| JS           | ✅       | 🆗    | ✅     | ❓ | ❓️     |
-| wasm         | 🆗️     | 🆗️   | 🆗️   | ❓️ | ❓️     |
-| native x86   | 🛠️     | 🛠️   | 🛠️   | 🛠️ | 🛠️     |
-| native arm64 | 🛠️     | 🛠️   | 🛠️   | 🛠️ | 🛠️     |
+|--------------|---------|-------|-------|-----|---------|
+| JVM x64      | ✅       | 🆗    | 🆗    | ❌   | ❌       |
+| JVM arm64    | 🛠️     | 🆗    | ✅     | ❌   | ❌       |
+| JS           | ✅       | 🆗    | ✅     | ❓   | ❓️      |
+| wasm         | 🆗️     | 🆗️   | 🆗️   | ❓️  | ❓️      |
+| native x86   | 🛠️     | 🛠️   | 🆗️   | 🛠️ | 🛠️     |
+| native arm64 | 🛠️     | 🛠️   | 🆗️   | 🛠️ | 🛠️     |
 
 
 ✅ = First class citizen

@@ -45,14 +45,15 @@ actual class Surface(
 
 	actual fun configure(canvasConfiguration: CanvasConfiguration) = confined { arena ->
 		if (WGPUSurfaceCapabilities.formats(surfaceCapabilities) == MemorySegment.NULL) error("call computeSurfaceCapabilities(adapter: Adapter) before configure")
-		wgpu_h.wgpuSurfaceConfigure(handler, arena.convert(canvasConfiguration))
+		wgpu_h.wgpuSurfaceConfigure(handler, arena.map(canvasConfiguration))
 	}
 
     actual override fun close() {
 		wgpu_h.wgpuSurfaceRelease(handler)
 	}
 
-	private fun Arena.convert(input: CanvasConfiguration): MemorySegment = WGPUSurfaceConfiguration.allocate(this).also { output ->
+	private fun Arena.map(input: CanvasConfiguration): MemorySegment =
+		WGPUSurfaceConfiguration.allocate(this).also { output ->
 		WGPUSurfaceConfiguration.device(output, input.device.handler)
 		WGPUSurfaceConfiguration.usage(output, input.usage.toFlagInt())
 		WGPUSurfaceConfiguration.format(output, input.format.value)

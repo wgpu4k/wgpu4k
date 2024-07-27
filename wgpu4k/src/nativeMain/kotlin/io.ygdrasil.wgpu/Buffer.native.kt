@@ -1,35 +1,53 @@
+@file:OptIn(ExperimentalForeignApi::class)
+
 package io.ygdrasil.wgpu
 
-actual class Buffer : AutoCloseable {
+import kotlinx.cinterop.*
+import webgpu.*
+
+actual class Buffer(internal val handler: WGPUBuffer) : AutoCloseable {
+
 
     actual val size: GPUSize64
-        get() = TODO("Not yet implemented")
+        get() = wgpuBufferGetSize(handler).toLong()
     actual val usage: Set<BufferUsage>
-        get() = TODO("Not yet implemented")
+        get() = wgpuBufferGetUsage(handler)
+            .let { usage -> BufferUsage.entries.filter { it.value and usage.toInt() != 0 }.toSet() }
     actual val mapState: BufferMapState
-        get() = TODO("Not yet implemented")
+        get() = wgpuBufferGetMapState(handler).toInt()
+            .let { BufferMapState.of(it) ?: error("Can't get map state: $it") }
 
     actual fun unmap() {
-        TODO("Not yet implemented")
+        wgpuBufferUnmap(handler)
     }
 
     actual fun mapFrom(buffer: FloatArray, offset: Int) {
-        TODO("Not yet implemented")
+        (wgpuBufferGetMappedRange(handler, offset.toULong(), (buffer.size * Float.SIZE_BYTES).toULong())
+            ?: error("Can't get map from: $buffer"))
+            .reinterpret<FloatVar>()
+            .also { buffer.forEachIndexed { index, value -> it[index] = value } }
     }
 
     actual fun mapFrom(buffer: ByteArray, offset: Int) {
-        TODO("Not yet implemented")
-    }
-
-    actual fun mapInto(buffer: ByteArray, offset: Int) {
-        TODO("Not yet implemented")
+        (wgpuBufferGetMappedRange(handler, offset.toULong(), (buffer.size * Float.SIZE_BYTES).toULong())
+            ?: error("Can't get map from: $buffer"))
+            .reinterpret<ByteVar>()
+            .also { buffer.forEachIndexed { index, value -> it[index] = value } }
     }
 
     actual suspend fun map(mode: Set<MapMode>, offset: GPUSize64, size: GPUSize64) {
-        TODO("Not yet implemented")
+        wgpuBufferMapAsync(handler, mode.toFlagUInt(), offset.toULong(), size.toULong(), null, null)
+    }
+
+    actual fun mapInto(buffer: ByteArray, offset: Int) {
+        (wgpuBufferGetMappedRange(handler, offset.toULong(), buffer.size.toULong())
+            ?: error("Can't get map from: $buffer"))
+            .reinterpret<ByteVar>()
+            .also { buffer.indices.forEach { index -> buffer[index] = it[index] } }
     }
 
     actual override fun close() {
-        TODO("Not yet implemented")
+        wgpuBufferRelease(handler)
     }
+
 }

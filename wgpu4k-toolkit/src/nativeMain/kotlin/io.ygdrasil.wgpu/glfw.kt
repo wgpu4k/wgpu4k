@@ -1,5 +1,8 @@
+@file:OptIn(ExperimentalForeignApi::class)
+
 package io.ygdrasil.wgpu
 
+import cnames.structs.GLFWwindow
 import glfw.*
 import io.ygdrasil.wgpu.WGPU.Companion.createInstance
 import kotlinx.cinterop.*
@@ -50,7 +53,7 @@ suspend fun glfwContextRenderer(
 }
 
 class GLFWContext(
-    val windowHandler: CValuesRef<cnames.structs.GLFWwindow>,
+    val windowHandler: CValuesRef<GLFWwindow>,
     val wgpuContext: WGPUContext,
 ) : AutoCloseable {
 
@@ -59,3 +62,6 @@ class GLFWContext(
         glfwDestroyWindow(windowHandler)
     }
 }
+
+
+expect fun WGPU.getSurface(window: CPointer<GLFWwindow>, sizeProvider: () -> Pair<Int, Int>): Surface

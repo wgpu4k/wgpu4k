@@ -12,7 +12,6 @@ actual class RenderPipeline(internal val handler: MemorySegment) : AutoCloseable
 			?.let { BindGroupLayout(it) } ?: error("fail to get bindgroup layout")
 	}
 
-
 	actual override fun close() {
 		wgpu_h.wgpuRenderPipelineRelease(handler)
 	}

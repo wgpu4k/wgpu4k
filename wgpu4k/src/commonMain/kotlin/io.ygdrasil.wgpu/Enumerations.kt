@@ -2,6 +2,8 @@ package io.ygdrasil.wgpu
 
 interface EnumerationWithValue {
     val value: Int
+    val uValue: UInt
+        get() = value.toUInt()
 
     infix fun or(other: Int): Int = value or other
     infix fun or(other: EnumerationWithValue): Int = value or other.value
@@ -11,6 +13,12 @@ internal fun Set<EnumerationWithValue>.toFlagInt(): Int = when (size) {
     0 -> 0
     1 -> first().value
     else -> fold(0) { acc, enumerationWithValue -> acc or enumerationWithValue.value }
+}
+
+internal fun Set<EnumerationWithValue>.toFlagUInt(): UInt = when (size) {
+    0 -> 0u
+    1 -> first().value.toUInt()
+    else -> fold(0u) { acc, enumerationWithValue -> acc or enumerationWithValue.value.toUInt() }
 }
 
 enum class AdapterType(

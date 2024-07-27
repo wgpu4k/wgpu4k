@@ -120,7 +120,7 @@ suspend fun runApp(window: ComposeWindow) {
 	(WGPU.createInstance() ?: error("fail to wgpu instance")).use { instance ->
 
 
-		val surfacePointer = instance.getSurfaceFromMetalLayer(java.lang.foreign.MemorySegment.ofAddress(layer.id().toLong())) ?: error("fail to get surface")
+		val surfacePointer = instance.getSurfaceFromMetalLayer(java.lang.foreign.MemorySegment.ofAddress(layer.id().toLong()))
 		val surface = Surface(surfacePointer) {
 			window.width to window.height
 		}
@@ -132,13 +132,13 @@ suspend fun runApp(window: ComposeWindow) {
 			?: error("fail to get device")
 
 		val application = createApplication(
-			WGPUContext(
-				surface,
-				adapter,
-				device,
-				SurfaceRenderingContext(surface)
+            WGPUContext(
+                surface,
+                adapter,
+                device,
+                SurfaceRenderingContext(surface)
 			)
-		)
+        )
 
 		fun run() {
 			applicationScope.launch {

@@ -100,7 +100,6 @@ actual class Queue(internal val handler: MemorySegment) {
 
     }
 
-
     private fun FloatArray.toBuffer(dataOffset: GPUSize64, arena: Arena): MemorySegment {
         if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
         return arena.allocateFrom(ValueLayout.JAVA_FLOAT, *this)

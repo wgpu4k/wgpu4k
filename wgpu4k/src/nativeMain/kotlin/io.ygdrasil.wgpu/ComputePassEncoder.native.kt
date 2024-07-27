@@ -1,6 +1,13 @@
+@file:OptIn(ExperimentalForeignApi::class)
+
 package io.ygdrasil.wgpu
 
-actual class ComputePassEncoder : AutoCloseable {
+import kotlinx.cinterop.ExperimentalForeignApi
+import webgpu.WGPUComputePassEncoder
+import webgpu.wgpuComputePassEncoderEnd
+import webgpu.wgpuComputePassEncoderRelease
+
+actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : AutoCloseable {
 
     actual fun setPipeline(pipeline: ComputePipeline) {
         TODO("Not yet implemented")
@@ -33,10 +40,10 @@ actual class ComputePassEncoder : AutoCloseable {
     }
 
     actual fun end() {
-        TODO("Not yet implemented")
+        wgpuComputePassEncoderEnd(handler)
     }
 
     actual override fun close() {
-        TODO("Not yet implemented")
+        wgpuComputePassEncoderRelease(handler)
     }
 }

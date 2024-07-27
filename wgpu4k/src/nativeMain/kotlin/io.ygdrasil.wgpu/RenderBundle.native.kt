@@ -1,3 +1,8 @@
+@file:OptIn(ExperimentalForeignApi::class)
+
 package io.ygdrasil.wgpu
 
-actual class RenderBundle
+import kotlinx.cinterop.ExperimentalForeignApi
+import webgpu.WGPURenderBundle
+
+actual class RenderBundle(internal val handler: WGPURenderBundle)
