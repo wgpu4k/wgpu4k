@@ -16,8 +16,7 @@ fun jsApplication(canvas: HTMLCanvasElement) {
         val canvasContext = canvasContextRenderer(canvas)
 
         val application = createApplication(
-            canvasContext.wgpuContext,
-            resourceBasePath
+            canvasContext.wgpuContext
         )
 
         window.onkeydown = { event ->
