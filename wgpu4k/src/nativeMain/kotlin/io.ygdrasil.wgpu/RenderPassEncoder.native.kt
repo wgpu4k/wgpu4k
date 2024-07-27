@@ -2,17 +2,19 @@
 
 package io.ygdrasil.wgpu
 
+import io.ygdrasil.wgpu.internal.toPointerArray
 import kotlinx.cinterop.ExperimentalForeignApi
-import webgpu.WGPURenderPassEncoder
+import kotlinx.cinterop.memScoped
+import webgpu.*
 
 actual class RenderPassEncoder(internal val handler: WGPURenderPassEncoder) : AutoCloseable {
 
     actual fun end() {
-        TODO("Not yet implemented")
+        wgpuRenderPassEncoderEnd(handler)
     }
 
     actual fun setPipeline(renderPipeline: RenderPipeline) {
-        TODO("Not yet implemented")
+        wgpuRenderPassEncoderSetPipeline(handler, renderPipeline.handler)
     }
 
     actual fun draw(
@@ -21,27 +23,55 @@ actual class RenderPassEncoder(internal val handler: WGPURenderPassEncoder) : Au
         firstVertex: GPUSize32,
         firstInstance: GPUSize32
     ) {
-        TODO("Not yet implemented")
+        wgpuRenderPassEncoderDraw(
+            handler,
+            vertexCount.toUInt(),
+            instanceCount.toUInt(),
+            firstVertex.toUInt(),
+            firstInstance.toUInt()
+        )
     }
 
     actual fun setBindGroup(index: Int, bindGroup: BindGroup) {
-        TODO("Not yet implemented")
+        wgpuRenderPassEncoderSetBindGroup(
+            handler,
+            index.toUInt(),
+            bindGroup.handler,
+            0uL,
+            null
+        )
     }
 
     actual fun setVertexBuffer(slot: Int, buffer: Buffer) {
-        TODO("Not yet implemented")
+        wgpuRenderPassEncoderSetVertexBuffer(
+            handler,
+            slot.toUInt(),
+            buffer.handler,
+            0uL,
+            buffer.size.toULong()
+        )
     }
 
     actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
-        TODO("Not yet implemented")
+        wgpuRenderPassEncoderSetIndexBuffer(
+            handler,
+            buffer.handler,
+            indexFormat.value.toUInt(),
+            offset.toULong(),
+            size.toULong()
+        )
     }
 
-    actual fun executeBundles(bundles: List<RenderBundle>) {
-        TODO("Not yet implemented")
+    actual fun executeBundles(bundles: List<RenderBundle>) = memScoped {
+        wgpuRenderPassEncoderExecuteBundles(
+            handler,
+            bundles.size.toULong(),
+            bundles.map { it.handler }.toPointerArray(this)
+        )
     }
 
     actual override fun close() {
-        TODO("Not yet implemented")
+        wgpuRenderPassEncoderRelease(handler)
     }
 
 }

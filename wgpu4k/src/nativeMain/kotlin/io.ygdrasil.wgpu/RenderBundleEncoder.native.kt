@@ -2,29 +2,40 @@
 
 package io.ygdrasil.wgpu
 
+import io.ygdrasil.wgpu.mapper.map
 import kotlinx.cinterop.ExperimentalForeignApi
-import webgpu.WGPURenderBundleEncoder
+import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.ptr
+import webgpu.*
 
 actual class RenderBundleEncoder(internal val handler: WGPURenderBundleEncoder) : AutoCloseable {
 
-    actual fun finish(descriptor: RenderBundleDescriptor): RenderBundle {
-        TODO("Not yet implemented")
+    actual fun finish(descriptor: RenderBundleDescriptor): RenderBundle = memScoped {
+        map(descriptor)
+            .let { wgpuRenderBundleEncoderFinish(handler, it.ptr) }
+            ?.let(::RenderBundle) ?: error("Unable to get render bundle from descriptor $descriptor")
     }
 
     actual fun setBindGroup(index: GPUIndex32, bindGroup: BindGroup) {
-        TODO("Not yet implemented")
+        wgpuRenderBundleEncoderSetBindGroup(handler, index.toUInt(), bindGroup.handler, 0u, null)
     }
 
     actual fun setPipeline(renderPipeline: RenderPipeline) {
-        TODO("Not yet implemented")
+        wgpuRenderBundleEncoderSetPipeline(handler, renderPipeline.handler)
     }
 
     actual fun setVertexBuffer(slot: GPUIndex32, buffer: Buffer, offset: GPUSize64, size: GPUSize64) {
-        TODO("Not yet implemented")
+        wgpuRenderBundleEncoderSetVertexBuffer(handler, slot.toUInt(), buffer.handler, offset.toULong(), size.toULong())
     }
 
     actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
-        TODO("Not yet implemented")
+        wgpuRenderBundleEncoderSetIndexBuffer(
+            handler,
+            buffer.handler,
+            indexFormat.value.toUInt(),
+            offset.toULong(),
+            size.toULong()
+        )
     }
 
     actual fun drawIndexed(
@@ -34,7 +45,14 @@ actual class RenderBundleEncoder(internal val handler: WGPURenderBundleEncoder) 
         baseVertex: GPUSignedOffset32,
         firstInstance: GPUSize32
     ) {
-        TODO("Not yet implemented")
+        wgpuRenderBundleEncoderDrawIndexed(
+            handler,
+            indexCount.toUInt(),
+            instanceCount.toUInt(),
+            firstIndex.toUInt(),
+            baseVertex,
+            firstInstance.toUInt()
+        )
     }
 
     actual fun draw(
@@ -43,10 +61,16 @@ actual class RenderBundleEncoder(internal val handler: WGPURenderBundleEncoder) 
         firstVertex: GPUSize32,
         firstInstance: GPUSize32
     ) {
-        TODO("Not yet implemented")
+        wgpuRenderBundleEncoderDraw(
+            handler,
+            vertexCount.toUInt(),
+            instanceCount.toUInt(),
+            firstVertex.toUInt(),
+            firstInstance.toUInt()
+        )
     }
 
     actual override fun close() {
-        TODO("Not yet implemented")
+        wgpuRenderBundleEncoderRelease(handler)
     }
 }

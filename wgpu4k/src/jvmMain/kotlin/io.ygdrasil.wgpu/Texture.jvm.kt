@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.*
+import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.mapper.map
 import java.lang.foreign.MemorySegment
@@ -20,16 +20,14 @@ actual class Texture(internal val handler: MemorySegment) : AutoCloseable {
         get() = wgpu_h.wgpuTextureGetSampleCount(handler)
     actual val dimension: TextureDimension
         get() = wgpu_h.wgpuTextureGetDimension(handler)
-            ?.let { TextureDimension.of(it) }
+            .let { TextureDimension.of(it) }
             ?: error("fail to get texture dimension")
     actual val format: TextureFormat
         get() = wgpu_h.wgpuTextureGetFormat(handler)
-            ?.let { TextureFormat.of(it) }
+            .let { TextureFormat.of(it) }
             ?: error("fail to get texture format")
     actual val usage: GPUFlagsConstant
         get() = wgpu_h.wgpuTextureGetUsage(handler)
-
-
 
     actual fun createView(descriptor: TextureViewDescriptor?): TextureView = confined { arena ->
         descriptor?.let { arena.map(it) }

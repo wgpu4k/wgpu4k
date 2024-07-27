@@ -2,32 +2,44 @@
 
 package io.ygdrasil.wgpu
 
-import webgpu.WGPUTexture
+import io.ygdrasil.wgpu.mapper.map
+import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.ptr
+import webgpu.*
 
 actual class Texture(internal val handler: WGPUTexture) : AutoCloseable {
 
     actual val width: GPUIntegerCoordinateOut
-        get() = TODO("Not yet implemented")
+        get() = wgpuTextureGetWidth(handler).toInt()
     actual val height: GPUIntegerCoordinateOut
-        get() = TODO("Not yet implemented")
+        get() = wgpuTextureGetHeight(handler).toInt()
     actual val depthOrArrayLayers: GPUIntegerCoordinateOut
-        get() = TODO("Not yet implemented")
+        get() = wgpuTextureGetDepthOrArrayLayers(handler).toInt()
     actual val mipLevelCount: GPUIntegerCoordinateOut
-        get() = TODO("Not yet implemented")
+        get() = wgpuTextureGetMipLevelCount(handler).toInt()
     actual val sampleCount: GPUSize32Out
-        get() = TODO("Not yet implemented")
+        get() = wgpuTextureGetSampleCount(handler).toInt()
     actual val dimension: TextureDimension
-        get() = TODO("Not yet implemented")
+        get() = wgpuTextureGetDimension(handler)
+            .toInt()
+            .let { TextureDimension.of(it) }
+            ?: error("fail to get texture dimension")
     actual val format: TextureFormat
-        get() = TODO("Not yet implemented")
+        get() = wgpuTextureGetFormat(handler)
+            .toInt()
+            .let { TextureFormat.of(it) }
+            ?: error("fail to get texture format")
     actual val usage: GPUFlagsConstant
-        get() = TODO("Not yet implemented")
+        get() = wgpuTextureGetUsage(handler).toInt()
 
-    actual fun createView(descriptor: TextureViewDescriptor?): TextureView {
-        TODO("Not yet implemented")
+    actual fun createView(descriptor: TextureViewDescriptor?): TextureView = memScoped {
+        descriptor?.let { map(it) }
+            .let { wgpuTextureCreateView(handler, it?.ptr) }
+            ?.let { TextureView(it) }
+            ?: error("fail to create texture view")
     }
 
     actual override fun close() {
-        TODO("Not yet implemented")
+        wgpuTextureRelease(handler)
     }
 }
