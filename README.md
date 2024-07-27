@@ -32,10 +32,10 @@ This project focuses on creating a binding for WebGPU which can support Kotlin o
 git clone https://github.com/wgpu4k/wgpu4k.git
 cd wgpu4k
 ```
-- On desktop: `./gradlew examples:glfw:run`
+- On desktop JVM: `./gradlew examples:glfw:run`
 - On web js: `./gradlew examples:web-js:jsBrowserRun`
 - On web wasm: `./gradlew examples:web-js:wasmJsBrowserRun`
-- On native (Mac only and still experimental) `./gradlew examples:web-native:runDebugExecutableNative`
+- On desktop native (Mac only and still experimental) `./gradlew examples:native:runDebugExecutableNative`
 
 Use `page down` and `page up` on your keyboard to switch scene.
 
