@@ -137,8 +137,7 @@ suspend fun runApp(window: ComposeWindow) {
                 adapter,
                 device,
                 SurfaceRenderingContext(surface)
-            ),
-            resourceBasePath
+			)
         )
 
 		fun run() {
