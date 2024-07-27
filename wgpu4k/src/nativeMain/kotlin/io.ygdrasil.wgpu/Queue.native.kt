@@ -113,13 +113,12 @@ actual class Queue(internal val handler: WGPUQueue) {
 actual sealed interface DrawableHolder
 
 actual class ImageBitmapHolder(
-    val arena: Arena,
     val data: CValuesRef<*>,
     actual val width: Int,
     actual val height: Int
 ) : DrawableHolder, AutoCloseable {
 
     override fun close() {
-        arena.clear()
+        // Nothing to do
     }
 }

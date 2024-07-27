@@ -30,7 +30,8 @@ suspend fun bitmapFrom(path: String): ImageBitmapHolder = (resourcesVfs[path]
     .toBMP32()
     .toBitmapHolder()
 
-suspend fun glt2From(path: String): GLTF2 = resourcesVfs[path]
+suspend fun glt2From(path: String): GLTF2 = (resourcesVfs[path]
+    .takeIfExists() ?: rootLocalVfs[path])
     .readGLB()
 
 expect fun Bitmap32.toBitmapHolder(): ImageBitmapHolder

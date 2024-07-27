@@ -18,6 +18,7 @@ lateinit var application: Application
 fun main(args: Array<String>) = runBlocking {
 
     val resourceBasePath = "${args[0]}/"
+    println("resource path that will be used is $resourceBasePath")
     val glfwContext = glfwContextRenderer(width = 640, height = 480, title = "GLFW+WebGPU")
 
     application = createApplication(

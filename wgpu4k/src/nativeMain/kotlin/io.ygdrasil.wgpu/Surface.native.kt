@@ -22,10 +22,10 @@ actual class Surface(
         _textureFormat ?: error("call first computeSurfaceCapabilities")
     }
 
-    actual fun getCurrentTexture(): Texture {
-        val surfaceTexture = cValue<WGPUSurfaceTexture>()
-        wgpuSurfaceGetCurrentTexture(handler, surfaceTexture)
-        return Texture(surfaceTexture.useContents { texture } ?: error("no texture available"))
+    actual fun getCurrentTexture(): Texture = memScoped {
+        val surfaceTexture = alloc<WGPUSurfaceTexture>()
+        wgpuSurfaceGetCurrentTexture(handler, surfaceTexture.ptr)
+        return Texture(surfaceTexture.texture ?: error("no texture available"))
     }
 
     actual fun present() {
