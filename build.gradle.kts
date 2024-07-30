@@ -10,11 +10,6 @@ allprojects {
 		mavenLocal()
 		google()
 		mavenCentral()
-		// Use by rococoa
-		maven {
-			url = uri("http://repo.maven.cyberduck.io.s3.amazonaws.com/releases")
-			isAllowInsecureProtocol = true
-		}
 	}
 
 	group = "io.ygdrasil"

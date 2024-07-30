@@ -1,6 +1,4 @@
-package darwin 
-
-import org.apache.logging.log4j.LogManager
+package darwin
 
 class AlertSheetReturnCodeMapper {
 	/**
@@ -12,21 +10,17 @@ class AlertSheetReturnCodeMapper {
 	 *
 	 * @see SheetCallback.CANCEL_OPTION
 	 */
-	fun getOption(sender: darwin.NSButton?): Int {
+	fun getOption(sender: NSButton?): Int {
 		return this.getOption(sender?.tag() ?: 0)
 	}
 
 	fun getOption(option: Int): Int {
 		when (option) {
-			darwin.NSAlert.Companion.NSAlertFirstButtonReturn, darwin.NSPanel.Companion.NSOKButton -> return darwin.SheetCallback.Companion.DEFAULT_OPTION
-			darwin.NSAlert.Companion.NSAlertSecondButtonReturn, darwin.NSPanel.Companion.NSCancelButton -> return darwin.SheetCallback.Companion.CANCEL_OPTION
-			darwin.NSAlert.Companion.NSAlertThirdButtonReturn -> return darwin.SheetCallback.Companion.ALTERNATE_OPTION
+			NSAlert.NSAlertFirstButtonReturn, NSPanel.NSOKButton -> return SheetCallback.DEFAULT_OPTION
+			NSAlert.NSAlertSecondButtonReturn, NSPanel.NSCancelButton -> return SheetCallback.CANCEL_OPTION
+			NSAlert.NSAlertThirdButtonReturn -> return SheetCallback.ALTERNATE_OPTION
 		}
-		darwin.AlertSheetReturnCodeMapper.Companion.log.warn(String.format("Unknown return code %d", option))
-		return darwin.SheetCallback.Companion.DEFAULT_OPTION
+		return SheetCallback.DEFAULT_OPTION
 	}
 
-	companion object {
-		private val log = LogManager.getLogger(darwin.AlertSheetReturnCodeMapper::class.java)
-	}
 }

@@ -1,6 +1,5 @@
 package darwin 
 
-import org.apache.logging.log4j.LogManager
 import org.rococoa.ID
 import org.rococoa.ObjCClass
 import org.rococoa.Rococoa
@@ -110,11 +109,7 @@ abstract class NSApplication : NSObject() {
 		 * @param notification A notification named NSApplicationWillFinishLaunchingNotification. Calling the object
 		 * method of this notification returns the NSApplication object itself.
 		 */
-		fun applicationWillFinishLaunching(notification: NSNotification?) {
-			if (log.isDebugEnabled()) {
-				log.debug(notification)
-			}
-		}
+		fun applicationWillFinishLaunching(notification: NSNotification?) {}
 
 		/**
 		 * Sent by the default notification center after the application has been launched and initialized but before it
@@ -130,11 +125,7 @@ abstract class NSApplication : NSObject() {
 		 * @param notification A notification named NSApplicationDidFinishLaunchingNotification. Calling the object
 		 * method of this notification returns the NSApplication object itself.
 		 */
-		fun applicationDidFinishLaunching(notification: NSNotification?) {
-			if (log.isDebugEnabled()) {
-				log.debug(notification)
-			}
-		}
+		fun applicationDidFinishLaunching(notification: NSNotification?) {}
 
 		/**
 		 * Sent to notify the delegate that the application is about to terminate.
@@ -153,11 +144,7 @@ abstract class NSApplication : NSObject() {
 		 */
 		fun applicationShouldTerminate(app: NSApplication?): NSUInteger?
 
-		fun applicationWillTerminate(notification: NSNotification?) {
-			if (log.isDebugEnabled()) {
-				log.debug(notification)
-			}
-		}
+		fun applicationWillTerminate(notification: NSNotification?) {}
 
 		/**
 		 * Invoked when the user closes the last window the application has open.
@@ -184,11 +171,7 @@ abstract class NSApplication : NSObject() {
 		 * @param notification A notification named NSApplicationWillBecomeActiveNotification. Calling the object method
 		 * of this notification returns the NSApplication object itself.
 		 */
-		fun applicationWillBecomeActive(notification: NSNotification?) {
-			if (log.isDebugEnabled()) {
-				log.debug(notification)
-			}
-		}
+		fun applicationWillBecomeActive(notification: NSNotification?) {}
 
 		/**
 		 * Sent by the default notification center immediately after the application becomes active.
@@ -196,11 +179,7 @@ abstract class NSApplication : NSObject() {
 		 * @param notification A notification named NSApplicationDidBecomeActiveNotification. Calling the object method
 		 * of this notification returns the NSApplication object itself.
 		 */
-		fun applicationDidBecomeActive(notification: NSNotification?) {
-			if (log.isDebugEnabled()) {
-				log.debug(notification)
-			}
-		}
+		fun applicationDidBecomeActive(notification: NSNotification?) {}
 
 		/**
 		 * Sent by the default notification center immediately before the application is deactivated.
@@ -208,11 +187,7 @@ abstract class NSApplication : NSObject() {
 		 * @param notification A notification named NSApplicationWillResignActiveNotification. Calling the object method
 		 * of this notification returns the NSApplication object itself.
 		 */
-		fun applicationWillResignActive(notification: NSNotification?) {
-			if (log.isDebugEnabled()) {
-				log.debug(notification)
-			}
-		}
+		fun applicationWillResignActive(notification: NSNotification?) {}
 
 		/**
 		 * Sent by the default notification center immediately after the application is deactivated.
@@ -220,11 +195,7 @@ abstract class NSApplication : NSObject() {
 		 * @param notification A notification named NSApplicationDidResignActiveNotification. Calling the object method
 		 * of this notification returns the NSApplication object itself.
 		 */
-		fun applicationDidResignActive(notification: NSNotification?) {
-			if (log.isDebugEnabled()) {
-				log.debug(notification)
-			}
-		}
+		fun applicationDidResignActive(notification: NSNotification?) {}
 	}
 
 	interface _Class : ObjCClass {
@@ -759,11 +730,9 @@ abstract class NSApplication : NSObject() {
 	companion object {
 		private val CLASS: _Class = Rococoa.createClass("NSApplication", _Class::class.java) //$NON-NLS-1$
 
-		private val log = LogManager.getLogger(NSApplication::class.java)
-
-		val NSTerminateCancel: NSUInteger? = NSUInteger(0)
-		val NSTerminateNow: NSUInteger? = NSUInteger(1)
-		val NSTerminateLater: NSUInteger? = NSUInteger(2)
+		val NSTerminateCancel: NSUInteger = NSUInteger(0)
+		val NSTerminateNow: NSUInteger = NSUInteger(1)
+		val NSTerminateLater: NSUInteger = NSUInteger(2)
 
 		fun sharedApplication(): NSApplication {
 			return CLASS.sharedApplication()
