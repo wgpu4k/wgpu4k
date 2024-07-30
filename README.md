@@ -3,7 +3,7 @@
 ![Static Badge](https://img.shields.io/badge/Status-Alpha-red?style=plastic)
 ![Static Badge](https://img.shields.io/badge/Latest%20version-preview_2-red?style=plastic)
 [![Static Badge](https://img.shields.io/badge/Licence-MIT-blue?style=plastic)](https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FMIT_License)
-[![Static Badge](https://img.shields.io/badge/Discord-wgpu4k-purple?style=plastic)](https://discord.gg/ZdNb4ZXQ)
+[![Static Badge](https://img.shields.io/badge/Discord-wgpu4k-purple?style=plastic)](https://discord.gg/qy9KQAP9Kc)
 
 This project focuses on creating a binding for WebGPU which can support Kotlin on multiple platforms.
 
