@@ -82,7 +82,7 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
-                api(projects.librococoa)
+                api(libs.rococoa)
                 api(libs.jnaPlatform)
                 api(libs.jna)
 

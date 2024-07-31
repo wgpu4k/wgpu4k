@@ -10,6 +10,7 @@ korge = "6.0.0"
 download = "5.6.0"
 agp = "8.5.1"
 jreleaser = "1.13.1"
+rococoa = "0.0.1"
 
 [libraries]
 kotest-core = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
@@ -23,6 +24,7 @@ kotlin-multiplatform = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 android-library = { module = "com.android.library:com.android.library.gradle.plugin", version.ref = "agp" }
 jreleaser-plugin = { module = "org.jreleaser:org.jreleaser.gradle.plugin", version.ref = "jreleaser" }
 korlibs-image = { module = "com.soywiz:korlibs-image", version.ref = "korge" }
+rococoa = { module = "io.ygdrasil:rococoa", version.ref = "rococoa" }
 
 
 [plugins]
