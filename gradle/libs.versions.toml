@@ -11,6 +11,7 @@ download = "5.6.0"
 agp = "8.5.1"
 jreleaser = "1.13.1"
 rococoa = "0.0.1"
+wgpu4k-panama = "0.0.1"
 
 [libraries]
 kotest-core = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
@@ -25,6 +26,7 @@ android-library = { module = "com.android.library:com.android.library.gradle.plu
 jreleaser-plugin = { module = "org.jreleaser:org.jreleaser.gradle.plugin", version.ref = "jreleaser" }
 korlibs-image = { module = "com.soywiz:korlibs-image", version.ref = "korge" }
 rococoa = { module = "io.ygdrasil:rococoa", version.ref = "rococoa" }
+wgpu4k-panama = { module = "io.ygdrasil:wgpu4k-panama", version.ref = "wgpu4k-panama" }
 
 
 [plugins]

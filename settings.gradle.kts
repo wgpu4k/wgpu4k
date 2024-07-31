@@ -21,7 +21,6 @@ dependencyResolutionManagement {
 
 val hostOs = System.getProperty("os.name")
 
-include("wgpu4k-jvm-panama")
 include("wgpu4k-glfw-native")
 include("wgpu4k-native")
 include("wgpu4k")
