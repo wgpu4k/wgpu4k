@@ -71,7 +71,7 @@ kotlin {
             }
 
             dependencies {
-                api(projects.wgpu4kJvmPanama)
+                api(libs.wgpu4k.panama)
             }
         }
 
