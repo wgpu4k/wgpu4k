@@ -59,5 +59,12 @@ tasks.create("e2eTest") {
     }
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(22))
+    }
+}
+
+
 fun getHeadlessProject() = projects.examples.headless.identityPath.path
     ?.let(::project) ?: error("Could not find project path")
