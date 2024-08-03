@@ -51,4 +51,16 @@ configureDownloadTasks {
     download("wgpu-macos-x86_64-release.zip") {
         extract("libwgpu_native.a", buildNativeResourcesDirectory.resolve("darwin-x64").resolve("libWGPU.a"))
     }
+
+    download("wgpu-windows-x86_64-release.zip") {
+        extract("wgpu_native.lib", buildNativeResourcesDirectory.resolve("windows-x64").resolve("wgpu.lib"))
+    }
+
+    download("wgpu-linux-x86_64-release.zip") {
+        extract("libwgpu_native.a", buildNativeResourcesDirectory.resolve("linux-x64").resolve("libWGPU.a"))
+    }
+
+    download("wgpu-linux-aarch64-release.zip") {
+        extract("libwgpu_native.a", buildNativeResourcesDirectory.resolve("linux-aarch64").resolve("libWGPU.a"))
+    }
 }
