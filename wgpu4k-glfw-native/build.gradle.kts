@@ -68,13 +68,13 @@ configureDownloadTasks {
 
     download("glfw-3.3.10.bin.WIN64.zip") {
         extract(
-            "**/lib-vc2022/glfw3.lib",
-            buildNativeResourcesDirectory.resolve("windows").resolve("glfw3.lib")
+            "**/lib-mingw-w64/libglfw3.a",
+            buildNativeResourcesDirectory.resolve("windows").resolve("libglfw3.a")
         ).doLast {
             Files.move(
                 buildNativeResourcesDirectory.resolve("windows").resolve("glfw-3.3.10.bin.WIN64")
-                    .resolve("lib-vc2022")
-                    .resolve("glfw3.lib"), buildNativeResourcesDirectory.resolve("windows").resolve("glfw3.lib")
+                    .resolve("lib-mingw-w64")
+                    .resolve("libglfw3.a"), buildNativeResourcesDirectory.resolve("windows").resolve("libglfw3.a")
             )
             buildNativeResourcesDirectory.resolve("windows").resolve("glfw-3.3.10.bin.WIN64").deleteRecursively()
         }

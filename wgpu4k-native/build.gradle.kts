@@ -40,7 +40,7 @@ kotlin {
 }
 
 configureDownloadTasks {
-    baseUrl = "https://github.com/gfx-rs/wgpu-native/releases/download/${libs.versions.wgpu.get()}/"
+    baseUrl = "https://github.com/ygdrasil-io/wgpu-native/releases/download/${libs.versions.wgpu.get()}/"
 
     download("wgpu-macos-aarch64-release.zip") {
         extract("webgpu.h", buildNativeResourcesDirectory.resolve("webgpu.h"))
@@ -52,8 +52,8 @@ configureDownloadTasks {
         extract("libwgpu_native.a", buildNativeResourcesDirectory.resolve("darwin-x64").resolve("libWGPU.a"))
     }
 
-    download("wgpu-windows-x86_64-release.zip") {
-        extract("wgpu_native.lib", buildNativeResourcesDirectory.resolve("windows-x64").resolve("wgpu.lib"))
+    download("wgpu-windows-x86_64-release-gnu.zip") {
+        extract("libwgpu_native.a", buildNativeResourcesDirectory.resolve("windows-x64").resolve("wgpu.a"))
     }
 
     download("wgpu-linux-x86_64-release.zip") {
