@@ -19,7 +19,7 @@ class WGPU(val handler: WGPUInstance) : AutoCloseable {
             this.powerPreference = powerPreference
         }
 
-        val handleRequestAdapter: WGPURequestAdapterCallback =
+        val handleRequestAdapter =
             staticCFunction<WGPURequestAdapterStatus, WGPUAdapter, CPointer<ByteVar>?, COpaquePointer, Unit> { status, adapter, message, userData ->
                 println("WGPURequestAdapterCallback ${userData} ${adapter}")
                 if (status == WGPURequestAdapterStatus_Success) {
@@ -27,10 +27,9 @@ class WGPU(val handler: WGPUInstance) : AutoCloseable {
                 } else {
                     println("request_adapter status=$status message=${message?.toKStringFromUtf8()}\n")
                 }
+            }
 
-            }.reinterpret()
-
-        wgpuInstanceRequestAdapter(handler, options, handleRequestAdapter, null)
+        wgpuInstanceRequestAdapter(handler, options, handleRequestAdapter.reinterpret(), null)
 
         return lastFindAdapter?.let { Adapter(it) }
     }
