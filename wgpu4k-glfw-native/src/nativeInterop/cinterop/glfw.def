@@ -4,8 +4,8 @@ staticLibraries.macos_arm64 = libglfw3.a
 libraryPaths.macos_arm64 = ./build/native/darwin/
 staticLibraries.macos_x64 = libglfw3.a
 libraryPaths.macos_x64 = ./build/native/darwin/
-staticLibraries.windows = glfw3.lib
-libraryPaths.windows = ./build/native/windows/
+staticLibraries.mingw = glfw3.lib
+libraryPaths.mingw = ./build/native/windows/
 
 linkerOpts.macos_arm64 = -framework IOKit -framework CoreGraphics -framework AppKit
 linkerOpts.macos_x64 = -framework IOKit -framework CoreGraphics -framework AppKit
