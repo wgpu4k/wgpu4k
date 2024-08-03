@@ -35,6 +35,24 @@ class WGPU(val handler: WGPUInstance) : AutoCloseable {
         return lastFindAdapter?.let { Adapter(it) }
     }
 
+    fun getSurfaceFromWindows(hinstance: MemorySegment, hwnd: MemorySegment): MemorySegment? = confined { arena ->
+        WGPUSurfaceDescriptor.allocate(arena).let { surfaceDescriptor ->
+            WGPUSurfaceDescriptor.nextInChain(
+                surfaceDescriptor,
+                WGPUSurfaceDescriptorFromWindowsHWND.allocate(arena).also { nextInChain ->
+                    WGPUSurfaceDescriptorFromWindowsHWND.chain(
+                        nextInChain,
+                        WGPUChainedStruct.allocate(arena).also { chain ->
+                            WGPUChainedStruct.sType(chain, wgpu_h.WGPUSType_SurfaceDescriptorFromWindowsHWND())
+                        })
+                    WGPUSurfaceDescriptorFromWindowsHWND.hwnd(nextInChain, hwnd)
+                    WGPUSurfaceDescriptorFromWindowsHWND.hinstance(nextInChain, hinstance)
+                })
+
+            wgpu_h.wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+        }
+    }
+
     fun getSurfaceFromMetalLayer(metalLayer: COpaquePointer): WGPUSurface? = memScoped {
         val surfaceDescriptor = cValue<WGPUSurfaceDescriptor> {
             nextInChain = cValue<WGPUSurfaceDescriptorFromMetalLayer> {

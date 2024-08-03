@@ -34,5 +34,5 @@ include("examples:glfw")
 include("examples:headless")
 if (hostOs == "Mac OS X") include("examples:iOS")
 // right now only running on OSX
-if (hostOs == "Mac OS X") include("examples:native")
+if (hostOs == "Mac OS X" || hostOs.startsWith("Windows")) include("examples:native")
 include("webgpu-samples-ts")
