@@ -65,4 +65,18 @@ configureDownloadTasks {
             buildNativeResourcesDirectory.resolve("darwin").resolve("glfw-3.3.10.bin.MACOS").deleteRecursively()
         }
     }
+
+    download("glfw-3.3.10.bin.WIN64.zip") {
+        extract(
+            "**/lib-vc2022/glfw3.lib",
+            buildNativeResourcesDirectory.resolve("windows").resolve("glfw3.lib")
+        ).doLast {
+            Files.move(
+                buildNativeResourcesDirectory.resolve("windows").resolve("glfw-3.3.10.bin.WIN64")
+                    .resolve("lib-vc2022")
+                    .resolve("glfw3.lib"), buildNativeResourcesDirectory.resolve("windows").resolve("glfw3.lib")
+            )
+            buildNativeResourcesDirectory.resolve("windows").resolve("glfw-3.3.10.bin.WIN64").deleteRecursively()
+        }
+    }
 }
