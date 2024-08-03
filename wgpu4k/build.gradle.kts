@@ -119,7 +119,7 @@ java {
 }
 
 configureDownloadTasks {
-    baseUrl = "https://github.com/gfx-rs/wgpu-native/releases/download/${libs.versions.wgpu.get()}/"
+    baseUrl = "https://github.com/ygdrasil-io/wgpu-native/releases/download/${libs.versions.wgpu.get()}/"
 
     download("wgpu-macos-aarch64-release.zip") {
         extract("libwgpu_native.dylib", resourcesDirectory.resolve("darwin-aarch64").resolve("libWGPU.dylib"))
@@ -129,7 +129,7 @@ configureDownloadTasks {
         extract("libwgpu_native.dylib", resourcesDirectory.resolve("darwin-x86-64").resolve("libWGPU.dylib"))
     }
 
-    download("wgpu-windows-x86_64-release.zip") {
+    download("wgpu-windows-x86_64-msvc-release.zip") {
         extract("wgpu_native.dll", resourcesDirectory.resolve("win32-x86-64").resolve("WGPU.dll"))
     }
 

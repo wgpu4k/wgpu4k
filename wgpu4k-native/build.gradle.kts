@@ -52,7 +52,7 @@ configureDownloadTasks {
         extract("libwgpu_native.a", buildNativeResourcesDirectory.resolve("darwin-x64").resolve("libWGPU.a"))
     }
 
-    download("wgpu-windows-x86_64-release-gnu.zip") {
+    download("wgpu-windows-x86_64-gnu-release.zip") {
         extract("libwgpu_native.a", buildNativeResourcesDirectory.resolve("windows-x64").resolve("wgpu.a"))
     }
 
