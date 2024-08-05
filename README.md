@@ -51,7 +51,7 @@ Documentation will be added later, to start you can check out the minimalist pro
 | JVM arm64    | 🛠️     | 🆗    | ✅     | ❌   | ❌       |
 | JS           | ✅       | 🆗    | ✅     | ❓   | ❓️      |
 | wasm         | 🆗️     | 🆗️   | 🆗️   | ❓️  | ❓️      |
-| native x86   | 🛠️     | 🛠️   | 🆗️   | 🛠️ | 🛠️     |
+| native x64   | 🆗️️     | 🛠️   | 🆗️   | 🛠️ | 🛠️     |
 | native arm64 | 🛠️     | 🛠️   | 🆗️   | 🛠️ | 🛠️     |
 
 
