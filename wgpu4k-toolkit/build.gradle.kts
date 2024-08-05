@@ -44,7 +44,7 @@ kotlin {
     val nativeTargets = listOf<KotlinNativeTarget>(
         macosArm64(),
         macosX64(),
-        mingwX64(),
+        configureMingwX64(),
     )
 
     nativeTargets.forEach { target ->

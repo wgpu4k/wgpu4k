@@ -36,9 +36,9 @@ kotlin {
     tvosX64()
     linuxArm64()
     linuxX64()
-    mingwX64()
-    androidNativeX64()
-    androidNativeArm64()
+    configureMingwX64()
+    //androidNativeX64()
+    //androidNativeArm64()
 
     if (isAndroidConfigured) androidTarget()
 

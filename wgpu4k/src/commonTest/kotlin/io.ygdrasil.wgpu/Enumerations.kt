@@ -9,7 +9,6 @@ class EnumerationsTest : FreeSpec ({
         // Given
         val noflag = setOf<BufferUsage>()
 
-
         // When
         val intFlag = noflag.toFlagInt()
 
@@ -22,7 +21,6 @@ class EnumerationsTest : FreeSpec ({
         // Given
         val withFlags = setOf(BufferUsage.vertex)
 
-
         // When
         val intFlag = withFlags.toFlagInt()
 
@@ -31,11 +29,9 @@ class EnumerationsTest : FreeSpec ({
         intFlag shouldBe BufferUsage.vertex.value
     }
 
-
     "test flag to int with multiple flags" {
         // Given
         val withFlags = setOf(BufferUsage.vertex, BufferUsage.copydst, BufferUsage.uniform)
-
 
         // When
         val intFlag = withFlags.toFlagInt()
