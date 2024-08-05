@@ -91,6 +91,7 @@ kotlin {
         jvmTest {
             dependencies {
                 implementation(libs.kotest.runner.junit5)
+                implementation("org.jetbrains.kotlin:kotlin-reflect")
             }
         }
 
