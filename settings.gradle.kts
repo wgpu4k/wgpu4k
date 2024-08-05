@@ -36,3 +36,5 @@ if (hostOs == "Mac OS X") include("examples:iOS")
 // right now only running on OSX
 if (hostOs == "Mac OS X" || (hostOs.startsWith("Windows") && getCustomLLVMPath() != null)) include("examples:native")
 include("webgpu-samples-ts")
+
+fun getCustomLLVMPath(): String? = System.getenv("LIBCLANG_PATH")

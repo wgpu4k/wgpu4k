@@ -16,6 +16,10 @@ jobs:
       fail-fast: false
       matrix:
         os: [ macos-14, ubuntu-latest, windows-latest ]
+        llvm:
+          - na
+          - na
+          - na
     runs-on: ${{ matrix.os }}
     steps:
       - name: print architecture
