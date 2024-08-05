@@ -35,3 +35,4 @@ gradle-app.setting
 /wgpu4k-e2e/js-chromium/
 /local.properties
 /examples/iosApp/iOSApp.xcodeproj/xcuserdata/
+/android-jni/target/
