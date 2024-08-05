@@ -16,12 +16,13 @@ jobs:
       fail-fast: false
       matrix:
         os: [ macos-14, ubuntu-latest, windows-latest ]
-        llvm:
-          - na
-          - na
-          - na
     runs-on: ${{ matrix.os }}
     steps:
+      - name: set llvm Path On macos
+        if: runner.os == 'macos-14'
+        run: echo "set llvm Path On macos"
+        env:
+          LIBCLANG_PATH: "/Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
       - name: print architecture
         run: uname -m
       - uses: actions/checkout@v4
