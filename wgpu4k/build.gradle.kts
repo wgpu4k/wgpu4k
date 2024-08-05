@@ -159,6 +159,5 @@ tasks.named<Test>("jvmTest") {
     }
 }
 
-tasks.named("mingwX64Test") {
-    enabled = false
-}
+tasks.named("linkDebugTestMingwX64") { enabled = false }
+tasks.named("mingwX64Test") { enabled = false }
