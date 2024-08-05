@@ -44,7 +44,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          echo "clang path : $LIBCLANG_PATH"
+          echo "clang path :"
+          echo $LIBCLANG_PATH
           gradle wrapper
           ./gradlew fetch-native-dependencies build check --stacktrace
       - name: package
