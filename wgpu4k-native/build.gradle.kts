@@ -40,7 +40,7 @@ kotlin {
 }
 
 configureDownloadTasks {
-    baseUrl = "https://github.com/ygdrasil-io/wgpu-native/releases/download/${libs.versions.wgpu.get()}/"
+    baseUrl = "${project.properties["wgpu.base.url"]}${libs.versions.wgpu.get()}/"
 
     download("wgpu-macos-aarch64-release.zip") {
         extract("webgpu.h", buildNativeResourcesDirectory.resolve("webgpu.h"))
