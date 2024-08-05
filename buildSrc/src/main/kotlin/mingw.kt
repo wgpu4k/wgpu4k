@@ -1,4 +1,3 @@
-import org.gradle.plugin.use.PluginDependencySpec
 import org.jetbrains.kotlin.gradle.dsl.KotlinTargetContainerWithPresetFunctions
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTargetWithHostTests
 
