@@ -19,10 +19,15 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: set llvm Path On macos
-        if: runner.os == 'macos-14'
+        if: matrix.os == 'macos-14'
         run: echo "set llvm Path On macos"
         env:
           LIBCLANG_PATH: "/Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+      - name: set llvm Path On windows
+        if: matrix.os == 'windows-latest'
+        run: echo "set llvm Path On windows"
+        env:
+          LIBCLANG_PATH: "C:\Program Files\LLVM\bin"
       - name: print architecture
         run: uname -m
       - uses: actions/checkout@v4
