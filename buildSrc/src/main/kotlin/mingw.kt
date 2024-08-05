@@ -11,7 +11,7 @@ fun KotlinTargetContainerWithPresetFunctions.configureMingwX64(): KotlinNativeTa
     return getCustomLLVMPath()?.let { path ->
         mingwX64().apply {
             compilerOptions {
-                freeCompilerArgs.add("-Xllvm-variant=\"$path\"")
+                freeCompilerArgs.add("-Xllvm-variant=$path")
             }
         }
     }
