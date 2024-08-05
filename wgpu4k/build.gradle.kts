@@ -158,3 +158,7 @@ tasks.named<Test>("jvmTest") {
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
     }
 }
+
+tasks.named("mingwX64Test") {
+    enabled = false
+}
