@@ -2,7 +2,7 @@ import org.gradle.plugin.use.PluginDependencySpec
 import org.jetbrains.kotlin.gradle.dsl.KotlinTargetContainerWithPresetFunctions
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTargetWithHostTests
 
-fun getCustomLLVMPath(): String? = System.getenv("LIBCLANG_PATH")
+fun getCustomLLVMPath(): String? = System.getenv("LIBCLANG_PATH").takeIf { it.isNotEmpty() }
 
 /**
  * dirty fix until 2.1.0 version
