@@ -41,11 +41,11 @@ kotlin {
         browser()
     }
 
-    val nativeTargets = listOf<KotlinNativeTarget>(
+    val nativeTargets = listOf<KotlinNativeTarget?>(
         macosArm64(),
         macosX64(),
         configureMingwX64(),
-    )
+    ).filterNotNull()
 
     nativeTargets.forEach { target ->
         val main by target.compilations.getting {

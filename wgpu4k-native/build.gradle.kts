@@ -23,7 +23,7 @@ kotlin {
         linuxArm64(),
         linuxX64(),
         configureMingwX64(),
-    )
+    ).filterNotNull()
 
     nativeTargets.forEach { target ->
         val main by target.compilations.getting {
