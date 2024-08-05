@@ -24,7 +24,7 @@ kotlin {
         hostOs == "Mac OS X" && !isArm64 -> macosX64("native")
         hostOs.startsWith("Windows") -> mingwX64("native").apply {
             compilerOptions {
-                freeCompilerArgs.add("-Xllvm-variant=$${getCustomLLVMPath()}")
+                freeCompilerArgs.add("-Xllvm-variant=\"${getCustomLLVMPath()}\"")
             }
         }
         else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
