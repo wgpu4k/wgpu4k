@@ -36,9 +36,9 @@ kotlin {
     tvosX64()
     linuxArm64()
     linuxX64()
-    mingwX64()
-    androidNativeX64()
-    androidNativeArm64()
+    configureMingwX64()
+    //androidNativeX64()
+    //androidNativeArm64()
 
     if (isAndroidConfigured) androidTarget()
 
@@ -91,6 +91,7 @@ kotlin {
         jvmTest {
             dependencies {
                 implementation(libs.kotest.runner.junit5)
+                implementation("org.jetbrains.kotlin:kotlin-reflect")
             }
         }
 
@@ -119,7 +120,7 @@ java {
 }
 
 configureDownloadTasks {
-    baseUrl = "https://github.com/gfx-rs/wgpu-native/releases/download/${libs.versions.wgpu.get()}/"
+    baseUrl = "${project.properties["wgpu.base.url"]}${libs.versions.wgpu.get()}/"
 
     download("wgpu-macos-aarch64-release.zip") {
         extract("libwgpu_native.dylib", resourcesDirectory.resolve("darwin-aarch64").resolve("libWGPU.dylib"))
@@ -129,7 +130,7 @@ configureDownloadTasks {
         extract("libwgpu_native.dylib", resourcesDirectory.resolve("darwin-x86-64").resolve("libWGPU.dylib"))
     }
 
-    download("wgpu-windows-x86_64-release.zip") {
+    download("wgpu-windows-x86_64-msvc-release.zip") {
         extract("wgpu_native.dll", resourcesDirectory.resolve("win32-x86-64").resolve("WGPU.dll"))
     }
 
@@ -156,4 +157,9 @@ tasks.named<Test>("jvmTest") {
         )
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
     }
+}
+
+if (Platform.os == Os.MacOs) {
+    tasks.findByName("linkDebugTestMingwX64")?.apply { enabled = false }
+    tasks.findByName("mingwX64Test")?.apply { enabled = false }
 }

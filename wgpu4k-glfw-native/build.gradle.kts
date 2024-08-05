@@ -18,8 +18,8 @@ kotlin {
         iosSimulatorArm64(),
         macosArm64(),
         macosX64(),
-        androidNativeX64(),
-        androidNativeArm64(),
+        //androidNativeX64(),
+        //androidNativeArm64(),
         tvosArm64(),
         tvosX64(),
         linuxArm64(),
@@ -63,6 +63,20 @@ configureDownloadTasks {
                     .resolve("libglfw3.a"), buildNativeResourcesDirectory.resolve("darwin").resolve("libglfw3.a")
             )
             buildNativeResourcesDirectory.resolve("darwin").resolve("glfw-3.3.10.bin.MACOS").deleteRecursively()
+        }
+    }
+
+    download("glfw-3.3.10.bin.WIN64.zip") {
+        extract(
+            "**/lib-mingw-w64/libglfw3.a",
+            buildNativeResourcesDirectory.resolve("windows").resolve("libglfw3.a")
+        ).doLast {
+            Files.move(
+                buildNativeResourcesDirectory.resolve("windows").resolve("glfw-3.3.10.bin.WIN64")
+                    .resolve("lib-mingw-w64")
+                    .resolve("libglfw3.a"), buildNativeResourcesDirectory.resolve("windows").resolve("libglfw3.a")
+            )
+            buildNativeResourcesDirectory.resolve("windows").resolve("glfw-3.3.10.bin.WIN64").deleteRecursively()
         }
     }
 }

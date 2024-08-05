@@ -4,6 +4,8 @@ staticLibraries.macos_arm64 = libglfw3.a
 libraryPaths.macos_arm64 = ./build/native/darwin/
 staticLibraries.macos_x64 = libglfw3.a
 libraryPaths.macos_x64 = ./build/native/darwin/
+staticLibraries.mingw = libglfw3.a
+libraryPaths.mingw = ./build/native/windows/
 
 linkerOpts.macos_arm64 = -framework IOKit -framework CoreGraphics -framework AppKit
 linkerOpts.macos_x64 = -framework IOKit -framework CoreGraphics -framework AppKit
@@ -11,3 +13,6 @@ linkerOpts.macos_x64 = -framework IOKit -framework CoreGraphics -framework AppKi
 ---
 
 void* glfwGetCocoaWindow(GLFWwindow* window);
+void* glfwGetX11Display(GLFWwindow* window);
+size_t glfwGetX11Window(GLFWwindow* window);
+void* glfwGetWin32Window(GLFWwindow* window);

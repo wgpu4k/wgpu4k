@@ -16,14 +16,14 @@ kotlin {
         iosSimulatorArm64(),
         macosArm64(),
         macosX64(),
-        androidNativeX64(),
-        androidNativeArm64(),
+        //androidNativeX64(),
+        //androidNativeArm64(),
         tvosArm64(),
         tvosX64(),
         linuxArm64(),
         linuxX64(),
-        mingwX64(),
-    )
+        configureMingwX64(),
+    ).filterNotNull()
 
     nativeTargets.forEach { target ->
         val main by target.compilations.getting {
@@ -40,7 +40,7 @@ kotlin {
 }
 
 configureDownloadTasks {
-    baseUrl = "https://github.com/gfx-rs/wgpu-native/releases/download/${libs.versions.wgpu.get()}/"
+    baseUrl = "${project.properties["wgpu.base.url"]}${libs.versions.wgpu.get()}/"
 
     download("wgpu-macos-aarch64-release.zip") {
         extract("webgpu.h", buildNativeResourcesDirectory.resolve("webgpu.h"))
@@ -50,5 +50,17 @@ configureDownloadTasks {
 
     download("wgpu-macos-x86_64-release.zip") {
         extract("libwgpu_native.a", buildNativeResourcesDirectory.resolve("darwin-x64").resolve("libWGPU.a"))
+    }
+
+    download("wgpu-windows-x86_64-gnu-release.zip") {
+        extract("libwgpu_native.a", buildNativeResourcesDirectory.resolve("windows-x64").resolve("wgpu.a"))
+    }
+
+    download("wgpu-linux-x86_64-release.zip") {
+        extract("libwgpu_native.a", buildNativeResourcesDirectory.resolve("linux-x64").resolve("libWGPU.a"))
+    }
+
+    download("wgpu-linux-aarch64-release.zip") {
+        extract("libwgpu_native.a", buildNativeResourcesDirectory.resolve("linux-aarch64").resolve("libWGPU.a"))
     }
 }

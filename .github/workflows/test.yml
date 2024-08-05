@@ -18,6 +18,12 @@ jobs:
         os: [ macos-14, ubuntu-latest, windows-latest ]
     runs-on: ${{ matrix.os }}
     steps:
+      - name: set llvm Path On macos
+        if: matrix.os == 'macos-14'
+        run: echo "LIBCLANG_PATH=/Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr" >> $GITHUB_ENV
+      - name: set llvm Path On windows
+        if: matrix.os == 'windows-latest'
+        run: echo "LIBCLANG_PATH=\"C:\Program Files\LLVM\"" >> $GITHUB_ENV
       - name: print architecture
         run: uname -m
       - uses: actions/checkout@v4
@@ -38,6 +44,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
+          echo "clang path :"
+          echo $LIBCLANG_PATH
           gradle wrapper
           ./gradlew fetch-native-dependencies build check --stacktrace
       - name: package
