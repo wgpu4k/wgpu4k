@@ -37,8 +37,6 @@ kotlin {
     linuxArm64()
     linuxX64()
     configureMingwX64()
-    //androidNativeX64()
-    //androidNativeArm64()
 
     if (isAndroidConfigured) androidTarget()
 

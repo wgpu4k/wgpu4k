@@ -10,7 +10,7 @@ pub static FILES_PATH: &str = "/data/user/0/com.example.android/files/";
 
 // Return a i32 from another i32
 #[no_mangle]
-pub unsafe extern "C" fn Java_com_example_android_MainActivity_returni32(
+pub unsafe extern "C" fn Java_io_ygdrasil_MainActivity_returni32(
     _env: JNIEnv,
     _: JObject,
     int: i32,
@@ -20,7 +20,7 @@ pub unsafe extern "C" fn Java_com_example_android_MainActivity_returni32(
 
 // Return a bool (true when a specific file in our folder exists)
 #[no_mangle]
-pub unsafe extern "C" fn Java_com_example_android_MainActivity_getFileStatus(
+pub unsafe extern "C" fn Java_io_ygdrasil_MainActivity_getFileStatus(
     _env: JNIEnv,
     _: JObject,
 ) -> bool {
