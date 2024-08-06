@@ -1,7 +1,10 @@
-use std::convert::TryFrom;
+extern crate wgpu_native;
 
 use jni::JNIEnv;
 use jni::objects::JObject;
+use jni::sys::{jlong, jobject};
+use wgpu_native::native::WGPUInstanceDescriptor;
+use wgpu_native::wgpuCreateInstance;
 
 #[allow(dead_code)]
 mod lib_example;
@@ -25,4 +28,20 @@ pub unsafe extern "C" fn Java_io_ygdrasil_MainActivity_getFileStatus(
     _: JObject,
 ) -> bool {
     lib_example::get_file_status(&FILES_PATH)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn Java_io_ygdrasil_Wgpu4kAndroid_wgpuCreateInstance(
+    _env: JNIEnv,
+    _: JObject,
+    descriptor: jobject,
+) -> Option<jlong> {
+    return wgpuCreateInstance(
+        map(descriptor)
+    )
+        .map(|it| &it as i64);
+}
+
+fn map(_: jobject) -> Option<&'static WGPUInstanceDescriptor> {
+   None
 }

@@ -17,47 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="130a7eee-c28b-4705-84ef-09d63a60e7dc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/migrations.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.gitmodules" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/app/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/proguard-rules.pro" beforeDir="false" afterPath="$PROJECT_DIR$/app/proguard-rules.pro" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android/MainActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../buildScript.command" beforeDir="false" afterPath="$PROJECT_DIR$/../buildScript.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../examples/macos/build.gradle.kts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../examples/macos/src/nativeInterop/cinterop/glfw.def" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../examples/macos/src/nativeMain/kotlin/GlfwCoroutineDispatcher.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../examples/macos/src/nativeMain/kotlin/GlfwMain.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../examples/macos/src/nativeMain/kotlin/main.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../examples/macos/src/nativeMain/kotlin/platform.foundation/NSRect.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../spec-generator/libs/gpuweb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../spec-generator/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../spec-generator/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../spec-generator/src/index.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../spec-generator/src/parser.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../spec-generator/tsconfig.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../webgpu-headers" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../wgpu4k-native/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/../../wgpu4k-native/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../wgpu4k/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/../../wgpu4k/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

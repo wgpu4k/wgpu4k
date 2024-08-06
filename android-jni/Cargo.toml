@@ -3,7 +3,7 @@
 name = "wgpu4k"
 version = "0.0.1"
 authors = ["Alexandre Mommers"]
-edition = "2018"
+edition = "2021"
 license = "MIT"
 
 [lib]
@@ -20,6 +20,4 @@ jni = "0.21.1"
 ndk = { version = "0.9.0", features = ["audio"] }
 ndk-context = "0.1.1"
 
-# Have to follow Ruffle with this.
-wgpu = "0.20.1"
-
+wgpu-native = { git = "https://github.com/gfx-rs/wgpu-native.git", tag = "v0.19.4.1" }
