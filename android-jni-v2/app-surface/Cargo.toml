@@ -24,16 +24,6 @@ glam.workspace = true
 pollster.workspace = true
 wgpu.workspace = true
 
-[target.'cfg(any(target_os = "macos", target_os = "windows", target_os = "linux"))'.dependencies]
-winit.workspace = true
-
-[target.'cfg(any(target_os = "macos", target_os = "ios"))'.dependencies]
-libc.workspace = true
-objc.workspace = true
-core-graphics.workspace = true
-env_logger.workspace = true
-raw-window-handle.workspace = true
-
 [target.'cfg(target_os = "android")'.dependencies]
 android_logger.workspace = true
 jni.workspace = true
@@ -41,8 +31,3 @@ ndk-sys.workspace = true
 raw-window-handle.workspace = true
 ash.workspace = true
 
-[target.'cfg(target_arch = "wasm32")'.dependencies]
-winit.workspace = true
-web-sys = { workspace = true, features = ["Document", "Window", "Location"] }
-wasm-bindgen.workspace = true
-web-time.workspace = true

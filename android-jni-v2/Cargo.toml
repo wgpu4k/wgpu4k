@@ -19,20 +19,9 @@ web-time = "1"
 raw-window-handle = "0.6"
 env_logger = "0.11"
 
-# macOS, iOS
-libc = "0.2"
-objc = "0.2.7"
-core-graphics = "0.23.1"
-
 # android target
 android_logger = "0.14"
 jni = "0.21"
 jni_fn = "0.1"
 ndk-sys = "0.6"
 ash = "0.38"
-
-# wasm target
-web-sys = "0.3.69"
-wasm-bindgen = "0.2.87"
-js-sys = "0.3.69"
-wasm-bindgen-futures = "0.4.42"

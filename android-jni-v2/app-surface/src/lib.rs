@@ -1,15 +1,12 @@
 use std::{ops::Deref, sync::Arc};
+
+pub use app_surface::*;
+pub use touch::*;
 use wgpu::{Instance, Surface};
 
 mod touch;
-pub use touch::*;
-
-#[cfg_attr(target_os = "ios", path = "ios.rs")]
 #[cfg_attr(target_os = "android", path = "android.rs")]
-#[cfg_attr(all(feature = "mac_catalyst", target_os = "macos"), path = "ios.rs")]
 mod app_surface;
-pub use app_surface::*;
-
 #[repr(C)]
 #[derive(Debug)]
 pub struct ViewSize {
@@ -48,8 +45,7 @@ pub trait SurfaceFrame {
     fn view_size(&self) -> ViewSize;
     // After App view's size or orientation changed, need to resize surface.
     fn resize_surface(&mut self);
-    #[cfg(target_arch = "wasm32")]
-    fn resize_surface_by_size(&mut self, size: (u32, u32));
+
     fn pintch(&mut self, _touch: Touch, _scale: f32) {}
     fn touch(&mut self, _touch: Touch) {}
     fn normalize_touch_point(&self, _touch_point_x: f32, _touch_point_y: f32) -> (f32, f32) {
@@ -103,13 +99,6 @@ impl SurfaceFrame for AppSurface {
 
     fn resize_surface(&mut self) {
         let size = self.get_view_size();
-        self.sdq.config.width = size.0;
-        self.sdq.config.height = size.1;
-        self.surface.configure(&self.device, &self.config);
-    }
-
-    #[cfg(target_arch = "wasm32")]
-    fn resize_surface_by_size(&mut self, size: (u32, u32)) {
         self.sdq.config.width = size.0;
         self.sdq.config.height = size.1;
         self.surface.configure(&self.device, &self.config);
