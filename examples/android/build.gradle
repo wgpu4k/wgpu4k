@@ -8,7 +8,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "name.jinleili.wgpu"
+        applicationId "io.ygdrasil.wgpu"
 //        Android 7.1.1, API 25
 //        Android 9.0, API 28
         minSdk 28
@@ -55,7 +55,7 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
-    namespace 'name.jinleili.wgpu'
+    namespace 'io.ygdrasil.wgpu'
 }
 
 dependencies {

@@ -1,4 +1,4 @@
-package name.jinleili.wgpu
+package io.ygdrasil.wgpu
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -26,7 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import name.jinleili.wgpu.ui.theme.MyApplicationTheme
+import io.ygdrasil.wgpu.ui.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
 

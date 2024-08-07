@@ -1,4 +1,4 @@
-package name.jinleili.wgpu
+package io.ygdrasil.wgpu
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

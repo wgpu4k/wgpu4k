@@ -1,4 +1,4 @@
-package name.jinleili.wgpu
+package io.ygdrasil.wgpu
 
 import android.content.Context
 import android.graphics.Canvas

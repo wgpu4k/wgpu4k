@@ -1,4 +1,4 @@
-package name.jinleili.wgpu.ui.theme
+package io.ygdrasil.wgpu.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
