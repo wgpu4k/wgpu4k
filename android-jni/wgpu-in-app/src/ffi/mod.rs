@@ -27,7 +27,7 @@ pub fn createWgpuInstance(_: *mut JNIEnv, _: JClass) -> jlong {
 #[no_mangle]
 #[jni_fn("io.ygdrasil.wgpu.RustBridge")]
 pub fn createWgpuCanvas(env: *mut JNIEnv, _: JClass, wgpu: jlong, surface: jobject, idx: jint) -> jlong {
-    let wgpu = unsafe { wgpu as *const wgpu::Instance };
+    let wgpu = wgpu as *const wgpu::Instance;
     log_panics::init();
     android_logger::init_once(Config::default().with_max_level(LevelFilter::Error));
     let canvas = WgpuCanvas::new(AppSurface::new(wgpu, env as *mut _, surface), idx);
