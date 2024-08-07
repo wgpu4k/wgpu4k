@@ -1201,23 +1201,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "wgpu-in-app"
-version = "1.1.0"
-dependencies = [
- "android_logger",
- "bytemuck",
- "glam",
- "jni",
- "jni_fn",
- "log",
- "log-panics",
- "noise",
- "pollster",
- "rand",
- "wgpu-native",
-]
-
-[[package]]
 name = "wgpu-native"
 version = "0.0.0"
 dependencies = [
@@ -1242,6 +1225,23 @@ dependencies = [
  "bitflags 2.6.0",
  "js-sys",
  "web-sys",
+]
+
+[[package]]
+name = "wgpu4k"
+version = "1.1.0"
+dependencies = [
+ "android_logger",
+ "bytemuck",
+ "glam",
+ "jni",
+ "jni_fn",
+ "log",
+ "log-panics",
+ "noise",
+ "pollster",
+ "rand",
+ "wgpu-native",
 ]
 
 [[package]]

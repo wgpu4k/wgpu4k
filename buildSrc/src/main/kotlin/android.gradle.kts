@@ -9,4 +9,11 @@ android {
     defaultConfig {
         minSdk = 28
     }
+
+    sourceSets {
+        getByName("main") {
+            jniLibs.srcDirs("libs")
+        }
+
+    }
 }

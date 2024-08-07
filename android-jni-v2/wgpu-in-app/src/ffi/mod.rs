@@ -8,7 +8,7 @@ use log::{info, LevelFilter};
 use wgpu_native::wgpuCreateInstance;
 
 #[no_mangle]
-#[jni_fn("io.ygdrasil.wgpu.RustBridge")]
+#[jni_fn("io.ygdrasil.wgpu.internal.JniInterface")]
 pub fn createWgpuInstance2(_: *mut JNIEnv, _: JClass) -> jlong {
     log_panics::init();
     android_logger::init_once(Config::default().with_max_level(LevelFilter::Error));

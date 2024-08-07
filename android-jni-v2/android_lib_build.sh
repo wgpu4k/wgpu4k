@@ -22,8 +22,8 @@ fi
 
 echo "copy .so files to jniLibs folder"
 cd ../
-ARM64="../examples/android/libs/arm64-v8a"
-ARMv7a="../examples/android/libs/armeabi-v7a"
+ARM64="../wgpu4k/src/androidMain/libs/arm64-v8a"
+ARMv7a="../wgpu4k/src/androidMain/libs/armeabi-v7a"
 
 if [ ! -d "$ARM64" ]; then
     mkdir -p "$ARM64"
@@ -32,5 +32,5 @@ if [ ! -d "$ARMv7a" ]; then
     mkdir -p "$ARMv7a"
 fi
 
-cp target/aarch64-linux-android/${LIB_FOLDER}/libwgpu_in_app.so "${ARM64}/libwgpu_in_app.so"
+cp target/aarch64-linux-android/${LIB_FOLDER}/libwgpu4k.so "${ARM64}/libwgpu4k.so"
 # cp target/armv7-linux-androideabi/debug/libwgpu_in_app.so "${ARMv7a}/libwgpu_in_app.so"
