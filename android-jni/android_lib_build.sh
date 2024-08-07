@@ -19,8 +19,8 @@ fi
 
 echo "copy .so files to jniLibs folder"
 cd ../
-ARM64="Android/app/libs/arm64-v8a"
-ARMv7a="Android/app/libs/armeabi-v7a"
+ARM64="../examples/android/libs/arm64-v8a"
+ARMv7a="../examples/android/libs/armeabi-v7a"
 
 if [ ! -d "$ARM64" ]; then
     mkdir -p "$ARM64"

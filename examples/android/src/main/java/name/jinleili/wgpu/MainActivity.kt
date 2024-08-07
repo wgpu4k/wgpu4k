@@ -62,7 +62,7 @@ fun SurfaceCard() {
                 .padding(horizontal = 0.dp, vertical = 7.dp)
                 .fillMaxWidth()
         ) {
-            Text(text = "wgpu in Android App", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text(text = "wgpu4k Android", fontSize = 20.sp, fontWeight = FontWeight.Bold)
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
