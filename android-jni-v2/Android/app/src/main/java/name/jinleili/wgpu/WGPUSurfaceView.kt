@@ -13,16 +13,9 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     private var wgpuObj: Long = Long.MAX_VALUE
     private var idx: Int = 0
 
-    constructor(context: Context) : super(context) {
-    }
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-    }
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
-        context,
-        attrs,
-        defStyle
-    ) {
-    }
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
     init {
         // 将当前类设置为 SurfaceHolder 的回调接口代理
