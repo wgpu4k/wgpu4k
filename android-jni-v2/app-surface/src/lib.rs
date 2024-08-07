@@ -5,7 +5,7 @@ pub use touch::*;
 use wgpu::{Instance, Surface};
 
 mod touch;
-#[cfg_attr(target_os = "android", path = "android.rs")]
+
 mod app_surface;
 #[repr(C)]
 #[derive(Debug)]
