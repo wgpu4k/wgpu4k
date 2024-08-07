@@ -1,0 +1,38 @@
+[workspace]
+resolver = "2"
+members = ["wgpu-in-app", "app-surface", "cargo-so"]
+default-members = ["wgpu-in-app"]
+
+[workspace.dependencies]
+bytemuck = { version = "1.16", features = ["derive"] }
+cfg-if = "1.0"
+glam = "0.28"
+log = "0.4"
+noise = { version = "0.8", default-features = false }
+pollster = "0.3"
+rand = "0.7.2"
+wgpu = "22.1"
+# wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "445fa6019b47079c9d336881dbee1c3be3ed4c38" }
+# wgpu = { git = "https://github.com/jinleili/wgpu", branch="visionOS" }
+winit = { version = "=0.30.2" }
+web-time = "1"
+raw-window-handle = "0.6"
+env_logger = "0.11"
+
+# macOS, iOS
+libc = "0.2"
+objc = "0.2.7"
+core-graphics = "0.23.1"
+
+# android target
+android_logger = "0.14"
+jni = "0.21"
+jni_fn = "0.1"
+ndk-sys = "0.6"
+ash = "0.38"
+
+# wasm target
+web-sys = "0.3.69"
+wasm-bindgen = "0.2.87"
+js-sys = "0.3.69"
+wasm-bindgen-futures = "0.4.42"
