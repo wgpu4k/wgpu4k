@@ -10,11 +10,6 @@ crate-type = ["cdylib"]
 
 [features]
 default = []
-angle = ["wgpu/angle"]
-
-[dependencies.app_surface]
-path = "../app-surface"
-package = "app-surface"
 
 [dependencies]
 bytemuck.workspace = true
@@ -23,7 +18,6 @@ log.workspace = true
 noise.workspace = true
 pollster.workspace = true
 rand.workspace = true
-wgpu.workspace = true
 wgpu-native.workspace = true
 
 #Android
