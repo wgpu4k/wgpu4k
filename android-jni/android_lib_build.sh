@@ -8,9 +8,6 @@ LIB_FOLDER="debug"
 
 #cargo clean
 
-export BINDGEN_EXTRA_CLANG_ARGS="--target=arm64-apple-ios -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk"
-
-
 echo "build to Android target"
 cd wgpu-in-app
 if [ "${RELEASE_MODE}" = "--release" ]; then

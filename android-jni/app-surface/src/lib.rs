@@ -1,8 +1,7 @@
 use std::{ops::Deref, sync::Arc};
 
-use wgpu::{Instance, Surface};
-
 pub use app_surface::*;
+use wgpu::{Instance, Surface};
 
 mod app_surface;
 #[repr(C)]
