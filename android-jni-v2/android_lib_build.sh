@@ -6,6 +6,8 @@ set -e
 RELEASE_MODE=${1}
 LIB_FOLDER="debug"
 
+cargo clean
+
 echo "build to Android target"
 cd wgpu-in-app
 if [ "${RELEASE_MODE}" = "--release" ]; then

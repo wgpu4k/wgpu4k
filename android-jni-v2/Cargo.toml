@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["wgpu-in-app", "app-surface", "cargo-so"]
+members = ["wgpu-in-app", "app-surface"]
 default-members = ["wgpu-in-app"]
 
 [workspace.dependencies]
