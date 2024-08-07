@@ -16,6 +16,7 @@ winit = { version = "=0.30.2" }
 web-time = "1"
 raw-window-handle = "0.6"
 env_logger = "0.11"
+wgpu-native = {path = "../wgpu-native" }
 
 # android target
 android_logger = "0.14"

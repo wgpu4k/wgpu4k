@@ -6,7 +6,7 @@ edition = "2021"
 rust-version = "1.76"
 
 [lib]
-crate-type = ["rlib", "staticlib", "cdylib"]
+crate-type = ["cdylib"]
 
 [features]
 default = []
@@ -24,6 +24,7 @@ noise.workspace = true
 pollster.workspace = true
 rand.workspace = true
 wgpu.workspace = true
+wgpu-native.workspace = true
 
 #Android
 #[target.'cfg(target_os = "android")'.dependencies]

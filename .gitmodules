@@ -1,0 +1,3 @@
+[submodule "wgpu-native"]
+	path = android-jni/wgpu-native
+	url = https://github.com/gfx-rs/wgpu-native.git

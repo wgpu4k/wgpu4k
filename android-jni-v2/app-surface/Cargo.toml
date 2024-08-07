@@ -1,0 +1,34 @@
+[package]
+name = "app-surface"
+authors = ["jinleili"]
+description = "Integrate wgpu into your existing iOS and Android apps."
+edition = "2021"
+version = "1.1.0"
+rust-version = "1.76"
+repository = "https://github.com/jinleili/wgpu-in-app"
+keywords = ["android", "SurfaceView", "ios", "macos", "wgpu"]
+license = "MIT"
+
+[lib]
+crate-type = ["rlib"]
+
+[features]
+default = []
+webgl = ["wgpu/webgl"]
+mac_catalyst = []
+
+[dependencies]
+cfg-if.workspace = true
+log.workspace = true
+glam.workspace = true
+pollster.workspace = true
+wgpu.workspace = true
+
+#Android
+#[target.'cfg(target_os = "android")'.dependencies]
+android_logger.workspace = true
+jni.workspace = true
+ndk-sys.workspace = true
+raw-window-handle.workspace = true
+ash.workspace = true
+
