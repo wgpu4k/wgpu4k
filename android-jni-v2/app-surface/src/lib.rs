@@ -1,10 +1,7 @@
 use std::{ops::Deref, sync::Arc};
 
 pub use app_surface::*;
-pub use touch::*;
 use wgpu::{Instance, Surface};
-
-mod touch;
 
 mod app_surface;
 #[repr(C)]
@@ -46,11 +43,6 @@ pub trait SurfaceFrame {
     // After App view's size or orientation changed, need to resize surface.
     fn resize_surface(&mut self);
 
-    fn pintch(&mut self, _touch: Touch, _scale: f32) {}
-    fn touch(&mut self, _touch: Touch) {}
-    fn normalize_touch_point(&self, _touch_point_x: f32, _touch_point_y: f32) -> (f32, f32) {
-        unimplemented!()
-    }
     fn enter_frame(&mut self) {}
     fn get_current_frame_view(
         &self,
@@ -102,14 +94,6 @@ impl SurfaceFrame for AppSurface {
         self.sdq.config.width = size.0;
         self.sdq.config.height = size.1;
         self.surface.configure(&self.device, &self.config);
-    }
-
-    fn normalize_touch_point(&self, touch_point_x: f32, touch_point_y: f32) -> (f32, f32) {
-        let size = self.get_view_size();
-        (
-            touch_point_x * self.scale_factor / size.0 as f32,
-            touch_point_y * self.scale_factor / size.1 as f32,
-        )
     }
 
     fn get_current_frame_view(
