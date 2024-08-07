@@ -1,12 +1,28 @@
 use android_logger::Config;
-use app_surface::AppSurface;
 use jni::JNIEnv;
 use jni::objects::JClass;
 use jni::sys::{jint, jlong, jobject};
 use jni_fn::jni_fn;
 use log::{info, LevelFilter};
 
+use app_surface::AppSurface;
+
 use crate::wgpu_canvas::WgpuCanvas;
+
+#[no_mangle]
+#[jni_fn("name.jinleili.wgpu.RustBridge")]
+pub fn createWgpuInstance(_: *mut JNIEnv, _: JClass) -> jlong {
+    log_panics::init();
+    android_logger::init_once(Config::default().with_max_level(LevelFilter::Error));
+    let backends = wgpu::Backends::VULKAN;
+    let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
+        backends,
+        ..Default::default()
+    });
+
+    info!("WgpuCanvas instance!");
+    Box::into_raw(Box::new(instance)) as jlong
+}
 
 #[no_mangle]
 #[jni_fn("name.jinleili.wgpu.RustBridge")]

@@ -24,7 +24,8 @@ glam.workspace = true
 pollster.workspace = true
 wgpu.workspace = true
 
-[target.'cfg(target_os = "android")'.dependencies]
+#Android
+#[target.'cfg(target_os = "android")'.dependencies]
 android_logger.workspace = true
 jni.workspace = true
 ndk-sys.workspace = true

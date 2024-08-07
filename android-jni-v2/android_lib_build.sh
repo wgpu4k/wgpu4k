@@ -6,7 +6,7 @@ set -e
 RELEASE_MODE=${1}
 LIB_FOLDER="debug"
 
-cargo clean
+#cargo clean
 
 echo "build to Android target"
 cd wgpu-in-app

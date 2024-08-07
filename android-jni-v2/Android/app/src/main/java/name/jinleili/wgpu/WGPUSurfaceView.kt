@@ -32,6 +32,8 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     // 绘制表面被创建后，创建/重新创建 wgpu 对象
     override fun surfaceCreated(holder: SurfaceHolder) {
         holder.let { h ->
+            val wgpuIntance = rustBrige.createWgpuInstance()
+            Log.i("myApp", "isntance $wgpuIntance");
             wgpuObj = rustBrige.createWgpuCanvas(h.surface, this.idx)
             // SurfaceView 默认不会自动开始绘制，setWillNotDraw(false) 用于通知 App 已经准备好开始绘制了。
             setWillNotDraw(false)

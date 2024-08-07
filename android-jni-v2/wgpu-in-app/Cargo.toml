@@ -11,7 +11,6 @@ crate-type = ["rlib", "staticlib", "cdylib"]
 [features]
 default = []
 angle = ["wgpu/angle"]
-vulkan-portability = ["wgpu/vulkan-portability"]
 
 [dependencies.app_surface]
 path = "../app-surface"
@@ -26,7 +25,8 @@ pollster.workspace = true
 rand.workspace = true
 wgpu.workspace = true
 
-[target.'cfg(target_os = "android")'.dependencies]
+#Android
+#[target.'cfg(target_os = "android")'.dependencies]
 android_logger.workspace = true
 jni.workspace = true
 jni_fn.workspace = true

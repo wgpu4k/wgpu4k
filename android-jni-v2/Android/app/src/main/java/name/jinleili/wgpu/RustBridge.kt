@@ -7,6 +7,7 @@ class RustBridge {
         System.loadLibrary("wgpu_in_app")
     }
 
+    external fun createWgpuInstance(): Long
     external fun createWgpuCanvas(surface: Surface, idx: Int): Long
     external fun enterFrame(rustObj: Long)
     external fun changeExample(rustObj: Long, idx: Int)
