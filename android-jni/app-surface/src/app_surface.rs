@@ -12,24 +12,20 @@ pub struct AppSurface {
     pub native_window: Arc<NativeWindow>,
     pub scale_factor: f32,
     pub sdq: crate::SurfaceDeviceQueue,
-    pub instance: wgpu::Instance,
+    pub instance: *const wgpu::Instance,
     pub callback_to_app: Option<extern "C" fn(arg: i32)>,
 }
 
 impl AppSurface {
-    pub fn new(env: *mut JNIEnv, surface: jobject) -> Self {
+    pub fn new(wgpu: *const wgpu::Instance, env: *mut JNIEnv, surface: jobject) -> Self {
         let native_window = Arc::new(NativeWindow::new(env, surface));
-        let backends = wgpu::Backends::VULKAN;
-        let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
-            backends,
-            ..Default::default()
-        });
         let handle: Box<dyn wgpu::WindowHandle> = Box::new(native_window.clone());
-        let surface = instance
+        let wgpu_ref: &wgpu::Instance = unsafe { &*wgpu };
+        let surface = wgpu_ref
             .create_surface(wgpu::SurfaceTarget::Window(handle))
             .unwrap();
         let (adapter, device, queue) =
-            pollster::block_on(crate::request_device(&instance, &surface));
+            pollster::block_on(crate::request_device(wgpu_ref, &surface));
 
         let caps = surface.get_capabilities(&adapter);
 
@@ -55,7 +51,7 @@ impl AppSurface {
                 device: Arc::new(device),
                 queue: Arc::new(queue),
             },
-            instance,
+            instance: wgpu,
             callback_to_app: None,
         }
     }

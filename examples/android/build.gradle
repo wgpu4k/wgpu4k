@@ -9,8 +9,7 @@ android {
 
     defaultConfig {
         applicationId "io.ygdrasil.wgpu"
-//        Android 7.1.1, API 25
-//        Android 9.0, API 28
+
         minSdk 28
         targetSdk 33
         versionCode 1
