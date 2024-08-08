@@ -19,5 +19,6 @@ dependencies {
 	implementation(libs.coroutines)
 	implementation(libs.kotlin.multiplatform)
 	implementation(libs.android.library)
+	//implementation(libs.android.model.library)
 	implementation(libs.jreleaser.plugin)
 }

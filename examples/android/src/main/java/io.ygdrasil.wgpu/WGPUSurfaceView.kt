@@ -7,9 +7,11 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import io.ygdrasil.wgpu.internal.JniInterface
 
 class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     private var rustBrige = RustBridge()
+    private var jniInterface = JniInterface.Companion.instance
     private var wgpuObj: Long = Long.MAX_VALUE
     private var idx: Int = 0
 
