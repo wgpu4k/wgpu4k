@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-actual class RenderBundleEncoder : AutoCloseable {
+actual class RenderBundleEncoder(internal val handler: Long) : AutoCloseable {
 
     actual fun finish(descriptor: RenderBundleDescriptor): RenderBundle {
         TODO("Not yet implemented")

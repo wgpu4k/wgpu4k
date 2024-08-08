@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-actual class RenderPassEncoder : AutoCloseable {
+actual class RenderPassEncoder(internal val handler: Long) : AutoCloseable {
 
     actual fun end() {
         TODO("Not yet implemented")

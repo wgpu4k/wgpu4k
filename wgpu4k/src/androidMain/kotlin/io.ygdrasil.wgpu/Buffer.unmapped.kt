@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-actual class Buffer : AutoCloseable {
+actual class Buffer(internal val handler: Long) : AutoCloseable {
 
     actual val size: GPUSize64
         get() = TODO("Not yet implemented")

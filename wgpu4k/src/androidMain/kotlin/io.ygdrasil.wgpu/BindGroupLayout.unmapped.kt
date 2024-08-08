@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-actual class BindGroupLayout : AutoCloseable {
+actual class BindGroupLayout(internal val handler: Long) : AutoCloseable {
     actual override fun close() {
     }
 }

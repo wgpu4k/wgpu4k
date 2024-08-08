@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-actual class Surface : AutoCloseable {
+actual class Surface(internal val handler: Long) : AutoCloseable {
     actual val width: Int
         get() = TODO("Not yet implemented")
     actual val height: Int

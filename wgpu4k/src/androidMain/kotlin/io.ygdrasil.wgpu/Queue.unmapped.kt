@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-actual class Queue {
+actual class Queue(internal val handler: Long) {
 
     actual fun submit(commandsBuffer: List<CommandBuffer>) {
         TODO("Not yet implemented")

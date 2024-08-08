@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-actual class ComputePassEncoder : AutoCloseable {
+actual class ComputePassEncoder(internal val handler: Long) : AutoCloseable {
 
     actual fun setPipeline(pipeline: ComputePipeline) {
         TODO("Not yet implemented")

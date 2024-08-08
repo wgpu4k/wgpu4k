@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-actual class Adapter : AutoCloseable {
+actual class Adapter(internal val handler: Long) : AutoCloseable {
 
     actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? {
         TODO("Not yet implemented")
