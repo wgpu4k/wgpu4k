@@ -1,25 +1,46 @@
 package io.ygdrasil.wgpu
 
+import io.ygdrasil.wgpu.internal.JniInterface
+
 actual class RenderBundleEncoder(internal val handler: Long) : AutoCloseable {
 
     actual fun finish(descriptor: RenderBundleDescriptor): RenderBundle {
-        TODO("Not yet implemented")
+        return JniInterface.instance.wgpuRenderBundleEncoderFinish(handler, descriptor)
+            .let(::RenderBundle)
     }
 
     actual fun setBindGroup(index: GPUIndex32, bindGroup: BindGroup) {
-        TODO("Not yet implemented")
+        JniInterface.instance.wgpuRenderBundleEncoderSetBindGroup(
+            handler,
+            index,
+            bindGroup.handler,
+            0,
+            null
+        )
     }
 
     actual fun setPipeline(renderPipeline: RenderPipeline) {
-        TODO("Not yet implemented")
+        JniInterface.instance.wgpuRenderBundleEncoderSetPipeline(handler, renderPipeline.handler)
     }
 
     actual fun setVertexBuffer(slot: GPUIndex32, buffer: Buffer, offset: GPUSize64, size: GPUSize64) {
-        TODO("Not yet implemented")
+        JniInterface.instance.wgpuRenderBundleEncoderSetVertexBuffer(
+            handler,
+            slot,
+            buffer.handler,
+            offset,
+            size
+        )
     }
 
     actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
-        TODO("Not yet implemented")
+        JniInterface.instance.wgpuRenderBundleEncoderSetIndexBuffer(
+            handler,
+            buffer.handler,
+            indexFormat.value,
+            offset,
+            size
+        )
     }
 
     actual fun drawIndexed(
@@ -29,7 +50,14 @@ actual class RenderBundleEncoder(internal val handler: Long) : AutoCloseable {
         baseVertex: GPUSignedOffset32,
         firstInstance: GPUSize32
     ) {
-        TODO("Not yet implemented")
+        JniInterface.instance.wgpuRenderBundleEncoderDrawIndexed(
+            handler,
+            indexCount,
+            instanceCount,
+            firstIndex,
+            baseVertex,
+            firstInstance
+        )
     }
 
     actual fun draw(
@@ -38,10 +66,16 @@ actual class RenderBundleEncoder(internal val handler: Long) : AutoCloseable {
         firstVertex: GPUSize32,
         firstInstance: GPUSize32
     ) {
-        TODO("Not yet implemented")
+        JniInterface.instance.wgpuRenderBundleEncoderDraw(
+            handler,
+            vertexCount,
+            instanceCount,
+            firstVertex,
+            firstInstance
+        )
     }
 
     actual override fun close() {
-        TODO("Not yet implemented")
+        JniInterface.instance.wgpuRenderBundleEncoderRelease(handler)
     }
 }

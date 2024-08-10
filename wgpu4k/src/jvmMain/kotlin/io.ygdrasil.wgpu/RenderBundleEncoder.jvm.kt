@@ -6,6 +6,7 @@ import io.ygdrasil.wgpu.mapper.map
 import java.lang.foreign.MemorySegment
 
 actual class RenderBundleEncoder(internal val handler: MemorySegment) : AutoCloseable {
+
     actual fun finish(descriptor: RenderBundleDescriptor): RenderBundle  = confined { arena ->
         arena.map(descriptor)
             .let { wgpu_h.wgpuRenderBundleEncoderFinish(handler, it) }

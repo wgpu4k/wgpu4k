@@ -1,13 +1,15 @@
 package io.ygdrasil.wgpu
 
+import io.ygdrasil.wgpu.internal.JniInterface
+
 actual class RenderPassEncoder(internal val handler: Long) : AutoCloseable {
 
     actual fun end() {
-        TODO("Not yet implemented")
+        JniInterface.instance.wgpuRenderPassEncoderEnd(handler)
     }
 
     actual fun setPipeline(renderPipeline: RenderPipeline) {
-        TODO("Not yet implemented")
+        JniInterface.instance.wgpuRenderPassEncoderSetPipeline(handler, renderPipeline.handler)
     }
 
     actual fun draw(
@@ -16,27 +18,54 @@ actual class RenderPassEncoder(internal val handler: Long) : AutoCloseable {
         firstVertex: GPUSize32,
         firstInstance: GPUSize32
     ) {
-        TODO("Not yet implemented")
+        JniInterface.instance.wgpuRenderPassEncoderDraw(
+            handler,
+            vertexCount,
+            instanceCount,
+            firstVertex,
+            firstInstance
+        )
     }
 
     actual fun setBindGroup(index: Int, bindGroup: BindGroup) {
-        TODO("Not yet implemented")
+        JniInterface.instance.wgpuRenderPassEncoderSetBindGroup(
+            handler,
+            index,
+            bindGroup.handler,
+            0L,
+            null
+        )
     }
 
     actual fun setVertexBuffer(slot: Int, buffer: Buffer) {
-        TODO("Not yet implemented")
+        JniInterface.instance.wgpuRenderPassEncoderSetVertexBuffer(
+            handler,
+            slot,
+            buffer.handler,
+            0L,
+            buffer.size
+        )
     }
 
     actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
-        TODO("Not yet implemented")
+        JniInterface.instance.wgpuRenderPassEncoderSetIndexBuffer(
+            handler,
+            buffer.handler,
+            indexFormat.value,
+            offset,
+            size
+        )
     }
-
     actual fun executeBundles(bundles: List<RenderBundle>) {
-        TODO("Not yet implemented")
+        JniInterface.instance.wgpuRenderPassEncoderExecuteBundles(
+            handler,
+            bundles.size.toLong(),
+            bundles
+        )
     }
 
     actual override fun close() {
-        TODO("Not yet implemented")
+        JniInterface.instance.wgpuRenderPassEncoderRelease(handler)
     }
 
 }
