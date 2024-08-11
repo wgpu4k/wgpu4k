@@ -1,61 +1,80 @@
 package io.ygdrasil.wgpu
 
+import io.ygdrasil.wgpu.internal.JniInterface
+
 actual class Device(internal val handler: Long) : AutoCloseable {
-    actual val queue: Queue
-        get() = TODO("Not yet implemented")
+
+
+    actual val queue: Queue by lazy {
+        Queue(JniInterface.instance.wgpuDeviceGetQueue(handler))
+    }
 
     actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder {
-        TODO("Not yet implemented")
+        return JniInterface.instance.wgpuDeviceCreateCommandEncoder(handler, descriptor)
+            .let(::CommandEncoder)
     }
 
     actual fun createShaderModule(descriptor: ShaderModuleDescriptor): ShaderModule {
-        TODO("Not yet implemented")
+        return JniInterface.instance.wgpuDeviceCreateShaderModule(handler, descriptor)
+            .let(::ShaderModule)
     }
 
     actual fun createPipelineLayout(descriptor: PipelineLayoutDescriptor): PipelineLayout {
-        TODO("Not yet implemented")
+        return JniInterface.instance.wgpuDeviceCreatePipelineLayout(handler, descriptor)
+            .let(::PipelineLayout)
     }
 
     actual fun createRenderPipeline(descriptor: RenderPipelineDescriptor): RenderPipeline {
-        TODO("Not yet implemented")
+        return JniInterface.instance.wgpuDeviceCreateRenderPipeline(handler, descriptor)
+            .let(::RenderPipeline)
     }
 
     actual fun createBuffer(descriptor: BufferDescriptor): Buffer {
-        TODO("Not yet implemented")
-    }
-
-    actual fun createTexture(descriptor: TextureDescriptor): Texture {
-        TODO("Not yet implemented")
+        return JniInterface.instance.wgpuDeviceCreateBuffer(handler, descriptor)
+            .let(::Buffer)
     }
 
     actual fun createBindGroup(descriptor: BindGroupDescriptor): BindGroup {
-        TODO("Not yet implemented")
+        return JniInterface.instance.wgpuDeviceCreateBindGroup(handler, descriptor)
+            .let(::BindGroup)
+    }
+
+    actual fun createTexture(descriptor: TextureDescriptor): Texture {
+        return JniInterface.instance.wgpuDeviceCreateTexture(handler, descriptor)
+            .let(::Texture)
     }
 
     actual fun createSampler(descriptor: SamplerDescriptor): Sampler {
-        TODO("Not yet implemented")
+        return JniInterface.instance.wgpuDeviceCreateSampler(handler, descriptor)
+            .let(::Sampler)
     }
 
     actual fun createComputePipeline(descriptor: ComputePipelineDescriptor): ComputePipeline {
-        TODO("Not yet implemented")
+        return JniInterface.instance.wgpuDeviceCreateComputePipeline(handler, descriptor)
+            .let(::ComputePipeline)
     }
 
     actual fun createBindGroupLayout(descriptor: BindGroupLayoutDescriptor): BindGroupLayout {
-        TODO("Not yet implemented")
+        return JniInterface.instance.wgpuDeviceCreateBindGroupLayout(handler, descriptor)
+            .let(::BindGroupLayout)
     }
 
     actual fun createRenderBundleEncoder(descriptor: RenderBundleEncoderDescriptor): RenderBundleEncoder {
-        TODO("Not yet implemented")
+        return JniInterface.instance.wgpuDeviceCreateRenderBundleEncoder(handler, descriptor)
+            .let(::RenderBundleEncoder)
     }
 
     actual fun createQuerySet(descriptor: QuerySetDescriptor): QuerySet {
-        TODO("Not yet implemented")
+        return JniInterface.instance.wgpuDeviceCreateQuerySet(handler, descriptor)
+            .let(::QuerySet)
     }
 
     actual suspend fun poll() {
+        JniInterface.instance.wgpuDevicePoll(handler, 1)
     }
 
     actual override fun close() {
+        JniInterface.instance.wgpuDeviceRelease(handler)
     }
 
 }

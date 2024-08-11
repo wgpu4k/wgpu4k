@@ -1,23 +1,35 @@
 package io.ygdrasil.wgpu
 
+import io.ygdrasil.wgpu.internal.JniInterface
+
 actual class CommandEncoder(internal val handler: Long) : AutoCloseable {
+
     actual fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder {
-        TODO("Not yet implemented")
+        return JniInterface.instance.wgpuCommandEncoderBeginRenderPass(handler, descriptor)
+            .let { RenderPassEncoder(it) }
     }
 
     actual fun finish(): CommandBuffer {
-        TODO("Not yet implemented")
+        return JniInterface.instance.wgpuCommandEncoderFinish(handler)
+            .let { CommandBuffer(it) }
     }
 
     actual fun copyTextureToTexture(
         source: ImageCopyTexture,
         destination: ImageCopyTexture,
-        copySize: Size3D,
+        copySize: Size3D
     ) {
+        JniInterface.instance.wgpuCommandEncoderCopyTextureToTexture(
+            handler,
+            source,
+            destination,
+            copySize
+        )
     }
 
     actual fun beginComputePass(descriptor: ComputePassDescriptor?): ComputePassEncoder {
-        TODO("Not yet implemented")
+        return JniInterface.instance.wgpuCommandEncoderBeginComputePass(handler, descriptor)
+            .let { ComputePassEncoder(it) }
     }
 
     actual fun copyTextureToBuffer(
@@ -25,6 +37,13 @@ actual class CommandEncoder(internal val handler: Long) : AutoCloseable {
         destination: ImageCopyBuffer,
         copySize: Size3D,
     ) {
+
+        JniInterface.instance.wgpuCommandEncoderCopyTextureToBuffer(
+            handler,
+            source,
+            destination,
+            copySize
+        )
     }
 
     actual fun copyBufferToTexture(
@@ -32,9 +51,17 @@ actual class CommandEncoder(internal val handler: Long) : AutoCloseable {
         destination: ImageCopyTexture,
         copySize: Size3D,
     ) {
+
+        JniInterface.instance.wgpuCommandEncoderCopyBufferToTexture(
+            handler,
+            source,
+            destination,
+            copySize
+        )
     }
+
 
     actual override fun close() {
+        JniInterface.instance.wgpuCommandEncoderRelease(handler)
     }
-
 }
