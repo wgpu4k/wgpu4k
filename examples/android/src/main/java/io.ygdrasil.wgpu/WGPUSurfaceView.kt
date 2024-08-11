@@ -36,7 +36,7 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
         holder.let { h ->
             val wgpuIntance = rustBrige.createWgpuInstance()
             wgpuObj = rustBrige.createWgpuCanvas(wgpuIntance, h.surface, this.idx)
-            Log.i("myApp", "instances $wgpuIntance");
+            Log.i("myApp", "instances $wgpuIntance")
             // SurfaceView 默认不会自动开始绘制，setWillNotDraw(false) 用于通知 App 已经准备好开始绘制了。
             setWillNotDraw(false)
         }
@@ -58,7 +58,7 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
 //        super.surfaceRedrawNeededAsync(holder, drawingFinished)
 //    }
 
-    override fun draw(canvas: Canvas?) {
+    override fun draw(canvas: Canvas) {
         super.draw(canvas)
         // 考虑到边界情况，这个条件判断不能省略
         if (wgpuObj == Long.MAX_VALUE) {

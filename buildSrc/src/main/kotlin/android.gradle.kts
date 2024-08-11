@@ -9,7 +9,7 @@ val jniLibsPath = project.file("src")
 
 android {
     namespace = "io.ygdrasil.wgpu4k"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 28
