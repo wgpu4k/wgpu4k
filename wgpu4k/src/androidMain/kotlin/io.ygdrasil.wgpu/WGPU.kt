@@ -3,7 +3,7 @@ package io.ygdrasil.wgpu
 import android.view.SurfaceHolder
 import io.ygdrasil.wgpu.internal.JniInterface
 
-class WGPU(public val handler: Long) : AutoCloseable {
+class WGPU(internal val handler: Long) : AutoCloseable {
 
     override fun close() {
         JniInterface.instance.wgpuInstanceRelease(handler)
@@ -17,9 +17,9 @@ class WGPU(public val handler: Long) : AutoCloseable {
             .let(::Adapter)
     }
 
-    fun getSurface(surfaceHolder: SurfaceHolder): Surface {
+    fun getSurface(surfaceHolder: SurfaceHolder, width: Int, height: Int): Surface {
         return JniInterface.instance.wgpuInstanceCreateSurface(handler, surfaceHolder.surface)
-            .let { Surface(it, 0, 0) }
+            .let { Surface(it, width, height) }
     }
 
     companion object {

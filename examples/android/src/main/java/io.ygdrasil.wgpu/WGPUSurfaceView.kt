@@ -50,7 +50,7 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
         MainScope().launch {
             withAndroidContext(context) {
-                val androidContext = androidContextRenderer(surfaceHolder)
+                val androidContext = androidContextRenderer(surfaceHolder, width, height)
                 application = createApplication(androidContext.wgpuContext)
             }
         }

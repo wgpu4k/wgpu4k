@@ -35,6 +35,16 @@ class JniInterface  {
     external fun wgpuSurfaceGetCurrentTexture(handler: Long): Long
     external fun wgpuSurfacePresent(handler: Long)
     external fun wgpuSurfaceRelease(handler: Long)
+    external fun wgpuSurfaceGetFormat(handler: Long, adapter: Long) :  Int
+    external fun wgpuSurfaceConfigure(
+        handler: Long,
+        device: Long,
+        usage: Int,
+        format: Int,
+        alphaMode: Int,
+        width: Int,
+        height: Int
+    )
 
     /*** Sampler ***/
     external fun wgpuSamplerRelease(handler: Long)

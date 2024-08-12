@@ -1114,6 +1114,7 @@ dependencies = [
 name = "wgpu-native"
 version = "0.0.0"
 dependencies = [
+ "android_logger",
  "bindgen",
  "cfg_aliases",
  "log",
