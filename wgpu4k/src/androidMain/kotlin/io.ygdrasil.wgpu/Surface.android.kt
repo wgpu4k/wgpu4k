@@ -2,7 +2,7 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.JniInterface
 
-actual class Surface(public val handler: Long, actual val width: Int, actual val height: Int) : AutoCloseable {
+actual class Surface(internal val handler: Long, actual val width: Int, actual val height: Int) : AutoCloseable {
 
     actual val textureFormat: TextureFormat
         get() = TODO("Not yet implemented")
