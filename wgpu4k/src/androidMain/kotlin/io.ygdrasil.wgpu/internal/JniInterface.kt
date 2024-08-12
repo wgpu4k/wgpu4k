@@ -10,10 +10,10 @@ class JniInterface  {
     external fun createWgpuInstance2(): Long
 
     /*** Instance ***/
-    external fun wgpuInstanceRelease(handler: Long)
-    external fun wgpuInstanceRequestAdapter(handler: Long, powerPreference: PowerPreference?): Long
     external fun wgpuCreateInstance(backend: WGPUInstanceBackend?): Long
+    external fun wgpuInstanceRequestAdapter(handler: Long, powerPreference: PowerPreference?): Long
     external fun wgpuInstanceCreateSurface(handler: Long, androidSurface: android.view.Surface): Long
+    external fun wgpuInstanceRelease(handler: Long)
 
     /*** Texture ***/
     external fun wgpuTextureGetWidth(handler: Long): GPUIntegerCoordinateOut

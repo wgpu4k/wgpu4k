@@ -15,7 +15,7 @@ import kotlinx.coroutines.future.future
 import kotlinx.coroutines.launch
 
 class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
-    private var rustBrige = RustBridge()
+    //private var rustBrige = RustBridge()
     private var wgpuObj: Long = Long.MAX_VALUE
     private var idx: Int = 0
     private var application: Application? = null
@@ -49,6 +49,7 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
 
     override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
         MainScope().launch {
+            if (application != null) return@launch
             withAndroidContext(context) {
                 val androidContext = androidContextRenderer(surfaceHolder, width, height)
                 application = createApplication(androidContext.wgpuContext)
@@ -63,7 +64,7 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         application = null
         if (wgpuObj != Long.MAX_VALUE) {
-            rustBrige.dropWgpuCanvas(wgpuObj)
+            //rustBrige.dropWgpuCanvas(wgpuObj)
             wgpuObj = Long.MAX_VALUE
         }
     }
@@ -80,14 +81,14 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
         if (wgpuObj == Long.MAX_VALUE) {
             return
         }
-        rustBrige.enterFrame(wgpuObj)
+        //rustBrige.enterFrame(wgpuObj)
 
         invalidate()
     }
 
     fun changeExample(index: Int) {
         if (wgpuObj != Long.MAX_VALUE && this.idx != index) {
-            rustBrige.changeExample(wgpuObj, index)
+            //rustBrige.changeExample(wgpuObj, index)
             this.idx = index
         }
     }

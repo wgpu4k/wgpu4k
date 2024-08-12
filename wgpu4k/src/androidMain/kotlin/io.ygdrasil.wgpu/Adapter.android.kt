@@ -8,7 +8,8 @@ actual class Adapter(internal val handler: Long) : AutoCloseable {
         return JniInterface.instance.wgpuAdapterRequestDevice(
             handler,
             descriptor
-        ).let { Device(it) }
+        ).takeIf { it != 0L }
+            ?.let { Device(it) }
     }
 
     actual override fun close() {

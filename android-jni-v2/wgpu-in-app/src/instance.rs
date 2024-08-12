@@ -61,7 +61,7 @@ pub unsafe fn wgpuInstanceRelease(_: JNIEnv, _: JClass, wgpu: jlong) {
 #[jni_fn("io.ygdrasil.wgpu.internal.JniInterface")]
 pub unsafe fn wgpuInstanceCreateSurface(env: *mut JNIEnv, _: JClass, wgpu: jlong, surface: jobject) -> jlong {
     let wgpu = wgpu as *const native::WGPUInstance;
-    let native_window = ndk_sys::ANativeWindow_fromSurface(env as *mut _, surface as *mut _);
+    let native_window = ndk_sys::ANativeWindow_fromSurface(env as *mut _, surface);
 
     let next_in_chain = native::WGPUSurfaceDescriptorFromAndroidNativeWindow {
         chain: WGPUChainedStruct {
@@ -109,11 +109,15 @@ pub unsafe fn wgpuInstanceRequestAdapter(mut env: JNIEnv, _: JClass, wgpu: jlong
 }
 
 unsafe extern "C" fn my_adapter_callback(
-    _: native::WGPURequestAdapterStatus,
+    status: native::WGPURequestAdapterStatus,
     adapter: native::WGPUAdapter,
-    _: *const ::std::os::raw::c_char,
+    message: *const ::std::os::raw::c_char,
     userdata: *mut ::std::os::raw::c_void,
 ) {
+    if status != native::WGPURequestAdapterStatus_Success {
+        panic!("my_adapter_callback with status error and message {}", crate::c_char_ptr_to_string(message));
+    }
+
     let userdata = userdata as *mut native::WGPUAdapter;
     *userdata = adapter;
 }

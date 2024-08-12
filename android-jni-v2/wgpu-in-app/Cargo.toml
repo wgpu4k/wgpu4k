@@ -24,4 +24,3 @@ jni.workspace = true
 jni_fn.workspace = true
 ndk-sys.workspace = true
 log-panics = "*"
-

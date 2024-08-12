@@ -2,6 +2,8 @@ use jni::objects::{JClass, JObject};
 use jni::sys::jlong;
 use jni::JNIEnv;
 use jni_fn::jni_fn;
+use log::error;
+use std::ffi::CStr;
 use std::mem::MaybeUninit;
 use wgpu_native::native;
 
@@ -19,11 +21,16 @@ pub unsafe fn wgpuAdapterRequestDevice(_: JNIEnv, _: JClass, adapter: jlong, _: 
 }
 
 unsafe extern "C" fn my_device_callback(
-    _: native::WGPURequestDeviceStatus,
+    status: native::WGPURequestDeviceStatus,
     device: native::WGPUDevice,
-    _: *const ::std::os::raw::c_char,
-    userdata: *mut ::std::os::raw::c_void,
+    message: *const std::os::raw::c_char,
+    userdata: *mut std::os::raw::c_void,
 ) {
+    if status == native::WGPURequestDeviceStatus_Error {
+        panic!("my_device_callback with status error and message {}", crate::c_char_ptr_to_string(message));
+    }
+    error!("my_device_callback with status {}", status);
     let userdata = userdata as *mut native::WGPUDevice;
     *userdata = device;
 }
+
