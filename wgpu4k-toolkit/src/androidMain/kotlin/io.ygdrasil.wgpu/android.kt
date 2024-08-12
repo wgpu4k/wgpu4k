@@ -9,12 +9,21 @@ suspend fun glfwContextRenderer(surfaceHolder: SurfaceHolder, width: Int? = null
     val device = adapter.requestDevice() ?: error("fail to get device")
 
     println("device ${device.handler}")
-    TODO()
+
+    val renderingContext = when (deferredRendering) {
+        true -> TextureRenderingContext(width ?: error("width must be set on deferred rendering"), height ?: error("height must be set on deferred rendering"), TextureFormat.rgba8unormsrgb, device)
+        false -> SurfaceRenderingContext(surface)
+    }
+
+    return AndroidContext(
+        surfaceHolder,
+        WGPUContext(surface, adapter, device, renderingContext)
+    )
 }
 
 
 class AndroidContext(
-    val surface: Surface,
+    val surfaceHolder: SurfaceHolder,
     val wgpuContext: WGPUContext,
 ) : AutoCloseable {
 
