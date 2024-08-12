@@ -28,7 +28,7 @@ class WGPU(public val handler: Long) : AutoCloseable {
     }
 }
 
-enum class WGPUInstanceBackend(val myvalue: Int) {
+enum class WGPUInstanceBackend(val value: Int) {
 
     All(0x00000000),
     Vulkan(1),
@@ -40,9 +40,4 @@ enum class WGPUInstanceBackend(val myvalue: Int) {
     Primary(Vulkan.value or Metal.value or DX12.value or BrowserWebGPU.value),
     Secondary(GL.value or DX11.value);
 
-    val value: Int
-        get() {
-            println("hey there $myvalue")
-            return myvalue
-        }
 }

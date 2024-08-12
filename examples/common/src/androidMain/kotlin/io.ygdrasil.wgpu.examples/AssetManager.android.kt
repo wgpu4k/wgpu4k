@@ -2,6 +2,8 @@ package io.ygdrasil.wgpu.examples
 
 import io.ygdrasil.wgpu.ImageBitmapHolder
 import korlibs.image.bitmap.Bitmap32
+import korlibs.io.file.Vfs
+import korlibs.io.file.std.AndroidResourcesVfs
 
 actual fun Bitmap32.toBitmapHolder(): ImageBitmapHolder {
     return ImageBitmapHolder(
@@ -26,3 +28,5 @@ private fun convertIntArrayToByteArray(intArray: IntArray): ByteArray {
 
     return byteArray
 }
+
+actual var customVfs: Vfs = AndroidResourcesVfs()

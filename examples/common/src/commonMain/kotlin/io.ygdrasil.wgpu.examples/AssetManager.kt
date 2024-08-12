@@ -5,8 +5,11 @@ import io.ygdrasil.wgpu.examples.helper.glb.GLTF2
 import io.ygdrasil.wgpu.examples.helper.glb.readGLB
 import korlibs.image.bitmap.Bitmap32
 import korlibs.image.format.readBitmap
+import korlibs.io.file.Vfs
 import korlibs.io.file.std.resourcesVfs
 import korlibs.io.file.std.rootLocalVfs
+
+expect var customVfs: Vfs
 
 interface AssetManager {
 
@@ -25,13 +28,13 @@ interface AssetManager {
 }
 
 suspend fun bitmapFrom(path: String): ImageBitmapHolder = (resourcesVfs[path]
-    .takeIfExists() ?: rootLocalVfs[path])
+    .takeIfExists() ?: rootLocalVfs[path].takeIfExists() ?: customVfs[path])
     .readBitmap()
     .toBMP32()
     .toBitmapHolder()
 
 suspend fun glt2From(path: String): GLTF2 = (resourcesVfs[path]
-    .takeIfExists() ?: rootLocalVfs[path])
+    .takeIfExists() ?: rootLocalVfs[path].takeIfExists() ?: customVfs[path])
     .readGLB()
 
 expect fun Bitmap32.toBitmapHolder(): ImageBitmapHolder

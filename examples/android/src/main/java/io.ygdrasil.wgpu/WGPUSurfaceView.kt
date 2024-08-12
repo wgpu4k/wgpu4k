@@ -7,10 +7,14 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import io.ygdrasil.wgpu.examples.genericAssetManager
+import korlibs.io.android.withAndroidContext
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.future.future
 
 class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     private var rustBrige = RustBridge()
-    private val wgpu = WGPU.createInstance(null)
+    private val wgpu = WGPU.createInstance()
     private var wgpuObj: Long = Long.MAX_VALUE
     private var idx: Int = 0
 
@@ -19,14 +23,23 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
     init {
-        Log.e("backend", "${WGPUInstanceBackend.Metal.value}")
-        Log.e("na", "${wgpu.handler}")
-        // 将当前类设置为 SurfaceHolder 的回调接口代理
         holder.addCallback(this)
         // The only way to set SurfaceView background color to transparent:
         // https://groups.google.com/g/android-developers/c/jYjvm7ItpXQ?pli=1
         this.setZOrderOnTop(true)
         holder.setFormat(PixelFormat.TRANSPARENT)
+
+        val assetManager = MainScope().future {
+            try {
+                println("will load asset manager")
+                withAndroidContext(context) {
+                    genericAssetManager("/")
+                        .also { println("test ${it.boxMesh}") }
+                }
+            } catch (e: Throwable) {
+                e.printStackTrace()
+            }
+        }
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {

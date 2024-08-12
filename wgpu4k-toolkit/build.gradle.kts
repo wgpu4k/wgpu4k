@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
+    if (isAndroidConfigured) id("android")
     id("publish")
 }
 
@@ -34,6 +35,7 @@ kotlin {
         nodejs()
     }
     jvm()
+    if (isAndroidConfigured) androidTarget()
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {

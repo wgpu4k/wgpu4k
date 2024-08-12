@@ -4,6 +4,15 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 
+val commonResourcesFile = getCommonProject()
+    .projectDir
+    .resolve("src")
+    .resolve("commonMain")
+    .resolve("resources")
+
+assert(commonResourcesFile.isDirectory) { "$commonResourcesFile is not a directory" }
+assert(commonResourcesFile.isNotEmpty) { "$commonResourcesFile is empty" }
+
 android {
     compileSdk = 35
 
@@ -23,6 +32,7 @@ android {
     sourceSets {
         getByName("main") {
             jniLibs.srcDirs("libs")
+            assets.srcDirs(commonResourcesFile.absolutePath)
         }
     }
 
@@ -59,7 +69,7 @@ android {
 
 dependencies {
 
-    implementation(projects.wgpu4k)
+    implementation(projects.examples.common)
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.compose.ui:ui:1.2.0")
     implementation("androidx.compose.material:material:1.2.0")
@@ -72,3 +82,9 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.2.0")
     debugImplementation("androidx.compose.ui:ui-tooling:1.2.0")
 }
+
+fun getCommonProject() = projects.examples.common.identityPath.path
+    ?.let(::project) ?: error("Could not find project path")
+
+val File.isNotEmpty: Boolean
+    get() = this.listFiles()?.isNotEmpty() ?: false
