@@ -13,11 +13,8 @@ default = []
 
 [dependencies]
 bytemuck.workspace = true
-glam.workspace = true
 log.workspace = true
-noise.workspace = true
 pollster.workspace = true
-rand.workspace = true
 wgpu-native.workspace = true
 
 #Android

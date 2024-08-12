@@ -2,7 +2,7 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.JniInterface
 
-class WGPU(internal val handler: Long) : AutoCloseable {
+class WGPU(public val handler: Long) : AutoCloseable {
 
     override fun close() {
         JniInterface.instance.wgpuInstanceRelease(handler)
@@ -20,9 +20,9 @@ class WGPU(internal val handler: Long) : AutoCloseable {
     
     companion object {
         
-        fun createInstance(backend: WGPUInstanceBackend? = null): WGPU? {
+        fun createInstance(backend: WGPUInstanceBackend? = null): WGPU {
             return JniInterface.instance.wgpuCreateInstance(backend)
-                ?.let { WGPU(it) }
+                .let { WGPU(it) }
         }
 
     }

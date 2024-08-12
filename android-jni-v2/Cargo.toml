@@ -6,12 +6,8 @@ default-members = ["wgpu-in-app"]
 [workspace.dependencies]
 bytemuck = { version = "1.16", features = ["derive"] }
 cfg-if = "1.0"
-glam = "0.28"
 log = "0.4"
-noise = { version = "0.8", default-features = false }
 pollster = "0.3"
-rand = "0.7.2"
-wgpu = "22.1"
 winit = { version = "=0.30.2" }
 web-time = "1"
 raw-window-handle = "0.6"

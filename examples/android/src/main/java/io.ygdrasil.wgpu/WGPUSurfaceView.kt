@@ -11,7 +11,7 @@ import io.ygdrasil.wgpu.internal.JniInterface
 
 class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     private var rustBrige = RustBridge()
-    private var jniInterface = JniInterface.Companion.instance
+    private val wgpu = WGPU.createInstance(WGPUInstanceBackend.DX12)
     private var wgpuObj: Long = Long.MAX_VALUE
     private var idx: Int = 0
 
@@ -20,6 +20,7 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
     init {
+        Log.e("na", "${wgpu.handler}")
         // 将当前类设置为 SurfaceHolder 的回调接口代理
         holder.addCallback(this)
         // The only way to set SurfaceView background color to transparent:
@@ -35,9 +36,11 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     override fun surfaceCreated(holder: SurfaceHolder) {
         holder.let { h ->
             val wgpuIntance = rustBrige.createWgpuInstance()
-            wgpuObj = rustBrige.createWgpuCanvas(wgpuIntance, h.surface, this.idx)
-            Log.i("myApp", "instances $wgpuIntance")
+            val instance2 = WGPU.createInstance(WGPUInstanceBackend.DX12)
+            //wgpuObj = rustBrige.createWgpuCanvas(wgpuIntance, h.surface, this.idx)
+            Log.i("myApp", "instances $wgpuIntance ${instance2.handler}")
             // SurfaceView 默认不会自动开始绘制，setWillNotDraw(false) 用于通知 App 已经准备好开始绘制了。
+            instance2.close()
             setWillNotDraw(false)
         }
     }
