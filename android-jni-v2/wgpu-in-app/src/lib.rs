@@ -3,7 +3,7 @@ use jni::objects::{JClass, JObject};
 use jni::sys::jlong;
 use jni::JNIEnv;
 use jni_fn::jni_fn;
-use log::{info, LevelFilter};
+use log::{error, info, LevelFilter};
 use std::ptr::null;
 
 use wgpu_native::{native, wgpuCreateInstance};
@@ -15,17 +15,20 @@ pub unsafe fn wgpuCreateInstance(mut env: JNIEnv, _: JClass, backendHolder: JObj
     android_logger::init_once(Config::default().with_max_level(LevelFilter::Error));
 
     let instance = if backendHolder.is_null() {
+        error!("backendHolder is null!");
         wgpuCreateInstance(None)
     } else {
         let backend = env.call_method(backendHolder, "getValue", "()I", &[])
-            .unwrap().i().unwrap() as u32;
+            .unwrap().i().unwrap();
+
+        error!("backendHolder value is {}", backend);
 
         let next_in_chain = native::WGPUInstanceExtras {
             chain: native::WGPUChainedStruct {
                 next: null(),
                 sType: native::WGPUSType_InstanceExtras,
             },
-            backends: backend,
+            backends: backend as u32,
             flags: 0,
             dx12ShaderCompiler: 0,
             gles3MinorVersion: 0,
@@ -40,7 +43,7 @@ pub unsafe fn wgpuCreateInstance(mut env: JNIEnv, _: JClass, backendHolder: JObj
         wgpuCreateInstance(Some(&descriptor))
     };
 
-    info!("WgpuCanvas instance!");
+    error!("WgpuCanvas instance!");
     Box::into_raw(Box::new(instance)) as jlong
 }
 

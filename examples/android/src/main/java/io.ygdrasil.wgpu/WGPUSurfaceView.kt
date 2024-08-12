@@ -7,11 +7,10 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import io.ygdrasil.wgpu.internal.JniInterface
 
 class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     private var rustBrige = RustBridge()
-    private val wgpu = WGPU.createInstance(WGPUInstanceBackend.DX12)
+    private val wgpu = WGPU.createInstance(null)
     private var wgpuObj: Long = Long.MAX_VALUE
     private var idx: Int = 0
 
@@ -20,6 +19,7 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
     init {
+        Log.e("backend", "${WGPUInstanceBackend.Metal.value}")
         Log.e("na", "${wgpu.handler}")
         // 将当前类设置为 SurfaceHolder 的回调接口代理
         holder.addCallback(this)
@@ -35,12 +35,9 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     // 绘制表面被创建后，创建/重新创建 wgpu 对象
     override fun surfaceCreated(holder: SurfaceHolder) {
         holder.let { h ->
-            val wgpuIntance = rustBrige.createWgpuInstance()
-            val instance2 = WGPU.createInstance(WGPUInstanceBackend.DX12)
             //wgpuObj = rustBrige.createWgpuCanvas(wgpuIntance, h.surface, this.idx)
-            Log.i("myApp", "instances $wgpuIntance ${instance2.handler}")
+            Log.i("myApp", "instances")
             // SurfaceView 默认不会自动开始绘制，setWillNotDraw(false) 用于通知 App 已经准备好开始绘制了。
-            instance2.close()
             setWillNotDraw(false)
         }
     }
