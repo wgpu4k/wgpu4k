@@ -1,5 +1,6 @@
 package io.ygdrasil.wgpu
 
+import android.view.SurfaceHolder
 import io.ygdrasil.wgpu.internal.JniInterface
 
 class WGPU(public val handler: Long) : AutoCloseable {
@@ -12,12 +13,15 @@ class WGPU(public val handler: Long) : AutoCloseable {
         surface: Surface,
         powerPreference: PowerPreference? = null
     ): Adapter {
-
-        JniInterface.instance.wgpuInstanceRequestAdapter(handler, null, null, null)
-
-        return Adapter(0L)
+        return JniInterface.instance.wgpuInstanceRequestAdapter(handler, powerPreference)
+            .let(::Adapter)
     }
-    
+
+    fun getSurface(surfaceHolder: SurfaceHolder): Surface {
+        return JniInterface.instance.wgpuInstanceCreateSurface(handler, surfaceHolder.surface)
+            .let { Surface(it, 0, 0) }
+    }
+
     companion object {
         
         fun createInstance(backend: WGPUInstanceBackend? = null): WGPU {

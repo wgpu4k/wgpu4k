@@ -30,6 +30,7 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
         holder.setFormat(PixelFormat.TRANSPARENT)
 
         val assetManager = MainScope().future {
+
             try {
                 println("will load asset manager")
                 withAndroidContext(context) {
@@ -46,8 +47,12 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     }
 
     // 绘制表面被创建后，创建/重新创建 wgpu 对象
-    override fun surfaceCreated(holder: SurfaceHolder) {
-        holder.let { h ->
+    override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
+        MainScope().future {
+            glfwContextRenderer(surfaceHolder)
+        }
+
+        surfaceHolder.let { h ->
             //wgpuObj = rustBrige.createWgpuCanvas(wgpuIntance, h.surface, this.idx)
             Log.i("myApp", "instances")
             // SurfaceView 默认不会自动开始绘制，setWillNotDraw(false) 用于通知 App 已经准备好开始绘制了。

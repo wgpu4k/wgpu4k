@@ -2,7 +2,7 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.JniInterface
 
-actual class Device(internal val handler: Long) : AutoCloseable {
+actual class Device(val handler: Long) : AutoCloseable {
 
 
     actual val queue: Queue by lazy {

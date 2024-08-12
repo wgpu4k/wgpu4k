@@ -1,35 +1,6 @@
 package io.ygdrasil.wgpu.internal
 
-import io.ygdrasil.wgpu.BindGroupDescriptor
-import io.ygdrasil.wgpu.BindGroupLayoutDescriptor
-import io.ygdrasil.wgpu.BufferDescriptor
-import io.ygdrasil.wgpu.CommandEncoderDescriptor
-import io.ygdrasil.wgpu.ComputePassDescriptor
-import io.ygdrasil.wgpu.ComputePipelineDescriptor
-import io.ygdrasil.wgpu.DeviceDescriptor
-import io.ygdrasil.wgpu.GPUFlagsConstant
-import io.ygdrasil.wgpu.GPUIndex32
-import io.ygdrasil.wgpu.GPUIntegerCoordinateOut
-import io.ygdrasil.wgpu.GPUSignedOffset32
-import io.ygdrasil.wgpu.GPUSize32
-import io.ygdrasil.wgpu.GPUSize32Out
-import io.ygdrasil.wgpu.GPUSize64
-import io.ygdrasil.wgpu.ImageCopyBuffer
-import io.ygdrasil.wgpu.ImageCopyTexture
-import io.ygdrasil.wgpu.ImageCopyTextureTagged
-import io.ygdrasil.wgpu.PipelineLayoutDescriptor
-import io.ygdrasil.wgpu.QuerySetDescriptor
-import io.ygdrasil.wgpu.RenderBundle
-import io.ygdrasil.wgpu.RenderBundleDescriptor
-import io.ygdrasil.wgpu.RenderBundleEncoderDescriptor
-import io.ygdrasil.wgpu.RenderPassDescriptor
-import io.ygdrasil.wgpu.RenderPipelineDescriptor
-import io.ygdrasil.wgpu.SamplerDescriptor
-import io.ygdrasil.wgpu.ShaderModuleDescriptor
-import io.ygdrasil.wgpu.Size3D
-import io.ygdrasil.wgpu.TextureDescriptor
-import io.ygdrasil.wgpu.TextureViewDescriptor
-import io.ygdrasil.wgpu.WGPUInstanceBackend
+import io.ygdrasil.wgpu.*
 
 class JniInterface  {
     init {
@@ -40,13 +11,9 @@ class JniInterface  {
 
     /*** Instance ***/
     external fun wgpuInstanceRelease(handler: Long)
-    external fun wgpuInstanceRequestAdapter(
-        handler: Long,
-        nothing: Any?,
-        nothing1: Any?,
-        nothing2: Any?,
-    )
+    external fun wgpuInstanceRequestAdapter(handler: Long, powerPreference: PowerPreference?): Long
     external fun wgpuCreateInstance(backend: WGPUInstanceBackend?): Long
+    external fun wgpuInstanceCreateSurface(handler: Long, androidSurface: android.view.Surface): Long
 
     /*** Texture ***/
     external fun wgpuTextureGetWidth(handler: Long): GPUIntegerCoordinateOut

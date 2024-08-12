@@ -22,5 +22,6 @@ wgpu-native.workspace = true
 android_logger.workspace = true
 jni.workspace = true
 jni_fn.workspace = true
+ndk-sys.workspace = true
 log-panics = "*"
 
