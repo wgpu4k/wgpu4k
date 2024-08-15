@@ -32,6 +32,7 @@ include("examples:compose")
 include("examples:web-js")
 include("examples:glfw")
 include("examples:headless")
+include("examples:temp")
 if (hostOs == "Mac OS X") include("examples:iOS")
 if (isAndroidConfigured()) include("examples:android")
 // right now only running on OSX

@@ -178,11 +178,10 @@
 				TargetAttributes = {
 					3A35328E1E99974500C194AD = {
 						CreatedOnToolsVersion = 8.3;
-						ProvisioningStyle = Automatic;
 					};
 				};
 			};
-			buildConfigurationList = 3A3532821E99974500C194AD /* Build configuration list for PBXProject "iOSApp" */;
+			buildConfigurationList = 3A3532821E99974500C194AD /* Build configuration list for PBXProject "iosApp" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -379,11 +378,12 @@
 			baseConfigurationReference = 907FE32A28789CDAFD777257 /* SampleCode.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/System/Library/Frameworks",
-					"./../iOS/build/fat-framework/release",
+					./../iOS/build/XCFrameworks/release,
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -410,11 +410,12 @@
 			baseConfigurationReference = 907FE32A28789CDAFD777257 /* SampleCode.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/System/Library/Frameworks",
-					"./../iOS/build/fat-framework/release",
+					./../iOS/build/XCFrameworks/release,
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = TARGET_IOS;
 				INFOPLIST_FILE = Application/iOS/Info.plist;
@@ -436,7 +437,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3A3532821E99974500C194AD /* Build configuration list for PBXProject "iOSApp" */ = {
+		3A3532821E99974500C194AD /* Build configuration list for PBXProject "iosApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3A3532E01E99974500C194AD /* Debug */,
