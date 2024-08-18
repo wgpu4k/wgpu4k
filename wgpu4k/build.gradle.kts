@@ -9,7 +9,6 @@ plugins {
     if (isAndroidConfigured) id("android")
 }
 
-val buildNativeResourcesDirectory = project.file("build").resolve("native")
 val resourcesDirectory = project.file("src").resolve("jvmMain").resolve("resources")
 
 kotlin {
@@ -161,3 +160,22 @@ if (Platform.os == Os.MacOs) {
     tasks.findByName("linkDebugTestMingwX64")?.apply { enabled = false }
     tasks.findByName("mingwX64Test")?.apply { enabled = false }
 }
+
+val jniLibsPath = project.file("src")
+    .resolve("androidMain")
+    .resolve("libs")
+
+val commonResourcesFile = get4kAndroidJniProject()
+    .projectDir
+    .resolve("build")
+    .resolve("bin")
+
+tasks.findByName("build")?.apply {
+    dependsOn(":wgpu4k-android-jni:build")
+    doFirst {
+        println("build wgpu4k")
+    }
+}
+
+fun get4kAndroidJniProject() = projects.wgpu4kAndroidJni.identityPath.path
+    ?.let(::project) ?: error("Could not find project path")

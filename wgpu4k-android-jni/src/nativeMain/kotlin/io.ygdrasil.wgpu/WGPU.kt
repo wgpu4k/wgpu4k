@@ -8,7 +8,7 @@ import kotlin.experimental.ExperimentalNativeApi
 
 typealias JNIEnv = CPointer<JNIEnvVar>
 
-@CName("io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuCreateInstance")
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuCreateInstance")
 fun wgpuCreateInstance(env: JNIEnv, thiz_: jclass, backendHolder: jobject?) : jlong = memScoped {
     return if (backendHolder == null) {
         webgpu.wgpuCreateInstance(null).toLong()

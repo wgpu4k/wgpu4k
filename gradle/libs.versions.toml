@@ -2,7 +2,7 @@
 kotest = "5.9.1"
 klang = "0.0.0"
 jna = "5.14.0"
-kotlin = "2.0.10"
+kotlin = "2.0.0"
 wgpu = "v0.0.0.2"
 compose = "1.6.11"
 coroutines = "1.8.1"
