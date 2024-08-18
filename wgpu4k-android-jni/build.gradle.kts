@@ -14,7 +14,8 @@ kotlin {
     targets.forEach { target ->
         target.binaries {
             sharedLib {
-                baseName = "libwgpu4kv2"
+                baseName = "wgpu4kv2"
+                export(projects.wgpu4kNative)
             }
         }
     }
@@ -25,6 +26,11 @@ kotlin {
             languageSettings.optIn("kotlin.ExperimentalUnsignedTypes")
         }
 
+        nativeMain {
+            dependencies {
+                api(projects.wgpu4kNative)
+            }
+        }
     }
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {

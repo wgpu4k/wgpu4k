@@ -2,6 +2,7 @@ package io.ygdrasil.wgpu
 
 import android.view.SurfaceHolder
 import io.ygdrasil.wgpu.internal.JniInterface
+import io.ygdrasil.wgpu.internal.JniInterfaceV2
 
 class WGPU(internal val handler: Long) : AutoCloseable {
 
@@ -25,7 +26,7 @@ class WGPU(internal val handler: Long) : AutoCloseable {
     companion object {
         
         fun createInstance(backend: WGPUInstanceBackend? = null): WGPU {
-            return JniInterface.instance.wgpuCreateInstance(backend)
+            return JniInterfaceV2().wgpuCreateInstance(backend)
                 .let { WGPU(it) }
         }
 

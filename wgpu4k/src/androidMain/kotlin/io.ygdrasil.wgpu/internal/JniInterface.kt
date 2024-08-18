@@ -7,8 +7,6 @@ class JniInterface  {
         System.loadLibrary("wgpu4k")
     }
 
-    external fun createWgpuInstance2(): Long
-
     /*** Instance ***/
     external fun wgpuCreateInstance(backend: WGPUInstanceBackend?): Long
     external fun wgpuInstanceRequestAdapter(handler: Long, powerPreference: PowerPreference?): Long
