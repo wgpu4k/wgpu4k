@@ -10,6 +10,7 @@ typealias JNIEnv = CPointer<JNIEnvVar>
 
 @CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuCreateInstance")
 fun wgpuCreateInstance(env: JNIEnv, thiz_: jclass, backendHolder: jobject?) : jlong = memScoped {
+    println("wgpuCreateInstance ${backendHolder}")
     return if (backendHolder == null) {
         webgpu.wgpuCreateInstance(null).toLong()
     } else {
@@ -24,7 +25,6 @@ fun wgpuCreateInstance(env: JNIEnv, thiz_: jclass, backendHolder: jobject?) : jl
 
         webgpu.wgpuCreateInstance(descriptor.ptr).toLong()
     }
-
 }
 
 fun samplestring(env: CPointer<JNIEnvVar>, clazz: jclass, backendHolder: jobject?) {
@@ -43,9 +43,9 @@ fun samplecall(env: CPointer<JNIEnvVar>, thiz: jobject): jstring {
 }
 
 private fun JNIEnv.callIntMethodFrom(thiz: jobject, methodName: String): Int {
-    val jniEnvVal = pointed.pointed!!
-    val jclass = getObjectClass(thiz)!!
-    val methodId = getMethodID(jclass, methodName, "()I;")!!
+    val jniEnvVal = pointed.pointed ?: error("JNIEnv is null")
+    val jclass = getObjectClass(thiz) ?: error("fail to get class of $thiz")
+    val methodId = getMethodID(jclass, methodName, "()I;") ?: error("fail to get method of $methodName")
     return callObjectMethodA(thiz, methodId)
 }
 
