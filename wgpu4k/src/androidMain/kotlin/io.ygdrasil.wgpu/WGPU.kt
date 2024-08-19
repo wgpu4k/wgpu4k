@@ -26,7 +26,7 @@ class WGPU(internal val handler: Long) : AutoCloseable {
     companion object {
         
         fun createInstance(backend: WGPUInstanceBackend? = null): WGPU {
-            return JniInterfaceV2().wgpuCreateInstance(backend)
+            return JniInterfaceV2.wgpuCreateInstance(backend)
                 .let { WGPU(it) }
         }
 

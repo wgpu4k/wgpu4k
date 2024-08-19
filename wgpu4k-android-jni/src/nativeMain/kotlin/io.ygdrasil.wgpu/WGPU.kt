@@ -2,15 +2,17 @@
 
 package io.ygdrasil.wgpu
 
+import io.ygdrasil.wgpu.internal.JNIEnvPointer
+import io.ygdrasil.wgpu.internal.callIntMethodFrom
 import kotlinx.cinterop.*
 import platform.android.*
 import kotlin.experimental.ExperimentalNativeApi
 
-typealias JNIEnv = CPointer<JNIEnvVar>
 
 @CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuCreateInstance")
-fun wgpuCreateInstance(env: JNIEnv, thiz_: jclass, backendHolder: jobject?) : jlong = memScoped {
+fun wgpuCreateInstance(env: JNIEnvPointer, thiz: jclass, backendHolder: jobject?) : jlong = memScoped {
     println("wgpuCreateInstance ${backendHolder}")
+
     return if (backendHolder == null) {
         webgpu.wgpuCreateInstance(null).toLong()
     } else {
@@ -27,30 +29,7 @@ fun wgpuCreateInstance(env: JNIEnv, thiz_: jclass, backendHolder: jobject?) : jl
     }
 }
 
-fun samplestring(env: CPointer<JNIEnvVar>, clazz: jclass, backendHolder: jobject?) {
-    memScoped {
-        env.pointed.pointed!!.NewStringUTF!!.invoke(env, "This is from Kotlin Native!!".cstr.ptr)!!
-    }
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuInstanceRelease")
+fun wgpuInstanceRelease(env: JNIEnv, thiz: jclass, wgpu: jlong) {
+    webgpu.wgpuInstanceRelease(wgpu.toCPointer())
 }
-
-fun samplecall(env: CPointer<JNIEnvVar>, thiz: jobject): jstring {
-    memScoped {
-        val jniEnvVal = env.pointed.pointed!!
-        val jclass = jniEnvVal.GetObjectClass!!.invoke(env, thiz)
-        val methodId = jniEnvVal.GetMethodID!!.invoke(env, jclass, "callFromNative".cstr.ptr, "()Ljava/lang/String;".cstr.ptr)
-        return jniEnvVal.CallObjectMethodA!!.invoke(env, thiz, methodId, null) as jstring
-    }
-}
-
-private fun JNIEnv.callIntMethodFrom(thiz: jobject, methodName: String): Int {
-    val jniEnvVal = pointed.pointed ?: error("JNIEnv is null")
-    val jclass = getObjectClass(thiz) ?: error("fail to get class of $thiz")
-    val methodId = getMethodID(jclass, methodName, "()I;") ?: error("fail to get method of $methodName")
-    return callObjectMethodA(thiz, methodId)
-}
-
-private fun JNIEnv.getObjectClass(thiz: jobject) = pointed.pointed!!.GetObjectClass!!.invoke(this, thiz)
-private fun JNIEnv.getMethodID(jclass: jclass, methodName: String, signature: String) = memScoped {
-    pointed.pointed!!.GetMethodID!!.invoke(this@getMethodID, jclass, methodName.cstr.ptr, signature.cstr.ptr)
-}
-private fun JNIEnv.callObjectMethodA(thiz: jobject, methodId: jmethodID) = pointed.pointed!!.CallIntMethodA!!.invoke(this, thiz, methodId, null)

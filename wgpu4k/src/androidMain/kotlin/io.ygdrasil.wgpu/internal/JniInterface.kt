@@ -4,7 +4,7 @@ import io.ygdrasil.wgpu.*
 
 class JniInterface  {
     init {
-        System.loadLibrary("wgpu4k")
+
     }
 
     /*** Instance ***/

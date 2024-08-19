@@ -2,7 +2,7 @@ package io.ygdrasil.wgpu.internal
 
 import io.ygdrasil.wgpu.WGPUInstanceBackend
 
-class JniInterfaceV2 {
+object JniInterfaceV2 {
     init {
         System.loadLibrary("wgpu4kv2")
     }
