@@ -12,7 +12,7 @@ import java.lang.foreign.MemorySegment
 internal fun Arena.map(input: ShaderModuleDescriptor): MemorySegment = WGPUShaderModuleDescriptor.allocate(this).also { output ->
     if (input.label != null) WGPUShaderModuleDescriptor.label(output, allocateFrom(input.label))
     WGPUShaderModuleDescriptor.nextInChain(output, mapCode(input.code))
-    if (input.compilationHints != null && input.compilationHints.isNotEmpty()) {
+    if (input.compilationHints.isNotEmpty()) {
         WGPUShaderModuleDescriptor.hintCount(output, input.compilationHints.size.toLong())
         val hints = WGPUShaderModuleCompilationHint.allocateArray(input.compilationHints.size.toLong(), this)
         input.compilationHints.forEachIndexed { index, hint ->

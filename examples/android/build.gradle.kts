@@ -68,7 +68,6 @@ android {
 }
 
 dependencies {
-
     implementation(projects.examples.common)
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.compose.ui:ui:1.2.0")

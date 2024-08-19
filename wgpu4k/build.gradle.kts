@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.implementation
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
@@ -102,6 +103,12 @@ kotlin {
             }
         }
 
+        androidMain {
+            dependencies {
+                implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.0")
+            }
+        }
+
     }
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
@@ -182,15 +189,27 @@ val fileToCopy = listOf(
 tasks.findByName("build")?.apply {
     dependsOn(":wgpu4k-android-jni:build")
     doFirst {
-        fileToCopy.forEach { (source, target) ->
-            target.mkdirs()
-            target.resolve(libraryName)
-                .also { fileTarget ->
-                    source.resolve(libraryName).copyTo(fileTarget, overwrite = true)
-                }
-        }
+        copyJniLibraries()
+    }
+}
+
+tasks.create("copyJniLibraries") {
+    dependsOn("build")
+    doFirst {
+        copyJniLibraries()
     }
 }
 
 fun get4kAndroidJniProject() = projects.wgpu4kAndroidJni.identityPath.path
     ?.let(::project) ?: error("Could not find project path")
+
+
+fun copyJniLibraries() {
+    fileToCopy.forEach { (source, target) ->
+        target.mkdirs()
+        target.resolve(libraryName)
+            .also { fileTarget ->
+                source.resolve(libraryName).copyTo(fileTarget, overwrite = true)
+            }
+    }
+}

@@ -21,7 +21,7 @@ class ShaderModuleDescriptorTest : FreeSpec({
             val shaderModuleDescriptor = ShaderModuleDescriptor(
                 label = "ShaderModuleDescriptor",
                 code = "Shader code",
-                compilationHints = arrayOf(
+                compilationHints = listOf(
                     ShaderModuleDescriptor.CompilationHint(
                         entryPoint = "main"
                     )

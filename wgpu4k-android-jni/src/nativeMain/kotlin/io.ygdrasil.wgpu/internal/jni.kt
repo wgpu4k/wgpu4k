@@ -2,32 +2,62 @@
 
 package io.ygdrasil.wgpu.internal
 
+import kotlinx.cinterop.ArenaBase
+import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.UByteVar
+import kotlinx.cinterop.alloc
 import kotlinx.cinterop.cstr
 import kotlinx.cinterop.invoke
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.pointed
+import kotlinx.cinterop.ptr
 import platform.android.JNIEnvVar
 import platform.android.jclass
 import platform.android.jmethodID
 import platform.android.jobject
 import platform.android.jstring
+import platform.android.jvalue
 
 typealias JNIEnvPointer = CPointer<JNIEnvVar>
 
-internal fun JNIEnvPointer.callIntMethodFrom(thiz: jobject, methodName: String): Int = memScoped{
+internal fun JNIEnvPointer.callIntMethodFrom(thiz: jobject, methodName: String): Int = memScoped {
     val jclass = getObjectClass(thiz) ?: error("fail to get class of $thiz")
     val methodId = getMethodID(jclass, methodName, "()I") ?: error("fail to get method of $methodName")
-    return callObjectMethodA(thiz, methodId)
+    return callIntMethodA(thiz, methodId)
 }
+
+internal fun JNIEnvPointer.callStringMethodFrom(thiz: jobject, methodName: String): jstring? =
+    callObjectMethodFrom(thiz, methodName, "java/lang/String")
+
+internal fun JNIEnvPointer.callListMethodFrom(thiz: jobject, methodName: String): JniList? =
+    callObjectMethodFrom(thiz, methodName, "java/util/List")?.let { JniList(it) }
+
+
+internal fun JNIEnvPointer.callObjectMethodFrom(thiz: jobject, methodName: String, returnType: String, args: CPointer<jvalue>? = null): jobject? =
+    memScoped {
+        val jclass = getObjectClass(thiz) ?: error("fail to get class of $thiz")
+        val methodId = getMethodID(jclass, methodName, "()L$returnType;") ?: error("fail to get method of $methodName")
+        return callObjectMethodA(thiz, methodId, args)
+    }
 
 internal fun JNIEnvPointer.getObjectClass(thiz: jobject) = pointed.pointed!!.GetObjectClass!!.invoke(this, thiz)
-internal fun JNIEnvPointer.getMethodID(jclass: jclass, methodName: String, signature: String) = memScoped {
-    return@memScoped pointed.pointed!!.GetMethodID!!.invoke(this@getMethodID, jclass, methodName.cstr.ptr, signature.cstr.ptr)
+internal fun JNIEnvPointer.getMethodID(jclass: jclass, methodName: String, signature: String): jmethodID? = memScoped {
+    return pointed.pointed!!.GetMethodID!!.invoke(this@getMethodID, jclass, methodName.cstr.ptr, signature.cstr.ptr)
 }
-internal fun JNIEnvPointer.callObjectMethodA(thiz: jobject, methodId: jmethodID) = pointed.pointed!!.CallIntMethodA!!.invoke(this, thiz, methodId, null)
 
+internal fun JNIEnvPointer.callIntMethodA(thiz: jobject, methodId: jmethodID) =
+    pointed.pointed?.CallIntMethodA!!.invoke(this, thiz, methodId, null)
+
+internal fun JNIEnvPointer.callObjectMethodA(thiz: jobject, methodId: jmethodID, args: CPointer<jvalue>?) =
+    pointed.pointed?.CallObjectMethodA!!.invoke(this, thiz, methodId, args)
+
+internal fun jstring.toCString(env: JNIEnvPointer, arena: ArenaBase): CPointer<ByteVar>? {
+    return env.pointed.pointed
+        ?.GetStringUTFChars
+        ?.invoke(env, this, arena.alloc<UByteVar>().ptr)
+}
 
 
 fun samplestring(env: CPointer<JNIEnvVar>, clazz: jclass, backendHolder: jobject?) {
@@ -40,7 +70,8 @@ fun samplecall(env: CPointer<JNIEnvVar>, thiz: jobject): jstring {
     memScoped {
         val jniEnvVal = env.pointed.pointed!!
         val jclass = jniEnvVal.GetObjectClass!!.invoke(env, thiz)
-        val methodId = jniEnvVal.GetMethodID!!.invoke(env, jclass, "callFromNative".cstr.ptr, "()Ljava/lang/String;".cstr.ptr)
+        val methodId =
+            jniEnvVal.GetMethodID!!.invoke(env, jclass, "callFromNative".cstr.ptr, "()Ljava/lang/String;".cstr.ptr)
         return jniEnvVal.CallObjectMethodA!!.invoke(env, thiz, methodId, null) as jstring
     }
 }

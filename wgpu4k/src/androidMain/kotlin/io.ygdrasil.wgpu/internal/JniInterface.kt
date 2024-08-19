@@ -3,11 +3,6 @@ package io.ygdrasil.wgpu.internal
 import io.ygdrasil.wgpu.*
 
 class JniInterface  {
-    init {
-
-    }
-
-
 
     /*** Texture ***/
     external fun wgpuTextureGetWidth(handler: Long): GPUIntegerCoordinateOut
@@ -24,21 +19,6 @@ class JniInterface  {
     ): Long
 
     external fun wgpuTextureRelease(handler: Long)
-
-    /*** Surface ***/
-    external fun wgpuSurfaceGetCurrentTexture(handler: Long): Long
-    external fun wgpuSurfacePresent(handler: Long)
-    external fun wgpuSurfaceRelease(handler: Long)
-    external fun wgpuSurfaceGetFormat(handler: Long, adapter: Long) :  Int
-    external fun wgpuSurfaceConfigure(
-        handler: Long,
-        device: Long,
-        usage: Int,
-        format: Int,
-        alphaMode: Int,
-        width: Int,
-        height: Int
-    )
 
     /*** Sampler ***/
     external fun wgpuSamplerRelease(handler: Long)
@@ -179,51 +159,6 @@ class JniInterface  {
     /*** RenderPipeline ***/
     external fun wgpuRenderPipelineRelease(handler: Long)
     external fun wgpuRenderPipelineGetBindGroupLayout(handler: Long, index: Int): Long
-
-    /*** Device ***/
-    external fun wgpuDeviceGetQueue(handler: Long): Long
-    external fun wgpuDeviceCreateCommandEncoder(
-        handler: Long,
-        descriptor: CommandEncoderDescriptor?
-    ): Long
-
-    external fun wgpuDeviceCreateShaderModule(
-        handler: Long,
-        descriptor: ShaderModuleDescriptor
-    ): Long
-
-    external fun wgpuDeviceCreatePipelineLayout(
-        handler: Long,
-        descriptor: PipelineLayoutDescriptor
-    ): Long
-
-    external fun wgpuDeviceCreateRenderPipeline(
-        handler: Long,
-        descriptor: RenderPipelineDescriptor
-    ): Long
-
-    external fun wgpuDeviceCreateBuffer(handler: Long, descriptor: BufferDescriptor): Long
-    external fun wgpuDeviceCreateBindGroup(handler: Long, descriptor: BindGroupDescriptor): Long
-    external fun wgpuDeviceCreateTexture(handler: Long, descriptor: TextureDescriptor): Long
-    external fun wgpuDeviceCreateSampler(handler: Long, descriptor: SamplerDescriptor): Long
-    external fun wgpuDeviceCreateComputePipeline(
-        handler: Long,
-        descriptor: ComputePipelineDescriptor
-    ): Long
-
-    external fun wgpuDeviceCreateBindGroupLayout(
-        handler: Long,
-        descriptor: BindGroupLayoutDescriptor
-    ): Long
-
-    external fun wgpuDeviceCreateRenderBundleEncoder(
-        handler: Long,
-        descriptor: RenderBundleEncoderDescriptor
-    ): Long
-
-    external fun wgpuDeviceCreateQuerySet(handler: Long, descriptor: QuerySetDescriptor): Long
-    external fun wgpuDevicePoll(handler: Long, i: Int)
-    external fun wgpuDeviceRelease(handler: Long)
 
     /*** ComputePipeline ***/
 

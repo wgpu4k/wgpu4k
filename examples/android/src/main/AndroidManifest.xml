@@ -13,6 +13,7 @@
         android:label="wgpu on Android"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:largeHeap="true"
         android:theme="@style/Theme.Wgpu">
         <activity
             android:name=".MainActivity"
