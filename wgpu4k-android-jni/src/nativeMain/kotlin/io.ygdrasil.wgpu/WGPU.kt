@@ -6,6 +6,11 @@ import io.ygdrasil.wgpu.internal.JNIEnvPointer
 import io.ygdrasil.wgpu.internal.callIntMethodFrom
 import kotlinx.cinterop.*
 import platform.android.*
+import webgpu.WGPUAdapter
+import webgpu.WGPURequestAdapterStatus
+import webgpu.WGPURequestAdapterStatus_Success
+import webgpu.WGPUSType_SurfaceDescriptorFromAndroidNativeWindow
+import webgpu.wgpuInstanceRequestAdapter
 import kotlin.experimental.ExperimentalNativeApi
 
 
@@ -29,7 +34,60 @@ fun wgpuCreateInstance(env: JNIEnvPointer, thiz: jclass, backendHolder: jobject?
     }
 }
 
+
+
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuInstanceCreateSurface")
+fun wgpuInstanceCreateSurface(env: JNIEnvPointer, thiz: jclass, wgpu: jlong, surface: jobject) : jlong = memScoped {
+
+    val native_window = ANativeWindow_fromSurface(env.reinterpret(), surface)
+
+    val next_in_chain = alloc<webgpu.WGPUSurfaceDescriptorFromAndroidNativeWindow> {
+        chain.sType = WGPUSType_SurfaceDescriptorFromAndroidNativeWindow
+        window = native_window
+    }
+
+    val descriptor = alloc<webgpu.WGPUSurfaceDescriptor> {
+        nextInChain = next_in_chain.ptr.reinterpret()
+    }
+
+    val surface = webgpu.wgpuInstanceCreateSurface(wgpu.toCPointer(), descriptor.ptr)
+    return@memScoped surface.toLong()
+}
+
+private var lastFindAdapter: WGPUAdapter? = null
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuInstanceRequestAdapter")
+fun wgpuInstanceRequestAdapter(env: JNIEnvPointer, thiz: jclass, wgpu: jlong, powerPreference: jobject?, surface: jlong) : jlong = memScoped {
+
+    val powerPreference =  if (powerPreference == null) {
+        0u
+    } else {
+        env.callIntMethodFrom(powerPreference, "getValue").toUInt()
+    }
+
+    val options = alloc<webgpu.WGPURequestAdapterOptions> {
+        this.powerPreference = powerPreference
+        compatibleSurface = surface.toCPointer()
+    }
+
+    val handleRequestAdapter =
+        staticCFunction<WGPURequestAdapterStatus, WGPUAdapter, CPointer<ByteVar>?, COpaquePointer, Unit> { status, adapter, message, userData ->
+            println("WGPURequestAdapterCallback ${userData} ${adapter}")
+            if (status == WGPURequestAdapterStatus_Success) {
+                lastFindAdapter = adapter
+            } else {
+                println("request_adapter status=$status message=${message?.toKStringFromUtf8()}\n")
+            }
+        }
+
+    wgpuInstanceRequestAdapter(wgpu.toCPointer(), options.ptr, handleRequestAdapter.reinterpret(), null)
+
+    val adapter = lastFindAdapter
+    lastFindAdapter = null
+    adapter?.toLong() ?: 0L
+}
+
+
 @CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuInstanceRelease")
-fun wgpuInstanceRelease(env: JNIEnv, thiz: jclass, wgpu: jlong) {
+fun wgpuInstanceRelease(env: JNIEnvPointer, thiz: jclass, wgpu: jlong) {
     webgpu.wgpuInstanceRelease(wgpu.toCPointer())
 }
