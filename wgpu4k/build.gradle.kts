@@ -165,15 +165,30 @@ val jniLibsPath = project.file("src")
     .resolve("androidMain")
     .resolve("libs")
 
-val commonResourcesFile = get4kAndroidJniProject()
+val jniBuildPath = get4kAndroidJniProject()
     .projectDir
     .resolve("build")
     .resolve("bin")
 
+val libraryName = "libwgpu4kv2.so"
+
+val fileToCopy = listOf(
+    jniBuildPath.resolve("androidNativeArm64").resolve("releaseShared")
+        to jniLibsPath.resolve("arm64-v8a"),
+    jniBuildPath.resolve("androidNativeX64").resolve("releaseShared")
+        to jniLibsPath.resolve("x86_64"),
+)
+
 tasks.findByName("build")?.apply {
     dependsOn(":wgpu4k-android-jni:build")
     doFirst {
-        println("build wgpu4k")
+        fileToCopy.forEach { (source, target) ->
+            target.mkdirs()
+            target.resolve(libraryName)
+                .also { fileTarget ->
+                    source.resolve(libraryName).copyTo(fileTarget, overwrite = true)
+                }
+        }
     }
 }
 
