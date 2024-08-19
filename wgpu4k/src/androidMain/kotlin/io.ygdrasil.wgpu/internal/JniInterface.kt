@@ -289,10 +289,6 @@ class JniInterface  {
 
     external fun wgpuCommandBufferRelease(handler: Long)
 
-    /*** Adapter ***/
-    external fun wgpuAdapterRequestDevice(handler: Long, descriptor: DeviceDescriptor): Long
-    external fun wgpuAdapterRelease(handler: Long)
-
     /*** BindGroup ***/
 
     external fun wgpuBindGroupRelease(handler: Long)

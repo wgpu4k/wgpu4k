@@ -37,7 +37,7 @@ fun wgpuCreateInstance(env: JNIEnvPointer, thiz: jclass, backendHolder: jobject?
 
 
 @CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuInstanceCreateSurface")
-fun wgpuInstanceCreateSurface(env: JNIEnvPointer, thiz: jclass, wgpu: jlong, surface: jobject) : jlong = memScoped {
+fun wgpuInstanceCreateSurface(env: JNIEnvPointer, thiz: jclass, handler: jlong, surface: jobject) : jlong = memScoped {
 
     val native_window = ANativeWindow_fromSurface(env.reinterpret(), surface)
 
@@ -50,13 +50,13 @@ fun wgpuInstanceCreateSurface(env: JNIEnvPointer, thiz: jclass, wgpu: jlong, sur
         nextInChain = next_in_chain.ptr.reinterpret()
     }
 
-    val surface = webgpu.wgpuInstanceCreateSurface(wgpu.toCPointer(), descriptor.ptr)
-    return@memScoped surface.toLong()
+    val surface = webgpu.wgpuInstanceCreateSurface(handler.toCPointer(), descriptor.ptr)
+    return surface.toLong()
 }
 
 private var lastFindAdapter: WGPUAdapter? = null
 @CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuInstanceRequestAdapter")
-fun wgpuInstanceRequestAdapter(env: JNIEnvPointer, thiz: jclass, wgpu: jlong, powerPreference: jobject?, surface: jlong) : jlong = memScoped {
+fun wgpuInstanceRequestAdapter(env: JNIEnvPointer, thiz: jclass, handler: jlong, powerPreference: jobject?, surface: jlong) : jlong = memScoped {
 
     val powerPreference =  if (powerPreference == null) {
         0u
@@ -79,15 +79,15 @@ fun wgpuInstanceRequestAdapter(env: JNIEnvPointer, thiz: jclass, wgpu: jlong, po
             }
         }
 
-    wgpuInstanceRequestAdapter(wgpu.toCPointer(), options.ptr, handleRequestAdapter.reinterpret(), null)
+    wgpuInstanceRequestAdapter(handler.toCPointer(), options.ptr, handleRequestAdapter.reinterpret(), null)
 
     val adapter = lastFindAdapter
     lastFindAdapter = null
-    adapter?.toLong() ?: 0L
+    return adapter?.toLong() ?: 0L
 }
 
 
 @CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuInstanceRelease")
-fun wgpuInstanceRelease(env: JNIEnvPointer, thiz: jclass, wgpu: jlong) {
-    webgpu.wgpuInstanceRelease(wgpu.toCPointer())
+fun wgpuInstanceRelease(env: JNIEnvPointer, thiz: jclass, handler: jlong) {
+    webgpu.wgpuInstanceRelease(handler.toCPointer())
 }
