@@ -267,7 +267,6 @@ object JniInterfaceV2 {
     )
 
     /*** CommandBuffer ***/
-
     external fun wgpuCommandBufferRelease(handler: Long)
 
     /*** Sampler ***/
@@ -275,4 +274,10 @@ object JniInterfaceV2 {
 
     /*** ShaderModule ***/
     external fun wgpuShaderModuleRelease(handler: Long)
+
+    /*** BindGroup ***/
+    external fun wgpuBindGroupRelease(handler: Long)
+
+    /*** BindGroupLayout ***/
+    external fun wgpuBindGroupLayoutRelease(handler: Long)
 }

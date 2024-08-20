@@ -14,7 +14,6 @@ class JniInterface  {
         firstVertex: GPUSize32,
         firstInstance: GPUSize32
     )
-
     external fun wgpuRenderBundleEncoderDrawIndexed(
         handler: Long,
         indexCount: GPUSize32,
@@ -23,7 +22,6 @@ class JniInterface  {
         baseVertex: GPUSignedOffset32,
         firstInstance: GPUSize32
     )
-
     external fun wgpuRenderBundleEncoderSetIndexBuffer(
         handler: Long,
         handler1: Long,
@@ -31,7 +29,6 @@ class JniInterface  {
         offset: GPUSize64,
         size: GPUSize64
     )
-
     external fun wgpuRenderBundleEncoderSetVertexBuffer(
         handler: Long,
         slot: GPUIndex32,
@@ -39,7 +36,6 @@ class JniInterface  {
         offset: GPUSize64,
         size: GPUSize64
     )
-
     external fun wgpuRenderBundleEncoderSetPipeline(handler: Long, handler1: Long)
     external fun wgpuRenderBundleEncoderSetBindGroup(
         handler: Long,
@@ -48,7 +44,6 @@ class JniInterface  {
         i: Int,
         nothing: Nothing?
     )
-
     external fun wgpuRenderBundleEncoderFinish(
         handler: Long,
         descriptor: RenderBundleDescriptor
@@ -59,12 +54,10 @@ class JniInterface  {
     external fun wgpuRenderPipelineGetBindGroupLayout(handler: Long, index: Int): Long
 
     /*** ComputePipeline ***/
-
     external fun wgpuComputePipelineGetBindGroupLayout(handler: Long, index: Int): Long
     external fun wgpuComputePipelineRelease(handler: Long)
 
     /*** ComputePassEncoder ***/
-
     external fun wgpuComputePassEncoderSetPipeline(handler: Long, handler1: Long)
     external fun wgpuComputePassEncoderDispatchWorkgroups(
         handler: Long,
@@ -72,26 +65,15 @@ class JniInterface  {
         workgroupCountY: GPUSize32,
         workgroupCountZ: GPUSize32
     )
-
     external fun wgpuComputePassEncoderDispatchWorkgroupsIndirect(
         handler: Long,
         handler1: Long,
         indirectOffset: GPUSize64
     )
-
     external fun wgpuComputePassEncoderEnd(handler: Long)
     external fun wgpuComputePassEncoderRelease(handler: Long)
 
-    /*** BindGroup ***/
-
-    external fun wgpuBindGroupRelease(handler: Long)
-
-    /*** BindGroupLayout ***/
-
-    external fun wgpuBindGroupLayoutRelease(handler: Long)
-
     /*** Buffer ***/
-
     external fun wgpuBufferGetSize(handler: Long): GPUSize64
     external fun wgpuBufferGetUsage(handler: Long): Int
     external fun wgpuBufferGetMapState(handler: Long): Int
@@ -102,7 +84,6 @@ class JniInterface  {
         offset: GPUSize64,
         size: GPUSize64
     )
-
     external fun wgpuBufferRelease(handler: Long)
     external fun wgpuBufferMapInto(handler: Long, buffer: ByteArray, offset: Int)
     external fun mapFrom(buffer: FloatArray, offset: Int)
