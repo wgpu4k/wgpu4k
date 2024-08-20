@@ -8,7 +8,9 @@ import io.ygdrasil.wgpu.ComputePassDescriptor
 import io.ygdrasil.wgpu.ComputePipelineDescriptor
 import io.ygdrasil.wgpu.DeviceDescriptor
 import io.ygdrasil.wgpu.GPUFlagsConstant
+import io.ygdrasil.wgpu.GPUIndex32
 import io.ygdrasil.wgpu.GPUIntegerCoordinateOut
+import io.ygdrasil.wgpu.GPUSignedOffset32
 import io.ygdrasil.wgpu.GPUSize32
 import io.ygdrasil.wgpu.GPUSize32Out
 import io.ygdrasil.wgpu.GPUSize64
@@ -19,6 +21,7 @@ import io.ygdrasil.wgpu.PipelineLayoutDescriptor
 import io.ygdrasil.wgpu.PowerPreference
 import io.ygdrasil.wgpu.QuerySetDescriptor
 import io.ygdrasil.wgpu.RenderBundle
+import io.ygdrasil.wgpu.RenderBundleDescriptor
 import io.ygdrasil.wgpu.RenderBundleEncoderDescriptor
 import io.ygdrasil.wgpu.RenderPassDescriptor
 import io.ygdrasil.wgpu.RenderPipelineDescriptor
@@ -280,4 +283,110 @@ object JniInterfaceV2 {
 
     /*** BindGroupLayout ***/
     external fun wgpuBindGroupLayoutRelease(handler: Long)
+
+    /*** Buffer ***/
+    // TODO jni
+    external fun wgpuBufferGetSize(handler: Long): GPUSize64
+    // TODO jni
+    external fun wgpuBufferGetUsage(handler: Long): Int
+    // TODO jni
+    external fun wgpuBufferGetMapState(handler: Long): Int
+    // TODO jni
+    external fun wgpuBufferUnmap(handler: Long)
+    // TODO jni
+    external fun wgpuBufferMapAsync(
+        handler: Long,
+        toFlagInt: Int,
+        offset: GPUSize64,
+        size: GPUSize64
+    )
+    // TODO jni
+    external fun wgpuBufferRelease(handler: Long)
+    // TODO jni
+    external fun wgpuBufferMapInto(handler: Long, buffer: ByteArray, offset: Int)
+    // TODO jni
+    external fun mapFrom(buffer: FloatArray, offset: Int)
+    // TODO jni
+    external fun mapFrom(buffer: ByteArray, offset: Int)
+
+    /*** ComputePassEncoder ***/
+    // TODO jni
+    external fun wgpuComputePassEncoderSetPipeline(handler: Long, handler1: Long)
+    // TODO jni
+    external fun wgpuComputePassEncoderDispatchWorkgroups(
+        handler: Long,
+        workgroupCountX: GPUSize32,
+        workgroupCountY: GPUSize32,
+        workgroupCountZ: GPUSize32
+    )
+    // TODO jni
+    external fun wgpuComputePassEncoderDispatchWorkgroupsIndirect(
+        handler: Long,
+        handler1: Long,
+        indirectOffset: GPUSize64
+    )
+    // TODO jni
+    external fun wgpuComputePassEncoderEnd(handler: Long)
+    external fun wgpuComputePassEncoderRelease(handler: Long)
+
+    /*** ComputePipeline ***/
+    // TODO jni
+    external fun wgpuComputePipelineGetBindGroupLayout(handler: Long, index: Int): Long
+    external fun wgpuComputePipelineRelease(handler: Long)
+
+    /*** RenderPipeline ***/
+    // TODO jni
+    external fun wgpuRenderPipelineGetBindGroupLayout(handler: Long, index: Int): Long
+    external fun wgpuRenderPipelineRelease(handler: Long)
+
+    /*** RenderBundleEncoder ***/
+    // TODO jni
+    external fun wgpuRenderBundleEncoderDraw(
+        handler: Long,
+        vertexCount: GPUSize32,
+        instanceCount: GPUSize32,
+        firstVertex: GPUSize32,
+        firstInstance: GPUSize32
+    )
+    // TODO jni
+    external fun wgpuRenderBundleEncoderDrawIndexed(
+        handler: Long,
+        indexCount: GPUSize32,
+        instanceCount: GPUSize32,
+        firstIndex: GPUSize32,
+        baseVertex: GPUSignedOffset32,
+        firstInstance: GPUSize32
+    )
+    // TODO jni
+    external fun wgpuRenderBundleEncoderSetIndexBuffer(
+        handler: Long,
+        handler1: Long,
+        value: Int,
+        offset: GPUSize64,
+        size: GPUSize64
+    )
+    // TODO jni
+    external fun wgpuRenderBundleEncoderSetVertexBuffer(
+        handler: Long,
+        slot: GPUIndex32,
+        handler1: Long,
+        offset: GPUSize64,
+        size: GPUSize64
+    )
+    // TODO jni
+    external fun wgpuRenderBundleEncoderSetPipeline(handler: Long, handler1: Long)
+    // TODO jni
+    external fun wgpuRenderBundleEncoderSetBindGroup(
+        handler: Long,
+        index: GPUIndex32,
+        handler1: Long,
+        i: Int,
+        nothing: Nothing?
+    )
+    // TODO jni
+    external fun wgpuRenderBundleEncoderFinish(
+        handler: Long,
+        descriptor: RenderBundleDescriptor
+    ): Long
+    external fun wgpuRenderBundleEncoderRelease(handler: Long)
 }
