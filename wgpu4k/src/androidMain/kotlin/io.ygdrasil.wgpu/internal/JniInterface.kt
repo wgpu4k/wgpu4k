@@ -5,12 +5,6 @@ import io.ygdrasil.wgpu.*
 @Deprecated("created to test JNI rust binding, must be remove in favor of work in progress kotlin JNI binding use on JniInterfaceV2")
 class JniInterface  {
 
-    /*** Sampler ***/
-    external fun wgpuSamplerRelease(handler: Long)
-
-    /*** ShaderModule ***/
-    external fun wgpuShaderModuleRelease(handler: Long)
-
     /*** RenderBundleEncoder ***/
     external fun wgpuRenderBundleEncoderRelease(handler: Long)
     external fun wgpuRenderBundleEncoderDraw(
