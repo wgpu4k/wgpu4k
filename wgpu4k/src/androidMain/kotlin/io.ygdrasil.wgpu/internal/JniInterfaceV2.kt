@@ -6,6 +6,9 @@ import io.ygdrasil.wgpu.BufferDescriptor
 import io.ygdrasil.wgpu.CommandEncoderDescriptor
 import io.ygdrasil.wgpu.ComputePipelineDescriptor
 import io.ygdrasil.wgpu.DeviceDescriptor
+import io.ygdrasil.wgpu.GPUFlagsConstant
+import io.ygdrasil.wgpu.GPUIntegerCoordinateOut
+import io.ygdrasil.wgpu.GPUSize32Out
 import io.ygdrasil.wgpu.PipelineLayoutDescriptor
 import io.ygdrasil.wgpu.PowerPreference
 import io.ygdrasil.wgpu.QuerySetDescriptor
@@ -14,6 +17,7 @@ import io.ygdrasil.wgpu.RenderPipelineDescriptor
 import io.ygdrasil.wgpu.SamplerDescriptor
 import io.ygdrasil.wgpu.ShaderModuleDescriptor
 import io.ygdrasil.wgpu.TextureDescriptor
+import io.ygdrasil.wgpu.TextureViewDescriptor
 import io.ygdrasil.wgpu.WGPUInstanceBackend
 
 object JniInterfaceV2 {
@@ -48,7 +52,6 @@ object JniInterfaceV2 {
     /*** Device ***/
     // TODO jni
     external fun wgpuDeviceGetQueue(handler: Long): Long
-    // TODO jni
     external fun wgpuDeviceCreateCommandEncoder(
         handler: Long,
         descriptor: CommandEncoderDescriptor?
@@ -62,7 +65,6 @@ object JniInterfaceV2 {
         handler: Long,
         descriptor: PipelineLayoutDescriptor
     ): Long
-    // TODO jni
     external fun wgpuDeviceCreateRenderPipeline(
         handler: Long,
         descriptor: RenderPipelineDescriptor
@@ -96,4 +98,29 @@ object JniInterfaceV2 {
     external fun wgpuDevicePoll(handler: Long, i: Int)
     external fun wgpuDeviceRelease(handler: Long)
 
+    /*** Texture ***/
+    // TODO jni
+    external fun wgpuTextureGetWidth(handler: Long): GPUIntegerCoordinateOut
+    // TODO jni
+    external fun wgpuTextureGetHeight(handler: Long): GPUIntegerCoordinateOut
+    // TODO jni
+    external fun wgpuTextureGetDepthOrArrayLayers(handler: Long): GPUIntegerCoordinateOut
+    // TODO jni
+    external fun wgpuTextureGetMipLevelCount(handler: Long): GPUIntegerCoordinateOut
+    // TODO jni
+    external fun wgpuTextureGetSampleCount(handler: Long): GPUSize32Out
+    // TODO jni
+    external fun wgpuTextureGetDimension(handler: Long): Int
+    // TODO jni
+    external fun wgpuTextureGetFormat(handler: Long): Int
+    // TODO jni
+    external fun wgpuTextureGetUsage(handler: Long): GPUFlagsConstant
+    external fun wgpuTextureCreateView(
+        handler: Long,
+        textureViewDescriptor: TextureViewDescriptor?
+    ): Long
+    external fun wgpuTextureRelease(handler: Long)
+
+    /*** TextureView ***/
+    external fun wgpuTextureViewRelease(handler: Long)
 }

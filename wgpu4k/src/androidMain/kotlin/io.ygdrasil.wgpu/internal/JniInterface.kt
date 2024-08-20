@@ -4,20 +4,6 @@ import io.ygdrasil.wgpu.*
 
 class JniInterface  {
 
-    /*** Texture ***/
-    external fun wgpuTextureGetWidth(handler: Long): GPUIntegerCoordinateOut
-    external fun wgpuTextureGetHeight(handler: Long): GPUIntegerCoordinateOut
-    external fun wgpuTextureGetDepthOrArrayLayers(handler: Long): GPUIntegerCoordinateOut
-    external fun wgpuTextureGetMipLevelCount(handler: Long): GPUIntegerCoordinateOut
-    external fun wgpuTextureGetSampleCount(handler: Long): GPUSize32Out
-    external fun wgpuTextureGetDimension(handler: Long): Int
-    external fun wgpuTextureGetFormat(handler: Long): Int
-    external fun wgpuTextureGetUsage(handler: Long): GPUFlagsConstant
-    external fun wgpuTextureCreateView(
-        handler: Long,
-        textureViewDescriptor: TextureViewDescriptor?
-    ): Long
-
     external fun wgpuTextureRelease(handler: Long)
 
     /*** Sampler ***/
@@ -25,9 +11,6 @@ class JniInterface  {
 
     /*** ShaderModule ***/
     external fun wgpuShaderModuleRelease(handler: Long)
-
-    /*** TextureView ***/
-    external fun wgpuTextureViewRelease(handler: Long)
 
     /*** RenderPassEncoder ***/
     external fun wgpuRenderPassEncoderRelease(handler: Long)

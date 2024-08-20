@@ -30,19 +30,6 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
         // https://groups.google.com/g/android-developers/c/jYjvm7ItpXQ?pli=1
         this.setZOrderOnTop(true)
         holder.setFormat(PixelFormat.TRANSPARENT)
-
-        val assetManager = MainScope().future {
-
-            try {
-                println("will load asset manager")
-                withAndroidContext(context) {
-                    genericAssetManager("/")
-                        .also { println("test ${it.boxMesh}") }
-                }
-            } catch (e: Throwable) {
-                e.printStackTrace()
-            }
-        }
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
@@ -50,18 +37,24 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
         MainScope().launch {
             if (application != null) return@launch
-            withAndroidContext(context) {
-                val androidContext = androidContextRenderer(surfaceHolder, width, height)
-                application = createApplication(androidContext.wgpuContext)
+            try {
+                withAndroidContext(context) {
+                    val androidContext = androidContextRenderer(surfaceHolder, width, height)
+                    application = createApplication(androidContext.wgpuContext)
+                    println("Created application $application")
+                    setWillNotDraw(false)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
-        setWillNotDraw(false)
 
 
         //wgpuObj = rustBrige.createWgpuCanvas(wgpuIntance, surfaceHolder.surface, this.idx)
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
+        println("surfaceDestroyed")
         application = null
         if (wgpuObj != Long.MAX_VALUE) {
             //rustBrige.dropWgpuCanvas(wgpuObj)
@@ -69,13 +62,32 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
         }
     }
 
-    override fun surfaceRedrawNeeded(holder: SurfaceHolder) {}
+    override fun surfaceRedrawNeeded(holder: SurfaceHolder) {
+        println("surfaceRedrawNeeded")
+    }
+
+    override fun surfaceRedrawNeededAsync(holder: SurfaceHolder, drawingFinished: Runnable) {
+        println("surfaceRedrawNeededAsync")
+        surfaceRedrawNeeded(holder)
+        drawingFinished.run()
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        println("onDraw")
+    }
 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
+        println("draw")
 
         MainScope().launch {
-            application?.renderFrame()
+            try {
+                if (application != null) println("draw")
+                application?.renderFrame()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
         if (wgpuObj == Long.MAX_VALUE) {

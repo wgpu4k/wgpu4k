@@ -10,22 +10,29 @@ import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
 import kotlinx.cinterop.toCPointer
 import kotlinx.cinterop.toLong
+import kotlinx.cinterop.alloc
 import platform.android.jclass
 import platform.android.jlong
 import platform.android.jobject
 import kotlin.experimental.ExperimentalNativeApi
 
 @CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuDeviceCreateShaderModule")
-fun wgpuDeviceCreateShaderModule(env: JNIEnvPointer, thiz: jclass, handler: jlong, descriptor: jobject) = memScoped {
-    mapShaderModuleDescriptor(descriptor, env)
+fun wgpuDeviceCreateShaderModule(env: JNIEnvPointer, thiz: jclass, handler: jlong, descriptor: jobject): jlong = memScoped {
+    return mapShaderModuleDescriptor(descriptor, env)
         .let { webgpu.wgpuDeviceCreateShaderModule(handler.toCPointer(), it.ptr) }
         .toLong()
 }
 
 @CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuDeviceCreateRenderPipeline")
-fun wgpuDeviceCreateRenderPipeline(env: JNIEnvPointer, thiz: jclass, handler: jlong, descriptor: jobject) = memScoped {
-    mapRenderPipelineDescriptor(descriptor, env)
+fun wgpuDeviceCreateRenderPipeline(env: JNIEnvPointer, thiz: jclass, handler: jlong, descriptor: jobject): jlong = memScoped {
+    return mapRenderPipelineDescriptor(descriptor, env)
         .let { webgpu.wgpuDeviceCreateRenderPipeline(handler.toCPointer(), it.ptr) }
+        .toLong()
+}
+
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuDeviceCreateCommandEncoder")
+fun wgpuDeviceCreateCommandEncoder(env: JNIEnvPointer, thiz: jclass, handler: jlong, descriptor: jobject): jlong = memScoped {
+    return webgpu.wgpuDeviceCreateCommandEncoder(handler.toCPointer(), alloc<webgpu.WGPUCommandEncoderDescriptor>().ptr)
         .toLong()
 }
 
