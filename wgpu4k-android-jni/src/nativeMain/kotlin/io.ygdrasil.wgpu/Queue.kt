@@ -16,7 +16,7 @@ import platform.android.jlong
 import platform.android.jobject
 import kotlin.experimental.ExperimentalNativeApi
 
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuQueueSubmit")
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuQueueSubmit")
 fun wgpuQueueSubmit(env: JNIEnvPointer, thiz: jclass, handler: jlong, commandsBufferSize: jlong, commandsBuffer: jobject) =
     memScoped{
         val commands = if (commandsBufferSize > 0) {

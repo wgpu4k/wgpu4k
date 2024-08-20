@@ -1,36 +1,36 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.JniInterfaceV2
+import io.ygdrasil.wgpu.internal.JniInterface
 
 actual class Texture(val handler: Long) : AutoCloseable {
 
     actual val width: GPUIntegerCoordinateOut
-        get() = JniInterfaceV2.wgpuTextureGetWidth(handler)
+        get() = JniInterface.wgpuTextureGetWidth(handler)
     actual val height: GPUIntegerCoordinateOut
-        get() = JniInterfaceV2.wgpuTextureGetHeight(handler)
+        get() = JniInterface.wgpuTextureGetHeight(handler)
     actual val depthOrArrayLayers: GPUIntegerCoordinateOut
-        get() = JniInterfaceV2.wgpuTextureGetDepthOrArrayLayers(handler)
+        get() = JniInterface.wgpuTextureGetDepthOrArrayLayers(handler)
     actual val mipLevelCount: GPUIntegerCoordinateOut
-        get() = JniInterfaceV2.wgpuTextureGetMipLevelCount(handler)
+        get() = JniInterface.wgpuTextureGetMipLevelCount(handler)
     actual val sampleCount: GPUSize32Out
-        get() = JniInterfaceV2.wgpuTextureGetSampleCount(handler)
+        get() = JniInterface.wgpuTextureGetSampleCount(handler)
     actual val dimension: TextureDimension
-        get() = JniInterfaceV2.wgpuTextureGetDimension(handler)
+        get() = JniInterface.wgpuTextureGetDimension(handler)
             .let { TextureDimension.of(it) }
             ?: error("fail to get texture dimension")
     actual val format: TextureFormat
-        get() = JniInterfaceV2.wgpuTextureGetFormat(handler)
+        get() = JniInterface.wgpuTextureGetFormat(handler)
             .let { TextureFormat.of(it) }
             ?: error("fail to get texture format")
     actual val usage: GPUFlagsConstant
-        get() = JniInterfaceV2.wgpuTextureGetUsage(handler)
+        get() = JniInterface.wgpuTextureGetUsage(handler)
 
     actual fun createView(descriptor: TextureViewDescriptor?): TextureView {
-        return JniInterfaceV2.wgpuTextureCreateView(handler, descriptor)
+        return JniInterface.wgpuTextureCreateView(handler, descriptor)
             .let { TextureView(it) }
     }
 
     actual override fun close() {
-        JniInterfaceV2.wgpuTextureRelease(handler)
+        JniInterface.wgpuTextureRelease(handler)
     }
 }

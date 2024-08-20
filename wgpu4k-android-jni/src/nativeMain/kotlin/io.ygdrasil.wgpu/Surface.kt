@@ -18,7 +18,7 @@ import webgpu.WGPUPresentMode_Fifo
 import webgpu.WGPUSurfaceTexture
 import kotlin.experimental.ExperimentalNativeApi
 
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuSurfaceGetFormat")
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuSurfaceGetFormat")
 fun wgpuSurfaceGetFormat(env: JNIEnv, thiz: jclass, surface: jlong, adapter: jlong): jint = memScoped {
 
     val capabilities = alloc<webgpu.WGPUSurfaceCapabilities>()
@@ -33,7 +33,7 @@ fun wgpuSurfaceGetFormat(env: JNIEnv, thiz: jclass, surface: jlong, adapter: jlo
     }
 }
 
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuSurfaceConfigure")
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuSurfaceConfigure")
 fun wgpuSurfaceConfigure(
     env: JNIEnv,
     thiz: jclass,
@@ -60,19 +60,19 @@ fun wgpuSurfaceConfigure(
     webgpu.wgpuSurfaceConfigure(surface.toCPointer(), canvas_configuration.ptr)
 }
 
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuSurfaceGetCurrentTexture")
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuSurfaceGetCurrentTexture")
 fun wgpuSurfaceGetCurrentTexture(env: JNIEnvPointer, thiz: jclass, handler: jlong): jlong = memScoped {
     val surfaceTexture = alloc<WGPUSurfaceTexture>()
     webgpu.wgpuSurfaceGetCurrentTexture(handler.toCPointer(), surfaceTexture.ptr)
     return surfaceTexture.texture.toLong()
 }
 
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuSurfacePresent")
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuSurfacePresent")
 fun wgpuSurfacePresent(env: JNIEnvPointer, thiz: jclass, handler: jlong) {
     webgpu.wgpuSurfacePresent(handler.toCPointer())
 }
 
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuSurfaceRelease")
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuSurfaceRelease")
 fun wgpuSurfaceRelease(env: JNIEnvPointer, thiz: jclass, handler: jlong) {
     webgpu.wgpuSurfaceRelease(handler.toCPointer())
 }

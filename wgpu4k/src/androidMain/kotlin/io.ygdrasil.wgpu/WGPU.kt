@@ -1,32 +1,32 @@
 package io.ygdrasil.wgpu
 
 import android.view.SurfaceHolder
-import io.ygdrasil.wgpu.internal.JniInterfaceV2
+import io.ygdrasil.wgpu.internal.JniInterface
 
 class WGPU(val handler: Long) : AutoCloseable {
 
     override fun close() {
-        JniInterfaceV2.wgpuInstanceRelease(handler)
+        JniInterface.wgpuInstanceRelease(handler)
     }
 
     fun requestAdapter(
         surface: Surface,
         powerPreference: PowerPreference? = null
     ): Adapter {
-        return JniInterfaceV2.wgpuInstanceRequestAdapter(handler, powerPreference, surface.handler)
+        return JniInterface.wgpuInstanceRequestAdapter(handler, powerPreference, surface.handler)
             .takeIf { it != 0L }
             ?.let(::Adapter) ?: error("fail to create adapter")
     }
 
     fun getSurface(surfaceHolder: SurfaceHolder, width: Int, height: Int): Surface {
-        return JniInterfaceV2.wgpuInstanceCreateSurface(handler, surfaceHolder.surface)
+        return JniInterface.wgpuInstanceCreateSurface(handler, surfaceHolder.surface)
             .let { Surface(it, width, height) }
     }
 
     companion object {
         
         fun createInstance(backend: WGPUInstanceBackend? = null): WGPU {
-            return JniInterfaceV2.wgpuCreateInstance(backend)
+            return JniInterface.wgpuCreateInstance(backend)
                 .let { WGPU(it) }
         }
 

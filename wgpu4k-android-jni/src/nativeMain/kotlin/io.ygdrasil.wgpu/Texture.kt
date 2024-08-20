@@ -14,7 +14,7 @@ import platform.android.jlong
 import platform.android.jobject
 import kotlin.experimental.ExperimentalNativeApi
 
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuTextureCreateView")
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuTextureCreateView")
 fun wgpuTextureCreateView(env: JNIEnvPointer, thiz: jclass, handler: jlong, descriptor: jobject?): jlong = memScoped {
     return descriptor
         ?.let { mapTextureViewDescriptor(descriptor, env) }
@@ -22,7 +22,7 @@ fun wgpuTextureCreateView(env: JNIEnvPointer, thiz: jclass, handler: jlong, desc
         .toLong()
 }
 
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuTextureRelease")
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuTextureRelease")
 fun wgpuTextureRelease(env: JNIEnvPointer, thiz: jclass, handler: jlong) {
     webgpu.wgpuTextureRelease(handler.toCPointer())
 }

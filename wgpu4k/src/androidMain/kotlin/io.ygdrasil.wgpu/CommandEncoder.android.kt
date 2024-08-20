@@ -1,16 +1,16 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.JniInterfaceV2
+import io.ygdrasil.wgpu.internal.JniInterface
 
 actual class CommandEncoder(internal val handler: Long) : AutoCloseable {
 
     actual fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder {
-        return JniInterfaceV2.wgpuCommandEncoderBeginRenderPass(handler, descriptor)
+        return JniInterface.wgpuCommandEncoderBeginRenderPass(handler, descriptor)
             .let { RenderPassEncoder(it) }
     }
 
     actual fun finish(): CommandBuffer {
-        return JniInterfaceV2.wgpuCommandEncoderFinish(handler)
+        return JniInterface.wgpuCommandEncoderFinish(handler)
             .let { CommandBuffer(it) }
     }
 
@@ -19,7 +19,7 @@ actual class CommandEncoder(internal val handler: Long) : AutoCloseable {
         destination: ImageCopyTexture,
         copySize: Size3D
     ) {
-        JniInterfaceV2.wgpuCommandEncoderCopyTextureToTexture(
+        JniInterface.wgpuCommandEncoderCopyTextureToTexture(
             handler,
             source,
             destination,
@@ -28,7 +28,7 @@ actual class CommandEncoder(internal val handler: Long) : AutoCloseable {
     }
 
     actual fun beginComputePass(descriptor: ComputePassDescriptor?): ComputePassEncoder {
-        return JniInterfaceV2.wgpuCommandEncoderBeginComputePass(handler, descriptor)
+        return JniInterface.wgpuCommandEncoderBeginComputePass(handler, descriptor)
             .let { ComputePassEncoder(it) }
     }
 
@@ -38,7 +38,7 @@ actual class CommandEncoder(internal val handler: Long) : AutoCloseable {
         copySize: Size3D,
     ) {
 
-        JniInterfaceV2.wgpuCommandEncoderCopyTextureToBuffer(
+        JniInterface.wgpuCommandEncoderCopyTextureToBuffer(
             handler,
             source,
             destination,
@@ -52,7 +52,7 @@ actual class CommandEncoder(internal val handler: Long) : AutoCloseable {
         copySize: Size3D,
     ) {
 
-        JniInterfaceV2.wgpuCommandEncoderCopyBufferToTexture(
+        JniInterface.wgpuCommandEncoderCopyBufferToTexture(
             handler,
             source,
             destination,
@@ -62,6 +62,6 @@ actual class CommandEncoder(internal val handler: Long) : AutoCloseable {
 
 
     actual override fun close() {
-        JniInterfaceV2.wgpuCommandEncoderRelease(handler)
+        JniInterface.wgpuCommandEncoderRelease(handler)
     }
 }

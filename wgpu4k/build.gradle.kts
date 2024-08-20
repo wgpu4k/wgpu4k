@@ -112,8 +112,7 @@ kotlin {
     }
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
-        //TODO re-enable when removing old JNI rust binding
-        //allWarningsAsErrors = true
+        allWarningsAsErrors = true
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 }

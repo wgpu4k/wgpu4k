@@ -14,7 +14,7 @@ import webgpu.wgpuInstanceRequestAdapter
 import kotlin.experimental.ExperimentalNativeApi
 
 
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuCreateInstance")
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuCreateInstance")
 fun wgpuCreateInstance(env: JNIEnvPointer, thiz: jclass, backendHolder: jobject?) : jlong = memScoped {
     println("wgpuCreateInstance ${backendHolder}")
 
@@ -36,7 +36,7 @@ fun wgpuCreateInstance(env: JNIEnvPointer, thiz: jclass, backendHolder: jobject?
 
 
 
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuInstanceCreateSurface")
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuInstanceCreateSurface")
 fun wgpuInstanceCreateSurface(env: JNIEnvPointer, thiz: jclass, handler: jlong, surface: jobject) : jlong = memScoped {
 
     val native_window = ANativeWindow_fromSurface(env.reinterpret(), surface)
@@ -55,7 +55,7 @@ fun wgpuInstanceCreateSurface(env: JNIEnvPointer, thiz: jclass, handler: jlong, 
 }
 
 private var lastFindAdapter: WGPUAdapter? = null
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuInstanceRequestAdapter")
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuInstanceRequestAdapter")
 fun wgpuInstanceRequestAdapter(env: JNIEnvPointer, thiz: jclass, handler: jlong, powerPreference: jobject?, surface: jlong) : jlong = memScoped {
 
     val powerPreference =  if (powerPreference == null) {
@@ -87,7 +87,7 @@ fun wgpuInstanceRequestAdapter(env: JNIEnvPointer, thiz: jclass, handler: jlong,
 }
 
 
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuInstanceRelease")
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuInstanceRelease")
 fun wgpuInstanceRelease(env: JNIEnvPointer, thiz: jclass, handler: jlong) {
     webgpu.wgpuInstanceRelease(handler.toCPointer())
 }

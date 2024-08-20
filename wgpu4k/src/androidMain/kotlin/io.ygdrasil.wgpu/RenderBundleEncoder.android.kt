@@ -1,16 +1,16 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.JniInterfaceV2
+import io.ygdrasil.wgpu.internal.JniInterface
 
 actual class RenderBundleEncoder(val handler: Long) : AutoCloseable {
 
     actual fun finish(descriptor: RenderBundleDescriptor): RenderBundle {
-        return JniInterfaceV2.wgpuRenderBundleEncoderFinish(handler, descriptor)
+        return JniInterface.wgpuRenderBundleEncoderFinish(handler, descriptor)
             .let(::RenderBundle)
     }
 
     actual fun setBindGroup(index: GPUIndex32, bindGroup: BindGroup) {
-        JniInterfaceV2.wgpuRenderBundleEncoderSetBindGroup(
+        JniInterface.wgpuRenderBundleEncoderSetBindGroup(
             handler,
             index,
             bindGroup.handler,
@@ -20,11 +20,11 @@ actual class RenderBundleEncoder(val handler: Long) : AutoCloseable {
     }
 
     actual fun setPipeline(renderPipeline: RenderPipeline) {
-        JniInterfaceV2.wgpuRenderBundleEncoderSetPipeline(handler, renderPipeline.handler)
+        JniInterface.wgpuRenderBundleEncoderSetPipeline(handler, renderPipeline.handler)
     }
 
     actual fun setVertexBuffer(slot: GPUIndex32, buffer: Buffer, offset: GPUSize64, size: GPUSize64) {
-        JniInterfaceV2.wgpuRenderBundleEncoderSetVertexBuffer(
+        JniInterface.wgpuRenderBundleEncoderSetVertexBuffer(
             handler,
             slot,
             buffer.handler,
@@ -34,7 +34,7 @@ actual class RenderBundleEncoder(val handler: Long) : AutoCloseable {
     }
 
     actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
-        JniInterfaceV2.wgpuRenderBundleEncoderSetIndexBuffer(
+        JniInterface.wgpuRenderBundleEncoderSetIndexBuffer(
             handler,
             buffer.handler,
             indexFormat.value,
@@ -50,7 +50,7 @@ actual class RenderBundleEncoder(val handler: Long) : AutoCloseable {
         baseVertex: GPUSignedOffset32,
         firstInstance: GPUSize32
     ) {
-        JniInterfaceV2.wgpuRenderBundleEncoderDrawIndexed(
+        JniInterface.wgpuRenderBundleEncoderDrawIndexed(
             handler,
             indexCount,
             instanceCount,
@@ -66,7 +66,7 @@ actual class RenderBundleEncoder(val handler: Long) : AutoCloseable {
         firstVertex: GPUSize32,
         firstInstance: GPUSize32
     ) {
-        JniInterfaceV2.wgpuRenderBundleEncoderDraw(
+        JniInterface.wgpuRenderBundleEncoderDraw(
             handler,
             vertexCount,
             instanceCount,
@@ -76,6 +76,6 @@ actual class RenderBundleEncoder(val handler: Long) : AutoCloseable {
     }
 
     actual override fun close() {
-        JniInterfaceV2.wgpuRenderBundleEncoderRelease(handler)
+        JniInterface.wgpuRenderBundleEncoderRelease(handler)
     }
 }

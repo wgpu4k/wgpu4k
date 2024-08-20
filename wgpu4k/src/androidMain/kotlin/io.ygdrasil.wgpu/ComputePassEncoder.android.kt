@@ -1,15 +1,15 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.JniInterfaceV2
+import io.ygdrasil.wgpu.internal.JniInterface
 
 actual class ComputePassEncoder(val handler: Long) : AutoCloseable {
 
     actual fun setPipeline(pipeline: ComputePipeline) {
-        JniInterfaceV2.wgpuComputePassEncoderSetPipeline(handler, pipeline.handler)
+        JniInterface.wgpuComputePassEncoderSetPipeline(handler, pipeline.handler)
     }
 
     actual fun dispatchWorkgroups(workgroupCountX: GPUSize32, workgroupCountY: GPUSize32, workgroupCountZ: GPUSize32) {
-        JniInterfaceV2.wgpuComputePassEncoderDispatchWorkgroups(
+        JniInterface.wgpuComputePassEncoderDispatchWorkgroups(
             handler,
             workgroupCountX,
             workgroupCountY,
@@ -18,7 +18,7 @@ actual class ComputePassEncoder(val handler: Long) : AutoCloseable {
     }
 
     actual fun dispatchWorkgroupsIndirect(indirectBuffer: Buffer, indirectOffset: GPUSize64) {
-        JniInterfaceV2.wgpuComputePassEncoderDispatchWorkgroupsIndirect(
+        JniInterface.wgpuComputePassEncoderDispatchWorkgroupsIndirect(
             handler,
             indirectBuffer.handler,
             indirectOffset
@@ -44,10 +44,10 @@ actual class ComputePassEncoder(val handler: Long) : AutoCloseable {
     }
 
     actual fun end() {
-        JniInterfaceV2.wgpuComputePassEncoderEnd(handler)
+        JniInterface.wgpuComputePassEncoderEnd(handler)
     }
 
     actual override fun close() {
-        JniInterfaceV2.wgpuComputePassEncoderRelease(handler)
+        JniInterface.wgpuComputePassEncoderRelease(handler)
     }
 }

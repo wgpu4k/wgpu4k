@@ -9,7 +9,7 @@ import platform.android.jclass
 import platform.android.jlong
 import kotlin.experimental.ExperimentalNativeApi
 
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuSamplerRelease")
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuSamplerRelease")
 fun wgpuSamplerRelease(env: JNIEnvPointer, thiz: jclass, handler: jlong) {
     webgpu.wgpuSamplerRelease(handler.toCPointer())
 }

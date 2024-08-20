@@ -9,7 +9,7 @@ import platform.android.jclass
 import platform.android.jlong
 import kotlin.experimental.ExperimentalNativeApi
 
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuBindGroupRelease")
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuBindGroupRelease")
 fun wgpuBindGroupRelease(env: JNIEnvPointer, thiz: jclass, handler: jlong) {
     webgpu.wgpuBindGroupRelease(handler.toCPointer())
 }

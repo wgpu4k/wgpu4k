@@ -21,7 +21,7 @@ import kotlin.experimental.ExperimentalNativeApi
 
 private var lastFindDevice: WGPUDevice? = null
 
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuAdapterRequestDevice")
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuAdapterRequestDevice")
 fun wgpuAdapterRequestDevice(env: JNIEnvPointer, thiz: jclass, handler: jlong, descriptor: jobject) : jlong {
 
     val handleRequestDevice =
@@ -41,7 +41,7 @@ fun wgpuAdapterRequestDevice(env: JNIEnvPointer, thiz: jclass, handler: jlong, d
     return device?.toLong() ?: 0L
 }
 
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuAdapterRelease")
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuAdapterRelease")
 fun wgpuAdapterRelease(env: JNIEnvPointer, thiz: jclass, handler: jlong) {
     webgpu.wgpuAdapterRelease(handler.toCPointer())
 }

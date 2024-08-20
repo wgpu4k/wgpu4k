@@ -1,11 +1,11 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.JniInterfaceV2
+import io.ygdrasil.wgpu.internal.JniInterface
 
 actual class Adapter(val handler: Long) : AutoCloseable {
 
     actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? {
-        return JniInterfaceV2.wgpuAdapterRequestDevice(
+        return JniInterface.wgpuAdapterRequestDevice(
             handler,
             descriptor
         ).takeIf { it != 0L }
@@ -13,7 +13,7 @@ actual class Adapter(val handler: Long) : AutoCloseable {
     }
 
     actual override fun close() {
-        JniInterfaceV2.wgpuAdapterRelease(handler)
+        JniInterface.wgpuAdapterRelease(handler)
     }
 
 }

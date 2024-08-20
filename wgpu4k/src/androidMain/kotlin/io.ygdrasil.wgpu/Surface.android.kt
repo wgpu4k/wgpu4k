@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.JniInterfaceV2
+import io.ygdrasil.wgpu.internal.JniInterface
 
 actual class Surface(val handler: Long, actual val width: Int, actual val height: Int) : AutoCloseable {
 
@@ -10,22 +10,22 @@ actual class Surface(val handler: Long, actual val width: Int, actual val height
 
     fun computeSurfaceCapabilities(adapter: Adapter) {
         println("computeSurfaceCapabilities")
-        _textureFormat = JniInterfaceV2.wgpuSurfaceGetFormat(handler, adapter.handler)
+        _textureFormat = JniInterface.wgpuSurfaceGetFormat(handler, adapter.handler)
             .also { println("_textureFormat $it") }
             .let { TextureFormat.of(it) ?: TextureFormat.rgba8unormsrgb }
     }
 
     actual fun getCurrentTexture(): Texture {
-        return JniInterfaceV2.wgpuSurfaceGetCurrentTexture(handler)
+        return JniInterface.wgpuSurfaceGetCurrentTexture(handler)
             .let { Texture(it) }
     }
 
     actual fun present() {
-        JniInterfaceV2.wgpuSurfacePresent(handler)
+        JniInterface.wgpuSurfacePresent(handler)
     }
 
     actual fun configure(canvasConfiguration: CanvasConfiguration) {
-        JniInterfaceV2.wgpuSurfaceConfigure(
+        JniInterface.wgpuSurfaceConfigure(
             handler,
             canvasConfiguration.device.handler,
             canvasConfiguration.usage.toFlagInt(),
@@ -36,7 +36,7 @@ actual class Surface(val handler: Long, actual val width: Int, actual val height
     }
 
     actual override fun close() {
-        JniInterfaceV2.wgpuSurfaceRelease(handler)
+        JniInterface.wgpuSurfaceRelease(handler)
     }
 
 }

@@ -32,7 +32,7 @@ import io.ygdrasil.wgpu.TextureDescriptor
 import io.ygdrasil.wgpu.TextureViewDescriptor
 import io.ygdrasil.wgpu.WGPUInstanceBackend
 
-object JniInterfaceV2 {
+object JniInterface {
     init {
         System.loadLibrary("wgpu4kv2")
     }

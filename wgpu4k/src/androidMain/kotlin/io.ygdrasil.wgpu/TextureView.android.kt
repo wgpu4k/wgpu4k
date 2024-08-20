@@ -1,10 +1,10 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.JniInterfaceV2
+import io.ygdrasil.wgpu.internal.JniInterface
 
 actual class TextureView(val handler: Long) : AutoCloseable {
     actual override fun close() {
-        JniInterfaceV2.wgpuTextureViewRelease(handler)
+        JniInterface.wgpuTextureViewRelease(handler)
     }
 
 }
