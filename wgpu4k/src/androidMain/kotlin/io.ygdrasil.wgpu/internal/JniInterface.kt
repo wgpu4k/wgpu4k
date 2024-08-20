@@ -2,6 +2,7 @@ package io.ygdrasil.wgpu.internal
 
 import io.ygdrasil.wgpu.*
 
+@Deprecated("created to test JNI rust binding, must be remove in favor of work in progress kotlin JNI binding use on JniInterfaceV2")
 class JniInterface  {
 
     /*** Sampler ***/
@@ -59,41 +60,6 @@ class JniInterface  {
         descriptor: RenderBundleDescriptor
     ): Long
 
-    /*** Queue ***/
-    external fun wgpuQueueSubmit(
-        handler: Long,
-        commandsBufferSize: Long,
-        commandsBuffer: List<Long>
-    )
-
-    external fun wgpuQueueWriteBuffer(
-        handler: Long,
-        buffer: Long,
-        bufferOffset: GPUSize64,
-        data: FloatArray,
-        dataOffset: GPUSize64,
-        size: Long
-    )
-
-    external fun wgpuQueueWriteBuffer(
-        handler: Long,
-        buffer: Long,
-        bufferOffset: GPUSize64,
-        data: IntArray,
-        dataOffset: GPUSize64,
-        size: Long
-    )
-
-    external fun wgpuQueueWriteTexture(
-        handler: Long,
-        destination: ImageCopyTextureTagged,
-        data: ByteArray,
-        toLong: Long,
-        width: Int,
-        height: Int,
-        bytePerPixel: Int
-    )
-
     /*** RenderPipeline ***/
     external fun wgpuRenderPipelineRelease(handler: Long)
     external fun wgpuRenderPipelineGetBindGroupLayout(handler: Long, index: Int): Long
@@ -121,10 +87,6 @@ class JniInterface  {
 
     external fun wgpuComputePassEncoderEnd(handler: Long)
     external fun wgpuComputePassEncoderRelease(handler: Long)
-
-    /*** CommandBuffer ***/
-
-    external fun wgpuCommandBufferRelease(handler: Long)
 
     /*** BindGroup ***/
 

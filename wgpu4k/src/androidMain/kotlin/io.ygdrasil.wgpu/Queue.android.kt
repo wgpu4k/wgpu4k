@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.JniInterface
+import io.ygdrasil.wgpu.internal.JniInterfaceV2
 
 private val supportedFormatOncopyExternalImageToTexture =
     listOf(TextureFormat.rgba8unorm, TextureFormat.rgba8unormsrgb)
@@ -8,7 +8,7 @@ private val supportedFormatOncopyExternalImageToTexture =
 actual class Queue(val handler: Long) {
 
     actual fun submit(commandsBuffer: List<CommandBuffer>) {
-        JniInterface.instance.wgpuQueueSubmit(
+        JniInterfaceV2.wgpuQueueSubmit(
             handler,
             commandsBuffer.size.toLong(),
             commandsBuffer.map { it.handler }
@@ -22,7 +22,7 @@ actual class Queue(val handler: Long) {
         dataOffset: GPUSize64,
         size: GPUSize64
     ) {
-        JniInterface.instance.wgpuQueueWriteBuffer(
+        JniInterfaceV2.wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
@@ -39,7 +39,7 @@ actual class Queue(val handler: Long) {
         dataOffset: GPUSize64,
         size: GPUSize64
     ) {
-        JniInterface.instance.wgpuQueueWriteBuffer(
+        JniInterfaceV2.wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
@@ -65,7 +65,7 @@ actual class Queue(val handler: Long) {
 
         val bytePerPixel = destination.texture.format.getBytesPerPixel()
 
-        JniInterface.instance.wgpuQueueWriteTexture(
+        JniInterfaceV2.wgpuQueueWriteTexture(
             handler,
             destination,
             image.data,

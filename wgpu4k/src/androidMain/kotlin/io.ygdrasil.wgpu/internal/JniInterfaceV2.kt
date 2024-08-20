@@ -14,6 +14,7 @@ import io.ygdrasil.wgpu.GPUSize32Out
 import io.ygdrasil.wgpu.GPUSize64
 import io.ygdrasil.wgpu.ImageCopyBuffer
 import io.ygdrasil.wgpu.ImageCopyTexture
+import io.ygdrasil.wgpu.ImageCopyTextureTagged
 import io.ygdrasil.wgpu.PipelineLayoutDescriptor
 import io.ygdrasil.wgpu.PowerPreference
 import io.ygdrasil.wgpu.QuerySetDescriptor
@@ -229,4 +230,43 @@ object JniInterfaceV2 {
     external fun wgpuRenderPassEncoderSetPipeline(handler: Long, renderPipeline: Long)
     external fun wgpuRenderPassEncoderEnd(handler: Long)
     external fun wgpuRenderPassEncoderRelease(handler: Long)
+
+    /*** Queue ***/
+    external fun wgpuQueueSubmit(
+        handler: Long,
+        commandsBufferSize: Long,
+        commandsBuffer: List<Long>
+    )
+    // TODO jni
+    external fun wgpuQueueWriteBuffer(
+        handler: Long,
+        buffer: Long,
+        bufferOffset: GPUSize64,
+        data: FloatArray,
+        dataOffset: GPUSize64,
+        size: Long
+    )
+    // TODO jni
+    external fun wgpuQueueWriteBuffer(
+        handler: Long,
+        buffer: Long,
+        bufferOffset: GPUSize64,
+        data: IntArray,
+        dataOffset: GPUSize64,
+        size: Long
+    )
+    // TODO jni
+    external fun wgpuQueueWriteTexture(
+        handler: Long,
+        destination: ImageCopyTextureTagged,
+        data: ByteArray,
+        toLong: Long,
+        width: Int,
+        height: Int,
+        bytePerPixel: Int
+    )
+
+    /*** CommandBuffer ***/
+
+    external fun wgpuCommandBufferRelease(handler: Long)
 }
