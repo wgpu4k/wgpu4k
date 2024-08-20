@@ -48,16 +48,18 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         println("surfaceDestroyed")
+        application?.apply {
+            currentScene.close()
+            wgpuContext.close()
+        }
         application = null
     }
 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
-        println("draw")
 
         MainScope().launch {
             try {
-                if (application != null) println("draw")
                 application?.renderFrame()
                 invalidate()
             } catch (e: Exception) {
@@ -67,7 +69,7 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     }
 
     fun changeExample(index: Int) {
-        println("surfaceDestroyed with index $index")
+        println("changeExample with index $index")
         // TODO
     }
 
