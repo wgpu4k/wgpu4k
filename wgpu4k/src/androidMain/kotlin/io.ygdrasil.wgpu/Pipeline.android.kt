@@ -2,7 +2,7 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.JniInterface
 
-actual class RenderPipeline(internal val handler: Long) : AutoCloseable {
+actual class RenderPipeline(val handler: Long) : AutoCloseable {
 
     actual fun getBindGroupLayout(index: Int): BindGroupLayout {
         return JniInterface.instance.wgpuRenderPipelineGetBindGroupLayout(handler, index)
@@ -15,4 +15,4 @@ actual class RenderPipeline(internal val handler: Long) : AutoCloseable {
 
 }
 
-actual class PipelineLayout(internal val handler: Long)
+actual class PipelineLayout(val handler: Long)

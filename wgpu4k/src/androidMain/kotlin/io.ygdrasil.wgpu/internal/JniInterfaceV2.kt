@@ -53,7 +53,6 @@ object JniInterfaceV2 {
         handler: Long,
         descriptor: CommandEncoderDescriptor?
     ): Long
-    // TODO jni
     external fun wgpuDeviceCreateShaderModule(
         handler: Long,
         descriptor: ShaderModuleDescriptor

@@ -3,6 +3,7 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.JNIEnvPointer
+import io.ygdrasil.wgpu.mapper.mapRenderPipelineDescriptor
 import io.ygdrasil.wgpu.mapper.mapShaderModuleDescriptor
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.memScoped
@@ -18,6 +19,13 @@ import kotlin.experimental.ExperimentalNativeApi
 fun wgpuDeviceCreateShaderModule(env: JNIEnvPointer, thiz: jclass, handler: jlong, descriptor: jobject) = memScoped {
     mapShaderModuleDescriptor(descriptor, env)
         .let { webgpu.wgpuDeviceCreateShaderModule(handler.toCPointer(), it.ptr) }
+        .toLong()
+}
+
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuDeviceCreateRenderPipeline")
+fun wgpuDeviceCreateRenderPipeline(env: JNIEnvPointer, thiz: jclass, handler: jlong, descriptor: jobject) = memScoped {
+    mapRenderPipelineDescriptor(descriptor, env)
+        .let { webgpu.wgpuDeviceCreateRenderPipeline(handler.toCPointer(), it.ptr) }
         .toLong()
 }
 

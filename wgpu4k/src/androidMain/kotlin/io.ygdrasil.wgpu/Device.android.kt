@@ -15,10 +15,6 @@ actual class Device(internal val handler: Long) : AutoCloseable {
     }
 
     actual fun createShaderModule(descriptor: ShaderModuleDescriptor): ShaderModule {
-        descriptor.compilationHints
-            .javaClass
-            .methods
-            .forEach { println(it) }
         return JniInterfaceV2.wgpuDeviceCreateShaderModule(handler, descriptor)
             .let(::ShaderModule)
     }
@@ -29,6 +25,10 @@ actual class Device(internal val handler: Long) : AutoCloseable {
     }
 
     actual fun createRenderPipeline(descriptor: RenderPipelineDescriptor): RenderPipeline {
+        descriptor.multisample
+            .javaClass
+            .methods
+            .forEach { println(it) }
         return JniInterfaceV2.wgpuDeviceCreateRenderPipeline(handler, descriptor)
             .let(::RenderPipeline)
     }

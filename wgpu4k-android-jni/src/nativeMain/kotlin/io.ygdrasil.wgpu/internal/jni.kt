@@ -20,12 +20,42 @@ import platform.android.jobject
 import platform.android.jstring
 import platform.android.jvalue
 
+/**
+ * https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/types.html
+ *
+ * Java VM Type Signatures
+ * Type Signature	Java Type
+ * Z	boolean
+ * B	byte
+ * C	char
+ * S	short
+ * I	int
+ * J	long
+ * F	float
+ * D	double
+ * L fully-qualified-class ;	fully-qualified-class
+ * [ type	type[]
+ * ( arg-types ) ret-type	method type
+ */
+
 typealias JNIEnvPointer = CPointer<JNIEnvVar>
+
+internal fun JNIEnvPointer.callBooleanMethodFrom(thiz: jobject, methodName: String): Boolean = memScoped {
+    val jclass = getObjectClass(thiz) ?: error("fail to get class of $thiz")
+    val methodId = getMethodID(jclass, methodName, "()Z") ?: error("fail to get method of $methodName")
+    return callBooleanMethodA(thiz, methodId) == 1.toUByte()
+}
 
 internal fun JNIEnvPointer.callIntMethodFrom(thiz: jobject, methodName: String): Int = memScoped {
     val jclass = getObjectClass(thiz) ?: error("fail to get class of $thiz")
     val methodId = getMethodID(jclass, methodName, "()I") ?: error("fail to get method of $methodName")
     return callIntMethodA(thiz, methodId)
+}
+
+internal fun JNIEnvPointer.callLongMethodFrom(thiz: jobject, methodName: String): Long = memScoped {
+    val jclass = getObjectClass(thiz) ?: error("fail to get class of $thiz")
+    val methodId = getMethodID(jclass, methodName, "()J") ?: error("fail to get method of $methodName")
+    return callLongMethodA(thiz, methodId)
 }
 
 internal fun JNIEnvPointer.callStringMethodFrom(thiz: jobject, methodName: String): jstring? =
@@ -49,6 +79,10 @@ internal fun JNIEnvPointer.getMethodID(jclass: jclass, methodName: String, signa
 
 internal fun JNIEnvPointer.callIntMethodA(thiz: jobject, methodId: jmethodID) =
     pointed.pointed?.CallIntMethodA!!.invoke(this, thiz, methodId, null)
+internal fun JNIEnvPointer.callLongMethodA(thiz: jobject, methodId: jmethodID) =
+    pointed.pointed?.CallLongMethodA!!.invoke(this, thiz, methodId, null)
+internal fun JNIEnvPointer.callBooleanMethodA(thiz: jobject, methodId: jmethodID) =
+    pointed.pointed?.CallBooleanMethodA!!.invoke(this, thiz, methodId, null)
 
 internal fun JNIEnvPointer.callObjectMethodA(thiz: jobject, methodId: jmethodID, args: CPointer<jvalue>?) =
     pointed.pointed?.CallObjectMethodA!!.invoke(this, thiz, methodId, args)
@@ -59,6 +93,7 @@ internal fun jstring.toCString(env: JNIEnvPointer, arena: ArenaBase): CPointer<B
         ?.invoke(env, this, arena.alloc<UByteVar>().ptr)
 }
 
+fun Boolean.toUInt() = if (true) 1u else 0u
 
 fun samplestring(env: CPointer<JNIEnvVar>, clazz: jclass, backendHolder: jobject?) {
     memScoped {
