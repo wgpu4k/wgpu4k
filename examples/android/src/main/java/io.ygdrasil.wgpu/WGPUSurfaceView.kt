@@ -8,16 +8,11 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import io.ygdrasil.wgpu.examples.Application
 import io.ygdrasil.wgpu.examples.createApplication
-import io.ygdrasil.wgpu.examples.genericAssetManager
 import korlibs.io.android.withAndroidContext
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.future.future
 import kotlinx.coroutines.launch
 
 class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
-    //private var rustBrige = RustBridge()
-    private var wgpuObj: Long = Long.MAX_VALUE
-    private var idx: Int = 0
     private var application: Application? = null
 
     constructor(context: Context) : super(context)
@@ -49,32 +44,11 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
             }
         }
 
-
-        //wgpuObj = rustBrige.createWgpuCanvas(wgpuIntance, surfaceHolder.surface, this.idx)
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         println("surfaceDestroyed")
         application = null
-        if (wgpuObj != Long.MAX_VALUE) {
-            //rustBrige.dropWgpuCanvas(wgpuObj)
-            wgpuObj = Long.MAX_VALUE
-        }
-    }
-
-    override fun surfaceRedrawNeeded(holder: SurfaceHolder) {
-        println("surfaceRedrawNeeded")
-    }
-
-    override fun surfaceRedrawNeededAsync(holder: SurfaceHolder, drawingFinished: Runnable) {
-        println("surfaceRedrawNeededAsync")
-        surfaceRedrawNeeded(holder)
-        drawingFinished.run()
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        println("onDraw")
     }
 
     override fun draw(canvas: Canvas) {
@@ -85,24 +59,18 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
             try {
                 if (application != null) println("draw")
                 application?.renderFrame()
+                invalidate()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
-
-        if (wgpuObj == Long.MAX_VALUE) {
-            return
-        }
-        //rustBrige.enterFrame(wgpuObj)
-
-        invalidate()
     }
 
     fun changeExample(index: Int) {
-        if (wgpuObj != Long.MAX_VALUE && this.idx != index) {
-            //rustBrige.changeExample(wgpuObj, index)
-            this.idx = index
-        }
+        println("surfaceDestroyed with index $index")
+        // TODO
     }
+
+    override fun surfaceRedrawNeeded(holder: SurfaceHolder) { }
 
 }
