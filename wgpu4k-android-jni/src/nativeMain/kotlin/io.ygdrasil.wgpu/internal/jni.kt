@@ -46,6 +46,12 @@ internal fun JNIEnvPointer.callBooleanMethodFrom(thiz: jobject, methodName: Stri
     return callBooleanMethodA(thiz, methodId) == 1.toUByte()
 }
 
+internal fun JNIEnvPointer.callFloatMethodFrom(thiz: jobject, methodName: String): Float = memScoped {
+    val jclass = getObjectClass(thiz) ?: error("fail to get class of $thiz")
+    val methodId = getMethodID(jclass, methodName, "()F") ?: error("fail to get method of $methodName")
+    return callFloatMethodA(thiz, methodId)
+}
+
 internal fun JNIEnvPointer.callIntMethodFrom(thiz: jobject, methodName: String): Int = memScoped {
     val jclass = getObjectClass(thiz) ?: error("fail to get class of $thiz")
     val methodId = getMethodID(jclass, methodName, "()I") ?: error("fail to get method of $methodName")
@@ -65,10 +71,10 @@ internal fun JNIEnvPointer.callListMethodFrom(thiz: jobject, methodName: String)
     callObjectMethodFrom(thiz, methodName, "java/util/List")?.let { JniList(it) }
 
 
-internal fun JNIEnvPointer.callObjectMethodFrom(thiz: jobject, methodName: String, returnType: String, args: CPointer<jvalue>? = null): jobject? =
+internal fun JNIEnvPointer.callObjectMethodFrom(thiz: jobject, methodName: String, returnType: String, args: CPointer<jvalue>? = null, argsType: String = ""): jobject? =
     memScoped {
         val jclass = getObjectClass(thiz) ?: error("fail to get class of $thiz")
-        val methodId = getMethodID(jclass, methodName, "()L$returnType;") ?: error("fail to get method of $methodName")
+        val methodId = getMethodID(jclass, methodName, "($argsType)L$returnType;") ?: error("fail to get method of $methodName with return type $returnType and args $argsType")
         return callObjectMethodA(thiz, methodId, args)
     }
 
@@ -83,6 +89,8 @@ internal fun JNIEnvPointer.callLongMethodA(thiz: jobject, methodId: jmethodID) =
     pointed.pointed?.CallLongMethodA!!.invoke(this, thiz, methodId, null)
 internal fun JNIEnvPointer.callBooleanMethodA(thiz: jobject, methodId: jmethodID) =
     pointed.pointed?.CallBooleanMethodA!!.invoke(this, thiz, methodId, null)
+internal fun JNIEnvPointer.callFloatMethodA(thiz: jobject, methodId: jmethodID) =
+    pointed.pointed?.CallFloatMethodA!!.invoke(this, thiz, methodId, null)
 
 internal fun JNIEnvPointer.callObjectMethodA(thiz: jobject, methodId: jmethodID, args: CPointer<jvalue>?) =
     pointed.pointed?.CallObjectMethodA!!.invoke(this, thiz, methodId, args)

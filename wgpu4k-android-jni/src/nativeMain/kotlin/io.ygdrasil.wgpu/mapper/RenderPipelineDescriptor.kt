@@ -4,6 +4,7 @@ package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.internal.JNIEnvPointer
 import io.ygdrasil.wgpu.internal.callBooleanMethodFrom
+import io.ygdrasil.wgpu.internal.callFloatMethodFrom
 import io.ygdrasil.wgpu.internal.callIntMethodFrom
 import io.ygdrasil.wgpu.internal.callListMethodFrom
 import io.ygdrasil.wgpu.internal.callLongMethodFrom
@@ -15,6 +16,7 @@ import kotlinx.cinterop.*
 import platform.sles.jobject
 import webgpu.*
 import kotlin.let
+import kotlin.toUInt
 
 internal fun ArenaBase.mapRenderPipelineDescriptor(input: jobject, env: JNIEnvPointer) =
     alloc<WGPURenderPipelineDescriptor>().also { output ->
@@ -35,9 +37,13 @@ internal fun ArenaBase.mapRenderPipelineDescriptor(input: jobject, env: JNIEnvPo
                 "io/ygdrasil/wgpu/RenderPipelineDescriptor\$PrimitiveState"
             ) ?: error("primitive should not be null"), output.primitive, env
         )
-        /*
-        if (input.depthStencil != null) output.depthStencil = map(input.depthStencil).ptr
-        if (input.fragment != null) output.fragment = map(input.fragment).ptr*/
+        env.callObjectMethodFrom(input, "getDepthStencil", "io/ygdrasil/wgpu/RenderPipelineDescriptor\$DepthStencilState")?.let { depthStencil ->
+            output.depthStencil = mapDepthStencilState(depthStencil, env).ptr
+        }
+        env.callObjectMethodFrom(input, "getFragment", "io/ygdrasil/wgpu/RenderPipelineDescriptor\$FragmentState")?.let { fragment ->
+            output.fragment = mapFragment(fragment, env).ptr
+
+        }
         mapMultisampleState(
             env.callObjectMethodFrom(
                 input,
@@ -46,6 +52,128 @@ internal fun ArenaBase.mapRenderPipelineDescriptor(input: jobject, env: JNIEnvPo
             ) ?: error("multisample should not be null"), output.multisample, env)
         println("end mapRenderPipelineDescriptor")
     }
+
+private fun ArenaBase.mapFragment(input: jobject, env: JNIEnvPointer): WGPUFragmentState =
+    alloc<WGPUFragmentState>().also { output ->
+        println("fragment $output")
+        output.module = env.callObjectMethodFrom(input, "getModule", "io/ygdrasil/wgpu/ShaderModule")
+            ?.let { module -> env.callLongMethodFrom(module, "getHandler") }
+            ?.toCPointer()
+        output.entryPoint = env.callStringMethodFrom(input, "getEntryPoint")?.toCString(env, this)
+
+        env.callListMethodFrom(input, "getTargets")?.also { getTargets ->
+            getTargets.getSize(env)
+                .takeIf { it > 0 }
+                ?.let { size ->
+                    val targets = allocArray<WGPUColorTargetState>(size.toLong())
+                    repeat(size) { index ->
+                        mapColorTargetState(
+                            getTargets.getObject(index, env)?.reinterpret() ?: error("fail to get object"),
+                            targets[index],
+                            env
+                        )
+                    }
+                    output.targetCount = size.toULong()
+                    output.targets = targets
+                }
+        } ?: error("getTargets should not be null")
+    }
+
+fun ArenaBase.mapColorTargetState(input: jobject, output: WGPUColorTargetState, env: JNIEnvPointer) {
+    println("colorTargetState $output")
+    output.format = env.callObjectMethodFrom(input, "getFormat", "io/ygdrasil/wgpu/TextureFormat")
+        ?.let { stepMode -> env.callIntMethodFrom(stepMode, "getValue") }
+        ?.toUInt() ?: error("getFormat should not be null")
+    output.writeMask = env.callObjectMethodFrom(input, "getWriteMask", "io/ygdrasil/wgpu/ColorWriteMask")
+        ?.let { stepMode -> env.callIntMethodFrom(stepMode, "getValue") }
+        ?.toUInt() ?: error("getWriteMask should not be null")
+    output.blend = mapBlendState(
+        env.callObjectMethodFrom(input, "getBlend", "io/ygdrasil/wgpu/RenderPipelineDescriptor\$FragmentState\$ColorTargetState\$BlendState") ?: error("fait to get BlendState"),
+        env
+
+    ).ptr
+}
+
+fun ArenaBase.mapBlendState(input: jobject, env: JNIEnvPointer) =
+    alloc<WGPUBlendState>().also { output ->
+        println("blend state $output")
+        mapBlendComponent(
+            env.callObjectMethodFrom(input, "getColor", "io/ygdrasil/wgpu/RenderPipelineDescriptor\$FragmentState\$ColorTargetState\$BlendState\$BlendComponent") ?: error("fait to get BlendComponent"),
+            output.color,
+            env
+        )
+        mapBlendComponent(
+            env.callObjectMethodFrom(input, "getAlpha", "io/ygdrasil/wgpu/RenderPipelineDescriptor\$FragmentState\$ColorTargetState\$BlendState\$BlendComponent") ?: error("fait to get BlendComponent"),
+            output.alpha,
+            env
+        )
+    }
+
+fun mapBlendComponent(
+    input: jobject,
+    output: WGPUBlendComponent,
+    env: JNIEnvPointer
+) {
+    println("blend component $output")
+    output.operation = env.callObjectMethodFrom(input, "getOperation", "io/ygdrasil/wgpu/BlendOperation")
+        ?.let { stepMode -> env.callIntMethodFrom(stepMode, "getValue") }
+        ?.toUInt() ?: error("getSrcFactor should not be null")
+    output.srcFactor = env.callObjectMethodFrom(input, "getSrcFactor", "io/ygdrasil/wgpu/BlendFactor")
+    ?.let { stepMode -> env.callIntMethodFrom(stepMode, "getValue") }
+        ?.toUInt() ?: error("getSrcFactor should not be null")
+    output.dstFactor = env.callObjectMethodFrom(input, "getDstFactor", "io/ygdrasil/wgpu/BlendFactor")
+        ?.let { stepMode -> env.callIntMethodFrom(stepMode, "getValue") }
+        ?.toUInt() ?: error("getDstFactor should not be null")
+}
+
+private fun ArenaBase.mapDepthStencilState(input: jobject, env: JNIEnvPointer): WGPUDepthStencilState =
+    alloc<WGPUDepthStencilState>()
+        .also { output ->
+            output.format = env.callObjectMethodFrom(input, "getFormat", "io/ygdrasil/wgpu/TextureFormat")
+                ?.let { stepMode -> env.callIntMethodFrom(stepMode, "getValue") }
+                ?.toUInt() ?: error("getFormat should not be null")
+            env.callObjectMethodFrom(input, "getDepthWriteEnabled", "java/lang/Boolean")
+                ?.let { depthWriteEnabled -> output.depthWriteEnabled = env.callBooleanMethodFrom(depthWriteEnabled, "booleanValue").toUInt() }
+            env.callObjectMethodFrom(input, "getDepthCompare", "io/ygdrasil/wgpu/CompareFunction")
+                ?.let { stepMode -> env.callIntMethodFrom(stepMode, "getValue") }
+                ?.toUInt()?.let { output.depthCompare = it }
+            mapStencilFaceState(
+                env.callObjectMethodFrom(
+                    input,
+                    "getStencilFront",
+                    "io/ygdrasil/wgpu/RenderPipelineDescriptor\$DepthStencilState\$StencilFaceState"
+                ) ?: error("multisample should not be null"), output.stencilFront, env
+            )
+            mapStencilFaceState(
+                env.callObjectMethodFrom(
+                    input,
+                    "getStencilBack",
+                    "io/ygdrasil/wgpu/RenderPipelineDescriptor\$DepthStencilState\$StencilFaceState"
+                ) ?: error("multisample should not be null"), output.stencilBack, env
+            )
+            output.stencilReadMask = env.callLongMethodFrom(input, "getStencilReadMask").toUInt()
+            output.stencilWriteMask = env.callLongMethodFrom(input, "getStencilWriteMask").toUInt()
+            output.depthBias = env.callIntMethodFrom(input, "getDepthBias")
+            output.depthBiasSlopeScale = env.callFloatMethodFrom(input, "getDepthBiasSlopeScale")
+            output.depthBiasClamp = env.callFloatMethodFrom(input, "getDepthBiasClamp")
+        }
+
+fun mapStencilFaceState(input: jobject, output: WGPUStencilFaceState, env: JNIEnvPointer) {
+    println("mapStencilFaceState")
+    output.compare = env.callObjectMethodFrom(input, "getCompare", "io/ygdrasil/wgpu/CompareFunction")
+    ?.let { stepMode -> env.callIntMethodFrom(stepMode, "getValue") }
+        ?.toUInt() ?: error("getCompare should not be null")
+    output.failOp = env.callObjectMethodFrom(input, "getFailOp", "io/ygdrasil/wgpu/StencilOperation")
+    ?.let { stepMode -> env.callIntMethodFrom(stepMode, "getValue") }
+        ?.toUInt() ?: error("getFailOp should not be null")
+    output.depthFailOp = env.callObjectMethodFrom(input, "getDepthFailOp", "io/ygdrasil/wgpu/StencilOperation")
+        ?.let { stepMode -> env.callIntMethodFrom(stepMode, "getValue") }
+        ?.toUInt() ?: error("getDepthFailOp should not be null")
+    output.passOp = env.callObjectMethodFrom(input, "getPassOp", "io/ygdrasil/wgpu/StencilOperation")
+        ?.let { stepMode -> env.callIntMethodFrom(stepMode, "getValue") }
+        ?.toUInt() ?: error("getPassOp should not be null")
+}
+
 
 private fun mapMultisampleState(input: jobject, output: WGPUMultisampleState, env: JNIEnvPointer) {
     println("mapMultisampleState")
@@ -99,8 +227,7 @@ private fun ArenaBase.mapVertex(input: jobject, output: WGPUVertexState, env: JN
                     mapVertexBufferLayout(
                         compilationHints.getObject(
                             index,
-                            env,
-                            "io/ygdrasil/wgpu/RenderPipelineDescriptor/VertexState\$VertexBufferLayout"
+                            env
                         )?.reinterpret() ?: error("fail to get object"),
                         buffers[index],
                         env
@@ -130,8 +257,7 @@ private fun ArenaBase.mapVertexBufferLayout(
                     mapVertexAttribute(
                         compilationHints.getObject(
                             index,
-                            env,
-                            "io/ygdrasil/wgpu/RenderPipelineDescriptor/VertexState/VertexBufferLayout\$VertexAttribute"
+                            env
                         )?.reinterpret() ?: error("fail to get object"),
                         attributes[index],
                         env
@@ -160,69 +286,3 @@ private fun mapVertexAttribute(
     output.shaderLocation = env.callIntMethodFrom(input, "getShaderLocation").toUInt()
 }
 
-
-/*
-fun ArenaBase.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState, output: WGPUColorTargetState) {
-    println("colorTargetState $output")
-    output.format = input.format.uValue
-    output.writeMask = input.writeMask.uValue
-    output.blend = map(input.blend).ptr
-}
-
-fun ArenaBase.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState) =
-    alloc<WGPUBlendState>().also { output ->
-        println("blend state $output")
-        map(input.color, output.color)
-        map(input.alpha, output.alpha)
-    }
-
-fun map(
-    input: RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent,
-    output: WGPUBlendComponent
-) {
-    println("blend component $output")
-    output.operation = input.operation.uValue
-    output.srcFactor = input.srcFactor.uValue
-    output.dstFactor = input.dstFactor.uValue
-}
-
-private fun ArenaBase.map(input: RenderPipelineDescriptor.FragmentState): WGPUFragmentState =
-    alloc<WGPUFragmentState>().also { output ->
-        println("fragment $output")
-        output.module = input.module.handler
-        output.entryPoint = input.entryPoint.cstr.getPointer(this)
-        if (input.targets.isNotEmpty()) {
-            output.targetCount = input.targets.size.toULong()
-            val colorTargets = allocArray<WGPUColorTargetState>(input.targets.size)
-            println("colorTargets $colorTargets")
-            input.targets.forEachIndexed { index, colorTargetState ->
-                map(colorTargetState, colorTargets[index])
-            }
-            output.targets = colorTargets
-        }
-    }
-
-private fun ArenaBase.map(input: RenderPipelineDescriptor.DepthStencilState): WGPUDepthStencilState =
-    alloc<WGPUDepthStencilState>()
-        .also { output ->
-            output.format = input.format.uValue
-            if (input.depthWriteEnabled != null) output.depthWriteEnabled = input.depthWriteEnabled.toUInt()
-            if (input.depthCompare != null) output.depthCompare = input.depthCompare.uValue
-            map(input.stencilFront, output.stencilFront)
-            map(input.stencilBack, output.stencilBack)
-            output.stencilReadMask = input.stencilReadMask.toUInt()
-            output.stencilWriteMask = input.stencilWriteMask.toUInt()
-            output.depthBias = input.depthBias
-            output.depthBiasSlopeScale = input.depthBiasSlopeScale
-            output.depthBiasClamp = input.depthBiasClamp
-        }
-
-fun map(input: RenderPipelineDescriptor.DepthStencilState.StencilFaceState, output: WGPUStencilFaceState) {
-    output.compare = input.compare.uValue
-    output.failOp = input.failOp.uValue
-    output.depthFailOp = input.depthFailOp.uValue
-    output.passOp = input.passOp.uValue
-}
-
-
-*/

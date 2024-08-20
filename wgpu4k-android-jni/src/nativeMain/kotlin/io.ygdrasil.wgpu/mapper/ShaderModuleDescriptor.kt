@@ -27,7 +27,7 @@ internal fun ArenaBase.mapShaderModuleDescriptor(input: jobject, env: JNIEnvPoin
                      val hints = allocArray<WGPUShaderModuleCompilationHint>(size.toLong())
                      repeat(size) { index ->
                          mapCompilationHints(
-                             compilationHints.getObject(index, env, "io/ygdrasil/wgpu/ShaderModuleDescriptor/CompilationHint")?.reinterpret() ?: error("fail to get object"),
+                             compilationHints.getObject(index, env)?.reinterpret() ?: error("fail to get object"),
                              hints[index],
                              env
                          )

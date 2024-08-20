@@ -12,16 +12,17 @@ value class JniList(val handler: jobject) {
 
     fun getSize(env: JNIEnvPointer): Int {
         println("getSize with handler $handler")
-        return env.callIntMethodFrom(handler, "getSize")
+        return env.callIntMethodFrom(handler, "size")
     }
 
-    fun getObject(index: Int, env: JNIEnvPointer, returnType: String): jobject? = memScoped {
-        println("getObject at $index with return type $returnType and handler $handler")
+    fun getObject(index: Int, env: JNIEnvPointer): jobject? = memScoped {
+        println("getObject at $index and handler $handler")
         return env.callObjectMethodFrom(
-            handler, "get", returnType,
-            alloc<jvalue>().also {
+            handler, "get", "java/lang/Object",
+            args = alloc<jvalue>().also {
                 it.i = index
-            }.ptr
+            }.ptr,
+            argsType = "I"
         )
     }
 }
