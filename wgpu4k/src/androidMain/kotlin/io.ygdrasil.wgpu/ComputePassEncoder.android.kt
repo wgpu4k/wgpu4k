@@ -2,7 +2,7 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.JniInterface
 
-actual class ComputePassEncoder(internal val handler: Long) : AutoCloseable {
+actual class ComputePassEncoder(val handler: Long) : AutoCloseable {
 
     actual fun setPipeline(pipeline: ComputePipeline) {
         JniInterface.instance.wgpuComputePassEncoderSetPipeline(handler, pipeline.handler)

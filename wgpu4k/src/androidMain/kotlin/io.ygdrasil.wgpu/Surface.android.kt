@@ -2,7 +2,7 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.JniInterfaceV2
 
-actual class Surface(internal val handler: Long, actual val width: Int, actual val height: Int) : AutoCloseable {
+actual class Surface(val handler: Long, actual val width: Int, actual val height: Int) : AutoCloseable {
 
     private var _textureFormat: TextureFormat? = null
     actual val textureFormat: TextureFormat

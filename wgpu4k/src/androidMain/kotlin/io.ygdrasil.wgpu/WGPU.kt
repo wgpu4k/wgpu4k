@@ -3,7 +3,7 @@ package io.ygdrasil.wgpu
 import android.view.SurfaceHolder
 import io.ygdrasil.wgpu.internal.JniInterfaceV2
 
-class WGPU(internal val handler: Long) : AutoCloseable {
+class WGPU(val handler: Long) : AutoCloseable {
 
     override fun close() {
         JniInterfaceV2.wgpuInstanceRelease(handler)

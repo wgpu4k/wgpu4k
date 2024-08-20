@@ -6,14 +6,14 @@ class RenderPassTimestampWrites
 
 data class RenderPassDescriptor(
     val colorAttachments: List<ColorAttachment> = listOf(),
-    val depthStencilAttachment: RenderPassDepthStencilAttachment? = null,
+    val depthStencilAttachment: DepthStencilAttachment? = null,
     val occlusionQuerySet: QuerySet? = null,
     val timestampWrites: RenderPassTimestampWrites? = null,
     val maxDrawCount: GPUSize64 = 50000000,
     val label: String? = null,
 ) {
 
-    data class RenderPassDepthStencilAttachment(
+    data class DepthStencilAttachment(
         val view: TextureView,
         val depthClearValue: Float? = null,
         val depthLoadOp: LoadOp? = null,

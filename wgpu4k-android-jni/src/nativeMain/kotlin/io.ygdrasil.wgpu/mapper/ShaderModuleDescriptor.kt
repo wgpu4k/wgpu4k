@@ -23,7 +23,6 @@ internal fun ArenaBase.mapShaderModuleDescriptor(input: jobject, env: JNIEnvPoin
              compilationHints.getSize(env)
                  .takeIf { it > 0 }
                  ?.let { size ->
-                     output.hintCount = size.toULong()
                      val hints = allocArray<WGPUShaderModuleCompilationHint>(size.toLong())
                      repeat(size) { index ->
                          mapCompilationHints(
@@ -32,6 +31,7 @@ internal fun ArenaBase.mapShaderModuleDescriptor(input: jobject, env: JNIEnvPoin
                              env
                          )
                      }
+                     output.hintCount = size.toULong()
                      output.hints = hints
              }
          } ?: error("getCompilationHints should not be null")

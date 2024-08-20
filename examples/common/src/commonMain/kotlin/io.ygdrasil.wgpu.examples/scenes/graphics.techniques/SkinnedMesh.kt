@@ -44,7 +44,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
                     storeOp = StoreOp.store
                 )
             ),
-            depthStencilAttachment = RenderPassDescriptor.RenderPassDepthStencilAttachment(
+            depthStencilAttachment = RenderPassDescriptor.DepthStencilAttachment(
                 view = depthTexture.createView().bind(),
                 depthLoadOp = LoadOp.clear,
                 depthClearValue = 1f,

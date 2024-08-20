@@ -58,7 +58,7 @@ internal fun Arena.map(input: Color, output: MemorySegment) {
     }
 
 
-internal fun Arena.map(input: RenderPassDescriptor.RenderPassDepthStencilAttachment): MemorySegment =
+internal fun Arena.map(input: RenderPassDescriptor.DepthStencilAttachment): MemorySegment =
     WGPURenderPassDepthStencilAttachment.allocate(this).also { depthStencilAttachment ->
         WGPURenderPassDepthStencilAttachment.view(depthStencilAttachment, input.view.handler)
         if (input.depthClearValue != null) WGPURenderPassDepthStencilAttachment.depthClearValue(

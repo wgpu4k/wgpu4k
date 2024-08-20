@@ -2,7 +2,7 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.JniInterface
 
-actual class RenderBundleEncoder(internal val handler: Long) : AutoCloseable {
+actual class RenderBundleEncoder(val handler: Long) : AutoCloseable {
 
     actual fun finish(descriptor: RenderBundleDescriptor): RenderBundle {
         return JniInterface.instance.wgpuRenderBundleEncoderFinish(handler, descriptor)

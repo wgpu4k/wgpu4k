@@ -4,8 +4,6 @@ import io.ygdrasil.wgpu.*
 
 class JniInterface  {
 
-    external fun wgpuTextureRelease(handler: Long)
-
     /*** Sampler ***/
     external fun wgpuSamplerRelease(handler: Long)
 
@@ -166,42 +164,6 @@ class JniInterface  {
 
     external fun wgpuComputePassEncoderEnd(handler: Long)
     external fun wgpuComputePassEncoderRelease(handler: Long)
-
-    /*** CommandEncoder ***/
-
-    external fun wgpuCommandEncoderBeginRenderPass(
-        handler: Long,
-        descriptor: RenderPassDescriptor
-    ): Long
-
-    external fun wgpuCommandEncoderFinish(handler: Long): Long
-    external fun wgpuCommandEncoderCopyTextureToTexture(
-        handler: Long,
-        source: ImageCopyTexture,
-        destination: ImageCopyTexture,
-        copySize: Size3D
-    )
-
-    external fun wgpuCommandEncoderBeginComputePass(
-        handler: Long,
-        descriptor: ComputePassDescriptor?
-    ): Long
-
-    external fun wgpuCommandEncoderCopyTextureToBuffer(
-        handler: Long,
-        source: ImageCopyTexture,
-        destination: ImageCopyBuffer,
-        copySize: Size3D
-    )
-
-    external fun wgpuCommandEncoderCopyBufferToTexture(
-        handler: Long,
-        source: ImageCopyBuffer,
-        destination: ImageCopyTexture,
-        copySize: Size3D
-    )
-
-    external fun wgpuCommandEncoderRelease(handler: Long)
 
     /*** CommandBuffer ***/
 

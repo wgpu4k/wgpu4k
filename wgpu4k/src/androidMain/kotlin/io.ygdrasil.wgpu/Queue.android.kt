@@ -5,7 +5,7 @@ import io.ygdrasil.wgpu.internal.JniInterface
 private val supportedFormatOncopyExternalImageToTexture =
     listOf(TextureFormat.rgba8unorm, TextureFormat.rgba8unormsrgb)
 
-actual class Queue(internal val handler: Long) {
+actual class Queue(val handler: Long) {
 
     actual fun submit(commandsBuffer: List<CommandBuffer>) {
         JniInterface.instance.wgpuQueueSubmit(

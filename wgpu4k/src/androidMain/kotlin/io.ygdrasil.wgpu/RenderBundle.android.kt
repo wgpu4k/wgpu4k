@@ -1,3 +1,3 @@
 package io.ygdrasil.wgpu
 
-actual class RenderBundle(internal val handler: Long)
+actual class RenderBundle(val handler: Long)

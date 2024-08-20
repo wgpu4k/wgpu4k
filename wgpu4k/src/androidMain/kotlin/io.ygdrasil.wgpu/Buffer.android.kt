@@ -2,7 +2,7 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.JniInterface
 
-actual class Buffer(internal val handler: Long) : AutoCloseable {
+actual class Buffer(val handler: Long) : AutoCloseable {
 
     actual val size: GPUSize64
         get() = JniInterface.instance.wgpuBufferGetSize(handler)

@@ -2,7 +2,7 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.JniInterfaceV2
 
-actual class Texture(internal val handler: Long) : AutoCloseable {
+actual class Texture(val handler: Long) : AutoCloseable {
 
     actual val width: GPUIntegerCoordinateOut
         get() = JniInterfaceV2.wgpuTextureGetWidth(handler)

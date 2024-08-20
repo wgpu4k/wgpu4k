@@ -27,7 +27,7 @@ class RenderPassDescriptorMappingTest : FreeSpec({
                         storeOp = StoreOp.store,
                     )
                 ),
-                depthStencilAttachment = RenderPassDescriptor.RenderPassDepthStencilAttachment(
+                depthStencilAttachment = RenderPassDescriptor.DepthStencilAttachment(
                     view = TextureView(MemorySegment.NULL),
                     depthClearValue = 1.0f,
                     depthLoadOp = LoadOp.clear,

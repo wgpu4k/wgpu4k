@@ -52,6 +52,12 @@ internal fun JNIEnvPointer.callFloatMethodFrom(thiz: jobject, methodName: String
     return callFloatMethodA(thiz, methodId)
 }
 
+internal fun JNIEnvPointer.callDoubleMethodFrom(thiz: jobject, methodName: String): Double = memScoped {
+    val jclass = getObjectClass(thiz) ?: error("fail to get class of $thiz")
+    val methodId = getMethodID(jclass, methodName, "()D") ?: error("fail to get method of $methodName")
+    return callDoubleMethodA(thiz, methodId)
+}
+
 internal fun JNIEnvPointer.callIntMethodFrom(thiz: jobject, methodName: String): Int = memScoped {
     val jclass = getObjectClass(thiz) ?: error("fail to get class of $thiz")
     val methodId = getMethodID(jclass, methodName, "()I") ?: error("fail to get method of $methodName")
@@ -91,6 +97,8 @@ internal fun JNIEnvPointer.callBooleanMethodA(thiz: jobject, methodId: jmethodID
     pointed.pointed?.CallBooleanMethodA!!.invoke(this, thiz, methodId, null)
 internal fun JNIEnvPointer.callFloatMethodA(thiz: jobject, methodId: jmethodID) =
     pointed.pointed?.CallFloatMethodA!!.invoke(this, thiz, methodId, null)
+internal fun JNIEnvPointer.callDoubleMethodA(thiz: jobject, methodId: jmethodID) =
+    pointed.pointed?.CallDoubleMethodA!!.invoke(this, thiz, methodId, null)
 
 internal fun JNIEnvPointer.callObjectMethodA(thiz: jobject, methodId: jmethodID, args: CPointer<jvalue>?) =
     pointed.pointed?.CallObjectMethodA!!.invoke(this, thiz, methodId, args)
