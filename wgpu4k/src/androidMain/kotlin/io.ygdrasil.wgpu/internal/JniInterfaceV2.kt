@@ -9,12 +9,15 @@ import io.ygdrasil.wgpu.ComputePipelineDescriptor
 import io.ygdrasil.wgpu.DeviceDescriptor
 import io.ygdrasil.wgpu.GPUFlagsConstant
 import io.ygdrasil.wgpu.GPUIntegerCoordinateOut
+import io.ygdrasil.wgpu.GPUSize32
 import io.ygdrasil.wgpu.GPUSize32Out
+import io.ygdrasil.wgpu.GPUSize64
 import io.ygdrasil.wgpu.ImageCopyBuffer
 import io.ygdrasil.wgpu.ImageCopyTexture
 import io.ygdrasil.wgpu.PipelineLayoutDescriptor
 import io.ygdrasil.wgpu.PowerPreference
 import io.ygdrasil.wgpu.QuerySetDescriptor
+import io.ygdrasil.wgpu.RenderBundle
 import io.ygdrasil.wgpu.RenderBundleEncoderDescriptor
 import io.ygdrasil.wgpu.RenderPassDescriptor
 import io.ygdrasil.wgpu.RenderPipelineDescriptor
@@ -152,12 +155,10 @@ object JniInterfaceV2 {
     external fun wgpuTextureViewRelease(handler: Long)
 
     /*** CommandEncoder ***/
-    // TODO jni
     external fun wgpuCommandEncoderBeginRenderPass(
         handler: Long,
         descriptor: RenderPassDescriptor
     ): Long
-    // TODO jni
     external fun wgpuCommandEncoderFinish(handler: Long): Long
     // TODO jni
     external fun wgpuCommandEncoderCopyTextureToTexture(
@@ -185,6 +186,47 @@ object JniInterfaceV2 {
         destination: ImageCopyTexture,
         copySize: Size3D
     )
-
     external fun wgpuCommandEncoderRelease(handler: Long)
+
+    /*** RenderPassEncoder ***/
+    // TODO jni
+    external fun wgpuRenderPassEncoderExecuteBundles(
+        handler: Long,
+        bundlesSize: Long,
+        bundles: List<RenderBundle>
+    )
+    // TODO jni
+    external fun wgpuRenderPassEncoderSetIndexBuffer(
+        handler: Long,
+        handler1: Long,
+        value: Int,
+        offset: GPUSize64,
+        size: GPUSize64
+    )
+    // TODO jni
+    external fun wgpuRenderPassEncoderSetVertexBuffer(
+        handler: Long,
+        slot: Int,
+        buffer: Long,
+        offset: Long,
+        size: GPUSize64
+    )
+    // TODO jni
+    external fun wgpuRenderPassEncoderSetBindGroup(
+        handler: Long,
+        index: Int,
+        handler1: Long,
+        l: Long,
+        nothing: Nothing?
+    )
+    external fun wgpuRenderPassEncoderDraw(
+        handler: Long,
+        vertexCount: GPUSize32,
+        instanceCount: GPUSize32,
+        firstVertex: GPUSize32,
+        firstInstance: GPUSize32
+    )
+    external fun wgpuRenderPassEncoderSetPipeline(handler: Long, renderPipeline: Long)
+    external fun wgpuRenderPassEncoderEnd(handler: Long)
+    external fun wgpuRenderPassEncoderRelease(handler: Long)
 }

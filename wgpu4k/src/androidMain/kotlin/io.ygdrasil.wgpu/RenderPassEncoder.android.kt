@@ -1,15 +1,15 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.JniInterface
+import io.ygdrasil.wgpu.internal.JniInterfaceV2
 
 actual class RenderPassEncoder(val handler: Long) : AutoCloseable {
 
     actual fun end() {
-        JniInterface.instance.wgpuRenderPassEncoderEnd(handler)
+        JniInterfaceV2.wgpuRenderPassEncoderEnd(handler)
     }
 
     actual fun setPipeline(renderPipeline: RenderPipeline) {
-        JniInterface.instance.wgpuRenderPassEncoderSetPipeline(handler, renderPipeline.handler)
+        JniInterfaceV2.wgpuRenderPassEncoderSetPipeline(handler, renderPipeline.handler)
     }
 
     actual fun draw(
@@ -18,7 +18,7 @@ actual class RenderPassEncoder(val handler: Long) : AutoCloseable {
         firstVertex: GPUSize32,
         firstInstance: GPUSize32
     ) {
-        JniInterface.instance.wgpuRenderPassEncoderDraw(
+        JniInterfaceV2.wgpuRenderPassEncoderDraw(
             handler,
             vertexCount,
             instanceCount,
@@ -28,7 +28,7 @@ actual class RenderPassEncoder(val handler: Long) : AutoCloseable {
     }
 
     actual fun setBindGroup(index: Int, bindGroup: BindGroup) {
-        JniInterface.instance.wgpuRenderPassEncoderSetBindGroup(
+        JniInterfaceV2.wgpuRenderPassEncoderSetBindGroup(
             handler,
             index,
             bindGroup.handler,
@@ -38,7 +38,7 @@ actual class RenderPassEncoder(val handler: Long) : AutoCloseable {
     }
 
     actual fun setVertexBuffer(slot: Int, buffer: Buffer) {
-        JniInterface.instance.wgpuRenderPassEncoderSetVertexBuffer(
+        JniInterfaceV2.wgpuRenderPassEncoderSetVertexBuffer(
             handler,
             slot,
             buffer.handler,
@@ -48,7 +48,7 @@ actual class RenderPassEncoder(val handler: Long) : AutoCloseable {
     }
 
     actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
-        JniInterface.instance.wgpuRenderPassEncoderSetIndexBuffer(
+        JniInterfaceV2.wgpuRenderPassEncoderSetIndexBuffer(
             handler,
             buffer.handler,
             indexFormat.value,
@@ -57,7 +57,7 @@ actual class RenderPassEncoder(val handler: Long) : AutoCloseable {
         )
     }
     actual fun executeBundles(bundles: List<RenderBundle>) {
-        JniInterface.instance.wgpuRenderPassEncoderExecuteBundles(
+        JniInterfaceV2.wgpuRenderPassEncoderExecuteBundles(
             handler,
             bundles.size.toLong(),
             bundles
@@ -65,7 +65,7 @@ actual class RenderPassEncoder(val handler: Long) : AutoCloseable {
     }
 
     actual override fun close() {
-        JniInterface.instance.wgpuRenderPassEncoderRelease(handler)
+        JniInterfaceV2.wgpuRenderPassEncoderRelease(handler)
     }
 
 }

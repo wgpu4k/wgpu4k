@@ -10,49 +10,6 @@ class JniInterface  {
     /*** ShaderModule ***/
     external fun wgpuShaderModuleRelease(handler: Long)
 
-    /*** RenderPassEncoder ***/
-    external fun wgpuRenderPassEncoderRelease(handler: Long)
-    external fun wgpuRenderPassEncoderExecuteBundles(
-        handler: Long,
-        bundlesSize: Long,
-        bundles: List<RenderBundle>
-    )
-
-    external fun wgpuRenderPassEncoderSetIndexBuffer(
-        handler: Long,
-        handler1: Long,
-        value: Int,
-        offset: GPUSize64,
-        size: GPUSize64
-    )
-
-    external fun wgpuRenderPassEncoderSetVertexBuffer(
-        handler: Long,
-        slot: Int,
-        buffer: Long,
-        offset: Long,
-        size: GPUSize64
-    )
-
-    external fun wgpuRenderPassEncoderSetBindGroup(
-        handler: Long,
-        index: Int,
-        handler1: Long,
-        l: Long,
-        nothing: Nothing?
-    )
-
-    external fun wgpuRenderPassEncoderDraw(
-        handler: Long,
-        vertexCount: GPUSize32,
-        instanceCount: GPUSize32,
-        firstVertex: GPUSize32,
-        firstInstance: GPUSize32
-    )
-
-    external fun wgpuRenderPassEncoderSetPipeline(handler: Long, renderPipeline: Long)
-    external fun wgpuRenderPassEncoderEnd(handler: Long)
-
     /*** RenderBundleEncoder ***/
     external fun wgpuRenderBundleEncoderRelease(handler: Long)
     external fun wgpuRenderBundleEncoderDraw(

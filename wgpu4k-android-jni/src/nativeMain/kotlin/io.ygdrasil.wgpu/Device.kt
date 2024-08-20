@@ -36,6 +36,12 @@ fun wgpuDeviceCreateCommandEncoder(env: JNIEnvPointer, thiz: jclass, handler: jl
         .toLong()
 }
 
+@CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuDeviceGetQueue")
+fun wgpuDeviceGetQueue(env: JNIEnvPointer, thiz: jclass, handler: jlong): jlong {
+    return webgpu.wgpuDeviceGetQueue(handler.toCPointer())
+        .toLong()
+}
+
 @CName("Java_io_ygdrasil_wgpu_internal_JniInterfaceV2_wgpuDeviceRelease")
 fun wgpuDeviceRelease(env: JNIEnvPointer, thiz: jclass, handler: jlong) {
     webgpu.wgpuDeviceRelease(handler.toCPointer())
