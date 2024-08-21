@@ -3,6 +3,7 @@ package io.ygdrasil.wgpu.examples.helper.glb
 import korlibs.io.lang.invalidOp
 import korlibs.math.geom.AABB3D
 import korlibs.math.geom.Vector3
+import kotlin.jvm.JvmInline
 
 enum class VarKind(val bytesSize: Int) {
     //BYTE(1), UNSIGNED_BYTE(1), SHORT(2), UNSIGNED_SHORT(2), INT(4), FLOAT(4) // @TODO: This cause problems on Kotlin/Native Objective-C header.h
@@ -120,7 +121,8 @@ enum class VarType(val kind: VarKind, val elementCount: Int, val isMatrix: Boole
 
 
 /** Encoded in 2 bits */
-inline class AGIndexType(val ordinal: Int) {
+@JvmInline
+value class AGIndexType(val ordinal: Int) {
     val bytesSize: Int get() = when (this) {
         NONE -> 0
         UBYTE -> 1

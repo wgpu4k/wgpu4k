@@ -1,4 +1,3 @@
-import org.gradle.kotlin.dsl.implementation
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
@@ -75,7 +74,6 @@ kotlin {
 
         commonMain {
             dependencies {
-                implementation(kotlin("stdlib-common"))
                 implementation(libs.coroutines)
             }
         }
@@ -168,48 +166,50 @@ if (Platform.os == Os.MacOs) {
     tasks.findByName("mingwX64Test")?.apply { enabled = false }
 }
 
-val jniLibsPath = project.file("src")
-    .resolve("androidMain")
-    .resolve("libs")
+if (isAndroidConfigured) {
+    fun get4kAndroidJniProject() = projects.wgpu4kAndroidJni.identityPath.path
+        ?.let(::project) ?: error("Could not find project path")
 
-val jniBuildPath = get4kAndroidJniProject()
-    .projectDir
-    .resolve("build")
-    .resolve("bin")
+    val jniLibsPath = project.file("src")
+        .resolve("androidMain")
+        .resolve("libs")
 
-val libraryName = "libwgpu4kv2.so"
+    val jniBuildPath = get4kAndroidJniProject()
+        .projectDir
+        .resolve("build")
+        .resolve("bin")
 
-val fileToCopy = listOf(
-    jniBuildPath.resolve("androidNativeArm64").resolve("releaseShared")
-        to jniLibsPath.resolve("arm64-v8a"),
-    jniBuildPath.resolve("androidNativeX64").resolve("releaseShared")
-        to jniLibsPath.resolve("x86_64"),
-)
+    val libraryName = "libwgpu4kv2.so"
 
-tasks.findByName("build")?.apply {
-    dependsOn(":wgpu4k-android-jni:build")
-    doFirst {
-        copyJniLibraries()
+    val fileToCopy = listOf(
+        jniBuildPath.resolve("androidNativeArm64").resolve("releaseShared")
+            to jniLibsPath.resolve("arm64-v8a"),
+        jniBuildPath.resolve("androidNativeX64").resolve("releaseShared")
+            to jniLibsPath.resolve("x86_64"),
+    )
+
+    fun copyJniLibraries() {
+        fileToCopy.forEach { (source, target) ->
+            target.mkdirs()
+            target.resolve(libraryName)
+                .also { fileTarget ->
+                    source.resolve(libraryName).copyTo(fileTarget, overwrite = true)
+                }
+        }
     }
-}
 
-tasks.create("copyJniLibraries") {
-    dependsOn("build")
-    doFirst {
-        copyJniLibraries()
+    tasks.findByName("build")?.apply {
+        dependsOn(":wgpu4k-android-jni:build")
+        doFirst {
+            copyJniLibraries()
+        }
     }
-}
 
-fun get4kAndroidJniProject() = projects.wgpu4kAndroidJni.identityPath.path
-    ?.let(::project) ?: error("Could not find project path")
-
-
-fun copyJniLibraries() {
-    fileToCopy.forEach { (source, target) ->
-        target.mkdirs()
-        target.resolve(libraryName)
-            .also { fileTarget ->
-                source.resolve(libraryName).copyTo(fileTarget, overwrite = true)
-            }
+    tasks.create("copyJniLibraries") {
+        dependsOn("build")
+        doFirst {
+            copyJniLibraries()
+        }
     }
+
 }
