@@ -243,23 +243,15 @@ enum class CompilationMessageType(
 }
 
 enum class CompositeAlphaMode(
-    val value: Int,
-) {
-    auto(0),
-    opaque(1),
-    premultiplied(2),
-    postmultiplied(3),
-    inherit(4);
+    override val value: Int,
+    val stringValue: String,
+) : EnumerationWithValue {
+    auto(0, "opaque"),
+    opaque(1, "opaque"),
+    premultiplied(2, "premultiplied"),
+    postmultiplied(3, "opaque"),
+    inherit(4, "opaque");
 
-    infix fun or(other: Int): Int = value or other
-
-    infix fun or(other: CompositeAlphaMode): Int = value or other.value
-
-    companion object {
-        fun of(value: Int): CompositeAlphaMode? = entries.find {
-            it.value == value
-        }
-    }
 }
 
 enum class CreatePipelineAsyncStatus(

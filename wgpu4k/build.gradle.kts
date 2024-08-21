@@ -53,15 +53,6 @@ kotlin {
             languageSettings.optIn("kotlin.ExperimentalUnsignedTypes")
         }
 
-        val kotlinWrappersVersion = "1.0.0-pre.786"
-
-        jsMain {
-            dependencies {
-                implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:$kotlinWrappersVersion"))
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-web")
-            }
-        }
-
         jvmMain {
             sourceSets {
                 languageSettings.optIn("kotlin.js.ExperimentalJsExport")
