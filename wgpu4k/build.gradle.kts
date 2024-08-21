@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotest)
     id("publish")
     if (isAndroidConfigured) id("android")
+    if (isAndroidConfigured) id("android-copy-jni")
 }
 
 val resourcesDirectory = project.file("src").resolve("jvmMain").resolve("resources")
@@ -167,7 +168,7 @@ if (Platform.os == Os.MacOs) {
 }
 
 if (isAndroidConfigured) {
-    fun get4kAndroidJniProject() = projects.wgpu4kAndroidJni.identityPath.path
+    fun get4kAndroidJniProject(): Project = projects.wgpu4kAndroidJni.identityPath.path
         ?.let(::project) ?: error("Could not find project path")
 
     val jniLibsPath = project.file("src")
