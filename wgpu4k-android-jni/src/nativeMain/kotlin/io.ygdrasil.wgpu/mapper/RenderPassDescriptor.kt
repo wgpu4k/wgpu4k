@@ -53,7 +53,7 @@ internal fun ArenaBase.mapRenderPassDescriptor(input: jobject, env: JNIEnvPointe
         // check WGPURenderPassDescriptorMaxDrawCount
     }
 
-internal fun ArenaBase.mapColorAttachment(input: jobject, output: WGPURenderPassColorAttachment, env: JNIEnvPointer) {
+private fun ArenaBase.mapColorAttachment(input: jobject, output: WGPURenderPassColorAttachment, env: JNIEnvPointer) {
     println("color attachment $output")
     output.view = env.callObjectMethodFrom(input, "getView", "io/ygdrasil/wgpu/TextureView")
         ?.let { module -> env.callLongMethodFrom(module, "getHandler") }
@@ -77,14 +77,14 @@ internal fun ArenaBase.mapColorAttachment(input: jobject, output: WGPURenderPass
     )
 }
 
-internal fun mapColor(input: jobject, output: WGPUColor, env: JNIEnvPointer) {
+private fun mapColor(input: jobject, output: WGPUColor, env: JNIEnvPointer) {
     output.r = env.callDoubleMethodFrom(input, "getRed")
     output.g = env.callDoubleMethodFrom(input, "getGreen")
     output.b = env.callDoubleMethodFrom(input, "getBlue")
     output.a = env.callDoubleMethodFrom(input, "getAlpha")
 }
 
-internal fun ArenaBase.mapRenderPassDepthStencilAttachment(input: jobject, env: JNIEnvPointer) =
+private fun ArenaBase.mapRenderPassDepthStencilAttachment(input: jobject, env: JNIEnvPointer) =
     alloc<WGPURenderPassDepthStencilAttachment>().also { output ->
         output.view = env.callObjectMethodFrom(input, "getView", "io/ygdrasil/wgpu/TextureView")
             ?.let { module -> env.callLongMethodFrom(module, "getHandler") }

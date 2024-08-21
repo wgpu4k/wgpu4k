@@ -79,7 +79,7 @@ private fun ArenaBase.mapFragment(input: jobject, env: JNIEnvPointer): WGPUFragm
         } ?: error("getTargets should not be null")
     }
 
-fun ArenaBase.mapColorTargetState(input: jobject, output: WGPUColorTargetState, env: JNIEnvPointer) {
+private fun ArenaBase.mapColorTargetState(input: jobject, output: WGPUColorTargetState, env: JNIEnvPointer) {
     println("colorTargetState $output")
     output.format = env.callObjectMethodFrom(input, "getFormat", "io/ygdrasil/wgpu/TextureFormat")
         ?.let { stepMode -> env.callIntMethodFrom(stepMode, "getValue") }
@@ -94,7 +94,7 @@ fun ArenaBase.mapColorTargetState(input: jobject, output: WGPUColorTargetState, 
     ).ptr
 }
 
-fun ArenaBase.mapBlendState(input: jobject, env: JNIEnvPointer) =
+private fun ArenaBase.mapBlendState(input: jobject, env: JNIEnvPointer) =
     alloc<WGPUBlendState>().also { output ->
         println("blend state $output")
         mapBlendComponent(
@@ -109,7 +109,7 @@ fun ArenaBase.mapBlendState(input: jobject, env: JNIEnvPointer) =
         )
     }
 
-fun mapBlendComponent(
+private fun mapBlendComponent(
     input: jobject,
     output: WGPUBlendComponent,
     env: JNIEnvPointer
@@ -158,7 +158,7 @@ private fun ArenaBase.mapDepthStencilState(input: jobject, env: JNIEnvPointer): 
             output.depthBiasClamp = env.callFloatMethodFrom(input, "getDepthBiasClamp")
         }
 
-fun mapStencilFaceState(input: jobject, output: WGPUStencilFaceState, env: JNIEnvPointer) {
+private fun mapStencilFaceState(input: jobject, output: WGPUStencilFaceState, env: JNIEnvPointer) {
     println("mapStencilFaceState")
     output.compare = env.callObjectMethodFrom(input, "getCompare", "io/ygdrasil/wgpu/CompareFunction")
     ?.let { stepMode -> env.callIntMethodFrom(stepMode, "getValue") }

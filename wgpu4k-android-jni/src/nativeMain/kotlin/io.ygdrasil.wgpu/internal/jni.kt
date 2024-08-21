@@ -109,5 +109,5 @@ internal fun jstring.toCString(env: JNIEnvPointer, arena: ArenaBase): CPointer<B
         ?.invoke(env, this, arena.alloc<UByteVar>().ptr)
 }
 
-fun Boolean.toUInt() = if (this) 1u else 0u
+internal fun Boolean.toUInt() = if (this) 1u else 0u
 
