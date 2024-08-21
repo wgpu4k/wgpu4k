@@ -252,6 +252,12 @@ enum class CompositeAlphaMode(
     postmultiplied(3, "opaque"),
     inherit(4, "opaque");
 
+    companion object {
+        fun of(value: Int): CompositeAlphaMode? = CompositeAlphaMode.entries.find {
+            it.value == value
+        }
+    }
+
 }
 
 enum class CreatePipelineAsyncStatus(
