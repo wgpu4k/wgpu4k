@@ -14,7 +14,7 @@ internal fun map(input: RenderPassDescriptor): GPURenderPassDescriptor =
         maxDrawCount = input.maxDrawCount
     }
 
-private fun map(input: RenderPassDescriptor.RenderPassDepthStencilAttachment): GPURenderPassDepthStencilAttachment =
+private fun map(input: RenderPassDescriptor.DepthStencilAttachment): GPURenderPassDepthStencilAttachment =
     createJsObject<GPURenderPassDepthStencilAttachment>().apply {
         view = input.view.handler
         if (input.depthClearValue != null) depthClearValue = input.depthClearValue

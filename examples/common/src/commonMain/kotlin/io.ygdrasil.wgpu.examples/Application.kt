@@ -12,7 +12,7 @@ suspend fun createApplication(wgpuContext: WGPUContext, resourceBasePath: String
 }
 
 class Application internal constructor(
-    private val wgpuContext: WGPUContext,
+    val wgpuContext: WGPUContext,
     currentScene: Scene,
     val availableScenes: List<Scene>,
 ) {

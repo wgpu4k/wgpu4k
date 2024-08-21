@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
 }
@@ -17,6 +19,9 @@ val buildNativeResourcesDirectory = project.file("build").resolve("native")
 
 kotlin {
 
+    val xcframeworkName = "WgpuApp"
+    val xcf = XCFramework(xcframeworkName)
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -25,6 +30,8 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "WgpuApp"
             isStatic = true
+            xcf.add(this)
+            binaryOption("bundleId", "io.ygdrasil.wgpu.$xcframeworkName")
         }
     }
 

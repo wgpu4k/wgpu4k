@@ -55,7 +55,7 @@ internal fun map(input: Color, output: WGPUColor) {
 }
 
 
-internal fun ArenaBase.map(input: RenderPassDescriptor.RenderPassDepthStencilAttachment) =
+internal fun ArenaBase.map(input: RenderPassDescriptor.DepthStencilAttachment) =
     alloc<WGPURenderPassDepthStencilAttachment>().also { output ->
         output.view = input.view.handler
         if (input.depthClearValue != null) output.depthClearValue = input.depthClearValue

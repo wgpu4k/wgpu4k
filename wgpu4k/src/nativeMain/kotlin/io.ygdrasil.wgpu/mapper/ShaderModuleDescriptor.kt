@@ -13,7 +13,7 @@ internal fun ArenaBase.map(input: ShaderModuleDescriptor) =
     alloc<WGPUShaderModuleDescriptor>().also { output ->
         if (input.label != null) output.label = input.label.cstr.getPointer(this)
         output.nextInChain = mapCode(input.code).ptr.reinterpret()
-        if (input.compilationHints != null && input.compilationHints.isNotEmpty()) {
+        if (input.compilationHints.isNotEmpty()) {
             output.hintCount = input.compilationHints.size.toULong()
             val hints = allocArray<WGPUShaderModuleCompilationHint>(input.compilationHints.size.toLong())
             input.compilationHints.forEachIndexed { index, hint ->

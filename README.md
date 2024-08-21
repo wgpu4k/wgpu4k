@@ -36,6 +36,7 @@ cd wgpu4k
 - On web js: `./gradlew examples:web-js:jsBrowserRun`
 - On web wasm: `./gradlew examples:web-js:wasmJsBrowserRun`
 - On desktop native (Mac only and still experimental) `./gradlew examples:native:runDebugExecutableNative`
+- On android (experimental) `./gradlew wgpu4k:build` to build the JNI library, then you can run the subproject `android` with android studio ![android-studio-capture.png](android-studio-capture.png)
 
 Use `page down` and `page up` on your keyboard to switch scene.
 
@@ -48,11 +49,11 @@ Documentation will be added later, to start you can check out the minimalist pro
 | Target       | Windows | Linux | MacOs | iOS | Android |
 |--------------|---------|-------|-------|-----|---------|
 | JVM x64      | ✅       | 🆗    | 🆗    | ❌   | ❌       |
-| JVM arm64    | 🛠️     | 🆗    | ✅     | ❌   | ❌       |
+| JVM arm64    | 🔍️     | 🆗    | ✅     | ❌   | ❌       |
 | JS           | ✅       | 🆗    | ✅     | ❓   | ❓️      |
 | wasm         | 🆗️     | 🆗️   | 🆗️   | ❓️  | ❓️      |
-| native x64   | 🆗️️     | 🛠️   | 🆗️   | 🛠️ | 🛠️     |
-| native arm64 | 🛠️     | 🛠️   | 🆗️   | 🛠️ | 🛠️     |
+| native x64   | 🛠️     | 🔍️   | 🛠️   | 🛠️ | 🛠️️    |
+| native arm64 | 🔍️     | 🔍️   | 🛠️   | 🛠️ | 🛠️️️   |
 
 
 ✅ = First class citizen
@@ -61,7 +62,9 @@ Documentation will be added later, to start you can check out the minimalist pro
 
 ❓ = Untested, could work
 
-🛠️ = Unsupported yet, open to contributions
+🛠️ = Work in progress
+
+🔍 = Unsupported yet, open to contributions
 
 ❌ = Not applicable 
 

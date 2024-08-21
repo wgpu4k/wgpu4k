@@ -177,7 +177,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                     storeOp = StoreOp.store,
                 ),
             ),
-            depthStencilAttachment = RenderPassDescriptor.RenderPassDepthStencilAttachment(
+            depthStencilAttachment = RenderPassDescriptor.DepthStencilAttachment(
                 view = depthTexture.createView().bind(),
 
                 depthClearValue = 1.0f,

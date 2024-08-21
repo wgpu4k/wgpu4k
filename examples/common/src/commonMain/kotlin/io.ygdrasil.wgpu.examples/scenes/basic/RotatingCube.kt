@@ -132,7 +132,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 					storeOp = StoreOp.store,
 				)
 			),
-			depthStencilAttachment = RenderPassDescriptor.RenderPassDepthStencilAttachment(
+			depthStencilAttachment = RenderPassDescriptor.DepthStencilAttachment(
 				view = depthTexture.createView(),
 				depthClearValue = 1.0f,
 				depthLoadOp = LoadOp.clear,

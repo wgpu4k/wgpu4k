@@ -1,11 +1,11 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUBufferMapCallback
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUBufferMapAsyncCallback
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 
-private val mapCallback = WGPUBufferMapCallback.allocate({ status, data -> }, Arena.global())
+private val mapCallback = WGPUBufferMapAsyncCallback.allocate({ status, data -> }, Arena.global())
 
 actual class Buffer(internal val handler: MemorySegment) : AutoCloseable {
 

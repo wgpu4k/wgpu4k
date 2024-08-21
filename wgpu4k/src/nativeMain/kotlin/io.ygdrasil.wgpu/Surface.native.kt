@@ -47,8 +47,10 @@ actual class Surface(
     actual fun configure(canvasConfiguration: CanvasConfiguration) {
 
         if (_textureFormat == null) error("call computeSurfaceCapabilities(adapter: Adapter) before configure")
+        if (_alphaMode == null) error("call computeSurfaceCapabilities(adapter: Adapter) before configure")
 
-        wgpuSurfaceConfigure(handler, map(canvasConfiguration))
+
+        wgpuSurfaceConfigure(handler, map(canvasConfiguration.copy(alphaMode = CompositeAlphaMode.of(_alphaMode!!.toInt())!!)))
     }
 
     actual override fun close() {

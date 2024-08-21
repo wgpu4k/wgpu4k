@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.implementation
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
@@ -9,7 +10,6 @@ plugins {
     if (isAndroidConfigured) id("android")
 }
 
-val buildNativeResourcesDirectory = project.file("build").resolve("native")
 val resourcesDirectory = project.file("src").resolve("jvmMain").resolve("resources")
 
 kotlin {
@@ -37,8 +37,6 @@ kotlin {
     linuxArm64()
     linuxX64()
     configureMingwX64()
-    //androidNativeX64()
-    //androidNativeArm64()
 
     if (isAndroidConfigured) androidTarget()
 
@@ -105,6 +103,12 @@ kotlin {
             }
         }
 
+        androidMain {
+            dependencies {
+                implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.0")
+            }
+        }
+
     }
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
@@ -162,4 +166,50 @@ tasks.named<Test>("jvmTest") {
 if (Platform.os == Os.MacOs) {
     tasks.findByName("linkDebugTestMingwX64")?.apply { enabled = false }
     tasks.findByName("mingwX64Test")?.apply { enabled = false }
+}
+
+val jniLibsPath = project.file("src")
+    .resolve("androidMain")
+    .resolve("libs")
+
+val jniBuildPath = get4kAndroidJniProject()
+    .projectDir
+    .resolve("build")
+    .resolve("bin")
+
+val libraryName = "libwgpu4kv2.so"
+
+val fileToCopy = listOf(
+    jniBuildPath.resolve("androidNativeArm64").resolve("releaseShared")
+        to jniLibsPath.resolve("arm64-v8a"),
+    jniBuildPath.resolve("androidNativeX64").resolve("releaseShared")
+        to jniLibsPath.resolve("x86_64"),
+)
+
+tasks.findByName("build")?.apply {
+    dependsOn(":wgpu4k-android-jni:build")
+    doFirst {
+        copyJniLibraries()
+    }
+}
+
+tasks.create("copyJniLibraries") {
+    dependsOn("build")
+    doFirst {
+        copyJniLibraries()
+    }
+}
+
+fun get4kAndroidJniProject() = projects.wgpu4kAndroidJni.identityPath.path
+    ?.let(::project) ?: error("Could not find project path")
+
+
+fun copyJniLibraries() {
+    fileToCopy.forEach { (source, target) ->
+        target.mkdirs()
+        target.resolve(libraryName)
+            .also { fileTarget ->
+                source.resolve(libraryName).copyTo(fileTarget, overwrite = true)
+            }
+    }
 }

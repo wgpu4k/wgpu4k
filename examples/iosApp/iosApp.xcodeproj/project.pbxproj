@@ -15,7 +15,7 @@
 		3A3532CE1E99974500C194AD /* AAPLRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3532851E99974500C194AD /* AAPLRenderer.m */; };
 		3ACD21351EAE60D2000D1DED /* AAPLAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ACD21341EAE60D2000D1DED /* AAPLAppDelegate.m */; };
 		63E77A181ED2059A00E1E542 /* AAPLShaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3A3532871E99974500C194AD /* AAPLShaders.metal */; };
-		C446A3982C4F024F0079DBEC /* WgpuApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C446A3972C4F024F0079DBEC /* WgpuApp.framework */; };
+		C4623DBE2C6D8856000C2843 /* WgpuApp.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4623DBD2C6D8856000C2843 /* WgpuApp.xcframework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,7 +39,7 @@
 		3ACD21331EAE60D2000D1DED /* AAPLAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAPLAppDelegate.h; sourceTree = "<group>"; };
 		3ACD21341EAE60D2000D1DED /* AAPLAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAPLAppDelegate.m; sourceTree = "<group>"; };
 		907FE32A28789CDAFD777257 /* SampleCode.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
-		C446A3972C4F024F0079DBEC /* WgpuApp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WgpuApp.framework; path = "../iOS/build/fat-framework/release/WgpuApp.framework"; sourceTree = "<group>"; };
+		C4623DBD2C6D8856000C2843 /* WgpuApp.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WgpuApp.xcframework; path = ../iOS/build/XCFrameworks/release/WgpuApp.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,8 +47,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C446A3982C4F024F0079DBEC /* WgpuApp.framework in Frameworks */,
 				3A05CBE11F731AC000CA21B1 /* MetalKit.framework in Frameworks */,
+				C4623DBE2C6D8856000C2843 /* WgpuApp.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,7 +131,7 @@
 		3AE289861EEA0A9100DF4C9A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				C446A3972C4F024F0079DBEC /* WgpuApp.framework */,
+				C4623DBD2C6D8856000C2843 /* WgpuApp.xcframework */,
 				3A05CBDE1F731AB800CA21B1 /* MetalKit.framework */,
 				3A1F1B411F0338CF001622B3 /* MetalKit.framework */,
 			);
@@ -178,11 +178,10 @@
 				TargetAttributes = {
 					3A35328E1E99974500C194AD = {
 						CreatedOnToolsVersion = 8.3;
-						ProvisioningStyle = Automatic;
 					};
 				};
 			};
-			buildConfigurationList = 3A3532821E99974500C194AD /* Build configuration list for PBXProject "iOSApp" */;
+			buildConfigurationList = 3A3532821E99974500C194AD /* Build configuration list for PBXProject "iosApp" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -379,11 +378,12 @@
 			baseConfigurationReference = 907FE32A28789CDAFD777257 /* SampleCode.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/System/Library/Frameworks",
-					"./../iOS/build/fat-framework/release",
+					./../iOS/build/XCFrameworks/release,
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -410,11 +410,12 @@
 			baseConfigurationReference = 907FE32A28789CDAFD777257 /* SampleCode.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/System/Library/Frameworks",
-					"./../iOS/build/fat-framework/release",
+					./../iOS/build/XCFrameworks/release,
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = TARGET_IOS;
 				INFOPLIST_FILE = Application/iOS/Info.plist;
@@ -436,7 +437,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3A3532821E99974500C194AD /* Build configuration list for PBXProject "iOSApp" */ = {
+		3A3532821E99974500C194AD /* Build configuration list for PBXProject "iosApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3A3532E01E99974500C194AD /* Debug */,

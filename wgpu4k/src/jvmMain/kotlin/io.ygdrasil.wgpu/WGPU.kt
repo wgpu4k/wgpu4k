@@ -24,7 +24,7 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 
         val adapterState = MutableStateFlow<MemorySegment?>(null)
 
-        val handleRequestAdapter = WGPURequestAdapterCallback.allocate({ statusAsInt, adapter, message, param4 ->
+        val handleRequestAdapter = WGPUInstanceRequestAdapterCallback.allocate({ statusAsInt, adapter, message, param4 ->
             if (statusAsInt == wgpu_h.WGPURequestAdapterStatus_Success()) {
                 adapterState.update { adapter }
             } else {

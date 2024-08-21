@@ -30,7 +30,7 @@ actual class Texture(internal val handler: MemorySegment) : AutoCloseable {
         get() = wgpu_h.wgpuTextureGetUsage(handler)
 
     actual fun createView(descriptor: TextureViewDescriptor?): TextureView = confined { arena ->
-        descriptor?.let { arena.map(it) }
+        descriptor?.let { arena.map(descriptor) }
             .let { wgpu_h.wgpuTextureCreateView(handler, it ?: MemorySegment.NULL) }
             ?.let { TextureView(it) }
             ?: error("fail to create texture view")

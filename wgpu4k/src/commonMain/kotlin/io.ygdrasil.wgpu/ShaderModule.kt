@@ -9,7 +9,7 @@ data class ShaderModuleDescriptor(
 	val code: String,
 	val label: String? = null,
 	val sourceMap: Any? = null,
-	val compilationHints: Array<CompilationHint>? = null,
+	val compilationHints: List<CompilationHint> =  listOf(),
 ) {
     data class CompilationHint(
         val entryPoint: String,
