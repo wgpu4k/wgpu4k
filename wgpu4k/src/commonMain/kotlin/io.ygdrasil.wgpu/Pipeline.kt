@@ -1,7 +1,5 @@
 package io.ygdrasil.wgpu
 
-import kotlin.jvm.JvmField
-
 expect class PipelineLayout
 
 expect class RenderPipeline : AutoCloseable {
