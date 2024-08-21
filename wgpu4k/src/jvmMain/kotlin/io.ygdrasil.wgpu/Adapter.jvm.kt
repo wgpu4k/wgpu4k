@@ -1,7 +1,7 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.jvm.confined
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPURequestDeviceCallback
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUAdapterRequestDeviceCallback
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.mapper.map
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,7 @@ actual class Adapter(internal val handler: MemorySegment) : AutoCloseable {
 	actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? = confined { arena ->
 		val deviceState = MutableStateFlow<MemorySegment?>(null)
 
-		val handleRequestAdapter = WGPURequestDeviceCallback.allocate( { statusAsInt, device, message, param4 ->
+		val handleRequestAdapter = WGPUAdapterRequestDeviceCallback.allocate( { statusAsInt, device, message, param4 ->
 			if (statusAsInt == wgpu_h.WGPURequestDeviceStatus_Success()) {
 				deviceState.update { device }
 			} else {
