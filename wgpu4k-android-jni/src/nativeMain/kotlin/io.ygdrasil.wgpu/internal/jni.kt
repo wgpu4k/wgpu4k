@@ -109,20 +109,5 @@ internal fun jstring.toCString(env: JNIEnvPointer, arena: ArenaBase): CPointer<B
         ?.invoke(env, this, arena.alloc<UByteVar>().ptr)
 }
 
-fun Boolean.toUInt() = if (true) 1u else 0u
+fun Boolean.toUInt() = if (this) 1u else 0u
 
-fun samplestring(env: CPointer<JNIEnvVar>, clazz: jclass, backendHolder: jobject?) {
-    memScoped {
-        env.pointed.pointed!!.NewStringUTF!!.invoke(env, "This is from Kotlin Native!!".cstr.ptr)!!
-    }
-}
-
-fun samplecall(env: CPointer<JNIEnvVar>, thiz: jobject): jstring {
-    memScoped {
-        val jniEnvVal = env.pointed.pointed!!
-        val jclass = jniEnvVal.GetObjectClass!!.invoke(env, thiz)
-        val methodId =
-            jniEnvVal.GetMethodID!!.invoke(env, jclass, "callFromNative".cstr.ptr, "()Ljava/lang/String;".cstr.ptr)
-        return jniEnvVal.CallObjectMethodA!!.invoke(env, thiz, methodId, null) as jstring
-    }
-}
