@@ -1,10 +1,8 @@
 [versions]
 kotest = "5.9.1"
-klang = "0.0.0"
 jna = "5.14.0"
 kotlin = "2.0.0"
-ktor-server-core-jvm = "2.3.12"
-ktor-server-netty-jvm = "2.3.12"
+ktor = "2.3.12"
 playwright = "1.45.1"
 wgpu = "v0.0.0.2"
 compose = "1.6.11"
@@ -28,8 +26,8 @@ kotlin-multiplatform = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 android-library = { module = "com.android.library:com.android.library.gradle.plugin", version.ref = "agp" }
 jreleaser-plugin = { module = "org.jreleaser:org.jreleaser.gradle.plugin", version.ref = "jreleaser" }
 korlibs-image = { module = "com.soywiz:korlibs-image", version.ref = "korge" }
-ktor-ktor-server-netty-jvm = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor-server-netty-jvm" }
-ktor-server-core-jvm = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor-server-core-jvm" }
+ktor-server-netty-jvm = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
+ktor-server-core-jvm = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 playwright = { module = "com.microsoft.playwright:playwright", version.ref = "playwright" }
 rococoa = { module = "io.ygdrasil:rococoa", version.ref = "rococoa" }
 wgpu4k-panama = { module = "io.ygdrasil:wgpu4k-panama", version.ref = "wgpu4k-panama" }

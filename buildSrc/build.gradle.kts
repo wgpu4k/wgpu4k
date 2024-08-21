@@ -13,7 +13,7 @@ repositories {
 dependencies {
 	implementation(libs.download)
 	implementation(libs.ktor.server.core.jvm)
-	implementation(libs.ktor.ktor.server.netty.jvm)
+	implementation(libs.ktor.server.netty.jvm)
 	implementation(libs.playwright)
     implementation(libs.bundles.korlibs)
 	implementation(libs.coroutines)
