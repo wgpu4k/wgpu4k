@@ -5,8 +5,9 @@ plugins {
 	alias(libs.plugins.compose) apply false
 }
 
+tasks.findByName("checkKotlinGradlePluginConfigurationErrors")?.enabled = isAndroidConfigured
+
 allprojects {
-	tasks.findByName("checkKotlinGradlePluginConfigurationErrors")?.enabled = isAndroidConfigured
 
 	repositories {
 		mavenLocal()
