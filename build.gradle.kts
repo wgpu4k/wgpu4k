@@ -7,6 +7,7 @@ plugins {
 }
 
 allprojects {
+	tasks.findByName("checkKotlinGradlePluginConfigurationErrors")
 
 	repositories {
 		mavenLocal()
