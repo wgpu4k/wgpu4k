@@ -26,7 +26,6 @@ kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref 
 download = { module = "de.undercouch.download:de.undercouch.download.gradle.plugin", version.ref = "download" }
 kotlin-multiplatform = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 android-library = { module = "com.android.library:com.android.library.gradle.plugin", version.ref = "agp" }
-android-model-library = { module = "com.android.model.library:com.android.model.library.gradle.plugin", version.ref = "agp" }
 jreleaser-plugin = { module = "org.jreleaser:org.jreleaser.gradle.plugin", version.ref = "jreleaser" }
 korlibs-image = { module = "com.soywiz:korlibs-image", version.ref = "korge" }
 ktor-ktor-server-netty-jvm = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor-server-netty-jvm" }
@@ -38,16 +37,9 @@ wgpu4k-panama = { module = "io.ygdrasil:wgpu4k-panama", version.ref = "wgpu4k-pa
 
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-klang = { id = "io.ygdrasil.klang-plugin", version.ref = "klang" }
-kotlinJvm = { id = "org.jetbrains.kotlin.jvm" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 kotest = { id = "io.kotest.multiplatform", version.ref = "kotest" }
-download = { id = "de.undercouch.download", version.ref = "download" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-android-library = { id = "com.android.library", version.ref = "agp" }
-android-model-library = { id = "com.android.model.library", version.ref = "agp" }
-
-
 
 [bundles]
 kotest = ["kotest-core", "kotest-assertions"]
