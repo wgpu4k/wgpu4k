@@ -58,7 +58,6 @@ kotlin {
         jsMain {
             dependencies {
                 implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:$kotlinWrappersVersion"))
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-js")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-web")
             }
         }
