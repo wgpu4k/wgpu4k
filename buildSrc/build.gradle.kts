@@ -18,6 +18,9 @@ dependencies {
     implementation(libs.bundles.korlibs)
 	implementation(libs.coroutines)
 	implementation(libs.kotlin.multiplatform)
-	implementation(libs.android.library)
+	if (isAndroidConfigured) implementation(libs.android.library) else compileOnly(libs.android.library)
 	implementation(libs.jreleaser.plugin)
 }
+
+val isAndroidConfigured: Boolean
+	get() = System.getenv("ANDROID_HOME") != null
