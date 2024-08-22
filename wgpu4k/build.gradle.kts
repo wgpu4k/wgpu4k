@@ -32,8 +32,6 @@ kotlin {
     iosSimulatorArm64()
     macosArm64()
     macosX64()
-    tvosArm64()
-    tvosX64()
     linuxArm64()
     linuxX64()
     configureMingwX64()
