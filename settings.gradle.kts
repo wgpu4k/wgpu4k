@@ -22,7 +22,6 @@ dependencyResolutionManagement {
 val hostOs = System.getProperty("os.name")
 
 include("wgpu4k-glfw-native")
-include("wgpu4k-native")
 if (isAndroidConfigured()) include("wgpu4k-android-jni")
 include("wgpu4k")
 include("wgpu4k-toolkit")

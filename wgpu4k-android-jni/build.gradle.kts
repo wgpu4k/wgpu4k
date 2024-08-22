@@ -15,7 +15,7 @@ kotlin {
         target.binaries {
             sharedLib {
                 baseName = "wgpu4kv2"
-                export(projects.wgpu4kNative)
+                export(libs.wgpu4k.native)
             }
         }
     }
@@ -28,7 +28,7 @@ kotlin {
 
         nativeMain {
             dependencies {
-                api(projects.wgpu4kNative)
+                implementation(libs.wgpu4k.native)
             }
         }
     }

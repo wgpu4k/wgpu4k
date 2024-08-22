@@ -86,7 +86,7 @@ kotlin {
             }
 
             dependencies {
-                implementation(projects.wgpu4kNative)
+                implementation(libs.wgpu4k.native)
             }
         }
 
