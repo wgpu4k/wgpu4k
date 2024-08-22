@@ -35,7 +35,7 @@ include("examples:headless")
 if (hostOs == "Mac OS X") include("examples:iOS")
 if (isAndroidConfigured()) include("examples:android")
 // right now only running on OSX
-if (hostOs == "Mac OS X" || (hostOs.startsWith("Windows") && getCustomLLVMPath() != null)) include("examples:native")
+if ((hostOs.startsWith("Windows") && getCustomLLVMPath() != null) || !hostOs.startsWith("Windows")) include("examples:native")
 include("webgpu-samples-ts")
 
 fun getCustomLLVMPath(): String? = System.getenv("LIBCLANG_PATH")?.takeIf { it.isNotEmpty() }
