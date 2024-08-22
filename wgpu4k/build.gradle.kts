@@ -15,13 +15,7 @@ val resourcesDirectory = project.file("src").resolve("jvmMain").resolve("resourc
 kotlin {
 
     js {
-        browser {
-            testTask {
-                useKarma {
-                    useFirefox()
-                }
-            }
-        }
+        browser()
         nodejs()
     }
 
@@ -49,13 +43,7 @@ kotlin {
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        browser {
-            testTask {
-                useKarma {
-                    useFirefox()
-                }
-            }
-        }
+        browser()
         nodejs()
     }
 
