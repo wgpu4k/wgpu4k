@@ -10,6 +10,9 @@ libraryPaths.mingw = ./build/native/windows/
 linkerOpts.macos_arm64 = -framework IOKit -framework CoreGraphics -framework AppKit
 linkerOpts.macos_x64 = -framework IOKit -framework CoreGraphics -framework AppKit
 
+linkerOpts.linux_arm64 = -lglfw
+linkerOpts.linux_x64 = -lglfw
+
 ---
 
 void* glfwGetCocoaWindow(GLFWwindow* window);
