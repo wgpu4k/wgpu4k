@@ -10,8 +10,16 @@ libraryPaths.mingw = ./build/native/windows/
 linkerOpts.macos_arm64 = -framework IOKit -framework CoreGraphics -framework AppKit
 linkerOpts.macos_x64 = -framework IOKit -framework CoreGraphics -framework AppKit
 
-linkerOpts.linux_arm64 = -lglfw
-linkerOpts.linux_x64 = -lglfw
+linkerOpts.linux =           -lglfw \
+                             -L/usr/lib64 \
+                             -L/usr/lib/x86_64-linux-gnu \
+                             -L/opt/local/lib \
+                             -L/usr/local/opt/curl/lib \
+                             -L/opt/homebrew/opt/curl/lib
+
+compilerOpts.linux =         -I/usr/include/ \
+                             -I/usr/include/x86_64-linux-gnu/ \
+                             -I/opt/homebrew/opt/curl/include/
 
 ---
 
