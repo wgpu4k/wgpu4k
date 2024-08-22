@@ -18,7 +18,7 @@ dependencies {
     implementation(libs.bundles.korlibs)
 	implementation(libs.coroutines)
 	implementation(libs.kotlin.multiplatform)
-	if (isAndroidConfigured) implementation(libs.android.library) else compileOnly(libs.android.library)
+	implementation(libs.android.library)
 	implementation(libs.jreleaser.plugin)
 }
 

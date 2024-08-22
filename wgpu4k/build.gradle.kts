@@ -156,3 +156,5 @@ if (Platform.os == Os.MacOs) {
     tasks.findByName("linkDebugTestMingwX64")?.apply { enabled = false }
     tasks.findByName("mingwX64Test")?.apply { enabled = false }
 }
+
+tasks.findByName("checkKotlinGradlePluginConfigurationErrors")?.enabled = isAndroidConfigured
