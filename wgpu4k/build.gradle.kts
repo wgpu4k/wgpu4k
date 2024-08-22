@@ -15,7 +15,13 @@ val resourcesDirectory = project.file("src").resolve("jvmMain").resolve("resourc
 kotlin {
 
     js {
-        browser()
+        browser {
+            testTask {
+                useKarma {
+                    useFirefox()
+                }
+            }
+        }
         nodejs()
     }
 
@@ -46,7 +52,7 @@ kotlin {
         browser {
             testTask {
                 useKarma {
-                    useChrome()
+                    useFirefox()
                 }
             }
         }
