@@ -17,8 +17,8 @@ linkerOpts.linux =           -lglfw \
                              -L/usr/local/opt/curl/lib \
                              -L/opt/homebrew/opt/curl/lib
 
-compilerOpts.linux =         -I/usr/include/ \
-                             -I/usr/include/x86_64-linux-gnu/ \
+compilerOpts.linux =         -I/usr/include/x86_64-linux-gnu/ \
+                             -I/usr/include/ \
                              -I/opt/homebrew/opt/curl/include/
 
 ---
