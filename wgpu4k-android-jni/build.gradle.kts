@@ -28,7 +28,7 @@ kotlin {
 
         nativeMain {
             dependencies {
-                implementation(libs.wgpu4k.native)
+                api(libs.wgpu4k.native)
             }
         }
     }
