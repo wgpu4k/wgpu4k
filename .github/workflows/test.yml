@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: install dependencies
         if: matrix.os == 'ubuntu-latest'
-        run: sudo apt install -y libc6-dev-i386 libglfw3-dev
+        run: sudo apt install -y libglfw3-dev
       - name: set llvm Path On macos
         if: matrix.os == 'macos-14'
         run: echo "LIBCLANG_PATH=/Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr" >> $GITHUB_ENV

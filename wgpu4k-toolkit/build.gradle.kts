@@ -69,7 +69,7 @@ kotlin {
 
         nativeMain {
             dependencies {
-                api(projects.wgpu4kGlfwNative)
+                api(libs.glfw.native)
             }
         }
 
