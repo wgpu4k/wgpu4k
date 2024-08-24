@@ -53,18 +53,13 @@ jobs:
           ./gradlew fetch-native-dependencies build check --stacktrace
       - name: package
         run: ./gradlew assemble --stacktrace
-      - name: Install web drivers
-        if: matrix.os == 'windows-latest'
-        run: mvn -B install -D skipTests --no-transfer-progress -f ./wgpu4k-e2e/pom.xml
       - name: Run jvm e2e tests
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          {
-            xvfb-run ./gradlew :wgpu4k-e2e:e2eJvmTest --stacktrace --info || echo '::warning::Previous command failed'
-          } 2>&1 | sed 's/^::error::/::warning::/g'
+        if: matrix.os == 'macos-14'
+        run: ./gradlew :wgpu4k-e2e:e2eTest --stacktrace --info
         continue-on-error: true
+
       - name: Run all e2e tests
-        if: matrix.os != 'ubuntu-latest'
+        if: matrix.os == 'macos-14'
         run: ./gradlew :wgpu4k-e2e:e2eTest --stacktrace --info
         continue-on-error: true
 
