@@ -34,18 +34,18 @@ suspend fun glfwContextRenderer(width: Int = 1, height: Int = 1, title: String =
         width[0] to height[0]
     }
 
-
     val adapter = wgpu.requestAdapter(surface)
         ?: error("fail to get adapter")
 
     val device = adapter.requestDevice()
         ?: error("fail to get device")
 
-    surface.computeSurfaceCapabilities(adapter)
-
     val renderingContext = when (deferredRendering) {
         true -> TextureRenderingContext(256, 256, TextureFormat.rgba8unormsrgb, device)
-        false -> SurfaceRenderingContext(surface)
+        false -> {
+            surface.computeSurfaceCapabilities(adapter)
+            SurfaceRenderingContext(surface)
+        }
     }
 
     return GLFWContext(

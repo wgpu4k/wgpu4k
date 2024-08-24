@@ -6,10 +6,10 @@ dependencies {
     implementation(projects.examples.headless)
 }
 
-val jvmTask = mutableListOf<TaskProvider<*>>()
-scenes.forEach { (sceneName, frames) ->
-    frames.forEach { frame ->
-        tasks.register<JavaExec>("e2eJvm-$sceneName-$frame") {
+val jvmTasks = scenes.flatMap { (sceneName, frames) ->
+    frames.map { frame ->
+        tasks.register<JavaExec>("e2eJvmTest-$sceneName-$frame") {
+            group = "e2eTest"
             isIgnoreExitValue = true
             mainClass = "MainKt"
             jvmArgs(
@@ -31,13 +31,17 @@ scenes.forEach { (sceneName, frames) ->
                 )
             )
             classpath = sourceSets["main"].runtimeClasspath
-        }.also { jvmTask.add(it) }
+        }
     }
 }
 
+val jvmTest = tasks.create("e2eJvmTest") {
+    group = "e2eTest"
+    jvmTasks.forEach { tasks -> dependsOn(tasks) }
+}
+
 val e2eBrowserTest = tasks.create("e2eBrowserTest") {
-    // not working on windows Github CI
-    onlyIf { Platform.os != Os.Windows }
+    group = "e2eTest"
     doLast {
         val server = endToEndWebserver(getHeadlessProject().projectDir)
         browser(project.projectDir, logger)
@@ -48,8 +52,9 @@ val e2eBrowserTest = tasks.create("e2eBrowserTest") {
 
 
 tasks.create("e2eTest") {
+    group = "e2eTest"
     dependsOn(e2eBrowserTest)
-    jvmTask.forEach { tasks -> dependsOn(tasks) }
+    dependsOn(jvmTest)
 
     doLast {
         logger.info("Starting e2e test...")

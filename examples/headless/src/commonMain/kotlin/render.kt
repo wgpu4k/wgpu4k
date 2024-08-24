@@ -65,7 +65,10 @@ suspend fun captureScene() {
 
                 val path = screenshotPath ?: error("screenshot path not set")
                 val screenshotsVfs = localVfs(path)["jvm"].also { it.mkdirs() }.jail()
-                screenshotsVfs["$sceneName-$frame.png"].writeBitmap(image, PNG)
+                val outputPath = "$sceneName-$frame.png"
+                screenshotsVfs[outputPath]
+                    .also { println("will output texture to ${it.absolutePath}") }
+                    .writeBitmap(image, PNG)
             } else {
                 // Complete async work
                 context.device.poll()
