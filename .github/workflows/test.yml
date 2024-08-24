@@ -21,9 +21,6 @@ jobs:
       - name: install dependencies
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt install -y libglfw3-dev
-      - name: run fake X11 server
-        if: matrix.os == 'ubuntu-latest'
-        run: Xvfb :1 -screen 0 1024x768x16 &
       - name: set llvm Path On macos
         if: matrix.os == 'macos-14'
         run: echo "LIBCLANG_PATH=/Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr" >> $GITHUB_ENV
@@ -61,13 +58,13 @@ jobs:
         run: mvn -B install -D skipTests --no-transfer-progress -f ./wgpu4k-e2e/pom.xml
       - name: Run jvm e2e tests
         if: matrix.os == 'ubuntu-latest'
-        run: |
-          {
-           ./gradlew :wgpu4k-e2e:e2eJvmTest --stacktrace --info || echo '::warning::Previous command failed'
-          } 2>&1 | sed 's/^::error::/::warning::/g'
+        uses: coactions/setup-xvfb@v1
+        with:
+          run: |
+            {
+             ./gradlew :wgpu4k-e2e:e2eJvmTest --stacktrace --info || echo '::warning::Previous command failed'
+            } 2>&1 | sed 's/^::error::/::warning::/g'
         continue-on-error: true
-        env:
-          DISPLAY: ":1"
       - name: Run all e2e tests
         if: matrix.os != 'ubuntu-latest'
         run: |
