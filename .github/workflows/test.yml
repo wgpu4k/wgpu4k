@@ -58,11 +58,9 @@ jobs:
         run: mvn -B install -D skipTests --no-transfer-progress -f ./wgpu4k-e2e/pom.xml
       - name: Run jvm e2e tests
         if: matrix.os == 'ubuntu-latest'
-        uses: coactions/setup-xvfb@v1
-        with:
-          run: |
+        run: |
             {
-             ./gradlew :wgpu4k-e2e:e2eJvmTest --stacktrace --info || echo '::warning::Previous command failed'
+           xvfb-run ./gradlew :wgpu4k-e2e:e2eJvmTest --stacktrace --info || echo '::warning::Previous command failed'
             } 2>&1 | sed 's/^::error::/::warning::/g'
         continue-on-error: true
       - name: Run all e2e tests
