@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalForeignApi::class)
+
 package io.ygdrasil.wgpu
 
 import cnames.structs.GLFWwindow
