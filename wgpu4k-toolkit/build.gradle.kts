@@ -51,6 +51,8 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
 
+    applyDefaultHierarchyTemplate()
+
     sourceSets {
 
         all {
@@ -59,44 +61,38 @@ kotlin {
             languageSettings.optIn("kotlin.js.ExperimentalJsExport")
         }
 
-        val desktopNativeMain by creating {
-
-        }
-
-        linuxMain {
-            dependencies {
-                api(libs.glfw.native)
-            }
-            dependsOn(desktopNativeMain)
-        }
-
-        macosMain {
-            dependencies {
-                api(libs.glfw.native)
-            }
-            dependsOn(desktopNativeMain)
-        }
-
-        mingwMain {
-            dependencies {
-                api(libs.glfw.native)
-            }
-            dependsOn(desktopNativeMain)
-        }
-
         val commonMain by getting {
             dependencies {
                 api(projects.wgpu4k)
             }
         }
 
-        val commonTest by getting {
+        val desktopNativeMain by creating {
+            dependsOn(commonMain)
+            dependencies {
+                api(libs.glfw.native)
+            }
+        }
+
+        linuxMain {
+            dependsOn(desktopNativeMain)
+        }
+
+        macosMain {
+            dependsOn(desktopNativeMain)
+        }
+
+        mingwMain {
+            dependsOn(desktopNativeMain)
+        }
+
+        commonTest {
             dependencies {
                 implementation(libs.bundles.kotest)
             }
         }
 
-        val jvmMain by getting {
+        jvmMain {
             dependencies {
                 api(libs.rococoa)
                 api(libs.jnaPlatform)
@@ -117,7 +113,7 @@ kotlin {
             }
         }
 
-        val jvmTest by getting {
+        jvmTest {
             dependencies {
                 implementation(libs.kotest.runner.junit5)
             }
