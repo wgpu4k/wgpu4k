@@ -1,4 +1,6 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.plugin.KotlinHierarchyTemplate
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
@@ -51,7 +53,38 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
 
-    applyDefaultHierarchyTemplate()
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    applyHierarchyTemplate(
+        KotlinHierarchyTemplate {
+            /* natural hierarchy is only applied to default 'main'/'test' compilations (by default) */
+            withSourceSetTree(KotlinSourceSetTree.main, KotlinSourceSetTree.test)
+
+            common {
+                /* All compilations shall be added to the common group by default */
+                withCompilations { true }
+
+                group("ios") {
+                    withIos()
+                }
+
+                group("desktopNative") {
+
+                    group("macos") {
+                        withMacos()
+                    }
+
+                    group("linux") {
+                        withLinux()
+                    }
+
+                    group("mingw") {
+                        withMingw()
+                    }
+
+                }
+            }
+        }
+    )
 
     sourceSets {
 
@@ -61,30 +94,19 @@ kotlin {
             languageSettings.optIn("kotlin.js.ExperimentalJsExport")
         }
 
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 api(projects.wgpu4k)
             }
         }
 
-        val desktopNativeMain by creating {
-            dependsOn(commonMain)
+        val desktopNativeMain by getting {
             dependencies {
                 api(libs.glfw.native)
             }
         }
 
-        linuxMain {
-            dependsOn(desktopNativeMain)
-        }
 
-        macosMain {
-            dependsOn(desktopNativeMain)
-        }
-
-        mingwMain {
-            dependsOn(desktopNativeMain)
-        }
 
         commonTest {
             dependencies {

@@ -12,13 +12,6 @@ suspend fun glfwContextRenderer(
     height: Int = 1,
     title: String = "",
     deferredRendering: Boolean = false
-): GLFWContext
-
-suspend fun glfwContextRenderer(
-    width: Int = 1,
-    height: Int = 1,
-    title: String = "",
-    deferredRendering: Boolean = false
 ): GLFWContext {
 
     glfwInit()

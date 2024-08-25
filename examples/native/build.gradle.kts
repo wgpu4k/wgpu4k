@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
 }
@@ -25,6 +27,7 @@ kotlin {
         hostOs == "Mac OS X" && isArm64 -> macosArm64("native")
         hostOs == "Mac OS X" && !isArm64 -> macosX64("native")
         hostOs.startsWith("Windows") -> mingwX64("native").apply {
+            @OptIn(ExperimentalKotlinGradlePluginApi::class)
             compilerOptions {
                 freeCompilerArgs.add("-Xllvm-variant=${getCustomLLVMPath()}")
             }
