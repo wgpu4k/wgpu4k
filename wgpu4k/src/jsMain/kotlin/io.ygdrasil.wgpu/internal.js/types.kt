@@ -1,15 +1,12 @@
 package io.ygdrasil.wgpu.internal.js
 
 import io.ygdrasil.wgpu.*
-import js.collections.ReadonlySet
-import js.objects.Record
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.ArrayBufferView
 import org.khronos.webgl.Uint32Array
 import org.w3c.dom.EventInit
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventTarget
-import web.errors.DOMException
 import kotlin.js.Promise
 
 fun <T> createJsObject(): T =
@@ -124,7 +121,7 @@ external interface GPUDepthStencilState {
 
 external interface GPUDeviceDescriptor : GPUObjectDescriptorBase {
     var requiredFeatures: Array<String? /* "depth-clip-control" | "depth32float-stencil8" | "texture-compression-bc" | "texture-compression-etc2" | "texture-compression-astc" | "timestamp-query" | "indirect-first-instance" | "shader-f16" | "rg11b10ufloat-renderable" | "bgra8unorm-storage" | "float32-filterable" */>?
-    var requiredLimits: Record<String, GPUSize64>?
+    var requiredLimits: dynamic //Record<String, GPUSize64>?
     var defaultQueue: GPUQueueDescriptor?
 }
 
@@ -633,7 +630,7 @@ external interface GPUExternalTexture : GPUObjectBase
 external interface GPUInternalError : GPUError
 external interface GPUOutOfMemoryError : GPUError
 
-open external class GPUPipelineError : DOMException {
+open external class GPUPipelineError {
     var reason: String /* "validation" | "internal" */
 }
 
@@ -758,7 +755,7 @@ external interface GPUShaderModule : GPUObjectBase {
 
 }
 
-typealias GPUSupportedFeatures = ReadonlySet<String>
+typealias GPUSupportedFeatures = Any//ReadonlySet<String>
 
 
 external interface GPUSupportedLimits {
@@ -821,7 +818,7 @@ open external class GPUUncapturedErrorEvent : Event {
 
 external interface GPUValidationError : GPUError
 
-typealias WGSLLanguageFeatures = ReadonlySet<String>
+typealias WGSLLanguageFeatures = Any//ReadonlySet<String>
 
 external interface WorkerNavigator : NavigatorGPU
 

@@ -1,4 +1,3 @@
-import org.gradle.kotlin.dsl.implementation
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
@@ -8,6 +7,7 @@ plugins {
     alias(libs.plugins.kotest)
     id("publish")
     if (isAndroidConfigured) id("android")
+    if (isAndroidConfigured) id("android-copy-jni")
 }
 
 val resourcesDirectory = project.file("src").resolve("jvmMain").resolve("resources")
@@ -32,8 +32,6 @@ kotlin {
     iosSimulatorArm64()
     macosArm64()
     macosX64()
-    tvosArm64()
-    tvosX64()
     linuxArm64()
     linuxX64()
     configureMingwX64()
@@ -53,16 +51,6 @@ kotlin {
             languageSettings.optIn("kotlin.ExperimentalUnsignedTypes")
         }
 
-        val kotlinWrappersVersion = "1.0.0-pre.786"
-
-        jsMain {
-            dependencies {
-                implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:$kotlinWrappersVersion"))
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-js")
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-web")
-            }
-        }
-
         jvmMain {
             sourceSets {
                 languageSettings.optIn("kotlin.js.ExperimentalJsExport")
@@ -75,7 +63,6 @@ kotlin {
 
         commonMain {
             dependencies {
-                implementation(kotlin("stdlib-common"))
                 implementation(libs.coroutines)
             }
         }
@@ -99,7 +86,7 @@ kotlin {
             }
 
             dependencies {
-                implementation(projects.wgpu4kNative)
+                implementation(libs.wgpu4k.native)
             }
         }
 
@@ -168,48 +155,4 @@ if (Platform.os == Os.MacOs) {
     tasks.findByName("mingwX64Test")?.apply { enabled = false }
 }
 
-val jniLibsPath = project.file("src")
-    .resolve("androidMain")
-    .resolve("libs")
-
-val jniBuildPath = get4kAndroidJniProject()
-    .projectDir
-    .resolve("build")
-    .resolve("bin")
-
-val libraryName = "libwgpu4kv2.so"
-
-val fileToCopy = listOf(
-    jniBuildPath.resolve("androidNativeArm64").resolve("releaseShared")
-        to jniLibsPath.resolve("arm64-v8a"),
-    jniBuildPath.resolve("androidNativeX64").resolve("releaseShared")
-        to jniLibsPath.resolve("x86_64"),
-)
-
-tasks.findByName("build")?.apply {
-    dependsOn(":wgpu4k-android-jni:build")
-    doFirst {
-        copyJniLibraries()
-    }
-}
-
-tasks.create("copyJniLibraries") {
-    dependsOn("build")
-    doFirst {
-        copyJniLibraries()
-    }
-}
-
-fun get4kAndroidJniProject() = projects.wgpu4kAndroidJni.identityPath.path
-    ?.let(::project) ?: error("Could not find project path")
-
-
-fun copyJniLibraries() {
-    fileToCopy.forEach { (source, target) ->
-        target.mkdirs()
-        target.resolve(libraryName)
-            .also { fileTarget ->
-                source.resolve(libraryName).copyTo(fileTarget, overwrite = true)
-            }
-    }
-}
+tasks.findByName("checkKotlinGradlePluginConfigurationErrors")?.enabled = isAndroidConfigured

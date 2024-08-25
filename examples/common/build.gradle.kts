@@ -25,6 +25,8 @@ kotlin {
 
     macosArm64()
     macosX64()
+    linuxArm64()
+    linuxX64()
     configureMingwX64()
 
     if (isAndroidConfigured) androidTarget()

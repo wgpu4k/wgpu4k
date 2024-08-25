@@ -1,7 +1,7 @@
 [versions]
 kotest = "5.9.1"
 jna = "5.14.0"
-kotlin = "2.0.10"
+kotlin = "2.0.0"
 ktor = "2.3.12"
 playwright = "1.46.0"
 wgpu = "v0.0.0.2"
@@ -13,6 +13,8 @@ agp = "8.5.1"
 jreleaser = "1.13.1"
 rococoa = "0.0.1"
 wgpu4k-panama = "0.0.2"
+wgpu4k-native = "0.0.2"
+glfw-native = "0.0.1"
 
 [libraries]
 kotest-core = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
@@ -31,7 +33,8 @@ ktor-server-core-jvm = { module = "io.ktor:ktor-server-core-jvm", version.ref = 
 playwright = { module = "com.microsoft.playwright:playwright", version.ref = "playwright" }
 rococoa = { module = "io.ygdrasil:rococoa", version.ref = "rococoa" }
 wgpu4k-panama = { module = "io.ygdrasil:wgpu4k-panama", version.ref = "wgpu4k-panama" }
-
+wgpu4k-native = { module = "io.ygdrasil:wgpu4k-native", version.ref = "wgpu4k-native" }
+glfw-native = { module = "io.ygdrasil:glfw-native", version.ref = "glfw-native" }
 
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

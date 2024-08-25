@@ -21,3 +21,6 @@ dependencies {
 	implementation(libs.android.library)
 	implementation(libs.jreleaser.plugin)
 }
+
+val isAndroidConfigured: Boolean
+	get() = System.getenv("ANDROID_HOME") != null

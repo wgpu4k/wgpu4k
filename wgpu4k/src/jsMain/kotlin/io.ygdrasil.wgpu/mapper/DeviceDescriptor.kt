@@ -6,7 +6,6 @@ import io.ygdrasil.wgpu.QueueDescriptor
 import io.ygdrasil.wgpu.internal.js.GPUDeviceDescriptor
 import io.ygdrasil.wgpu.internal.js.GPUQueueDescriptor
 import io.ygdrasil.wgpu.internal.js.createJsObject
-import js.objects.Record
 
 // TODO: add unit test
 internal fun map(input: DeviceDescriptor): GPUDeviceDescriptor = createJsObject<GPUDeviceDescriptor>().apply {
@@ -20,8 +19,8 @@ private fun map(input: QueueDescriptor): GPUQueueDescriptor = createJsObject<GPU
     if (input.label != null) label = input.label
 }
 
-private fun map(input: Map<String, GPUSize64>): Record<String, GPUSize64> {
-    val record = Record<String, GPUSize64>()
+private fun map(input: Map<String, GPUSize64>): dynamic {
+    val record = js("{ }")
     input.forEach { (key, value) -> record.set(key, value) }
     return record
 }

@@ -13,7 +13,7 @@ internal fun map(input: CanvasConfiguration): GPUCanvasConfiguration {
         usage = input.usage.toFlagInt().toJsNumber()
         viewFormats = input.viewFormats.mapJsArray { it.actualName.toJsString() }
         colorSpace = input.colorSpace.name.toJsString()
-        alphaMode = input.alphaMode.name.toJsString()
+        alphaMode = input.alphaMode.stringValue.toJsString()
     }
 }
 

@@ -41,7 +41,7 @@ actual class Surface(private val handler: GPUCanvasContext) : AutoCloseable {
         override var usage: GPUTextureUsageFlags? = this@convert.usage.toFlagInt()
         override var viewFormats: Array<String>? = this@convert.viewFormats.map { it.actualName }.toTypedArray()
         override var colorSpace: Any? = this@convert.colorSpace
-        override var alphaMode: String? = this@convert.alphaMode.name
+        override var alphaMode: String? = this@convert.alphaMode.stringValue
     }
 }
 
