@@ -23,17 +23,25 @@ Implementation of our cross-platform view controller
     // Set the view to use the default device
     _view = (MTKView *)self.view;
     
-    [WgpuAppMainKt nothing];
     //Need to build rust library to iOs
     [WgpuAppMainKt initwgpuMetalLayer:(__bridge void *)_view.layer completionHandler:^(WgpuAppCommonApplication *  _Nullable application, NSError * _Nullable error) {
         if (error) {
             NSLog(@"Erreur : %@", error.localizedDescription);
         } else {
             NSLog(@"Action réussie");
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [application renderFrameWithCompletionHandler:^(NSError * _Nullable error) {
+                    if (error) {
+                        NSLog(@"Erreur : %@", error.localizedDescription);
+                    } else {
+                        NSLog(@"Action réussie");
+                    }
+                }];
+            });
         }
     }];
     
-    _view.device = MTLCreateSystemDefaultDevice();
+    /*_view.device = MTLCreateSystemDefaultDevice();
     
     NSAssert(_view.device, @"Metal is not supported on this device");
     
@@ -44,7 +52,7 @@ Implementation of our cross-platform view controller
     // Initialize our renderer with the view size
     [_renderer mtkView:_view drawableSizeWillChange:_view.drawableSize];
 
-    _view.delegate = _renderer;
+    _view.delegate = _renderer;*/
 }
 
 @end

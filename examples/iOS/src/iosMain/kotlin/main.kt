@@ -7,6 +7,8 @@ import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.COpaquePointer
 import kotlinx.cinterop.CValue
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import platform.CoreGraphics.CGSize
 import platform.MetalKit.MTKView
 import platform.MetalKit.MTKViewDelegateProtocol
@@ -37,23 +39,17 @@ suspend fun initwgpu(metalLayer: COpaquePointer): Application {
 
 }
 
-fun nothing() {
-    println("nothing")
-}
-
-class View : NSObject(), MTKViewDelegateProtocol {
+class View(
+    val application: Application,
+) : NSObject(), MTKViewDelegateProtocol {
 
 
-    override fun mtkView(view: MTKView, drawableSizeWillChange: CValue<CGSize>) {
-        /*val application = createApplication(
-            glfwContext.wgpuContext
-        )*/
-        TODO("Not yet implemented")
-    }
-
+    override fun mtkView(view: MTKView, drawableSizeWillChange: CValue<CGSize>) { }
 
     override fun drawInMTKView(view: MTKView) {
-        TODO("Not yet implemented")
+        MainScope().launch {
+            application.renderFrame()
+        }
     }
 
 }

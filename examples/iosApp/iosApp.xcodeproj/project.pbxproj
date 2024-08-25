@@ -15,6 +15,7 @@
 		3A3532CE1E99974500C194AD /* AAPLRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3532851E99974500C194AD /* AAPLRenderer.m */; };
 		3ACD21351EAE60D2000D1DED /* AAPLAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ACD21341EAE60D2000D1DED /* AAPLAppDelegate.m */; };
 		63E77A181ED2059A00E1E542 /* AAPLShaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3A3532871E99974500C194AD /* AAPLShaders.metal */; };
+		C40DE4902C7BDC6E00031804 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = C40DE48F2C7BDC6E00031804 /* assets */; };
 		C4623DBE2C6D8856000C2843 /* WgpuApp.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4623DBD2C6D8856000C2843 /* WgpuApp.xcframework */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +40,7 @@
 		3ACD21331EAE60D2000D1DED /* AAPLAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAPLAppDelegate.h; sourceTree = "<group>"; };
 		3ACD21341EAE60D2000D1DED /* AAPLAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAPLAppDelegate.m; sourceTree = "<group>"; };
 		907FE32A28789CDAFD777257 /* SampleCode.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
+		C40DE48F2C7BDC6E00031804 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
 		C4623DBD2C6D8856000C2843 /* WgpuApp.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WgpuApp.xcframework; path = ../iOS/build/XCFrameworks/release/WgpuApp.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -116,6 +118,7 @@
 		3A3532911E99974500C194AD /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				C40DE48F2C7BDC6E00031804 /* assets */,
 				3ACD21331EAE60D2000D1DED /* AAPLAppDelegate.h */,
 				3ACD21341EAE60D2000D1DED /* AAPLAppDelegate.m */,
 				3A35329B1E99974500C194AD /* AAPLViewController.h */,
@@ -181,7 +184,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 3A3532821E99974500C194AD /* Build configuration list for PBXProject "iOSApp" */;
+			buildConfigurationList = 3A3532821E99974500C194AD /* Build configuration list for PBXProject "iosApp" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -204,6 +207,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C40DE4902C7BDC6E00031804 /* assets in Resources */,
 				3A3532A01E99974500C194AD /* Main.storyboard in Resources */,
 				3A3532A31E99974500C194AD /* LaunchScreen.storyboard in Resources */,
 			);
@@ -437,7 +441,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3A3532821E99974500C194AD /* Build configuration list for PBXProject "iOSApp" */ = {
+		3A3532821E99974500C194AD /* Build configuration list for PBXProject "iosApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3A3532E01E99974500C194AD /* Debug */,
