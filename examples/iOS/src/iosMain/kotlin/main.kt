@@ -1,7 +1,6 @@
 @file:OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
 
-import io.ygdrasil.wgpu.Surface
-import io.ygdrasil.wgpu.WGPU
+import io.ygdrasil.wgpu.*
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.COpaquePointer
 import kotlinx.cinterop.CValue
@@ -11,7 +10,7 @@ import platform.MetalKit.MTKView
 import platform.MetalKit.MTKViewDelegateProtocol
 import platform.darwin.NSObject
 
-fun initwgpu(metalLayer: COpaquePointer) {
+suspend fun initwgpu(metalLayer: COpaquePointer) {
     val sizeProvider = {
         100 to 100
     }
@@ -19,8 +18,13 @@ fun initwgpu(metalLayer: COpaquePointer) {
     val surface = instance.getSurfaceFromMetalLayer(metalLayer)
         ?.let { Surface(it, sizeProvider) } ?: error("Can't create Surface")
     val adapter = instance.requestAdapter(surface) ?: error("Can't create Adapter")
+    val device = adapter.requestDevice() ?: error("fail to get device")
+
+    surface.computeSurfaceCapabilities(adapter)
+    val renderingContext = SurfaceRenderingContext(surface)
 
 
+    val context = WGPUContext(surface, adapter, device, renderingContext)
 }
 
 fun nothing() {
