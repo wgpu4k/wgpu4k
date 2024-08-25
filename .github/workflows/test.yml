@@ -54,7 +54,7 @@ jobs:
       - name: package
         run: ./gradlew assemble --stacktrace
       - name: Run jvm e2e tests
-        if: matrix.os == 'macos-14'
+        if: matrix.os != 'macos-14'
         run: ./gradlew :wgpu4k-e2e:e2eTest --stacktrace --info
         continue-on-error: true
 
