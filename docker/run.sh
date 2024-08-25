@@ -1,0 +1,1 @@
+ docker run -it -v ${PWD}:/app ubuntu-wgpu4k /bin/bash

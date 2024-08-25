@@ -35,3 +35,4 @@ gradle-app.setting
 /local.properties
 /examples/iosApp/iOSApp.xcodeproj/xcuserdata/
 
+*.deb
