@@ -28,6 +28,9 @@ kotlin {
     linuxArm64()
     linuxX64()
     configureMingwX64()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
 
     if (isAndroidConfigured) androidTarget()
 

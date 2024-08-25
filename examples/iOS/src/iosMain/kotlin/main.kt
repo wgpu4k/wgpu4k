@@ -1,9 +1,15 @@
-@file:OptIn(ExperimentalForeignApi::class)
+@file:OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
 
 import io.ygdrasil.wgpu.Surface
 import io.ygdrasil.wgpu.WGPU
+import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.COpaquePointer
+import kotlinx.cinterop.CValue
 import kotlinx.cinterop.ExperimentalForeignApi
+import platform.CoreGraphics.CGSize
+import platform.MetalKit.MTKView
+import platform.MetalKit.MTKViewDelegateProtocol
+import platform.darwin.NSObject
 
 fun initwgpu(metalLayer: COpaquePointer) {
     val sizeProvider = {
@@ -13,8 +19,27 @@ fun initwgpu(metalLayer: COpaquePointer) {
     val surface = instance.getSurfaceFromMetalLayer(metalLayer)
         ?.let { Surface(it, sizeProvider) } ?: error("Can't create Surface")
     val adapter = instance.requestAdapter(surface) ?: error("Can't create Adapter")
+
+
 }
 
 fun nothing() {
     println("nothing")
+}
+
+class View : NSObject(), MTKViewDelegateProtocol {
+
+
+    override fun mtkView(view: MTKView, drawableSizeWillChange: CValue<CGSize>) {
+        /*val application = createApplication(
+            glfwContext.wgpuContext
+        )*/
+        TODO("Not yet implemented")
+    }
+
+
+    override fun drawInMTKView(view: MTKView) {
+        TODO("Not yet implemented")
+    }
+
 }

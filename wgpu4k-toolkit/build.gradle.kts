@@ -42,12 +42,14 @@ kotlin {
         browser()
     }
 
-
     macosArm64()
     macosX64()
     linuxArm64()
     linuxX64()
     configureMingwX64()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
 
     sourceSets {
 
@@ -57,10 +59,29 @@ kotlin {
             languageSettings.optIn("kotlin.js.ExperimentalJsExport")
         }
 
-        nativeMain {
+        val desktopNativeMain by creating {
+
+        }
+
+        linuxMain {
             dependencies {
                 api(libs.glfw.native)
             }
+            dependsOn(desktopNativeMain)
+        }
+
+        macosMain {
+            dependencies {
+                api(libs.glfw.native)
+            }
+            dependsOn(desktopNativeMain)
+        }
+
+        mingwMain {
+            dependencies {
+                api(libs.glfw.native)
+            }
+            dependsOn(desktopNativeMain)
         }
 
         val commonMain by getting {
