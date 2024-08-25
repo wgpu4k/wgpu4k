@@ -25,7 +25,13 @@ Implementation of our cross-platform view controller
     
     [WgpuAppMainKt nothing];
     //Need to build rust library to iOs
-    [WgpuAppMainKt initwgpuMetalLayer:(__bridge void *)_view.layer completionHandler:nil];
+    [WgpuAppMainKt initwgpuMetalLayer:(__bridge void *)_view.layer completionHandler:^(WgpuAppCommonApplication *  _Nullable application, NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"Erreur : %@", error.localizedDescription);
+        } else {
+            NSLog(@"Action réussie");
+        }
+    }];
     
     _view.device = MTLCreateSystemDefaultDevice();
     
