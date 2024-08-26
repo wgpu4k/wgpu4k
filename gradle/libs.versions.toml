@@ -1,7 +1,7 @@
 [versions]
 kotest = "5.9.1"
 jna = "5.14.0"
-kotlin = "2.0.0"
+kotlin = "2.0.20"
 ktor = "2.3.12"
 playwright = "1.46.0"
 wgpu = "v0.0.0.2"
