@@ -1,4 +1,6 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.plugin.KotlinHierarchyTemplate
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
@@ -42,12 +44,47 @@ kotlin {
         browser()
     }
 
-
     macosArm64()
     macosX64()
     linuxArm64()
     linuxX64()
     configureMingwX64()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    applyHierarchyTemplate(
+        KotlinHierarchyTemplate {
+            /* natural hierarchy is only applied to default 'main'/'test' compilations (by default) */
+            withSourceSetTree(KotlinSourceSetTree.main, KotlinSourceSetTree.test)
+
+            common {
+                /* All compilations shall be added to the common group by default */
+                withCompilations { true }
+
+                group("ios") {
+                    withIos()
+                }
+
+                group("desktopNative") {
+
+                    group("macos") {
+                        withMacos()
+                    }
+
+                    group("linux") {
+                        withLinux()
+                    }
+
+                    group("mingw") {
+                        withMingw()
+                    }
+
+                }
+            }
+        }
+    )
 
     sourceSets {
 
@@ -57,25 +94,27 @@ kotlin {
             languageSettings.optIn("kotlin.js.ExperimentalJsExport")
         }
 
-        nativeMain {
-            dependencies {
-                api(libs.glfw.native)
-            }
-        }
-
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 api(projects.wgpu4k)
             }
         }
 
-        val commonTest by getting {
+        val desktopNativeMain by getting {
+            dependencies {
+                api(libs.glfw.native)
+            }
+        }
+
+
+
+        commonTest {
             dependencies {
                 implementation(libs.bundles.kotest)
             }
         }
 
-        val jvmMain by getting {
+        jvmMain {
             dependencies {
                 api(libs.rococoa)
                 api(libs.jnaPlatform)
@@ -96,7 +135,7 @@ kotlin {
             }
         }
 
-        val jvmTest by getting {
+        jvmTest {
             dependencies {
                 implementation(libs.kotest.runner.junit5)
             }

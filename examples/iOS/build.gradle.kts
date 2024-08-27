@@ -39,7 +39,7 @@ kotlin {
 
         val commonMain by getting {
             dependencies {
-                implementation(projects.wgpu4k)
+                implementation(projects.examples.common)
             }
         }
 

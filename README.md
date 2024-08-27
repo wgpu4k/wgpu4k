@@ -37,6 +37,7 @@ cd wgpu4k
 - On web wasm: `./gradlew examples:web-js:wasmJsBrowserRun`
 - On desktop native (Mac only and still experimental) `./gradlew examples:native:runDebugExecutableNative`
 - On android (experimental) `./gradlew wgpu4k:build` to build the JNI library, then you can run the subproject `android` with android studio ![android-studio-capture.png](android-studio-capture.png)
+- On iOS (experimental) `./gradlew examples:iOS:assembleWgpuAppXCFramework` to build the XC Framework, then you can run the subproject `iosApp` with XCode on a iOS simulator or real device.
 
 Use `page down` and `page up` on your keyboard to switch scene.
 
