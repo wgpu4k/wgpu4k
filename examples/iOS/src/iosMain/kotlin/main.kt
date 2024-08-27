@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
+@file:OptIn(ExperimentalForeignApi::class)
 
 import io.ygdrasil.wgpu.*
 import io.ygdrasil.wgpu.examples.Application
@@ -14,23 +14,11 @@ import platform.darwin.NSObject
 suspend fun configureApplication(view: MTKView) {
     try {
         val size = view.drawableSize()
-        val sizeProvider = {
-            size.useContents { width.toInt() } to size.useContents { height.toInt() }
-        }
-        val layer = view.layer
-        val layerPointer: COpaquePointer = interpretCPointer<COpaque>(layer.objcPtr())!!.reinterpret()
-        val instance = WGPU.createInstance() ?: error("Can't create WGPU instance")
-        val surface = instance.getSurfaceFromMetalLayer(layerPointer)
-            ?.let { Surface(it, sizeProvider) } ?: error("Can't create Surface")
-        val adapter = instance.requestAdapter(surface) ?: error("Can't create Adapter")
-        val device = adapter.requestDevice() ?: error("fail to get device")
-
-        surface.computeSurfaceCapabilities(adapter)
-        val renderingContext = SurfaceRenderingContext(surface)
-
-
-        val context = WGPUContext(surface, adapter, device, renderingContext)
-        val application = createApplication(context)
+        val context = iosContextRenderer(
+            view,
+            size.useContents { width.toInt() }, size.useContents { height.toInt() }
+        )
+        val application = createApplication(context.wgpuContext)
         view.delegate = View(application)
     }catch (e: Throwable) {
         e.printStackTrace()
