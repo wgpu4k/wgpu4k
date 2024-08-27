@@ -12,9 +12,7 @@
 		3A35329D1E99974500C194AD /* AAPLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A35329C1E99974500C194AD /* AAPLViewController.m */; };
 		3A3532A01E99974500C194AD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A35329E1E99974500C194AD /* Main.storyboard */; };
 		3A3532A31E99974500C194AD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A3532A11E99974500C194AD /* LaunchScreen.storyboard */; };
-		3A3532CE1E99974500C194AD /* AAPLRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3532851E99974500C194AD /* AAPLRenderer.m */; };
 		3ACD21351EAE60D2000D1DED /* AAPLAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ACD21341EAE60D2000D1DED /* AAPLAppDelegate.m */; };
-		63E77A181ED2059A00E1E542 /* AAPLShaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3A3532871E99974500C194AD /* AAPLShaders.metal */; };
 		C40DE4902C7BDC6E00031804 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = C40DE48F2C7BDC6E00031804 /* assets */; };
 		C4623DBE2C6D8856000C2843 /* WgpuApp.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4623DBD2C6D8856000C2843 /* WgpuApp.xcframework */; };
 /* End PBXBuildFile section */
@@ -22,10 +20,6 @@
 /* Begin PBXFileReference section */
 		3A05CBDE1F731AB800CA21B1 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = ../../../../iPhoneOS.platform/Developer/SDKs/iPhoneOS11.0.sdk/System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		3A1F1B411F0338CF001622B3 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = ../../../../AppleTVOS.platform/Developer/SDKs/AppleTVOS11.0.sdk/System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
-		3A3532841E99974500C194AD /* AAPLRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AAPLRenderer.h; sourceTree = "<group>"; };
-		3A3532851E99974500C194AD /* AAPLRenderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AAPLRenderer.m; sourceTree = "<group>"; };
-		3A3532861E99974500C194AD /* AAPLShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AAPLShaderTypes.h; sourceTree = "<group>"; };
-		3A3532871E99974500C194AD /* AAPLShaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = AAPLShaders.metal; sourceTree = "<group>"; };
 		3A35328F1E99974500C194AD /* HelloTriangle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloTriangle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A3532931E99974500C194AD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3A35329B1E99974500C194AD /* AAPLViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AAPLViewController.h; sourceTree = "<group>"; };
@@ -88,23 +82,11 @@
 		3A35327E1E99974500C194AD = {
 			isa = PBXGroup;
 			children = (
-				3A3532831E99974500C194AD /* Renderer */,
 				3A3532911E99974500C194AD /* Application */,
 				3AE289861EEA0A9100DF4C9A /* Frameworks */,
 				3A3532901E99974500C194AD /* Products */,
 				F4F7FAFBBA6575359FC81F34 /* Configuration */,
 			);
-			sourceTree = "<group>";
-		};
-		3A3532831E99974500C194AD /* Renderer */ = {
-			isa = PBXGroup;
-			children = (
-				3A3532841E99974500C194AD /* AAPLRenderer.h */,
-				3A3532851E99974500C194AD /* AAPLRenderer.m */,
-				3A3532861E99974500C194AD /* AAPLShaderTypes.h */,
-				3A3532871E99974500C194AD /* AAPLShaders.metal */,
-			);
-			path = Renderer;
 			sourceTree = "<group>";
 		};
 		3A3532901E99974500C194AD /* Products */ = {
@@ -220,10 +202,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63E77A181ED2059A00E1E542 /* AAPLShaders.metal in Sources */,
 				3A35329D1E99974500C194AD /* AAPLViewController.m in Sources */,
 				3A3532941E99974500C194AD /* main.m in Sources */,
-				3A3532CE1E99974500C194AD /* AAPLRenderer.m in Sources */,
 				3ACD21351EAE60D2000D1DED /* AAPLAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
