@@ -53,7 +53,7 @@ class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
         textureView = texture.createView().bind()
     }
 
-    override fun AutoClosableContext.render() {
+    override suspend fun AutoClosableContext.render() {
 
 
         val encoder = device.createCommandEncoder()
@@ -71,11 +71,11 @@ class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
                     )
                 )
             )
-        ).bind()
-
-        renderPassEncoder.setPipeline(renderPipeline)
-        renderPassEncoder.draw(3)
-        renderPassEncoder.end()
+        ) {
+            setPipeline(renderPipeline)
+            draw(3)
+            end()
+        }
 
         val commandBuffer = encoder.finish()
             .bind()

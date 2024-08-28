@@ -35,7 +35,7 @@ class HelloTriangleScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
         ).bind()
     }
 
-    override fun AutoClosableContext.render() {
+    override suspend fun AutoClosableContext.render() {
 
         // Clear the canvas with a render pass
         val encoder = device.createCommandEncoder()
@@ -44,7 +44,7 @@ class HelloTriangleScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
         val texture = renderingContext.getCurrentTexture()
             .bind()
 
-        val renderPassEncoder = encoder.beginRenderPass(
+        encoder.beginRenderPass(
             RenderPassDescriptor(
                 colorAttachments = listOf(
                     RenderPassDescriptor.ColorAttachment(
@@ -55,11 +55,12 @@ class HelloTriangleScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
                     )
                 )
             )
-        ).bind()
+        ) {
+            setPipeline(renderPipeline)
+            draw(3)
+            end()
+        }
 
-        renderPassEncoder.setPipeline(renderPipeline)
-        renderPassEncoder.draw(3)
-        renderPassEncoder.end()
 
         val commandBuffer = encoder.finish()
             .bind()

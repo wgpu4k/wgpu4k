@@ -6,6 +6,7 @@ actual class RenderPassEncoder(val handler: Long) : AutoCloseable {
 
     actual fun end() {
         JniInterface.wgpuRenderPassEncoderEnd(handler)
+        close()
     }
 
     actual fun setPipeline(renderPipeline: RenderPipeline) {

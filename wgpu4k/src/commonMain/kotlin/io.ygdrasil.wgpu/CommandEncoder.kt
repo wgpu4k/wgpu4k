@@ -21,6 +21,10 @@ expect class CommandEncoder : AutoCloseable {
     override fun close()
 }
 
+inline fun CommandEncoder.beginRenderPass(descriptor: RenderPassDescriptor, then: RenderPassEncoder.() -> Unit) {
+    beginRenderPass(descriptor).apply(then)
+}
+
 data class ImageCopyTexture(
     val texture: Texture,
     val mipLevel: GPUIntegerCoordinate = 0,

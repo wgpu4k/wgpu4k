@@ -168,7 +168,7 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			.translated(2.0, 0.0, -7.0)
 	}
 
-	override fun AutoClosableContext.render() {
+	override suspend fun AutoClosableContext.render() {
 
 		val transformationMatrix1 = getTransformationMatrix(
 			frame / 100.0,
@@ -206,21 +206,22 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		val encoder = device.createCommandEncoder()
 			.bind()
 
-		val renderPassEncoder = encoder.beginRenderPass(renderPassDescriptor)
-			.bind()
-		renderPassEncoder.setPipeline(renderPipeline)
-		renderPassEncoder.setBindGroup(0, uniformBindGroup1)
-		renderPassEncoder.setVertexBuffer(0, verticesBuffer)
+		encoder.beginRenderPass(renderPassDescriptor) {
+			setPipeline(renderPipeline)
+			setBindGroup(0, uniformBindGroup1)
+			setVertexBuffer(0, verticesBuffer)
 
-		// Bind the bind group (with the transformation matrix) for
-		// each cube, and draw.
-		renderPassEncoder.setBindGroup(0, uniformBindGroup1);
-		renderPassEncoder.draw(cubeVertexCount);
+			// Bind the bind group (with the transformation matrix) for
+			// each cube, and draw.
+			setBindGroup(0, uniformBindGroup1);
+			draw(cubeVertexCount);
 
-		renderPassEncoder.setBindGroup(0, uniformBindGroup2);
-		renderPassEncoder.draw(cubeVertexCount);
+			setBindGroup(0, uniformBindGroup2);
+			draw(cubeVertexCount);
 
-		renderPassEncoder.end()
+			end()
+		}
+
 		val commandBuffer = encoder.finish()
 			.bind()
 

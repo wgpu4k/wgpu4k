@@ -175,7 +175,7 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		projectionMatrix = Matrix4.perspective(fox, aspect, 1.0, 100.0)
 	}
 
-	override fun AutoClosableContext.render() {
+	override suspend fun AutoClosableContext.render() {
 
 		val transformationMatrix = getTransformationMatrix(
 			frame / 100.0,
@@ -204,13 +204,14 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		val encoder = device.createCommandEncoder()
 			.bind()
 
-		val renderPassEncoder = encoder.beginRenderPass(renderPassDescriptor)
-			.bind()
-		renderPassEncoder.setPipeline(renderPipeline)
-		renderPassEncoder.setBindGroup(0, uniformBindGroup)
-		renderPassEncoder.setVertexBuffer(0, verticesBuffer)
-		renderPassEncoder.draw(cubeVertexCount)
-		renderPassEncoder.end()
+		encoder.beginRenderPass(renderPassDescriptor) {
+			setPipeline(renderPipeline)
+			setBindGroup(0, uniformBindGroup)
+			setVertexBuffer(0, verticesBuffer)
+			draw(cubeVertexCount)
+			end()
+		}
+
 
 		encoder.copyTextureToTexture(
 			source = ImageCopyTexture(texture = swapChainTexture),

@@ -417,7 +417,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
             .rotated(Angle.fromRadians(PI * -0.1), 1, 0, 0)
     }
 
-    override fun AutoClosableContext.render() {
+    override suspend fun AutoClosableContext.render() {
 
         device.queue.writeBuffer(
             simulationUBOBuffer,

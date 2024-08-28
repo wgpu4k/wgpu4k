@@ -98,7 +98,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
         projectionMatrix = getProjectionMatrix(renderingContext.width, renderingContext.height)
     }
 
-    override fun AutoClosableContext.render() {
+    override suspend fun AutoClosableContext.render() {
 
         val renderPassDesc = renderPassDesc.copy(
             colorAttachments = listOf(
@@ -122,10 +122,12 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
         )
 
         val commandEncoder = device.createCommandEncoder().bind()
-        val renderPass = commandEncoder.beginRenderPass(renderPassDesc).bind()
-        renderPass.executeBundles(renderBundles)
 
-        renderPass.end()
+        commandEncoder.beginRenderPass(renderPassDesc) {
+            executeBundles(renderBundles)
+            end()
+        }
+
         device.queue.submit(listOf(commandEncoder.finish()))
 
     }

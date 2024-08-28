@@ -11,6 +11,7 @@ actual class RenderPassEncoder(internal val handler: WGPURenderPassEncoder) : Au
 
     actual fun end() {
         wgpuRenderPassEncoderEnd(handler)
+        close()
     }
 
     actual fun setPipeline(renderPipeline: RenderPipeline) {

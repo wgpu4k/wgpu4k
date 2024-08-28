@@ -5,10 +5,11 @@ import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.internal.jvm.toPointerArray
 import java.lang.foreign.MemorySegment
 
-actual class RenderPassEncoder(private val handler: MemorySegment) : AutoCloseable {
+actual class RenderPassEncoder(private val handler: MemorySegment) {
 
     actual fun end() {
         wgpu_h.wgpuRenderPassEncoderEnd(handler)
+        close()
     }
 
     actual fun setPipeline(renderPipeline: RenderPipeline) {
@@ -55,7 +56,7 @@ actual class RenderPassEncoder(private val handler: MemorySegment) : AutoCloseab
         )
     }
 
-    actual override fun close() {
+    private fun close() {
         wgpu_h.wgpuRenderPassEncoderRelease(handler)
     }
 
