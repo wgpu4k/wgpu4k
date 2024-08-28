@@ -3,6 +3,7 @@ package io.ygdrasil.wgpu.examples
 import io.ygdrasil.wgpu.ImageBitmapHolder
 import korlibs.image.bitmap.Bitmap32
 import korlibs.io.file.Vfs
+import korlibs.io.file.std.resourcesVfs
 
 actual fun Bitmap32.toBitmapHolder(): ImageBitmapHolder {
     return ImageBitmapHolder(width, height, toByteArrayJS())
@@ -22,5 +23,5 @@ private fun Bitmap32.toByteArrayJS(): ByteArray {
 }
 
 actual var customVfs: Vfs
-    get() = TODO("Not yet implemented")
+    get() = resourcesVfs.vfs // only to avoid fail of e2e test on browser
     set(value) {}
