@@ -2,7 +2,7 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.JniInterface
 
-actual class RenderPassEncoder(val handler: Long) : AutoCloseable {
+actual class RenderPassEncoder(val handler: Long) {
 
     actual fun end() {
         JniInterface.wgpuRenderPassEncoderEnd(handler)
@@ -65,7 +65,7 @@ actual class RenderPassEncoder(val handler: Long) : AutoCloseable {
         )
     }
 
-    actual override fun close() {
+    private fun close() {
         JniInterface.wgpuRenderPassEncoderRelease(handler)
     }
 

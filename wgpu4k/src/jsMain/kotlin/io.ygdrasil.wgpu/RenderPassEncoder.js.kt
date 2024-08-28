@@ -2,7 +2,7 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPURenderPassEncoder
 
-actual class RenderPassEncoder(private val handler: GPURenderPassEncoder) : AutoCloseable {
+actual class RenderPassEncoder(private val handler: GPURenderPassEncoder) {
 
     actual fun end() {
         handler.end()
@@ -40,10 +40,6 @@ actual class RenderPassEncoder(private val handler: GPURenderPassEncoder) : Auto
 
     actual fun executeBundles(bundles: List<RenderBundle>) {
         handler.executeBundles(bundles.map { it.handler }.toTypedArray())
-    }
-
-    actual override fun close() {
-        // Nothing to do
     }
 
 }
