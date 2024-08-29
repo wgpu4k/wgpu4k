@@ -50,7 +50,7 @@ jobs:
           echo "clang path :"
           echo $LIBCLANG_PATH
           gradle wrapper
-          ./gradlew fetch-native-dependencies build check --stacktrace
+          ./gradlew build check --stacktrace
       - name: package
         run: ./gradlew assemble --stacktrace
 
