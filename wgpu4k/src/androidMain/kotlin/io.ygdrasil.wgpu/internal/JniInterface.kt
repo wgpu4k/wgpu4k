@@ -235,11 +235,6 @@ object JniInterface {
     external fun wgpuRenderPassEncoderRelease(handler: Long)
 
     /*** Queue ***/
-    external fun wgpuQueueSubmit(
-        handler: Long,
-        commandsBufferSize: Long,
-        commandsBuffer: List<Long>
-    )
     // TODO jni
     external fun wgpuQueueWriteBuffer(
         handler: Long,

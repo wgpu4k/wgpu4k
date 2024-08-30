@@ -92,6 +92,8 @@ kotlin {
 
         androidMain {
             dependencies {
+                val jna = libs.jna.get()
+                implementation("${jna.module.group}:${jna.module.name}:${jna.versionConstraint}:@aar")
                 implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.0")
             }
         }

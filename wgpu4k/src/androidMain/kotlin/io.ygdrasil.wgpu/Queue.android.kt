@@ -1,17 +1,22 @@
 package io.ygdrasil.wgpu
 
+import io.ygdrasil.wgpu.internal.JnaInterface
 import io.ygdrasil.wgpu.internal.JniInterface
+import io.ygdrasil.wgpu.internal.scoped
+import io.ygdrasil.wgpu.internal.toAddress
+import io.ygdrasil.wgpu.internal.toNativeArray
 
 private val supportedFormatOncopyExternalImageToTexture =
     listOf(TextureFormat.rgba8unorm, TextureFormat.rgba8unormsrgb)
 
 actual class Queue(val handler: Long) {
 
-    actual fun submit(commandsBuffer: List<CommandBuffer>) {
-        JniInterface.wgpuQueueSubmit(
+    actual fun submit(commandsBuffer: List<CommandBuffer>) = scoped {
+        val buffers = commandsBuffer.map { it.handler }.toNativeArray(this)
+        JnaInterface.wgpuQueueSubmit(
             handler,
             commandsBuffer.size.toLong(),
-            commandsBuffer.map { it.handler }
+            buffers.toAddress()
         )
     }
 
@@ -78,6 +83,7 @@ actual class Queue(val handler: Long) {
     }
 
 }
+
 
 actual sealed interface DrawableHolder
 
