@@ -48,7 +48,7 @@ class HelloTriangleScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
             RenderPassDescriptor(
                 colorAttachments = listOf(
                     RenderPassDescriptor.ColorAttachment(
-                        view = texture.createView().bind(),
+                        view = texture.createView(TextureViewDescriptor(label = "temp")).bind(),
                         loadOp = LoadOp.load,
                         clearValue = Color(.0, .0, .0, 1.0),
                         storeOp = StoreOp.store

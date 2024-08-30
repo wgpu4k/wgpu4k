@@ -148,12 +148,7 @@ object JniInterface {
 
     // TODO jni
     external fun wgpuTextureGetUsage(handler: Long): GPUFlagsConstant
-    external fun wgpuTextureCreateView(
-        handler: Long,
-        textureViewDescriptor: TextureViewDescriptor?
-    ): Long
 
-    external fun wgpuTextureRelease(handler: Long)
 
     /*** CommandEncoder ***/
     external fun wgpuCommandEncoderBeginRenderPass(

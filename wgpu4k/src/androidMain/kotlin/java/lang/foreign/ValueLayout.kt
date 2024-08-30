@@ -1,6 +1,6 @@
 package java.lang.foreign
 
-typealias AddressLayout = ValueLayout
+class AddressLayout
 
 class ValueLayout(val size: Long, val name: String? = null) {
     companion object {
@@ -11,11 +11,17 @@ class ValueLayout(val size: Long, val name: String? = null) {
         val JAVA_SHORT: ValueLayout = ValueLayout(Short.SIZE_BYTES.toLong())
         val JAVA_BYTE: ValueLayout = ValueLayout(Byte.SIZE_BYTES.toLong())
         val JAVA_BOOLEAN: ValueLayout = ValueLayout(1)
-        val ADDRESS: AddressLayout = JAVA_LONG
+        val ADDRESS: ValueLayout = JAVA_LONG
     }
 
     fun withName(name: String) = ValueLayout(size, name)
 
 
     class OfDouble
+    class OfFloat
+    class OfInt
+    class OfLong
+    class OfShort
+    class OfByte
+    class OfBoolean
 }

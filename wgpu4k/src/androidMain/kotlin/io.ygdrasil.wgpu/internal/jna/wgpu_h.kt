@@ -21,7 +21,7 @@ object wgpu_h {
     @JvmField
     val C_DOUBLE: ValueLayout = ValueLayout.JAVA_DOUBLE
     @JvmField
-    val C_POINTER: AddressLayout = ValueLayout.ADDRESS
+    val C_POINTER: ValueLayout = ValueLayout.ADDRESS
     @JvmField
     val C_LONG: ValueLayout = ValueLayout.JAVA_LONG
 }

@@ -13,6 +13,9 @@ class MemoryLayout {
             repeat(elementCount.toInt()) { layouts += layout.layouts}
             return GroupLayout(layouts)
         }
+
+        @JvmStatic
+        fun paddingLayout(size: Int): ValueLayout =  ValueLayout(size.toLong())
     }
 
     object PathElement {

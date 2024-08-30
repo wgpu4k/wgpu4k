@@ -1,6 +1,7 @@
 package java.lang.foreign
 
 import com.sun.jna.Pointer
+import io.ygdrasil.wgpu.internal.toAddress
 import java.util.function.Consumer
 
 class MemorySegment(val pointer: Pointer) {
@@ -11,6 +12,36 @@ class MemorySegment(val pointer: Pointer) {
 
     fun set(layout: ValueLayout.OfDouble?, offest: Long, newValue: Double  ) {
         return pointer.setDouble(offest, newValue)
+    }
+
+    fun get(layout: ValueLayout.OfFloat?, offest: Long ) : Float {
+        return pointer.getFloat(offest)
+    }
+
+    fun set(layout: ValueLayout.OfFloat?, offest: Long, newValue: Float  ) {
+        return pointer.setFloat(offest, newValue)
+    }
+    fun get(layout: ValueLayout.OfInt?, offest: Long ) : Int {
+        return pointer.getInt(offest)
+    }
+    fun set(layout: ValueLayout.OfInt?, offest: Long, newValue: Int  ) {
+        return pointer.setInt(offest, newValue)
+    }
+    fun get(layout: ValueLayout.OfLong?, offest: Long ) : Long {
+        return pointer.getLong(offest)
+    }
+
+    fun set(layout: ValueLayout.OfLong?, offest: Long, newValue: Long  ) {
+        return pointer.setLong(offest, newValue )
+    }
+
+    fun get(layout: AddressLayout?, offest: Long ) : MemorySegment {
+        return pointer.getLong(offest)
+            .let { MemorySegment(Pointer(it)) }
+    }
+
+    fun set(layout: AddressLayout?, offest: Long, newValue: MemorySegment  ) {
+        return pointer.setLong(offest, newValue.pointer.toAddress() )
     }
 
     fun asSlice(offest: Long): MemorySegment = MemorySegment(pointer.share(offest))

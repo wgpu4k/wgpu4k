@@ -7,7 +7,7 @@ import java.lang.foreign.SegmentAllocator
 class JnaArena: AutoCloseable {
     private val autoCloseableMemory = mutableListOf<AutoCloseable>()
 
-    fun allocate(size: Long): Memory {
+    fun allocate(size: Long): Pointer {
         return Memory(size)
             .also { autoCloseableMemory.add(it) }
     }
@@ -15,13 +15,19 @@ class JnaArena: AutoCloseable {
     override fun close() {
         autoCloseableMemory.forEach { it.close() }
     }
+
+    fun allocateFrom(label: String): Pointer {
+        return NativeString(label).pointer
+            ?.also { autoCloseableMemory.add(it) }
+            ?: error("fail to allocate CString")
+    }
 }
 
-internal fun scoped(run: JnaArena.(SegmentAllocator) -> Unit) = JnaArena().use { it.run(SegmentAllocator(it)) }
+internal fun <T> scoped(run: JnaArena.(SegmentAllocator) -> T) : T = JnaArena().use { return it.run(SegmentAllocator(it)) }
 
-internal fun Memory.toAddress() = Pointer.nativeValue(this)
+internal fun Pointer.toAddress() = Pointer.nativeValue(this)
 
-internal fun List<Long>.toNativeArray(arena: JnaArena): Memory {
+internal fun List<Long>.toNativeArray(arena: JnaArena): Pointer {
     return arena.allocate(size * Long.SIZE_BYTES.toLong())
         .also { array -> forEachIndexed { index, value -> array.setLong(index * Long.SIZE_BYTES.toLong(), value) } }
 }
