@@ -24,13 +24,8 @@ class WGPU(val handler: Long) : AutoCloseable {
     }
 
     companion object {
-        
-        fun createInstance(backend: WGPUInstanceBackend? = null): WGPU = scoped { arena ->
-            JniInterface.wgpuCreateInstance( backend)
-                .let { WGPU(it) }
-        }
 
-        fun createInstance1(backend: WGPUInstanceBackend? = null): WGPU = scoped { arena ->
+        fun createInstance(backend: WGPUInstanceBackend? = null): WGPU = scoped { arena ->
             backend?.let { arena.map(backend) }
                 .let { JnaInterface.wgpuCreateInstance( it ?: 0L) }
                 .let { WGPU(it) }

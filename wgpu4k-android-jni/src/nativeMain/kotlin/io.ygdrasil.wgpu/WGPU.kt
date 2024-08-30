@@ -27,29 +27,6 @@ import webgpu.WGPUSType_SurfaceDescriptorFromAndroidNativeWindow
 import webgpu.wgpuInstanceRequestAdapter
 import kotlin.experimental.ExperimentalNativeApi
 
-
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuCreateInstance")
-fun wgpuCreateInstance(env: JNIEnvPointer, thiz: jclass, backendHolder: jobject?) : jlong = memScoped {
-    println("wgpuCreateInstance ${backendHolder}")
-
-    return if (backendHolder == null) {
-        webgpu.wgpuCreateInstance(null).toLong()
-    } else {
-        val backend = env.callIntMethodFrom(backendHolder, "getValue")
-
-        val descriptor = alloc<webgpu.WGPUInstanceDescriptor>().apply  {
-            nextInChain = alloc<webgpu.WGPUInstanceExtras>().apply {
-                chain.sType = webgpu.WGPUSType_InstanceExtras
-                backends = backend.toUInt()
-            }.ptr.reinterpret()
-        }
-
-        webgpu.wgpuCreateInstance(descriptor.ptr).toLong()
-    }
-}
-
-
-
 @CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuInstanceCreateSurface")
 fun wgpuInstanceCreateSurface(env: JNIEnvPointer, thiz: jclass, handler: jlong, surface: jobject) : jlong = memScoped {
 

@@ -50,6 +50,7 @@ class MemorySegment(val pointer: Pointer, val size: Long) {
         pointer,
         size
     )
+
     fun fillWithZero() {
         repeat((size / 8).toInt()) {
             pointer.setLong(it * Long.SIZE_BYTES.toLong(), 0L) }

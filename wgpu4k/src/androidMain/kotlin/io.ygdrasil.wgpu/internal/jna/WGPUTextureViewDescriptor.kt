@@ -464,7 +464,7 @@ object WGPUTextureViewDescriptor {
      * Allocate a segment of size `layout().byteSize()` using `allocator`
      */
     fun allocate(allocator: SegmentAllocator): MemorySegment {
-        return allocator.allocate(layout()).also { it.fillWithZero() }
+        return allocator.allocate(layout())
     }
 
     /**
