@@ -57,32 +57,6 @@ object JniInterface {
         height: Int
     )
 
-    /*** Texture ***/
-    // TODO jni
-    external fun wgpuTextureGetWidth(handler: Long): GPUIntegerCoordinateOut
-
-    // TODO jni
-    external fun wgpuTextureGetHeight(handler: Long): GPUIntegerCoordinateOut
-
-    // TODO jni
-    external fun wgpuTextureGetDepthOrArrayLayers(handler: Long): GPUIntegerCoordinateOut
-
-    // TODO jni
-    external fun wgpuTextureGetMipLevelCount(handler: Long): GPUIntegerCoordinateOut
-
-    // TODO jni
-    external fun wgpuTextureGetSampleCount(handler: Long): GPUSize32Out
-
-    // TODO jni
-    external fun wgpuTextureGetDimension(handler: Long): Int
-
-    // TODO jni
-    external fun wgpuTextureGetFormat(handler: Long): Int
-
-    // TODO jni
-    external fun wgpuTextureGetUsage(handler: Long): GPUFlagsConstant
-
-
     /*** CommandEncoder ***/
     external fun wgpuCommandEncoderBeginRenderPass(
         handler: Long,

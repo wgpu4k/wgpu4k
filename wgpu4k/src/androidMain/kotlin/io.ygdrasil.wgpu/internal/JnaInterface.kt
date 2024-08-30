@@ -1,6 +1,9 @@
 package io.ygdrasil.wgpu.internal
 
 import com.sun.jna.Native
+import io.ygdrasil.wgpu.GPUFlagsConstant
+import io.ygdrasil.wgpu.GPUIntegerCoordinateOut
+import io.ygdrasil.wgpu.GPUSize32Out
 
 object JnaInterface {
 
@@ -24,13 +27,6 @@ object JnaInterface {
 
     /*** TextureView ***/
     external fun wgpuTextureViewRelease(handler: Long)
-
-    /*** Texture ***/
-    external fun wgpuTextureCreateView(
-        handler: Long,
-        textureViewDescriptor: Long
-    ): Long
-
     external fun wgpuTextureRelease(handler: Long)
 
     /*** CommandEncoder ***/
@@ -74,4 +70,19 @@ object JnaInterface {
     external fun wgpuDeviceCreateQuerySet(handler: Long, descriptor: Long): Long
     external fun wgpuDevicePoll(handler: Long, bool: Int, ptr: Long)
     external fun wgpuDeviceRelease(handler: Long)
+
+    /*** Texture ***/
+    external fun wgpuTextureCreateView(
+        handler: Long,
+        textureViewDescriptor: Long
+    ): Long
+
+    external fun wgpuTextureGetWidth(handler: Long): Int
+    external fun wgpuTextureGetHeight(handler: Long): Int
+    external fun wgpuTextureGetDepthOrArrayLayers(handler: Long): Int
+    external fun wgpuTextureGetMipLevelCount(handler: Long): Int
+    external fun wgpuTextureGetSampleCount(handler: Long): Int
+    external fun wgpuTextureGetDimension(handler: Long): Int
+    external fun wgpuTextureGetFormat(handler: Long): Int
+    external fun wgpuTextureGetUsage(handler: Long): Int
 }
