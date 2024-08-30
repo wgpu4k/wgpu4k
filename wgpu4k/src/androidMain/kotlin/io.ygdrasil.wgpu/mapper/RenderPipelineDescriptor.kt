@@ -13,6 +13,7 @@ import io.ygdrasil.wgpu.internal.jna.WGPUStencilFaceState
 import io.ygdrasil.wgpu.internal.jna.WGPUVertexAttribute
 import io.ygdrasil.wgpu.internal.jna.WGPUVertexBufferLayout
 import io.ygdrasil.wgpu.internal.jna.WGPUVertexState
+import io.ygdrasil.wgpu.internal.toAddress
 import io.ygdrasil.wgpu.toInt
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.SegmentAllocator
@@ -25,7 +26,7 @@ internal fun SegmentAllocator.map(input: RenderPipelineDescriptor) = WGPURenderP
     if (input.depthStencil != null) WGPURenderPipelineDescriptor.depthStencil(output, map(input.depthStencil))
     if (input.fragment != null) WGPURenderPipelineDescriptor.fragment(output, map(input.fragment))
     map(input.multisample, WGPURenderPipelineDescriptor.multisample(output))
-}
+}.pointer.toAddress()
 
 fun SegmentAllocator.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState, output: MemorySegment) {
     println("colorTargetState $output")

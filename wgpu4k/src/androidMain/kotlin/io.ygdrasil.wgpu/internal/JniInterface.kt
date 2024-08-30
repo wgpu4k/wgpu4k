@@ -37,7 +37,6 @@ object JniInterface {
     }
 
     /*** Instance ***/
-    external fun wgpuCreateInstance(backend: WGPUInstanceBackend?): Long
     external fun wgpuInstanceRequestAdapter(handler: Long, powerPreference: PowerPreference?, surface: Long): Long
     external fun wgpuInstanceCreateSurface(handler: Long, androidSurface: android.view.Surface): Long
 
@@ -57,69 +56,6 @@ object JniInterface {
         width: Int,
         height: Int
     )
-
-    external fun wgpuSurfaceRelease(handler: Long)
-
-    /*** Device ***/
-    // TODO jni
-    external fun wgpuDeviceGetQueue(handler: Long): Long
-    external fun wgpuDeviceCreateCommandEncoder(
-        handler: Long,
-        descriptor: CommandEncoderDescriptor?
-    ): Long
-
-    external fun wgpuDeviceCreateShaderModule(
-        handler: Long,
-        descriptor: ShaderModuleDescriptor
-    ): Long
-
-    // TODO jni
-    external fun wgpuDeviceCreatePipelineLayout(
-        handler: Long,
-        descriptor: PipelineLayoutDescriptor
-    ): Long
-
-    external fun wgpuDeviceCreateRenderPipeline(
-        handler: Long,
-        descriptor: RenderPipelineDescriptor
-    ): Long
-
-    // TODO jni
-    external fun wgpuDeviceCreateBuffer(handler: Long, descriptor: BufferDescriptor): Long
-
-    // TODO jni
-    external fun wgpuDeviceCreateBindGroup(handler: Long, descriptor: BindGroupDescriptor): Long
-
-    // TODO jni
-    external fun wgpuDeviceCreateTexture(handler: Long, descriptor: TextureDescriptor): Long
-
-    // TODO jni
-    external fun wgpuDeviceCreateSampler(handler: Long, descriptor: SamplerDescriptor): Long
-
-    // TODO jni
-    external fun wgpuDeviceCreateComputePipeline(
-        handler: Long,
-        descriptor: ComputePipelineDescriptor
-    ): Long
-
-    // TODO jni
-    external fun wgpuDeviceCreateBindGroupLayout(
-        handler: Long,
-        descriptor: BindGroupLayoutDescriptor
-    ): Long
-
-    // TODO jni
-    external fun wgpuDeviceCreateRenderBundleEncoder(
-        handler: Long,
-        descriptor: RenderBundleEncoderDescriptor
-    ): Long
-
-    // TODO jni
-    external fun wgpuDeviceCreateQuerySet(handler: Long, descriptor: QuerySetDescriptor): Long
-
-    // TODO jni
-    external fun wgpuDevicePoll(handler: Long, i: Int)
-    external fun wgpuDeviceRelease(handler: Long)
 
     /*** Texture ***/
     // TODO jni

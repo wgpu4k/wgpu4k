@@ -37,7 +37,7 @@ actual class Surface(val handler: Long, actual val width: Int, actual val height
     }
 
     actual override fun close() {
-        JniInterface.wgpuSurfaceRelease(handler)
+        JnaInterface.wgpuSurfaceRelease(handler)
     }
 
 }

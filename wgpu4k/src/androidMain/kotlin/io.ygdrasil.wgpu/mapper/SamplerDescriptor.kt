@@ -2,10 +2,12 @@ package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.SamplerDescriptor
 import io.ygdrasil.wgpu.internal.jna.WGPUSamplerDescriptor
+import io.ygdrasil.wgpu.internal.toAddress
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.SegmentAllocator
 
-internal fun SegmentAllocator.map(input: SamplerDescriptor): MemorySegment = WGPUSamplerDescriptor.allocate(this).also { output ->
+internal fun SegmentAllocator.map(input: SamplerDescriptor): Long =
+    WGPUSamplerDescriptor.allocate(this).also { output ->
     if (input.label != null) WGPUSamplerDescriptor.label(output, allocateFrom(input.label))
 
     WGPUSamplerDescriptor.addressModeU(output, input.addressModeU.value)
@@ -21,5 +23,4 @@ internal fun SegmentAllocator.map(input: SamplerDescriptor): MemorySegment = WGP
 
     if (input.compare != null) WGPUSamplerDescriptor.compare(output, input.compare.value)
     WGPUSamplerDescriptor.maxAnisotropy(output, input.maxAnisotropy.toShort())
-
-}
+    }.pointer.toAddress()

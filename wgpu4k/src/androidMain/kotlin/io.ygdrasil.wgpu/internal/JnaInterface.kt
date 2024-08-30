@@ -12,6 +12,9 @@ object JnaInterface {
     external fun wgpuCreateInstance(descriptor: Long): Long
     external fun wgpuInstanceRelease(handler: Long)
 
+    /*** Surface ***/
+    external fun wgpuSurfaceRelease(handler: Long)
+
     /*** Queue ***/
     external fun wgpuQueueSubmit(
         handler: Long,
@@ -54,4 +57,21 @@ object JnaInterface {
 
     /*** Surface ***/
     external fun wgpuSurfacePresent(handler: Long)
+
+    /*** Device ***/
+    external fun wgpuDeviceGetQueue(handler: Long): Long
+    external fun wgpuDeviceCreateCommandEncoder(handler: Long, descriptor: Long): Long
+    external fun wgpuDeviceCreateShaderModule(handler: Long, descriptor: Long): Long
+    external fun wgpuDeviceCreatePipelineLayout(handler: Long, descriptor: Long): Long
+    external fun wgpuDeviceCreateRenderPipeline(handler: Long, descriptor: Long): Long
+    external fun wgpuDeviceCreateBuffer(handler: Long, descriptor: Long): Long
+    external fun wgpuDeviceCreateBindGroup(handler: Long, descriptor: Long): Long
+    external fun wgpuDeviceCreateTexture(handler: Long, descriptor: Long): Long
+    external fun wgpuDeviceCreateSampler(handler: Long, descriptor: Long): Long
+    external fun wgpuDeviceCreateComputePipeline(handler: Long, descriptor: Long): Long
+    external fun wgpuDeviceCreateBindGroupLayout(handler: Long, descriptor: Long): Long
+    external fun wgpuDeviceCreateRenderBundleEncoder(handler: Long, descriptor: Long): Long
+    external fun wgpuDeviceCreateQuerySet(handler: Long, descriptor: Long): Long
+    external fun wgpuDevicePoll(handler: Long, bool: Int, ptr: Long)
+    external fun wgpuDeviceRelease(handler: Long)
 }

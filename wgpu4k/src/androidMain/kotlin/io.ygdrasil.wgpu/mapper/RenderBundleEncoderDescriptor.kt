@@ -2,12 +2,13 @@ package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.RenderBundleEncoderDescriptor
 import io.ygdrasil.wgpu.internal.jna.WGPURenderBundleEncoderDescriptor
+import io.ygdrasil.wgpu.internal.toAddress
 import io.ygdrasil.wgpu.toInt
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.SegmentAllocator
 import java.lang.foreign.ValueLayout
 
-fun SegmentAllocator.map(input: RenderBundleEncoderDescriptor): MemorySegment =
+fun SegmentAllocator.map(input: RenderBundleEncoderDescriptor) =
     WGPURenderBundleEncoderDescriptor.allocate(this).also { renderBundleEncoderDescriptor ->
         if (input.label != null) WGPURenderBundleEncoderDescriptor.label(renderBundleEncoderDescriptor, allocateFrom(input.label))
 
@@ -27,5 +28,5 @@ fun SegmentAllocator.map(input: RenderBundleEncoderDescriptor): MemorySegment =
         WGPURenderBundleEncoderDescriptor.sampleCount(renderBundleEncoderDescriptor, input.sampleCount)
         WGPURenderBundleEncoderDescriptor.depthReadOnly(renderBundleEncoderDescriptor, input.depthReadOnly.toInt())
         WGPURenderBundleEncoderDescriptor.stencilReadOnly(renderBundleEncoderDescriptor, input.stencilReadOnly.toInt())
-}
+    }.pointer.toAddress()
 

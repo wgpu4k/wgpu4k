@@ -2,6 +2,7 @@ package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.TextureDescriptor
 import io.ygdrasil.wgpu.internal.jna.WGPUTextureDescriptor
+import io.ygdrasil.wgpu.internal.toAddress
 import io.ygdrasil.wgpu.toFlagInt
 import java.lang.foreign.SegmentAllocator
 import java.lang.foreign.ValueLayout
@@ -19,6 +20,6 @@ internal fun SegmentAllocator.map(input: TextureDescriptor) = WGPUTextureDescrip
         val viewFormats = allocateFrom(ValueLayout.JAVA_INT, input.viewFormats.map { it.value }.toIntArray())
         WGPUTextureDescriptor.viewFormats(output, viewFormats)
     }
-}
+}.pointer.toAddress()
 
 

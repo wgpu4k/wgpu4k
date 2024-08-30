@@ -3,10 +3,12 @@ package io.ygdrasil.wgpu.mapper
 import io.ygdrasil.wgpu.BindGroupDescriptor
 import io.ygdrasil.wgpu.internal.jna.WGPUBindGroupDescriptor
 import io.ygdrasil.wgpu.internal.jna.WGPUBindGroupEntry
+import io.ygdrasil.wgpu.internal.toAddress
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.SegmentAllocator
 
-internal fun SegmentAllocator.map(input: BindGroupDescriptor): MemorySegment = WGPUBindGroupDescriptor.allocate(this).also { output ->
+internal fun SegmentAllocator.map(input: BindGroupDescriptor): Long =
+    WGPUBindGroupDescriptor.allocate(this).also { output ->
     if(input.label != null) WGPUBindGroupDescriptor.label(output, allocateFrom(input.label))
     WGPUBindGroupDescriptor.layout(output, input.layout.mhandler)
     if (input.entries.isNotEmpty()) {
@@ -18,7 +20,7 @@ internal fun SegmentAllocator.map(input: BindGroupDescriptor): MemorySegment = W
         WGPUBindGroupDescriptor.entries(output, entries)
 
     }
-}
+    }.pointer.toAddress()
 
 private fun SegmentAllocator.map(input: BindGroupDescriptor.BindGroupEntry, output: MemorySegment) {
     WGPUBindGroupEntry.binding(output, input.binding)

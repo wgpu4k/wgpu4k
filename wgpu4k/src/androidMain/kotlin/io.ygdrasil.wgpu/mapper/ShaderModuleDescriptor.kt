@@ -6,10 +6,12 @@ import io.ygdrasil.wgpu.internal.jna.WGPUShaderModuleCompilationHint
 import io.ygdrasil.wgpu.internal.jna.WGPUShaderModuleDescriptor
 import io.ygdrasil.wgpu.internal.jna.WGPUShaderModuleWGSLDescriptor
 import io.ygdrasil.wgpu.internal.jna.wgpu_h.WGPUSType_ShaderModuleWGSLDescriptor
+import io.ygdrasil.wgpu.internal.toAddress
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.SegmentAllocator
 
-internal fun SegmentAllocator.map(input: ShaderModuleDescriptor): MemorySegment = WGPUShaderModuleDescriptor.allocate(this).also { output ->
+internal fun SegmentAllocator.map(input: ShaderModuleDescriptor): Long =
+    WGPUShaderModuleDescriptor.allocate(this).also { output ->
     if (input.label != null) WGPUShaderModuleDescriptor.label(output, allocateFrom(input.label))
     WGPUShaderModuleDescriptor.nextInChain(output, mapCode(input.code))
     if (input.compilationHints.isNotEmpty()) {
@@ -21,7 +23,7 @@ internal fun SegmentAllocator.map(input: ShaderModuleDescriptor): MemorySegment 
         WGPUShaderModuleDescriptor.hints(output, hints)
     }
 
-}
+    }.pointer.toAddress()
 
 private fun SegmentAllocator.map(input: ShaderModuleDescriptor.CompilationHint, output: MemorySegment) {
     WGPUShaderModuleCompilationHint.entryPoint(output, allocateFrom(input.entryPoint))

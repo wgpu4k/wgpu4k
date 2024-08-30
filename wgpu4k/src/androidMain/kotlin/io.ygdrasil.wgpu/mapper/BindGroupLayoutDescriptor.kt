@@ -9,12 +9,14 @@ import io.ygdrasil.wgpu.internal.jna.WGPUSamplerBindingLayout
 import io.ygdrasil.wgpu.internal.jna.WGPUStorageTextureBindingLayout
 import io.ygdrasil.wgpu.internal.jna.WGPUTextureBindingLayout
 import io.ygdrasil.wgpu.internal.jna.wgpu_h
+import io.ygdrasil.wgpu.internal.toAddress
 import io.ygdrasil.wgpu.toFlagInt
 import io.ygdrasil.wgpu.toInt
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.SegmentAllocator
 
-fun SegmentAllocator.map(input: BindGroupLayoutDescriptor): MemorySegment = WGPUBindGroupLayoutDescriptor.allocate(this) .also{ output ->
+fun SegmentAllocator.map(input: BindGroupLayoutDescriptor) =
+    WGPUBindGroupLayoutDescriptor.allocate(this).also { output ->
     if (input.label != null) WGPUBindGroupLayoutDescriptor.label(output, allocateFrom(input.label))
 
     if (input.entries.isNotEmpty()) {
@@ -25,7 +27,7 @@ fun SegmentAllocator.map(input: BindGroupLayoutDescriptor): MemorySegment = WGPU
         }
         WGPUBindGroupLayoutDescriptor.entries(output, entries)
     }
-}
+    }.pointer.toAddress()
 
 fun SegmentAllocator.map(input: BindGroupLayoutDescriptor.Entry, output: MemorySegment) {
 
