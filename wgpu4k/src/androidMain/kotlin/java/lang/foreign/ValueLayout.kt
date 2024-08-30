@@ -4,14 +4,14 @@ typealias AddressLayout = ValueLayout
 
 abstract class ValueLayout(val size: Long, val name: String? = null) {
     companion object {
-        val JAVA_LONG: ValueLayout = OfLong(Long.SIZE_BYTES.toLong())
-        val JAVA_DOUBLE: ValueLayout = OfDouble(Double.SIZE_BYTES.toLong())
-        val JAVA_FLOAT: ValueLayout = OfFloat(Float.SIZE_BYTES.toLong())
-        val JAVA_INT: ValueLayout = OfInt(Int.SIZE_BYTES.toLong())
-        val JAVA_SHORT: ValueLayout = OfShort(Short.SIZE_BYTES.toLong())
-        val JAVA_BYTE: ValueLayout = OfByte(Byte.SIZE_BYTES.toLong())
-        val JAVA_BOOLEAN: ValueLayout = OfBoolean(1)
-        val ADDRESS: ValueLayout = JAVA_LONG
+        val JAVA_LONG: OfLong = OfLong(Long.SIZE_BYTES.toLong())
+        val JAVA_DOUBLE: OfDouble = OfDouble(Double.SIZE_BYTES.toLong())
+        val JAVA_FLOAT: OfFloat = OfFloat(Float.SIZE_BYTES.toLong())
+        val JAVA_INT: OfInt = OfInt(Int.SIZE_BYTES.toLong())
+        val JAVA_SHORT: OfShort = OfShort(Short.SIZE_BYTES.toLong())
+        val JAVA_BYTE: OfByte = OfByte(Byte.SIZE_BYTES.toLong())
+        val JAVA_BOOLEAN: OfBoolean = OfBoolean(1)
+        val ADDRESS: OfLong = JAVA_LONG
     }
 
     abstract fun withName(name: String) : ValueLayout

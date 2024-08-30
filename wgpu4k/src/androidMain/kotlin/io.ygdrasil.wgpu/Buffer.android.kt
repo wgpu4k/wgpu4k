@@ -1,8 +1,12 @@
 package io.ygdrasil.wgpu
 
+import com.sun.jna.Pointer
 import io.ygdrasil.wgpu.internal.JniInterface
+import java.lang.foreign.MemorySegment
 
 actual class Buffer(val handler: Long) : AutoCloseable {
+
+    internal val mhandler = MemorySegment(Pointer(handler), 0L)
 
     actual val size: GPUSize64
         get() = JniInterface.wgpuBufferGetSize(handler)

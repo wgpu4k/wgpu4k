@@ -1,6 +1,8 @@
 package io.ygdrasil.wgpu
 
+import com.sun.jna.Pointer
 import io.ygdrasil.wgpu.internal.JniInterface
+import java.lang.foreign.MemorySegment
 
 actual class RenderPipeline(val handler: Long) : AutoCloseable {
 
@@ -15,4 +17,8 @@ actual class RenderPipeline(val handler: Long) : AutoCloseable {
 
 }
 
-actual class PipelineLayout(val handler: Long)
+actual class PipelineLayout(val handler: Long) {
+
+    internal val mhandler = MemorySegment(Pointer(handler), 0L)
+
+}

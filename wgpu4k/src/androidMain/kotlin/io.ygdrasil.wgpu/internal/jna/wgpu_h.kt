@@ -1014,4 +1014,14 @@ object wgpu_h {
     private
     const val WGPUNativeTextureFormat_NV12: Int = 196615L.toInt()
 
+    private const val WGPUSType_ShaderModuleWGSLDescriptor: Int = 6L.toInt()
+
+    /**
+     * {@snippet lang=c :
+     * * enum WGPUSType.WGPUSType_ShaderModuleWGSLDescriptor = 6
+     * * }
+     */
+    fun WGPUSType_ShaderModuleWGSLDescriptor(): Int {
+        return WGPUSType_ShaderModuleWGSLDescriptor
+    }
 }

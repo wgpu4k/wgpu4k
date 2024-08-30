@@ -27,6 +27,12 @@ class MemorySegment(val pointer: Pointer, val size: Long) {
     fun set(layout: ValueLayout.OfInt?, offest: Long, newValue: Int  ) {
         return pointer.setInt(offest, newValue)
     }
+
+
+    fun get(layout: ValueLayout.OfShort?, offest: Long ) : Short {
+        return pointer.getShort(offest)
+    }
+
     fun get(layout: ValueLayout.OfLong?, offest: Long ) : Long {
         return pointer.getLong(offest)
     }
@@ -44,6 +50,10 @@ class MemorySegment(val pointer: Pointer, val size: Long) {
         return pointer.setLong(offest, newValue.pointer.toAddress() )
     }
 
+    fun set(layout: ValueLayout.OfShort?, offest: Long, newValue: Short ) {
+        return pointer.setShort(offest, newValue)
+    }
+
     fun asSlice(offest: Long, size: Long = 0): MemorySegment = MemorySegment(pointer.share(offest), size - offest)
 
     fun reinterpret(l: Long, arena: Arena, cleanup: Consumer<MemorySegment?>): MemorySegment = MemorySegment(
@@ -56,7 +66,13 @@ class MemorySegment(val pointer: Pointer, val size: Long) {
             pointer.setLong(it * Long.SIZE_BYTES.toLong(), 0L) }
     }
 
+    fun setAtIndex(layout: ValueLayout.OfInt, offest: Long, value: Int) {
+        pointer.setInt(offest, value)
+    }
+
     companion object {
+        val NULL: MemorySegment = MemorySegment(Pointer(0), 0)
+
         fun copy(source: MemorySegment, sourceOffest: Long, target: MemorySegment, targetOffest: Long, size: Long) {
             target.pointer.share(targetOffest).write(
                 0,
