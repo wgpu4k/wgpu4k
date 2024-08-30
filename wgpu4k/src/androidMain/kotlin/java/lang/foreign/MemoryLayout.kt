@@ -15,13 +15,13 @@ class MemoryLayout {
         }
 
         @JvmStatic
-        fun paddingLayout(size: Int): ValueLayout =  ValueLayout(size.toLong())
+        fun paddingLayout(size: Int): ValueLayout =  PaddingLayout(size.toLong())
     }
 
     object PathElement {
 
         @JvmStatic
-        fun groupElement(none: Any?): Any? = null
+        fun groupElement(name: String): String = name
 
     }
 

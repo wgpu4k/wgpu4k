@@ -1,13 +1,12 @@
 package io.ygdrasil.wgpu
 
 import android.view.SurfaceHolder
+import io.ygdrasil.wgpu.internal.JnaInterface
 import io.ygdrasil.wgpu.internal.JniInterface
+import io.ygdrasil.wgpu.internal.scoped
+import io.ygdrasil.wgpu.mapper.map
 
 class WGPU(val handler: Long) : AutoCloseable {
-
-    override fun close() {
-        JniInterface.wgpuInstanceRelease(handler)
-    }
 
     fun requestAdapter(
         surface: Surface,
@@ -19,17 +18,28 @@ class WGPU(val handler: Long) : AutoCloseable {
     }
 
     fun getSurface(surfaceHolder: SurfaceHolder, width: Int, height: Int): Surface {
+        surfaceHolder.surface
         return JniInterface.wgpuInstanceCreateSurface(handler, surfaceHolder.surface)
             .let { Surface(it, width, height) }
     }
 
     companion object {
         
-        fun createInstance(backend: WGPUInstanceBackend? = null): WGPU {
-            return JniInterface.wgpuCreateInstance(backend)
+        fun createInstance(backend: WGPUInstanceBackend? = null): WGPU = scoped { arena ->
+            JniInterface.wgpuCreateInstance( backend)
                 .let { WGPU(it) }
         }
 
+        fun createInstance1(backend: WGPUInstanceBackend? = null): WGPU = scoped { arena ->
+            backend?.let { arena.map(backend) }
+                .let { JnaInterface.wgpuCreateInstance( it ?: 0L) }
+                .let { WGPU(it) }
+        }
+
+    }
+
+    override fun close() {
+        JnaInterface.wgpuInstanceRelease(handler)
     }
 }
 

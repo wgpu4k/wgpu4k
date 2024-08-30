@@ -1,11 +1,9 @@
 package java.lang.foreign
 
-class GroupLayout(internal val layouts: List<ValueLayout>) {
+class GroupLayout(internal val layouts: List<ValueLayout>, name: String? = null) : ValueLayout(layouts.fold(0L, { acc, layout -> acc + layout.size }), name) {
 
-    val size: Long = layouts.fold(0L, { acc, layout -> acc + layout.size })
-
-    fun withName(WGPUColor: String) = this
-    fun select(r: Any?): Any? = null
+    override fun withName(name: String) = GroupLayout(layouts, name)
+    fun select(name: String): ValueLayout = layouts.first { it.name == name }
     fun byteSize(): Long = size
 
 }

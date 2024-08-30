@@ -44,7 +44,8 @@ class MemorySegment(val pointer: Pointer, val size: Long) {
         return pointer.setLong(offest, newValue.pointer.toAddress() )
     }
 
-    fun asSlice(offest: Long): MemorySegment = MemorySegment(pointer.share(offest), size - offest)
+    fun asSlice(offest: Long, size: Long = 0): MemorySegment = MemorySegment(pointer.share(offest), size - offest)
+
     fun reinterpret(l: Long, arena: Arena, cleanup: Consumer<MemorySegment?>): MemorySegment = MemorySegment(
         pointer,
         size
@@ -52,5 +53,16 @@ class MemorySegment(val pointer: Pointer, val size: Long) {
     fun fillWithZero() {
         repeat((size / 8).toInt()) {
             pointer.setLong(it * Long.SIZE_BYTES.toLong(), 0L) }
+    }
+
+    companion object {
+        fun copy(source: MemorySegment, sourceOffest: Long, target: MemorySegment, targetOffest: Long, size: Long) {
+            target.pointer.share(targetOffest).write(
+                0,
+                source.pointer.share(sourceOffest).getByteArray(0, size.toInt()),
+                0,
+                size.toInt()
+            )
+        }
     }
 }

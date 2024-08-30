@@ -8,6 +8,10 @@ object JnaInterface {
         Native.register(JnaInterface::class.java, "wgpu4kv2")
     }
 
+    /*** Instance ***/
+    external fun wgpuCreateInstance(descriptor: Long): Long
+    external fun wgpuInstanceRelease(handler: Long)
+
     /*** Queue ***/
     external fun wgpuQueueSubmit(
         handler: Long,
