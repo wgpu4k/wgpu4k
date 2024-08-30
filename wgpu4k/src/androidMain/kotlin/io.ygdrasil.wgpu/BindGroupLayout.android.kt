@@ -1,9 +1,9 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.JniInterface
+import io.ygdrasil.wgpu.internal.JnaInterface
 
 actual class BindGroupLayout(val handler: Long) : AutoCloseable {
     actual override fun close() {
-        JniInterface.wgpuBindGroupLayoutRelease(handler)
+        JnaInterface.wgpuBindGroupLayoutRelease(handler)
     }
 }

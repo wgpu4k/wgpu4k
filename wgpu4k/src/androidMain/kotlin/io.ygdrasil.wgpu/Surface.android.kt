@@ -1,5 +1,6 @@
 package io.ygdrasil.wgpu
 
+import io.ygdrasil.wgpu.internal.JnaInterface
 import io.ygdrasil.wgpu.internal.JniInterface
 
 actual class Surface(val handler: Long, actual val width: Int, actual val height: Int) : AutoCloseable {
@@ -21,7 +22,7 @@ actual class Surface(val handler: Long, actual val width: Int, actual val height
     }
 
     actual fun present() {
-        JniInterface.wgpuSurfacePresent(handler)
+        JnaInterface.wgpuSurfacePresent(handler)
     }
 
     actual fun configure(canvasConfiguration: CanvasConfiguration) {

@@ -20,8 +20,3 @@ fun wgpuCommandEncoderBeginRenderPass(env: JNIEnvPointer, thiz: jclass, handler:
         .let { webgpu.wgpuCommandEncoderBeginRenderPass(handler.toCPointer(), it.ptr) }
         .toLong()
 }
-
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuCommandEncoderRelease")
-fun wgpuCommandEncoderRelease(env: JNIEnvPointer, thiz: jclass, handler: jlong) {
-    webgpu.wgpuCommandEncoderRelease(handler.toCPointer())
-}

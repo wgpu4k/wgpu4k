@@ -4,8 +4,22 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.JNIEnvPointer
 import io.ygdrasil.wgpu.internal.callIntMethodFrom
-import kotlinx.cinterop.*
-import platform.android.*
+import kotlinx.cinterop.ByteVar
+import kotlinx.cinterop.COpaquePointer
+import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.alloc
+import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.ptr
+import kotlinx.cinterop.reinterpret
+import kotlinx.cinterop.staticCFunction
+import kotlinx.cinterop.toCPointer
+import kotlinx.cinterop.toKStringFromUtf8
+import kotlinx.cinterop.toLong
+import platform.android.ANativeWindow_fromSurface
+import platform.android.jclass
+import platform.android.jlong
+import platform.android.jobject
 import webgpu.WGPUAdapter
 import webgpu.WGPURequestAdapterStatus
 import webgpu.WGPURequestAdapterStatus_Success
@@ -84,10 +98,4 @@ fun wgpuInstanceRequestAdapter(env: JNIEnvPointer, thiz: jclass, handler: jlong,
     val adapter = lastFindAdapter
     lastFindAdapter = null
     return adapter?.toLong() ?: 0L
-}
-
-
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuInstanceRelease")
-fun wgpuInstanceRelease(env: JNIEnvPointer, thiz: jclass, handler: jlong) {
-    webgpu.wgpuInstanceRelease(handler.toCPointer())
 }

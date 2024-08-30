@@ -1,11 +1,12 @@
 package io.ygdrasil.wgpu
 
+import io.ygdrasil.wgpu.internal.JnaInterface
 import io.ygdrasil.wgpu.internal.JniInterface
 
 actual class RenderPassEncoder(val handler: Long) {
 
     actual fun end() {
-        JniInterface.wgpuRenderPassEncoderEnd(handler)
+        JnaInterface.wgpuRenderPassEncoderEnd(handler)
         close()
     }
 
@@ -66,7 +67,7 @@ actual class RenderPassEncoder(val handler: Long) {
     }
 
     private fun close() {
-        JniInterface.wgpuRenderPassEncoderRelease(handler)
+        JnaInterface.wgpuRenderPassEncoderRelease(handler)
     }
 
 }

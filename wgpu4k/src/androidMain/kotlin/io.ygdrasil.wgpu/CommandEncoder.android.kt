@@ -1,5 +1,6 @@
 package io.ygdrasil.wgpu
 
+import io.ygdrasil.wgpu.internal.JnaInterface
 import io.ygdrasil.wgpu.internal.JniInterface
 
 actual class CommandEncoder(internal val handler: Long) : AutoCloseable {
@@ -62,6 +63,6 @@ actual class CommandEncoder(internal val handler: Long) : AutoCloseable {
 
 
     actual override fun close() {
-        JniInterface.wgpuCommandEncoderRelease(handler)
+        JnaInterface.wgpuCommandEncoderRelease(handler)
     }
 }

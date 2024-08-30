@@ -29,7 +29,6 @@ import io.ygdrasil.wgpu.SamplerDescriptor
 import io.ygdrasil.wgpu.ShaderModuleDescriptor
 import io.ygdrasil.wgpu.Size3D
 import io.ygdrasil.wgpu.TextureDescriptor
-import io.ygdrasil.wgpu.TextureViewDescriptor
 import io.ygdrasil.wgpu.WGPUInstanceBackend
 
 object JniInterface {
@@ -49,7 +48,6 @@ object JniInterface {
 
     /*** Surface ***/
     external fun wgpuSurfaceGetCurrentTexture(handler: Long): Long
-    external fun wgpuSurfacePresent(handler: Long)
     external fun wgpuSurfaceGetFormat(handler: Long, adapter: Long): Int
     external fun wgpuSurfaceConfigure(
         handler: Long,
@@ -182,7 +180,6 @@ object JniInterface {
         destination: ImageCopyTexture,
         copySize: Size3D
     )
-    external fun wgpuCommandEncoderRelease(handler: Long)
 
     /*** RenderPassEncoder ***/
     // TODO jni
@@ -223,8 +220,6 @@ object JniInterface {
         firstInstance: GPUSize32
     )
     external fun wgpuRenderPassEncoderSetPipeline(handler: Long, renderPipeline: Long)
-    external fun wgpuRenderPassEncoderEnd(handler: Long)
-    external fun wgpuRenderPassEncoderRelease(handler: Long)
 
     /*** Queue ***/
     // TODO jni
@@ -255,21 +250,6 @@ object JniInterface {
         height: Int,
         bytePerPixel: Int
     )
-
-    /*** CommandBuffer ***/
-    external fun wgpuCommandBufferRelease(handler: Long)
-
-    /*** Sampler ***/
-    external fun wgpuSamplerRelease(handler: Long)
-
-    /*** ShaderModule ***/
-    external fun wgpuShaderModuleRelease(handler: Long)
-
-    /*** BindGroup ***/
-    external fun wgpuBindGroupRelease(handler: Long)
-
-    /*** BindGroupLayout ***/
-    external fun wgpuBindGroupLayoutRelease(handler: Long)
 
     /*** Buffer ***/
     // TODO jni

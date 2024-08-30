@@ -1,7 +1,6 @@
 package io.ygdrasil.wgpu.internal
 
 import com.sun.jna.Native
-import io.ygdrasil.wgpu.TextureViewDescriptor
 
 object JnaInterface {
 
@@ -27,4 +26,28 @@ object JnaInterface {
 
     external fun wgpuTextureRelease(handler: Long)
 
+    /*** CommandEncoder ***/
+    external fun wgpuCommandEncoderRelease(handler: Long)
+
+    /*** RenderPassEncoder ***/
+    external fun wgpuRenderPassEncoderEnd(handler: Long)
+    external fun wgpuRenderPassEncoderRelease(handler: Long)
+
+    /*** CommandBuffer ***/
+    external fun wgpuCommandBufferRelease(handler: Long)
+
+    /*** Sampler ***/
+    external fun wgpuSamplerRelease(handler: Long)
+
+    /*** ShaderModule ***/
+    external fun wgpuShaderModuleRelease(handler: Long)
+
+    /*** BindGroup ***/
+    external fun wgpuBindGroupRelease(handler: Long)
+
+    /*** BindGroupLayout ***/
+    external fun wgpuBindGroupLayoutRelease(handler: Long)
+
+    /*** Surface ***/
+    external fun wgpuSurfacePresent(handler: Long)
 }
