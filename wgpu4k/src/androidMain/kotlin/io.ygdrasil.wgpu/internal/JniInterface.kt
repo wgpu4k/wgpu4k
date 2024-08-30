@@ -155,9 +155,6 @@ object JniInterface {
 
     external fun wgpuTextureRelease(handler: Long)
 
-    /*** TextureView ***/
-    external fun wgpuTextureViewRelease(handler: Long)
-
     /*** CommandEncoder ***/
     external fun wgpuCommandEncoderBeginRenderPass(
         handler: Long,

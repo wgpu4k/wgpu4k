@@ -14,4 +14,7 @@ object JnaInterface {
         commandsBufferSize: Long,
         commandsBuffer: Long
     )
+
+    /*** TextureView ***/
+    external fun wgpuTextureViewRelease(handler: Long)
 }
