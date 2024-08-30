@@ -30,9 +30,6 @@ internal class NativeString @JvmOverloads constructor(
      * Uses the encoding returned by [Native.getDefaultStringEncoding].
      */
     init {
-        if (string == null) {
-            throw NullPointerException("String must not be null")
-        }
         // Allocate the memory to hold the string.  Note, we have to
         // make this 1 element longer in order to accommodate the terminating
         // NUL (which is generated in Pointer.setString()).

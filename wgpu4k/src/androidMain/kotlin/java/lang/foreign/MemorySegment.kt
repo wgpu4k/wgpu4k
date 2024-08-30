@@ -4,7 +4,7 @@ import com.sun.jna.Pointer
 import io.ygdrasil.wgpu.internal.toAddress
 import java.util.function.Consumer
 
-class MemorySegment(val pointer: Pointer) {
+class MemorySegment(val pointer: Pointer, val size: Long) {
 
     fun get(layout: ValueLayout.OfDouble?, offest: Long ) : Double {
         return pointer.getDouble(offest)
@@ -37,13 +37,20 @@ class MemorySegment(val pointer: Pointer) {
 
     fun get(layout: AddressLayout?, offest: Long ) : MemorySegment {
         return pointer.getLong(offest)
-            .let { MemorySegment(Pointer(it)) }
+            .let { MemorySegment(Pointer(it), size - offest) }
     }
 
     fun set(layout: AddressLayout?, offest: Long, newValue: MemorySegment  ) {
         return pointer.setLong(offest, newValue.pointer.toAddress() )
     }
 
-    fun asSlice(offest: Long): MemorySegment = MemorySegment(pointer.share(offest))
-    fun reinterpret(l: Long, arena: Arena, cleanup: Consumer<MemorySegment?>): MemorySegment = MemorySegment(pointer)
+    fun asSlice(offest: Long): MemorySegment = MemorySegment(pointer.share(offest), size - offest)
+    fun reinterpret(l: Long, arena: Arena, cleanup: Consumer<MemorySegment?>): MemorySegment = MemorySegment(
+        pointer,
+        size
+    )
+    fun fillWithZero() {
+        repeat((size / 8).toInt()) {
+            pointer.setLong(it * Long.SIZE_BYTES.toLong(), 0L) }
+    }
 }
