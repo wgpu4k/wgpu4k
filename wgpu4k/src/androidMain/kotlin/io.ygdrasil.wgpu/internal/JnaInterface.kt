@@ -1,16 +1,12 @@
 package io.ygdrasil.wgpu.internal
 
 import com.sun.jna.Native
-import io.ygdrasil.wgpu.GPUFlagsConstant
 import io.ygdrasil.wgpu.GPUIndex32
-import io.ygdrasil.wgpu.GPUIntegerCoordinateOut
 import io.ygdrasil.wgpu.GPUSignedOffset32
 import io.ygdrasil.wgpu.GPUSize32
-import io.ygdrasil.wgpu.GPUSize32Out
 import io.ygdrasil.wgpu.GPUSize64
-import java.lang.foreign.MemorySegment
 
-object JnaInterface {
+internal object JnaInterface {
 
     init {
         Native.register(JnaInterface::class.java, "wgpu4kv2")
@@ -37,6 +33,33 @@ object JnaInterface {
     /*** RenderPassEncoder ***/
     external fun wgpuRenderPassEncoderEnd(handler: Long)
     external fun wgpuRenderPassEncoderRelease(handler: Long)
+    external fun wgpuRenderPassEncoderSetPipeline(handler: Long, renderPipeline: Long)
+    external fun wgpuRenderPassEncoderDraw(
+        handler: Long,
+        vertexCount: GPUSize32,
+        instanceCount: GPUSize32,
+        firstVertex: GPUSize32,
+        firstInstance: GPUSize32
+    )
+
+    external fun wgpuRenderPassEncoderSetBindGroup(
+        handler: Long,
+        index: Int,
+        handler1: Long,
+        l: Long,
+        memorySegment: Long
+    )
+
+    external fun wgpuRenderPassEncoderSetVertexBuffer(handler: Long, slot: Int, buffer: Long, l: Long, size: GPUSize64)
+    external fun wgpuRenderPassEncoderSetIndexBuffer(
+        handler: Long,
+        buffer: Long,
+        value: Int,
+        offset: GPUSize64,
+        size: GPUSize64
+    )
+
+    external fun wgpuRenderPassEncoderExecuteBundles(handler: Long, toLong: Long, toNativeArray: Long)
 
     /*** CommandBuffer ***/
     external fun wgpuCommandBufferRelease(handler: Long)
@@ -186,5 +209,6 @@ object JnaInterface {
     )
 
     external fun wgpuCommandEncoderRelease(handler: Long)
+
 
 }

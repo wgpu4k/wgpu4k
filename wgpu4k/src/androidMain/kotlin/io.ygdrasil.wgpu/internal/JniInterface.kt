@@ -1,13 +1,11 @@
 package io.ygdrasil.wgpu.internal
 
 import io.ygdrasil.wgpu.DeviceDescriptor
-import io.ygdrasil.wgpu.GPUSize32
 import io.ygdrasil.wgpu.GPUSize64
 import io.ygdrasil.wgpu.ImageCopyTextureTagged
 import io.ygdrasil.wgpu.PowerPreference
-import io.ygdrasil.wgpu.RenderBundle
 
-object JniInterface {
+internal object JniInterface {
     init {
         System.loadLibrary("wgpu4kv2")
     }
@@ -33,46 +31,6 @@ object JniInterface {
         height: Int
     )
 
-
-    /*** RenderPassEncoder ***/
-    // TODO jni
-    external fun wgpuRenderPassEncoderExecuteBundles(
-        handler: Long,
-        bundlesSize: Long,
-        bundles: List<RenderBundle>
-    )
-    // TODO jni
-    external fun wgpuRenderPassEncoderSetIndexBuffer(
-        handler: Long,
-        handler1: Long,
-        value: Int,
-        offset: GPUSize64,
-        size: GPUSize64
-    )
-    // TODO jni
-    external fun wgpuRenderPassEncoderSetVertexBuffer(
-        handler: Long,
-        slot: Int,
-        buffer: Long,
-        offset: Long,
-        size: GPUSize64
-    )
-    // TODO jni
-    external fun wgpuRenderPassEncoderSetBindGroup(
-        handler: Long,
-        index: Int,
-        handler1: Long,
-        l: Long,
-        nothing: Nothing?
-    )
-    external fun wgpuRenderPassEncoderDraw(
-        handler: Long,
-        vertexCount: GPUSize32,
-        instanceCount: GPUSize32,
-        firstVertex: GPUSize32,
-        firstInstance: GPUSize32
-    )
-    external fun wgpuRenderPassEncoderSetPipeline(handler: Long, renderPipeline: Long)
 
     /*** Queue ***/
     // TODO jni
