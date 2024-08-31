@@ -1,7 +1,6 @@
 package io.ygdrasil.wgpu.internal
 
 import io.ygdrasil.wgpu.DeviceDescriptor
-import io.ygdrasil.wgpu.GPUSize64
 import io.ygdrasil.wgpu.PowerPreference
 
 internal object JniInterface {
@@ -29,31 +28,5 @@ internal object JniInterface {
         width: Int,
         height: Int
     )
-
-    /*** Buffer ***/
-    // TODO jni
-    external fun wgpuBufferGetSize(handler: Long): GPUSize64
-    // TODO jni
-    external fun wgpuBufferGetUsage(handler: Long): Int
-    // TODO jni
-    external fun wgpuBufferGetMapState(handler: Long): Int
-    // TODO jni
-    external fun wgpuBufferUnmap(handler: Long)
-    // TODO jni
-    external fun wgpuBufferMapAsync(
-        handler: Long,
-        toFlagInt: Int,
-        offset: GPUSize64,
-        size: GPUSize64
-    )
-    // TODO jni
-    external fun wgpuBufferRelease(handler: Long)
-    // TODO jni
-    external fun wgpuBufferMapInto(handler: Long, buffer: ByteArray, offset: Int)
-    // TODO jni
-    external fun mapFrom(buffer: FloatArray, offset: Int)
-    // TODO jni
-    external fun mapFrom(buffer: ByteArray, offset: Int)
-
 
 }

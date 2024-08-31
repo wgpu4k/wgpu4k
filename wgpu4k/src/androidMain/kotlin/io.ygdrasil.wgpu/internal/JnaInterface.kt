@@ -219,4 +219,41 @@ internal object JnaInterface {
         dataLayout: Long,
         size3D: Long
     )
+
+    /*** Buffer ***/
+
+    fun wgpuBufferGetSize(handler: Long): GPUSize64 {
+        TODO("Not yet implemented")
+    }
+
+    fun wgpuBufferGetUsage(handler: Long): Int {
+        TODO("Not yet implemented")
+    }
+
+    fun wgpuBufferGetMapState(handler: Long): Int {
+        TODO("Not yet implemented")
+    }
+
+    fun wgpuBufferUnmap(handler: Long) {
+        TODO("Not yet implemented")
+    }
+
+    fun wgpuBufferGetMappedRange(handler: Long, toLong: Long, toLong1: Long): Long {
+        TODO("Not yet implemented")
+    }
+
+    fun wgpuBufferMapAsync(
+        handler: Long,
+        flags: Int,
+        offset: GPUSize64,
+        size: GPUSize64,
+        callback: Any,
+        objectPtr: Long
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    fun wgpuBufferRelease(handler: Long) {
+        TODO("Not yet implemented")
+    }
 }
