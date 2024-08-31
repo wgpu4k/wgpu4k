@@ -19,13 +19,6 @@ internal object JnaInterface {
     /*** Surface ***/
     external fun wgpuSurfaceRelease(handler: Long)
 
-    /*** Queue ***/
-    external fun wgpuQueueSubmit(
-        handler: Long,
-        commandsBufferSize: Long,
-        commandsBuffer: Long
-    )
-
     /*** TextureView ***/
     external fun wgpuTextureViewRelease(handler: Long)
     external fun wgpuTextureRelease(handler: Long)
@@ -210,5 +203,20 @@ internal object JnaInterface {
 
     external fun wgpuCommandEncoderRelease(handler: Long)
 
+    /*** Queue ***/
+    external fun wgpuQueueSubmit(
+        handler: Long,
+        commandsBufferSize: Long,
+        commandsBuffer: Long
+    )
 
+    external fun wgpuQueueWriteBuffer(handler: Long, buffer: Long, bufferOffset: GPUSize64, data: Long, size: Long)
+    external fun wgpuQueueWriteTexture(
+        handler: Long,
+        destination: Long,
+        data: Long,
+        toLong: Long,
+        dataLayout: Long,
+        size3D: Long
+    )
 }

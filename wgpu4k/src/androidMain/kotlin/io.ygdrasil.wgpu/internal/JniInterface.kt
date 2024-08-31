@@ -2,7 +2,6 @@ package io.ygdrasil.wgpu.internal
 
 import io.ygdrasil.wgpu.DeviceDescriptor
 import io.ygdrasil.wgpu.GPUSize64
-import io.ygdrasil.wgpu.ImageCopyTextureTagged
 import io.ygdrasil.wgpu.PowerPreference
 
 internal object JniInterface {
@@ -29,37 +28,6 @@ internal object JniInterface {
         alphaMode: Int,
         width: Int,
         height: Int
-    )
-
-
-    /*** Queue ***/
-    // TODO jni
-    external fun wgpuQueueWriteBuffer(
-        handler: Long,
-        buffer: Long,
-        bufferOffset: GPUSize64,
-        data: FloatArray,
-        dataOffset: GPUSize64,
-        size: Long
-    )
-    // TODO jni
-    external fun wgpuQueueWriteBuffer(
-        handler: Long,
-        buffer: Long,
-        bufferOffset: GPUSize64,
-        data: IntArray,
-        dataOffset: GPUSize64,
-        size: Long
-    )
-    // TODO jni
-    external fun wgpuQueueWriteTexture(
-        handler: Long,
-        destination: ImageCopyTextureTagged,
-        data: ByteArray,
-        toLong: Long,
-        width: Int,
-        height: Int,
-        bytePerPixel: Int
     )
 
     /*** Buffer ***/
