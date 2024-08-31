@@ -2,6 +2,7 @@ package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.ImageCopyTexture
 import io.ygdrasil.wgpu.internal.jna.WGPUImageCopyTexture
+import io.ygdrasil.wgpu.internal.toAddress
 import java.lang.foreign.SegmentAllocator
 
 internal fun SegmentAllocator.map(input: ImageCopyTexture) = WGPUImageCopyTexture.allocate(this).also { output ->
@@ -9,4 +10,4 @@ internal fun SegmentAllocator.map(input: ImageCopyTexture) = WGPUImageCopyTextur
     WGPUImageCopyTexture.mipLevel(output, input.mipLevel)
     WGPUImageCopyTexture.aspect(output, input.aspect.value)
     map(input.origin, WGPUImageCopyTexture.origin(output))
-}
+}.pointer.toAddress()

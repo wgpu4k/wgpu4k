@@ -1,35 +1,11 @@
 package io.ygdrasil.wgpu.internal
 
-import io.ygdrasil.wgpu.BindGroupDescriptor
-import io.ygdrasil.wgpu.BindGroupLayoutDescriptor
-import io.ygdrasil.wgpu.BufferDescriptor
-import io.ygdrasil.wgpu.CommandEncoderDescriptor
-import io.ygdrasil.wgpu.ComputePassDescriptor
-import io.ygdrasil.wgpu.ComputePipelineDescriptor
 import io.ygdrasil.wgpu.DeviceDescriptor
-import io.ygdrasil.wgpu.GPUFlagsConstant
-import io.ygdrasil.wgpu.GPUIndex32
-import io.ygdrasil.wgpu.GPUIntegerCoordinateOut
-import io.ygdrasil.wgpu.GPUSignedOffset32
 import io.ygdrasil.wgpu.GPUSize32
-import io.ygdrasil.wgpu.GPUSize32Out
 import io.ygdrasil.wgpu.GPUSize64
-import io.ygdrasil.wgpu.ImageCopyBuffer
-import io.ygdrasil.wgpu.ImageCopyTexture
 import io.ygdrasil.wgpu.ImageCopyTextureTagged
-import io.ygdrasil.wgpu.PipelineLayoutDescriptor
 import io.ygdrasil.wgpu.PowerPreference
-import io.ygdrasil.wgpu.QuerySetDescriptor
 import io.ygdrasil.wgpu.RenderBundle
-import io.ygdrasil.wgpu.RenderBundleDescriptor
-import io.ygdrasil.wgpu.RenderBundleEncoderDescriptor
-import io.ygdrasil.wgpu.RenderPassDescriptor
-import io.ygdrasil.wgpu.RenderPipelineDescriptor
-import io.ygdrasil.wgpu.SamplerDescriptor
-import io.ygdrasil.wgpu.ShaderModuleDescriptor
-import io.ygdrasil.wgpu.Size3D
-import io.ygdrasil.wgpu.TextureDescriptor
-import io.ygdrasil.wgpu.WGPUInstanceBackend
 
 object JniInterface {
     init {
@@ -57,38 +33,6 @@ object JniInterface {
         height: Int
     )
 
-    /*** CommandEncoder ***/
-    external fun wgpuCommandEncoderBeginRenderPass(
-        handler: Long,
-        descriptor: RenderPassDescriptor
-    ): Long
-    external fun wgpuCommandEncoderFinish(handler: Long): Long
-    // TODO jni
-    external fun wgpuCommandEncoderCopyTextureToTexture(
-        handler: Long,
-        source: ImageCopyTexture,
-        destination: ImageCopyTexture,
-        copySize: Size3D
-    )
-    // TODO jni
-    external fun wgpuCommandEncoderBeginComputePass(
-        handler: Long,
-        descriptor: ComputePassDescriptor?
-    ): Long
-    // TODO jni
-    external fun wgpuCommandEncoderCopyTextureToBuffer(
-        handler: Long,
-        source: ImageCopyTexture,
-        destination: ImageCopyBuffer,
-        copySize: Size3D
-    )
-    // TODO jni
-    external fun wgpuCommandEncoderCopyBufferToTexture(
-        handler: Long,
-        source: ImageCopyBuffer,
-        destination: ImageCopyTexture,
-        copySize: Size3D
-    )
 
     /*** RenderPassEncoder ***/
     // TODO jni
@@ -185,84 +129,5 @@ object JniInterface {
     // TODO jni
     external fun mapFrom(buffer: ByteArray, offset: Int)
 
-    /*** ComputePassEncoder ***/
-    // TODO jni
-    external fun wgpuComputePassEncoderSetPipeline(handler: Long, handler1: Long)
-    // TODO jni
-    external fun wgpuComputePassEncoderDispatchWorkgroups(
-        handler: Long,
-        workgroupCountX: GPUSize32,
-        workgroupCountY: GPUSize32,
-        workgroupCountZ: GPUSize32
-    )
-    // TODO jni
-    external fun wgpuComputePassEncoderDispatchWorkgroupsIndirect(
-        handler: Long,
-        handler1: Long,
-        indirectOffset: GPUSize64
-    )
-    // TODO jni
-    external fun wgpuComputePassEncoderEnd(handler: Long)
-    external fun wgpuComputePassEncoderRelease(handler: Long)
 
-    /*** ComputePipeline ***/
-    // TODO jni
-    external fun wgpuComputePipelineGetBindGroupLayout(handler: Long, index: Int): Long
-    external fun wgpuComputePipelineRelease(handler: Long)
-
-    /*** RenderPipeline ***/
-    // TODO jni
-    external fun wgpuRenderPipelineGetBindGroupLayout(handler: Long, index: Int): Long
-    external fun wgpuRenderPipelineRelease(handler: Long)
-
-    /*** RenderBundleEncoder ***/
-    // TODO jni
-    external fun wgpuRenderBundleEncoderDraw(
-        handler: Long,
-        vertexCount: GPUSize32,
-        instanceCount: GPUSize32,
-        firstVertex: GPUSize32,
-        firstInstance: GPUSize32
-    )
-    // TODO jni
-    external fun wgpuRenderBundleEncoderDrawIndexed(
-        handler: Long,
-        indexCount: GPUSize32,
-        instanceCount: GPUSize32,
-        firstIndex: GPUSize32,
-        baseVertex: GPUSignedOffset32,
-        firstInstance: GPUSize32
-    )
-    // TODO jni
-    external fun wgpuRenderBundleEncoderSetIndexBuffer(
-        handler: Long,
-        handler1: Long,
-        value: Int,
-        offset: GPUSize64,
-        size: GPUSize64
-    )
-    // TODO jni
-    external fun wgpuRenderBundleEncoderSetVertexBuffer(
-        handler: Long,
-        slot: GPUIndex32,
-        handler1: Long,
-        offset: GPUSize64,
-        size: GPUSize64
-    )
-    // TODO jni
-    external fun wgpuRenderBundleEncoderSetPipeline(handler: Long, handler1: Long)
-    // TODO jni
-    external fun wgpuRenderBundleEncoderSetBindGroup(
-        handler: Long,
-        index: GPUIndex32,
-        handler1: Long,
-        i: Int,
-        nothing: Nothing?
-    )
-    // TODO jni
-    external fun wgpuRenderBundleEncoderFinish(
-        handler: Long,
-        descriptor: RenderBundleDescriptor
-    ): Long
-    external fun wgpuRenderBundleEncoderRelease(handler: Long)
 }

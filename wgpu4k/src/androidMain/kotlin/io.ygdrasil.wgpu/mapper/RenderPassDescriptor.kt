@@ -6,11 +6,12 @@ import io.ygdrasil.wgpu.internal.jna.WGPUColor
 import io.ygdrasil.wgpu.internal.jna.WGPURenderPassColorAttachment
 import io.ygdrasil.wgpu.internal.jna.WGPURenderPassDepthStencilAttachment
 import io.ygdrasil.wgpu.internal.jna.WGPURenderPassDescriptor
+import io.ygdrasil.wgpu.internal.toAddress
 import io.ygdrasil.wgpu.toInt
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.SegmentAllocator
 
-internal fun SegmentAllocator.map(input: RenderPassDescriptor): MemorySegment =
+internal fun SegmentAllocator.map(input: RenderPassDescriptor) =
     WGPURenderPassDescriptor.allocate(this).also { renderPassDescriptor ->
         println("render pass descriptor $renderPassDescriptor")
         if (input.label != null) WGPURenderPassDescriptor.label(renderPassDescriptor, allocateFrom(input.label))
@@ -37,7 +38,7 @@ internal fun SegmentAllocator.map(input: RenderPassDescriptor): MemorySegment =
         //TODO map this var timestampWrites: GPURenderPassTimestampWrites?
         //TODO map this var maxDrawCount: GPUSize64
         // check WGPURenderPassDescriptorMaxDrawCount
-    }
+    }.pointer.toAddress()
 
 internal fun SegmentAllocator.map(input: RenderPassDescriptor.ColorAttachment, output: MemorySegment) {
     println("color attachment $output")

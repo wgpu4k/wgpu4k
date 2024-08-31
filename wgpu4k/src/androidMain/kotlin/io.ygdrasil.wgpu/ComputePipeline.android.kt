@@ -1,14 +1,14 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.JniInterface
+import io.ygdrasil.wgpu.internal.JnaInterface
 
 actual class ComputePipeline(val handler: Long) : AutoCloseable {
 
     actual fun getBindGroupLayout(index: Int): BindGroupLayout =
-        JniInterface.wgpuComputePipelineGetBindGroupLayout(handler, index)
+        JnaInterface.wgpuComputePipelineGetBindGroupLayout(handler, index)
             .let(::BindGroupLayout)
 
     actual override fun close() {
-        JniInterface.wgpuComputePipelineRelease(handler)
+        JnaInterface.wgpuComputePipelineRelease(handler)
     }
 }
