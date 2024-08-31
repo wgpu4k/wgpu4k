@@ -14,7 +14,6 @@ internal object JniInterface {
 
     /*** Adapter ***/
     external fun wgpuAdapterRequestDevice(handler: Long, descriptor: DeviceDescriptor): Long
-    external fun wgpuAdapterRelease(handler: Long)
 
     /*** Surface ***/
     external fun wgpuSurfaceGetCurrentTexture(handler: Long): Long
