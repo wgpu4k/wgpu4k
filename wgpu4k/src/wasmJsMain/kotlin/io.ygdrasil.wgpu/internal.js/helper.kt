@@ -44,6 +44,14 @@ internal fun <A, B : JsAny> List<A>.mapJsArray(converter: (A) -> B): JsArray<B> 
     return output
 }
 
+internal fun <A, B : JsAny> Set<A>.mapJsArray(converter: (A) -> B): JsArray<B> {
+    val output: JsArray<B> = JsArray()
+    forEachIndexed { index, value ->
+        output[index] = converter(value)
+    }
+    return output
+}
+
 internal fun <A, B : JsAny> Array<A>.mapJsArray(converter: (A) -> B): JsArray<B> {
     val output: JsArray<B> = JsArray()
     forEachIndexed { index, value ->

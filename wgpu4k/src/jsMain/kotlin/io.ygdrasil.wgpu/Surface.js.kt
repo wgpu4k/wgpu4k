@@ -18,7 +18,8 @@ actual class Surface(private val handler: GPUCanvasContext) : AutoCloseable {
             ?.let { TextureFormat.of(it) }
     }
 
-    actual val supportedFormats: Set<TextureFormat> = TextureFormat.entries.toSet()
+    // @see https://gpuweb.github.io/gpuweb/#canvas-configuration
+    actual val supportedFormats: Set<TextureFormat> = setOf(TextureFormat.bgra8unorm, TextureFormat.rgba8unorm, TextureFormat.rgba16float)
     actual val supportedAlphaMode: Set<CompositeAlphaMode> = setOf(CompositeAlphaMode.opaque, CompositeAlphaMode.premultiplied)
 
     actual fun getCurrentTexture(): Texture {
@@ -39,7 +40,7 @@ actual class Surface(private val handler: GPUCanvasContext) : AutoCloseable {
 
     fun CanvasConfiguration.convert(): GPUCanvasConfiguration = object : GPUCanvasConfiguration {
         override var device: GPUDevice = this@convert.device.handler
-        override var format: String = this@convert.format.name
+        override var format: String = this@convert.format.actualName
         override var usage: GPUTextureUsageFlags? = this@convert.usage.toFlagInt()
         override var viewFormats: Array<String>? = this@convert.viewFormats.map { it.actualName }.toTypedArray()
         override var colorSpace: Any? = this@convert.colorSpace

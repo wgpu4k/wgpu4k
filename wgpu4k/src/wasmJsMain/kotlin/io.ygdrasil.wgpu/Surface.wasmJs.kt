@@ -17,7 +17,8 @@ actual class Surface(internal val handler: GPUCanvasContext) : AutoCloseable {
             ?.let { TextureFormat.of(it) }
     }
 
-    actual val supportedFormats: Set<TextureFormat> = TextureFormat.entries.toSet()
+    // @see https://gpuweb.github.io/gpuweb/#canvas-configuration
+    actual val supportedFormats: Set<TextureFormat> = setOf(TextureFormat.bgra8unorm, TextureFormat.rgba8unorm, TextureFormat.rgba16float)
     actual val supportedAlphaMode: Set<CompositeAlphaMode> = setOf(CompositeAlphaMode.opaque, CompositeAlphaMode.premultiplied)
 
     actual fun getCurrentTexture(): Texture {
