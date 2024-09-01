@@ -2,7 +2,6 @@ package io.ygdrasil.wgpu
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.PixelFormat
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -23,8 +22,8 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
         holder.addCallback(this)
         // The only way to set SurfaceView background color to transparent:
         // https://groups.google.com/g/android-developers/c/jYjvm7ItpXQ?pli=1
-        this.setZOrderOnTop(true)
-        holder.setFormat(PixelFormat.TRANSPARENT)
+        //this.setZOrderOnTop(true)
+        //holder.setFormat(PixelFormat.TRANSPARENT)
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}

@@ -5,6 +5,8 @@ import io.ygdrasil.wgpu.mapper.map
 
 actual class Texture(internal val handler: GPUTexture) : AutoCloseable {
 
+    val alphaMode: CompositeAlphaMode
+        get() = CompositeAlphaMode.of(handler.alphaMode) ?: error("unsupported alpha mode ${handler.alphaMode}")
     actual val width: GPUIntegerCoordinateOut
         get() = handler.width
     actual val height: GPUIntegerCoordinateOut
@@ -16,9 +18,9 @@ actual class Texture(internal val handler: GPUTexture) : AutoCloseable {
     actual val sampleCount: GPUSize32Out
         get() = handler.sampleCount
     actual val dimension: TextureDimension
-        get() = TextureDimension.of(handler.dimension) ?: error("unsupported texture dimension $dimension")
+        get() = TextureDimension.of(handler.dimension) ?: error("unsupported texture dimension ${handler.dimension}")
     actual val format: TextureFormat
-        get() = TextureFormat.of(handler.format) ?: error("unsupported texture format $format")
+        get() = TextureFormat.of(handler.format) ?: error("unsupported texture format ${handler.format}")
     actual val usage: GPUFlagsConstant
         get() = handler.usage
 

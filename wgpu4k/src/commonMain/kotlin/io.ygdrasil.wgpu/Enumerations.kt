@@ -256,6 +256,10 @@ enum class CompositeAlphaMode(
         fun of(value: Int): CompositeAlphaMode? = CompositeAlphaMode.entries.find {
             it.value == value
         }
+
+        fun of(value: String): CompositeAlphaMode? = CompositeAlphaMode.entries.find {
+            it.stringValue == value
+        }
     }
 
 }

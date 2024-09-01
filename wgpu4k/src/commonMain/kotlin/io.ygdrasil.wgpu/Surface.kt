@@ -29,5 +29,5 @@ data class CanvasConfiguration(
     val usage: Set<TextureUsage> = setOf(TextureUsage.renderattachment),
     val viewFormats: List<TextureFormat> = listOf(),
     val colorSpace: PredefinedColorSpace = PredefinedColorSpace.srgb,
-    val alphaMode: CompositeAlphaMode = CompositeAlphaMode.inherit,
+    val alphaMode: CompositeAlphaMode = CompositeAlphaMode.opaque,
 )

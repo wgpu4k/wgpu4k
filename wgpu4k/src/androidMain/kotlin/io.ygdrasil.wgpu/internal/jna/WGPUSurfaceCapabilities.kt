@@ -2,6 +2,7 @@
 package io.ygdrasil.wgpu.internal.jna
 
 import java.lang.foreign.*
+import java.lang.foreign.MemoryLayout.Companion.paddingLayout
 import java.lang.foreign.MemoryLayout.Companion.sequenceLayout
 import java.lang.foreign.MemoryLayout.Companion.structLayout
 import java.lang.foreign.MemoryLayout.PathElement.groupElement
@@ -11,18 +12,21 @@ import java.util.function.Consumer
  * {@snippet lang=c :
  * * struct WGPUSurfaceCapabilities {
  * *     WGPUChainedStructOut *nextInChain;
+ * *     WGPUTextureUsageFlags usages;
  * *     size_t formatCount;
- * *     WGPUTextureFormat *formats;
+ * *     const WGPUTextureFormat *formats;
  * *     size_t presentModeCount;
- * *     WGPUPresentMode *presentModes;
+ * *     const WGPUPresentMode *presentModes;
  * *     size_t alphaModeCount;
- * *     WGPUCompositeAlphaMode *alphaModes;
+ * *     const WGPUCompositeAlphaMode *alphaModes;
  * * }
  * * }
  */
 object WGPUSurfaceCapabilities {
     private val `$LAYOUT` = structLayout(
         wgpu_h.C_POINTER.withName("nextInChain"),
+        wgpu_h.C_INT.withName("usages"),
+        paddingLayout(4),
         wgpu_h.C_LONG.withName("formatCount"),
         wgpu_h.C_POINTER.withName("formats"),
         wgpu_h.C_LONG.withName("presentModeCount"),
@@ -85,6 +89,50 @@ object WGPUSurfaceCapabilities {
         )
     }
 
+    private val `usages$LAYOUT` = `$LAYOUT`.select(groupElement("usages")) as ValueLayout.OfInt
+
+    /**
+     * Layout for field:
+     * {@snippet lang=c :
+     * * WGPUTextureUsageFlags usages
+     * * }
+     */
+    fun `usages$layout`(): ValueLayout.OfInt {
+        return `usages$LAYOUT`
+    }
+
+    private const val `usages$OFFSET`: Long = 8
+
+    /**
+     * Offset for field:
+     * {@snippet lang=c :
+     * * WGPUTextureUsageFlags usages
+     * * }
+     */
+    fun `usages$offset`(): Long {
+        return `usages$OFFSET`
+    }
+
+    /**
+     * Getter for field:
+     * {@snippet lang=c :
+     * * WGPUTextureUsageFlags usages
+     * * }
+     */
+    fun usages(struct: MemorySegment): Int {
+        return struct.get(`usages$LAYOUT`, `usages$OFFSET`)
+    }
+
+    /**
+     * Setter for field:
+     * {@snippet lang=c :
+     * * WGPUTextureUsageFlags usages
+     * * }
+     */
+    fun usages(struct: MemorySegment, fieldValue: Int) {
+        struct.set(`usages$LAYOUT`, `usages$OFFSET`, fieldValue)
+    }
+
     private val `formatCount$LAYOUT` = `$LAYOUT`.select(groupElement("formatCount")) as ValueLayout.OfLong
 
     /**
@@ -97,7 +145,7 @@ object WGPUSurfaceCapabilities {
         return `formatCount$LAYOUT`
     }
 
-    private const val `formatCount$OFFSET`: Long = 8
+    private const val `formatCount$OFFSET`: Long = 16
 
     /**
      * Offset for field:
@@ -134,19 +182,19 @@ object WGPUSurfaceCapabilities {
     /**
      * Layout for field:
      * {@snippet lang=c :
-     * * WGPUTextureFormat *formats
+     * * const WGPUTextureFormat *formats
      * * }
      */
     fun `formats$layout`(): AddressLayout {
         return `formats$LAYOUT`
     }
 
-    private const val `formats$OFFSET`: Long = 16
+    private const val `formats$OFFSET`: Long = 24
 
     /**
      * Offset for field:
      * {@snippet lang=c :
-     * * WGPUTextureFormat *formats
+     * * const WGPUTextureFormat *formats
      * * }
      */
     fun `formats$offset`(): Long {
@@ -156,7 +204,7 @@ object WGPUSurfaceCapabilities {
     /**
      * Getter for field:
      * {@snippet lang=c :
-     * * WGPUTextureFormat *formats
+     * * const WGPUTextureFormat *formats
      * * }
      */
     fun formats(struct: MemorySegment): MemorySegment {
@@ -166,7 +214,7 @@ object WGPUSurfaceCapabilities {
     /**
      * Setter for field:
      * {@snippet lang=c :
-     * * WGPUTextureFormat *formats
+     * * const WGPUTextureFormat *formats
      * * }
      */
     fun formats(struct: MemorySegment, fieldValue: MemorySegment?) {
@@ -188,7 +236,7 @@ object WGPUSurfaceCapabilities {
         return `presentModeCount$LAYOUT`
     }
 
-    private const val `presentModeCount$OFFSET`: Long = 24
+    private const val `presentModeCount$OFFSET`: Long = 32
 
     /**
      * Offset for field:
@@ -225,19 +273,19 @@ object WGPUSurfaceCapabilities {
     /**
      * Layout for field:
      * {@snippet lang=c :
-     * * WGPUPresentMode *presentModes
+     * * const WGPUPresentMode *presentModes
      * * }
      */
     fun `presentModes$layout`(): AddressLayout {
         return `presentModes$LAYOUT`
     }
 
-    private const val `presentModes$OFFSET`: Long = 32
+    private const val `presentModes$OFFSET`: Long = 40
 
     /**
      * Offset for field:
      * {@snippet lang=c :
-     * * WGPUPresentMode *presentModes
+     * * const WGPUPresentMode *presentModes
      * * }
      */
     fun `presentModes$offset`(): Long {
@@ -247,7 +295,7 @@ object WGPUSurfaceCapabilities {
     /**
      * Getter for field:
      * {@snippet lang=c :
-     * * WGPUPresentMode *presentModes
+     * * const WGPUPresentMode *presentModes
      * * }
      */
     fun presentModes(struct: MemorySegment): MemorySegment {
@@ -257,7 +305,7 @@ object WGPUSurfaceCapabilities {
     /**
      * Setter for field:
      * {@snippet lang=c :
-     * * WGPUPresentMode *presentModes
+     * * const WGPUPresentMode *presentModes
      * * }
      */
     fun presentModes(struct: MemorySegment, fieldValue: MemorySegment?) {
@@ -279,7 +327,7 @@ object WGPUSurfaceCapabilities {
         return `alphaModeCount$LAYOUT`
     }
 
-    private const val `alphaModeCount$OFFSET`: Long = 40
+    private const val `alphaModeCount$OFFSET`: Long = 48
 
     /**
      * Offset for field:
@@ -316,19 +364,19 @@ object WGPUSurfaceCapabilities {
     /**
      * Layout for field:
      * {@snippet lang=c :
-     * * WGPUCompositeAlphaMode *alphaModes
+     * * const WGPUCompositeAlphaMode *alphaModes
      * * }
      */
     fun `alphaModes$layout`(): AddressLayout {
         return `alphaModes$LAYOUT`
     }
 
-    private const val `alphaModes$OFFSET`: Long = 48
+    private const val `alphaModes$OFFSET`: Long = 56
 
     /**
      * Offset for field:
      * {@snippet lang=c :
-     * * WGPUCompositeAlphaMode *alphaModes
+     * * const WGPUCompositeAlphaMode *alphaModes
      * * }
      */
     fun `alphaModes$offset`(): Long {
@@ -338,7 +386,7 @@ object WGPUSurfaceCapabilities {
     /**
      * Getter for field:
      * {@snippet lang=c :
-     * * WGPUCompositeAlphaMode *alphaModes
+     * * const WGPUCompositeAlphaMode *alphaModes
      * * }
      */
     fun alphaModes(struct: MemorySegment): MemorySegment {
@@ -348,7 +396,7 @@ object WGPUSurfaceCapabilities {
     /**
      * Setter for field:
      * {@snippet lang=c :
-     * * WGPUCompositeAlphaMode *alphaModes
+     * * const WGPUCompositeAlphaMode *alphaModes
      * * }
      */
     fun alphaModes(struct: MemorySegment, fieldValue: MemorySegment?) {
