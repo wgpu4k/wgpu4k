@@ -241,4 +241,5 @@ internal object JnaInterface {
     /*** Adapter ***/
     external fun wgpuAdapterRequestDevice(handler: Long, descriptor: Long): Long
     external fun wgpuAdapterRelease(handler: Long)
+    external fun wgpuSurfaceGetCapabilities(handler: Long, adapter: Long, surfaceCapabilities: Long)
 }

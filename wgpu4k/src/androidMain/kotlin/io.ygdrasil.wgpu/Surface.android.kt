@@ -2,6 +2,9 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.JnaInterface
 import io.ygdrasil.wgpu.internal.JniInterface
+import io.ygdrasil.wgpu.internal.jna.WGPUSurfaceCapabilities
+import io.ygdrasil.wgpu.internal.scoped
+import io.ygdrasil.wgpu.internal.toAddress
 
 actual class Surface(val handler: Long, actual val width: Int, actual val height: Int) : AutoCloseable {
 
@@ -9,8 +12,12 @@ actual class Surface(val handler: Long, actual val width: Int, actual val height
     actual val textureFormat: TextureFormat
         get() = _textureFormat ?: error("call computeSurfaceCapabilities first")
 
-    fun computeSurfaceCapabilities(adapter: Adapter) {
+    fun computeSurfaceCapabilities(adapter: Adapter) = scoped { arena ->
         println("computeSurfaceCapabilities")
+        val surfaceCapabilities = WGPUSurfaceCapabilities.allocate(arena)
+        JnaInterface.wgpuSurfaceGetCapabilities(handler, adapter.handler, surfaceCapabilities.pointer.toAddress())
+
+
         _textureFormat = JniInterface.wgpuSurfaceGetFormat(handler, adapter.handler)
             .also { println("_textureFormat $it") }
             .let { TextureFormat.of(it) ?: TextureFormat.rgba8unormsrgb }
