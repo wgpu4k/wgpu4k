@@ -7,7 +7,7 @@ import io.ygdrasil.wgpu.internal.js.createJsObject
 internal fun map(input: TextureViewDescriptor): GPUTextureViewDescriptor =
     createJsObject<GPUTextureViewDescriptor>().apply {
         if (input.label != null) label = input.label
-        if (input.format?.name != null) format = input.format.name
+        if (input.format != null) format = input.format.actualName
         if (input.dimension?.stringValue != null) dimension = input.dimension.stringValue
         aspect = input.aspect.name
         baseMipLevel = input.baseMipLevel
