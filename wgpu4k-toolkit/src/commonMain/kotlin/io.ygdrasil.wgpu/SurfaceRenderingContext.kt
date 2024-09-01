@@ -9,7 +9,7 @@ class SurfaceRenderingContext(
     override val height: Int
         get() = surface.height
     override val textureFormat: TextureFormat
-        get() = surface.textureFormat
+        get() = surface.preferredCanvasFormat ?: error("remove this field")
 
     override fun getCurrentTexture(): Texture {
         return surface.getCurrentTexture()

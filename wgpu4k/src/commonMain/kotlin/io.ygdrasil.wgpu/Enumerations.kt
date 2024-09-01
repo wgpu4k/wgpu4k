@@ -246,11 +246,11 @@ enum class CompositeAlphaMode(
     override val value: Int,
     val stringValue: String,
 ) : EnumerationWithValue {
-    auto(0, "opaque"),
+    auto(0, "unsupported"),
     opaque(1, "opaque"),
     premultiplied(2, "premultiplied"),
-    postmultiplied(3, "opaque"),
-    inherit(4, "opaque");
+    postmultiplied(3, "unsupported"),
+    inherit(4, "unsupported");
 
     companion object {
         fun of(value: Int): CompositeAlphaMode? = CompositeAlphaMode.entries.find {

@@ -1,4 +1,5 @@
 import io.ygdrasil.wgpu.CanvasConfiguration
+import io.ygdrasil.wgpu.TextureFormat
 import io.ygdrasil.wgpu.WGPUContext
 import io.ygdrasil.wgpu.canvasContextRenderer
 
@@ -7,7 +8,7 @@ actual suspend fun getHeadlessContext(): WGPUContext {
     canvas.wgpuContext.surface.configure(
         CanvasConfiguration(
             canvas.wgpuContext.device,
-            canvas.wgpuContext.surface.textureFormat
+            TextureFormat.rgba8unormsrgb
         )
     )
     return canvas.wgpuContext

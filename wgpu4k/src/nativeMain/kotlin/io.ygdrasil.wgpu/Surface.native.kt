@@ -2,25 +2,42 @@
 
 package io.ygdrasil.wgpu
 
-import kotlinx.cinterop.*
-import webgpu.*
+import kotlinx.cinterop.CValue
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.alloc
+import kotlinx.cinterop.cValue
+import kotlinx.cinterop.get
+import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.ptr
+import webgpu.WGPUPresentMode_Fifo
+import webgpu.WGPUSurface
+import webgpu.WGPUSurfaceCapabilities
+import webgpu.WGPUSurfaceConfiguration
+import webgpu.WGPUSurfaceTexture
+import webgpu.wgpuSurfaceConfigure
+import webgpu.wgpuSurfaceGetCapabilities
+import webgpu.wgpuSurfaceGetCurrentTexture
+import webgpu.wgpuSurfacePresent
+import webgpu.wgpuSurfaceRelease
 
 actual class Surface(
     internal val handler: WGPUSurface,
     internal val sizeProvider: () -> Pair<Int, Int>
 ) : AutoCloseable {
 
-    private var _textureFormat: TextureFormat? = null
-    private var _alphaMode: UInt? = null
+    private var _supportedFormats: Set<TextureFormat> = setOf()
+    private var _supportedAlphaMode: Set<CompositeAlphaMode> = setOf()
 
     actual val width: Int
         get() = sizeProvider().first
     actual val height: Int
         get() = sizeProvider().second
 
-    actual val textureFormat: TextureFormat by lazy {
-        _textureFormat ?: error("call first computeSurfaceCapabilities")
-    }
+    actual val preferredCanvasFormat: TextureFormat? = null
+    actual val supportedFormats: Set<TextureFormat>
+        get() = _supportedFormats
+    actual val supportedAlphaMode: Set<CompositeAlphaMode>
+        get() = _supportedAlphaMode
 
     actual fun getCurrentTexture(): Texture = memScoped {
         val surfaceTexture = alloc<WGPUSurfaceTexture>()
@@ -36,21 +53,40 @@ actual class Surface(
         val surfaceCapabilities = alloc<WGPUSurfaceCapabilities>()
         wgpuSurfaceGetCapabilities(handler, adapter.handler, surfaceCapabilities.ptr)
 
-        _alphaMode = surfaceCapabilities.alphaModes
-            ?.get(0) ?: error("fail to get alphaMode at index 0")
-        _textureFormat = (surfaceCapabilities.formats
-            ?.get(0)?.toInt() ?: error("fail to get format at index 0"))
-            .let { TextureFormat.of(it) ?: error("TextureFormat not found with value $it") }
+        val formats = surfaceCapabilities.formats
+        val formatCount = surfaceCapabilities.formatCount
+        _supportedFormats = (0..formatCount.toInt()).map { index ->
+            formats?.get(index)
+                ?.let { value -> TextureFormat.of(value.toInt()).also { if (it == null) println("ignoring undefined format with value $value") } }
+        }.mapNotNull { it }
+            .toSet()
+
+        val alphaModes = surfaceCapabilities.alphaModes
+        val alphaModeCount = surfaceCapabilities.alphaModeCount
+        _supportedAlphaMode = (0..alphaModeCount.toInt()).map { index ->
+            alphaModes?.get(index)
+                ?.let { value -> CompositeAlphaMode.of(value.toInt()).also { if (it == null) println("ignoring undefined format with value $value") } }
+        }.mapNotNull { it }
+            .toSet()
+
+
+        println("supportedTextureFormats: $supportedFormats")
+        println("supportedAlphaMode: $supportedAlphaMode")
+
+        if (_supportedFormats.isEmpty()) {
+            println("WARNING: fail to get supported textures on surface, will inject rgba8unormsrgb and rgba8unorm format")
+            _supportedFormats = setOf(TextureFormat.rgba8unormsrgb, TextureFormat.rgba8unorm)
+        }
+
+        if (_supportedAlphaMode.isEmpty()) {
+            println("WARNING: fail to get supported alpha mode on surface, will inject inherit alpha mode")
+            _supportedAlphaMode = setOf(CompositeAlphaMode.inherit)
+        }
 
     }
 
     actual fun configure(canvasConfiguration: CanvasConfiguration) {
-
-        if (_textureFormat == null) error("call computeSurfaceCapabilities(adapter: Adapter) before configure")
-        if (_alphaMode == null) error("call computeSurfaceCapabilities(adapter: Adapter) before configure")
-
-
-        wgpuSurfaceConfigure(handler, map(canvasConfiguration.copy(alphaMode = CompositeAlphaMode.of(_alphaMode!!.toInt())!!)))
+        wgpuSurfaceConfigure(handler, map(canvasConfiguration))
     }
 
     actual override fun close() {

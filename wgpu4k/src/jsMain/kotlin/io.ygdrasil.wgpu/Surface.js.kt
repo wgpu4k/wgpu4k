@@ -12,12 +12,14 @@ actual class Surface(private val handler: GPUCanvasContext) : AutoCloseable {
     actual val height: Int
         get() = handler.canvas.height
 
-    actual val textureFormat: TextureFormat by lazy {
+    actual val preferredCanvasFormat: TextureFormat? by lazy {
         navigator.gpu
             ?.getPreferredCanvasFormat()
             ?.let { TextureFormat.of(it) }
-            ?: error("fail to get canvas prefered format")
     }
+
+    actual val supportedFormats: Set<TextureFormat> = TextureFormat.entries.toSet()
+    actual val supportedAlphaMode: Set<CompositeAlphaMode> = setOf(CompositeAlphaMode.opaque, CompositeAlphaMode.premultiplied)
 
     actual fun getCurrentTexture(): Texture {
         return Texture(handler.getCurrentTexture())
@@ -43,6 +45,8 @@ actual class Surface(private val handler: GPUCanvasContext) : AutoCloseable {
         override var colorSpace: Any? = this@convert.colorSpace
         override var alphaMode: String? = this@convert.alphaMode.stringValue
     }
+
+
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")

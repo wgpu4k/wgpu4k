@@ -4,7 +4,13 @@ expect class Surface : AutoCloseable {
 
     val width: Int
     val height: Int
-    val textureFormat: TextureFormat
+
+    /**
+     * Only supported on browser, not using it *could* lead to bad performance
+     */
+    val preferredCanvasFormat: TextureFormat?
+    val supportedFormats:Set<TextureFormat>
+    val supportedAlphaMode: Set<CompositeAlphaMode>
 
     fun getCurrentTexture(): Texture
 
@@ -27,7 +33,7 @@ data class CanvasConfiguration(
     val device: Device,
     val format: TextureFormat,
     val usage: Set<TextureUsage> = setOf(TextureUsage.renderattachment),
-    val viewFormats: List<TextureFormat> = listOf(),
+    val viewFormats: Set<TextureFormat> = setOf(),
     val colorSpace: PredefinedColorSpace = PredefinedColorSpace.srgb,
     val alphaMode: CompositeAlphaMode = CompositeAlphaMode.opaque,
 )
