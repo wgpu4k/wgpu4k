@@ -34,8 +34,8 @@ actual class Surface(val handler: Long, actual val width: Int, actual val height
         val alphaModes = WGPUSurfaceCapabilities.alphaModes(surfaceCapabilities)
         val alphaModeCount = WGPUSurfaceCapabilities.alphaModeCount(surfaceCapabilities)
         println("computeSurfaceCapabilities $alphaModeCount and ptr $alphaModes")
-        supportedAlphaMode = (0..formatCount.toInt()).map { index ->
-            formats.get(ValueLayout.JAVA_INT, index * ValueLayout.JAVA_INT.size)
+        supportedAlphaMode = (0..alphaModeCount.toInt()).map { index ->
+            alphaModes.get(ValueLayout.JAVA_INT, index * ValueLayout.JAVA_INT.size)
                 .also { if (it == 0) println("ignoring undefined alpha mode") }
                 .takeIf { it != 0 }
                 ?.let { CompositeAlphaMode.of(it) ?: error("fail to map alpha mode from $it") }
