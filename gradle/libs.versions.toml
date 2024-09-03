@@ -2,6 +2,7 @@
 kotest = "6.0.0-SNAPSHOT"
 jna = "5.14.0"
 kotlin = "2.0.20"
+kotlinx-serialization-json = "1.7.1"
 ktor = "2.3.12"
 playwright = "1.46.0"
 wgpu = "v0.0.0.2"
@@ -29,6 +30,7 @@ android-library = { module = "com.android.library:com.android.library.gradle.plu
 jreleaser-plugin = { module = "org.jreleaser:org.jreleaser.gradle.plugin", version.ref = "jreleaser" }
 korlibs-image = { module = "com.soywiz:korlibs-image", version.ref = "korge" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 ktor-server-netty-jvm = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
 ktor-server-core-jvm = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 playwright = { module = "com.microsoft.playwright:playwright", version.ref = "playwright" }

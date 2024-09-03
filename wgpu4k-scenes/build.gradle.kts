@@ -45,7 +45,7 @@ kotlin {
 
         val commonMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
+                implementation(libs.kotlinx.serialization.json)
                 api(projects.wgpu4kToolkit)
                 api(libs.coroutines)
                 api(libs.bundles.korlibs)
