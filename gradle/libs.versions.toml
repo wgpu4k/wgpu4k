@@ -13,7 +13,7 @@ agp = "8.5.1"
 jreleaser = "1.13.1"
 rococoa = "0.0.1"
 wgpu4k-panama = "0.0.3"
-wgpu4k-native = "0.0.0-SNAPSHOT"
+wgpu4k-native = "0.0.3"
 glfw-native = "0.0.1"
 
 [libraries]
