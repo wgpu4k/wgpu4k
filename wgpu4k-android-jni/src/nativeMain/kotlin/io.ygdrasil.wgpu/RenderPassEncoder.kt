@@ -4,10 +4,10 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.JNIEnvPointer
 import kotlinx.cinterop.ExperimentalForeignApi
-import kotlinx.cinterop.memScoped
-import kotlinx.cinterop.toCPointer
 import kotlinx.cinterop.alloc
+import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
+import kotlinx.cinterop.toCPointer
 import kotlinx.cinterop.toLong
 import platform.android.jclass
 import platform.android.jint
@@ -38,12 +38,4 @@ fun wgpuCommandEncoderFinish(env: JNIEnvPointer, thiz: jclass, handler: jlong): 
         .toLong()
 }
 
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuRenderPassEncoderEnd")
-fun wgpuRenderPassEncoderEnd(env: JNIEnvPointer, thiz: jclass, handler: jlong) {
-    webgpu.wgpuRenderPassEncoderEnd(handler.toCPointer())
-}
 
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuRenderPassEncoderRelease")
-fun wgpuRenderPassEncoderRelease(env: JNIEnvPointer, thiz: jclass, handler: jlong) {
-    webgpu.wgpuRenderPassEncoderRelease(handler.toCPointer())
-}

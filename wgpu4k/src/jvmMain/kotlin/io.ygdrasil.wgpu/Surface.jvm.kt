@@ -15,22 +15,19 @@ actual class Surface(
 	private val sizeProvider: () -> Pair<Int, Int>
 ) : AutoCloseable {
 
-	private lateinit var _textureFormat: TextureFormat
-	private lateinit var _alphaMode: CompositeAlphaMode
+	private var _supportedFormats: Set<TextureFormat> = setOf()
+	private var _supportedAlphaMode: Set<CompositeAlphaMode> = setOf()
+
 	actual val width: Int
 		get() = sizeProvider().first
 	actual val height: Int
 		get() = sizeProvider().second
 
-	actual val textureFormat: TextureFormat by lazy {
-		if (::_textureFormat.isInitialized.not()) error("call computeSurfaceCapabilities before getting textureFormat")
-		_textureFormat
-	}
-
-	val alphaMode: CompositeAlphaMode by lazy {
-		if (::_alphaMode.isInitialized.not()) error("call computeSurfaceCapabilities before getting textureFormat")
-		_alphaMode
-	}
+	actual val preferredCanvasFormat: TextureFormat? = null
+	actual val supportedFormats: Set<TextureFormat>
+		get() = _supportedFormats
+	actual val supportedAlphaMode: Set<CompositeAlphaMode>
+		get() = _supportedAlphaMode
 
 	actual fun getCurrentTexture(): Texture = confined { arena ->
 		WGPUSurfaceTexture.allocate(arena).let { surfaceTexture ->
@@ -44,19 +41,44 @@ actual class Surface(
 	}
 
 	fun computeSurfaceCapabilities(adapter: Adapter) = confined { arena ->
-		println("computing surface capabilities")
+		println("computeSurfaceCapabilities")
 		val surfaceCapabilities = WGPUSurfaceCapabilities.allocate(arena)
 		wgpu_h.wgpuSurfaceGetCapabilities(handler, adapter.handler, surfaceCapabilities)
-		if (WGPUSurfaceCapabilities.formatCount(surfaceCapabilities) == 0L) error("fail to get texture format")
-		if (WGPUSurfaceCapabilities.alphaModeCount(surfaceCapabilities) == 0L) error("fail to get alpha mode")
-		_textureFormat = WGPUSurfaceCapabilities.formats(surfaceCapabilities).get(ValueLayout.JAVA_INT, 0)
-			.let { TextureFormat.of(it) ?: error("texture format not found") }
-		_alphaMode = WGPUSurfaceCapabilities.alphaModes(surfaceCapabilities).get(ValueLayout.JAVA_INT, 0)
-			.let { CompositeAlphaMode.of(it) ?: error("alpha not found") }
+
+		val formats = WGPUSurfaceCapabilities.formats(surfaceCapabilities)
+		val formatCount = WGPUSurfaceCapabilities.formatCount(surfaceCapabilities)
+		_supportedFormats = (0..formatCount.toInt()).map { index ->
+			formats.get(ValueLayout.JAVA_INT, index * ValueLayout.JAVA_INT.byteOffset())
+				.let { value -> TextureFormat.of(value).also { if (it == null) println("ignoring undefined format with value $value") } }
+
+		}.mapNotNull { it }
+			.toSet()
+
+		val alphaModes = WGPUSurfaceCapabilities.alphaModes(surfaceCapabilities)
+		val alphaModeCount = WGPUSurfaceCapabilities.alphaModeCount(surfaceCapabilities)
+		_supportedAlphaMode = (0..alphaModeCount.toInt()).map { index ->
+			alphaModes.get(ValueLayout.JAVA_INT, index * ValueLayout.JAVA_INT.byteOffset())
+				.let { value -> CompositeAlphaMode.of(value).also { if (it == null) println("ignoring undefined format with value $value") } }
+		}.mapNotNull { it }
+			.toSet()
+
+
+		println("supportedTextureFormats: $supportedFormats")
+		println("supportedAlphaMode: $supportedAlphaMode")
+
+		if (_supportedFormats.isEmpty()) {
+			println("WARNING: fail to get supported textures on surface, will inject rgba8unormsrgb and rgba8unorm format")
+			_supportedFormats = setOf(TextureFormat.rgba8unormsrgb, TextureFormat.rgba8unorm)
+		}
+
+		if (_supportedAlphaMode.isEmpty()) {
+			println("WARNING: fail to get supported alpha mode on surface, will inject inherit alpha mode")
+			_supportedAlphaMode = setOf(CompositeAlphaMode.inherit)
+		}
 	}
 
 	actual fun configure(canvasConfiguration: CanvasConfiguration) = confined { arena ->
-		wgpu_h.wgpuSurfaceConfigure(handler, arena.map(canvasConfiguration.copy(alphaMode = this.alphaMode)))
+		wgpu_h.wgpuSurfaceConfigure(handler, arena.map(canvasConfiguration))
 	}
 
     actual override fun close() {

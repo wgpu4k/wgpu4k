@@ -12,12 +12,15 @@ actual class Surface(private val handler: GPUCanvasContext) : AutoCloseable {
     actual val height: Int
         get() = handler.canvas.height
 
-    actual val textureFormat: TextureFormat by lazy {
+    actual val preferredCanvasFormat: TextureFormat? by lazy {
         navigator.gpu
             ?.getPreferredCanvasFormat()
             ?.let { TextureFormat.of(it) }
-            ?: error("fail to get canvas prefered format")
     }
+
+    // @see https://gpuweb.github.io/gpuweb/#canvas-configuration
+    actual val supportedFormats: Set<TextureFormat> = setOf(TextureFormat.bgra8unorm, TextureFormat.rgba8unorm, TextureFormat.rgba16float)
+    actual val supportedAlphaMode: Set<CompositeAlphaMode> = setOf(CompositeAlphaMode.opaque, CompositeAlphaMode.premultiplied)
 
     actual fun getCurrentTexture(): Texture {
         return Texture(handler.getCurrentTexture())
@@ -37,12 +40,14 @@ actual class Surface(private val handler: GPUCanvasContext) : AutoCloseable {
 
     fun CanvasConfiguration.convert(): GPUCanvasConfiguration = object : GPUCanvasConfiguration {
         override var device: GPUDevice = this@convert.device.handler
-        override var format: String = this@convert.format.name
+        override var format: String = this@convert.format.actualName
         override var usage: GPUTextureUsageFlags? = this@convert.usage.toFlagInt()
         override var viewFormats: Array<String>? = this@convert.viewFormats.map { it.actualName }.toTypedArray()
         override var colorSpace: Any? = this@convert.colorSpace
         override var alphaMode: String? = this@convert.alphaMode.stringValue
     }
+
+
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")

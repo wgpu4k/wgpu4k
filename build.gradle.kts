@@ -7,9 +7,9 @@ plugins {
 allprojects {
 
 	repositories {
-		mavenLocal()
-		google()
 		mavenCentral()
+		google()
+		mavenLocal()
 	}
 
 	group = "io.ygdrasil"

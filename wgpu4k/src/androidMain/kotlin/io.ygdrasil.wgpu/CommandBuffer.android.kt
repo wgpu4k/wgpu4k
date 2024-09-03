@@ -1,10 +1,10 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.JniInterface
+import io.ygdrasil.wgpu.internal.JnaInterface
 
 actual class CommandBuffer(val handler: Long) : AutoCloseable {
     actual override fun close() {
-        JniInterface.wgpuCommandBufferRelease(handler)
+        JnaInterface.wgpuCommandBufferRelease(handler)
     }
 
 }

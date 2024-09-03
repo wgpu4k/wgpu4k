@@ -158,7 +158,7 @@ class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		}
 	}
 
-	override fun AutoClosableContext.render() {
+	override suspend fun AutoClosableContext.render() {
 
 		val transformationMatrix = getTransformationMatrix(
 			frame / 100.0,
@@ -186,13 +186,13 @@ class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		val encoder = device.createCommandEncoder()
 			.bind()
 
-		val renderPassEncoder = encoder.beginRenderPass(renderPassDescriptor)
-			.bind()
-		renderPassEncoder.setPipeline(renderPipeline)
-		renderPassEncoder.setBindGroup(0, uniformBindGroup)
-		renderPassEncoder.setVertexBuffer(0, verticesBuffer)
-		renderPassEncoder.draw(Cube.cubeVertexCount, numInstances)
-		renderPassEncoder.end()
+		encoder.beginRenderPass(renderPassDescriptor) {
+			setPipeline(renderPipeline)
+			setBindGroup(0, uniformBindGroup)
+			setVertexBuffer(0, verticesBuffer)
+			draw(Cube.cubeVertexCount, numInstances)
+			end()
+		}
 
 		val commandBuffer = encoder.finish()
 			.bind()

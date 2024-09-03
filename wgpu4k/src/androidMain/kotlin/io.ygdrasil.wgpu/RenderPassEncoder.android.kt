@@ -1,15 +1,19 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.JniInterface
+import io.ygdrasil.wgpu.internal.JnaInterface
+import io.ygdrasil.wgpu.internal.scoped
+import io.ygdrasil.wgpu.internal.toAddress
+import io.ygdrasil.wgpu.internal.toNativeArray
 
-actual class RenderPassEncoder(val handler: Long) : AutoCloseable {
+actual class RenderPassEncoder(val handler: Long) {
 
     actual fun end() {
-        JniInterface.wgpuRenderPassEncoderEnd(handler)
+        JnaInterface.wgpuRenderPassEncoderEnd(handler)
+        close()
     }
 
     actual fun setPipeline(renderPipeline: RenderPipeline) {
-        JniInterface.wgpuRenderPassEncoderSetPipeline(handler, renderPipeline.handler)
+        JnaInterface.wgpuRenderPassEncoderSetPipeline(handler, renderPipeline.handler)
     }
 
     actual fun draw(
@@ -18,27 +22,21 @@ actual class RenderPassEncoder(val handler: Long) : AutoCloseable {
         firstVertex: GPUSize32,
         firstInstance: GPUSize32
     ) {
-        JniInterface.wgpuRenderPassEncoderDraw(
-            handler,
-            vertexCount,
-            instanceCount,
-            firstVertex,
-            firstInstance
-        )
+        JnaInterface.wgpuRenderPassEncoderDraw(handler, vertexCount, instanceCount, firstVertex, firstInstance)
     }
 
     actual fun setBindGroup(index: Int, bindGroup: BindGroup) {
-        JniInterface.wgpuRenderPassEncoderSetBindGroup(
+        JnaInterface.wgpuRenderPassEncoderSetBindGroup(
             handler,
             index,
             bindGroup.handler,
             0L,
-            null
+            0L
         )
     }
 
     actual fun setVertexBuffer(slot: Int, buffer: Buffer) {
-        JniInterface.wgpuRenderPassEncoderSetVertexBuffer(
+        JnaInterface.wgpuRenderPassEncoderSetVertexBuffer(
             handler,
             slot,
             buffer.handler,
@@ -48,24 +46,19 @@ actual class RenderPassEncoder(val handler: Long) : AutoCloseable {
     }
 
     actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
-        JniInterface.wgpuRenderPassEncoderSetIndexBuffer(
-            handler,
-            buffer.handler,
-            indexFormat.value,
-            offset,
-            size
-        )
+        JnaInterface.wgpuRenderPassEncoderSetIndexBuffer(handler, buffer.handler, indexFormat.value, offset, size)
     }
-    actual fun executeBundles(bundles: List<RenderBundle>) {
-        JniInterface.wgpuRenderPassEncoderExecuteBundles(
+
+    actual fun executeBundles(bundles: List<RenderBundle>) = scoped { arena ->
+        JnaInterface.wgpuRenderPassEncoderExecuteBundles(
             handler,
             bundles.size.toLong(),
-            bundles
+            bundles.map { it.handler }.toNativeArray(arena.arena).toAddress()
         )
     }
 
-    actual override fun close() {
-        JniInterface.wgpuRenderPassEncoderRelease(handler)
+    private fun close() {
+        JnaInterface.wgpuRenderPassEncoderRelease(handler)
     }
 
 }

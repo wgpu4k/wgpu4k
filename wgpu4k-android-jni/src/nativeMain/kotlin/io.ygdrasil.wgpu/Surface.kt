@@ -67,12 +67,3 @@ fun wgpuSurfaceGetCurrentTexture(env: JNIEnvPointer, thiz: jclass, handler: jlon
     return surfaceTexture.texture.toLong()
 }
 
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuSurfacePresent")
-fun wgpuSurfacePresent(env: JNIEnvPointer, thiz: jclass, handler: jlong) {
-    webgpu.wgpuSurfacePresent(handler.toCPointer())
-}
-
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuSurfaceRelease")
-fun wgpuSurfaceRelease(env: JNIEnvPointer, thiz: jclass, handler: jlong) {
-    webgpu.wgpuSurfaceRelease(handler.toCPointer())
-}

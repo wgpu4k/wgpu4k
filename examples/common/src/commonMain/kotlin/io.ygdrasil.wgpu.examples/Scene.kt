@@ -47,7 +47,7 @@ suspend fun loadScenes(wgpuContext: WGPUContext, resourceBasePath: String = ""):
 
     abstract suspend fun initialize()
 
-    abstract fun AutoClosableContext.render()
+    abstract suspend fun AutoClosableContext.render()
 
     override fun close() {
         autoClosableContext.close()

@@ -61,7 +61,7 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
         ).bind()
     }
 
-    override fun AutoClosableContext.render() {
+    override suspend fun AutoClosableContext.render() {
 
         val transformationMatrix = Matrix4
             .rotation(Angle.fromDegrees(frame), .0, .0, 1.0)
@@ -81,7 +81,7 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
         val texture = renderingContext.getCurrentTexture()
             .bind()
 
-        val renderPassEncoder = encoder.beginRenderPass(
+        encoder.beginRenderPass(
             RenderPassDescriptor(
                 colorAttachments = listOf(
                     RenderPassDescriptor.ColorAttachment(
@@ -92,12 +92,12 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
                     )
                 )
             )
-        ).bind()
-
-        renderPassEncoder.setPipeline(renderPipeline)
-        renderPassEncoder.setBindGroup(0, uniformBindGroup)
-        renderPassEncoder.draw(3)
-        renderPassEncoder.end()
+        ) {
+            setPipeline(renderPipeline)
+            setBindGroup(0, uniformBindGroup)
+            draw(3)
+            end()
+        }
 
         val commandBuffer = encoder.finish()
             .bind()

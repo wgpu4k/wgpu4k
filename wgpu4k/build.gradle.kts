@@ -92,6 +92,8 @@ kotlin {
 
         androidMain {
             dependencies {
+                val jna = libs.jna.get()
+                implementation("${jna.module.group}:${jna.module.name}:${jna.versionConstraint}:@aar")
                 implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.0")
             }
         }
@@ -107,30 +109,6 @@ kotlin {
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(22))
-    }
-}
-
-configureDownloadTasks {
-    baseUrl = "${project.properties["wgpu.base.url"]}${libs.versions.wgpu.get()}/"
-
-    download("wgpu-macos-aarch64-release.zip") {
-        extract("libwgpu_native.dylib", resourcesDirectory.resolve("darwin-aarch64").resolve("libWGPU.dylib"))
-    }
-
-    download("wgpu-macos-x86_64-release.zip") {
-        extract("libwgpu_native.dylib", resourcesDirectory.resolve("darwin-x86-64").resolve("libWGPU.dylib"))
-    }
-
-    download("wgpu-windows-x86_64-msvc-release.zip") {
-        extract("wgpu_native.dll", resourcesDirectory.resolve("win32-x86-64").resolve("WGPU.dll"))
-    }
-
-    download("wgpu-linux-x86_64-release.zip") {
-        extract("libwgpu_native.so", resourcesDirectory.resolve("linux-x86-64").resolve("libWGPU.so"))
-    }
-
-    download("wgpu-linux-aarch64-release.zip") {
-        extract("libwgpu_native.so", resourcesDirectory.resolve("linux-aarch64").resolve("libWGPU.so"))
     }
 }
 

@@ -49,12 +49,12 @@ Documentation will be added later, to start you can check out the minimalist pro
 
 | Target       | Windows | Linux | MacOs | iOS | Android |
 |--------------|---------|-------|-------|-----|---------|
-| JVM x64      | ✅       | 🆗    | 🆗    | ❌   | ❌       |
-| JVM arm64    | 🔍️     | 🆗    | ✅     | ❌   | ❌       |
+| JVM x64      | ✅       | 🆗    | 🆗    | ❌   | 🛠️     |
+| JVM arm64    | 🔍️     | 🆗    | ✅     | ❌   | 🛠️     |
 | JS           | ✅       | 🆗    | ✅     | ❓   | ❓️      |
 | wasm         | 🆗️     | 🆗️   | 🆗️   | ❓️  | ❓️      |
-| native x64   | 🛠️     | 🔍️   | 🛠️   | 🛠️ | 🛠️️    |
-| native arm64 | 🔍️     | 🔍️   | 🛠️   | 🛠️ | 🛠️️️   |
+| native x64   | 🛠️     | 🔍️   | 🛠️   | 🛠️ | ❌️️     |
+| native arm64 | 🔍️     | 🔍️   | 🛠️   | 🛠️ | ❌️️     |
 
 
 ✅ = First class citizen

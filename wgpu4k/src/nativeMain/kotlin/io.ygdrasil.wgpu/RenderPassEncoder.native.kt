@@ -7,10 +7,11 @@ import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.memScoped
 import webgpu.*
 
-actual class RenderPassEncoder(internal val handler: WGPURenderPassEncoder) : AutoCloseable {
+actual class RenderPassEncoder(internal val handler: WGPURenderPassEncoder) {
 
     actual fun end() {
         wgpuRenderPassEncoderEnd(handler)
+        close()
     }
 
     actual fun setPipeline(renderPipeline: RenderPipeline) {
@@ -70,7 +71,7 @@ actual class RenderPassEncoder(internal val handler: WGPURenderPassEncoder) : Au
         )
     }
 
-    actual override fun close() {
+    private fun close() {
         wgpuRenderPassEncoderRelease(handler)
     }
 

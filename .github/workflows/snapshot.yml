@@ -18,7 +18,7 @@ jobs:
           java-version: 22
           cache: 'gradle'
       - name: Build and publish with Gradle
-        run: ./gradlew fetch-native-dependencies publish --info
+        run: ./gradlew publish --info
         env:
           SNAPSHOT: "true"
           VERSION: ${{ github.event.inputs.version }}

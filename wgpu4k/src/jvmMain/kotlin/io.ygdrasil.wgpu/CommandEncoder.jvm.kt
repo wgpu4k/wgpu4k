@@ -71,7 +71,6 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
         )
     }
 
-
     actual override fun close() {
         wgpu_h.wgpuCommandEncoderRelease(handler)
     }

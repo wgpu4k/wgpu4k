@@ -40,8 +40,3 @@ fun wgpuAdapterRequestDevice(env: JNIEnvPointer, thiz: jclass, handler: jlong, d
     lastFindDevice = null
     return device?.toLong() ?: 0L
 }
-
-@CName("Java_io_ygdrasil_wgpu_internal_JniInterface_wgpuAdapterRelease")
-fun wgpuAdapterRelease(env: JNIEnvPointer, thiz: jclass, handler: jlong) {
-    webgpu.wgpuAdapterRelease(handler.toCPointer())
-}

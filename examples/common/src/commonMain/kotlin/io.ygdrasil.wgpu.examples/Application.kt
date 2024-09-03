@@ -1,6 +1,14 @@
 package io.ygdrasil.wgpu.examples
 
-import io.ygdrasil.wgpu.*
+import io.ygdrasil.wgpu.CanvasConfiguration
+import io.ygdrasil.wgpu.CompositeAlphaMode
+import io.ygdrasil.wgpu.Device
+import io.ygdrasil.wgpu.Surface
+import io.ygdrasil.wgpu.SurfaceRenderingContext
+import io.ygdrasil.wgpu.TextureFormat
+import io.ygdrasil.wgpu.TextureUsage
+import io.ygdrasil.wgpu.WGPUContext
+import io.ygdrasil.wgpu.autoClosableContext
 
 suspend fun createApplication(wgpuContext: WGPUContext, resourceBasePath: String = ""): Application {
     wgpuContext.configureRenderingContext()
@@ -69,11 +77,21 @@ class Application internal constructor(
 
 
 private fun WGPUContext.configureRenderingContext() {
+    val format = surface.preferredCanvasFormat
+        ?: TextureFormat.rgba8unormsrgb?.takeIf { surface.supportedFormats.contains(it) }
+        ?: TextureFormat.rgba8unorm?.takeIf { surface.supportedFormats.contains(it) }
+        ?: surface.supportedFormats.first()
+    val alphaMode = CompositeAlphaMode.inherit?.takeIf { surface.supportedAlphaMode.contains(it) }
+        ?: CompositeAlphaMode.opaque
+
+    println("Using format $format and alpha mode $alphaMode")
+    println("Supported formats: ${surface.supportedFormats}")
     surface.configure(
         CanvasConfiguration(
             device = device,
-            format = surface.textureFormat,
-            usage = setOf(TextureUsage.renderattachment, TextureUsage.copysrc)
+            format = format,
+            usage = setOf(TextureUsage.renderattachment, TextureUsage.copysrc),
+            alphaMode = alphaMode
         )
     )
 }

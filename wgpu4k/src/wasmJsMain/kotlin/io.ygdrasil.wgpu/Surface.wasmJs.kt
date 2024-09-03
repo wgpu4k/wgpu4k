@@ -10,12 +10,16 @@ actual class Surface(internal val handler: GPUCanvasContext) : AutoCloseable {
         get() = handler.canvas.width
     actual val height: Int
         get() = handler.canvas.height
-    actual val textureFormat: TextureFormat by lazy {
+
+    actual val preferredCanvasFormat: TextureFormat? by lazy {
         navigator.gpu
             ?.getPreferredCanvasFormat()
             ?.let { TextureFormat.of(it) }
-            ?: error("fail to get canvas preferred format")
     }
+
+    // @see https://gpuweb.github.io/gpuweb/#canvas-configuration
+    actual val supportedFormats: Set<TextureFormat> = setOf(TextureFormat.bgra8unorm, TextureFormat.rgba8unorm, TextureFormat.rgba16float)
+    actual val supportedAlphaMode: Set<CompositeAlphaMode> = setOf(CompositeAlphaMode.opaque, CompositeAlphaMode.premultiplied)
 
     actual fun getCurrentTexture(): Texture {
         return handler.getCurrentTexture()

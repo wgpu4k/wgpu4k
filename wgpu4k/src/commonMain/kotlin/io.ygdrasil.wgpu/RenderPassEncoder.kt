@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-expect class RenderPassEncoder : AutoCloseable {
+expect class RenderPassEncoder {
 
     fun end()
 
@@ -30,7 +30,5 @@ expect class RenderPassEncoder : AutoCloseable {
     fun endOcclusionQuery(): Nothing?
     fun end(): Nothing?
      */
-
-    override fun close()
 
 }

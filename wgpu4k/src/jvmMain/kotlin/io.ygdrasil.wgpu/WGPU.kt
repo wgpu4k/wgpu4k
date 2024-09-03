@@ -3,11 +3,17 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.exportAndLoadLibrary
-import io.ygdrasil.wgpu.internal.jvm.panama.*
-import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h.WGPUSType_InstanceExtras
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUChainedStruct
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUInstanceRequestAdapterCallback
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPURequestAdapterOptions
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptor
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptorFromMetalLayer
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptorFromWindowsHWND
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptorFromXlibWindow
+import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
+import io.ygdrasil.wgpu.mapper.map
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 
 
@@ -114,25 +120,9 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
         }
 
         fun createInstance(backend: WGPUInstanceBackend? = null): WGPU? = confined { arena ->
-            wgpu_h.wgpuCreateInstance(arena.getDescriptor(backend))
+            backend?.let { arena.map(backend) }
+                .let { wgpu_h.wgpuCreateInstance(it ?: MemorySegment.NULL) }
                 ?.let { WGPU(it) }
-        }
-
-        private fun Arena.getDescriptor(backend: WGPUInstanceBackend?): MemorySegment {
-            val descriptor = WGPUInstanceDescriptor.allocate(this)
-
-            if (backend != null) {
-                WGPUInstanceExtras.allocate(this).also { nextInChain ->
-                    WGPUInstanceExtras.backends(nextInChain, backend.value)
-                    WGPUInstanceExtras.chain(nextInChain).also { chain ->
-                        WGPUChainedStruct.sType(nextInChain, WGPUSType_InstanceExtras())
-                    }
-                    WGPUInstanceDescriptor.nextInChain(descriptor, nextInChain)
-                }
-
-            }
-
-            return descriptor
         }
     }
 }
