@@ -14,7 +14,7 @@ repositories {
 
 dependencies {
 	implementation(compose.desktop.currentOs)
-	implementation(projects.examples.common)
+	implementation(projects.wgpu4kScenes)
 }
 
 compose.desktop {

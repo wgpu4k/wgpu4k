@@ -52,10 +52,6 @@ kotlin {
         }
 
         jvmMain {
-            sourceSets {
-                languageSettings.optIn("kotlin.js.ExperimentalJsExport")
-            }
-
             dependencies {
                 api(libs.wgpu4k.panama)
             }
@@ -76,7 +72,7 @@ kotlin {
         jvmTest {
             dependencies {
                 implementation(libs.kotest.runner.junit5)
-                implementation("org.jetbrains.kotlin:kotlin-reflect")
+                implementation(libs.kotlin.reflect)
             }
         }
 

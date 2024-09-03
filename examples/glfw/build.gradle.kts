@@ -11,7 +11,7 @@ val windowsLib = getLibraryProject()
 	.resolve("win32-x86-64")
 
 dependencies {
-	implementation(projects.examples.common)
+	implementation(projects.wgpu4kScenes)
 }
 
 application {

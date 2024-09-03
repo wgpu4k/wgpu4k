@@ -28,6 +28,7 @@ kotlin-multiplatform = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 android-library = { module = "com.android.library:com.android.library.gradle.plugin", version.ref = "agp" }
 jreleaser-plugin = { module = "org.jreleaser:org.jreleaser.gradle.plugin", version.ref = "jreleaser" }
 korlibs-image = { module = "com.soywiz:korlibs-image", version.ref = "korge" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 ktor-server-netty-jvm = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
 ktor-server-core-jvm = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 playwright = { module = "com.microsoft.playwright:playwright", version.ref = "playwright" }

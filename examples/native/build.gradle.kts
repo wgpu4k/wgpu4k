@@ -49,7 +49,7 @@ kotlin {
 
         val commonMain by getting {
             dependencies {
-                implementation(projects.examples.common)
+                implementation(projects.wgpu4kScenes)
             }
         }
 
@@ -68,7 +68,7 @@ tasks.named<Exec>("runDebugExecutableNative").configure {
     args(commonResourcesFile.absolutePath)
 }
 
-fun getCommonProject() = projects.examples.common.identityPath.path
+fun getCommonProject() = projects.wgpu4kScenes.identityPath.path
     ?.let(::project) ?: error("Could not find project path")
 
 val File.isNotEmpty: Boolean
