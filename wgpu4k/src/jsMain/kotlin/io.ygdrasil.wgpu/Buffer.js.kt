@@ -33,6 +33,12 @@ actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
             .copyInto(buffer)
     }
 
+    actual fun mapInto(buffer: IntArray, offset: Int) {
+        Int8Array(handler.getMappedRange(offset.toLong(), (buffer.size * Int.SIZE_BYTES).toLong()))
+            .unsafeCast<IntArray>()
+            .copyInto(buffer)
+    }
+
     actual suspend fun map(mode: Set<MapMode>, offset: GPUSize64, size: GPUSize64) {
         handler.mapAsync(mode.toFlagInt(), offset, size)
     }

@@ -43,6 +43,12 @@ actual class Buffer(val handler: Long) : AutoCloseable {
             .read(0, buffer, 0, buffer.size)
     }
 
+    actual fun mapInto(buffer: IntArray, offset: Int) {
+        JnaInterface.wgpuBufferGetMappedRange(handler, offset.toLong(), (buffer.size * Int.SIZE_BYTES).toLong())
+            .let(::Pointer)
+            .read(0, buffer, 0, buffer.size)
+    }
+
     actual override fun close() {
         JnaInterface.wgpuBufferRelease(handler)
     }

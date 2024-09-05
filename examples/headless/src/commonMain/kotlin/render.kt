@@ -30,10 +30,10 @@ suspend fun captureScene() {
             scene.bind()
             scene.initialize()
 
-            val textureData = ByteArray(renderingContext.width * renderingContext.height * 4)
+            val textureData = IntArray(renderingContext.width * renderingContext.height)
             val outputStagingBuffer = context.device.createBuffer(
                 BufferDescriptor(
-                    size = textureData.size.toLong(),
+                    size = (textureData.size * Int.SIZE_BYTES).toLong(),
                     usage = setOf(BufferUsage.copydst, BufferUsage.mapread),
                     mappedAtCreation = false,
                 )
@@ -69,9 +69,8 @@ suspend fun captureScene() {
                 outputStagingBuffer.map(setOf(MapMode.read))
                 // Complete async work
                 context.device.poll()
-                outputStagingBuffer.mapInto(buffer = textureData, offset = 0)
-                val image = Bitmap32(width = renderingContext.width, height = renderingContext.height)
-                byteArrayToIntArray(input = textureData, output = image.ints)
+                outputStagingBuffer.mapInto(buffer = textureData)
+                val image = Bitmap32(width = renderingContext.width, height = renderingContext.height, textureData)
 
                 val path = screenshotPath ?: error("screenshot path not set")
                 val screenshotsVfs = localVfs(path)["jvm"].also { it.mkdirs() }.jail()
@@ -94,16 +93,6 @@ private fun List<Scene>.findWithName(sceneName: String): Scene = first {
 
 expect fun getSceneParameter(): SceneParameter
 
-fun byteArrayToIntArray(input: ByteArray, output: IntArray) {
-    output.indices.forEach { index ->
-        output[index] = (input[index * 4].toInt() and 0xFF) or
-                ((input[index * 4 + 1].toInt() and 0xFF) shl 8) or
-                ((input[index * 4 + 2].toInt() and 0xFF) shl 16) or
-                ((input[index * 4 + 3].toInt() and 0xFF) shl 24)
-    }
-}
-
 expect fun initLog()
-
 
 data class SceneParameter(val sceneName: String, val frame: Int, val screenshotPath: String?)
