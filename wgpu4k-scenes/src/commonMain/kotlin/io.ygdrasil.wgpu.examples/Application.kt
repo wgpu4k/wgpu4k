@@ -75,12 +75,16 @@ class Application internal constructor(
 
 }
 
-
-private fun WGPUContext.configureRenderingContext() {
-    val format = surface.preferredCanvasFormat
+internal fun WGPUContext.getSurfaceExpectedFormat(): TextureFormat {
+    return surface.preferredCanvasFormat
         ?: TextureFormat.rgba8unormsrgb?.takeIf { surface.supportedFormats.contains(it) }
         ?: TextureFormat.rgba8unorm?.takeIf { surface.supportedFormats.contains(it) }
         ?: surface.supportedFormats.first()
+}
+
+
+private fun WGPUContext.configureRenderingContext() {
+    val format = getSurfaceExpectedFormat()
     val alphaMode = CompositeAlphaMode.inherit?.takeIf { surface.supportedAlphaMode.contains(it) }
         ?: CompositeAlphaMode.opaque
 

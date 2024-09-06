@@ -133,7 +133,7 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
         val cubeTexture = device.createTexture(
             TextureDescriptor(
                 size = Size3D(imageBitmapWidth, imageBitmapHeight),
-                format = TextureFormat.rgba8unormsrgb,
+                format = renderingContext.textureFormat,
                 usage = setOf(TextureUsage.texturebinding, TextureUsage.copydst, TextureUsage.renderattachment),
             )
         )

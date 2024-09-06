@@ -103,7 +103,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
             )
         ).bind()
 
-        val model = uploadGLBModel(device, boxMesh)
+        val model = uploadGLBModel(device, boxMesh, renderingContext.textureFormat)
 
         renderBundles = model.buildRenderBundles(
             device,

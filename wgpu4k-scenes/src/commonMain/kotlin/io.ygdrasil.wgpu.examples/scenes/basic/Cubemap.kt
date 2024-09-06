@@ -144,7 +144,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 				// Create a 2d array texture.
 				// Assume each image has the same size.
 				size = Size3D(imageBitmaps[0].width, imageBitmaps[0].height, depthLayer),
-				format = TextureFormat.rgba8unormsrgb,
+				format = renderingContext.textureFormat,
 				usage = setOf(TextureUsage.texturebinding, TextureUsage.copydst, TextureUsage.renderattachment),
 			)
 		).bind()

@@ -10,9 +10,6 @@ import io.ygdrasil.wgpu.mapper.map
 import java.lang.foreign.SegmentAllocator
 import java.lang.foreign.ValueLayout
 
-private val supportedFormatOncopyExternalImageToTexture =
-    listOf(TextureFormat.rgba8unorm, TextureFormat.rgba8unormsrgb)
-
 actual class Queue(val handler: Long) {
 
     actual fun submit(commandsBuffer: List<CommandBuffer>) = scoped { arena ->
@@ -72,11 +69,6 @@ actual class Queue(val handler: Long) {
         destination: ImageCopyTextureTagged,
         copySize: GPUIntegerCoordinates
     ) = scoped { arena ->
-        check(destination.texture.format in supportedFormatOncopyExternalImageToTexture) {
-            "(${
-                supportedFormatOncopyExternalImageToTexture.map { it.actualName }.joinToString(", ")
-            })are the only supported texture format supported, found ${destination.texture.format}"
-        }
 
         val image = (source.source as? ImageBitmapHolder)
             ?: error("ImageBitmapHolder required as source")
@@ -125,4 +117,9 @@ actual class ImageBitmapHolder(
     val data: ByteArray,
     actual val width: Int,
     actual val height: Int
-) : DrawableHolder
+) : DrawableHolder, AutoCloseable {
+
+    actual override fun close() {
+        // Nothing to do
+    }
+}

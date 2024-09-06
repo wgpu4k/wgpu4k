@@ -16,6 +16,7 @@ import korlibs.math.geom.Matrix4
 suspend fun uploadGLBModel(
     device: Device,
     gltf2: GLTF2,
+    textureFormat: TextureFormat,
 ): GLBModel {
     println("uploadGLBModel")
 
@@ -39,12 +40,12 @@ suspend fun uploadGLBModel(
         val gpuImg = device.createTexture(
             TextureDescriptor(
                 size = Size3D(width = bitmap.width, height = bitmap.height, depthOrArrayLayers = 1),
-                format = TextureFormat.rgba8unormsrgb,
+                format = textureFormat,
                 usage = setOf(TextureUsage.texturebinding, TextureUsage.copydst, TextureUsage.renderattachment)
             )
         )
 
-        val src = ImageCopyExternalImage(source = bitmap.toBitmapHolder())
+        val src = ImageCopyExternalImage(source = bitmap.toBitmapHolder(textureFormat))
         val dst = ImageCopyTextureTagged(texture = gpuImg)
         device.queue.copyExternalImageToTexture(
             src,

@@ -1,6 +1,13 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.js.*
+import io.ygdrasil.wgpu.internal.js.GPUExtent3DDict
+import io.ygdrasil.wgpu.internal.js.GPUImageCopyTexture
+import io.ygdrasil.wgpu.internal.js.GPUImageDataLayout
+import io.ygdrasil.wgpu.internal.js.GPUQueue
+import io.ygdrasil.wgpu.internal.js.createJsObject
+import io.ygdrasil.wgpu.internal.js.mapJsArray
+import io.ygdrasil.wgpu.internal.js.toInt8Array
+import io.ygdrasil.wgpu.internal.js.toJsNumber
 import org.khronos.webgl.Float32Array
 import org.khronos.webgl.Int32Array
 
@@ -83,4 +90,9 @@ actual class ImageBitmapHolder(
     actual val width: Int,
     actual val height: Int,
     val data: ByteArray,
-) : DrawableHolder
+) : DrawableHolder, AutoCloseable {
+
+    actual override fun close() {
+        // Nothing to do
+    }
+}
