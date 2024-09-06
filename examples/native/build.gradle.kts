@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
 }
@@ -22,50 +20,51 @@ kotlin {
     val hostOs = System.getProperty("os.name")
     val isArm64 = System.getProperty("os.arch") == "aarch64"
     val nativeTarget = when {
-        hostOs == "Linux" && isArm64 -> linuxArm64("native")
+        // No toolchain on this architecture
+        hostOs == "Linux" && isArm64 -> null.also { println("Linux native Arm64 not yet supported") }
         hostOs == "Linux" && !isArm64 -> linuxX64("native")
         hostOs == "Mac OS X" && isArm64 -> macosArm64("native")
         hostOs == "Mac OS X" && !isArm64 -> macosX64("native")
-        hostOs.startsWith("Windows") -> mingwX64("native").apply {
-            @OptIn(ExperimentalKotlinGradlePluginApi::class)
-            compilerOptions {
-                freeCompilerArgs.add("-Xllvm-variant=${getCustomLLVMPath()}")
-            }
-        }
-        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
+        hostOs.startsWith("Windows") -> configureMingwX64(project, "native")
+        else -> null // Not supported
     }
 
+    if (nativeTarget != null) {
+        with(nativeTarget) {
 
-    with(nativeTarget) {
-
-        binaries {
-            executable {
-                entryPoint = "main"
+            binaries {
+                executable {
+                    entryPoint = "main"
+                }
             }
         }
     }
 
     sourceSets {
 
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation(projects.wgpu4kScenes)
             }
         }
 
-        val nativeMain by getting {
-            resources.setSrcDirs(
-                resources.srcDirs + setOf(
-                    commonResourcesFile
+        if (nativeTarget != null) {
+            nativeMain {
+                resources.setSrcDirs(
+                    resources.srcDirs + setOf(
+                        commonResourcesFile
+                    )
                 )
-            )
+            }
         }
 
     }
-}
 
-tasks.named<Exec>("runDebugExecutableNative").configure {
-    args(commonResourcesFile.absolutePath)
+    if (nativeTarget != null) {
+        tasks.named<Exec>("runDebugExecutableNative").configure {
+            args(commonResourcesFile.absolutePath)
+        }
+    }
 }
 
 fun getCommonProject() = projects.wgpu4kScenes.identityPath.path
