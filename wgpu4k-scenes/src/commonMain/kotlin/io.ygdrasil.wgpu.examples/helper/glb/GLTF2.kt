@@ -24,11 +24,11 @@ import kotlinx.serialization.json.*
 import kotlin.jvm.JvmInline
 import kotlin.time.measureTimedValue
 
-suspend fun VfsFile.readGLB(options: GLTF2.ReadOptions = GLTF2.ReadOptions.DEFAULT): GLTF2 =
-    GLTF2.readGLB(this, options = options)
-suspend fun VfsFile.readGLTF2(options: GLTF2.ReadOptions = GLTF2.ReadOptions.DEFAULT): GLTF2 {
-    if (this.extensionLC == "glb") return readGLB(options)
-    return GLTF2.readGLTF(this.readString(), null, this, options)
+suspend fun VfsFile.readGLB(): GLTF2 =
+    GLTF2.readGLB(this)
+suspend fun VfsFile.readGLTF2(): GLTF2 {
+    if (this.extensionLC == "glb") return readGLB()
+    return GLTF2.readGLTF(this.readString(), null, this)
 }
 
 // https://github.com/KhronosGroup/glTF/blob/main/specification/2.0/Specification.adoc
@@ -760,8 +760,11 @@ data class GLTF2(
 
         val logger = Logger("GLTF2")
 
-        suspend fun readGLB(file: VfsFile, options: ReadOptions = ReadOptions.DEFAULT): GLTF2 = readGLB(file.readBytes(), file, options)
-        suspend fun readGLB(data: ByteArray, file: VfsFile? = null, options: ReadOptions = ReadOptions.DEFAULT): GLTF2 {
+        suspend fun readGLB(file: VfsFile): GLTF2 = readGLB(
+            file.readBytes(),
+            file
+        )
+        suspend fun readGLB(data: ByteArray, file: VfsFile? = null): GLTF2 {
             val s = data.openSync()
             if (s.readString(4) != "glTF") error("Not a glTF binary")
             val version = s.readS32LE()
@@ -780,17 +783,16 @@ data class GLTF2(
                 logger.trace { "CHUNK[$chunkName] = $chunkSize" }
             }
 
-            return readGLTF(json, bin, file, options)
+            return readGLTF(json, bin, file)
         }
 
         // @TODO: Use kotlinx-serialization
-        suspend fun readGLTF(jsonString: String, bin: ByteArray? = null, file: VfsFile? = null, options: ReadOptions = ReadOptions.DEFAULT): GLTF2 {
+        suspend fun readGLTF(jsonString: String, bin: ByteArray? = null, file: VfsFile? = null): GLTF2 {
             return try {
-                Json { this.ignoreUnknownKeys = options.ignoreUnknownKeys }
+                Json
                     .decodeFromString<GLTF2>(jsonString)
                     .also { it.ensureLoad(file, bin) }
             } catch (e: Throwable) {
-                println("options=$options")
                 println("ERROR parsing: $jsonString")
                 throw e
             }

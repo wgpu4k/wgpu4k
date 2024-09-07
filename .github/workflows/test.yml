@@ -21,6 +21,8 @@ jobs:
       matrix:
         os: [ macos-14, ubuntu-latest, windows-latest ]
     runs-on: ${{ matrix.os }}
+    env:
+      CI: "true"
     steps:
       - name: install dependencies
         if: matrix.os == 'ubuntu-latest'

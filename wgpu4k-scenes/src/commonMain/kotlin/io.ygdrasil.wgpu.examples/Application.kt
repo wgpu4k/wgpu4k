@@ -77,8 +77,12 @@ class Application internal constructor(
 
 internal fun WGPUContext.getSurfaceExpectedFormat(): TextureFormat {
     return surface.preferredCanvasFormat
-        ?: TextureFormat.rgba8unormsrgb?.takeIf { surface.supportedFormats.contains(it) }
+        /*
+            https://developer.mozilla.org/en-US/docs/Web/API/GPU/getPreferredCanvasFormat
+            rgba8unorm or bgra8unorm are default format supported on web
+         */
         ?: TextureFormat.rgba8unorm?.takeIf { surface.supportedFormats.contains(it) }
+        ?: TextureFormat.bgra8unormsrgb?.takeIf { surface.supportedFormats.contains(it) }
         ?: surface.supportedFormats.first()
 }
 

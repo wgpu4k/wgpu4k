@@ -27,13 +27,16 @@ include("wgpu4k")
 include("wgpu4k-toolkit")
 include("wgpu4k-scenes")
 include("wgpu4k-e2e")
-include("examples:compose")
+if (isInCI().not()) {
+	/*include("examples:compose")
 include("examples:web-js")
 include("examples:glfw")
-include("examples:headless")
 if (hostOs == "Mac OS X") include("examples:iOS")
 if (isAndroidConfigured()) include("examples:android")
 // right now only running on OSX and may be linux x64
-include("examples:native")
+include("examples:native")*/
+}
+
 
 fun isAndroidConfigured(): Boolean = System.getenv("ANDROID_HOME") != null
+fun isInCI(): Boolean = System.getenv("CI") != null
