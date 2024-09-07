@@ -1,3 +1,5 @@
+package io.ygdrasil.wgpu.examples.headless
+
 import kotlinx.browser.window
 import org.w3c.dom.url.URLSearchParams
 

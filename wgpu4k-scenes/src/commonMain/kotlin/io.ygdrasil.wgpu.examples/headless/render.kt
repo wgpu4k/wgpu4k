@@ -1,3 +1,5 @@
+package io.ygdrasil.wgpu.examples.headless
+
 import io.ygdrasil.wgpu.BufferDescriptor
 import io.ygdrasil.wgpu.BufferUsage
 import io.ygdrasil.wgpu.ImageCopyBuffer
@@ -9,7 +11,6 @@ import io.ygdrasil.wgpu.TextureAspect
 import io.ygdrasil.wgpu.TextureRenderingContext
 import io.ygdrasil.wgpu.autoClosableContext
 import io.ygdrasil.wgpu.examples.Scene
-import io.ygdrasil.wgpu.examples.headless.getHeadlessContext
 import io.ygdrasil.wgpu.examples.loadScenes
 import korlibs.image.bitmap.Bitmap32
 import korlibs.image.format.PNG

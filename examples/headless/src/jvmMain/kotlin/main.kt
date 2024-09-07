@@ -1,3 +1,4 @@
+import io.ygdrasil.wgpu.examples.headless.captureScene
 import kotlinx.coroutines.runBlocking
 
 

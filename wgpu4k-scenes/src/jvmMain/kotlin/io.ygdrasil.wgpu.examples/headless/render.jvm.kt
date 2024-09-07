@@ -1,3 +1,5 @@
+package io.ygdrasil.wgpu.examples.headless
+
 import io.ygdrasil.wgpu.LogLevel
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPULogCallback
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
