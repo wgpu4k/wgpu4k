@@ -5,7 +5,6 @@ import io.ygdrasil.wgpu.CompositeAlphaMode
 import io.ygdrasil.wgpu.Device
 import io.ygdrasil.wgpu.Surface
 import io.ygdrasil.wgpu.SurfaceRenderingContext
-import io.ygdrasil.wgpu.TextureFormat
 import io.ygdrasil.wgpu.TextureUsage
 import io.ygdrasil.wgpu.WGPUContext
 import io.ygdrasil.wgpu.autoClosableContext
@@ -75,20 +74,8 @@ class Application internal constructor(
 
 }
 
-internal fun WGPUContext.getSurfaceExpectedFormat(): TextureFormat {
-    return surface.preferredCanvasFormat
-        /*
-            https://developer.mozilla.org/en-US/docs/Web/API/GPU/getPreferredCanvasFormat
-            rgba8unorm or bgra8unorm are default format supported on web
-         */
-        ?: TextureFormat.rgba8unorm?.takeIf { surface.supportedFormats.contains(it) }
-        ?: TextureFormat.bgra8unormsrgb?.takeIf { surface.supportedFormats.contains(it) }
-        ?: surface.supportedFormats.first()
-}
-
-
 private fun WGPUContext.configureRenderingContext() {
-    val format = getSurfaceExpectedFormat()
+    val format = renderingContext.textureFormat
     val alphaMode = CompositeAlphaMode.inherit?.takeIf { surface.supportedAlphaMode.contains(it) }
         ?: CompositeAlphaMode.opaque
 

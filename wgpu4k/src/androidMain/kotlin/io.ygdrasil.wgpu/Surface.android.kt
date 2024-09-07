@@ -45,8 +45,8 @@ actual class Surface(val handler: Long, actual val width: Int, actual val height
         println("supportedAlphaMode: $supportedAlphaMode")
 
         if (_supportedFormats.isEmpty()) {
-            println("WARNING: fail to get supported textures on surface, will inject rgba8unormsrgb and rgba8unorm format")
-            _supportedFormats = setOf(TextureFormat.rgba8unormsrgb, TextureFormat.rgba8unorm)
+            println("WARNING: fail to get supported textures on surface, will inject rgba8unorm format")
+            _supportedFormats = setOf(TextureFormat.rgba8unorm)
         }
 
         if (_supportedAlphaMode.isEmpty()) {

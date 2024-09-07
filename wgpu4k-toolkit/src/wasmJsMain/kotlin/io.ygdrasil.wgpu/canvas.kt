@@ -20,7 +20,7 @@ suspend fun canvasContextRenderer(htmlCanvas: HTMLCanvasElement? = null, deferre
     val surface = canvas.getSurface() ?: error("fail to get context")
 
     val renderingContext = when (deferredRendering) {
-        true -> TextureRenderingContext(256, 256, TextureFormat.rgba8unormsrgb, device)
+        true -> TextureRenderingContext(256, 256, TextureFormat.rgba8unorm, device)
         false -> SurfaceRenderingContext(surface)
     }
 

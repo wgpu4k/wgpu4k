@@ -4,7 +4,6 @@ import io.ygdrasil.wgpu.AutoClosableContext
 import io.ygdrasil.wgpu.Device
 import io.ygdrasil.wgpu.RenderingContext
 import io.ygdrasil.wgpu.Size3D
-import io.ygdrasil.wgpu.SurfaceRenderingContext
 import io.ygdrasil.wgpu.TextureDescriptor
 import io.ygdrasil.wgpu.TextureFormat
 import io.ygdrasil.wgpu.TextureUsage
@@ -21,11 +20,7 @@ import io.ygdrasil.wgpu.examples.scenes.basic.TwoCubesScene
 import io.ygdrasil.wgpu.examples.scenes.graphics.techniques.SkinnedMeshScene
 
 suspend fun loadScenes(wgpuContext: WGPUContext, resourceBasePath: String = ""): List<Scene> {
-    val textureFormat = if (wgpuContext.renderingContext is SurfaceRenderingContext) {
-        wgpuContext.getSurfaceExpectedFormat()
-    } else {
-        wgpuContext.renderingContext.textureFormat
-    }
+    val textureFormat = wgpuContext.renderingContext.textureFormat
     val assetManager = genericAssetManager(textureFormat, resourceBasePath)
     return listOf(
         HelloTriangleScene(wgpuContext),

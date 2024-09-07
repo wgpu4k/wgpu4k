@@ -2,7 +2,12 @@
 
 package io.ygdrasil.wgpu
 
-import kotlinx.cinterop.*
+import kotlinx.cinterop.COpaque
+import kotlinx.cinterop.COpaquePointer
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.interpretCPointer
+import kotlinx.cinterop.objcPtr
+import kotlinx.cinterop.reinterpret
 import platform.MetalKit.MTKView
 
 
@@ -18,7 +23,7 @@ suspend fun iosContextRenderer(view: MTKView, width: Int, height: Int, deferredR
     surface.computeSurfaceCapabilities(adapter)
 
     val renderingContext = when (deferredRendering) {
-        true -> TextureRenderingContext(width, height, TextureFormat.rgba8unormsrgb, device)
+        true -> TextureRenderingContext(width, height, TextureFormat.rgba8unorm, device)
         false -> SurfaceRenderingContext(surface)
     }
 

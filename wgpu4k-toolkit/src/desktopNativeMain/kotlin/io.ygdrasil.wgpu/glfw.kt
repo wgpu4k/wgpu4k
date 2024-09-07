@@ -3,9 +3,25 @@
 package io.ygdrasil.wgpu
 
 import cnames.structs.GLFWwindow
-import glfw.*
+import glfw.GLFW_CLIENT_API
+import glfw.GLFW_FALSE
+import glfw.GLFW_NO_API
+import glfw.GLFW_RESIZABLE
+import glfw.GLFW_VISIBLE
+import glfw.glfwCreateWindow
+import glfw.glfwDestroyWindow
+import glfw.glfwGetWindowSize
+import glfw.glfwInit
+import glfw.glfwWindowHint
 import io.ygdrasil.wgpu.WGPU.Companion.createInstance
-import kotlinx.cinterop.*
+import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.CValuesRef
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.IntVar
+import kotlinx.cinterop.alloc
+import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.ptr
+import kotlinx.cinterop.value
 
 suspend fun glfwContextRenderer(
     width: Int = 1,
@@ -42,7 +58,7 @@ suspend fun glfwContextRenderer(
     surface.computeSurfaceCapabilities(adapter)
 
     val renderingContext = when (deferredRendering) {
-        true -> TextureRenderingContext(256, 256, TextureFormat.rgba8unormsrgb, device)
+        true -> TextureRenderingContext(256, 256, TextureFormat.rgba8unorm, device)
         false -> SurfaceRenderingContext(surface)
     }
 

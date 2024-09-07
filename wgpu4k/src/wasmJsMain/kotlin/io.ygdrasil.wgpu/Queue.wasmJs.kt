@@ -54,12 +54,9 @@ actual class Queue(internal val handler: GPUQueue) {
         destination: ImageCopyTextureTagged,
         copySize: GPUIntegerCoordinates,
     ) {
-        if (destination.texture.format !in listOf(TextureFormat.rgba8unorm, TextureFormat.rgba8unormsrgb)) {
-            error("rgba8unorm asnd rgba8unormsrgb are the only supported texture format supported")
-        }
 
         val image = (source.source as? ImageBitmapHolder)
-        if (image == null) error("ImageBitmapHolder required as source")
+            ?: error("ImageBitmapHolder required as source")
 
         val bytePerPixel = destination.texture.format.getBytesPerPixel()
 
