@@ -40,6 +40,7 @@ val jvmTasks = scenes.flatMap { (sceneName, frames) ->
     frames.map { frame ->
         tasks.register<JavaExec>("e2eJvmTest-$sceneName-$frame") {
             group = "e2eTest"
+            // TODO: find why the app is crashing sometimes
             isIgnoreExitValue = true
             mainClass = "MainKt"
             jvmArgs(
