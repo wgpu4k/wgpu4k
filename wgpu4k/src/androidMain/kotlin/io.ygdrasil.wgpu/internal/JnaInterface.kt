@@ -16,6 +16,7 @@ internal object JnaInterface {
     external fun wgpuCreateInstance(descriptor: Long): Long
     external fun wgpuInstanceRelease(handler: Long)
     external fun wgpuInstanceCreateSurface(handler: Long, descriptor: Long): Long
+    external fun wgpuInstanceRequestAdapterNoCallback(handler: Long, descriptor: Long): Long
 
     /*** Surface ***/
     external fun wgpuSurfaceRelease(handler: Long)

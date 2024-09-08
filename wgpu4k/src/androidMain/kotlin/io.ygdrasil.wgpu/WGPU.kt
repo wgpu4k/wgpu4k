@@ -3,8 +3,8 @@ package io.ygdrasil.wgpu
 import android.view.SurfaceHolder
 import com.sun.jna.Pointer
 import io.ygdrasil.wgpu.internal.JnaInterface
-import io.ygdrasil.wgpu.internal.JniInterface
 import io.ygdrasil.wgpu.internal.jna.WGPUChainedStruct
+import io.ygdrasil.wgpu.internal.jna.WGPURequestAdapterOptions
 import io.ygdrasil.wgpu.internal.jna.WGPUSurfaceDescriptor
 import io.ygdrasil.wgpu.internal.jna.WGPUSurfaceDescriptorFromAndroidNativeWindow
 import io.ygdrasil.wgpu.internal.jna.wgpu_h.WGPUSType_SurfaceDescriptorFromAndroidNativeWindow
@@ -18,8 +18,12 @@ class WGPU(val handler: Long) : AutoCloseable {
     fun requestAdapter(
         surface: Surface,
         powerPreference: PowerPreference? = null
-    ): Adapter {
-        return JniInterface.wgpuInstanceRequestAdapter(handler, powerPreference, surface.handler)
+    ): Adapter = scoped { arena ->
+        val descriptor = WGPURequestAdapterOptions.allocate(arena).also { descriptor ->
+            WGPURequestAdapterOptions.powerPreference(descriptor, powerPreference?.value ?: 0)
+            WGPURequestAdapterOptions.compatibleSurface(descriptor, MemorySegment(Pointer(surface.handler), Long.SIZE_BYTES.toLong()))
+        }
+        JnaInterface.wgpuInstanceRequestAdapterNoCallback(handler, descriptor.pointer.toAddress())
             .takeIf { it != 0L }
             ?.let(::Adapter) ?: error("fail to create adapter")
     }

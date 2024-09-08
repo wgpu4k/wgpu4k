@@ -28,7 +28,7 @@ import java.util.function.Consumer
  * * }
  */
 object WGPUDeviceDescriptor {
-    private val `$LAYOUT` = structLayout(
+    val `$LAYOUT` = structLayout(
         wgpu_h.C_POINTER.withName("nextInChain"),
         wgpu_h.C_POINTER.withName("label"),
         wgpu_h.C_LONG.withName("requiredFeatureCount"),
@@ -47,7 +47,7 @@ object WGPUDeviceDescriptor {
         return `$LAYOUT`
     }
 
-    private val `nextInChain$LAYOUT`: AddressLayout = `$LAYOUT`.select(groupElement("nextInChain")) as AddressLayout
+    val `nextInChain$LAYOUT`: AddressLayout = `$LAYOUT`.select(groupElement("nextInChain")) as AddressLayout
 
     /**
      * Layout for field:
@@ -59,7 +59,7 @@ object WGPUDeviceDescriptor {
         return `nextInChain$LAYOUT`
     }
 
-    private const val `nextInChain$OFFSET`: Long = 0
+    const val `nextInChain$OFFSET`: Long = 0
 
     /**
      * Offset for field:
@@ -94,7 +94,7 @@ object WGPUDeviceDescriptor {
         )
     }
 
-    private val `label$LAYOUT`: AddressLayout = `$LAYOUT`.select(groupElement("label")) as AddressLayout
+    val `label$LAYOUT`: AddressLayout = `$LAYOUT`.select(groupElement("label")) as AddressLayout
 
     /**
      * Layout for field:
@@ -106,7 +106,7 @@ object WGPUDeviceDescriptor {
         return `label$LAYOUT`
     }
 
-    private const val `label$OFFSET`: Long = 8
+    const val `label$OFFSET`: Long = 8
 
     /**
      * Offset for field:
@@ -141,7 +141,7 @@ object WGPUDeviceDescriptor {
         )
     }
 
-    private val `requiredFeatureCount$LAYOUT` =
+    val `requiredFeatureCount$LAYOUT` =
         `$LAYOUT`.select(groupElement("requiredFeatureCount")) as ValueLayout.OfLong
 
     /**
@@ -154,7 +154,7 @@ object WGPUDeviceDescriptor {
         return `requiredFeatureCount$LAYOUT`
     }
 
-    private const val `requiredFeatureCount$OFFSET`: Long = 16
+    const val `requiredFeatureCount$OFFSET`: Long = 16
 
     /**
      * Offset for field:
@@ -186,7 +186,7 @@ object WGPUDeviceDescriptor {
         struct.set(`requiredFeatureCount$LAYOUT`, `requiredFeatureCount$OFFSET`, fieldValue)
     }
 
-    private val `requiredFeatures$LAYOUT`: AddressLayout =
+    val `requiredFeatures$LAYOUT`: AddressLayout =
         `$LAYOUT`.select(groupElement("requiredFeatures")) as AddressLayout
 
     /**
@@ -199,7 +199,7 @@ object WGPUDeviceDescriptor {
         return `requiredFeatures$LAYOUT`
     }
 
-    private const val `requiredFeatures$OFFSET`: Long = 24
+    const val `requiredFeatures$OFFSET`: Long = 24
 
     /**
      * Offset for field:
@@ -234,7 +234,7 @@ object WGPUDeviceDescriptor {
         )
     }
 
-    private val `requiredLimits$LAYOUT`: AddressLayout =
+    val `requiredLimits$LAYOUT`: AddressLayout =
         `$LAYOUT`.select(groupElement("requiredLimits")) as AddressLayout
 
     /**
@@ -247,7 +247,7 @@ object WGPUDeviceDescriptor {
         return `requiredLimits$LAYOUT`
     }
 
-    private const val `requiredLimits$OFFSET`: Long = 32
+    const val `requiredLimits$OFFSET`: Long = 32
 
     /**
      * Offset for field:
@@ -282,7 +282,7 @@ object WGPUDeviceDescriptor {
         )
     }
 
-    private val `defaultQueue$LAYOUT` = `$LAYOUT`.select(groupElement("defaultQueue")) as GroupLayout
+    val `defaultQueue$LAYOUT` = `$LAYOUT`.select(groupElement("defaultQueue")) as GroupLayout
 
     /**
      * Layout for field:
@@ -294,7 +294,7 @@ object WGPUDeviceDescriptor {
         return `defaultQueue$LAYOUT`
     }
 
-    private const val `defaultQueue$OFFSET`: Long = 40
+    const val `defaultQueue$OFFSET`: Long = 40
 
     /**
      * Offset for field:
@@ -329,7 +329,7 @@ object WGPUDeviceDescriptor {
         )
     }
 
-    private val `deviceLostCallback$LAYOUT`: AddressLayout =
+    val `deviceLostCallback$LAYOUT`: AddressLayout =
         `$LAYOUT`.select(groupElement("deviceLostCallback")) as AddressLayout
 
     /**
@@ -342,7 +342,7 @@ object WGPUDeviceDescriptor {
         return `deviceLostCallback$LAYOUT`
     }
 
-    private const val `deviceLostCallback$OFFSET`: Long = 56
+    const val `deviceLostCallback$OFFSET`: Long = 56
 
     /**
      * Offset for field:
@@ -377,7 +377,7 @@ object WGPUDeviceDescriptor {
         )
     }
 
-    private val `deviceLostUserdata$LAYOUT`: AddressLayout =
+    val `deviceLostUserdata$LAYOUT`: AddressLayout =
         `$LAYOUT`.select(groupElement("deviceLostUserdata")) as AddressLayout
 
     /**
@@ -390,7 +390,7 @@ object WGPUDeviceDescriptor {
         return `deviceLostUserdata$LAYOUT`
     }
 
-    private const val `deviceLostUserdata$OFFSET`: Long = 64
+    const val `deviceLostUserdata$OFFSET`: Long = 64
 
     /**
      * Offset for field:
@@ -425,7 +425,7 @@ object WGPUDeviceDescriptor {
         )
     }
 
-    private val `uncapturedErrorCallbackInfo$LAYOUT` =
+    val `uncapturedErrorCallbackInfo$LAYOUT` =
         `$LAYOUT`.select(groupElement("uncapturedErrorCallbackInfo")) as GroupLayout
 
     /**
@@ -438,7 +438,7 @@ object WGPUDeviceDescriptor {
         return `uncapturedErrorCallbackInfo$LAYOUT`
     }
 
-    private const val `uncapturedErrorCallbackInfo$OFFSET`: Long = 72
+    const val `uncapturedErrorCallbackInfo$OFFSET`: Long = 72
 
     /**
      * Offset for field:
