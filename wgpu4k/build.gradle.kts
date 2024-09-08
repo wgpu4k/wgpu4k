@@ -21,7 +21,7 @@ kotlin {
     jvm {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_11
+            jvmTarget = JvmTarget.JVM_22
         }
     }
 
@@ -35,7 +35,12 @@ kotlin {
     linuxX64()
     configureMingwX64(project)
 
-    if (isAndroidConfigured) androidTarget()
+    if (isAndroidConfigured) androidTarget {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_22
+        }
+    }
 
 
     @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
@@ -76,9 +81,6 @@ kotlin {
         }
 
         nativeMain {
-            sourceSets {
-                //languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
-            }
 
             dependencies {
                 implementation(libs.wgpu4k.native)
@@ -90,6 +92,7 @@ kotlin {
                 val jna = libs.jna.get()
                 implementation("${jna.module.group}:${jna.module.name}:${jna.versionConstraint}:@aar")
                 implementation(libs.jetbrains.kotlin.reflect)
+                implementation(projects.androidNativeHelper)
             }
         }
 
@@ -121,6 +124,9 @@ tasks.named<Test>("jvmTest") {
         )
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
     }
+}
+dependencies {
+    implementation(project(":android-native-helper"))
 }
 
 if (Platform.os == Os.MacOs) {

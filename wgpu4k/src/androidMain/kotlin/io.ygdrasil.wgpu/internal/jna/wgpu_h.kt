@@ -1024,4 +1024,14 @@ object wgpu_h {
     fun WGPUSType_ShaderModuleWGSLDescriptor(): Int {
         return WGPUSType_ShaderModuleWGSLDescriptor
     }
+
+    /**
+     * {@snippet lang=c :
+     * * enum WGPUSType.WGPUSType_SurfaceDescriptorFromWaylandSurface = 8
+     * * }
+     */
+    fun WGPUSType_SurfaceDescriptorFromAndroidNativeWindow(): Int {
+        return WGPUSType_SurfaceDescriptorFromAndroidNativeWindow
+    }
+    private const val WGPUSType_SurfaceDescriptorFromAndroidNativeWindow: Int = 9L.toInt()
 }

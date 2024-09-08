@@ -1,10 +1,17 @@
 package io.ygdrasil.wgpu
 
 import android.view.SurfaceHolder
+import com.sun.jna.Pointer
 import io.ygdrasil.wgpu.internal.JnaInterface
 import io.ygdrasil.wgpu.internal.JniInterface
+import io.ygdrasil.wgpu.internal.jna.WGPUChainedStruct
+import io.ygdrasil.wgpu.internal.jna.WGPUSurfaceDescriptor
+import io.ygdrasil.wgpu.internal.jna.WGPUSurfaceDescriptorFromAndroidNativeWindow
+import io.ygdrasil.wgpu.internal.jna.wgpu_h.WGPUSType_SurfaceDescriptorFromAndroidNativeWindow
 import io.ygdrasil.wgpu.internal.scoped
+import io.ygdrasil.wgpu.internal.toAddress
 import io.ygdrasil.wgpu.mapper.map
+import java.lang.foreign.MemorySegment
 
 class WGPU(val handler: Long) : AutoCloseable {
 
@@ -17,9 +24,22 @@ class WGPU(val handler: Long) : AutoCloseable {
             ?.let(::Adapter) ?: error("fail to create adapter")
     }
 
-    fun getSurface(surfaceHolder: SurfaceHolder, width: Int, height: Int): Surface {
-        surfaceHolder.surface
-        return JniInterface.wgpuInstanceCreateSurface(handler, surfaceHolder.surface)
+    fun getSurface(surfaceHolder: SurfaceHolder, width: Int, height: Int): Surface = scoped { arena ->
+        val nativeWindow = io.ygdrasil.nativeHelper.JniInterface.nativeWindowFromSurface(surfaceHolder.surface)
+            .let { MemorySegment(Pointer(it), Long.SIZE_BYTES.toLong()) }
+
+        val descriptor = WGPUSurfaceDescriptor.allocate(arena).also {descriptor ->
+            WGPUSurfaceDescriptor.nextInChain(descriptor,
+                WGPUSurfaceDescriptorFromAndroidNativeWindow.allocate(arena).also { nextInChain ->
+                    WGPUSurfaceDescriptorFromAndroidNativeWindow.chain(nextInChain).also { chain ->
+                        WGPUChainedStruct.sType(chain, WGPUSType_SurfaceDescriptorFromAndroidNativeWindow())
+                    }
+                    WGPUSurfaceDescriptorFromAndroidNativeWindow.window(nextInChain, nativeWindow)
+                }
+            )
+        }
+
+        JnaInterface.wgpuInstanceCreateSurface(handler, descriptor.pointer.toAddress())
             .let { Surface(it, width, height) }
     }
 
