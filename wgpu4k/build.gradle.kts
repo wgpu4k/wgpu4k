@@ -10,11 +10,6 @@ plugins {
 
 val resourcesDirectory = project.file("src").resolve("jvmMain").resolve("resources")
 
-configurations.all {
-    // Check for updates every build
-    resolutionStrategy.cacheChangingModulesFor( 0, "seconds")
-}
-
 kotlin {
 
     js {

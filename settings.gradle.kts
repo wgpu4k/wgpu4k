@@ -19,10 +19,7 @@ dependencyResolutionManagement {
 		mavenCentral()
 		// Snapshot central repository
 		maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
-		// Snapshot repository
-		maven {
-			url = uri("https://gitlab.com/api/v4/projects/25805863/packages/maven")
-		}
+
 	}
 }
 
