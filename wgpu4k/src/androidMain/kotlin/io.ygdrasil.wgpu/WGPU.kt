@@ -2,7 +2,6 @@ package io.ygdrasil.wgpu
 
 import android.view.SurfaceHolder
 import com.sun.jna.Pointer
-import io.ygdrasil.wgpu.internal.JnaInterface
 import io.ygdrasil.wgpu.internal.jna.WGPUChainedStruct
 import io.ygdrasil.wgpu.internal.jna.WGPURequestAdapterOptions
 import io.ygdrasil.wgpu.internal.jna.WGPUSurfaceDescriptor
@@ -11,6 +10,7 @@ import io.ygdrasil.wgpu.internal.jna.wgpu_h.WGPUSType_SurfaceDescriptorFromAndro
 import io.ygdrasil.wgpu.internal.scoped
 import io.ygdrasil.wgpu.internal.toAddress
 import io.ygdrasil.wgpu.mapper.map
+import io.ygdrasil.wgpu.nativeWgpu4k.NativeWgpu4k
 import java.lang.foreign.MemorySegment
 
 class WGPU(val handler: Long) : AutoCloseable {
@@ -23,13 +23,13 @@ class WGPU(val handler: Long) : AutoCloseable {
             WGPURequestAdapterOptions.powerPreference(descriptor, powerPreference?.value ?: 0)
             WGPURequestAdapterOptions.compatibleSurface(descriptor, MemorySegment(Pointer(surface.handler), Long.SIZE_BYTES.toLong()))
         }
-        JnaInterface.wgpuInstanceRequestAdapterNoCallback(handler, descriptor.pointer.toAddress())
+        NativeWgpu4k.wgpuInstanceRequestAdapterNoCallback(handler, descriptor.pointer.toAddress())
             .takeIf { it != 0L }
             ?.let(::Adapter) ?: error("fail to create adapter")
     }
 
     fun getSurface(surfaceHolder: SurfaceHolder, width: Int, height: Int): Surface = scoped { arena ->
-        val nativeWindow = io.ygdrasil.nativeHelper.JniInterface.nativeWindowFromSurface(surfaceHolder.surface)
+        val nativeWindow = io.ygdrasil.nativeHelper.Helper.nativeWindowFromSurface(surfaceHolder.surface)
             .let { MemorySegment(Pointer(it), Long.SIZE_BYTES.toLong()) }
 
         val descriptor = WGPUSurfaceDescriptor.allocate(arena).also {descriptor ->
@@ -43,7 +43,7 @@ class WGPU(val handler: Long) : AutoCloseable {
             )
         }
 
-        JnaInterface.wgpuInstanceCreateSurface(handler, descriptor.pointer.toAddress())
+        NativeWgpu4k.wgpuInstanceCreateSurface(handler, descriptor.pointer.toAddress())
             .let { Surface(it, width, height) }
     }
 
@@ -51,14 +51,14 @@ class WGPU(val handler: Long) : AutoCloseable {
 
         fun createInstance(backend: WGPUInstanceBackend? = null): WGPU = scoped { arena ->
             backend?.let { arena.map(backend) }
-                .let { JnaInterface.wgpuCreateInstance( it ?: 0L) }
+                .let { NativeWgpu4k.wgpuCreateInstance( it ?: 0L) }
                 .let { WGPU(it) }
         }
 
     }
 
     override fun close() {
-        JnaInterface.wgpuInstanceRelease(handler)
+        NativeWgpu4k.wgpuInstanceRelease(handler)
     }
 }
 

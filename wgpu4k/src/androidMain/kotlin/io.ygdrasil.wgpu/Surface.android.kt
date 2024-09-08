@@ -1,13 +1,13 @@
 package io.ygdrasil.wgpu
 
 import com.sun.jna.Pointer
-import io.ygdrasil.wgpu.internal.JnaInterface
 import io.ygdrasil.wgpu.internal.jna.WGPUSurfaceCapabilities
 import io.ygdrasil.wgpu.internal.jna.WGPUSurfaceConfiguration
 import io.ygdrasil.wgpu.internal.jna.WGPUSurfaceTexture
 import io.ygdrasil.wgpu.internal.jna.wgpu_h.WGPUPresentMode_Fifo
 import io.ygdrasil.wgpu.internal.scoped
 import io.ygdrasil.wgpu.internal.toAddress
+import io.ygdrasil.wgpu.nativeWgpu4k.NativeWgpu4k
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.SegmentAllocator
 import java.lang.foreign.ValueLayout
@@ -26,7 +26,7 @@ actual class Surface(val handler: Long, actual val width: Int, actual val height
     fun computeSurfaceCapabilities(adapter: Adapter) = scoped { arena ->
         println("computeSurfaceCapabilities")
         val surfaceCapabilities = WGPUSurfaceCapabilities.allocate(arena)
-        JnaInterface.wgpuSurfaceGetCapabilities(handler, adapter.handler, surfaceCapabilities.pointer.toAddress())
+        NativeWgpu4k.wgpuSurfaceGetCapabilities(handler, adapter.handler, surfaceCapabilities.pointer.toAddress())
 
         val formats = WGPUSurfaceCapabilities.formats(surfaceCapabilities)
         val formatCount = WGPUSurfaceCapabilities.formatCount(surfaceCapabilities)
@@ -63,21 +63,21 @@ actual class Surface(val handler: Long, actual val width: Int, actual val height
     actual fun getCurrentTexture(): Texture = scoped{arena ->
         WGPUSurfaceTexture.allocate(arena)
             .let {  surfaceTexture ->
-                JnaInterface.wgpuSurfaceGetCurrentTexture(handler, surfaceTexture.pointer.toAddress())
+                NativeWgpu4k.wgpuSurfaceGetCurrentTexture(handler, surfaceTexture.pointer.toAddress())
                     .let { Texture(WGPUSurfaceTexture.texture(surfaceTexture).pointer.toAddress()) }
             }
     }
 
     actual fun present() {
-        JnaInterface.wgpuSurfacePresent(handler)
+        NativeWgpu4k.wgpuSurfacePresent(handler)
     }
 
     actual fun configure(canvasConfiguration: CanvasConfiguration) = scoped { arena ->
-        JnaInterface.wgpuSurfaceConfigure(handler, arena.map(canvasConfiguration).pointer.toAddress())
+        NativeWgpu4k.wgpuSurfaceConfigure(handler, arena.map(canvasConfiguration).pointer.toAddress())
     }
 
     actual override fun close() {
-        JnaInterface.wgpuSurfaceRelease(handler)
+        NativeWgpu4k.wgpuSurfaceRelease(handler)
     }
 
     private fun SegmentAllocator.map(input: CanvasConfiguration): MemorySegment =

@@ -16,7 +16,7 @@ import kotlin.experimental.ExperimentalNativeApi
 
 typealias JNIEnvPointer = CPointer<JNIEnvVar>
 
-@CName("Java_io_ygdrasil_nativeHelper_JniInterface_nativeWindowFromSurface")
+@CName("Java_io_ygdrasil_nativeHelper_Helper_nativeWindowFromSurface")
 fun nativeWindowFromSurface(env: JNIEnvPointer, thiz: jclass, surface: jobject) : jlong = memScoped {
     return ANativeWindow_fromSurface(env.reinterpret(), surface)
         .toLong()

@@ -1,22 +1,22 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.JnaInterface
 import io.ygdrasil.wgpu.internal.jna.WGPUCommandBufferDescriptor
 import io.ygdrasil.wgpu.internal.scoped
 import io.ygdrasil.wgpu.internal.toAddress
 import io.ygdrasil.wgpu.mapper.map
+import io.ygdrasil.wgpu.nativeWgpu4k.NativeWgpu4k
 
 actual class CommandEncoder(internal val handler: Long) : AutoCloseable {
 
     actual fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder = scoped { arena ->
         arena.map(descriptor)
-            .let { JnaInterface.wgpuCommandEncoderBeginRenderPass(handler, it) }
+            .let { NativeWgpu4k.wgpuCommandEncoderBeginRenderPass(handler, it) }
             .let { RenderPassEncoder(it) }
     }
 
     actual fun finish(): CommandBuffer = scoped { arena ->
         WGPUCommandBufferDescriptor.allocate(arena).pointer.toAddress()
-            .let { JnaInterface.wgpuCommandEncoderFinish(handler, it) }
+            .let { NativeWgpu4k.wgpuCommandEncoderFinish(handler, it) }
             .let { CommandBuffer(it) }
     }
 
@@ -25,7 +25,7 @@ actual class CommandEncoder(internal val handler: Long) : AutoCloseable {
         destination: ImageCopyTexture,
         copySize: Size3D
     ) = scoped { arena ->
-        JnaInterface.wgpuCommandEncoderCopyTextureToTexture(
+        NativeWgpu4k.wgpuCommandEncoderCopyTextureToTexture(
             handler,
             arena.map(source),
             arena.map(destination),
@@ -35,7 +35,7 @@ actual class CommandEncoder(internal val handler: Long) : AutoCloseable {
 
     actual fun beginComputePass(descriptor: ComputePassDescriptor?): ComputePassEncoder = scoped { arena ->
         descriptor?.let { arena.map(descriptor) }
-            .let { JnaInterface.wgpuCommandEncoderBeginComputePass(handler, it ?: 0L) }
+            .let { NativeWgpu4k.wgpuCommandEncoderBeginComputePass(handler, it ?: 0L) }
             .let { ComputePassEncoder(it) }
     }
 
@@ -45,7 +45,7 @@ actual class CommandEncoder(internal val handler: Long) : AutoCloseable {
         copySize: Size3D,
     ) = scoped { arena ->
 
-        JnaInterface.wgpuCommandEncoderCopyTextureToBuffer(
+        NativeWgpu4k.wgpuCommandEncoderCopyTextureToBuffer(
             handler,
             arena.map(source),
             arena.map(destination),
@@ -59,7 +59,7 @@ actual class CommandEncoder(internal val handler: Long) : AutoCloseable {
         copySize: Size3D,
     ) = scoped { arena ->
 
-        JnaInterface.wgpuCommandEncoderCopyBufferToTexture(
+        NativeWgpu4k.wgpuCommandEncoderCopyBufferToTexture(
             handler,
             arena.map(source),
             arena.map(destination),
@@ -69,6 +69,6 @@ actual class CommandEncoder(internal val handler: Long) : AutoCloseable {
 
 
     actual override fun close() {
-        JnaInterface.wgpuCommandEncoderRelease(handler)
+        NativeWgpu4k.wgpuCommandEncoderRelease(handler)
     }
 }

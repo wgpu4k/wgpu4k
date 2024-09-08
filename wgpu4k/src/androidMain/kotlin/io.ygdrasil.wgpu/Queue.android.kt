@@ -1,12 +1,12 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.JnaInterface
 import io.ygdrasil.wgpu.internal.jna.WGPUExtent3D
 import io.ygdrasil.wgpu.internal.jna.WGPUTextureDataLayout
 import io.ygdrasil.wgpu.internal.scoped
 import io.ygdrasil.wgpu.internal.toAddress
 import io.ygdrasil.wgpu.internal.toNativeArray
 import io.ygdrasil.wgpu.mapper.map
+import io.ygdrasil.wgpu.nativeWgpu4k.NativeWgpu4k
 import java.lang.foreign.SegmentAllocator
 import java.lang.foreign.ValueLayout
 
@@ -17,14 +17,14 @@ actual class Queue(val handler: Long) {
 
             val commands = commandsBuffer.map { it.handler }.toNativeArray(arena.arena).toAddress()
 
-            JnaInterface.wgpuQueueSubmit(
+            NativeWgpu4k.wgpuQueueSubmit(
                 handler,
                 commandsBuffer.size.toLong(),
                 commands
             )
         } else {
 
-            JnaInterface.wgpuQueueSubmit(
+            NativeWgpu4k.wgpuQueueSubmit(
                 handler,
                 0L,
                 0L
@@ -39,7 +39,7 @@ actual class Queue(val handler: Long) {
         dataOffset: GPUSize64,
         size: GPUSize64
     ) = scoped { arena ->
-        JnaInterface.wgpuQueueWriteBuffer(
+        NativeWgpu4k.wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
@@ -55,7 +55,7 @@ actual class Queue(val handler: Long) {
         dataOffset: GPUSize64,
         size: GPUSize64
     ) = scoped { arena ->
-        JnaInterface.wgpuQueueWriteBuffer(
+        NativeWgpu4k.wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
@@ -75,7 +75,7 @@ actual class Queue(val handler: Long) {
 
         val bytePerPixel = destination.texture.format.getBytesPerPixel()
 
-        JnaInterface.wgpuQueueWriteTexture(
+        NativeWgpu4k.wgpuQueueWriteTexture(
             handler,
             arena.map(destination),
             image.data.toBuffer(0L, arena),

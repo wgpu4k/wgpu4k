@@ -93,6 +93,8 @@ kotlin {
                 implementation("${jna.module.group}:${jna.module.name}:${jna.versionConstraint}:@aar")
                 implementation(libs.jetbrains.kotlin.reflect)
                 implementation(projects.androidNativeHelper)
+                //val wgpu4kNative = libs.wgpu4k.native.get()
+                implementation(libs.wgpu4k.native)
             }
         }
 

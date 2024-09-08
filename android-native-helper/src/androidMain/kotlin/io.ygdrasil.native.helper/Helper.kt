@@ -1,6 +1,6 @@
 package io.ygdrasil.nativeHelper
 
-object JniInterface {
+object Helper {
     init {
         System.loadLibrary("native_helper")
     }
