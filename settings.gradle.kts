@@ -31,7 +31,6 @@ include("wgpu4k-scenes")
 include("wgpu4k-e2e")
 if (isInCI().not()) {
 	include("examples:glfw")
-	//include("examples:compose")
 	include("examples:web-js")
 	include("examples:glfw")
 	if (hostOs == "Mac OS X") include("examples:iOS")
