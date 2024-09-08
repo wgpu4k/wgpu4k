@@ -6,10 +6,14 @@ plugins {
     alias(libs.plugins.kotest)
     id("publish")
     if (isAndroidConfigured) id("android")
-    if (isAndroidConfigured) id("android-copy-jni")
 }
 
 val resourcesDirectory = project.file("src").resolve("jvmMain").resolve("resources")
+
+configurations.all {
+    // Check for updates every build
+    resolutionStrategy.cacheChangingModulesFor( 0, "seconds")
+}
 
 kotlin {
 
@@ -92,8 +96,7 @@ kotlin {
                 val jna = libs.jna.get()
                 implementation("${jna.module.group}:${jna.module.name}:${jna.versionConstraint}:@aar")
                 implementation(libs.jetbrains.kotlin.reflect)
-                implementation(projects.androidNativeHelper)
-                //val wgpu4kNative = libs.wgpu4k.native.get()
+                implementation(libs.android.native.helper)
                 implementation(libs.wgpu4k.native)
             }
         }
@@ -127,9 +130,7 @@ tasks.named<Test>("jvmTest") {
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
     }
 }
-dependencies {
-    implementation(project(":android-native-helper"))
-}
+
 
 if (Platform.os == Os.MacOs) {
     tasks.findByName("linkDebugTestMingwX64")?.apply { enabled = false }

@@ -28,8 +28,8 @@ dependencyResolutionManagement {
 
 val hostOs = System.getProperty("os.name")
 
-if (isAndroidConfigured()) include("android-native-helper")
-if (isAndroidConfigured()) include("wgpu4k-android-jni")
+//if (isAndroidConfigured()) include("android-native-helper")
+//if (isAndroidConfigured()) include("wgpu4k-android-jni")
 include("wgpu4k")
 include("wgpu4k-toolkit")
 include("wgpu4k-scenes")
