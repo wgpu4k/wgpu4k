@@ -2,7 +2,6 @@ package io.ygdrasil.wgpu
 
 import com.sun.jna.Pointer
 import io.ygdrasil.wgpu.internal.JnaInterface
-import io.ygdrasil.wgpu.internal.JniInterface
 import io.ygdrasil.wgpu.internal.scoped
 import io.ygdrasil.wgpu.mapper.map
 import java.lang.foreign.MemorySegment

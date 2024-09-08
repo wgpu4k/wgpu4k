@@ -1,12 +1,10 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.JnaInterface
-import io.ygdrasil.wgpu.internal.JniInterface
 import io.ygdrasil.wgpu.internal.jna.WGPUCommandBufferDescriptor
 import io.ygdrasil.wgpu.internal.scoped
 import io.ygdrasil.wgpu.internal.toAddress
 import io.ygdrasil.wgpu.mapper.map
-import java.lang.foreign.MemorySegment
 
 actual class CommandEncoder(internal val handler: Long) : AutoCloseable {
 

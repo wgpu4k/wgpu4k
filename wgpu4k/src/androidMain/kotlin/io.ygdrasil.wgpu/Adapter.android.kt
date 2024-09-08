@@ -1,14 +1,16 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.JnaInterface
-import io.ygdrasil.wgpu.internal.JniInterface
+import io.ygdrasil.wgpu.internal.scoped
+import io.ygdrasil.wgpu.internal.toAddress
+import io.ygdrasil.wgpu.mapper.map
 
 actual class Adapter(val handler: Long) : AutoCloseable {
 
-    actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? {
-        return JniInterface.wgpuAdapterRequestDevice(
+    actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? = scoped { arena ->
+        JnaInterface.wgpuAdapterRequestDeviceNoCallback(
             handler,
-            descriptor
+            arena.map(descriptor).pointer.toAddress()
         ).takeIf { it != 0L }
             ?.let { Device(it) }
     }

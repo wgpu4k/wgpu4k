@@ -1,7 +1,6 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.JnaInterface
-import io.ygdrasil.wgpu.internal.JniInterface
 
 actual class ComputePassEncoder(val handler: Long) : AutoCloseable {
 
