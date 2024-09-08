@@ -1,10 +1,15 @@
 package io.ygdrasil.wgpu
 
+import com.sun.jna.Pointer
 import io.ygdrasil.wgpu.internal.JnaInterface
-import io.ygdrasil.wgpu.internal.JniInterface
 import io.ygdrasil.wgpu.internal.jna.WGPUSurfaceCapabilities
+import io.ygdrasil.wgpu.internal.jna.WGPUSurfaceConfiguration
+import io.ygdrasil.wgpu.internal.jna.WGPUSurfaceTexture
+import io.ygdrasil.wgpu.internal.jna.wgpu_h.WGPUPresentMode_Fifo
 import io.ygdrasil.wgpu.internal.scoped
 import io.ygdrasil.wgpu.internal.toAddress
+import java.lang.foreign.MemorySegment
+import java.lang.foreign.SegmentAllocator
 import java.lang.foreign.ValueLayout
 
 actual class Surface(val handler: Long, actual val width: Int, actual val height: Int) : AutoCloseable {
@@ -55,28 +60,34 @@ actual class Surface(val handler: Long, actual val width: Int, actual val height
         }
     }
 
-    actual fun getCurrentTexture(): Texture {
-        return JniInterface.wgpuSurfaceGetCurrentTexture(handler)
-            .let { Texture(it) }
+    actual fun getCurrentTexture(): Texture = scoped{arena ->
+        WGPUSurfaceTexture.allocate(arena)
+            .let {  surfaceTexture ->
+                JnaInterface.wgpuSurfaceGetCurrentTexture(handler, surfaceTexture.pointer.toAddress())
+                    .let { Texture(WGPUSurfaceTexture.texture(surfaceTexture).pointer.toAddress()) }
+            }
     }
 
     actual fun present() {
         JnaInterface.wgpuSurfacePresent(handler)
     }
 
-    actual fun configure(canvasConfiguration: CanvasConfiguration) {
-        JniInterface.wgpuSurfaceConfigure(
-            handler,
-            canvasConfiguration.device.handler,
-            canvasConfiguration.usage.toFlagInt(),
-            canvasConfiguration.format.value,
-            canvasConfiguration.alphaMode.value,
-            width, height
-        )
+    actual fun configure(canvasConfiguration: CanvasConfiguration) = scoped { arena ->
+        JnaInterface.wgpuSurfaceConfigure(handler, arena.map(canvasConfiguration).pointer.toAddress())
     }
 
     actual override fun close() {
         JnaInterface.wgpuSurfaceRelease(handler)
     }
 
+    private fun SegmentAllocator.map(input: CanvasConfiguration): MemorySegment =
+        WGPUSurfaceConfiguration.allocate(this).also { output ->
+            WGPUSurfaceConfiguration.device(output, MemorySegment(Pointer(input.device.handler), Long.SIZE_BYTES.toLong()))
+            WGPUSurfaceConfiguration.usage(output, input.usage.toFlagInt())
+            WGPUSurfaceConfiguration.format(output, input.format.value)
+            WGPUSurfaceConfiguration.presentMode(output, WGPUPresentMode_Fifo())
+            WGPUSurfaceConfiguration.alphaMode(output, input.alphaMode.value)
+            WGPUSurfaceConfiguration.width(output, width)
+            WGPUSurfaceConfiguration.height(output, height)
+        }
 }

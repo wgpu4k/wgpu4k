@@ -40,3 +40,24 @@ fun wgpuAdapterRequestDevice(env: JNIEnvPointer, thiz: jclass, handler: jlong, d
     lastFindDevice = null
     return device?.toLong() ?: 0L
 }
+
+
+@CName("wgpuAdapterRequestDeviceNoCallback")
+fun wgpuAdapterRequestDeviceNoCallback(handler: Long, descriptor: Long) : jlong {
+
+    val handleRequestDevice =
+        staticCFunction<WGPURequestDeviceStatus, WGPUDevice?, CPointer<ByteVar>?, COpaquePointer?, Unit> { status, device, message, _ ->
+            if (status == WGPURequestDeviceStatus_Success) {
+                lastFindDevice = device
+            } else {
+                println(" request_device status=$status message=${message?.toKStringFromUtf8()}\n")
+            }
+
+        }
+
+    webgpu.wgpuAdapterRequestDevice(handler.toCPointer(), descriptor.toCPointer(), handleRequestDevice, null)
+
+    val device = lastFindDevice
+    lastFindDevice = null
+    return device?.toLong() ?: 0L
+}

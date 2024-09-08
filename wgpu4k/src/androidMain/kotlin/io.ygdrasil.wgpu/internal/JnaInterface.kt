@@ -20,6 +20,9 @@ internal object JnaInterface {
 
     /*** Surface ***/
     external fun wgpuSurfaceRelease(handler: Long)
+    external fun wgpuSurfaceConfigure(handler: Long, descriptor: Long)
+    external fun wgpuSurfaceGetCurrentTexture(handler: Long, surfaceTexture: Long): Long
+    external fun wgpuSurfaceGetCapabilities(handler: Long, adapter: Long, surfaceCapabilities: Long)
 
     /*** TextureView ***/
     external fun wgpuTextureViewRelease(handler: Long)
@@ -242,6 +245,6 @@ internal object JnaInterface {
 
     /*** Adapter ***/
     external fun wgpuAdapterRequestDevice(handler: Long, descriptor: Long): Long
+    external fun wgpuAdapterRequestDeviceNoCallback(handler: Long, descriptor: Long): Long
     external fun wgpuAdapterRelease(handler: Long)
-    external fun wgpuSurfaceGetCapabilities(handler: Long, adapter: Long, surfaceCapabilities: Long)
 }
