@@ -7,11 +7,9 @@ repositories {
 	gradlePluginPortal()
 	google()
 	mavenCentral()
-	maven( url = "https://jitpack.io" )
 }
 
 dependencies {
-	implementation(libs.download)
 	implementation(libs.ktor.server.core.jvm)
 	implementation(libs.ktor.server.netty.jvm)
 	implementation(libs.playwright)
