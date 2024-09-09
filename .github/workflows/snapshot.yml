@@ -28,4 +28,5 @@ jobs:
           PGP_PRIVATE: ${{ secrets.PGP_PRIVATE }}
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          CI: "true"
 

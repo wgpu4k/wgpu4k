@@ -12,7 +12,9 @@ expect class Buffer : AutoCloseable {
 
     fun mapFrom(buffer: ByteArray, offset: Int = 0)
 
-    fun mapInto(buffer: ByteArray, offset: Int)
+    fun mapInto(buffer: ByteArray, offset: Int = 0)
+
+    fun mapInto(buffer: IntArray, offset: Int = 0)
 
     suspend fun map(mode: Set<MapMode>, offset: GPUSize64 = 0, size: GPUSize64 = this.size)
 

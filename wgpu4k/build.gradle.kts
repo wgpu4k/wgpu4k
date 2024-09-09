@@ -1,13 +1,11 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
     alias(libs.plugins.kotest)
     id("publish")
     if (isAndroidConfigured) id("android")
-    if (isAndroidConfigured) id("android-copy-jni")
 }
 
 val resourcesDirectory = project.file("src").resolve("jvmMain").resolve("resources")
@@ -22,7 +20,7 @@ kotlin {
     jvm {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_11
+            jvmTarget = JvmTarget.JVM_22
         }
     }
 
@@ -34,12 +32,17 @@ kotlin {
     macosX64()
     linuxArm64()
     linuxX64()
-    configureMingwX64()
+    configureMingwX64(project)
 
-    if (isAndroidConfigured) androidTarget()
+    if (isAndroidConfigured) androidTarget {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_22
+        }
+    }
 
 
-    @OptIn(ExperimentalWasmDsl::class)
+    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
     wasmJs {
         browser()
         nodejs()
@@ -52,10 +55,6 @@ kotlin {
         }
 
         jvmMain {
-            sourceSets {
-                languageSettings.optIn("kotlin.js.ExperimentalJsExport")
-            }
-
             dependencies {
                 api(libs.wgpu4k.panama)
             }
@@ -76,14 +75,11 @@ kotlin {
         jvmTest {
             dependencies {
                 implementation(libs.kotest.runner.junit5)
-                implementation("org.jetbrains.kotlin:kotlin-reflect")
+                implementation(libs.kotlin.reflect)
             }
         }
 
         nativeMain {
-            sourceSets {
-                //languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
-            }
 
             dependencies {
                 implementation(libs.wgpu4k.native)
@@ -94,7 +90,9 @@ kotlin {
             dependencies {
                 val jna = libs.jna.get()
                 implementation("${jna.module.group}:${jna.module.name}:${jna.versionConstraint}:@aar")
-                implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.0")
+                implementation(libs.jetbrains.kotlin.reflect)
+                implementation(libs.android.native.helper)
+                implementation(libs.wgpu4k.native)
             }
         }
 
@@ -127,6 +125,7 @@ tasks.named<Test>("jvmTest") {
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
     }
 }
+
 
 if (Platform.os == Os.MacOs) {
     tasks.findByName("linkDebugTestMingwX64")?.apply { enabled = false }

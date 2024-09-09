@@ -5,9 +5,12 @@ package io.ygdrasil.wgpu
 import io.ygdrasil.wgpu.internal.toPointerArray
 import io.ygdrasil.wgpu.mapper.map
 import kotlinx.cinterop.*
-import webgpu.*
-
-private val supportedFormatOncopyExternalImageToTexture = listOf(TextureFormat.rgba8unorm, TextureFormat.rgba8unormsrgb)
+import webgpu.WGPUExtent3D
+import webgpu.WGPUQueue
+import webgpu.WGPUTextureDataLayout
+import webgpu.wgpuQueueSubmit
+import webgpu.wgpuQueueWriteBuffer
+import webgpu.wgpuQueueWriteTexture
 
 actual class Queue(internal val handler: WGPUQueue) {
 
@@ -65,11 +68,6 @@ actual class Queue(internal val handler: WGPUQueue) {
         destination: ImageCopyTextureTagged,
         copySize: GPUIntegerCoordinates
     ) = memScoped {
-        check(destination.texture.format in supportedFormatOncopyExternalImageToTexture) {
-            "(${
-                supportedFormatOncopyExternalImageToTexture.map { it.actualName }.joinToString(", ")
-            })are the only supported texture format supported, found ${destination.texture.format}"
-        }
 
         val image = (source.source as? ImageBitmapHolder)
             ?: error("ImageBitmapHolder required as source")
@@ -118,7 +116,7 @@ actual class ImageBitmapHolder(
     actual val height: Int
 ) : DrawableHolder, AutoCloseable {
 
-    override fun close() {
+    actual override fun close() {
         // Nothing to do
     }
 }

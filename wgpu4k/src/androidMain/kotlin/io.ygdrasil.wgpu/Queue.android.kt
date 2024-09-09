@@ -1,17 +1,14 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.JnaInterface
 import io.ygdrasil.wgpu.internal.jna.WGPUExtent3D
 import io.ygdrasil.wgpu.internal.jna.WGPUTextureDataLayout
 import io.ygdrasil.wgpu.internal.scoped
 import io.ygdrasil.wgpu.internal.toAddress
 import io.ygdrasil.wgpu.internal.toNativeArray
 import io.ygdrasil.wgpu.mapper.map
+import io.ygdrasil.wgpu.nativeWgpu4k.NativeWgpu4k
 import java.lang.foreign.SegmentAllocator
 import java.lang.foreign.ValueLayout
-
-private val supportedFormatOncopyExternalImageToTexture =
-    listOf(TextureFormat.rgba8unorm, TextureFormat.rgba8unormsrgb)
 
 actual class Queue(val handler: Long) {
 
@@ -20,14 +17,14 @@ actual class Queue(val handler: Long) {
 
             val commands = commandsBuffer.map { it.handler }.toNativeArray(arena.arena).toAddress()
 
-            JnaInterface.wgpuQueueSubmit(
+            NativeWgpu4k.wgpuQueueSubmit(
                 handler,
                 commandsBuffer.size.toLong(),
                 commands
             )
         } else {
 
-            JnaInterface.wgpuQueueSubmit(
+            NativeWgpu4k.wgpuQueueSubmit(
                 handler,
                 0L,
                 0L
@@ -42,7 +39,7 @@ actual class Queue(val handler: Long) {
         dataOffset: GPUSize64,
         size: GPUSize64
     ) = scoped { arena ->
-        JnaInterface.wgpuQueueWriteBuffer(
+        NativeWgpu4k.wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
@@ -58,7 +55,7 @@ actual class Queue(val handler: Long) {
         dataOffset: GPUSize64,
         size: GPUSize64
     ) = scoped { arena ->
-        JnaInterface.wgpuQueueWriteBuffer(
+        NativeWgpu4k.wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
@@ -72,18 +69,13 @@ actual class Queue(val handler: Long) {
         destination: ImageCopyTextureTagged,
         copySize: GPUIntegerCoordinates
     ) = scoped { arena ->
-        check(destination.texture.format in supportedFormatOncopyExternalImageToTexture) {
-            "(${
-                supportedFormatOncopyExternalImageToTexture.map { it.actualName }.joinToString(", ")
-            })are the only supported texture format supported, found ${destination.texture.format}"
-        }
 
         val image = (source.source as? ImageBitmapHolder)
             ?: error("ImageBitmapHolder required as source")
 
         val bytePerPixel = destination.texture.format.getBytesPerPixel()
 
-        JnaInterface.wgpuQueueWriteTexture(
+        NativeWgpu4k.wgpuQueueWriteTexture(
             handler,
             arena.map(destination),
             image.data.toBuffer(0L, arena),
@@ -125,4 +117,9 @@ actual class ImageBitmapHolder(
     val data: ByteArray,
     actual val width: Int,
     actual val height: Int
-) : DrawableHolder
+) : DrawableHolder, AutoCloseable {
+
+    actual override fun close() {
+        // Nothing to do
+    }
+}

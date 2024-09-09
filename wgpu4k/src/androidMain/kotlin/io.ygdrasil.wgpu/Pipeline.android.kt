@@ -1,19 +1,18 @@
 package io.ygdrasil.wgpu
 
 import com.sun.jna.Pointer
-import io.ygdrasil.wgpu.internal.JnaInterface
-import io.ygdrasil.wgpu.internal.JniInterface
+import io.ygdrasil.wgpu.nativeWgpu4k.NativeWgpu4k
 import java.lang.foreign.MemorySegment
 
 actual class RenderPipeline(val handler: Long) : AutoCloseable {
 
     actual fun getBindGroupLayout(index: Int): BindGroupLayout {
-        return JnaInterface.wgpuRenderPipelineGetBindGroupLayout(handler, index)
+        return NativeWgpu4k.wgpuRenderPipelineGetBindGroupLayout(handler, index)
             .let { BindGroupLayout(it) }
     }
 
     actual override fun close() {
-        JnaInterface.wgpuRenderPipelineRelease(handler)
+        NativeWgpu4k.wgpuRenderPipelineRelease(handler)
     }
 
 }

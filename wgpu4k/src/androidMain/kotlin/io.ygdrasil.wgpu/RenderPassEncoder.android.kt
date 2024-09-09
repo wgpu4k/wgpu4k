@@ -1,19 +1,19 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.JnaInterface
 import io.ygdrasil.wgpu.internal.scoped
 import io.ygdrasil.wgpu.internal.toAddress
 import io.ygdrasil.wgpu.internal.toNativeArray
+import io.ygdrasil.wgpu.nativeWgpu4k.NativeWgpu4k
 
 actual class RenderPassEncoder(val handler: Long) {
 
     actual fun end() {
-        JnaInterface.wgpuRenderPassEncoderEnd(handler)
+        NativeWgpu4k.wgpuRenderPassEncoderEnd(handler)
         close()
     }
 
     actual fun setPipeline(renderPipeline: RenderPipeline) {
-        JnaInterface.wgpuRenderPassEncoderSetPipeline(handler, renderPipeline.handler)
+        NativeWgpu4k.wgpuRenderPassEncoderSetPipeline(handler, renderPipeline.handler)
     }
 
     actual fun draw(
@@ -22,11 +22,11 @@ actual class RenderPassEncoder(val handler: Long) {
         firstVertex: GPUSize32,
         firstInstance: GPUSize32
     ) {
-        JnaInterface.wgpuRenderPassEncoderDraw(handler, vertexCount, instanceCount, firstVertex, firstInstance)
+        NativeWgpu4k.wgpuRenderPassEncoderDraw(handler, vertexCount, instanceCount, firstVertex, firstInstance)
     }
 
     actual fun setBindGroup(index: Int, bindGroup: BindGroup) {
-        JnaInterface.wgpuRenderPassEncoderSetBindGroup(
+        NativeWgpu4k.wgpuRenderPassEncoderSetBindGroup(
             handler,
             index,
             bindGroup.handler,
@@ -36,7 +36,7 @@ actual class RenderPassEncoder(val handler: Long) {
     }
 
     actual fun setVertexBuffer(slot: Int, buffer: Buffer) {
-        JnaInterface.wgpuRenderPassEncoderSetVertexBuffer(
+        NativeWgpu4k.wgpuRenderPassEncoderSetVertexBuffer(
             handler,
             slot,
             buffer.handler,
@@ -46,11 +46,11 @@ actual class RenderPassEncoder(val handler: Long) {
     }
 
     actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
-        JnaInterface.wgpuRenderPassEncoderSetIndexBuffer(handler, buffer.handler, indexFormat.value, offset, size)
+        NativeWgpu4k.wgpuRenderPassEncoderSetIndexBuffer(handler, buffer.handler, indexFormat.value, offset, size)
     }
 
     actual fun executeBundles(bundles: List<RenderBundle>) = scoped { arena ->
-        JnaInterface.wgpuRenderPassEncoderExecuteBundles(
+        NativeWgpu4k.wgpuRenderPassEncoderExecuteBundles(
             handler,
             bundles.size.toLong(),
             bundles.map { it.handler }.toNativeArray(arena.arena).toAddress()
@@ -58,7 +58,7 @@ actual class RenderPassEncoder(val handler: Long) {
     }
 
     private fun close() {
-        JnaInterface.wgpuRenderPassEncoderRelease(handler)
+        NativeWgpu4k.wgpuRenderPassEncoderRelease(handler)
     }
 
 }

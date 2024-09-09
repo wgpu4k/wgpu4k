@@ -10,7 +10,7 @@ suspend fun androidContextRenderer(surfaceHolder: SurfaceHolder, width: Int, hei
     surface.computeSurfaceCapabilities(adapter)
 
     val renderingContext = when (deferredRendering) {
-        true -> TextureRenderingContext(width, height, TextureFormat.rgba8unormsrgb, device)
+        true -> TextureRenderingContext(width, height, TextureFormat.rgba8unorm, device)
         false -> SurfaceRenderingContext(surface)
     }
 

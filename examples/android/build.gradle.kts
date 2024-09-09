@@ -68,7 +68,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.examples.common)
+    implementation(projects.wgpu4kScenes)
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.compose.ui:ui:1.2.0")
     implementation("androidx.compose.material:material:1.2.0")
@@ -82,7 +82,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling:1.2.0")
 }
 
-fun getCommonProject() = projects.examples.common.identityPath.path
+fun getCommonProject() = projects.wgpu4kScenes.identityPath.path
     ?.let(::project) ?: error("Could not find project path")
 
 val File.isNotEmpty: Boolean

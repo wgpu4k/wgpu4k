@@ -1,6 +1,13 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.js.*
+import io.ygdrasil.wgpu.internal.js.GPUExtent3DDict
+import io.ygdrasil.wgpu.internal.js.GPUImageCopyTexture
+import io.ygdrasil.wgpu.internal.js.GPUImageDataLayout
+import io.ygdrasil.wgpu.internal.js.GPUQueue
+import io.ygdrasil.wgpu.internal.js.createJsObject
+import io.ygdrasil.wgpu.internal.js.mapJsArray
+import io.ygdrasil.wgpu.internal.js.toInt8Array
+import io.ygdrasil.wgpu.internal.js.toJsNumber
 import org.khronos.webgl.Float32Array
 import org.khronos.webgl.Int32Array
 
@@ -47,12 +54,9 @@ actual class Queue(internal val handler: GPUQueue) {
         destination: ImageCopyTextureTagged,
         copySize: GPUIntegerCoordinates,
     ) {
-        if (destination.texture.format !in listOf(TextureFormat.rgba8unorm, TextureFormat.rgba8unormsrgb)) {
-            error("rgba8unorm asnd rgba8unormsrgb are the only supported texture format supported")
-        }
 
         val image = (source.source as? ImageBitmapHolder)
-        if (image == null) error("ImageBitmapHolder required as source")
+            ?: error("ImageBitmapHolder required as source")
 
         val bytePerPixel = destination.texture.format.getBytesPerPixel()
 
@@ -83,4 +87,9 @@ actual class ImageBitmapHolder(
     actual val width: Int,
     actual val height: Int,
     val data: ByteArray,
-) : DrawableHolder
+) : DrawableHolder, AutoCloseable {
+
+    actual override fun close() {
+        // Nothing to do
+    }
+}

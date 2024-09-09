@@ -41,7 +41,7 @@ suspend fun glfwContextRenderer(width: Int = 1, height: Int = 1, title: String =
         ?: error("fail to get device")
 
     val renderingContext = when (deferredRendering) {
-        true -> TextureRenderingContext(256, 256, TextureFormat.rgba8unormsrgb, device)
+        true -> TextureRenderingContext(256, 256, TextureFormat.rgba8unorm, device)
         false -> {
             surface.computeSurfaceCapabilities(adapter)
             SurfaceRenderingContext(surface)

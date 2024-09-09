@@ -45,6 +45,15 @@ actual class Buffer(internal val handler: MemorySegment) : AutoCloseable {
             )
     }
 
+    actual fun mapInto(buffer: IntArray, offset: Int) {
+        MemorySegment.ofArray(buffer)
+            .copyFrom(
+                wgpu_h.wgpuBufferGetMappedRange(handler, offset.toLong(), (buffer.size * Int.SIZE_BYTES).toLong())
+                    // create a slice, as the buffer size is wrong
+                    .asSlice(0, buffer.size.toLong() * Int.SIZE_BYTES)
+            )
+    }
+
     actual override fun close() {
         wgpu_h.wgpuBufferRelease(handler)
     }

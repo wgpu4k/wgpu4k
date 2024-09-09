@@ -8,6 +8,7 @@ pluginManagement {
 		mavenCentral()
 		mavenLocal()
 		maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+		maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
 	}
 }
 
@@ -16,24 +17,28 @@ dependencyResolutionManagement {
 		google()
 		mavenLocal()
 		mavenCentral()
+		// Snapshot central repository
+		maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
+
 	}
 }
 
 val hostOs = System.getProperty("os.name")
 
-if (isAndroidConfigured()) include("wgpu4k-android-jni")
 include("wgpu4k")
 include("wgpu4k-toolkit")
-include("examples:common")
+include("wgpu4k-scenes")
 include("wgpu4k-e2e")
-include("examples:compose")
-include("examples:web-js")
-include("examples:glfw")
-include("examples:headless")
-if (hostOs == "Mac OS X") include("examples:iOS")
-if (isAndroidConfigured()) include("examples:android")
-// right now only running on OSX
-if ((hostOs.startsWith("Windows") && getCustomLLVMPath() != null) || !hostOs.startsWith("Windows")) include("examples:native")
+if (isInCI().not()) {
+	include("examples:glfw")
+	include("examples:web-js")
+	include("examples:glfw")
+	if (hostOs == "Mac OS X") include("examples:iOS")
+	if (isAndroidConfigured()) include("examples:android")
+	// right now only running on OSX and may be linux x64
+	include("examples:native")
+}
 
-fun getCustomLLVMPath(): String? = System.getenv("LIBCLANG_PATH")?.takeIf { it.isNotEmpty() }
+
 fun isAndroidConfigured(): Boolean = System.getenv("ANDROID_HOME") != null
+fun isInCI(): Boolean = System.getenv("CI") != null

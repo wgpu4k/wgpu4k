@@ -3,6 +3,10 @@ name: Tests
 on:
   push:
     branches: [ main, 'release/**', 'feature/**'  ]
+    paths-ignore:
+      - '*.md'
+      - '*.yml'
+      - '.github/workflows/**'
   pull_request:
     branches: [ main, 'release/**', 'feature/**'  ]
 
@@ -17,6 +21,8 @@ jobs:
       matrix:
         os: [ macos-14, ubuntu-latest, windows-latest ]
     runs-on: ${{ matrix.os }}
+    env:
+      CI: "true"
     steps:
       - name: install dependencies
         if: matrix.os == 'ubuntu-latest'
@@ -57,17 +63,14 @@ jobs:
       - name: Run jvm e2e tests
         if: matrix.os == 'ubuntu-latest'
         run: xvfb-run ./gradlew :wgpu4k-e2e:e2eJvmTest --stacktrace --info
-        continue-on-error: true
 
       - name: Run jvm e2e tests
         if: matrix.os == 'windows-latest'
         run: ./gradlew :wgpu4k-e2e:e2eJvmTest --stacktrace --info
-        continue-on-error: true
 
       - name: Run all e2e tests
         if: matrix.os == 'macos-14'
         run: ./gradlew :wgpu4k-e2e:e2eTest --stacktrace --info
-        continue-on-error: true
 
       - name: Bundle chromium screenshot
         uses: vimtor/action-zip@v1.2

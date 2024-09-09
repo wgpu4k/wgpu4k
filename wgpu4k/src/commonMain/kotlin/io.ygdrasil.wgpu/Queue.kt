@@ -29,9 +29,11 @@ expect class Queue {
 }
 
 expect sealed interface DrawableHolder
-expect class ImageBitmapHolder : DrawableHolder {
+expect class ImageBitmapHolder : DrawableHolder, AutoCloseable {
     val width: Int
     val height: Int
+
+    override fun close()
 }
 
 data class ImageCopyExternalImage(

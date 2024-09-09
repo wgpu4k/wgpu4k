@@ -1,33 +1,36 @@
 [versions]
-kotest = "5.9.1"
+kotest = "6.0.0-SNAPSHOT"
 jna = "5.14.0"
-kotlin = "2.0.0"
+kotlin = "2.0.20"
+kotlinx-serialization-json = "1.7.1"
 ktor = "2.3.12"
 playwright = "1.46.0"
-wgpu = "v0.0.0.2"
 compose = "1.6.11"
-coroutines = "1.8.1"
+coroutines = "1.9.0-RC.2"
 korge = "6.0.0"
 download = "5.6.0"
 agp = "8.5.1"
 jreleaser = "1.13.1"
 rococoa = "0.0.1"
 wgpu4k-panama = "0.0.3"
-wgpu4k-native = "0.0.3"
+wgpu4k-native = "0.0.5"
+android-native-helper = "0.0.1"
 glfw-native = "0.0.1"
 
 [libraries]
+jetbrains-kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotest-core = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
 kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 jna = { module = "net.java.dev.jna:jna", version.ref = "jna" }
 jnaPlatform = { module = "net.java.dev.jna:jna-platform", version.ref = "jna" }
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
-download = { module = "de.undercouch.download:de.undercouch.download.gradle.plugin", version.ref = "download" }
 kotlin-multiplatform = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 android-library = { module = "com.android.library:com.android.library.gradle.plugin", version.ref = "agp" }
 jreleaser-plugin = { module = "org.jreleaser:org.jreleaser.gradle.plugin", version.ref = "jreleaser" }
 korlibs-image = { module = "com.soywiz:korlibs-image", version.ref = "korge" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 ktor-server-netty-jvm = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
 ktor-server-core-jvm = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 playwright = { module = "com.microsoft.playwright:playwright", version.ref = "playwright" }
@@ -35,10 +38,10 @@ rococoa = { module = "io.ygdrasil:rococoa", version.ref = "rococoa" }
 wgpu4k-panama = { module = "io.ygdrasil:wgpu4k-panama", version.ref = "wgpu4k-panama" }
 wgpu4k-native = { module = "io.ygdrasil:wgpu4k-native", version.ref = "wgpu4k-native" }
 glfw-native = { module = "io.ygdrasil:glfw-native", version.ref = "glfw-native" }
+android-native-helper = { module = "io.ygdrasil:android-native-helper", version.ref = "android-native-helper" }
 
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 kotest = { id = "io.kotest.multiplatform", version.ref = "kotest" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 

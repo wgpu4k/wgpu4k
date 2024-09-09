@@ -1,4 +1,7 @@
-import com.microsoft.playwright.*
+import com.microsoft.playwright.BrowserContext
+import com.microsoft.playwright.BrowserType
+import com.microsoft.playwright.Page
+import com.microsoft.playwright.Playwright
 import io.ktor.server.engine.*
 import io.ktor.server.http.content.*
 import io.ktor.server.netty.*
@@ -24,7 +27,7 @@ fun endToEndWebserver(basePath: File): NettyApplicationEngine {
         .resolve("dist")
         .resolve("js")
         .resolve("productionExecutable")
-    println("serve page at ${pagePath.absolutePath}")
+    println("serve page from ${pagePath.absolutePath}")
     return embeddedServer(Netty, port = 9000) {
 
         routing {
@@ -58,7 +61,7 @@ fun browser(projectDir: File, logger: Logger) {
                     Page.ScreenshotOptions()
                         .setPath(
                             projectDir
-                                .resolve("js-${browserType.name().toString()}")
+                                .resolve("js-${browserType.name()}")
                                 .also { it.mkdirs() }
                                 .resolve("gpu.png")
                                 .toPath()
@@ -81,7 +84,7 @@ fun browser(projectDir: File, logger: Logger) {
                                 Page.ScreenshotOptions()
                                     .setPath(
                                         projectDir
-                                            .resolve("js-${browserType.name().toString()}")
+                                            .resolve("js-${browserType.name()}")
                                             .also { it.mkdirs() }
                                             .resolve("$sceneName-$frame.png")
                                             .toPath()
