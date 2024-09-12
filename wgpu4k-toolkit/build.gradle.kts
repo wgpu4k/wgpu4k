@@ -35,7 +35,9 @@ kotlin {
         nodejs()
     }
     jvm()
-    if (isAndroidConfigured) androidTarget()
+    if (isAndroidConfigured) androidTarget {
+        publishLibraryVariants("release", "debug")
+    }
 
     @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
     wasmJs {
