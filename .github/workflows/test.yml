@@ -48,17 +48,12 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
           restore-keys: ${{ runner.os }}-gradle
-      - name: Build, test & Analyse
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          echo "clang path :"
-          echo $LIBCLANG_PATH
-          gradle wrapper
-          ./gradlew build check --stacktrace
-      - name: package
+      - name: assemble
         run: ./gradlew assemble --stacktrace
+      - name: build
+        run: ./gradlew build --stacktrace
+      - name: check
+        run: ./gradlew check --stacktrace
 
       - name: Run jvm e2e tests
         if: matrix.os == 'ubuntu-latest'
