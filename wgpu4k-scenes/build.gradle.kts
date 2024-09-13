@@ -32,7 +32,9 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
 
-    if (isAndroidConfigured) androidTarget()
+    if (isAndroidConfigured) androidTarget{
+        publishLibraryVariants("release", "debug")
+    }
 
     sourceSets {
 

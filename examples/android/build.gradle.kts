@@ -31,7 +31,6 @@ android {
     }
     sourceSets {
         getByName("main") {
-            jniLibs.srcDirs("libs")
             assets.srcDirs(commonResourcesFile.absolutePath)
         }
     }

@@ -39,6 +39,8 @@ kotlin {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_22
         }
+
+        publishLibraryVariants("release", "debug")
     }
 
 
