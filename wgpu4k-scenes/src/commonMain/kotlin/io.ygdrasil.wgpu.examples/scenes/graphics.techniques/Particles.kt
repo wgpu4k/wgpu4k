@@ -166,7 +166,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
             TextureDescriptor(
                 size = Size3D(renderingContext.width, renderingContext.height),
                 format = TextureFormat.depth24plus,
-                usage = setOf(TextureUsage.renderattachment),
+                usage = setOf(TextureUsage.renderAttachment),
             )
         )
 
@@ -257,10 +257,10 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                 format = TextureFormat.rgba8unorm,
                 usage =
                 setOf(
-                    TextureUsage.texturebinding,
-                    TextureUsage.storagebinding,
-                    TextureUsage.copydst,
-                    TextureUsage.renderattachment
+                    TextureUsage.textureBinding,
+                    TextureUsage.storageBinding,
+                    TextureUsage.copyDst,
+                    TextureUsage.renderAttachment
                 ),
             )
         )

@@ -114,7 +114,7 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
             TextureDescriptor(
                 size = Size3D(renderingContext.width, renderingContext.height),
                 format = TextureFormat.depth24plus,
-                usage = setOf(TextureUsage.renderattachment),
+                usage = setOf(TextureUsage.renderAttachment),
             )
         ).bind()
 
@@ -134,7 +134,7 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
             TextureDescriptor(
                 size = Size3D(imageBitmapWidth, imageBitmapHeight),
                 format = renderingContext.textureFormat,
-                usage = setOf(TextureUsage.texturebinding, TextureUsage.copydst, TextureUsage.renderattachment),
+                usage = setOf(TextureUsage.textureBinding, TextureUsage.copyDst, TextureUsage.renderAttachment),
             )
         )
 

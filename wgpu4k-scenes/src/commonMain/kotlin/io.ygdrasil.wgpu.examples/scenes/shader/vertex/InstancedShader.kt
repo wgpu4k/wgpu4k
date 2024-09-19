@@ -1,5 +1,6 @@
 package io.ygdrasil.wgpu.examples.scenes.shader.vertex
 
+// language=wgsl
 val instancedShader = """
 	struct Uniforms {
 	  modelViewProjectionMatrix : array<mat4x4f, 16>,

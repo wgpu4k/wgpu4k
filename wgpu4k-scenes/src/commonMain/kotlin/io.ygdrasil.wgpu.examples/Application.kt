@@ -85,7 +85,7 @@ private fun WGPUContext.configureRenderingContext() {
         CanvasConfiguration(
             device = device,
             format = format,
-            usage = setOf(TextureUsage.renderattachment, TextureUsage.copysrc),
+            usage = setOf(TextureUsage.renderAttachment, TextureUsage.copySrc),
             alphaMode = alphaMode
         )
     )

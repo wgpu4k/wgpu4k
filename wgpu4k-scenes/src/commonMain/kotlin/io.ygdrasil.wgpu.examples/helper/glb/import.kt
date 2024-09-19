@@ -41,7 +41,7 @@ suspend fun uploadGLBModel(
             TextureDescriptor(
                 size = Size3D(width = bitmap.width, height = bitmap.height, depthOrArrayLayers = 1),
                 format = textureFormat,
-                usage = setOf(TextureUsage.texturebinding, TextureUsage.copydst, TextureUsage.renderattachment)
+                usage = setOf(TextureUsage.textureBinding, TextureUsage.copyDst, TextureUsage.renderAttachment)
             )
         )
 

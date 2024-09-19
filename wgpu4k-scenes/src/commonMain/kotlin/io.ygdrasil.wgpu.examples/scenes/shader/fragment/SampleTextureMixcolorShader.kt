@@ -1,5 +1,6 @@
 package io.ygdrasil.wgpu.examples.scenes.shader.fragment
 
+// language=wgsl
 const val sampleTextureMixColorShader = """
 @group(0) @binding(1) var mySampler: sampler;
 @group(0) @binding(2) var myTexture: texture_2d<f32>;

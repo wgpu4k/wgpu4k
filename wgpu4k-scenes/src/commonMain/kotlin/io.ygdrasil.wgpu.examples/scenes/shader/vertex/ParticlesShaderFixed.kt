@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu.examples.scenes.shader.vertex
 
-
+// language=wgsl
 val particlesShaderFixed = """
 ////////////////////////////////////////////////////////////////////////////////
 // Utilities

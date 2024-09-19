@@ -126,7 +126,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 			TextureDescriptor(
 				size = Size3D(renderingContext.width, renderingContext.height),
 				format = TextureFormat.depth24plus,
-				usage = setOf(TextureUsage.renderattachment),
+				usage = setOf(TextureUsage.renderAttachment),
 			)
 		).bind()
 
@@ -145,7 +145,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 				// Assume each image has the same size.
 				size = Size3D(imageBitmaps[0].width, imageBitmaps[0].height, depthLayer),
 				format = renderingContext.textureFormat,
-				usage = setOf(TextureUsage.texturebinding, TextureUsage.copydst, TextureUsage.renderattachment),
+				usage = setOf(TextureUsage.textureBinding, TextureUsage.copyDst, TextureUsage.renderAttachment),
 			)
 		).bind()
 

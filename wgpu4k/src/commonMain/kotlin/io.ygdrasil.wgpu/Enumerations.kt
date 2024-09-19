@@ -832,11 +832,11 @@ enum class TextureUsage(
     override val value: Int,
 ) : EnumerationWithValue {
     none(0),
-    copysrc(1),
-    copydst(2),
-    texturebinding(4),
-    storagebinding(8),
-    renderattachment(16);
+    copySrc(1),
+    copyDst(2),
+    textureBinding(4),
+    storageBinding(8),
+    renderAttachment(16);
 
     companion object {
         fun of(value: Int): TextureUsage? = entries.find {

@@ -1,5 +1,6 @@
 package io.ygdrasil.wgpu.examples.scenes.shader.vertex
 
+// language=wgsl
 const val triangleVertexShader = """
 @vertex
 fn main(

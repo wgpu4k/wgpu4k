@@ -1,5 +1,6 @@
 package io.ygdrasil.wgpu.examples.scenes.shader.fragment
 
+// language=wgsl
 const val vertexPositionColorShader = """
 @fragment
 fn main(

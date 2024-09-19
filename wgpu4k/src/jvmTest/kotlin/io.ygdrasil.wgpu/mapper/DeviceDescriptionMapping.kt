@@ -2,7 +2,11 @@ package io.ygdrasil.wgpu.mapper
 
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
-import io.ygdrasil.wgpu.*
+import io.ygdrasil.wgpu.Size3D
+import io.ygdrasil.wgpu.TextureDescriptor
+import io.ygdrasil.wgpu.TextureDimension
+import io.ygdrasil.wgpu.TextureFormat
+import io.ygdrasil.wgpu.TextureUsage
 import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUExtent3D
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUTextureDescriptor
@@ -21,7 +25,7 @@ class DeviceDescriptionMapping : FreeSpec({
                 label = "TextureDescriptor",
                 size = Size3D(100, 150, 5),
                 format = TextureFormat.depth24plus,
-                usage = setOf(TextureUsage.renderattachment, TextureUsage.storagebinding),
+                usage = setOf(TextureUsage.renderAttachment, TextureUsage.storageBinding),
                 viewFormats = listOf(TextureFormat.astc4x4unorm, TextureFormat.astc10x10unorm)
             )
 
@@ -31,7 +35,7 @@ class DeviceDescriptionMapping : FreeSpec({
 
             WGPUTextureDescriptor.label(actual).getString(0) shouldBe "TextureDescriptor"
             WGPUTextureDescriptor.format(actual) shouldBe TextureFormat.depth24plus.value
-            WGPUTextureDescriptor.usage(actual) shouldBe (TextureUsage.renderattachment or TextureUsage.storagebinding)
+            WGPUTextureDescriptor.usage(actual) shouldBe (TextureUsage.renderAttachment or TextureUsage.storageBinding)
             WGPUTextureDescriptor.sampleCount(actual) shouldBe 1
             WGPUTextureDescriptor.mipLevelCount(actual) shouldBe 1
             WGPUTextureDescriptor.dimension(actual) shouldBe TextureDimension._2d.value

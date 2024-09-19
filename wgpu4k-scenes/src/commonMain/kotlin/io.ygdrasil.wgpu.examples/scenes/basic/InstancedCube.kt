@@ -117,7 +117,7 @@ class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			TextureDescriptor(
 				size = Size3D(renderingContext.width, renderingContext.height),
 				format = TextureFormat.depth24plus,
-				usage = setOf(TextureUsage.renderattachment),
+				usage = setOf(TextureUsage.renderAttachment),
 			)
 		).bind()
 

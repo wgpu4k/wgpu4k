@@ -49,7 +49,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
             TextureDescriptor(
                 size = Size3D(width = renderingContext.width, height = renderingContext.height, depthOrArrayLayers = 1),
                 format = TextureFormat.depth24plusstencil8,
-                usage = setOf(TextureUsage.renderattachment)
+                usage = setOf(TextureUsage.renderAttachment)
             )
         ).bind()
 

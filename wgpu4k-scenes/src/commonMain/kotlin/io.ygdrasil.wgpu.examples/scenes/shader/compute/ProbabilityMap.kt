@@ -1,5 +1,6 @@
 package io.ygdrasil.wgpu.examples.scenes.shader.compute
 
+// language=wgsl
 const val probabilityMap = """
 struct UBO {
   width : u32,
