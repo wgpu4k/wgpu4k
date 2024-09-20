@@ -21,6 +21,12 @@ fun main() = runBlocking {
 
     val glfwContext = glfwContextRenderer(width = 640, height = 480, title = "GLFW+WebGPU")
 
+    println("Devices features : ${glfwContext.wgpuContext.device.features}")
+    println("Devices limits : ${glfwContext.wgpuContext.device.limits}")
+
+    println("Adapter features : ${glfwContext.wgpuContext.adapter.features}")
+    println("Adapter limits : ${glfwContext.wgpuContext.adapter.limits}")
+
     val application = createApplication(
         glfwContext.wgpuContext
     )
