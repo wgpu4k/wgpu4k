@@ -5,6 +5,11 @@ package io.ygdrasil.wgpu
  * From this you can request a Device, adapter info, features, and limits.
  */
 expect class Adapter : AutoCloseable {
+
+    val features: Set<FeatureName>
+
+    val limits: SupportedLimits
+
     suspend fun requestDevice(descriptor: DeviceDescriptor = DeviceDescriptor()): Device?
 
     override fun close()

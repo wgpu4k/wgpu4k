@@ -18,8 +18,11 @@ suspend fun requestAdapter(options: GPURequestAdapterOptions? = null): Adapter? 
 }
 
 actual class Adapter(val handler: GPUAdapter) : AutoCloseable {
-    actual override fun close() {
-        // Nothing to do on JS
+
+    actual val features: Set<FeatureName> by lazy {
+        handler.features
+            .map { FeatureName.of(it) ?: error("Unsupported feature $it") }
+            .toSet()
     }
 
     actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? {
@@ -27,5 +30,9 @@ actual class Adapter(val handler: GPUAdapter) : AutoCloseable {
             .let { handler.requestDevice(it) }
             .await()
             .let(::Device)
+    }
+
+    actual override fun close() {
+        // Nothing to do on JS
     }
 }

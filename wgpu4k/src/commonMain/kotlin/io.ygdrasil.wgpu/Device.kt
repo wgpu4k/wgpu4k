@@ -6,6 +6,8 @@ expect class Device : AutoCloseable {
 
     val queue: Queue
 
+    val limits: SupportedLimits
+
     fun createCommandEncoder(descriptor: CommandEncoderDescriptor? = null): CommandEncoder
 
     fun createShaderModule(descriptor: ShaderModuleDescriptor): ShaderModule

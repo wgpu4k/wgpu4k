@@ -776,39 +776,38 @@ typealias GPUSupportedFeatures = Set<String>//ReadonlySet<String>
 
 
 external interface GPUSupportedLimits {
-    var maxTextureDimension1D: Number
-    var maxTextureDimension2D: Number
-    var maxTextureDimension3D: Number
-    var maxTextureArrayLayers: Number
-    var maxBindGroups: Number
-    var maxBindGroupsPlusVertexBuffers: Number
-    var maxBindingsPerBindGroup: Number
-    var maxDynamicUniformBuffersPerPipelineLayout: Number
-    var maxDynamicStorageBuffersPerPipelineLayout: Number
-    var maxSampledTexturesPerShaderStage: Number
-    var maxSamplersPerShaderStage: Number
-    var maxStorageBuffersPerShaderStage: Number
-    var maxStorageTexturesPerShaderStage: Number
-    var maxUniformBuffersPerShaderStage: Number
-    var maxUniformBufferBindingSize: Number
-    var maxStorageBufferBindingSize: Number
-    var minUniformBufferOffsetAlignment: Number
-    var minStorageBufferOffsetAlignment: Number
-    var maxVertexBuffers: Number
-    var maxBufferSize: Number
-    var maxVertexAttributes: Number
-    var maxVertexBufferArrayStride: Number
-    var maxInterStageShaderComponents: Number
-    var maxInterStageShaderVariables: Number
-    var maxColorAttachments: Number
-    var maxColorAttachmentBytesPerSample: Number
-    var maxComputeWorkgroupStorageSize: Number
-    var maxComputeInvocationsPerWorkgroup: Number
-    var maxComputeWorkgroupSizeX: Number
-    var maxComputeWorkgroupSizeY: Number
-    var maxComputeWorkgroupSizeZ: Number
-    var maxComputeWorkgroupsPerDimension: Number
-
+    var maxTextureDimension1D: GPUSize32
+    var maxTextureDimension2D: GPUSize32
+    var maxTextureDimension3D: GPUSize32
+    var maxTextureArrayLayers: GPUSize32
+    var maxBindGroups: GPUSize32
+    var maxBindGroupsPlusVertexBuffers: GPUSize32
+    var maxBindingsPerBindGroup: GPUSize32
+    var maxDynamicUniformBuffersPerPipelineLayout: GPUSize32
+    var maxDynamicStorageBuffersPerPipelineLayout: GPUSize32
+    var maxSampledTexturesPerShaderStage: GPUSize32
+    var maxSamplersPerShaderStage: GPUSize32
+    var maxStorageBuffersPerShaderStage: GPUSize32
+    var maxStorageTexturesPerShaderStage: GPUSize32
+    var maxUniformBuffersPerShaderStage: GPUSize32
+    var maxUniformBufferBindingSize: GPUSize64
+    var maxStorageBufferBindingSize: GPUSize64
+    var minUniformBufferOffsetAlignment: GPUSize32
+    var minStorageBufferOffsetAlignment: GPUSize32
+    var maxVertexBuffers: GPUSize32
+    var maxBufferSize: GPUSize64
+    var maxVertexAttributes: GPUSize32
+    var maxVertexBufferArrayStride: GPUSize32
+    var maxInterStageShaderComponents: GPUSize32
+    var maxInterStageShaderVariables: GPUSize32
+    var maxColorAttachments: GPUSize32
+    var maxColorAttachmentBytesPerSample: GPUSize32
+    var maxComputeWorkgroupStorageSize: GPUSize32
+    var maxComputeInvocationsPerWorkgroup: GPUSize32
+    var maxComputeWorkgroupSizeX: GPUSize32
+    var maxComputeWorkgroupSizeY: GPUSize32
+    var maxComputeWorkgroupSizeZ: GPUSize32
+    var maxComputeWorkgroupsPerDimension: GPUSize32
 }
 
 
