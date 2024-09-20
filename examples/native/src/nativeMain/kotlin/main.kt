@@ -1,7 +1,16 @@
 @file:OptIn(ExperimentalForeignApi::class)
 
 import cnames.structs.GLFWwindow
-import glfw.*
+import glfw.GLFW_KEY_DOWN
+import glfw.GLFW_KEY_PAGE_DOWN
+import glfw.GLFW_KEY_PAGE_UP
+import glfw.GLFW_KEY_UP
+import glfw.GLFW_PRESS
+import glfw.GLFWkeyfun
+import glfw.glfwPollEvents
+import glfw.glfwSetKeyCallback
+import glfw.glfwShowWindow
+import glfw.glfwWindowShouldClose
 import io.ygdrasil.wgpu.GLFWContext
 import io.ygdrasil.wgpu.examples.Application
 import io.ygdrasil.wgpu.examples.createApplication
@@ -20,6 +29,12 @@ fun main(args: Array<String>) = runBlocking {
     val resourceBasePath = "${args[0]}/"
     println("resource path that will be used is $resourceBasePath")
     val glfwContext = glfwContextRenderer(width = 640, height = 480, title = "GLFW+WebGPU")
+
+    println("Devices features : ${glfwContext.wgpuContext.device.features}")
+    println("Devices limits : ${glfwContext.wgpuContext.device.limits}")
+
+    println("Adapter features : ${glfwContext.wgpuContext.adapter.features}")
+    println("Adapter limits : ${glfwContext.wgpuContext.adapter.limits}")
 
     application = createApplication(
         glfwContext.wgpuContext,
