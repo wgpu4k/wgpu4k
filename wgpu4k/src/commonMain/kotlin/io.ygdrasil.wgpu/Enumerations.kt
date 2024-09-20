@@ -378,6 +378,10 @@ enum class FeatureName(
         fun of(value: Int): FeatureName? = entries.find {
             it.value == value
         }
+
+        fun of(value: String): FeatureName? = entries.find {
+            it.actualName == value
+        }
     }
 }
 

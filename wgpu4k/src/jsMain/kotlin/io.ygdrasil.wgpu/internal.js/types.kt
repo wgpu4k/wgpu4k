@@ -1,6 +1,23 @@
 package io.ygdrasil.wgpu.internal.js
 
-import io.ygdrasil.wgpu.*
+import io.ygdrasil.wgpu.GPUBufferDynamicOffset
+import io.ygdrasil.wgpu.GPUBufferUsageFlags
+import io.ygdrasil.wgpu.GPUColorWriteFlags
+import io.ygdrasil.wgpu.GPUDepthBias
+import io.ygdrasil.wgpu.GPUFlagsConstant
+import io.ygdrasil.wgpu.GPUIndex32
+import io.ygdrasil.wgpu.GPUIntegerCoordinate
+import io.ygdrasil.wgpu.GPUIntegerCoordinateOut
+import io.ygdrasil.wgpu.GPUMapModeFlags
+import io.ygdrasil.wgpu.GPUPipelineConstantValue
+import io.ygdrasil.wgpu.GPUShaderStageFlags
+import io.ygdrasil.wgpu.GPUSignedOffset32
+import io.ygdrasil.wgpu.GPUSize32
+import io.ygdrasil.wgpu.GPUSize32Out
+import io.ygdrasil.wgpu.GPUSize64
+import io.ygdrasil.wgpu.GPUSize64Out
+import io.ygdrasil.wgpu.GPUStencilValue
+import io.ygdrasil.wgpu.GPUTextureUsageFlags
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.ArrayBufferView
 import org.khronos.webgl.Uint32Array
@@ -755,7 +772,7 @@ external interface GPUShaderModule : GPUObjectBase {
 
 }
 
-typealias GPUSupportedFeatures = Any//ReadonlySet<String>
+typealias GPUSupportedFeatures = Set<String>//ReadonlySet<String>
 
 
 external interface GPUSupportedLimits {

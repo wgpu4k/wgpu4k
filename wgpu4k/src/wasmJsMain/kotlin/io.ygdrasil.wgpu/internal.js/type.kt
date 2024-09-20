@@ -1,6 +1,17 @@
 package io.ygdrasil.wgpu.internal.js
 
-import io.ygdrasil.wgpu.*
+import io.ygdrasil.wgpu.GPUBufferUsageFlags
+import io.ygdrasil.wgpu.GPUColorWriteFlags
+import io.ygdrasil.wgpu.GPUFlagsConstant
+import io.ygdrasil.wgpu.GPUIndex32
+import io.ygdrasil.wgpu.GPUIntegerCoordinate
+import io.ygdrasil.wgpu.GPUIntegerCoordinateOut
+import io.ygdrasil.wgpu.GPUMapModeFlags
+import io.ygdrasil.wgpu.GPUShaderStageFlags
+import io.ygdrasil.wgpu.GPUSignedOffset32
+import io.ygdrasil.wgpu.GPUSize32
+import io.ygdrasil.wgpu.GPUSize32Out
+import io.ygdrasil.wgpu.GPUTextureUsageFlags
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.ArrayBufferView
 import org.khronos.webgl.Uint32Array
@@ -34,6 +45,7 @@ external interface GPUAdapter : JsAny {
 
 external class GPUDevice : JsAny {
     var queue: GPUQueue
+    var features: JsArray<JsString>
     fun createBindGroup(descriptor: GPUBindGroupDescriptor): GPUBindGroup
     fun createTexture(descriptor: GPUTextureDescriptor): GPUTexture
     fun createBuffer(descriptor: GPUBufferDescriptor): GPUBuffer

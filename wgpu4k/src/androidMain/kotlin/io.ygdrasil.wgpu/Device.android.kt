@@ -12,6 +12,14 @@ actual class Device(val handler: Long) : AutoCloseable {
         Queue(NativeWgpu4k.wgpuDeviceGetQueue(handler))
     }
 
+    actual val features: Set<FeatureName> by lazy {
+        FeatureName.entries
+            .mapNotNull { feature ->
+                feature.takeIf { NativeWgpu4k.wgpuDeviceHasFeature(handler, feature.value) == 1 }
+            }
+            .toSet()
+    }
+
     actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder = scoped { arena ->
         WGPUCommandEncoderDescriptor.allocate(arena).pointer.toAddress()
             .let { NativeWgpu4k.wgpuDeviceCreateCommandEncoder(handler, it) }

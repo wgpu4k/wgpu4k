@@ -7,6 +7,15 @@ import kotlinx.coroutines.await
 actual class Device(internal val handler: GPUDevice) : AutoCloseable {
     actual val queue: Queue by lazy { Queue(handler.queue) }
 
+    actual val features: Set<FeatureName> by lazy {
+        (0..handler.features.length)
+            .map {  index ->
+                index.let { handler.features[it].toString() }
+                    .let { FeatureName.of(it) ?: error("Unsupported feature $it") }
+            }
+            .toSet()
+    }
+
     actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder {
         return CommandEncoder(
             when (descriptor) {

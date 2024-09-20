@@ -2,6 +2,8 @@ package io.ygdrasil.wgpu
 
 expect class Device : AutoCloseable {
 
+    val features: Set<FeatureName>
+
     val queue: Queue
 
     fun createCommandEncoder(descriptor: CommandEncoderDescriptor? = null): CommandEncoder

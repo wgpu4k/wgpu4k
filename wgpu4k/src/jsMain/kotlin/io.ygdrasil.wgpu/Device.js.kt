@@ -8,6 +8,12 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
 
     actual val queue: Queue by lazy { Queue(handler.queue) }
 
+    actual val features: Set<FeatureName> by lazy {
+        handler.features
+            .map { FeatureName.of(it) ?: error("Unsupported feature $it") }
+            .toSet()
+    }
+
     actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder {
         return CommandEncoder(
             when (descriptor) {
@@ -76,6 +82,7 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
     actual override fun close() {
         // Nothing on JS
     }
+
 }
 
 

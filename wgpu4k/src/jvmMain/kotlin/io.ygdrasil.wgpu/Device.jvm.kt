@@ -10,6 +10,14 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
     
     actual val queue: Queue by lazy { Queue(wgpu_h.wgpuDeviceGetQueue(handler) ?: error("fail to get device queue")) }
 
+    actual val features: Set<FeatureName> by lazy {
+        FeatureName.entries
+            .mapNotNull { feature ->
+                feature.takeIf { wgpu_h.wgpuDeviceHasFeature(handler, feature.value) == 1 }
+            }
+            .toSet()
+    }
+
     actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder =confined { arena ->
         WGPUCommandEncoderDescriptor.allocate(arena)
             .let { wgpu_h.wgpuDeviceCreateCommandEncoder(handler, it) }
