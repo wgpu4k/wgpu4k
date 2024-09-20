@@ -2,7 +2,7 @@ package io.ygdrasil.wgpu
 
 expect class Device : AutoCloseable {
 
-    val features: Set<FeatureName>
+    val features: Set<Feature>
 
     val queue: Queue
 

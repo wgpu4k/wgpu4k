@@ -355,7 +355,7 @@ enum class ErrorType(
     }
 }
 
-enum class FeatureName(
+enum class Feature(
     override val value: Int,
     private val extraName: String? = null,
 ) : EnumerationWithValue {
@@ -375,11 +375,11 @@ enum class FeatureName(
         get() = if (extraName != null) extraName else name
 
     companion object {
-        fun of(value: Int): FeatureName? = entries.find {
+        fun of(value: Int): Feature? = entries.find {
             it.value == value
         }
 
-        fun of(value: String): FeatureName? = entries.find {
+        fun of(value: String): Feature? = entries.find {
             it.actualName == value
         }
     }

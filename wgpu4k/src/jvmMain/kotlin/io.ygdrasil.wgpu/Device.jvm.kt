@@ -2,23 +2,30 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUCommandEncoderDescriptor
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSupportedLimits
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.mapper.map
 import java.lang.foreign.MemorySegment
 
 actual class Device(internal val handler: MemorySegment) : AutoCloseable {
-    
+
     actual val queue: Queue by lazy { Queue(wgpu_h.wgpuDeviceGetQueue(handler) ?: error("fail to get device queue")) }
 
-    actual val features: Set<FeatureName> by lazy {
-        FeatureName.entries
+    actual val features: Set<Feature> by lazy {
+        Feature.entries
             .mapNotNull { feature ->
                 feature.takeIf { wgpu_h.wgpuDeviceHasFeature(handler, feature.value) == 1 }
             }
             .toSet()
     }
 
-    actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder =confined { arena ->
+    actual val limits: SupportedLimits = confined { arena ->
+        val supportedLimits = WGPUSupportedLimits.allocate(arena)
+        wgpu_h.wgpuAdapterGetLimits(handler, supportedLimits)
+        map(WGPUSupportedLimits.limits(supportedLimits))
+    }
+
+    actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder = confined { arena ->
         WGPUCommandEncoderDescriptor.allocate(arena)
             .let { wgpu_h.wgpuDeviceCreateCommandEncoder(handler, it) }
             ?.let(::CommandEncoder) ?: error("fail to create command encoder")
@@ -34,11 +41,11 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
         arena.map(descriptor)
             .let { wgpu_h.wgpuDeviceCreatePipelineLayout(handler, it) }
             ?.let(::PipelineLayout) ?: error("fail to create pipeline layout")
-}
+    }
 
     actual fun createRenderPipeline(descriptor: RenderPipelineDescriptor): RenderPipeline = confined { arena ->
         arena.map(descriptor)
-            .let {  wgpu_h.wgpuDeviceCreateRenderPipeline(handler, it) }
+            .let { wgpu_h.wgpuDeviceCreateRenderPipeline(handler, it) }
             ?.let(::RenderPipeline) ?: error("fail to create render pipeline")
     }
 
@@ -78,11 +85,12 @@ actual class Device(internal val handler: MemorySegment) : AutoCloseable {
             ?.let(::BindGroupLayout) ?: error("fail to create bind group layout")
     }
 
-    actual fun createRenderBundleEncoder(descriptor: RenderBundleEncoderDescriptor): RenderBundleEncoder = confined { arena ->
-        arena.map(descriptor)
-            .let { wgpu_h.wgpuDeviceCreateRenderBundleEncoder(handler, it) }
-            ?.let(::RenderBundleEncoder) ?: error("fail to create bind group layout")
-    }
+    actual fun createRenderBundleEncoder(descriptor: RenderBundleEncoderDescriptor): RenderBundleEncoder =
+        confined { arena ->
+            arena.map(descriptor)
+                .let { wgpu_h.wgpuDeviceCreateRenderBundleEncoder(handler, it) }
+                ?.let(::RenderBundleEncoder) ?: error("fail to create bind group layout")
+        }
 
     actual fun createQuerySet(descriptor: QuerySetDescriptor): QuerySet = confined { arena ->
         arena.map(descriptor)

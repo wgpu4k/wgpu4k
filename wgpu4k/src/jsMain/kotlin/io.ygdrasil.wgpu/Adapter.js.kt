@@ -19,11 +19,13 @@ suspend fun requestAdapter(options: GPURequestAdapterOptions? = null): Adapter? 
 
 actual class Adapter(val handler: GPUAdapter) : AutoCloseable {
 
-    actual val features: Set<FeatureName> by lazy {
+    actual val features: Set<Feature> by lazy {
         handler.features
-            .map { FeatureName.of(it) ?: error("Unsupported feature $it") }
+            .map { Feature.of(it) ?: error("Unsupported feature $it") }
             .toSet()
     }
+
+    actual val limits: SupportedLimits by lazy { map(handler.limits) }
 
     actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? {
         return map(descriptor)

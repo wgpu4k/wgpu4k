@@ -2,6 +2,7 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUAdapterRequestDeviceCallback
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSupportedLimits
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.mapper.map
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,6 +10,20 @@ import kotlinx.coroutines.flow.update
 import java.lang.foreign.MemorySegment
 
 actual class Adapter(internal val handler: MemorySegment) : AutoCloseable {
+
+	actual val features: Set<Feature> by lazy {
+		Feature.entries
+			.mapNotNull { feature ->
+				feature.takeIf { wgpu_h.wgpuAdapterHasFeature(handler, feature.value) == 1 }
+			}
+			.toSet()
+	}
+
+	actual val limits: SupportedLimits = confined { arena ->
+		val supportedLimits = WGPUSupportedLimits.allocate(arena)
+		wgpu_h.wgpuAdapterGetLimits(handler, supportedLimits)
+		map(WGPUSupportedLimits.limits(supportedLimits))
+	}
 
 	actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? = confined { arena ->
 		val deviceState = MutableStateFlow<MemorySegment?>(null)

@@ -1,6 +1,7 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.jna.WGPUCommandEncoderDescriptor
+import io.ygdrasil.wgpu.internal.jna.WGPUSupportedLimits
 import io.ygdrasil.wgpu.internal.scoped
 import io.ygdrasil.wgpu.internal.toAddress
 import io.ygdrasil.wgpu.mapper.map
@@ -12,8 +13,14 @@ actual class Device(val handler: Long) : AutoCloseable {
         Queue(NativeWgpu4k.wgpuDeviceGetQueue(handler))
     }
 
-    actual val features: Set<FeatureName> by lazy {
-        FeatureName.entries
+    actual val limits: SupportedLimits = scoped { arena ->
+        val supportedLimits = WGPUSupportedLimits.allocate(arena)
+        NativeWgpu4k.wgpuAdapterGetLimits(handler, supportedLimits.pointer.toAddress())
+        map(WGPUSupportedLimits.limits(supportedLimits))
+    }
+
+    actual val features: Set<Feature> by lazy {
+        Feature.entries
             .mapNotNull { feature ->
                 feature.takeIf { NativeWgpu4k.wgpuDeviceHasFeature(handler, feature.value) == 1 }
             }

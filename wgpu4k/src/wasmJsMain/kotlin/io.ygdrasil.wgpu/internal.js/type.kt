@@ -11,6 +11,7 @@ import io.ygdrasil.wgpu.GPUShaderStageFlags
 import io.ygdrasil.wgpu.GPUSignedOffset32
 import io.ygdrasil.wgpu.GPUSize32
 import io.ygdrasil.wgpu.GPUSize32Out
+import io.ygdrasil.wgpu.GPUSize64
 import io.ygdrasil.wgpu.GPUTextureUsageFlags
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.ArrayBufferView
@@ -38,6 +39,8 @@ external interface GPU {
 }
 
 external interface GPUAdapter : JsAny {
+    var features: JsArray<JsString>
+    var limits: GPUSupportedLimits
     var isFallbackAdapter: Boolean
     fun requestDevice(descriptor: GPUDeviceDescriptor = definedExternally): Promise<GPUDevice>
     fun requestAdapterInfo(): Promise<GPUAdapterInfo>
@@ -46,6 +49,7 @@ external interface GPUAdapter : JsAny {
 external class GPUDevice : JsAny {
     var queue: GPUQueue
     var features: JsArray<JsString>
+    var limits: GPUSupportedLimits
     fun createBindGroup(descriptor: GPUBindGroupDescriptor): GPUBindGroup
     fun createTexture(descriptor: GPUTextureDescriptor): GPUTexture
     fun createBuffer(descriptor: GPUBufferDescriptor): GPUBuffer
@@ -58,6 +62,41 @@ external class GPUDevice : JsAny {
     fun createBindGroupLayout(descriptor: GPUBindGroupLayoutDescriptor): GPUBindGroupLayout
     fun createRenderBundleEncoder(descriptor: GPURenderBundleEncoderDescriptor): GPURenderBundleEncoder
     fun createQuerySet(descriptor: GPUQuerySetDescriptor): GPUQuerySet
+}
+
+external interface GPUSupportedLimits {
+    var maxTextureDimension1D: GPUSize32
+    var maxTextureDimension2D: GPUSize32
+    var maxTextureDimension3D: GPUSize32
+    var maxTextureArrayLayers: GPUSize32
+    var maxBindGroups: GPUSize32
+    var maxBindGroupsPlusVertexBuffers: GPUSize32
+    var maxBindingsPerBindGroup: GPUSize32
+    var maxDynamicUniformBuffersPerPipelineLayout: GPUSize32
+    var maxDynamicStorageBuffersPerPipelineLayout: GPUSize32
+    var maxSampledTexturesPerShaderStage: GPUSize32
+    var maxSamplersPerShaderStage: GPUSize32
+    var maxStorageBuffersPerShaderStage: GPUSize32
+    var maxStorageTexturesPerShaderStage: GPUSize32
+    var maxUniformBuffersPerShaderStage: GPUSize32
+    var maxUniformBufferBindingSize: GPUSize64
+    var maxStorageBufferBindingSize: GPUSize64
+    var minUniformBufferOffsetAlignment: GPUSize32
+    var minStorageBufferOffsetAlignment: GPUSize32
+    var maxVertexBuffers: GPUSize32
+    var maxBufferSize: GPUSize64
+    var maxVertexAttributes: GPUSize32
+    var maxVertexBufferArrayStride: GPUSize32
+    var maxInterStageShaderComponents: GPUSize32
+    var maxInterStageShaderVariables: GPUSize32
+    var maxColorAttachments: GPUSize32
+    var maxColorAttachmentBytesPerSample: GPUSize32
+    var maxComputeWorkgroupStorageSize: GPUSize32
+    var maxComputeInvocationsPerWorkgroup: GPUSize32
+    var maxComputeWorkgroupSizeX: GPUSize32
+    var maxComputeWorkgroupSizeY: GPUSize32
+    var maxComputeWorkgroupSizeZ: GPUSize32
+    var maxComputeWorkgroupsPerDimension: GPUSize32
 }
 
 external interface GPUPipelineLayoutDescriptor : GPUObjectDescriptorBase {

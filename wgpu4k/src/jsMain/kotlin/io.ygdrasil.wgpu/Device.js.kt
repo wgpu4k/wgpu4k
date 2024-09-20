@@ -8,48 +8,13 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
 
     actual val queue: Queue by lazy { Queue(handler.queue) }
 
-    actual val features: Set<FeatureName> by lazy {
+    actual val features: Set<Feature> by lazy {
         handler.features
-            .map { FeatureName.of(it) ?: error("Unsupported feature $it") }
+            .map { Feature.of(it) ?: error("Unsupported feature $it") }
             .toSet()
     }
 
-    val limits: SupportedLimits by lazy {
-        SupportedLimits(
-            maxTextureDimension1D = handler.limits.maxTextureDimension1D,
-            maxTextureDimension2D = handler.limits.maxTextureDimension2D,
-            maxTextureDimension3D = handler.limits.maxTextureDimension3D,
-            maxTextureArrayLayers = handler.limits.maxTextureArrayLayers,
-            maxBindGroups = handler.limits.maxBindGroups,
-            maxBindGroupsPlusVertexBuffers = handler.limits.maxBindGroupsPlusVertexBuffers,
-            maxBindingsPerBindGroup = handler.limits.maxBindingsPerBindGroup,
-            maxDynamicUniformBuffersPerPipelineLayout = handler.limits.maxDynamicUniformBuffersPerPipelineLayout,
-            maxDynamicStorageBuffersPerPipelineLayout = handler.limits.maxDynamicStorageBuffersPerPipelineLayout,
-            maxSampledTexturesPerShaderStage = handler.limits.maxSampledTexturesPerShaderStage,
-            maxSamplersPerShaderStage = handler.limits.maxSamplersPerShaderStage,
-            maxStorageBuffersPerShaderStage = handler.limits.maxStorageBuffersPerShaderStage,
-            maxStorageTexturesPerShaderStage = handler.limits.maxStorageTexturesPerShaderStage,
-            maxUniformBuffersPerShaderStage = handler.limits.maxUniformBuffersPerShaderStage,
-            maxUniformBufferBindingSize = handler.limits.maxUniformBufferBindingSize,
-            maxStorageBufferBindingSize = handler.limits.maxStorageBufferBindingSize,
-            minUniformBufferOffsetAlignment = handler.limits.minUniformBufferOffsetAlignment,
-            minStorageBufferOffsetAlignment = handler.limits.minStorageBufferOffsetAlignment,
-            maxVertexBuffers = handler.limits.maxVertexBuffers,
-            maxBufferSize = handler.limits.maxBufferSize,
-            maxVertexAttributes = handler.limits.maxVertexAttributes,
-            maxVertexBufferArrayStride = handler.limits.maxVertexBufferArrayStride,
-            maxInterStageShaderComponents = handler.limits.maxInterStageShaderComponents,
-            maxInterStageShaderVariables = handler.limits.maxInterStageShaderVariables,
-            maxColorAttachments = handler.limits.maxColorAttachments,
-            maxColorAttachmentBytesPerSample = handler.limits.maxColorAttachmentBytesPerSample,
-            maxComputeWorkgroupStorageSize = handler.limits.maxComputeWorkgroupStorageSize,
-            maxComputeInvocationsPerWorkgroup = handler.limits.maxComputeInvocationsPerWorkgroup,
-            maxComputeWorkgroupSizeX = handler.limits.maxComputeWorkgroupSizeX,
-            maxComputeWorkgroupSizeY = handler.limits.maxComputeWorkgroupSizeY,
-            maxComputeWorkgroupSizeZ = handler.limits.maxComputeWorkgroupSizeZ,
-            maxComputeWorkgroupsPerDimension = handler.limits.maxComputeWorkgroupsPerDimension,
-        )
-    }
+    actual val limits: SupportedLimits by lazy { map(handler.limits) }
 
     actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder {
         return CommandEncoder(
