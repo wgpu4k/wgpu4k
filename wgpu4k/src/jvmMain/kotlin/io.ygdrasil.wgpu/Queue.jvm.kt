@@ -36,6 +36,22 @@ actual class Queue(internal val handler: MemorySegment) {
     actual fun writeBuffer(
         buffer: Buffer,
         bufferOffset: GPUSize64,
+        data: ShortArray,
+        dataOffset: GPUSize64,
+        size: GPUSize64
+    ) = confined { arena ->
+        wgpu_h.wgpuQueueWriteBuffer(
+            handler,
+            buffer.handler,
+            bufferOffset,
+            data.toBuffer(dataOffset, arena),
+            (size * Short.SIZE_BYTES)
+        )
+    }
+
+    actual fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
         data: FloatArray,
         dataOffset: GPUSize64,
         size: GPUSize64
@@ -103,6 +119,11 @@ actual class Queue(internal val handler: MemorySegment) {
     private fun IntArray.toBuffer(dataOffset: GPUSize64, arena: Arena): MemorySegment {
         if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
         return arena.allocateFrom(ValueLayout.JAVA_INT, *this)
+    }
+
+    private fun ShortArray.toBuffer(dataOffset: GPUSize64, arena: Arena): MemorySegment {
+        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
+        return arena.allocateFrom(ValueLayout.JAVA_SHORT, *this)
     }
 }
 

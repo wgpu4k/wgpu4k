@@ -1,17 +1,30 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUExtent3DDict
-import io.ygdrasil.wgpu.internal.js.GPUImageCopyTexture
-import io.ygdrasil.wgpu.internal.js.GPUImageDataLayout
-import io.ygdrasil.wgpu.internal.js.GPUQueue
-import io.ygdrasil.wgpu.internal.js.createJsObject
+import io.ygdrasil.wgpu.internal.js.*
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.Float32Array
+import org.khronos.webgl.Int16Array
 import org.khronos.webgl.Int32Array
 
 actual class Queue(internal val handler: GPUQueue) {
     actual fun submit(commandsBuffer: List<CommandBuffer>) {
         handler.submit(commandsBuffer.map { it.handler }.toTypedArray())
+    }
+
+    actual fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
+        data: ShortArray,
+        dataOffset: GPUSize64,
+        size: GPUSize64,
+    ) {
+        handler.writeBuffer(
+            buffer.handler,
+            bufferOffset,
+            data.unsafeCast<Int16Array>(),
+            dataOffset,
+            size
+        )
     }
 
     actual fun writeBuffer(

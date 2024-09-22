@@ -35,6 +35,22 @@ actual class Queue(val handler: Long) {
     actual fun writeBuffer(
         buffer: Buffer,
         bufferOffset: GPUSize64,
+        data: ShortArray,
+        dataOffset: GPUSize64,
+        size: GPUSize64
+    ) = scoped { arena ->
+        NativeWgpu4k.wgpuQueueWriteBuffer(
+            handler,
+            buffer.handler,
+            bufferOffset,
+            data.toBuffer(dataOffset, arena),
+            (size * Short.SIZE_BYTES)
+        )
+    }
+
+    actual fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
         data: FloatArray,
         dataOffset: GPUSize64,
         size: GPUSize64
@@ -107,6 +123,11 @@ actual class Queue(val handler: Long) {
     private fun IntArray.toBuffer(dataOffset: GPUSize64, arena: SegmentAllocator): Long {
         if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
         return arena.allocateFrom(ValueLayout.JAVA_INT, this).pointer.toAddress()
+    }
+
+    private fun ShortArray.toBuffer(dataOffset: GPUSize64, arena: SegmentAllocator): Long {
+        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
+        return arena.allocateFrom(ValueLayout.JAVA_SHORT, this).pointer.toAddress()
     }
 }
 

@@ -5,12 +5,7 @@ package io.ygdrasil.wgpu
 import io.ygdrasil.wgpu.internal.toPointerArray
 import io.ygdrasil.wgpu.mapper.map
 import kotlinx.cinterop.*
-import webgpu.WGPUExtent3D
-import webgpu.WGPUQueue
-import webgpu.WGPUTextureDataLayout
-import webgpu.wgpuQueueSubmit
-import webgpu.wgpuQueueWriteBuffer
-import webgpu.wgpuQueueWriteTexture
+import webgpu.*
 
 actual class Queue(internal val handler: WGPUQueue) {
 
@@ -29,6 +24,22 @@ actual class Queue(internal val handler: WGPUQueue) {
                 null
             )
         }
+    }
+
+    actual fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
+        data: ShortArray,
+        dataOffset: GPUSize64,
+        size: GPUSize64
+    ) = memScoped {
+        wgpuQueueWriteBuffer(
+            handler,
+            buffer.handler,
+            bufferOffset.toULong(),
+            data.toBuffer(dataOffset, this),
+            (size * Short.SIZE_BYTES).toULong()
+        )
     }
 
     actual fun writeBuffer(
@@ -103,6 +114,13 @@ actual class Queue(internal val handler: WGPUQueue) {
     private fun IntArray.toBuffer(dataOffset: GPUSize64, arena: ArenaBase): CValuesRef<*> {
         if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
         return arena.allocArray<IntVar>(size).also {
+            forEachIndexed { index, value -> it[index] = value }
+        }
+    }
+
+    private fun ShortArray.toBuffer(dataOffset: GPUSize64, arena: ArenaBase): CValuesRef<*> {
+        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
+        return arena.allocArray<ShortVar>(size).also {
             forEachIndexed { index, value -> it[index] = value }
         }
     }

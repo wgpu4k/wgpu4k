@@ -7,6 +7,14 @@ expect class Queue {
     fun writeBuffer(
         buffer: Buffer,
         bufferOffset: GPUSize64,
+        data: ShortArray,
+        dataOffset: GPUSize64 = 0,
+        size: GPUSize64 = data.size.toLong(),
+    )
+
+    fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
         data: FloatArray,
         dataOffset: GPUSize64 = 0,
         size: GPUSize64 = data.size.toLong(),
