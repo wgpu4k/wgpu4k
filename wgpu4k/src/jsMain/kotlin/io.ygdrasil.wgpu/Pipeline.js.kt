@@ -3,7 +3,11 @@ package io.ygdrasil.wgpu
 import io.ygdrasil.wgpu.internal.js.GPUPipelineLayout
 import io.ygdrasil.wgpu.internal.js.GPURenderPipeline
 
-actual class PipelineLayout(internal var handler: GPUPipelineLayout)
+actual class PipelineLayout(internal var handler: GPUPipelineLayout) : AutoCloseable {
+    actual override fun close() {
+        // Nothing to do on js
+    }
+}
 
 actual class RenderPipeline(internal var handler: GPURenderPipeline) : AutoCloseable {
 

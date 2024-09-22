@@ -17,8 +17,12 @@ actual class RenderPipeline(val handler: Long) : AutoCloseable {
 
 }
 
-actual class PipelineLayout(val handler: Long) {
+actual class PipelineLayout(val handler: Long) : AutoCloseable {
 
     internal val mhandler = MemorySegment(Pointer(handler), 0L)
+
+    actual override fun close() {
+        NativeWgpu4k.wgpuPipelineLayoutRelease(handler)
+    }
 
 }

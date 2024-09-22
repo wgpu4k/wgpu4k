@@ -6,11 +6,13 @@ plugins {
 }
 
 
+val libraryDescription = "Webgpu binding to kotlin multiplatform"
+
 jreleaser {
     gitRootSearch = true
 
     project {
-        description = "Webgpu binding to kotlin multiplatform"
+        description = libraryDescription
         copyright = "MIT"
     }
 
@@ -45,6 +47,34 @@ jreleaser {
 }
 
 publishing {
+    publications {
+        withType<MavenPublication> {
+            pom {
+                name.set(project.name)
+                description.set(libraryDescription)
+                url.set("https://github.com/wgpu4k/wgpu4k")
+                inceptionYear.set("2024")
+                licenses {
+                    license {
+                        name.set("MIT")
+                        url.set("https://opensource.org/license/MIT")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("amommers")
+                        name.set("Alexandre Mommers")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:https://github.com/wgpu4k/wgpu4k.git")
+                    developerConnection.set("scm:git:https://github.com/wgpu4k/wgpu4k.git")
+                    url.set("https://github.com/wgpu4k/wgpu4k")
+                }
+            }
+        }
+    }
+
     repositories {
         maven {
             if (isSnapshot()) {

@@ -3,10 +3,7 @@
 package io.ygdrasil.wgpu
 
 import kotlinx.cinterop.ExperimentalForeignApi
-import webgpu.WGPUPipelineLayout
-import webgpu.WGPURenderPipeline
-import webgpu.wgpuRenderPipelineGetBindGroupLayout
-import webgpu.wgpuRenderPipelineRelease
+import webgpu.*
 
 actual class RenderPipeline(internal val handler: WGPURenderPipeline) : AutoCloseable {
 
@@ -21,4 +18,10 @@ actual class RenderPipeline(internal val handler: WGPURenderPipeline) : AutoClos
 
 }
 
-actual class PipelineLayout(internal val handler: WGPUPipelineLayout)
+actual class PipelineLayout(internal val handler: WGPUPipelineLayout) : AutoCloseable {
+
+    actual override fun close() {
+        wgpuPipelineLayoutRelease(handler)
+    }
+
+}

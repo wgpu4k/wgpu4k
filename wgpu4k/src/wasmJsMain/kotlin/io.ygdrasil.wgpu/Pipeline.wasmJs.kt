@@ -15,4 +15,10 @@ actual class RenderPipeline(internal val handler: GPURenderPipeline) : AutoClose
 
 }
 
-actual class PipelineLayout(internal val handler: GPUPipelineLayout)
+actual class PipelineLayout(internal val handler: GPUPipelineLayout) : AutoCloseable {
+
+    actual override fun close() {
+        // nothing to do here
+    }
+
+}
