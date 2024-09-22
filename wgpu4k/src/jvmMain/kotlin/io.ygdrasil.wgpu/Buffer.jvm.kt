@@ -22,6 +22,11 @@ actual class Buffer(internal val handler: MemorySegment) : AutoCloseable {
         wgpu_h.wgpuBufferUnmap(handler)
     }
 
+    actual fun mapFrom(buffer: ShortArray, offset: Int) {
+        wgpu_h.wgpuBufferGetMappedRange(handler, offset.toLong(), (buffer.size * Short.SIZE_BYTES).toLong())
+            .copyFrom(MemorySegment.ofArray(buffer))
+    }
+
     actual fun mapFrom(buffer: FloatArray, offset: Int) {
         wgpu_h.wgpuBufferGetMappedRange(handler, offset.toLong(), (buffer.size * Float.SIZE_BYTES).toLong())
             .copyFrom(MemorySegment.ofArray(buffer))

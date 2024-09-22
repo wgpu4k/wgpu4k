@@ -8,6 +8,8 @@ expect class Buffer : AutoCloseable {
 
     fun unmap()
 
+    fun mapFrom(buffer: ShortArray, offset: Int = 0)
+
     fun mapFrom(buffer: FloatArray, offset: Int = 0)
 
     fun mapFrom(buffer: ByteArray, offset: Int = 0)

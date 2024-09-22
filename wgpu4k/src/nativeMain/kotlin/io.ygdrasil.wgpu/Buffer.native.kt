@@ -2,21 +2,8 @@
 
 package io.ygdrasil.wgpu
 
-import kotlinx.cinterop.ByteVar
-import kotlinx.cinterop.ExperimentalForeignApi
-import kotlinx.cinterop.FloatVar
-import kotlinx.cinterop.IntVar
-import kotlinx.cinterop.get
-import kotlinx.cinterop.reinterpret
-import kotlinx.cinterop.set
-import webgpu.WGPUBuffer
-import webgpu.wgpuBufferGetMapState
-import webgpu.wgpuBufferGetMappedRange
-import webgpu.wgpuBufferGetSize
-import webgpu.wgpuBufferGetUsage
-import webgpu.wgpuBufferMapAsync
-import webgpu.wgpuBufferRelease
-import webgpu.wgpuBufferUnmap
+import kotlinx.cinterop.*
+import webgpu.*
 
 actual class Buffer(internal val handler: WGPUBuffer) : AutoCloseable {
 
@@ -32,6 +19,13 @@ actual class Buffer(internal val handler: WGPUBuffer) : AutoCloseable {
 
     actual fun unmap() {
         wgpuBufferUnmap(handler)
+    }
+
+    actual fun mapFrom(buffer: ShortArray, offset: Int) {
+        (wgpuBufferGetMappedRange(handler, offset.toULong(), (buffer.size * Short.SIZE_BYTES).toULong())
+            ?: error("Can't get map from: $buffer"))
+            .reinterpret<ShortVar>()
+            .also { buffer.forEachIndexed { index, value -> it[index] = value } }
     }
 
     actual fun mapFrom(buffer: FloatArray, offset: Int) {

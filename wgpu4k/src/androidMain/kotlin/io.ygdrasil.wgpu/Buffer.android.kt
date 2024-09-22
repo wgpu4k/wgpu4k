@@ -21,6 +21,12 @@ actual class Buffer(val handler: Long) : AutoCloseable {
         NativeWgpu4k.wgpuBufferUnmap(handler)
     }
 
+    actual fun mapFrom(buffer: ShortArray, offset: Int) {
+        NativeWgpu4k.wgpuBufferGetMappedRange(handler, offset.toLong(), (buffer.size * Short.SIZE_BYTES).toLong())
+            .let(::Pointer)
+            .write(0, buffer, 0, buffer.size)
+    }
+
     actual fun mapFrom(buffer: FloatArray, offset: Int) {
         NativeWgpu4k.wgpuBufferGetMappedRange(handler, offset.toLong(), (buffer.size * Float.SIZE_BYTES).toLong())
             .let(::Pointer)

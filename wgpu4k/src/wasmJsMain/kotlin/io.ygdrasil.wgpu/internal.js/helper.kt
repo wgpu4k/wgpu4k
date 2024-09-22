@@ -3,6 +3,7 @@ package io.ygdrasil.wgpu.internal.js
 import org.khronos.webgl.Int8Array
 import org.khronos.webgl.set
 
+private fun infer(value: Short): JsNumber = js("value")
 private fun infer(value: Byte): JsNumber = js("value")
 private fun infer(value: UInt): JsNumber = js("value")
 private fun infer(value: Float): JsNumber = js("value")
@@ -16,6 +17,9 @@ internal fun Double.toJsNumber(): JsNumber =
     infer(this)
 
 internal fun Float.toJsNumber(): JsNumber =
+    infer(this)
+
+internal fun Short.toJsNumber(): JsNumber =
     infer(this)
 
 internal fun UInt.toJsNumber(): JsNumber =
@@ -53,6 +57,14 @@ internal fun <A, B : JsAny> Set<A>.mapJsArray(converter: (A) -> B): JsArray<B> {
 }
 
 internal fun <A, B : JsAny> Array<A>.mapJsArray(converter: (A) -> B): JsArray<B> {
+    val output: JsArray<B> = JsArray()
+    forEachIndexed { index, value ->
+        output[index] = converter(value)
+    }
+    return output
+}
+
+internal fun <B : JsAny> ShortArray.mapJsArray(converter: (Short) -> B): JsArray<B> {
     val output: JsArray<B> = JsArray()
     forEachIndexed { index, value ->
         output[index] = converter(value)
