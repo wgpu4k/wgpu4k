@@ -24,12 +24,12 @@ expect class Surface : AutoCloseable {
      */
     fun present()
 
-    fun configure(canvasConfiguration: CanvasConfiguration)
+    fun configure(surfaceConfiguration: SurfaceConfiguration)
 
     override fun close()
 }
 
-data class CanvasConfiguration(
+data class SurfaceConfiguration(
     val device: Device,
     val format: TextureFormat,
     val usage: Set<TextureUsage> = setOf(TextureUsage.renderAttachment),

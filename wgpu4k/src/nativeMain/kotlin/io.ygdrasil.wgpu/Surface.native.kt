@@ -88,15 +88,15 @@ actual class Surface(
 
     }
 
-    actual fun configure(canvasConfiguration: CanvasConfiguration) {
-        wgpuSurfaceConfigure(handler, map(canvasConfiguration))
+    actual fun configure(surfaceConfiguration: SurfaceConfiguration) {
+        wgpuSurfaceConfigure(handler, map(surfaceConfiguration))
     }
 
     actual override fun close() {
         wgpuSurfaceRelease(handler)
     }
 
-    private fun map(input: CanvasConfiguration): CValue<WGPUSurfaceConfiguration> = cValue<WGPUSurfaceConfiguration> {
+    private fun map(input: SurfaceConfiguration): CValue<WGPUSurfaceConfiguration> = cValue<WGPUSurfaceConfiguration> {
         device = input.device.handler
         usage = input.usage.toFlagInt().toUInt()
         format = input.format.value.toUInt()

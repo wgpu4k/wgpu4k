@@ -86,15 +86,15 @@ actual class Surface(val handler: Long, actual val width: Int, actual val height
         NativeWgpu4k.wgpuSurfacePresent(handler)
     }
 
-    actual fun configure(canvasConfiguration: CanvasConfiguration) = scoped { arena ->
-        NativeWgpu4k.wgpuSurfaceConfigure(handler, arena.map(canvasConfiguration).pointer.toAddress())
+    actual fun configure(surfaceConfiguration: SurfaceConfiguration) = scoped { arena ->
+        NativeWgpu4k.wgpuSurfaceConfigure(handler, arena.map(surfaceConfiguration).pointer.toAddress())
     }
 
     actual override fun close() {
         NativeWgpu4k.wgpuSurfaceRelease(handler)
     }
 
-    private fun SegmentAllocator.map(input: CanvasConfiguration): MemorySegment =
+    private fun SegmentAllocator.map(input: SurfaceConfiguration): MemorySegment =
         WGPUSurfaceConfiguration.allocate(this).also { output ->
             WGPUSurfaceConfiguration.device(
                 output,

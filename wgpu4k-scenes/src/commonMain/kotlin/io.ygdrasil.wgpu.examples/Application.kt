@@ -1,9 +1,9 @@
 package io.ygdrasil.wgpu.examples
 
-import io.ygdrasil.wgpu.CanvasConfiguration
 import io.ygdrasil.wgpu.CompositeAlphaMode
 import io.ygdrasil.wgpu.Device
 import io.ygdrasil.wgpu.Surface
+import io.ygdrasil.wgpu.SurfaceConfiguration
 import io.ygdrasil.wgpu.SurfaceRenderingContext
 import io.ygdrasil.wgpu.TextureUsage
 import io.ygdrasil.wgpu.WGPUContext
@@ -82,7 +82,7 @@ private fun WGPUContext.configureRenderingContext() {
     println("Using format $format and alpha mode $alphaMode")
     println("Supported formats: ${surface.supportedFormats}")
     surface.configure(
-        CanvasConfiguration(
+        SurfaceConfiguration(
             device = device,
             format = format,
             usage = setOf(TextureUsage.renderAttachment, TextureUsage.copySrc),

@@ -34,11 +34,11 @@ actual class Surface(private val handler: GPUCanvasContext) : AutoCloseable {
         // Nothing to do on js
     }
 
-    actual fun configure(canvasConfiguration: CanvasConfiguration) {
-        handler.configure(canvasConfiguration.convert())
+    actual fun configure(surfaceConfiguration: SurfaceConfiguration) {
+        handler.configure(surfaceConfiguration.convert())
     }
 
-    fun CanvasConfiguration.convert(): GPUCanvasConfiguration = object : GPUCanvasConfiguration {
+    fun SurfaceConfiguration.convert(): GPUCanvasConfiguration = object : GPUCanvasConfiguration {
         override var device: GPUDevice = this@convert.device.handler
         override var format: String = this@convert.format.actualName
         override var usage: GPUTextureUsageFlags? = this@convert.usage.toFlagInt()
