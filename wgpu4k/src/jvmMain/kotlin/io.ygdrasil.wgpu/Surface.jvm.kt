@@ -29,10 +29,14 @@ actual class Surface(
 	actual val supportedAlphaMode: Set<CompositeAlphaMode>
 		get() = _supportedAlphaMode
 
-	actual fun getCurrentTexture(): Texture = confined { arena ->
+	actual fun getCurrentTexture(): SurfaceTexture = confined { arena ->
 		WGPUSurfaceTexture.allocate(arena).let { surfaceTexture ->
 			wgpu_h.wgpuSurfaceGetCurrentTexture(handler, surfaceTexture)
-			Texture(WGPUSurfaceTexture.texture(surfaceTexture))
+			WGPUSurfaceTexture.status(surfaceTexture)
+			SurfaceTexture(
+				Texture(WGPUSurfaceTexture.texture(surfaceTexture)),
+				SurfaceTextureStatus.of(WGPUSurfaceTexture.status(surfaceTexture)) ?: error("fail to get status"),
+			)
 		}
 	}
 

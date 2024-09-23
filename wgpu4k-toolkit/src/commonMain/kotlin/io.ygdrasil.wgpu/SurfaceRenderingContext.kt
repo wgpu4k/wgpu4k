@@ -19,7 +19,7 @@ class SurfaceRenderingContext(
         ?: surface.supportedFormats.first()
 
     override fun getCurrentTexture(): Texture {
-        return surface.getCurrentTexture()
+        return surface.getCurrentTexture().texture
     }
 
     override fun close() {

@@ -660,22 +660,22 @@ enum class StoreOp(
     }
 }
 
-enum class SurfaceGetCurrentTextureStatus(
+enum class SurfaceTextureStatus(
     val value: Int,
 ) {
     success(0),
     timeout(1),
     outdated(2),
     lost(3),
-    outofmemory(4),
-    devicelost(5);
+    outOfMemory(4),
+    deviceLost(5);
 
     infix fun or(other: Int): Int = value or other
 
-    infix fun or(other: SurfaceGetCurrentTextureStatus): Int = value or other.value
+    infix fun or(other: SurfaceTextureStatus): Int = value or other.value
 
     companion object {
-        fun of(value: Int): SurfaceGetCurrentTextureStatus? = entries.find {
+        fun of(value: Int): SurfaceTextureStatus? = entries.find {
             it.value == value
         }
     }

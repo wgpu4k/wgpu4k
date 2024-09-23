@@ -39,10 +39,13 @@ actual class Surface(
     actual val supportedAlphaMode: Set<CompositeAlphaMode>
         get() = _supportedAlphaMode
 
-    actual fun getCurrentTexture(): Texture = memScoped {
+    actual fun getCurrentTexture(): SurfaceTexture = memScoped {
         val surfaceTexture = alloc<WGPUSurfaceTexture>()
         wgpuSurfaceGetCurrentTexture(handler, surfaceTexture.ptr)
-        return Texture(surfaceTexture.texture ?: error("no texture available"))
+        return SurfaceTexture(
+            Texture(surfaceTexture.texture ?: error("no texture available")),
+            SurfaceTextureStatus.of(surfaceTexture.status.toInt()) ?: error("fail to get status"),
+        )
     }
 
     actual fun present() {

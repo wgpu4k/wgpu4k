@@ -32,7 +32,10 @@ actual class Surface(val handler: Long, actual val width: Int, actual val height
         val formatCount = WGPUSurfaceCapabilities.formatCount(surfaceCapabilities)
         _supportedFormats = (0..formatCount.toInt()).map { index ->
             formats.get(ValueLayout.JAVA_INT, index * ValueLayout.JAVA_INT.size)
-                .let { value -> TextureFormat.of(value).also { if (it == null) println("ignoring undefined format with value $value") } }
+                .let { value ->
+                    TextureFormat.of(value)
+                        .also { if (it == null) println("ignoring undefined format with value $value") }
+                }
 
         }.mapNotNull { it }
             .toSet()
@@ -41,7 +44,10 @@ actual class Surface(val handler: Long, actual val width: Int, actual val height
         val alphaModeCount = WGPUSurfaceCapabilities.alphaModeCount(surfaceCapabilities)
         _supportedAlphaMode = (0..alphaModeCount.toInt()).map { index ->
             alphaModes.get(ValueLayout.JAVA_INT, index * ValueLayout.JAVA_INT.size)
-                .let { value -> CompositeAlphaMode.of(value).also { if (it == null) println("ignoring undefined format with value $value") } }
+                .let { value ->
+                    CompositeAlphaMode.of(value)
+                        .also { if (it == null) println("ignoring undefined format with value $value") }
+                }
         }.mapNotNull { it }
             .toSet()
 
@@ -60,11 +66,19 @@ actual class Surface(val handler: Long, actual val width: Int, actual val height
         }
     }
 
-    actual fun getCurrentTexture(): Texture = scoped{arena ->
+    actual fun getCurrentTexture(): SurfaceTexture = scoped { arena ->
         WGPUSurfaceTexture.allocate(arena)
-            .let {  surfaceTexture ->
+            .let { surfaceTexture ->
                 NativeWgpu4k.wgpuSurfaceGetCurrentTexture(handler, surfaceTexture.pointer.toAddress())
                     .let { Texture(WGPUSurfaceTexture.texture(surfaceTexture).pointer.toAddress()) }
+                    .let {
+                        SurfaceTexture(
+                            it,
+                            SurfaceTextureStatus.of(WGPUSurfaceTexture.status(surfaceTexture))
+                                ?: error("fail to get status"),
+                        )
+                    }
+
             }
     }
 
@@ -82,7 +96,10 @@ actual class Surface(val handler: Long, actual val width: Int, actual val height
 
     private fun SegmentAllocator.map(input: CanvasConfiguration): MemorySegment =
         WGPUSurfaceConfiguration.allocate(this).also { output ->
-            WGPUSurfaceConfiguration.device(output, MemorySegment(Pointer(input.device.handler), Long.SIZE_BYTES.toLong()))
+            WGPUSurfaceConfiguration.device(
+                output,
+                MemorySegment(Pointer(input.device.handler), Long.SIZE_BYTES.toLong())
+            )
             WGPUSurfaceConfiguration.usage(output, input.usage.toFlagInt())
             WGPUSurfaceConfiguration.format(output, input.format.value)
             WGPUSurfaceConfiguration.presentMode(output, WGPUPresentMode_Fifo())

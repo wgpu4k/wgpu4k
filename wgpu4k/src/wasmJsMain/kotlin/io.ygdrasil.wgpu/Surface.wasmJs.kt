@@ -21,9 +21,10 @@ actual class Surface(internal val handler: GPUCanvasContext) : AutoCloseable {
     actual val supportedFormats: Set<TextureFormat> = setOf(TextureFormat.bgra8unorm, TextureFormat.rgba8unorm, TextureFormat.rgba16float)
     actual val supportedAlphaMode: Set<CompositeAlphaMode> = setOf(CompositeAlphaMode.opaque, CompositeAlphaMode.premultiplied)
 
-    actual fun getCurrentTexture(): Texture {
+    actual fun getCurrentTexture(): SurfaceTexture {
         return handler.getCurrentTexture()
             .let(::Texture)
+            .let { SurfaceTexture(it, SurfaceTextureStatus.success) }
     }
 
     actual fun present() {

@@ -12,7 +12,7 @@ expect class Surface : AutoCloseable {
     val supportedFormats:Set<TextureFormat>
     val supportedAlphaMode: Set<CompositeAlphaMode>
 
-    fun getCurrentTexture(): Texture
+    fun getCurrentTexture(): SurfaceTexture
 
     /**
      * Schedule this texture to be presented on the owning surface.
@@ -36,4 +36,9 @@ data class CanvasConfiguration(
     val viewFormats: Set<TextureFormat> = setOf(),
     val colorSpace: PredefinedColorSpace = PredefinedColorSpace.srgb,
     val alphaMode: CompositeAlphaMode = CompositeAlphaMode.opaque,
+)
+
+data class SurfaceTexture(
+    val texture: Texture,
+    val status: SurfaceTextureStatus
 )
