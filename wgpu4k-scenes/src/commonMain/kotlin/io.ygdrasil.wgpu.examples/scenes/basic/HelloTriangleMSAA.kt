@@ -48,7 +48,7 @@ class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
                     )
                 ),
                 primitive = RenderPipelineDescriptor.PrimitiveState(
-                    topology = PrimitiveTopology.trianglelist
+                    topology = PrimitiveTopology.triangleList
                 ),
                 multisample = RenderPipelineDescriptor.MultisampleState(
                     count = sampleCount

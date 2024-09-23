@@ -131,12 +131,12 @@ class GLTFPrimitive(
 
         val primitive = if (topology == GLTFRenderMode.TRIANGLE_STRIP) {
             RenderPipelineDescriptor.PrimitiveState(
-                topology = PrimitiveTopology.trianglestrip,
+                topology = PrimitiveTopology.triangleStrip,
                 stripIndexFormat = if (indices?.componentType == GLTFComponentType.UNSIGNED_SHORT.value) IndexFormat.uint16 else IndexFormat.uint32,
             )
         } else {
             RenderPipelineDescriptor.PrimitiveState(
-                topology = PrimitiveTopology.trianglelist
+                topology = PrimitiveTopology.triangleList
             )
         }
 

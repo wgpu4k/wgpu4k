@@ -111,7 +111,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 					)
 				),
 				primitive = RenderPipelineDescriptor.PrimitiveState(
-					topology = PrimitiveTopology.trianglelist,
+					topology = PrimitiveTopology.triangleList,
 					cullMode = CullMode.none
 				),
 				depthStencil = RenderPipelineDescriptor.DepthStencilState(

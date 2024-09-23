@@ -99,7 +99,7 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
                     )
                 ),
                 primitive = RenderPipelineDescriptor.PrimitiveState(
-                    topology = PrimitiveTopology.trianglelist,
+                    topology = PrimitiveTopology.triangleList,
                     cullMode = CullMode.back
                 ),
                 depthStencil = RenderPipelineDescriptor.DepthStencilState(

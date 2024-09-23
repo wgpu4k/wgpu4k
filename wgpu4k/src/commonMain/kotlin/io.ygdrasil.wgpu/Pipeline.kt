@@ -46,7 +46,7 @@ data class RenderPipelineDescriptor(
     }
 
     data class PrimitiveState(
-        val topology: PrimitiveTopology = PrimitiveTopology.trianglelist,
+        val topology: PrimitiveTopology = PrimitiveTopology.triangleList,
         val stripIndexFormat: IndexFormat? = null,
         val frontFace: FrontFace = FrontFace.ccw,
         val cullMode: CullMode = CullMode.none,

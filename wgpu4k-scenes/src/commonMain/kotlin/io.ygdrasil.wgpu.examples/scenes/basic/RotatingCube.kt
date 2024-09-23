@@ -100,7 +100,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 					)
 				),
 				primitive = RenderPipelineDescriptor.PrimitiveState(
-					topology = PrimitiveTopology.trianglelist,
+					topology = PrimitiveTopology.triangleList,
 					cullMode = CullMode.back
 				),
 				depthStencil = RenderPipelineDescriptor.DepthStencilState(

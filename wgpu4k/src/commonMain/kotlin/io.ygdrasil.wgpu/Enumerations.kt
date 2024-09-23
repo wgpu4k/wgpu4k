@@ -485,11 +485,11 @@ enum class PrimitiveTopology(
     override val value: Int,
     val stringValue: String,
 ) : EnumerationWithValue {
-    pointlist(0, "point-list"),
-    linelist(1, "line-list"),
-    linestrip(2, "line-strip"),
-    trianglelist(3, "triangle-list"),
-    trianglestrip(4, "triangle-strip");
+    pointList(0, "point-list"),
+    lineList(1, "line-list"),
+    lineStrip(2, "line-strip"),
+    triangleList(3, "triangle-list"),
+    triangleStrip(4, "triangle-strip");
 
     companion object {
         fun of(value: Int): PrimitiveTopology? = entries.find {

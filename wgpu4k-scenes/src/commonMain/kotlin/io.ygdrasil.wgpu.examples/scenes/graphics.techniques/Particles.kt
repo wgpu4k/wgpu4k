@@ -151,7 +151,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                     ),
                 ),
                 primitive = RenderPipelineDescriptor.PrimitiveState(
-                    topology = PrimitiveTopology.trianglelist,
+                    topology = PrimitiveTopology.triangleList,
                 ),
 
                 depthStencil = RenderPipelineDescriptor.DepthStencilState(

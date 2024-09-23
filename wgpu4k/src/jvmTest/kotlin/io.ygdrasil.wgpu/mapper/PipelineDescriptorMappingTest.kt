@@ -3,9 +3,29 @@ package io.ygdrasil.wgpu.mapper
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import io.ygdrasil.wgpu.*
+import io.ygdrasil.wgpu.BlendFactor
+import io.ygdrasil.wgpu.BlendOperation
+import io.ygdrasil.wgpu.ColorWriteMask
+import io.ygdrasil.wgpu.CompareFunction
+import io.ygdrasil.wgpu.CullMode
+import io.ygdrasil.wgpu.PrimitiveTopology
+import io.ygdrasil.wgpu.RenderPipelineDescriptor
+import io.ygdrasil.wgpu.ShaderModule
+import io.ygdrasil.wgpu.StencilOperation
+import io.ygdrasil.wgpu.TextureFormat
+import io.ygdrasil.wgpu.VertexFormat
 import io.ygdrasil.wgpu.internal.jvm.confined
-import io.ygdrasil.wgpu.internal.jvm.panama.*
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUBlendComponent
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUBlendState
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUColorTargetState
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUDepthStencilState
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUFragmentState
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUPrimitiveState
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPipelineDescriptor
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUStencilFaceState
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUVertexAttribute
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUVertexBufferLayout
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUVertexState
 import java.lang.foreign.MemorySegment
 
 class PipelineDescriptorMappingTest : FreeSpec({
@@ -47,7 +67,7 @@ class PipelineDescriptorMappingTest : FreeSpec({
                     )
                 ),
                 primitive = RenderPipelineDescriptor.PrimitiveState(
-                    topology = PrimitiveTopology.trianglelist,
+                    topology = PrimitiveTopology.triangleList,
                     cullMode = CullMode.back
                 ),
                 depthStencil = RenderPipelineDescriptor.DepthStencilState(
@@ -129,7 +149,7 @@ class PipelineDescriptorMappingTest : FreeSpec({
 
             WGPURenderPipelineDescriptor.primitive(result) shouldNotBe MemorySegment.NULL
             WGPURenderPipelineDescriptor.primitive(result)?.also { primitive ->
-                WGPUPrimitiveState.topology(primitive) shouldBe PrimitiveTopology.trianglelist.value
+                WGPUPrimitiveState.topology(primitive) shouldBe PrimitiveTopology.triangleList.value
                 WGPUPrimitiveState.cullMode(primitive) shouldBe CullMode.back.value
             }
 
