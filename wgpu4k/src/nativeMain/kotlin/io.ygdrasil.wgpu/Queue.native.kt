@@ -126,6 +126,7 @@ actual class Queue(internal val handler: WGPUQueue) {
             (size * Long.SIZE_BYTES).toULong()
         )
     }
+
     actual fun writeTexture(
         destination: ImageCopyTexture,
         data: FloatArray,
@@ -136,7 +137,87 @@ actual class Queue(internal val handler: WGPUQueue) {
             handler,
             map(destination).ptr,
             data.toBuffer(0, this),
-            data.size.toULong(),
+            (Float.SIZE_BYTES * data.size).toULong(),
+            map(dataLayout).ptr,
+            map(size).ptr
+        )
+    }
+
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: DoubleArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) = memScoped {
+        wgpuQueueWriteTexture(
+            handler,
+            map(destination).ptr,
+            data.toBuffer(0, this),
+            (Double.SIZE_BYTES * data.size).toULong(),
+            map(dataLayout).ptr,
+            map(size).ptr
+        )
+    }
+
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: ByteArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) = memScoped {
+        wgpuQueueWriteTexture(
+            handler,
+            map(destination).ptr,
+            data.toBuffer(0, this),
+            (Byte.SIZE_BYTES * data.size).toULong(),
+            map(dataLayout).ptr,
+            map(size).ptr
+        )
+    }
+
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: ShortArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) = memScoped {
+        wgpuQueueWriteTexture(
+            handler,
+            map(destination).ptr,
+            data.toBuffer(0, this),
+            (Short.SIZE_BYTES * data.size).toULong(),
+            map(dataLayout).ptr,
+            map(size).ptr
+        )
+    }
+
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: IntArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) = memScoped {
+        wgpuQueueWriteTexture(
+            handler,
+            map(destination).ptr,
+            data.toBuffer(0, this),
+            (Int.SIZE_BYTES * data.size).toULong(),
+            map(dataLayout).ptr,
+            map(size).ptr
+        )
+    }
+
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: LongArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) = memScoped {
+        wgpuQueueWriteTexture(
+            handler,
+            map(destination).ptr,
+            data.toBuffer(0, this),
+            (Long.SIZE_BYTES * data.size).toULong(),
             map(dataLayout).ptr,
             map(size).ptr
         )

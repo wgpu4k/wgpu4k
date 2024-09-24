@@ -58,6 +58,41 @@ expect class Queue {
         dataLayout: TextureDataLayout,
         size: Size3D,
     )
+
+    fun writeTexture(
+        destination: ImageCopyTexture,
+        data: DoubleArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    )
+
+    fun writeTexture(
+        destination: ImageCopyTexture,
+        data: ByteArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    )
+
+    fun writeTexture(
+        destination: ImageCopyTexture,
+        data: ShortArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    )
+
+    fun writeTexture(
+        destination: ImageCopyTexture,
+        data: IntArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    )
+
+    fun writeTexture(
+        destination: ImageCopyTexture,
+        data: LongArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    )
     
     fun copyExternalImageToTexture(
         source: ImageCopyExternalImage,

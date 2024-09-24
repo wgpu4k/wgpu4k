@@ -139,7 +139,87 @@ actual class Queue(internal val handler: MemorySegment) {
             handler,
             arena.map(destination),
             data.toBuffer(0, arena),
-            data.size.toLong(),
+            Float.SIZE_BYTES * data.size.toLong(),
+            arena.map(dataLayout),
+            arena.map(size)
+        )
+    }
+
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: DoubleArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) = confined { arena ->
+        wgpu_h.wgpuQueueWriteTexture(
+            handler,
+            arena.map(destination),
+            data.toBuffer(0, arena),
+            Double.SIZE_BYTES * data.size.toLong(),
+            arena.map(dataLayout),
+            arena.map(size)
+        )
+    }
+
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: ByteArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) = confined { arena ->
+        wgpu_h.wgpuQueueWriteTexture(
+            handler,
+            arena.map(destination),
+            data.toBuffer(0, arena),
+            Byte.SIZE_BYTES * data.size.toLong(),
+            arena.map(dataLayout),
+            arena.map(size)
+        )
+    }
+
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: ShortArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) = confined { arena ->
+        wgpu_h.wgpuQueueWriteTexture(
+            handler,
+            arena.map(destination),
+            data.toBuffer(0, arena),
+            Short.SIZE_BYTES * data.size.toLong(),
+            arena.map(dataLayout),
+            arena.map(size)
+        )
+    }
+
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: IntArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) = confined { arena ->
+        wgpu_h.wgpuQueueWriteTexture(
+            handler,
+            arena.map(destination),
+            data.toBuffer(0, arena),
+            Int.SIZE_BYTES * data.size.toLong(),
+            arena.map(dataLayout),
+            arena.map(size)
+        )
+    }
+
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: LongArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) = confined { arena ->
+        wgpu_h.wgpuQueueWriteTexture(
+            handler,
+            arena.map(destination),
+            data.toBuffer(0, arena),
+            Long.SIZE_BYTES * data.size.toLong(),
             arena.map(dataLayout),
             arena.map(size)
         )

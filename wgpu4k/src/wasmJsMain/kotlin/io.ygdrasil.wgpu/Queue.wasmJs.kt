@@ -133,6 +133,76 @@ actual class Queue(internal val handler: GPUQueue) {
         )
     }
 
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: DoubleArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) {
+        handler.writeTexture(
+            map(destination),
+            Float64Array(data.mapJsArray { it.toJsNumber() }),
+            map(dataLayout),
+            map(size)
+        )
+    }
+
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: ByteArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) {
+        handler.writeTexture(
+            map(destination),
+            Int8Array(data.mapJsArray { it.toJsNumber() }),
+            map(dataLayout),
+            map(size)
+        )
+    }
+
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: ShortArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) {
+        handler.writeTexture(
+            map(destination),
+            Int16Array(data.mapJsArray { it.toJsNumber() }),
+            map(dataLayout),
+            map(size)
+        )
+    }
+
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: IntArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) {
+        handler.writeTexture(
+            map(destination),
+            Int32Array(data.mapJsArray { it.toJsNumber() }),
+            map(dataLayout),
+            map(size)
+        )
+    }
+
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: LongArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) {
+        handler.writeTexture(
+            map(destination),
+            BigInt64Array(data.mapJsArray { it.toJsBigInt() }),
+            map(dataLayout),
+            map(size)
+        )
+    }
+
     actual fun copyExternalImageToTexture(
         source: ImageCopyExternalImage,
         destination: ImageCopyTextureTagged,

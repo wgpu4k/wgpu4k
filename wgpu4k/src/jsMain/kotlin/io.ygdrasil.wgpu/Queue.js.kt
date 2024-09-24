@@ -129,6 +129,76 @@ actual class Queue(internal val handler: GPUQueue) {
         )
     }
 
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: DoubleArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) {
+        handler.writeTexture(
+            map(destination),
+            data.unsafeCast<Float64Array>(),
+            map(dataLayout),
+            map(size)
+        )
+    }
+
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: ByteArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) {
+        handler.writeTexture(
+            map(destination),
+            data.unsafeCast<Int8Array>(),
+            map(dataLayout),
+            map(size)
+        )
+    }
+
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: ShortArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) {
+        handler.writeTexture(
+            map(destination),
+            data.unsafeCast<Int16Array>(),
+            map(dataLayout),
+            map(size)
+        )
+    }
+
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: IntArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) {
+        handler.writeTexture(
+            map(destination),
+            data.unsafeCast<Int32Array>(),
+            map(dataLayout),
+            map(size)
+        )
+    }
+
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: LongArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) {
+        handler.writeTexture(
+            map(destination),
+            data.unsafeCast<BigInt64Array>(),
+            map(dataLayout),
+            map(size)
+        )
+    }
+
     actual fun copyExternalImageToTexture(
         source: ImageCopyExternalImage,
         destination: ImageCopyTextureTagged,
