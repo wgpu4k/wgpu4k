@@ -1,10 +1,17 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.js.*
+import io.ygdrasil.wgpu.internal.js.BigInt64Array
+import io.ygdrasil.wgpu.internal.js.GPUExtent3DDict
+import io.ygdrasil.wgpu.internal.js.GPUImageCopyTexture
+import io.ygdrasil.wgpu.internal.js.GPUImageDataLayout
+import io.ygdrasil.wgpu.internal.js.GPUQueue
+import io.ygdrasil.wgpu.internal.js.createJsObject
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.Float32Array
+import org.khronos.webgl.Float64Array
 import org.khronos.webgl.Int16Array
 import org.khronos.webgl.Int32Array
+import org.khronos.webgl.Int8Array
 
 actual class Queue(internal val handler: GPUQueue) {
     actual fun submit(commandsBuffer: List<CommandBuffer>) {
@@ -43,7 +50,6 @@ actual class Queue(internal val handler: GPUQueue) {
         )
     }
 
-    @JsName("writeBufferI32")
     actual fun writeBuffer(
         buffer: Buffer,
         bufferOffset: GPUSize64,
@@ -55,6 +61,54 @@ actual class Queue(internal val handler: GPUQueue) {
             buffer.handler,
             bufferOffset,
             data.unsafeCast<Int32Array>(),
+            dataOffset,
+            size
+        )
+    }
+
+    actual fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
+        data: ByteArray,
+        dataOffset: GPUSize64,
+        size: GPUSize64,
+    ) {
+        handler.writeBuffer(
+            buffer.handler,
+            bufferOffset,
+            data.unsafeCast<Int8Array>(),
+            dataOffset,
+            size
+        )
+    }
+
+    actual fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
+        data: DoubleArray,
+        dataOffset: GPUSize64,
+        size: GPUSize64,
+    ) {
+        handler.writeBuffer(
+            buffer.handler,
+            bufferOffset,
+            data.unsafeCast<Float64Array>(),
+            dataOffset,
+            size
+        )
+    }
+
+    actual fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
+        data: LongArray,
+        dataOffset: GPUSize64,
+        size: GPUSize64,
+    ) {
+        handler.writeBuffer(
+            buffer.handler,
+            bufferOffset,
+            data.unsafeCast<BigInt64Array>(),
             dataOffset,
             size
         )

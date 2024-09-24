@@ -80,6 +80,54 @@ actual class Queue(val handler: Long) {
         )
     }
 
+    actual fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
+        data: ByteArray,
+        dataOffset: GPUSize64,
+        size: GPUSize64,
+    ) = scoped { arena ->
+        NativeWgpu4k.wgpuQueueWriteBuffer(
+            handler,
+            buffer.handler,
+            bufferOffset,
+            data.toBuffer(dataOffset, arena),
+            size * Byte.SIZE_BYTES
+        )
+    }
+
+    actual fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
+        data: DoubleArray,
+        dataOffset: GPUSize64,
+        size: GPUSize64,
+    ) = scoped { arena ->
+        NativeWgpu4k.wgpuQueueWriteBuffer(
+            handler,
+            buffer.handler,
+            bufferOffset,
+            data.toBuffer(dataOffset, arena),
+            size * Double.SIZE_BYTES
+        )
+    }
+
+    actual fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
+        data: LongArray,
+        dataOffset: GPUSize64,
+        size: GPUSize64,
+    ) = scoped { arena ->
+        NativeWgpu4k.wgpuQueueWriteBuffer(
+            handler,
+            buffer.handler,
+            bufferOffset,
+            data.toBuffer(dataOffset, arena),
+            size * Long.SIZE_BYTES
+        )
+    }
+
     actual fun copyExternalImageToTexture(
         source: ImageCopyExternalImage,
         destination: ImageCopyTextureTagged,
@@ -115,9 +163,19 @@ actual class Queue(val handler: Long) {
         return arena.allocateFrom(ValueLayout.JAVA_BYTE, this).pointer.toAddress()
     }
 
+    private fun DoubleArray.toBuffer(dataOffset: GPUSize64, arena: SegmentAllocator): Long {
+        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
+        return arena.allocateFrom(ValueLayout.JAVA_DOUBLE, this).pointer.toAddress()
+    }
+
     private fun FloatArray.toBuffer(dataOffset: GPUSize64, arena: SegmentAllocator): Long {
         if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
         return arena.allocateFrom(ValueLayout.JAVA_FLOAT, this).pointer.toAddress()
+    }
+
+    private fun LongArray.toBuffer(dataOffset: GPUSize64, arena: SegmentAllocator): Long {
+        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
+        return arena.allocateFrom(ValueLayout.JAVA_LONG, this).pointer.toAddress()
     }
 
     private fun IntArray.toBuffer(dataOffset: GPUSize64, arena: SegmentAllocator): Long {

@@ -81,6 +81,54 @@ actual class Queue(internal val handler: MemorySegment) {
         )
     }
 
+    actual fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
+        data: ByteArray,
+        dataOffset: GPUSize64,
+        size: GPUSize64,
+    ) = confined { arena ->
+        wgpu_h.wgpuQueueWriteBuffer(
+            handler,
+            buffer.handler,
+            bufferOffset,
+            data.toBuffer(dataOffset, arena),
+            size * Byte.SIZE_BYTES
+        )
+    }
+
+    actual fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
+        data: DoubleArray,
+        dataOffset: GPUSize64,
+        size: GPUSize64,
+    ) = confined { arena ->
+        wgpu_h.wgpuQueueWriteBuffer(
+            handler,
+            buffer.handler,
+            bufferOffset,
+            data.toBuffer(dataOffset, arena),
+            size * Double.SIZE_BYTES
+        )
+    }
+
+    actual fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
+        data: LongArray,
+        dataOffset: GPUSize64,
+        size: GPUSize64,
+    ) = confined { arena ->
+        wgpu_h.wgpuQueueWriteBuffer(
+            handler,
+            buffer.handler,
+            bufferOffset,
+            data.toBuffer(dataOffset, arena),
+            size * Long.SIZE_BYTES
+        )
+    }
+
     actual fun copyExternalImageToTexture(
         source: ImageCopyExternalImage,
         destination: ImageCopyTextureTagged,
@@ -111,9 +159,19 @@ actual class Queue(internal val handler: MemorySegment) {
 
     }
 
+    private fun DoubleArray.toBuffer(dataOffset: GPUSize64, arena: Arena): MemorySegment {
+        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
+        return arena.allocateFrom(ValueLayout.JAVA_DOUBLE, *this)
+    }
+
     private fun FloatArray.toBuffer(dataOffset: GPUSize64, arena: Arena): MemorySegment {
         if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
         return arena.allocateFrom(ValueLayout.JAVA_FLOAT, *this)
+    }
+
+    private fun LongArray.toBuffer(dataOffset: GPUSize64, arena: Arena): MemorySegment {
+        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
+        return arena.allocateFrom(ValueLayout.JAVA_LONG, *this)
     }
 
     private fun IntArray.toBuffer(dataOffset: GPUSize64, arena: Arena): MemorySegment {
@@ -124,6 +182,11 @@ actual class Queue(internal val handler: MemorySegment) {
     private fun ShortArray.toBuffer(dataOffset: GPUSize64, arena: Arena): MemorySegment {
         if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
         return arena.allocateFrom(ValueLayout.JAVA_SHORT, *this)
+    }
+
+    private fun ByteArray.toBuffer(dataOffset: GPUSize64, arena: Arena): MemorySegment {
+        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
+        return arena.allocateFrom(ValueLayout.JAVA_BYTE, *this)
     }
 }
 

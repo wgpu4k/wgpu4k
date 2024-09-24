@@ -10,6 +10,12 @@ value class SegmentAllocator(internal val arena: JnaArena) {
     fun allocate(layout: ValueLayout, size: Long): MemorySegment =
         MemorySegment(arena.allocate(layout.size * size), layout.size * size)
 
+    fun allocateFrom(layout: ValueLayout.OfByte, values: ByteArray): MemorySegment =
+        allocate(layout, values.size.toLong())
+            .also {
+                it.pointer.write(0, values, 0, values.size)
+            }
+
     fun allocateFrom(layout: ValueLayout.OfShort, values: ShortArray): MemorySegment =
         allocate(layout, values.size.toLong())
             .also {
@@ -22,13 +28,19 @@ value class SegmentAllocator(internal val arena: JnaArena) {
                 it.pointer.write(0, values, 0, values.size)
             }
 
+    fun allocateFrom(layout: ValueLayout.OfLong, values: LongArray): MemorySegment =
+        allocate(layout, values.size.toLong())
+            .also {
+                it.pointer.write(0, values, 0, values.size)
+            }
+
     fun allocateFrom(layout: ValueLayout.OfFloat, values: FloatArray): MemorySegment =
         allocate(layout, values.size.toLong())
             .also {
                 it.pointer.write(0, values, 0, values.size)
             }
 
-    fun allocateFrom(layout: ValueLayout.OfByte, values: ByteArray): MemorySegment =
+    fun allocateFrom(layout: ValueLayout.OfDouble, values: DoubleArray): MemorySegment =
         allocate(layout, values.size.toLong())
             .also {
                 it.pointer.write(0, values, 0, values.size)

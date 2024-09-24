@@ -5,7 +5,12 @@ package io.ygdrasil.wgpu
 import io.ygdrasil.wgpu.internal.toPointerArray
 import io.ygdrasil.wgpu.mapper.map
 import kotlinx.cinterop.*
-import webgpu.*
+import webgpu.WGPUExtent3D
+import webgpu.WGPUQueue
+import webgpu.WGPUTextureDataLayout
+import webgpu.wgpuQueueSubmit
+import webgpu.wgpuQueueWriteBuffer
+import webgpu.wgpuQueueWriteTexture
 
 actual class Queue(internal val handler: WGPUQueue) {
 
@@ -74,6 +79,54 @@ actual class Queue(internal val handler: WGPUQueue) {
         )
     }
 
+    actual fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
+        data: ByteArray,
+        dataOffset: GPUSize64,
+        size: GPUSize64,
+    ) = memScoped {
+        wgpuQueueWriteBuffer(
+            handler,
+            buffer.handler,
+            bufferOffset.toULong(),
+            data.toBuffer(dataOffset, this),
+            (size * Byte.SIZE_BYTES).toULong()
+        )
+    }
+
+    actual fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
+        data: DoubleArray,
+        dataOffset: GPUSize64,
+        size: GPUSize64,
+    ) = memScoped {
+        wgpuQueueWriteBuffer(
+            handler,
+            buffer.handler,
+            bufferOffset.toULong(),
+            data.toBuffer(dataOffset, this),
+            (size * Double.SIZE_BYTES).toULong()
+        )
+    }
+
+    actual fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
+        data: LongArray,
+        dataOffset: GPUSize64,
+        size: GPUSize64,
+    ) = memScoped {
+        wgpuQueueWriteBuffer(
+            handler,
+            buffer.handler,
+            bufferOffset.toULong(),
+            data.toBuffer(dataOffset, this),
+            (size * Long.SIZE_BYTES).toULong()
+        )
+    }
+
     actual fun copyExternalImageToTexture(
         source: ImageCopyExternalImage,
         destination: ImageCopyTextureTagged,
@@ -111,6 +164,20 @@ actual class Queue(internal val handler: WGPUQueue) {
         }
     }
 
+    private fun DoubleArray.toBuffer(dataOffset: GPUSize64, arena: ArenaBase): CValuesRef<*> {
+        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
+        return arena.allocArray<DoubleVar>(size).also {
+            forEachIndexed { index, value -> it[index] = value }
+        }
+    }
+
+    private fun LongArray.toBuffer(dataOffset: GPUSize64, arena: ArenaBase): CValuesRef<*> {
+        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
+        return arena.allocArray<LongVar>(size).also {
+            forEachIndexed { index, value -> it[index] = value }
+        }
+    }
+
     private fun IntArray.toBuffer(dataOffset: GPUSize64, arena: ArenaBase): CValuesRef<*> {
         if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
         return arena.allocArray<IntVar>(size).also {
@@ -121,6 +188,13 @@ actual class Queue(internal val handler: WGPUQueue) {
     private fun ShortArray.toBuffer(dataOffset: GPUSize64, arena: ArenaBase): CValuesRef<*> {
         if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
         return arena.allocArray<ShortVar>(size).also {
+            forEachIndexed { index, value -> it[index] = value }
+        }
+    }
+
+    private fun ByteArray.toBuffer(dataOffset: GPUSize64, arena: ArenaBase): CValuesRef<*> {
+        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
+        return arena.allocArray<ByteVar>(size).also {
             forEachIndexed { index, value -> it[index] = value }
         }
     }

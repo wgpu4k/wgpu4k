@@ -80,6 +80,14 @@ internal fun <B : JsAny> FloatArray.mapJsArray(converter: (Float) -> B): JsArray
     return output
 }
 
+internal fun <B : JsAny> DoubleArray.mapJsArray(converter: (Double) -> B): JsArray<B> {
+    val output: JsArray<B> = JsArray()
+    forEachIndexed { index, value ->
+        output[index] = converter(value)
+    }
+    return output
+}
+
 internal fun <B : JsAny> ByteArray.mapJsArray(converter: (Byte) -> B): JsArray<B> {
     val output: JsArray<B> = JsArray()
     forEachIndexed { index, value ->
@@ -89,6 +97,14 @@ internal fun <B : JsAny> ByteArray.mapJsArray(converter: (Byte) -> B): JsArray<B
 }
 
 internal fun <B : JsAny> IntArray.mapJsArray(converter: (Int) -> B): JsArray<B> {
+    val output: JsArray<B> = JsArray()
+    forEachIndexed { index, value ->
+        output[index] = converter(value)
+    }
+    return output
+}
+
+internal fun <B : JsAny> LongArray.mapJsArray(converter: (Long) -> B): JsArray<B> {
     val output: JsArray<B> = JsArray()
     forEachIndexed { index, value ->
         output[index] = converter(value)

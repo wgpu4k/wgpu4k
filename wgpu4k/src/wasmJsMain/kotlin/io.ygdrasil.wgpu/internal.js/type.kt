@@ -616,3 +616,21 @@ external interface GPUTexture {
 external interface GPURequestAdapterOptions
 
 external interface GPUSampler : GPUObjectBase
+
+external open class BigInt64Array : ArrayBufferView {
+    constructor(length: Int)
+    constructor(array: BigInt64Array)
+    constructor(array: JsArray<JsBigInt>)
+    constructor(buffer: ArrayBuffer, byteOffset: Int = definedExternally, length: Int = definedExternally)
+    open val length: Int
+    override val buffer: ArrayBuffer
+    override val byteOffset: Int
+    override val byteLength: Int
+    fun set(array: BigInt64Array, offset: Int = definedExternally)
+    fun set(array: JsArray<JsBigInt>, offset: Int = definedExternally)
+    fun subarray(start: Int, end: Int): BigInt64Array
+
+    companion object {
+        val BYTES_PER_ELEMENT: Int
+    }
+}

@@ -28,6 +28,30 @@ expect class Queue {
         size: GPUSize64 = data.size.toLong(),
     )
 
+    fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
+        data: ByteArray,
+        dataOffset: GPUSize64 = 0,
+        size: GPUSize64 = data.size.toLong(),
+    )
+
+    fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
+        data: DoubleArray,
+        dataOffset: GPUSize64 = 0,
+        size: GPUSize64 = data.size.toLong(),
+    )
+
+    fun writeBuffer(
+        buffer: Buffer,
+        bufferOffset: GPUSize64,
+        data: LongArray,
+        dataOffset: GPUSize64 = 0,
+        size: GPUSize64 = data.size.toLong(),
+    )
+    
     fun copyExternalImageToTexture(
         source: ImageCopyExternalImage,
         destination: ImageCopyTextureTagged,

@@ -667,32 +667,10 @@ external interface GPUQueue : GPUObjectBase {
         buffer: GPUBuffer,
         bufferOffset: GPUSize64,
         data: ArrayBufferView,
-        dataOffset: GPUSize64 = definedExternally,
-        size: GPUSize64 = definedExternally,
+        dataOffset: GPUSize64,
+        size: GPUSize64,
     )
 
-    fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: ArrayBufferView)
-    fun writeBuffer(
-        buffer: GPUBuffer,
-        bufferOffset: GPUSize64,
-        data: ArrayBufferView,
-        dataOffset: GPUSize64 = definedExternally,
-    )
-
-    fun writeBuffer(
-        buffer: GPUBuffer,
-        bufferOffset: GPUSize64,
-        data: ArrayBuffer,
-        dataOffset: GPUSize64 = definedExternally,
-        size: GPUSize64 = definedExternally,
-    )
-
-    fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: ArrayBuffer)
-
-    /*fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: ArrayBuffer, dataOffset: GPUSize64 = definedExternally)
-    fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: SharedArrayBuffer, dataOffset: GPUSize64 = definedExternally, size: GPUSize64 = definedExternally)
-    fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: SharedArrayBuffer)
-    fun writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: SharedArrayBuffer, dataOffset: GPUSize64 = definedExternally)*/
     fun writeTexture(
         destination: GPUImageCopyTexture,
         data: ArrayBufferView,
@@ -882,4 +860,22 @@ external interface GPUTextureUsage {
     var TEXTURE_BINDING: GPUFlagsConstant
     var STORAGE_BINDING: GPUFlagsConstant
     var RENDER_ATTACHMENT: GPUFlagsConstant
+}
+
+external open class BigInt64Array : ArrayBufferView {
+    constructor(length: Int)
+    constructor(array: BigInt64Array)
+    constructor(array: Array<Long>)
+    constructor(buffer: ArrayBuffer, byteOffset: Int = definedExternally, length: Int = definedExternally)
+    open val length: Int
+    override val buffer: ArrayBuffer
+    override val byteOffset: Int
+    override val byteLength: Int
+    fun set(array: BigInt64Array, offset: Int = definedExternally)
+    fun set(array: Array<Long>, offset: Int = definedExternally)
+    fun subarray(start: Int, end: Int): BigInt64Array
+
+    companion object {
+        val BYTES_PER_ELEMENT: Int
+    }
 }
