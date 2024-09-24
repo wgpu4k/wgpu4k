@@ -51,6 +51,13 @@ expect class Queue {
         dataOffset: GPUSize64 = 0,
         size: GPUSize64 = data.size.toLong(),
     )
+
+    fun writeTexture(
+        destination: ImageCopyTexture,
+        data: FloatArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    )
     
     fun copyExternalImageToTexture(
         source: ImageCopyExternalImage,
@@ -91,3 +98,10 @@ enum class PredefinedColorSpace(val value: String) {
     srgb("srgb"),
     displayp3("display-p3")
 }
+
+
+data class TextureDataLayout (
+    val offset: GPUSize64,
+    val bytesPerRow: GPUSize32?,
+    val rowsPerImage: GPUSize32?
+)

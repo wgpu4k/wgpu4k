@@ -366,8 +366,15 @@ external interface GPUQueue : GPUObjectBase {
         buffer: GPUBuffer,
         bufferOffset: JsNumber,
         data: ArrayBufferView,
-        dataOffset: JsNumber = definedExternally,
-        size: JsNumber = definedExternally,
+        dataOffset: JsNumber,
+        size: JsNumber,
+    )
+
+    fun writeTexture(
+        destination: GPUImageCopyTexture,
+        data: ArrayBufferView,
+        dataLayout: GPUImageDataLayout,
+        size: GPUExtent3DDict,
     )
 
     fun writeTexture(
@@ -381,9 +388,9 @@ external interface GPUQueue : GPUObjectBase {
 }
 
 external interface GPUImageDataLayout : JsAny {
-    var offset: JsNumber
-    var bytesPerRow: GPUSize32
-    var rowsPerImage: GPUSize32
+    var offset: JsBigInt
+    var bytesPerRow: GPUSize32?
+    var rowsPerImage: GPUSize32?
 }
 
 external interface GPUImageCopyTexture : JsAny {

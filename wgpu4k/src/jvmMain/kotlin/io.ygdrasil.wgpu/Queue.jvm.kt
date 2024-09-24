@@ -129,6 +129,22 @@ actual class Queue(internal val handler: MemorySegment) {
         )
     }
 
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: FloatArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) = confined { arena ->
+        wgpu_h.wgpuQueueWriteTexture(
+            handler,
+            arena.map(destination),
+            data.toBuffer(0, arena),
+            data.size.toLong(),
+            arena.map(dataLayout),
+            arena.map(size)
+        )
+    }
+
     actual fun copyExternalImageToTexture(
         source: ImageCopyExternalImage,
         destination: ImageCopyTextureTagged,

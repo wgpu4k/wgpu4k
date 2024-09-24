@@ -128,6 +128,22 @@ actual class Queue(val handler: Long) {
         )
     }
 
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: FloatArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) = scoped { arena ->
+        NativeWgpu4k.wgpuQueueWriteTexture(
+            handler,
+            arena.map(destination),
+            data.toBuffer(0, arena),
+            data.size.toLong(),
+            arena.map(dataLayout),
+            arena.map(size)
+        )
+    }
+
     actual fun copyExternalImageToTexture(
         source: ImageCopyExternalImage,
         destination: ImageCopyTextureTagged,

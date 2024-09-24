@@ -126,6 +126,21 @@ actual class Queue(internal val handler: WGPUQueue) {
             (size * Long.SIZE_BYTES).toULong()
         )
     }
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: FloatArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) = memScoped {
+        wgpuQueueWriteTexture(
+            handler,
+            map(destination).ptr,
+            data.toBuffer(0, this),
+            data.size.toULong(),
+            map(dataLayout).ptr,
+            map(size).ptr
+        )
+    }
 
     actual fun copyExternalImageToTexture(
         source: ImageCopyExternalImage,

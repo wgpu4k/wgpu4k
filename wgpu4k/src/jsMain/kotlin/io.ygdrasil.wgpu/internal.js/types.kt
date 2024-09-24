@@ -675,13 +675,6 @@ external interface GPUQueue : GPUObjectBase {
         destination: GPUImageCopyTexture,
         data: ArrayBufferView,
         dataLayout: GPUImageDataLayout,
-        size: Array<GPUIntegerCoordinate>,
-    )
-
-    fun writeTexture(
-        destination: GPUImageCopyTexture,
-        data: ArrayBufferView,
-        dataLayout: GPUImageDataLayout,
         size: GPUExtent3DDict,
     )
 
@@ -689,28 +682,7 @@ external interface GPUQueue : GPUObjectBase {
         destination: GPUImageCopyTexture,
         data: ArrayBuffer,
         dataLayout: GPUImageDataLayout,
-        size: Array<GPUIntegerCoordinate>,
-    )
-
-    fun writeTexture(
-        destination: GPUImageCopyTexture,
-        data: ArrayBuffer,
-        dataLayout: GPUImageDataLayout,
         size: GPUExtent3DDict,
-    )
-
-    /*fun writeTexture(destination: GPUImageCopyTexture, data: SharedArrayBuffer, dataLayout: GPUImageDataLayout, size: Array<GPUIntegerCoordinate>)
-    fun writeTexture(destination: GPUImageCopyTexture, data: SharedArrayBuffer, dataLayout: GPUImageDataLayout, size: GPUExtent3DDictStrict)*/
-    fun copyExternalImageToTexture(
-        source: GPUImageCopyExternalImage,
-        destination: GPUImageCopyTextureTagged,
-        copySize: Array<GPUIntegerCoordinate>,
-    )
-
-    fun copyExternalImageToTexture(
-        source: GPUImageCopyExternalImage,
-        destination: GPUImageCopyTextureTagged,
-        copySize: GPUExtent3DDict,
     )
 
 }

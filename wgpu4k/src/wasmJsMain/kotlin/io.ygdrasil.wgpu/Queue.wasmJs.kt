@@ -10,6 +10,7 @@ import io.ygdrasil.wgpu.internal.js.mapJsArray
 import io.ygdrasil.wgpu.internal.js.toInt8Array
 import io.ygdrasil.wgpu.internal.js.toJsBigInt
 import io.ygdrasil.wgpu.internal.js.toJsNumber
+import io.ygdrasil.wgpu.mapper.map
 import org.khronos.webgl.Float32Array
 import org.khronos.webgl.Float64Array
 import org.khronos.webgl.Int16Array
@@ -118,6 +119,20 @@ actual class Queue(internal val handler: GPUQueue) {
         )
     }
 
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: FloatArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) {
+        handler.writeTexture(
+            map(destination),
+            Float32Array(data.mapJsArray { it.toJsNumber() }),
+            map(dataLayout),
+            map(size)
+        )
+    }
+
     actual fun copyExternalImageToTexture(
         source: ImageCopyExternalImage,
         destination: ImageCopyTextureTagged,
@@ -138,7 +153,7 @@ actual class Queue(internal val handler: GPUQueue) {
             },
             image.data.toInt8Array().buffer,
             createJsObject<GPUImageDataLayout>().apply {
-                offset = 0.toJsNumber()
+                offset = 0L.toJsBigInt()
                 bytesPerRow = image.width * bytePerPixel
                 rowsPerImage = image.height
             },

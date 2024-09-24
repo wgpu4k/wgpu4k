@@ -6,6 +6,7 @@ import io.ygdrasil.wgpu.internal.js.GPUImageCopyTexture
 import io.ygdrasil.wgpu.internal.js.GPUImageDataLayout
 import io.ygdrasil.wgpu.internal.js.GPUQueue
 import io.ygdrasil.wgpu.internal.js.createJsObject
+import io.ygdrasil.wgpu.mapper.map
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.Float32Array
 import org.khronos.webgl.Float64Array
@@ -111,6 +112,20 @@ actual class Queue(internal val handler: GPUQueue) {
             data.unsafeCast<BigInt64Array>(),
             dataOffset,
             size
+        )
+    }
+
+    actual fun writeTexture(
+        destination: ImageCopyTexture,
+        data: FloatArray,
+        dataLayout: TextureDataLayout,
+        size: Size3D,
+    ) {
+        handler.writeTexture(
+            map(destination),
+            data.unsafeCast<Float32Array>(),
+            map(dataLayout),
+            map(size)
         )
     }
 
