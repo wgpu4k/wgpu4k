@@ -137,6 +137,6 @@ enum class PredefinedColorSpace(val value: String) {
 
 data class TextureDataLayout (
     val offset: GPUSize64,
-    val bytesPerRow: GPUSize32?,
-    val rowsPerImage: GPUSize32?
+    val bytesPerRow: GPUSize32? = null,
+    val rowsPerImage: GPUSize32? = null
 )
