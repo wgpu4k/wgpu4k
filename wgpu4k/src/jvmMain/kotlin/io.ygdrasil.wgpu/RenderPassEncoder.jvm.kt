@@ -44,13 +44,13 @@ actual class RenderPassEncoder(private val handler: MemorySegment) {
         wgpu_h.wgpuRenderPassEncoderDrawIndexedIndirect(handler, indirectBuffer.handler, indirectOffset)
     }
 
-    actual fun setBindGroup(index: Int, bindGroup: BindGroup) {
+    actual fun setBindGroup(index: Int, bindGroup: BindGroup, dynamicOffsets: List<Int>) = confined { arena ->
         wgpu_h.wgpuRenderPassEncoderSetBindGroup(
             handler,
             index,
             bindGroup.handler,
-            0L,
-            MemorySegment.NULL
+            dynamicOffsets.size.toLong(),
+            arena.map(dynamicOffsets)
         )
     }
 

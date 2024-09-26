@@ -69,13 +69,13 @@ actual class RenderPassEncoder(internal val handler: WGPURenderPassEncoder) {
         wgpuRenderPassEncoderDrawIndexedIndirect(handler, indirectBuffer.handler, indirectOffset.toULong())
     }
 
-    actual fun setBindGroup(index: Int, bindGroup: BindGroup) {
+    actual fun setBindGroup(index: Int, bindGroup: BindGroup, dynamicOffsets:List<Int>) = memScoped {
         wgpuRenderPassEncoderSetBindGroup(
             handler,
             index.toUInt(),
             bindGroup.handler,
-            0uL,
-            null
+            dynamicOffsets.size.toULong(),
+            map(dynamicOffsets),
         )
     }
 
@@ -144,3 +144,4 @@ actual class RenderPassEncoder(internal val handler: WGPURenderPassEncoder) {
     }
 
 }
+

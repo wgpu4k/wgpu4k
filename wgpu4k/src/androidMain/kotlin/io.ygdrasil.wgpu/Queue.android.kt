@@ -4,7 +4,7 @@ import io.ygdrasil.wgpu.internal.jna.WGPUExtent3D
 import io.ygdrasil.wgpu.internal.jna.WGPUTextureDataLayout
 import io.ygdrasil.wgpu.internal.scoped
 import io.ygdrasil.wgpu.internal.toAddress
-import io.ygdrasil.wgpu.internal.toNativeArray
+import io.ygdrasil.wgpu.internal.toLNativeArray
 import io.ygdrasil.wgpu.mapper.map
 import io.ygdrasil.wgpu.nativeWgpu4k.NativeWgpu4k
 import java.lang.foreign.SegmentAllocator
@@ -15,7 +15,7 @@ actual class Queue(val handler: Long) {
     actual fun submit(commandsBuffer: List<CommandBuffer>) = scoped { arena ->
         if (commandsBuffer.isNotEmpty()) {
 
-            val commands = commandsBuffer.map { it.handler }.toNativeArray(arena.arena).toAddress()
+            val commands = commandsBuffer.map { it.handler }.toLNativeArray(arena.arena).toAddress()
 
             NativeWgpu4k.wgpuQueueSubmit(
                 handler,

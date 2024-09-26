@@ -27,7 +27,12 @@ internal fun <T> scoped(run: JnaArena.(SegmentAllocator) -> T) : T = JnaArena().
 
 internal fun Pointer.toAddress() = Pointer.nativeValue(this)
 
-internal fun List<Long>.toNativeArray(arena: JnaArena): Pointer {
+internal fun List<Long>.toLNativeArray(arena: JnaArena): Pointer {
     return arena.allocate(size * Long.SIZE_BYTES.toLong())
         .also { array -> forEachIndexed { index, value -> array.setLong(index * Long.SIZE_BYTES.toLong(), value) } }
+}
+
+internal fun List<Int>.toINativeArray(arena: JnaArena): Pointer {
+    return arena.allocate(size * Int.SIZE_BYTES.toLong())
+        .also { array -> forEachIndexed { index, value -> array.setInt(index * Int.SIZE_BYTES.toLong(), value) } }
 }

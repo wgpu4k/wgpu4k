@@ -13,3 +13,11 @@ internal fun <E : CPointer<*>> List<E>.toPointerArray(arena: ArenaBase): CPointe
         }
     }
 }
+
+internal fun List<UInt>.toCArray(arena: ArenaBase): CPointer<UIntVar> {
+    return arena.allocArray<UIntVar>(size).also { array ->
+        forEachIndexed { index, entry ->
+            array[index] = entry
+        }
+    }
+}

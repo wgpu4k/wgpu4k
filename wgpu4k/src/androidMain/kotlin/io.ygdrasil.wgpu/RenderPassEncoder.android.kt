@@ -2,7 +2,7 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.scoped
 import io.ygdrasil.wgpu.internal.toAddress
-import io.ygdrasil.wgpu.internal.toNativeArray
+import io.ygdrasil.wgpu.internal.toLNativeArray
 import io.ygdrasil.wgpu.mapper.map
 import io.ygdrasil.wgpu.nativeWgpu4k.NativeWgpu4k
 
@@ -44,13 +44,13 @@ actual class RenderPassEncoder(val handler: Long) {
         NativeWgpu4k.wgpuRenderPassEncoderDrawIndexedIndirect(handler, indirectBuffer.handler, indirectOffset)
     }
 
-    actual fun setBindGroup(index: Int, bindGroup: BindGroup) {
+    actual fun setBindGroup(index: Int, bindGroup: BindGroup, dynamicOffsets: List<Int>) = scoped { arena ->
         NativeWgpu4k.wgpuRenderPassEncoderSetBindGroup(
             handler,
             index,
             bindGroup.handler,
-            0L,
-            0L
+            dynamicOffsets.size.toLong(),
+            arena.map(dynamicOffsets)
         )
     }
 
@@ -72,7 +72,7 @@ actual class RenderPassEncoder(val handler: Long) {
         NativeWgpu4k.wgpuRenderPassEncoderExecuteBundles(
             handler,
             bundles.size.toLong(),
-            bundles.map { it.handler }.toNativeArray(arena.arena).toAddress()
+            bundles.map { it.handler }.toLNativeArray(arena.arena).toAddress()
         )
     }
 
