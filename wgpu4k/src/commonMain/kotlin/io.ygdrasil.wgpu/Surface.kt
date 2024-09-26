@@ -36,6 +36,7 @@ data class SurfaceConfiguration(
     val viewFormats: Set<TextureFormat> = setOf(),
     val colorSpace: PredefinedColorSpace = PredefinedColorSpace.srgb,
     val alphaMode: CompositeAlphaMode = CompositeAlphaMode.opaque,
+    val presentMode: PresentMode = PresentMode.fifo,
 )
 
 data class SurfaceTexture(

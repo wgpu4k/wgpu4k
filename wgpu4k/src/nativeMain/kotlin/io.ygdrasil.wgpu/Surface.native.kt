@@ -9,7 +9,6 @@ import kotlinx.cinterop.cValue
 import kotlinx.cinterop.get
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
-import webgpu.WGPUPresentMode_Fifo
 import webgpu.WGPUSurface
 import webgpu.WGPUSurfaceCapabilities
 import webgpu.WGPUSurfaceConfiguration
@@ -100,7 +99,7 @@ actual class Surface(
         device = input.device.handler
         usage = input.usage.toFlagInt().toUInt()
         format = input.format.value.toUInt()
-        presentMode = WGPUPresentMode_Fifo
+        presentMode = input.presentMode.value.toUInt()
         alphaMode = input.alphaMode.value.toUInt()
         width = this@Surface.width.toUInt()
         height = this@Surface.height.toUInt()

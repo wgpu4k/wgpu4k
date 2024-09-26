@@ -5,7 +5,6 @@ import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceCapabilities
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceConfiguration
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceTexture
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
-import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h.WGPUPresentMode_Fifo
 import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.ValueLayout
@@ -94,7 +93,7 @@ actual class Surface(
 		WGPUSurfaceConfiguration.device(output, input.device.handler)
 		WGPUSurfaceConfiguration.usage(output, input.usage.toFlagInt())
 		WGPUSurfaceConfiguration.format(output, input.format.value)
-		WGPUSurfaceConfiguration.presentMode(output, WGPUPresentMode_Fifo())
+		WGPUSurfaceConfiguration.presentMode(output, input.presentMode.value)
 		WGPUSurfaceConfiguration.alphaMode(output, input.alphaMode.value)
 		WGPUSurfaceConfiguration.width(output, width)
 		WGPUSurfaceConfiguration.height(output, height)

@@ -4,7 +4,6 @@ import com.sun.jna.Pointer
 import io.ygdrasil.wgpu.internal.jna.WGPUSurfaceCapabilities
 import io.ygdrasil.wgpu.internal.jna.WGPUSurfaceConfiguration
 import io.ygdrasil.wgpu.internal.jna.WGPUSurfaceTexture
-import io.ygdrasil.wgpu.internal.jna.wgpu_h.WGPUPresentMode_Fifo
 import io.ygdrasil.wgpu.internal.scoped
 import io.ygdrasil.wgpu.internal.toAddress
 import io.ygdrasil.wgpu.nativeWgpu4k.NativeWgpu4k
@@ -102,7 +101,7 @@ actual class Surface(val handler: Long, actual val width: Int, actual val height
             )
             WGPUSurfaceConfiguration.usage(output, input.usage.toFlagInt())
             WGPUSurfaceConfiguration.format(output, input.format.value)
-            WGPUSurfaceConfiguration.presentMode(output, WGPUPresentMode_Fifo())
+            WGPUSurfaceConfiguration.presentMode(output, input.presentMode.value)
             WGPUSurfaceConfiguration.alphaMode(output, input.alphaMode.value)
             WGPUSurfaceConfiguration.width(output, width)
             WGPUSurfaceConfiguration.height(output, height)
