@@ -184,7 +184,19 @@ external interface GPUImageCopyBuffer : GPUImageDataLayout {
 
 external interface GPURenderPassEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin,
     GPUBindingCommandsMixin, GPURenderCommandsMixin {
+    fun setViewport(x: JsNumber, y: JsNumber, width: JsNumber, height: JsNumber, minDepth: JsNumber, maxDepth: JsNumber)
+    fun setScissorRect(
+        x: JsNumber,
+        y: JsNumber,
+        width: JsNumber,
+        height: JsNumber,
+    )
 
+    fun setBlendConstant(color: JsArray<JsNumber>)
+    fun setBlendConstant(color: GPUColorDict)
+    fun setStencilReference(reference: JsNumber)
+    fun beginOcclusionQuery(queryIndex: GPUSize32)
+    fun endOcclusionQuery()
     fun executeBundles(bundles: JsArray<GPURenderBundle>)
     fun end()
 }

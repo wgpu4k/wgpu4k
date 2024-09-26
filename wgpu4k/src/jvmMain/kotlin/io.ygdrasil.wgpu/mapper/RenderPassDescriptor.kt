@@ -1,8 +1,6 @@
 package io.ygdrasil.wgpu.mapper
 
-import io.ygdrasil.wgpu.Color
 import io.ygdrasil.wgpu.RenderPassDescriptor
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUColor
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPassColorAttachment
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPassDepthStencilAttachment
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPassDescriptor
@@ -49,14 +47,6 @@ internal fun Arena.map(input: RenderPassDescriptor.ColorAttachment, output: Memo
     if (input.resolveTarget != null) WGPURenderPassColorAttachment.resolveTarget(output, input.resolveTarget.handler)
     map(input.clearValue, WGPURenderPassColorAttachment.clearValue(output))
 }
-
-internal fun Arena.map(input: Color, output: MemorySegment) {
-        WGPUColor.r(output, input.red)
-        WGPUColor.g(output, input.green)
-        WGPUColor.b(output, input.blue)
-        WGPUColor.a(output, input.alpha)
-    }
-
 
 internal fun Arena.map(input: RenderPassDescriptor.DepthStencilAttachment): MemorySegment =
     WGPURenderPassDepthStencilAttachment.allocate(this).also { depthStencilAttachment ->

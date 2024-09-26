@@ -3,9 +3,25 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.toPointerArray
+import io.ygdrasil.wgpu.mapper.map
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.memScoped
-import webgpu.*
+import kotlinx.cinterop.ptr
+import webgpu.WGPURenderPassEncoder
+import webgpu.wgpuRenderPassEncoderBeginOcclusionQuery
+import webgpu.wgpuRenderPassEncoderDraw
+import webgpu.wgpuRenderPassEncoderEnd
+import webgpu.wgpuRenderPassEncoderEndOcclusionQuery
+import webgpu.wgpuRenderPassEncoderExecuteBundles
+import webgpu.wgpuRenderPassEncoderRelease
+import webgpu.wgpuRenderPassEncoderSetBindGroup
+import webgpu.wgpuRenderPassEncoderSetBlendConstant
+import webgpu.wgpuRenderPassEncoderSetIndexBuffer
+import webgpu.wgpuRenderPassEncoderSetPipeline
+import webgpu.wgpuRenderPassEncoderSetScissorRect
+import webgpu.wgpuRenderPassEncoderSetStencilReference
+import webgpu.wgpuRenderPassEncoderSetVertexBuffer
+import webgpu.wgpuRenderPassEncoderSetViewport
 
 actual class RenderPassEncoder(internal val handler: WGPURenderPassEncoder) {
 
@@ -69,6 +85,38 @@ actual class RenderPassEncoder(internal val handler: WGPURenderPassEncoder) {
             bundles.size.toULong(),
             bundles.map { it.handler }.toPointerArray(this)
         )
+    }
+
+    actual fun setViewport(x: Float, y: Float, width: Float, height: Float, minDepth: Float, maxDepth: Float) {
+        wgpuRenderPassEncoderSetViewport(
+            handler,
+            x, y, width, height, minDepth, maxDepth
+        )
+    }
+
+    actual fun setScissorRect(
+        x: GPUIntegerCoordinate,
+        y: GPUIntegerCoordinate,
+        width: GPUIntegerCoordinate,
+        height: GPUIntegerCoordinate,
+    ) {
+        wgpuRenderPassEncoderSetScissorRect(handler, x.toUInt(), y.toUInt(), width.toUInt(), height.toUInt())
+    }
+
+    actual fun setBlendConstant(color: Color) = memScoped {
+        wgpuRenderPassEncoderSetBlendConstant(handler, map(color).ptr)
+    }
+
+    actual fun setStencilReference(reference: GPUStencilValue) {
+        wgpuRenderPassEncoderSetStencilReference(handler, reference.toUInt())
+    }
+
+    actual fun beginOcclusionQuery(queryIndex: GPUSize32) {
+        wgpuRenderPassEncoderBeginOcclusionQuery(handler, queryIndex.toUInt())
+    }
+
+    actual fun endOcclusionQuery() {
+        wgpuRenderPassEncoderEndOcclusionQuery(handler)
     }
 
     private fun close() {

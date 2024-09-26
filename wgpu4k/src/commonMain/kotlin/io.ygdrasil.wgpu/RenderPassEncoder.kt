@@ -20,15 +20,21 @@ expect class RenderPassEncoder {
     fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64 = 0, size: GPUSize64 = buffer.size)
 
     fun executeBundles(bundles: List<RenderBundle>)
-    /* TODO
-    fun setViewport(x: Number, y: Number, width: Number, height: Number, minDepth: Number, maxDepth: Number): Nothing?
-    fun setScissorRect(x: GPUIntegerCoordinate, y: GPUIntegerCoordinate, width: GPUIntegerCoordinate, height: GPUIntegerCoordinate): Nothing?
-    fun setBlendConstant(color: Array<Number>): Nothing?
-    fun setBlendConstant(color: GPUColorDict): Nothing?
-    fun setStencilReference(reference: GPUStencilValue): Nothing?
-    fun beginOcclusionQuery(queryIndex: GPUSize32): Nothing?
-    fun endOcclusionQuery(): Nothing?
-    fun end(): Nothing?
-     */
 
+    fun setViewport(x: Float, y: Float, width: Float, height: Float, minDepth: Float, maxDepth: Float)
+
+    fun setScissorRect(
+        x: GPUIntegerCoordinate,
+        y: GPUIntegerCoordinate,
+        width: GPUIntegerCoordinate,
+        height: GPUIntegerCoordinate,
+    )
+
+    fun setBlendConstant(color: Color)
+
+    fun setStencilReference(reference: GPUStencilValue)
+
+    fun beginOcclusionQuery(queryIndex: GPUSize32)
+
+    fun endOcclusionQuery()
 }

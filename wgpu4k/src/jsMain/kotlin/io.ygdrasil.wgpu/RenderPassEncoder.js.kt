@@ -1,6 +1,7 @@
 package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPURenderPassEncoder
+import io.ygdrasil.wgpu.mapper.map
 
 actual class RenderPassEncoder(private val handler: GPURenderPassEncoder) {
 
@@ -40,6 +41,37 @@ actual class RenderPassEncoder(private val handler: GPURenderPassEncoder) {
 
     actual fun executeBundles(bundles: List<RenderBundle>) {
         handler.executeBundles(bundles.map { it.handler }.toTypedArray())
+    }
+
+    actual fun setViewport(x: Float, y: Float, width: Float, height: Float, minDepth: Float, maxDepth: Float) {
+        handler.setViewport(
+            x, y, width, height, minDepth, maxDepth
+        )
+    }
+
+    actual fun setScissorRect(
+        x: GPUIntegerCoordinate,
+        y: GPUIntegerCoordinate,
+        width: GPUIntegerCoordinate,
+        height: GPUIntegerCoordinate,
+    ) {
+        handler.setScissorRect(x, y, width, height)
+    }
+
+    actual fun setBlendConstant(color: Color) {
+        handler.setBlendConstant(map(color))
+    }
+
+    actual fun setStencilReference(reference: GPUStencilValue) {
+        handler.setStencilReference(reference)
+    }
+
+    actual fun beginOcclusionQuery(queryIndex: GPUSize32) {
+        handler.beginOcclusionQuery(queryIndex)
+    }
+
+    actual fun endOcclusionQuery() {
+        handler.endOcclusionQuery()
     }
 
 }

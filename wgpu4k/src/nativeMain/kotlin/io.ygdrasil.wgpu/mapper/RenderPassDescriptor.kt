@@ -2,11 +2,15 @@
 
 package io.ygdrasil.wgpu.mapper
 
-import io.ygdrasil.wgpu.Color
 import io.ygdrasil.wgpu.RenderPassDescriptor
 import io.ygdrasil.wgpu.internal.toUInt
-import kotlinx.cinterop.*
-import webgpu.WGPUColor
+import kotlinx.cinterop.ArenaBase
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.alloc
+import kotlinx.cinterop.allocArray
+import kotlinx.cinterop.cstr
+import kotlinx.cinterop.get
+import kotlinx.cinterop.ptr
 import webgpu.WGPURenderPassColorAttachment
 import webgpu.WGPURenderPassDepthStencilAttachment
 import webgpu.WGPURenderPassDescriptor
@@ -46,14 +50,6 @@ internal fun ArenaBase.map(input: RenderPassDescriptor.ColorAttachment, output: 
     if (input.resolveTarget != null) output.resolveTarget = input.resolveTarget.handler
     map(input.clearValue, output.clearValue)
 }
-
-internal fun map(input: Color, output: WGPUColor) {
-    output.r = input.red
-    output.g = input.green
-    output.b = input.blue
-    output.a = input.alpha
-}
-
 
 internal fun ArenaBase.map(input: RenderPassDescriptor.DepthStencilAttachment) =
     alloc<WGPURenderPassDepthStencilAttachment>().also { output ->

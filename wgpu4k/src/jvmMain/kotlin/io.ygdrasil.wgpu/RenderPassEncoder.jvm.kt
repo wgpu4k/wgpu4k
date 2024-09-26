@@ -3,6 +3,7 @@ package io.ygdrasil.wgpu
 import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.internal.jvm.toPointerArray
+import io.ygdrasil.wgpu.mapper.map
 import java.lang.foreign.MemorySegment
 
 actual class RenderPassEncoder(private val handler: MemorySegment) {
@@ -54,6 +55,38 @@ actual class RenderPassEncoder(private val handler: MemorySegment) {
             bundles.size.toLong(),
             bundles.map { it.handler }.toPointerArray(arena)
         )
+    }
+
+    actual fun setViewport(x: Float, y: Float, width: Float, height: Float, minDepth: Float, maxDepth: Float) {
+        wgpu_h.wgpuRenderPassEncoderSetViewport(
+            handler,
+            x, y, width, height, minDepth, maxDepth
+        )
+    }
+
+    actual fun setScissorRect(
+        x: GPUIntegerCoordinate,
+        y: GPUIntegerCoordinate,
+        width: GPUIntegerCoordinate,
+        height: GPUIntegerCoordinate,
+    ) {
+        wgpu_h.wgpuRenderPassEncoderSetScissorRect(handler, x, y, width, height)
+    }
+
+    actual fun setBlendConstant(color: Color) = confined { arena ->
+        wgpu_h.wgpuRenderPassEncoderSetBlendConstant(handler, arena.map(color))
+    }
+
+    actual fun setStencilReference(reference: GPUStencilValue) {
+        wgpu_h.wgpuRenderPassEncoderSetStencilReference(handler, reference.toInt())
+    }
+
+    actual fun beginOcclusionQuery(queryIndex: GPUSize32) {
+        wgpu_h.wgpuRenderPassEncoderBeginOcclusionQuery(handler, queryIndex)
+    }
+
+    actual fun endOcclusionQuery() {
+        wgpu_h.wgpuRenderPassEncoderEndOcclusionQuery(handler)
     }
 
     private fun close() {
