@@ -10,6 +10,8 @@ import kotlinx.cinterop.ptr
 import webgpu.WGPURenderPassEncoder
 import webgpu.wgpuRenderPassEncoderBeginOcclusionQuery
 import webgpu.wgpuRenderPassEncoderDraw
+import webgpu.wgpuRenderPassEncoderDrawIndexed
+import webgpu.wgpuRenderPassEncoderDrawIndexedIndirect
 import webgpu.wgpuRenderPassEncoderEnd
 import webgpu.wgpuRenderPassEncoderEndOcclusionQuery
 import webgpu.wgpuRenderPassEncoderExecuteBundles
@@ -47,6 +49,24 @@ actual class RenderPassEncoder(internal val handler: WGPURenderPassEncoder) {
             firstVertex.toUInt(),
             firstInstance.toUInt()
         )
+    }
+
+    actual fun drawIndexed(
+        indexCount: GPUSize32,
+        instanceCount: GPUSize32,
+        firstIndex: GPUSize32,
+        baseVertex: GPUSignedOffset32,
+        firstInstance: GPUSize32,
+    ) {
+        wgpuRenderPassEncoderDrawIndexed(handler, indexCount.toUInt(), instanceCount.toUInt(), firstIndex.toUInt(), baseVertex, firstInstance.toUInt())
+    }
+
+    actual fun drawIndirect(indirectBuffer: Buffer, indirectOffset: GPUSize64){
+        wgpuRenderPassEncoderDrawIndexedIndirect(handler, indirectBuffer.handler, indirectOffset.toULong())
+    }
+
+    actual fun drawIndexedIndirect(indirectBuffer: Buffer, indirectOffset: GPUSize64) {
+        wgpuRenderPassEncoderDrawIndexedIndirect(handler, indirectBuffer.handler, indirectOffset.toULong())
     }
 
     actual fun setBindGroup(index: Int, bindGroup: BindGroup) {

@@ -26,6 +26,24 @@ actual class RenderPassEncoder(private val handler: MemorySegment) {
         wgpu_h.wgpuRenderPassEncoderDraw(handler, vertexCount, instanceCount, firstVertex, firstInstance)
     }
 
+    actual fun drawIndexed(
+        indexCount: GPUSize32,
+        instanceCount: GPUSize32,
+        firstIndex: GPUSize32,
+        baseVertex: GPUSignedOffset32,
+        firstInstance: GPUSize32,
+    ) {
+        wgpu_h.wgpuRenderPassEncoderDrawIndexed(handler, indexCount, instanceCount, firstIndex, baseVertex, firstInstance)
+    }
+
+    actual fun drawIndirect(indirectBuffer: Buffer, indirectOffset: GPUSize64){
+        wgpu_h.wgpuRenderPassEncoderDrawIndexedIndirect(handler, indirectBuffer.handler, indirectOffset)
+    }
+
+    actual fun drawIndexedIndirect(indirectBuffer: Buffer, indirectOffset: GPUSize64) {
+        wgpu_h.wgpuRenderPassEncoderDrawIndexedIndirect(handler, indirectBuffer.handler, indirectOffset)
+    }
+
     actual fun setBindGroup(index: Int, bindGroup: BindGroup) {
         wgpu_h.wgpuRenderPassEncoderSetBindGroup(
             handler,

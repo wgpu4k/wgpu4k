@@ -27,6 +27,24 @@ actual class RenderPassEncoder(private val handler: GPURenderPassEncoder) {
         )
     }
 
+    actual fun drawIndexed(
+        indexCount: GPUSize32,
+        instanceCount: GPUSize32,
+        firstIndex: GPUSize32,
+        baseVertex: GPUSignedOffset32,
+        firstInstance: GPUSize32,
+    ) {
+        handler.drawIndexed(indexCount, instanceCount, firstIndex, baseVertex, firstInstance)
+    }
+
+    actual fun drawIndirect(indirectBuffer: Buffer, indirectOffset: GPUSize64){
+        handler.drawIndexedIndirect(indirectBuffer.handler, indirectOffset)
+    }
+
+    actual fun drawIndexedIndirect(indirectBuffer: Buffer, indirectOffset: GPUSize64) {
+        handler.drawIndexedIndirect(indirectBuffer.handler, indirectOffset)
+    }
+
     actual fun setBindGroup(index: Int, bindGroup: BindGroup) {
         handler.setBindGroup(index, bindGroup.handler)
     }

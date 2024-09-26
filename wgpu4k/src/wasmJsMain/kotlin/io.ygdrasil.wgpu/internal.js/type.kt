@@ -306,11 +306,14 @@ external interface GPURenderCommandsMixin {
 
     fun drawIndexed(
         indexCount: GPUSize32,
-        instanceCount: GPUSize32 = definedExternally,
-        firstIndex: GPUSize32 = definedExternally,
-        baseVertex: GPUSignedOffset32 = definedExternally,
-        firstInstance: GPUSize32 = definedExternally,
+        instanceCount: GPUSize32,
+        firstIndex: GPUSize32,
+        baseVertex: GPUSignedOffset32,
+        firstInstance: GPUSize32,
     )
+
+    fun drawIndirect(indirectBuffer: GPUBuffer, indirectOffset: GPUSize64)
+    fun drawIndexedIndirect(indirectBuffer: GPUBuffer, indirectOffset: GPUSize64)
 }
 
 typealias GPURenderBundleDescriptor = GPUObjectDescriptorBase

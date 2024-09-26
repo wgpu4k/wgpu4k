@@ -13,6 +13,17 @@ expect class RenderPassEncoder {
         firstInstance: GPUSize32 = 0,
     )
 
+    fun drawIndexed(
+        indexCount: GPUSize32,
+        instanceCount: GPUSize32 = 1,
+        firstIndex: GPUSize32 = 0,
+        baseVertex: GPUSignedOffset32 = 0,
+        firstInstance: GPUSize32 = 0,
+    )
+
+    fun drawIndirect(indirectBuffer: Buffer, indirectOffset: GPUSize64 = 0)
+    fun drawIndexedIndirect(indirectBuffer: Buffer, indirectOffset: GPUSize64 = 0)
+
     fun setBindGroup(index: Int, bindGroup: BindGroup)
 
     fun setVertexBuffer(slot: Int, buffer: Buffer)
