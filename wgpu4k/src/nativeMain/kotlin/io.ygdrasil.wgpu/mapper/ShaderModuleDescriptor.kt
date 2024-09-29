@@ -4,10 +4,10 @@ package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.ShaderModuleDescriptor
 import kotlinx.cinterop.*
-import webgpu.WGPUSType_ShaderModuleWGSLDescriptor
-import webgpu.WGPUShaderModuleCompilationHint
-import webgpu.WGPUShaderModuleDescriptor
-import webgpu.WGPUShaderModuleWGSLDescriptor
+import webgpu.native.WGPUSType_ShaderModuleWGSLDescriptor
+import webgpu.native.WGPUShaderModuleCompilationHint
+import webgpu.native.WGPUShaderModuleDescriptor
+import webgpu.native.WGPUShaderModuleWGSLDescriptor
 
 internal fun ArenaBase.map(input: ShaderModuleDescriptor) =
     alloc<WGPUShaderModuleDescriptor>().also { output ->

@@ -7,7 +7,7 @@ import kotlinx.cinterop.ArenaBase
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.cstr
-import webgpu.WGPUSamplerDescriptor
+import webgpu.native.WGPUSamplerDescriptor
 
 internal fun ArenaBase.map(input: SamplerDescriptor) = alloc<WGPUSamplerDescriptor>().also { output ->
     if (input.label != null) output.label = input.label.cstr.getPointer(this)

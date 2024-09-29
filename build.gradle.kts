@@ -5,3 +5,11 @@ allprojects {
 }
 
 
+
+// TODO: remove later
+configurations.all {
+	resolutionStrategy {
+		cacheChangingModulesFor(0, "seconds")
+		cacheDynamicVersionsFor(0, "minutes")
+	}
+}

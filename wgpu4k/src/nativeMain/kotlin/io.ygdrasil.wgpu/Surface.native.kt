@@ -9,15 +9,15 @@ import kotlinx.cinterop.cValue
 import kotlinx.cinterop.get
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
-import webgpu.WGPUSurface
-import webgpu.WGPUSurfaceCapabilities
-import webgpu.WGPUSurfaceConfiguration
-import webgpu.WGPUSurfaceTexture
-import webgpu.wgpuSurfaceConfigure
-import webgpu.wgpuSurfaceGetCapabilities
-import webgpu.wgpuSurfaceGetCurrentTexture
-import webgpu.wgpuSurfacePresent
-import webgpu.wgpuSurfaceRelease
+import webgpu.native.WGPUSurface
+import webgpu.native.WGPUSurfaceCapabilities
+import webgpu.native.WGPUSurfaceConfiguration
+import webgpu.native.WGPUSurfaceTexture
+import webgpu.native.wgpuSurfaceConfigure
+import webgpu.native.wgpuSurfaceGetCapabilities
+import webgpu.native.wgpuSurfaceGetCurrentTexture
+import webgpu.native.wgpuSurfacePresent
+import webgpu.native.wgpuSurfaceRelease
 
 actual class Surface(
     internal val handler: WGPUSurface,

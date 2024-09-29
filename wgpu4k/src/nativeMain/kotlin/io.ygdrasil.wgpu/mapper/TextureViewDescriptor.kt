@@ -7,7 +7,7 @@ import kotlinx.cinterop.ArenaBase
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.cstr
-import webgpu.WGPUTextureViewDescriptor
+import webgpu.native.WGPUTextureViewDescriptor
 
 internal fun ArenaBase.map(input: TextureViewDescriptor) = alloc<WGPUTextureViewDescriptor> {
     if (input.label != null) label = input.label.cstr.getPointer(this@map)

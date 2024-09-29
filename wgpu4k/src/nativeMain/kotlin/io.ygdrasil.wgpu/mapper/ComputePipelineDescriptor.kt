@@ -5,9 +5,9 @@ package io.ygdrasil.wgpu.mapper
 import io.ygdrasil.wgpu.ComputePipelineDescriptor
 import io.ygdrasil.wgpu.GPUPipelineConstantValue
 import kotlinx.cinterop.*
-import webgpu.WGPUComputePipelineDescriptor
-import webgpu.WGPUConstantEntry
-import webgpu.WGPUProgrammableStageDescriptor
+import webgpu.native.WGPUComputePipelineDescriptor
+import webgpu.native.WGPUConstantEntry
+import webgpu.native.WGPUProgrammableStageDescriptor
 
 internal fun ArenaBase.map(input: ComputePipelineDescriptor) = alloc<WGPUComputePipelineDescriptor>().also { output ->
     if (input.label != null) output.label = input.label.cstr.getPointer(this)

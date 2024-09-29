@@ -6,7 +6,7 @@ import io.ygdrasil.wgpu.mapper.map
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
-import webgpu.*
+import webgpu.native.*
 
 actual class RenderBundleEncoder(internal val handler: WGPURenderBundleEncoder) : AutoCloseable {
 

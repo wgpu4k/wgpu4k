@@ -5,7 +5,7 @@ package io.ygdrasil.wgpu.mapper
 import io.ygdrasil.wgpu.RenderPipelineDescriptor
 import io.ygdrasil.wgpu.internal.toUInt
 import kotlinx.cinterop.*
-import webgpu.*
+import webgpu.native.*
 
 internal fun ArenaBase.map(input: RenderPipelineDescriptor) = alloc<WGPURenderPipelineDescriptor>().also { output ->
     if (input.label != null) output.label = input.label.cstr.getPointer(this)

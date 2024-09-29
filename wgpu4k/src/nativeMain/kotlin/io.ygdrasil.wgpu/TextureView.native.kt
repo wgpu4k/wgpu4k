@@ -3,8 +3,8 @@
 package io.ygdrasil.wgpu
 
 import kotlinx.cinterop.ExperimentalForeignApi
-import webgpu.WGPUTextureView
-import webgpu.wgpuTextureViewRelease
+import webgpu.native.WGPUTextureView
+import webgpu.native.wgpuTextureViewRelease
 
 actual class TextureView(internal val handler: WGPUTextureView) : AutoCloseable {
     actual override fun close() {

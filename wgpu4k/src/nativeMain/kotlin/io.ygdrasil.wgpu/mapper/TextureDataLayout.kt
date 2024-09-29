@@ -6,7 +6,7 @@ import io.ygdrasil.wgpu.TextureDataLayout
 import kotlinx.cinterop.ArenaBase
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.alloc
-import webgpu.WGPUTextureDataLayout
+import webgpu.native.WGPUTextureDataLayout
 
 internal fun ArenaBase.map(input: TextureDataLayout) = alloc<WGPUTextureDataLayout>().also { output ->
     output.offset = input.offset.toULong()

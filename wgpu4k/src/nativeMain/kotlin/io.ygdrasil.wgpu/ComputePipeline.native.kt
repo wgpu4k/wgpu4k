@@ -3,9 +3,9 @@
 package io.ygdrasil.wgpu
 
 import kotlinx.cinterop.ExperimentalForeignApi
-import webgpu.WGPUComputePipeline
-import webgpu.wgpuComputePipelineGetBindGroupLayout
-import webgpu.wgpuComputePipelineRelease
+import webgpu.native.WGPUComputePipeline
+import webgpu.native.wgpuComputePipelineGetBindGroupLayout
+import webgpu.native.wgpuComputePipelineRelease
 
 actual class ComputePipeline(internal val handler: WGPUComputePipeline) : AutoCloseable {
 

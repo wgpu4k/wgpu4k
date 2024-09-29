@@ -11,9 +11,9 @@ import kotlinx.cinterop.allocArray
 import kotlinx.cinterop.cstr
 import kotlinx.cinterop.get
 import kotlinx.cinterop.ptr
-import webgpu.WGPURenderPassColorAttachment
-import webgpu.WGPURenderPassDepthStencilAttachment
-import webgpu.WGPURenderPassDescriptor
+import webgpu.native.WGPURenderPassColorAttachment
+import webgpu.native.WGPURenderPassDepthStencilAttachment
+import webgpu.native.WGPURenderPassDescriptor
 
 internal fun ArenaBase.map(input: RenderPassDescriptor) =
     alloc<WGPURenderPassDescriptor>().also { output ->

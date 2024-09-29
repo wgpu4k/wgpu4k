@@ -3,7 +3,7 @@
 package io.ygdrasil.wgpu
 
 import kotlinx.cinterop.*
-import webgpu.*
+import webgpu.native.*
 
 actual class Buffer(internal val handler: WGPUBuffer) : AutoCloseable {
 

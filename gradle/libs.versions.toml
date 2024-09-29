@@ -11,7 +11,7 @@ agp = "8.5.2"
 jreleaser = "1.13.1"
 rococoa = "0.0.1"
 wgpu4k-panama = "0.0.3"
-wgpu4k-native = "0.0.0-SNAPSHOT"
+wgpu4k-native = "0.0.1-SNAPSHOT"
 android-native-helper = "0.0.1"
 glfw-native = "0.0.1"
 

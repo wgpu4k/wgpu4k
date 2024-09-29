@@ -3,7 +3,7 @@
 package io.ygdrasil.wgpu
 
 import kotlinx.cinterop.ExperimentalForeignApi
-import webgpu.*
+import webgpu.native.*
 
 actual class RenderPipeline(internal val handler: WGPURenderPipeline) : AutoCloseable {
 

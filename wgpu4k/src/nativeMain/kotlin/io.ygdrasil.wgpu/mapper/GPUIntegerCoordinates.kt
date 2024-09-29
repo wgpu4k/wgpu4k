@@ -6,7 +6,7 @@ import io.ygdrasil.wgpu.GPUIntegerCoordinates
 import kotlinx.cinterop.ArenaBase
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.alloc
-import webgpu.WGPUOrigin3D
+import webgpu.native.WGPUOrigin3D
 
 internal fun ArenaBase.map(input: GPUIntegerCoordinates) = alloc<WGPUOrigin3D>().also { output ->
     output.x = input.first.toUInt()

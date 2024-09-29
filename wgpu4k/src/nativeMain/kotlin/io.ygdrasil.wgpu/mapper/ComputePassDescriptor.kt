@@ -4,8 +4,8 @@ package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.ComputePassDescriptor
 import kotlinx.cinterop.*
-import webgpu.WGPUComputePassDescriptor
-import webgpu.WGPUComputePassTimestampWrites
+import webgpu.native.WGPUComputePassDescriptor
+import webgpu.native.WGPUComputePassTimestampWrites
 
 internal fun ArenaBase.map(input: ComputePassDescriptor) = alloc<WGPUComputePassDescriptor>().also { output ->
     if (input.label != null) output.label = input.label.cstr.getPointer(this)

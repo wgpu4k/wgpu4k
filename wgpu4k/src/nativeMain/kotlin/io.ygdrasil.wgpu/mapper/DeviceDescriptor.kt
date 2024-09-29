@@ -8,8 +8,8 @@ import kotlinx.cinterop.ArenaBase
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.cstr
-import webgpu.WGPUDeviceDescriptor
-import webgpu.WGPUQueueDescriptor
+import webgpu.native.WGPUDeviceDescriptor
+import webgpu.native.WGPUQueueDescriptor
 
 // TODO add unit tests
 internal fun ArenaBase.map(input: DeviceDescriptor) = alloc<WGPUDeviceDescriptor>().also { output ->

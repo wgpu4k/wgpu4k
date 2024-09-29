@@ -5,7 +5,7 @@ package io.ygdrasil.wgpu
 import io.ygdrasil.wgpu.mapper.map
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
-import webgpu.*
+import webgpu.native.*
 
 actual class Texture(internal val handler: WGPUTexture) : AutoCloseable {
 

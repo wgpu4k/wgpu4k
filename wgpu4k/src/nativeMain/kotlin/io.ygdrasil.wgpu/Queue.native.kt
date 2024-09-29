@@ -5,12 +5,12 @@ package io.ygdrasil.wgpu
 import io.ygdrasil.wgpu.internal.toPointerArray
 import io.ygdrasil.wgpu.mapper.map
 import kotlinx.cinterop.*
-import webgpu.WGPUExtent3D
-import webgpu.WGPUQueue
-import webgpu.WGPUTextureDataLayout
-import webgpu.wgpuQueueSubmit
-import webgpu.wgpuQueueWriteBuffer
-import webgpu.wgpuQueueWriteTexture
+import webgpu.native.WGPUExtent3D
+import webgpu.native.WGPUQueue
+import webgpu.native.WGPUTextureDataLayout
+import webgpu.native.wgpuQueueSubmit
+import webgpu.native.wgpuQueueWriteBuffer
+import webgpu.native.wgpuQueueWriteTexture
 
 actual class Queue(internal val handler: WGPUQueue) {
 

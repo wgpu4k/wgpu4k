@@ -6,8 +6,8 @@ import io.ygdrasil.wgpu.ImageCopyBuffer
 import kotlinx.cinterop.ArenaBase
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.alloc
-import webgpu.WGPUImageCopyBuffer
-import webgpu.WGPUTextureDataLayout
+import webgpu.native.WGPUImageCopyBuffer
+import webgpu.native.WGPUTextureDataLayout
 
 internal fun ArenaBase.map(input: ImageCopyBuffer) = alloc<WGPUImageCopyBuffer>().also { output ->
     output.buffer = input.buffer.handler

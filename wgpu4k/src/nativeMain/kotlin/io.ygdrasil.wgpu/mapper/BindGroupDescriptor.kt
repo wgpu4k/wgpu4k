@@ -4,8 +4,8 @@ package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.BindGroupDescriptor
 import kotlinx.cinterop.*
-import webgpu.WGPUBindGroupDescriptor
-import webgpu.WGPUBindGroupEntry
+import webgpu.native.WGPUBindGroupDescriptor
+import webgpu.native.WGPUBindGroupEntry
 
 
 internal fun ArenaBase.map(input: BindGroupDescriptor) = alloc<WGPUBindGroupDescriptor>().also { output ->

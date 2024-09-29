@@ -4,7 +4,7 @@ package io.ygdrasil.wgpu.mapper
 
 import io.ygdrasil.wgpu.SupportedLimits
 import kotlinx.cinterop.ExperimentalForeignApi
-import webgpu.*
+import webgpu.native.*
 
 internal fun map(input: WGPULimits): SupportedLimits = SupportedLimits(
     maxTextureDimension1D = input.maxTextureDimension1D.toInt(),

@@ -1,5 +1,7 @@
 package io.ygdrasil.wgpu
 
+import ffi.Callback
+import ffi.WGPURequestDevice
 import io.ygdrasil.wgpu.internal.jna.WGPUSupportedLimits
 import io.ygdrasil.wgpu.internal.scoped
 import io.ygdrasil.wgpu.internal.toAddress
@@ -25,11 +27,27 @@ actual class Adapter(val handler: Long) : AutoCloseable {
     }
 
     actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? = scoped { arena ->
-        NativeWgpu4k.wgpuAdapterRequestDeviceNoCallback(
+
+        var othretDevicePtr = 0L
+
+
+        val callbackPointer = Callback.registerRequestDevice(object : WGPURequestDevice {
+            override fun invoke(status: UInt, device: Long, message: Long, userData1: Long) {
+                println("Invoked callback function with param: $status $device")
+                othretDevicePtr = device
+            }
+        })
+
+        NativeWgpu4k.wgpuAdapterRequestDevice(
             handler,
-            arena.map(descriptor).pointer.toAddress()
-        ).takeIf { it != 0L }
-            ?.let { Device(it) }
+            arena.map(descriptor).pointer.toAddress(),
+            callbackPointer,
+            callbackPointer
+        )
+
+        Callback.free(callbackPointer)
+
+        Device(othretDevicePtr)
     }
 
     actual override fun close() {

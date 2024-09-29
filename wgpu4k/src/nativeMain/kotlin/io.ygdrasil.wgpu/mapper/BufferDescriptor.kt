@@ -8,7 +8,7 @@ import io.ygdrasil.wgpu.toFlagUInt
 import kotlinx.cinterop.ArenaBase
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.alloc
-import webgpu.WGPUBufferDescriptor
+import webgpu.native.WGPUBufferDescriptor
 
 internal fun ArenaBase.map(input: BufferDescriptor) = alloc<WGPUBufferDescriptor> {
     size = input.size.toULong()

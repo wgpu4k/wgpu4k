@@ -6,7 +6,7 @@ import io.ygdrasil.wgpu.mapper.map
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
-import webgpu.*
+import webgpu.native.*
 
 actual class Device(internal val handler: WGPUDevice) : AutoCloseable {
 

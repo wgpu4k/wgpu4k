@@ -5,8 +5,8 @@ package io.ygdrasil.wgpu.mapper
 import io.ygdrasil.wgpu.RenderBundleEncoderDescriptor
 import io.ygdrasil.wgpu.internal.toUInt
 import kotlinx.cinterop.*
-import webgpu.WGPURenderBundleEncoderDescriptor
-import webgpu.WGPUTextureFormatVar
+import webgpu.native.WGPURenderBundleEncoderDescriptor
+import webgpu.native.WGPUTextureFormatVar
 
 fun ArenaBase.map(input: RenderBundleEncoderDescriptor) =
     alloc<WGPURenderBundleEncoderDescriptor>().also { output ->

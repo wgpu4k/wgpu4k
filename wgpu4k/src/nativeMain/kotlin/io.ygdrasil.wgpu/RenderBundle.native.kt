@@ -3,6 +3,6 @@
 package io.ygdrasil.wgpu
 
 import kotlinx.cinterop.ExperimentalForeignApi
-import webgpu.WGPURenderBundle
+import webgpu.native.WGPURenderBundle
 
 actual class RenderBundle(internal val handler: WGPURenderBundle)

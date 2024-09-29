@@ -3,9 +3,9 @@
 package io.ygdrasil.wgpu
 
 import kotlinx.cinterop.ExperimentalForeignApi
-import webgpu.WGPUComputePassEncoder
-import webgpu.wgpuComputePassEncoderEnd
-import webgpu.wgpuComputePassEncoderRelease
+import webgpu.native.WGPUComputePassEncoder
+import webgpu.native.wgpuComputePassEncoderEnd
+import webgpu.native.wgpuComputePassEncoderRelease
 
 actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : AutoCloseable {
 

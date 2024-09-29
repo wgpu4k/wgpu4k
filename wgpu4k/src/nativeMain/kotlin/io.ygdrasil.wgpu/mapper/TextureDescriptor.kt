@@ -5,8 +5,8 @@ package io.ygdrasil.wgpu.mapper
 import io.ygdrasil.wgpu.TextureDescriptor
 import io.ygdrasil.wgpu.toFlagUInt
 import kotlinx.cinterop.*
-import webgpu.WGPUTextureDescriptor
-import webgpu.WGPUTextureFormatVar
+import webgpu.native.WGPUTextureDescriptor
+import webgpu.native.WGPUTextureFormatVar
 
 internal fun ArenaBase.map(input: TextureDescriptor) = alloc<WGPUTextureDescriptor>().also { output ->
     if (input.label != null) output.label = input.label.cstr.getPointer(this)

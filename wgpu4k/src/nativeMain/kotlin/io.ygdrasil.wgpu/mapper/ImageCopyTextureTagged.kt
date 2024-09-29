@@ -6,7 +6,7 @@ import io.ygdrasil.wgpu.ImageCopyTextureTagged
 import kotlinx.cinterop.ArenaBase
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.alloc
-import webgpu.WGPUImageCopyTexture
+import webgpu.native.WGPUImageCopyTexture
 
 internal fun ArenaBase.map(input: ImageCopyTextureTagged) = alloc<WGPUImageCopyTexture>().also { output ->
     output.texture = input.texture.handler

@@ -6,7 +6,6 @@ pluginManagement {
 		gradlePluginPortal()
 		google()
 		mavenCentral()
-		mavenLocal()
 		maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
 		maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
 	}
@@ -20,7 +19,7 @@ dependencyResolutionManagement {
 		// Snapshot central repository
 		maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
 		//wgpu4k snapshot & preview repository
-		maven("https://gitlab.com/api/v4/projects/25805863/packages/maven")
+		//maven("https://gitlab.com/api/v4/projects/25805863/packages/maven")
 
 	}
 }

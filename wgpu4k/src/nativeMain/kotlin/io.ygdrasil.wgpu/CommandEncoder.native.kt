@@ -7,7 +7,7 @@ import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
-import webgpu.*
+import webgpu.native.*
 
 actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : AutoCloseable {
 

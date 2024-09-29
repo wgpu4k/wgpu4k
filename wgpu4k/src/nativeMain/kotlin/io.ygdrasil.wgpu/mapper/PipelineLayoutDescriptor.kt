@@ -8,7 +8,7 @@ import kotlinx.cinterop.ArenaBase
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.cstr
-import webgpu.WGPUPipelineLayoutDescriptor
+import webgpu.native.WGPUPipelineLayoutDescriptor
 
 internal fun ArenaBase.map(input: PipelineLayoutDescriptor) =
     alloc<WGPUPipelineLayoutDescriptor>().also { output ->

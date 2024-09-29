@@ -6,7 +6,7 @@ import io.ygdrasil.wgpu.mapper.map
 import kotlinx.cinterop.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import webgpu.*
+import webgpu.native.*
 
 val deviceState = MutableStateFlow<WGPUDevice?>(null)
 
