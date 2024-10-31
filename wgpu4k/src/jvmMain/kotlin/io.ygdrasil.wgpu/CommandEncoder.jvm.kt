@@ -3,22 +3,29 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUCommandBufferDescriptor
-import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.mapper.map
+import webgpu.WGPUCommandEncoder
+import webgpu.wgpuCommandEncoderBeginComputePass
+import webgpu.wgpuCommandEncoderBeginRenderPass
+import webgpu.wgpuCommandEncoderCopyBufferToTexture
+import webgpu.wgpuCommandEncoderCopyTextureToBuffer
+import webgpu.wgpuCommandEncoderCopyTextureToTexture
+import webgpu.wgpuCommandEncoderFinish
+import webgpu.wgpuCommandEncoderRelease
 import java.lang.foreign.MemorySegment
 
-actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable {
+actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : AutoCloseable {
 
     actual fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder = confined { arena ->
         arena.map(descriptor)
-            .let { wgpu_h.wgpuCommandEncoderBeginRenderPass(handler, it) }
+            .let { wgpuCommandEncoderBeginRenderPass(handler, it) }
             ?.let { RenderPassEncoder(it) }
             ?: error("fail to get RenderPassEncoder")
     }
 
     actual fun finish(): CommandBuffer = confined { arena ->
         WGPUCommandBufferDescriptor.allocate(arena)
-            .let { wgpu_h.wgpuCommandEncoderFinish(handler, it) }
+            .let { wgpuCommandEncoderFinish(handler, it) }
             ?.let { CommandBuffer(it) }
             ?: error("fail to get CommandBuffer")
     }
@@ -28,7 +35,7 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
         destination: ImageCopyTexture,
         copySize: Size3D
     ) = confined { arena ->
-        wgpu_h.wgpuCommandEncoderCopyTextureToTexture(
+        wgpuCommandEncoderCopyTextureToTexture(
             handler,
             arena.map(source),
             arena.map(destination),
@@ -38,7 +45,7 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
 
     actual fun beginComputePass(descriptor: ComputePassDescriptor?): ComputePassEncoder = confined { arena ->
         descriptor?.let { arena.map(descriptor) }
-            .let { wgpu_h.wgpuCommandEncoderBeginComputePass(handler, it ?: MemorySegment.NULL) }
+            .let { wgpuCommandEncoderBeginComputePass(handler, it ?: MemorySegment.NULL) }
             ?.let { ComputePassEncoder(it) }
             ?: error("fail to get ComputePassEncoder")
     }
@@ -49,7 +56,7 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
         copySize: Size3D,
     ) = confined { arena ->
 
-        wgpu_h.wgpuCommandEncoderCopyTextureToBuffer(
+        wgpuCommandEncoderCopyTextureToBuffer(
             handler,
             arena.map(source),
             arena.map(destination),
@@ -63,7 +70,7 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
         copySize: Size3D,
     ) = confined { arena ->
 
-        wgpu_h.wgpuCommandEncoderCopyBufferToTexture(
+        wgpuCommandEncoderCopyBufferToTexture(
             handler,
             arena.map(source),
             arena.map(destination),
@@ -72,6 +79,6 @@ actual class CommandEncoder(internal val handler: MemorySegment) : AutoCloseable
     }
 
     actual override fun close() {
-        wgpu_h.wgpuCommandEncoderRelease(handler)
+        wgpuCommandEncoderRelease(handler)
     }
 }

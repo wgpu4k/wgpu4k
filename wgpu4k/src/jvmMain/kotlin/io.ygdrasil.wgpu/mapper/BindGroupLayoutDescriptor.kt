@@ -1,71 +1,71 @@
 package io.ygdrasil.wgpu.mapper
 
+import ffi.MemoryAllocator
 import io.ygdrasil.wgpu.BindGroupLayoutDescriptor
-import io.ygdrasil.wgpu.internal.jvm.panama.*
-import io.ygdrasil.wgpu.toFlagInt
-import io.ygdrasil.wgpu.toInt
-import java.lang.foreign.Arena
-import java.lang.foreign.MemorySegment
+import io.ygdrasil.wgpu.toFlagULong
+import webgpu.WGPUBindGroupLayoutDescriptor
+import webgpu.WGPUBindGroupLayoutEntry
+import webgpu.WGPUChainedStruct
 
-fun Arena.map(input: BindGroupLayoutDescriptor): MemorySegment = WGPUBindGroupLayoutDescriptor.allocate(this) .also{ output ->
-    if (input.label != null) WGPUBindGroupLayoutDescriptor.label(output, allocateFrom(input.label))
+fun MemoryAllocator.map(input: BindGroupLayoutDescriptor): WGPUBindGroupLayoutDescriptor = WGPUBindGroupLayoutDescriptor.allocate(this) .also{ output ->
+    if (input.label != null) map(input.label, output.label)
 
     if (input.entries.isNotEmpty()) {
-        WGPUBindGroupLayoutDescriptor.entryCount(output, input.entries.size.toLong())
-        val entries = WGPUBindGroupLayoutEntry.allocateArray(input.entries.size.toLong(), this)
-        input.entries.forEachIndexed { index, entry ->
-            map(entry, WGPUBindGroupLayoutEntry.asSlice(entries, index.toLong()))
+        output.entryCount = input.entries.size.toULong()
+        val entries = WGPUBindGroupLayoutEntry.allocateArray(this, input.entries.size.toUInt()) { index, entry ->
+            map(input.entries[index.toInt()], entry)
+
         }
-        WGPUBindGroupLayoutDescriptor.entries(output, entries)
+        output.entries = entries
     }
 }
 
-fun Arena.map(input: BindGroupLayoutDescriptor.Entry, output: MemorySegment) {
+fun MemoryAllocator.map(input: BindGroupLayoutDescriptor.Entry, output: WGPUBindGroupLayoutEntry) {
 
-    WGPUBindGroupLayoutEntry.binding(output, input.binding)
-    WGPUBindGroupLayoutEntry.visibility(output, input.visibility.toFlagInt())
+    output.binding =  input.binding
+    output.visibility =  input.visibility.toFlagULong()
 
     when (val bindingType = input.bindingType) {
         is BindGroupLayoutDescriptor.Entry.BufferBindingLayout -> {
-            val buffer = WGPUBindGroupLayoutEntry.buffer(output)
-            WGPUBufferBindingLayout.hasDynamicOffset(buffer, bindingType.hasDynamicOffset.toInt())
-            WGPUBufferBindingLayout.minBindingSize(buffer, bindingType.minBindingSize)
-            WGPUBufferBindingLayout.type(buffer, bindingType.type.value)
+            val buffer = output.buffer
+            buffer.hasDynamicOffset = bindingType.hasDynamicOffset
+            buffer.minBindingSize = bindingType.minBindingSize
+            buffer.type = bindingType.type.uValue
 
             val chain = WGPUChainedStruct.allocate(this)
-            WGPUChainedStruct.sType(chain, wgpu_h.WGPUSType_BindGroupEntryExtras())
-            WGPUBufferBindingLayout.nextInChain(buffer, chain)
+            chain.sType = WGPUSType_BindGroupEntryExtras
+            buffer.nextInChain = chain.handler
         }
 
         is BindGroupLayoutDescriptor.Entry.SamplerBindingLayout -> {
-            val sampler = WGPUBindGroupLayoutEntry.sampler(output)
-            WGPUSamplerBindingLayout.type(sampler, bindingType.type.value)
+            val sampler = output.sampler
+            sampler.type = bindingType.type.value
 
             val chain = WGPUChainedStruct.allocate(this)
-            WGPUChainedStruct.sType(chain, wgpu_h.WGPUSType_BindGroupEntryExtras())
-            WGPUSamplerBindingLayout.nextInChain(sampler, chain)
+            chain.sType = WGPUSType_BindGroupEntryExtras
+            sampler.nextInChain = chain.handler
         }
 
         is BindGroupLayoutDescriptor.Entry.TextureBindingLayout -> {
-            val texture = WGPUBindGroupLayoutEntry.texture(output)
-            WGPUTextureBindingLayout.multisampled(texture, bindingType.multisampled.toInt())
-            WGPUTextureBindingLayout.sampleType(texture, bindingType.sampleType.value)
-            WGPUTextureBindingLayout.viewDimension(texture, bindingType.viewDimension.value)
+            val texture = output.texture
+            texture.multisampled = bindingType.multisampled
+            texture.sampleType = bindingType.sampleType.uValue
+            texture.viewDimension = bindingType.viewDimension.uValue
 
             val chain = WGPUChainedStruct.allocate(this)
-            WGPUChainedStruct.sType(chain, wgpu_h.WGPUSType_BindGroupEntryExtras())
-            WGPUTextureBindingLayout.nextInChain(texture, chain)
+            chain.sType = WGPUSType_BindGroupEntryExtras
+            texture.nextInChain = chain.handler
         }
 
         is BindGroupLayoutDescriptor.Entry.StorageTextureBindingLayout -> {
-            val storageTexture = WGPUBindGroupLayoutEntry.storageTexture(output)
-            WGPUStorageTextureBindingLayout.access(storageTexture, bindingType.access.value)
-            WGPUStorageTextureBindingLayout.format(storageTexture, bindingType.format.value)
-            WGPUStorageTextureBindingLayout.viewDimension(storageTexture, bindingType.viewDimension.value)
+            val storageTexture = output.storageTexture
+            storageTexture.access = bindingType.access.uValue
+            storageTexture.format = bindingType.format.uValue
+            storageTexture.viewDimension = bindingType.viewDimension.uValue
 
             val chain = WGPUChainedStruct.allocate(this)
-            WGPUChainedStruct.sType(chain, wgpu_h.WGPUSType_BindGroupEntryExtras())
-            WGPUStorageTextureBindingLayout.nextInChain(storageTexture, chain)
+            chain.sType = WGPUSType_BindGroupEntryExtras
+            storageTexture.nextInChain = chain
 
         }
     }

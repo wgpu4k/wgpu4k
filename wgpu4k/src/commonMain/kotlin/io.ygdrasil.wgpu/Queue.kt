@@ -8,48 +8,48 @@ expect class Queue {
         buffer: Buffer,
         bufferOffset: GPUSize64,
         data: ShortArray,
-        dataOffset: GPUSize64 = 0,
-        size: GPUSize64 = data.size.toLong(),
+        dataOffset: GPUSize64 = 0u,
+        size: GPUSize64 = data.size.toULong(),
     )
 
     fun writeBuffer(
         buffer: Buffer,
         bufferOffset: GPUSize64,
         data: FloatArray,
-        dataOffset: GPUSize64 = 0,
-        size: GPUSize64 = data.size.toLong(),
+        dataOffset: GPUSize64 = 0u,
+        size: GPUSize64 = data.size.toULong(),
     )
 
     fun writeBuffer(
         buffer: Buffer,
         bufferOffset: GPUSize64,
         data: IntArray,
-        dataOffset: GPUSize64 = 0,
-        size: GPUSize64 = data.size.toLong(),
+        dataOffset: GPUSize64 = 0u,
+        size: GPUSize64 = data.size.toULong(),
     )
 
     fun writeBuffer(
         buffer: Buffer,
         bufferOffset: GPUSize64,
         data: ByteArray,
-        dataOffset: GPUSize64 = 0,
-        size: GPUSize64 = data.size.toLong(),
+        dataOffset: GPUSize64 = 0u,
+        size: GPUSize64 = data.size.toULong(),
     )
 
     fun writeBuffer(
         buffer: Buffer,
         bufferOffset: GPUSize64,
         data: DoubleArray,
-        dataOffset: GPUSize64 = 0,
-        size: GPUSize64 = data.size.toLong(),
+        dataOffset: GPUSize64 = 0u,
+        size: GPUSize64 = data.size.toULong(),
     )
 
     fun writeBuffer(
         buffer: Buffer,
         bufferOffset: GPUSize64,
         data: LongArray,
-        dataOffset: GPUSize64 = 0,
-        size: GPUSize64 = data.size.toLong(),
+        dataOffset: GPUSize64 = 0u,
+        size: GPUSize64 = data.size.toULong(),
     )
 
     fun writeTexture(
@@ -113,7 +113,7 @@ expect class ImageBitmapHolder : DrawableHolder, AutoCloseable {
 data class ImageCopyExternalImage(
     val source: DrawableHolder,
     /* ImageBitmap | ImageData | HTMLImageElement | HTMLVideoElement | VideoFrame | HTMLCanvasElement | OffscreenCanvas */
-    val origin: GPUIntegerCoordinates = 0 to 0,
+    val origin: GPUIntegerCoordinates = 0u to 0u,
     /* Iterable<GPUIntegerCoordinate>? | GPUOrigin2DDictStrict? */
     val flipY: Boolean = false,
 
@@ -123,7 +123,7 @@ data class ImageCopyTextureTagged(
     val colorSpace: PredefinedColorSpace = PredefinedColorSpace.srgb,
     val premultipliedAlpha: Boolean = false,
     val texture: Texture,
-    val mipLevel: GPUIntegerCoordinate = 0,
+    val mipLevel: GPUIntegerCoordinate = 0u,
     val origin: Origin3D = Origin3D(),
     val aspect: TextureAspect = TextureAspect.all,
 

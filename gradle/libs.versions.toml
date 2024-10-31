@@ -1,5 +1,5 @@
 [versions]
-kotest = "6.0.0-SNAPSHOT"
+kotest = "6.0.0.M1"
 jna = "5.14.0"
 kotlin = "2.0.20"
 kotlinx-serialization-json = "1.7.2"
@@ -10,7 +10,6 @@ korge = "6.0.0"
 agp = "8.5.2"
 jreleaser = "1.13.1"
 rococoa = "0.0.1"
-wgpu4k-panama = "0.0.3"
 wgpu4k-native = "0.0.1-SNAPSHOT"
 android-native-helper = "0.0.1"
 glfw-native = "0.0.1"
@@ -33,7 +32,6 @@ ktor-server-netty-jvm = { module = "io.ktor:ktor-server-netty-jvm", version.ref 
 ktor-server-core-jvm = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 playwright = { module = "com.microsoft.playwright:playwright", version.ref = "playwright" }
 rococoa = { module = "io.ygdrasil:rococoa", version.ref = "rococoa" }
-wgpu4k-panama = { module = "io.ygdrasil:wgpu4k-panama", version.ref = "wgpu4k-panama" }
 wgpu4k-native = { module = "io.ygdrasil:wgpu4k-native", version.ref = "wgpu4k-native" }
 glfw-native = { module = "io.ygdrasil:glfw-native", version.ref = "glfw-native" }
 android-native-helper = { module = "io.ygdrasil:android-native-helper", version.ref = "android-native-helper" }

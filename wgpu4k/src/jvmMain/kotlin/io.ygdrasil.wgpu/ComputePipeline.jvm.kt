@@ -1,15 +1,16 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
-import java.lang.foreign.MemorySegment
+import webgpu.WGPUComputePipeline
+import webgpu.wgpuComputePipelineGetBindGroupLayout
+import webgpu.wgpuComputePipelineRelease
 
-actual class ComputePipeline(internal val handler: MemorySegment) : AutoCloseable {
+actual class ComputePipeline(internal val handler: WGPUComputePipeline) : AutoCloseable {
 
     actual fun getBindGroupLayout(index: Int): BindGroupLayout =
-        wgpu_h.wgpuComputePipelineGetBindGroupLayout(handler, index)
+        wgpuComputePipelineGetBindGroupLayout(handler, index)
             .let(::BindGroupLayout)
 
     actual override fun close() {
-        wgpu_h.wgpuComputePipelineRelease(handler)
+        wgpuComputePipelineRelease(handler)
     }
 }

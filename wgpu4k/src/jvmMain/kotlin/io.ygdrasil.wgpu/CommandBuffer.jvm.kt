@@ -1,11 +1,11 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
-import java.lang.foreign.MemorySegment
+import webgpu.WGPUCommandBuffer
+import webgpu.wgpuCommandBufferRelease
 
-actual class CommandBuffer(internal val handler: MemorySegment) : AutoCloseable {
+actual class CommandBuffer(internal val handler: WGPUCommandBuffer) : AutoCloseable {
 
 	actual override fun close() {
-		wgpu_h.wgpuCommandBufferRelease(handler)
+		wgpuCommandBufferRelease(handler)
 	}
 }

@@ -10,8 +10,8 @@ data class TextureViewDescriptor(
     val format: TextureFormat? = null,
     val dimension: TextureViewDimension? = null,
     val aspect: TextureAspect = TextureAspect.all,
-    val baseMipLevel: GPUIntegerCoordinate = 0,
-    val mipLevelCount: GPUIntegerCoordinate = 1,
-    val baseArrayLayer: GPUIntegerCoordinate = 0,
-    val arrayLayerCount: GPUIntegerCoordinate = 1,
+    val baseMipLevel: GPUIntegerCoordinate = 0u,
+    val mipLevelCount: GPUIntegerCoordinate = 1u,
+    val baseArrayLayer: GPUIntegerCoordinate = 0u,
+    val arrayLayerCount: GPUIntegerCoordinate = 1u,
 )

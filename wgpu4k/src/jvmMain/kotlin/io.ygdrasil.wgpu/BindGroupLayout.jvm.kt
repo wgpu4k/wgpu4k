@@ -1,10 +1,10 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
-import java.lang.foreign.MemorySegment
+import webgpu.WGPUBindGroupLayout
+import webgpu.wgpuBindGroupLayoutRelease
 
-actual class BindGroupLayout(internal val handler: MemorySegment) : AutoCloseable {
+actual class BindGroupLayout(internal val handler: WGPUBindGroupLayout) : AutoCloseable {
     actual override fun close() {
-        wgpu_h.wgpuBindGroupLayoutRelease(handler)
+        wgpuBindGroupLayoutRelease(handler)
     }
 }

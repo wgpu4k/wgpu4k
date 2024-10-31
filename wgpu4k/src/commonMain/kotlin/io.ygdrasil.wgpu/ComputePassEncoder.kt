@@ -3,7 +3,7 @@ package io.ygdrasil.wgpu
 expect class ComputePassEncoder : AutoCloseable {
 
     fun setPipeline(pipeline: ComputePipeline)
-    fun dispatchWorkgroups(workgroupCountX: GPUSize32, workgroupCountY: GPUSize32 = 1, workgroupCountZ: GPUSize32 = 1)
+    fun dispatchWorkgroups(workgroupCountX: GPUSize32, workgroupCountY: GPUSize32 = 1u, workgroupCountZ: GPUSize32 = 1u)
     fun dispatchWorkgroupsIndirect(indirectBuffer: Buffer, indirectOffset: GPUSize64)
 
     fun setBindGroup(index: GPUIndex32, bindGroup: BindGroup?, dynamicOffsets: Array<GPUBufferDynamicOffset>)

@@ -9,7 +9,7 @@ import java.lang.foreign.ValueLayout
 
 fun Arena.map(input: RenderBundleEncoderDescriptor): MemorySegment =
     WGPURenderBundleEncoderDescriptor.allocate(this).also { renderBundleEncoderDescriptor ->
-        if (input.label != null) WGPURenderBundleEncoderDescriptor.label(renderBundleEncoderDescriptor, allocateFrom(input.label))
+        if (input.label != null) map(input.label, output.label)
 
         if (input.colorFormats.isNotEmpty()) {
             WGPURenderBundleEncoderDescriptor.colorFormatCount(renderBundleEncoderDescriptor, input.colorFormats.size.toLong())

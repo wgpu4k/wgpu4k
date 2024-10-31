@@ -109,6 +109,10 @@ enum class TextureFormat(
             it.value == value
         }
 
+        fun of(value: UInt): TextureFormat? = TextureFormat.entries.find {
+            it.value == value.toInt()
+        }
+
         fun of(value: String): TextureFormat? = entries.find {
             it.actualName == value
         }

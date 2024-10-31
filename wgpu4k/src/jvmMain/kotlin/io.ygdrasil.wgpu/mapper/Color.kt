@@ -1,18 +1,17 @@
 
 package io.ygdrasil.wgpu.mapper
 
+import ffi.MemoryAllocator
 import io.ygdrasil.wgpu.Color
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUColor
-import java.lang.foreign.Arena
-import java.lang.foreign.MemorySegment
+import webgpu.WGPUColor
 
-internal fun Arena.map(input: Color) = WGPUColor.allocate(this).also { output ->
+internal fun MemoryAllocator.map(input: Color) = WGPUColor.allocate(this).also { output ->
     map(input, output)
 }
 
-internal fun Arena.map(input: Color, output: MemorySegment) {
-    WGPUColor.r(output, input.red)
-    WGPUColor.g(output, input.green)
-    WGPUColor.b(output, input.blue)
-    WGPUColor.a(output, input.alpha)
+internal fun map(input: Color, output: WGPUColor) {
+    output.r = input.red
+    output.g = input.green
+    output.b = input.blue
+    output.a = input.alpha
 }

@@ -1,16 +1,20 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
-import java.lang.foreign.MemorySegment
+import webgpu.WGPUComputePassEncoder
+import webgpu.wgpuComputePassEncoderDispatchWorkgroups
+import webgpu.wgpuComputePassEncoderDispatchWorkgroupsIndirect
+import webgpu.wgpuComputePassEncoderEnd
+import webgpu.wgpuComputePassEncoderRelease
+import webgpu.wgpuComputePassEncoderSetPipeline
 
-actual class ComputePassEncoder(internal val handler: MemorySegment) : AutoCloseable {
+actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : AutoCloseable {
 
     actual fun setPipeline(pipeline: ComputePipeline) {
-        wgpu_h.wgpuComputePassEncoderSetPipeline(handler, pipeline.handler)
+        wgpuComputePassEncoderSetPipeline(handler, pipeline.handler)
     }
 
     actual fun dispatchWorkgroups(workgroupCountX: GPUSize32, workgroupCountY: GPUSize32, workgroupCountZ: GPUSize32) {
-        wgpu_h.wgpuComputePassEncoderDispatchWorkgroups(
+        wgpuComputePassEncoderDispatchWorkgroups(
             handler,
             workgroupCountX,
             workgroupCountY,
@@ -19,7 +23,7 @@ actual class ComputePassEncoder(internal val handler: MemorySegment) : AutoClose
     }
 
     actual fun dispatchWorkgroupsIndirect(indirectBuffer: Buffer, indirectOffset: GPUSize64) {
-        wgpu_h.wgpuComputePassEncoderDispatchWorkgroupsIndirect(
+        wgpuComputePassEncoderDispatchWorkgroupsIndirect(
             handler,
             indirectBuffer.handler,
             indirectOffset
@@ -45,10 +49,10 @@ actual class ComputePassEncoder(internal val handler: MemorySegment) : AutoClose
     }
 
     actual fun end() {
-        wgpu_h.wgpuComputePassEncoderEnd(handler)
+        wgpuComputePassEncoderEnd(handler)
     }
 
     actual override fun close() {
-        wgpu_h.wgpuComputePassEncoderRelease(handler)
+        wgpuComputePassEncoderRelease(handler)
     }
 }

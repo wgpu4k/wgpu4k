@@ -26,6 +26,6 @@ data class SamplerDescriptor(
     val lodMinClamp: Float = 0f,
     val lodMaxClamp: Float = 32f,
     val compare: CompareFunction? = null,
-    val maxAnisotropy: Byte = 1,
+    val maxAnisotropy: UShort = 1u,
     val label: String? = null,
 )

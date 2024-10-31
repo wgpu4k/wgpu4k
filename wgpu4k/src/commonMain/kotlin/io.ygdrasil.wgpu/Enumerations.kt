@@ -21,6 +21,12 @@ internal fun Set<EnumerationWithValue>.toFlagUInt(): UInt = when (size) {
     else -> fold(0u) { acc, enumerationWithValue -> acc or enumerationWithValue.value.toUInt() }
 }
 
+internal fun Set<EnumerationWithValue>.toFlagULong(): ULong = when (size) {
+    0 -> 0u
+    1 -> first().value.toULong()
+    else -> fold(0u) { acc, enumerationWithValue -> acc or enumerationWithValue.value.toULong() }
+}
+
 enum class AdapterType(
     val value: Int,
 ) {
@@ -177,6 +183,9 @@ enum class BufferMapState(
     companion object {
         fun of(value: Int): BufferMapState? = entries.find {
             it.value == value
+        }
+        fun of(value: UInt): BufferMapState? = entries.find {
+            it.value == value.toInt()
         }
 
         fun of(value: String): BufferMapState? = entries.find {
@@ -678,6 +687,10 @@ enum class SurfaceTextureStatus(
         fun of(value: Int): SurfaceTextureStatus? = entries.find {
             it.value == value
         }
+
+        fun of(value: UInt): SurfaceTextureStatus? = entries.find {
+            it.value == value.toInt()
+        }
     }
 }
 
@@ -708,6 +721,10 @@ enum class TextureDimension(
     companion object {
         fun of(value: Int): TextureDimension? = entries.find {
             it.value == value
+        }
+
+        fun of(value: UInt): TextureDimension? = entries.find {
+            it.value == value.toInt()
         }
 
         fun of(value: String): TextureDimension? = entries.find {

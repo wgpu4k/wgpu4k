@@ -58,7 +58,7 @@ kotlin {
 
         jvmMain {
             dependencies {
-                api(libs.wgpu4k.panama)
+                implementation(libs.wgpu4k.native)
             }
         }
 

@@ -1,25 +1,29 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.confined
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceCapabilities
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceConfiguration
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceTexture
-import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
-import java.lang.foreign.Arena
-import java.lang.foreign.MemorySegment
+import ffi.MemoryAllocator
+import ffi.memoryScope
+import webgpu.WGPUSurface
+import webgpu.WGPUSurfaceCapabilities
+import webgpu.WGPUSurfaceConfiguration
+import webgpu.WGPUSurfaceTexture
+import webgpu.wgpuSurfaceConfigure
+import webgpu.wgpuSurfaceGetCapabilities
+import webgpu.wgpuSurfaceGetCurrentTexture
+import webgpu.wgpuSurfacePresent
+import webgpu.wgpuSurfaceRelease
 import java.lang.foreign.ValueLayout
 
 actual class Surface(
-	internal val handler: MemorySegment,
-	private val sizeProvider: () -> Pair<Int, Int>
+	internal val handler: WGPUSurface,
+	private val sizeProvider: () -> Pair<UInt, UInt>
 ) : AutoCloseable {
 
 	private var _supportedFormats: Set<TextureFormat> = setOf()
 	private var _supportedAlphaMode: Set<CompositeAlphaMode> = setOf()
 
-	actual val width: Int
+	actual val width: UInt
 		get() = sizeProvider().first
-	actual val height: Int
+	actual val height: UInt
 		get() = sizeProvider().second
 
 	actual val preferredCanvasFormat: TextureFormat? = null
@@ -28,28 +32,28 @@ actual class Surface(
 	actual val supportedAlphaMode: Set<CompositeAlphaMode>
 		get() = _supportedAlphaMode
 
-	actual fun getCurrentTexture(): SurfaceTexture = confined { arena ->
-		WGPUSurfaceTexture.allocate(arena).let { surfaceTexture ->
-			wgpu_h.wgpuSurfaceGetCurrentTexture(handler, surfaceTexture)
-			WGPUSurfaceTexture.status(surfaceTexture)
+	actual fun getCurrentTexture(): SurfaceTexture = memoryScope { scope ->
+		WGPUSurfaceTexture.allocate(scope).let { surfaceTexture ->
+			wgpuSurfaceGetCurrentTexture(handler, surfaceTexture)
+			surfaceTexture.status
 			SurfaceTexture(
-				Texture(WGPUSurfaceTexture.texture(surfaceTexture)),
-				SurfaceTextureStatus.of(WGPUSurfaceTexture.status(surfaceTexture)) ?: error("fail to get status"),
+				Texture(surfaceTexture.texture ?: error("fail to get texture from surface")),
+				SurfaceTextureStatus.of(surfaceTexture.status) ?: error("fail to get status"),
 			)
 		}
 	}
 
 	actual fun present() {
-		wgpu_h.wgpuSurfacePresent(handler)
+		wgpuSurfacePresent(handler)
 	}
 
-	fun computeSurfaceCapabilities(adapter: Adapter) = confined { arena ->
+	fun computeSurfaceCapabilities(adapter: Adapter) = memoryScope { scope ->
 		println("computeSurfaceCapabilities")
-		val surfaceCapabilities = WGPUSurfaceCapabilities.allocate(arena)
-		wgpu_h.wgpuSurfaceGetCapabilities(handler, adapter.handler, surfaceCapabilities)
+		val surfaceCapabilities = WGPUSurfaceCapabilities.allocate(scope)
+		wgpuSurfaceGetCapabilities(handler, adapter.handler, surfaceCapabilities)
 
-		val formats = WGPUSurfaceCapabilities.formats(surfaceCapabilities)
-		val formatCount = WGPUSurfaceCapabilities.formatCount(surfaceCapabilities)
+		val formats = surfaceCapabilities.formats
+		val formatCount = surfaceCapabilities.formatCount
 		_supportedFormats = (0..formatCount.toInt()).map { index ->
 			formats.get(ValueLayout.JAVA_INT, index * ValueLayout.JAVA_INT.byteOffset())
 				.let { value -> TextureFormat.of(value).also { if (it == null) println("ignoring undefined format with value $value") } }
@@ -57,8 +61,8 @@ actual class Surface(
 		}.mapNotNull { it }
 			.toSet()
 
-		val alphaModes = WGPUSurfaceCapabilities.alphaModes(surfaceCapabilities)
-		val alphaModeCount = WGPUSurfaceCapabilities.alphaModeCount(surfaceCapabilities)
+		val alphaModes = surfaceCapabilities.alphaModes
+		val alphaModeCount = surfaceCapabilities.alphaModeCount
 		_supportedAlphaMode = (0..alphaModeCount.toInt()).map { index ->
 			alphaModes.get(ValueLayout.JAVA_INT, index * ValueLayout.JAVA_INT.byteOffset())
 				.let { value -> CompositeAlphaMode.of(value).also { if (it == null) println("ignoring undefined format with value $value") } }
@@ -80,22 +84,22 @@ actual class Surface(
 		}
 	}
 
-	actual fun configure(surfaceConfiguration: SurfaceConfiguration) = confined { arena ->
-		wgpu_h.wgpuSurfaceConfigure(handler, arena.map(surfaceConfiguration))
+	actual fun configure(surfaceConfiguration: SurfaceConfiguration) = memoryScope { scope ->
+		wgpuSurfaceConfigure(handler, scope.map(surfaceConfiguration))
 	}
 
     actual override fun close() {
-		wgpu_h.wgpuSurfaceRelease(handler)
+		wgpuSurfaceRelease(handler)
 	}
 
-	private fun Arena.map(input: SurfaceConfiguration): MemorySegment =
+	private fun MemoryAllocator.map(input: SurfaceConfiguration): WGPUSurfaceConfiguration =
 		WGPUSurfaceConfiguration.allocate(this).also { output ->
-		WGPUSurfaceConfiguration.device(output, input.device.handler)
-		WGPUSurfaceConfiguration.usage(output, input.usage.toFlagInt())
-		WGPUSurfaceConfiguration.format(output, input.format.value)
-		WGPUSurfaceConfiguration.presentMode(output, input.presentMode.value)
-		WGPUSurfaceConfiguration.alphaMode(output, input.alphaMode.value)
-		WGPUSurfaceConfiguration.width(output, width)
-		WGPUSurfaceConfiguration.height(output, height)
+			output.device = input.device.handler
+			output.usage = input.usage.toFlagULong()
+			output.format = input.format.uValue
+			output.presentMode = input.presentMode.uValue
+			output.alphaMode = input.alphaMode.uValue
+			output.width = width
+			output.height = height
 	}
 }

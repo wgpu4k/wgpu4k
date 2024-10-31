@@ -1,68 +1,67 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.confined
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUAdapterRequestDeviceCallback
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSupportedLimits
-import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
+import ffi.NativeAddress
+import ffi.memoryScope
 import io.ygdrasil.wgpu.mapper.map
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
-import java.lang.foreign.MemorySegment
+import webgpu.WGPUAdapter
+import webgpu.WGPUDevice
+import webgpu.WGPURequestDeviceCallback
+import webgpu.WGPURequestDeviceCallbackInfo
+import webgpu.WGPURequestDeviceStatus
+import webgpu.WGPUStringView
+import webgpu.WGPUSupportedLimits
+import webgpu.wgpuAdapterGetLimits
+import webgpu.wgpuAdapterHasFeature
+import webgpu.wgpuAdapterRelease
+import webgpu.wgpuAdapterRequestDevice
 
-actual class Adapter(internal val handler: MemorySegment) : AutoCloseable {
+actual class Adapter(internal val handler: WGPUAdapter) : AutoCloseable {
 
 	actual val features: Set<Feature> by lazy {
 		Feature.entries
 			.mapNotNull { feature ->
-				feature.takeIf { wgpu_h.wgpuAdapterHasFeature(handler, feature.value) == 1 }
+				feature.takeIf { wgpuAdapterHasFeature(handler, feature.uValue) }
 			}
 			.toSet()
 	}
 
-	actual val limits: SupportedLimits = confined { arena ->
-		val supportedLimits = WGPUSupportedLimits.allocate(arena)
-		wgpu_h.wgpuAdapterGetLimits(handler, supportedLimits)
-		map(WGPUSupportedLimits.limits(supportedLimits))
+	actual val limits: SupportedLimits = memoryScope { scope ->
+		val supportedLimits = WGPUSupportedLimits.allocate(scope)
+		wgpuAdapterGetLimits(handler, supportedLimits)
+		map(supportedLimits)
 	}
 
-	actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? = confined { arena ->
-		val deviceState = MutableStateFlow<MemorySegment?>(null)
+	actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? = memoryScope { scope ->
+		var fetchedDevice: WGPUDevice? = null
 
-		val handleRequestAdapter = WGPUAdapterRequestDeviceCallback.allocate( { statusAsInt, device, message, param4 ->
-			if (statusAsInt == wgpu_h.WGPURequestDeviceStatus_Success()) {
-				deviceState.update { device }
-			} else {
-				println("request_device status=${WGPURequestDeviceStatus.of(statusAsInt)} message=${message.getString(0)}")
+		val callback = WGPURequestDeviceCallback.allocate(scope, object : WGPURequestDeviceCallback {
+
+			override fun invoke(
+				status: WGPURequestDeviceStatus,
+				device: WGPUDevice?,
+				message: WGPUStringView?,
+				userdata1: NativeAddress?,
+				userdata2: NativeAddress?
+			) {
+				if (status != 1u && device == null) error("fail to get device")
+				fetchedDevice = device
 			}
-		}, arena)
 
-		wgpu_h.wgpuAdapterRequestDevice(
-			handler,
-			arena.map(descriptor),
-			handleRequestAdapter,
-			MemorySegment.NULL
-		)
+		})
 
-		deviceState.value?.let { Device(it) }
+		val callbackInfo = WGPURequestDeviceCallbackInfo.allocate(scope).apply {
+			this.callback = callback
+			this.userdata2 = scope.bufferOfAddress(callback.handler).handler
+		}
+
+		wgpuAdapterRequestDevice(handler, null, callbackInfo)
+
+		fetchedDevice?.let(::Device) ?: error("fail to get device")
+
 	}
 
 	actual override fun close() {
-		wgpu_h.wgpuAdapterRelease(handler)
-	}
-}
-
-
-internal enum class WGPURequestDeviceStatus(
-	val `value`: Int,
-) {
-	WGPURequestDeviceStatus_Success(0),
-	WGPURequestDeviceStatus_Error(1),
-	WGPURequestDeviceStatus_Unknown(2);
-
-	companion object {
-		internal fun of(`value`: Int): WGPURequestDeviceStatus? = entries.find {
-			it.value == value
-		}
+		wgpuAdapterRelease(handler)
 	}
 }
 

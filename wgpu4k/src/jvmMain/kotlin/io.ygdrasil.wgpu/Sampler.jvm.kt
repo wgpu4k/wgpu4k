@@ -1,11 +1,11 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
-import java.lang.foreign.MemorySegment
+import webgpu.WGPUSampler
+import webgpu.wgpuSamplerRelease
 
-actual class Sampler(internal val handler: MemorySegment) : AutoCloseable {
+actual class Sampler(internal val handler: WGPUSampler) : AutoCloseable {
 
 	actual override fun close() {
-		wgpu_h.wgpuSamplerRelease(handler)
+		wgpuSamplerRelease(handler)
 	}
 }

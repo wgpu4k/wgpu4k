@@ -1,14 +1,14 @@
 package io.ygdrasil.wgpu.mapper
 
+import ffi.MemoryAllocator
 import io.ygdrasil.wgpu.RenderPassDescriptor
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPassColorAttachment
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPassDepthStencilAttachment
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPassDescriptor
 import io.ygdrasil.wgpu.toInt
-import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 
-internal fun Arena.map(input: RenderPassDescriptor): MemorySegment =
+internal fun MemoryAllocator.map(input: RenderPassDescriptor): MemorySegment =
     WGPURenderPassDescriptor.allocate(this).also { renderPassDescriptor ->
         println("render pass descriptor $renderPassDescriptor")
         if (input.label != null) WGPURenderPassDescriptor.label(renderPassDescriptor, allocateFrom(input.label))
@@ -37,20 +37,20 @@ internal fun Arena.map(input: RenderPassDescriptor): MemorySegment =
         // check WGPURenderPassDescriptorMaxDrawCount
     }
 
-internal fun Arena.map(input: RenderPassDescriptor.ColorAttachment, output: MemorySegment) {
+internal fun MemoryAllocator.map(input: RenderPassDescriptor.ColorAttachment, output: MemorySegment) {
     println("color attachment $output")
-    WGPURenderPassColorAttachment.view(output, input.view.handler)
+    WGPURenderPassColorAttachment.view(output, input.view.handler.handler.handler)
     WGPURenderPassColorAttachment.loadOp(output, input.loadOp.value)
     WGPURenderPassColorAttachment.storeOp(output, input.storeOp.value)
     // TODO find how to map this
     //if (input.depthSlice != null) WGPURenderPassColorAttachment.depthSlice(output, input.depthSlice)
-    if (input.resolveTarget != null) WGPURenderPassColorAttachment.resolveTarget(output, input.resolveTarget.handler)
+    if (input.resolveTarget != null) WGPURenderPassColorAttachment.resolveTarget(output, input.resolveTarget.handler.handler.handler)
     map(input.clearValue, WGPURenderPassColorAttachment.clearValue(output))
 }
 
-internal fun Arena.map(input: RenderPassDescriptor.DepthStencilAttachment): MemorySegment =
+internal fun MemoryAllocator.map(input: RenderPassDescriptor.DepthStencilAttachment): MemorySegment =
     WGPURenderPassDepthStencilAttachment.allocate(this).also { depthStencilAttachment ->
-        WGPURenderPassDepthStencilAttachment.view(depthStencilAttachment, input.view.handler)
+        WGPURenderPassDepthStencilAttachment.view(depthStencilAttachment, input.view.handler.handler.handler)
         if (input.depthClearValue != null) WGPURenderPassDepthStencilAttachment.depthClearValue(
             depthStencilAttachment,
             input.depthClearValue

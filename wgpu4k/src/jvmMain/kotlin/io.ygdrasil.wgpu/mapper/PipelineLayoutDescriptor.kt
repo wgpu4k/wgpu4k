@@ -1,19 +1,15 @@
 package io.ygdrasil.wgpu.mapper
 
+import ffi.MemoryAllocator
 import io.ygdrasil.wgpu.PipelineLayoutDescriptor
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUPipelineLayoutDescriptor
 import io.ygdrasil.wgpu.internal.jvm.toPointerArray
-import java.lang.foreign.Arena
-import java.lang.foreign.MemorySegment
+import webgpu.WGPUPipelineLayoutDescriptor
 
-internal fun Arena.map(input: PipelineLayoutDescriptor): MemorySegment = WGPUPipelineLayoutDescriptor.allocate(this).also { output ->
-    if(input.label != null) WGPUPipelineLayoutDescriptor.label(output, allocateFrom(input.label))
+internal fun MemoryAllocator.map(input: PipelineLayoutDescriptor): WGPUPipelineLayoutDescriptor = WGPUPipelineLayoutDescriptor.allocate(this).also { output ->
+    if (input.label != null) map(input.label, output.label)
     if (input.bindGroupLayouts.isNotEmpty()) {
-        WGPUPipelineLayoutDescriptor.bindGroupLayoutCount(output, input.bindGroupLayouts.size.toLong())
-        WGPUPipelineLayoutDescriptor.bindGroupLayouts(
-            output,
-            input.bindGroupLayouts.map { it.handler }.toPointerArray(this)
-        )
+        output.bindGroupLayoutCount = input.bindGroupLayouts.size.toULong()
+        output.bindGroupLayouts= input.bindGroupLayouts.map { it.handler }.toPointerArray(this)
     }
 }
 

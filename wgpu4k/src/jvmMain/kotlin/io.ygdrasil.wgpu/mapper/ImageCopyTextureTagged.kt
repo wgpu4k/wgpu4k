@@ -1,13 +1,13 @@
 package io.ygdrasil.wgpu.mapper
 
+import ffi.MemoryAllocator
 import io.ygdrasil.wgpu.ImageCopyTextureTagged
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUImageCopyTexture
-import java.lang.foreign.Arena
+import webgpu.WGPUImageCopyTexture
 
-internal fun Arena.map(input: ImageCopyTextureTagged) = WGPUImageCopyTexture.allocate(this).also { output ->
-    WGPUImageCopyTexture.texture(output, input.texture.handler)
-    WGPUImageCopyTexture.mipLevel(output, input.mipLevel)
-    WGPUImageCopyTexture.origin(output, map(input.origin))
-    WGPUImageCopyTexture.aspect(output, input.aspect.value)
+internal fun MemoryAllocator.map(input: ImageCopyTextureTagged) = WGPUImageCopyTexture.allocate(this).also { output ->
+    output.texture = input.texture.handler
+    output.mipLevel = input.mipLevel
+    output.origin = map(input.origin)
+    output.aspect = input.aspect.uValue
 }
 

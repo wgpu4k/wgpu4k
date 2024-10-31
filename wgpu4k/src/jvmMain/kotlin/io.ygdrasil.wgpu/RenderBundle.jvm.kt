@@ -1,5 +1,5 @@
 package io.ygdrasil.wgpu
 
-import java.lang.foreign.MemorySegment
+import webgpu.WGPURenderBundle
 
-actual class RenderBundle(internal val handler: MemorySegment)
+actual class RenderBundle(internal val handler: WGPURenderBundle)

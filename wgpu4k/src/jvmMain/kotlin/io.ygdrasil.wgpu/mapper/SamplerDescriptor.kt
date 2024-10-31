@@ -1,25 +1,25 @@
 package io.ygdrasil.wgpu.mapper
 
+import ffi.MemoryAllocator
 import io.ygdrasil.wgpu.SamplerDescriptor
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSamplerDescriptor
-import java.lang.foreign.Arena
-import java.lang.foreign.MemorySegment
+import webgpu.WGPUSamplerDescriptor
 
-internal fun Arena.map(input: SamplerDescriptor): MemorySegment = WGPUSamplerDescriptor.allocate(this).also { output ->
-    if (input.label != null) WGPUSamplerDescriptor.label(output, allocateFrom(input.label))
 
-    WGPUSamplerDescriptor.addressModeU(output, input.addressModeU.value)
-    WGPUSamplerDescriptor.addressModeV(output, input.addressModeV.value)
-    WGPUSamplerDescriptor.addressModeW(output, input.addressModeW.value)
+internal fun MemoryAllocator.map(input: SamplerDescriptor): WGPUSamplerDescriptor = WGPUSamplerDescriptor.allocate(this).also { output ->
+    if (input.label != null) map(input.label, output.label)
 
-    WGPUSamplerDescriptor.magFilter(output, input.magFilter.value)
-    WGPUSamplerDescriptor.minFilter(output, input.minFilter.value)
-    WGPUSamplerDescriptor.mipmapFilter(output, input.mipmapFilter.value)
+    output.addressModeU = input.addressModeU.uValue
+    output.addressModeV = input.addressModeV.uValue
+    output.addressModeW = input.addressModeW.uValue
 
-    WGPUSamplerDescriptor.lodMinClamp(output, input.lodMinClamp)
-    WGPUSamplerDescriptor.lodMaxClamp(output, input.lodMaxClamp)
+    output.magFilter = input.magFilter.uValue
+    output.minFilter = input.minFilter.uValue
+    output.mipmapFilter = input.mipmapFilter.uValue
 
-    if (input.compare != null) WGPUSamplerDescriptor.compare(output, input.compare.value)
-    WGPUSamplerDescriptor.maxAnisotropy(output, input.maxAnisotropy.toShort())
+    output.lodMinClamp = input.lodMinClamp
+    output.lodMaxClamp = input.lodMaxClamp
+
+    if (input.compare != null) output.compare = input.compare.uValue
+    output.maxAnisotropy = input.maxAnisotropy
 
 }

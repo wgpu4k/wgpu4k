@@ -1,17 +1,19 @@
 package io.ygdrasil.wgpu.mapper
 
+import ffi.MemoryAllocator
 import io.ygdrasil.wgpu.TextureViewDescriptor
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUTextureViewDescriptor
-import java.lang.foreign.Arena
+import webgpu.WGPUTextureViewDescriptor
 
-internal fun Arena.map(input: TextureViewDescriptor) = WGPUTextureViewDescriptor.allocate(this)
+internal fun MemoryAllocator.map(input: TextureViewDescriptor) = WGPUTextureViewDescriptor.allocate(this)
     .also { output ->
-        if (input.label != null) WGPUTextureViewDescriptor.label(output, allocateFrom(input.label))
-        if (input.format != null) WGPUTextureViewDescriptor.format(output, input.format.value)
-        if (input.dimension != null) WGPUTextureViewDescriptor.dimension(output, input.dimension.value)
-        WGPUTextureViewDescriptor.aspect(output, input.aspect.value)
-        WGPUTextureViewDescriptor.baseMipLevel(output, input.baseMipLevel)
-        WGPUTextureViewDescriptor.mipLevelCount(output, input.mipLevelCount)
-        WGPUTextureViewDescriptor.baseArrayLayer(output, input.baseArrayLayer)
-        WGPUTextureViewDescriptor.arrayLayerCount(output, input.arrayLayerCount)
+
+        if (input.label != null) map(input.label, output.label)
+        if (input.format != null) output.format = input.format.value.toUInt()
+        if (input.dimension != null) output.dimension = input.dimension.value.toUInt()
+        output.aspect = input.aspect.value.toUInt()
+        output.baseMipLevel = input.baseMipLevel.toUInt()
+        output.mipLevelCount = input.mipLevelCount.toUInt()
+        output.baseArrayLayer = input.baseArrayLayer.toUInt()
+        output.arrayLayerCount = input.arrayLayerCount.toUInt()
 }
+

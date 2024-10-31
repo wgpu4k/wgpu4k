@@ -9,7 +9,7 @@ data class RenderPassDescriptor(
     val depthStencilAttachment: DepthStencilAttachment? = null,
     val occlusionQuerySet: QuerySet? = null,
     val timestampWrites: RenderPassTimestampWrites? = null,
-    val maxDrawCount: GPUSize64 = 50000000,
+    val maxDrawCount: GPUSize64 = 50000000u,
     val label: String? = null,
 ) {
 

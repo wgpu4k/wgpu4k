@@ -4,28 +4,31 @@ package io.ygdrasil.wgpu
 import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUExtent3D
 import io.ygdrasil.wgpu.internal.jvm.panama.WGPUTextureDataLayout
-import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.internal.jvm.toPointerArray
 import io.ygdrasil.wgpu.mapper.map
+import webgpu.WGPUQueue
+import webgpu.wgpuQueueSubmit
+import webgpu.wgpuQueueWriteBuffer
+import webgpu.wgpuQueueWriteTexture
 import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.ValueLayout
 
-actual class Queue(internal val handler: MemorySegment) {
+actual class Queue(internal val handler: WGPUQueue) {
 
     actual fun submit(commandsBuffer: List<CommandBuffer>) = confined { arena ->
         if (commandsBuffer.isNotEmpty()) {
 
             val commands = commandsBuffer.map { it.handler }.toPointerArray(arena)
 
-            wgpu_h.wgpuQueueSubmit(
+            wgpuQueueSubmit(
                 handler,
                 commandsBuffer.size.toLong(),
                 commands
             )
         } else {
 
-            wgpu_h.wgpuQueueSubmit(
+            wgpuQueueSubmit(
                 handler,
                 0L,
                 MemorySegment.NULL
@@ -40,7 +43,7 @@ actual class Queue(internal val handler: MemorySegment) {
         dataOffset: GPUSize64,
         size: GPUSize64
     ) = confined { arena ->
-        wgpu_h.wgpuQueueWriteBuffer(
+        wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
@@ -56,7 +59,7 @@ actual class Queue(internal val handler: MemorySegment) {
         dataOffset: GPUSize64,
         size: GPUSize64
     ) = confined { arena ->
-        wgpu_h.wgpuQueueWriteBuffer(
+        wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
@@ -72,7 +75,7 @@ actual class Queue(internal val handler: MemorySegment) {
         dataOffset: GPUSize64,
         size: GPUSize64
     ) = confined { arena ->
-        wgpu_h.wgpuQueueWriteBuffer(
+        wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
@@ -88,7 +91,7 @@ actual class Queue(internal val handler: MemorySegment) {
         dataOffset: GPUSize64,
         size: GPUSize64,
     ) = confined { arena ->
-        wgpu_h.wgpuQueueWriteBuffer(
+        wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
@@ -104,7 +107,7 @@ actual class Queue(internal val handler: MemorySegment) {
         dataOffset: GPUSize64,
         size: GPUSize64,
     ) = confined { arena ->
-        wgpu_h.wgpuQueueWriteBuffer(
+        wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
@@ -120,7 +123,7 @@ actual class Queue(internal val handler: MemorySegment) {
         dataOffset: GPUSize64,
         size: GPUSize64,
     ) = confined { arena ->
-        wgpu_h.wgpuQueueWriteBuffer(
+        wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
@@ -135,7 +138,7 @@ actual class Queue(internal val handler: MemorySegment) {
         dataLayout: TextureDataLayout,
         size: Size3D,
     ) = confined { arena ->
-        wgpu_h.wgpuQueueWriteTexture(
+        wgpuQueueWriteTexture(
             handler,
             arena.map(destination),
             data.toBuffer(0, arena),
@@ -151,7 +154,7 @@ actual class Queue(internal val handler: MemorySegment) {
         dataLayout: TextureDataLayout,
         size: Size3D,
     ) = confined { arena ->
-        wgpu_h.wgpuQueueWriteTexture(
+        wgpuQueueWriteTexture(
             handler,
             arena.map(destination),
             data.toBuffer(0, arena),
@@ -167,7 +170,7 @@ actual class Queue(internal val handler: MemorySegment) {
         dataLayout: TextureDataLayout,
         size: Size3D,
     ) = confined { arena ->
-        wgpu_h.wgpuQueueWriteTexture(
+        wgpuQueueWriteTexture(
             handler,
             arena.map(destination),
             data.toBuffer(0, arena),
@@ -183,7 +186,7 @@ actual class Queue(internal val handler: MemorySegment) {
         dataLayout: TextureDataLayout,
         size: Size3D,
     ) = confined { arena ->
-        wgpu_h.wgpuQueueWriteTexture(
+        wgpuQueueWriteTexture(
             handler,
             arena.map(destination),
             data.toBuffer(0, arena),
@@ -199,7 +202,7 @@ actual class Queue(internal val handler: MemorySegment) {
         dataLayout: TextureDataLayout,
         size: Size3D,
     ) = confined { arena ->
-        wgpu_h.wgpuQueueWriteTexture(
+        wgpuQueueWriteTexture(
             handler,
             arena.map(destination),
             data.toBuffer(0, arena),
@@ -215,7 +218,7 @@ actual class Queue(internal val handler: MemorySegment) {
         dataLayout: TextureDataLayout,
         size: Size3D,
     ) = confined { arena ->
-        wgpu_h.wgpuQueueWriteTexture(
+        wgpuQueueWriteTexture(
             handler,
             arena.map(destination),
             data.toBuffer(0, arena),
@@ -236,7 +239,7 @@ actual class Queue(internal val handler: MemorySegment) {
 
         val bytePerPixel = destination.texture.format.getBytesPerPixel()
 
-        wgpu_h.wgpuQueueWriteTexture(
+        wgpuQueueWriteTexture(
             handler,
             arena.map(destination),
             image.data,

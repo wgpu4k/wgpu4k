@@ -8,23 +8,23 @@ expect class RenderBundleEncoder : AutoCloseable {
 
     fun setPipeline(renderPipeline: RenderPipeline)
 
-    fun setVertexBuffer(slot: GPUIndex32, buffer: Buffer, offset: GPUSize64 = 0, size: GPUSize64 = buffer.size)
+    fun setVertexBuffer(slot: GPUIndex32, buffer: Buffer, offset: GPUSize64 = 0u, size: GPUSize64 = buffer.size)
 
-    fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64 = 0, size: GPUSize64 = buffer.size)
+    fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64 = 0u, size: GPUSize64 = buffer.size)
 
     fun drawIndexed(
         indexCount: GPUSize32,
-        instanceCount: GPUSize32 = 1,
-        firstIndex: GPUSize32 = 0,
+        instanceCount: GPUSize32 = 1u,
+        firstIndex: GPUSize32 = 0u,
         baseVertex: GPUSignedOffset32 = 0,
-        firstInstance: GPUSize32 = 0,
+        firstInstance: GPUSize32 = 0u,
     )
 
     fun draw(
         vertexCount: GPUSize32,
-        instanceCount: GPUSize32 = 1,
-        firstVertex: GPUSize32 = 0,
-        firstInstance: GPUSize32 = 0,
+        instanceCount: GPUSize32 = 1u,
+        firstVertex: GPUSize32 = 0u,
+        firstInstance: GPUSize32 = 0u,
     )
 
     /*

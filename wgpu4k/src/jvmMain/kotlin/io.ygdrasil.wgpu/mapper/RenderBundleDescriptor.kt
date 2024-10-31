@@ -1,10 +1,9 @@
 package io.ygdrasil.wgpu.mapper
 
+import ffi.MemoryAllocator
 import io.ygdrasil.wgpu.RenderBundleDescriptor
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderBundleDescriptor
-import java.lang.foreign.Arena
-import java.lang.foreign.MemorySegment
+import webgpu.WGPURenderBundleDescriptor
 
-internal fun Arena.map(input: RenderBundleDescriptor): MemorySegment = WGPURenderBundleDescriptor.allocate(this).also { output ->
-    if (input.label != null) WGPURenderBundleDescriptor.label(output, allocateFrom(input.label))
+internal fun MemoryAllocator.map(input: RenderBundleDescriptor): WGPURenderBundleDescriptor = WGPURenderBundleDescriptor.allocate(this).also { output ->
+    if (input.label != null) map(input.label, output.label)
 }

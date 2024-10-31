@@ -8,17 +8,17 @@ expect class Buffer : AutoCloseable {
 
     fun unmap()
 
-    fun mapFrom(buffer: ShortArray, offset: Int = 0)
+    fun mapFrom(buffer: ShortArray, offset: ULong = 0u)
 
-    fun mapFrom(buffer: FloatArray, offset: Int = 0)
+    fun mapFrom(buffer: FloatArray, offset: ULong = 0u)
 
-    fun mapFrom(buffer: ByteArray, offset: Int = 0)
+    fun mapFrom(buffer: ByteArray, offset: ULong = 0u)
 
-    fun mapInto(buffer: ByteArray, offset: Int = 0)
+    fun mapInto(buffer: ByteArray, offset: ULong = 0u)
 
-    fun mapInto(buffer: IntArray, offset: Int = 0)
+    fun mapInto(buffer: IntArray, offset: ULong = 0u)
 
-    suspend fun map(mode: Set<MapMode>, offset: GPUSize64 = 0, size: GPUSize64 = this.size)
+    suspend fun map(mode: Set<MapMode>, offset: GPUSize64 = 0u, size: GPUSize64 = this.size)
 
     override fun close()
 }

@@ -2,8 +2,8 @@ package io.ygdrasil.wgpu
 
 expect class Surface : AutoCloseable {
 
-    val width: Int
-    val height: Int
+    val width: UInt
+    val height: UInt
 
     /**
      * Only supported on browser, not using it *could* lead to bad performance

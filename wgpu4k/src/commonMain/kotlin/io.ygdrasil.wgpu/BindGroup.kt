@@ -20,7 +20,7 @@ data class BindGroupDescriptor(
     sealed interface BindGroupResource
     data class BufferBinding(
         val buffer: Buffer,
-        val offset: GPUSize64 = 0,
+        val offset: GPUSize64 = 0u,
         val size: GPUSize64 = buffer.size,
     ) : BindGroupResource
 

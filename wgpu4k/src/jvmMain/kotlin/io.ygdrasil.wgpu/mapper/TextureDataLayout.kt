@@ -1,12 +1,12 @@
 
 package io.ygdrasil.wgpu.mapper
 
+import ffi.MemoryAllocator
 import io.ygdrasil.wgpu.TextureDataLayout
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUTextureDataLayout
-import java.lang.foreign.Arena
+import webgpu.WGPUTextureDataLayout
 
-internal fun Arena.map(input: TextureDataLayout) = WGPUTextureDataLayout.allocate(this).also { output ->
-    WGPUTextureDataLayout.offset(output, input.offset)
-    WGPUTextureDataLayout.bytesPerRow(output, input.bytesPerRow ?: 0)
-    WGPUTextureDataLayout.rowsPerImage(output, input.rowsPerImage ?: 0)
+internal fun MemoryAllocator.map(input: TextureDataLayout) = WGPUTextureDataLayout.allocate(this).also { output ->
+    output.offset = input.offset
+    output.bytesPerRow = input.bytesPerRow ?: 0u
+    output.rowsPerImage = input.rowsPerImage ?: 0u
 }

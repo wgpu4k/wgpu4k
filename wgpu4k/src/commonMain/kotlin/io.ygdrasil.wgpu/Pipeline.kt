@@ -76,7 +76,7 @@ data class RenderPipelineDescriptor(
 
 
     data class MultisampleState(
-        val count: GPUSize32 = 1,
+        val count: GPUSize32 = 1u,
         val mask: GPUSampleMask = 0xFFFFFFFFu,
         val alphaToCoverageEnabled: Boolean = false,
     )

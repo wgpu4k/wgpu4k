@@ -1,12 +1,23 @@
 package io.ygdrasil.wgpu.mapper
 
+import ffi.MemoryAllocator
 import io.ygdrasil.wgpu.RenderPipelineDescriptor
-import io.ygdrasil.wgpu.internal.jvm.panama.*
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUBlendComponent
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUBlendState
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUColorTargetState
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUDepthStencilState
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUFragmentState
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUMultisampleState
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUPrimitiveState
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPipelineDescriptor
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUStencilFaceState
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUVertexAttribute
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUVertexBufferLayout
+import io.ygdrasil.wgpu.internal.jvm.panama.WGPUVertexState
 import io.ygdrasil.wgpu.toInt
-import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 
-internal fun Arena.map(input: RenderPipelineDescriptor) = WGPURenderPipelineDescriptor.allocate(this).also { output ->
+internal fun MemoryAllocator.map(input: RenderPipelineDescriptor) = WGPURenderPipelineDescriptor.allocate(this).also { output ->
     map(input.vertex, WGPURenderPipelineDescriptor.vertex(output))
     if (input.label != null) WGPURenderPipelineDescriptor.label(output, allocateFrom(input.label))
     if (input.layout != null) WGPURenderPipelineDescriptor.layout(output, input.layout.handler)
@@ -16,14 +27,14 @@ internal fun Arena.map(input: RenderPipelineDescriptor) = WGPURenderPipelineDesc
     map(input.multisample, WGPURenderPipelineDescriptor.multisample(output))
 }
 
-fun Arena.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState, output: MemorySegment) {
+fun MemoryAllocator.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState, output: MemorySegment) {
     println("colorTargetState $output")
     WGPUColorTargetState.format(output, input.format.value)
     WGPUColorTargetState.writeMask(output, input.writeMask.value)
     WGPUColorTargetState.blend(output, map(input.blend))
 }
 
-fun Arena.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState): MemorySegment = WGPUBlendState
+fun MemoryAllocator.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState): MemorySegment = WGPUBlendState
     .allocate(this).also { output ->
         println("blend state $output")
         map(input.color, WGPUBlendState.color(output))
@@ -41,7 +52,7 @@ fun map(
     WGPUBlendComponent.dstFactor(output, input.dstFactor.value)
 }
 
-private fun Arena.map(input: RenderPipelineDescriptor.FragmentState): MemorySegment =
+private fun MemoryAllocator.map(input: RenderPipelineDescriptor.FragmentState): MemorySegment =
     WGPUFragmentState.allocate(this)
         .also { fragmentState ->
             println("fragment $fragmentState")
@@ -58,7 +69,7 @@ private fun Arena.map(input: RenderPipelineDescriptor.FragmentState): MemorySegm
             }
         }
 
-private fun Arena.map(input: RenderPipelineDescriptor.DepthStencilState): MemorySegment =
+private fun MemoryAllocator.map(input: RenderPipelineDescriptor.DepthStencilState): MemorySegment =
     WGPUDepthStencilState.allocate(this)
         .also { depthStencilState ->
             WGPUDepthStencilState.format(depthStencilState, input.format.value)
@@ -100,7 +111,7 @@ private fun map(input: RenderPipelineDescriptor.PrimitiveState, output: MemorySe
     //TODO check how to map unclippedDepth https://docs.rs/wgpu/latest/wgpu/struct.PrimitiveState.html
 }
 
-private fun Arena.map(input: RenderPipelineDescriptor.VertexState, output: MemorySegment) {
+private fun MemoryAllocator.map(input: RenderPipelineDescriptor.VertexState, output: MemorySegment) {
     println("vertex $output")
     WGPUVertexState.module(output, input.module.handler)
     WGPUVertexState.entryPoint(output, allocateFrom(input.entryPoint))
@@ -128,7 +139,7 @@ private fun map(
     WGPUVertexAttribute.shaderLocation(output, input.shaderLocation)
 }
 
-private fun Arena.map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout, output: MemorySegment) {
+private fun MemoryAllocator.map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout, output: MemorySegment) {
     println("buffer $output")
     WGPUVertexBufferLayout.arrayStride(output, input.arrayStride)
     if (input.attributes.isNotEmpty()) {

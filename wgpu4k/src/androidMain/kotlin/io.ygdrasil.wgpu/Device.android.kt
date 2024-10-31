@@ -13,7 +13,7 @@ actual class Device(val handler: Long) : AutoCloseable {
         Queue(NativeWgpu4k.wgpuDeviceGetQueue(handler))
     }
 
-    actual val limits: SupportedLimits = scoped { arena ->
+    actual val limits: Limits = scoped { arena ->
         val supportedLimits = WGPUSupportedLimits.allocate(arena)
         NativeWgpu4k.wgpuAdapterGetLimits(handler, supportedLimits.pointer.toAddress())
         map(WGPUSupportedLimits.limits(supportedLimits))

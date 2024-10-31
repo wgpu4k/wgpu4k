@@ -27,8 +27,8 @@ inline fun CommandEncoder.beginRenderPass(descriptor: RenderPassDescriptor, then
 
 data class ImageCopyTexture(
     val texture: Texture,
-    val mipLevel: GPUIntegerCoordinate = 0,
-    val origin: Origin3D = Origin3D(0, 0),
+    val mipLevel: GPUIntegerCoordinate = 0u,
+    val origin: Origin3D = Origin3D(0u, 0u),
     val aspect: TextureAspect = TextureAspect.all,
 )
 
