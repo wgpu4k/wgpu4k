@@ -36,7 +36,7 @@ typealias GPUSize64 = ULong
 
 typealias GPUSize64Out = Long
 
-typealias GPUStencilValue = Long
+typealias GPUStencilValue = UInt
 
 typealias GPUTextureUsageFlags = Int
 

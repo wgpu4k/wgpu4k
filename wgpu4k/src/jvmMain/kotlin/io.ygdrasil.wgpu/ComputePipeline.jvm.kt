@@ -6,8 +6,8 @@ import webgpu.wgpuComputePipelineRelease
 
 actual class ComputePipeline(internal val handler: WGPUComputePipeline) : AutoCloseable {
 
-    actual fun getBindGroupLayout(index: Int): BindGroupLayout =
-        wgpuComputePipelineGetBindGroupLayout(handler, index)
+    actual fun getBindGroupLayout(index: UInt): BindGroupLayout =
+        (wgpuComputePipelineGetBindGroupLayout(handler, index) ?: error("fail to get bind group layout"))
             .let(::BindGroupLayout)
 
     actual override fun close() {

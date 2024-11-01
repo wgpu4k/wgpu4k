@@ -1,9 +1,9 @@
 package io.ygdrasil.wgpu
 
 
-import io.ygdrasil.wgpu.internal.jvm.confined
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUCommandBufferDescriptor
+import ffi.memoryScope
 import io.ygdrasil.wgpu.mapper.map
+import webgpu.WGPUCommandBufferDescriptor
 import webgpu.WGPUCommandEncoder
 import webgpu.wgpuCommandEncoderBeginComputePass
 import webgpu.wgpuCommandEncoderBeginRenderPass
@@ -12,19 +12,18 @@ import webgpu.wgpuCommandEncoderCopyTextureToBuffer
 import webgpu.wgpuCommandEncoderCopyTextureToTexture
 import webgpu.wgpuCommandEncoderFinish
 import webgpu.wgpuCommandEncoderRelease
-import java.lang.foreign.MemorySegment
 
 actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : AutoCloseable {
 
-    actual fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder = confined { arena ->
+    actual fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder = memoryScope { arena ->
         arena.map(descriptor)
             .let { wgpuCommandEncoderBeginRenderPass(handler, it) }
             ?.let { RenderPassEncoder(it) }
             ?: error("fail to get RenderPassEncoder")
     }
 
-    actual fun finish(): CommandBuffer = confined { arena ->
-        WGPUCommandBufferDescriptor.allocate(arena)
+    actual fun finish(): CommandBuffer = memoryScope { scope ->
+        WGPUCommandBufferDescriptor.allocate(scope)
             .let { wgpuCommandEncoderFinish(handler, it) }
             ?.let { CommandBuffer(it) }
             ?: error("fail to get CommandBuffer")
@@ -34,18 +33,18 @@ actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : AutoClos
         source: ImageCopyTexture,
         destination: ImageCopyTexture,
         copySize: Size3D
-    ) = confined { arena ->
+    ) = memoryScope { scope ->
         wgpuCommandEncoderCopyTextureToTexture(
             handler,
-            arena.map(source),
-            arena.map(destination),
-            arena.map(copySize)
+            scope.map(source),
+            scope.map(destination),
+            scope.map(copySize)
         )
     }
 
-    actual fun beginComputePass(descriptor: ComputePassDescriptor?): ComputePassEncoder = confined { arena ->
-        descriptor?.let { arena.map(descriptor) }
-            .let { wgpuCommandEncoderBeginComputePass(handler, it ?: MemorySegment.NULL) }
+    actual fun beginComputePass(descriptor: ComputePassDescriptor?): ComputePassEncoder = memoryScope { scope ->
+        descriptor?.let { scope.map(descriptor) }
+            .let { wgpuCommandEncoderBeginComputePass(handler, it) }
             ?.let { ComputePassEncoder(it) }
             ?: error("fail to get ComputePassEncoder")
     }
@@ -54,13 +53,13 @@ actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : AutoClos
         source: ImageCopyTexture,
         destination: ImageCopyBuffer,
         copySize: Size3D,
-    ) = confined { arena ->
+    ) = memoryScope { scope ->
 
         wgpuCommandEncoderCopyTextureToBuffer(
             handler,
-            arena.map(source),
-            arena.map(destination),
-            arena.map(copySize)
+            scope.map(source),
+            scope.map(destination),
+            scope.map(copySize)
         )
     }
 
@@ -68,13 +67,13 @@ actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : AutoClos
         source : ImageCopyBuffer,
         destination: ImageCopyTexture,
         copySize: Size3D,
-    ) = confined { arena ->
+    ) = memoryScope { scope ->
 
         wgpuCommandEncoderCopyBufferToTexture(
             handler,
-            arena.map(source),
-            arena.map(destination),
-            arena.map(copySize)
+            scope.map(source),
+            scope.map(destination),
+            scope.map(copySize)
         )
     }
 

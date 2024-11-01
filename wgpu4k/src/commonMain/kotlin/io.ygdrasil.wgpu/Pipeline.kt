@@ -60,8 +60,8 @@ data class RenderPipelineDescriptor(
 
         val stencilFront: StencilFaceState = StencilFaceState(),
         val stencilBack: StencilFaceState = StencilFaceState(),
-        val stencilReadMask: GPUStencilValue = 0xFFFFFFFF,
-        val stencilWriteMask: GPUStencilValue = 0xFFFFFFFF,
+        val stencilReadMask: GPUStencilValue = 0xFFFFFFFFu,
+        val stencilWriteMask: GPUStencilValue = 0xFFFFFFFFu,
         val depthBias: GPUDepthBias = 0,
         val depthBiasSlopeScale: Float = 0f,
         val depthBiasClamp: Float = 0f,

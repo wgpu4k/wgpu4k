@@ -1,7 +1,7 @@
 package io.ygdrasil.wgpu
 
 expect class ComputePipeline : AutoCloseable {
-    fun getBindGroupLayout(index: Int): BindGroupLayout
+    fun getBindGroupLayout(index: UInt): BindGroupLayout
 
     override fun close()
 }

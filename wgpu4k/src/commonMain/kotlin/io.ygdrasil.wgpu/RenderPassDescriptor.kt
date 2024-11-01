@@ -19,7 +19,7 @@ data class RenderPassDescriptor(
         val depthLoadOp: LoadOp? = null,
         val depthStoreOp: StoreOp? = null,
         val depthReadOnly: Boolean = false,
-        val stencilClearValue: GPUStencilValue = 0,
+        val stencilClearValue: GPUStencilValue = 0u,
         val stencilLoadOp: LoadOp? = null,
         val stencilStoreOp: StoreOp? = null,
         val stencilReadOnly: Boolean = false,

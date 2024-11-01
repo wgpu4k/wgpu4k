@@ -2,76 +2,53 @@ package io.ygdrasil.wgpu.mapper
 
 import ffi.MemoryAllocator
 import io.ygdrasil.wgpu.RenderPassDescriptor
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPassColorAttachment
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPassDepthStencilAttachment
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPURenderPassDescriptor
-import io.ygdrasil.wgpu.toInt
-import java.lang.foreign.MemorySegment
+import webgpu.WGPURenderPassColorAttachment
+import webgpu.WGPURenderPassDepthStencilAttachment
+import webgpu.WGPURenderPassDescriptor
 
-internal fun MemoryAllocator.map(input: RenderPassDescriptor): MemorySegment =
-    WGPURenderPassDescriptor.allocate(this).also { renderPassDescriptor ->
-        println("render pass descriptor $renderPassDescriptor")
-        if (input.label != null) WGPURenderPassDescriptor.label(renderPassDescriptor, allocateFrom(input.label))
+internal fun MemoryAllocator.map(input: RenderPassDescriptor): WGPURenderPassDescriptor =
+    WGPURenderPassDescriptor.allocate(this).also { output ->
+        println("render pass descriptor $output")
+        if (input.label != null) map(input.label, output.label)
 
         if (input.colorAttachments.isNotEmpty()) {
-            WGPURenderPassDescriptor.colorAttachmentCount(renderPassDescriptor, input.colorAttachments.size.toLong())
-            val colorAttachments =
-                    WGPURenderPassColorAttachment.allocateArray(input.colorAttachments.size.toLong(), this)
-            println("color attachments $colorAttachments")
-
-            input.colorAttachments.forEachIndexed { index, colorAttachment ->
-                map(colorAttachment, WGPURenderPassColorAttachment.asSlice(colorAttachments, index.toLong()))
+            output.colorAttachmentCount = input.colorAttachments.size.toULong()
+            output.colorAttachments = WGPURenderPassColorAttachment.allocateArray(
+                this,
+                output.colorAttachmentCount.toUInt()
+            ) { index, value ->
+                map(input.colorAttachments[index.toInt()], value)
             }
-
-            WGPURenderPassDescriptor.colorAttachments(renderPassDescriptor, colorAttachments)
-
         }
 
-        if (input.depthStencilAttachment != null) WGPURenderPassDescriptor.depthStencilAttachment(
-            renderPassDescriptor,
-            map(input.depthStencilAttachment)
-        )
+        if (input.depthStencilAttachment != null) output.depthStencilAttachment = map(input.depthStencilAttachment)
         //TODO map this var occlusionQuerySet: GPUQuerySet?
         //TODO map this var timestampWrites: GPURenderPassTimestampWrites?
         //TODO map this var maxDrawCount: GPUSize64
         // check WGPURenderPassDescriptorMaxDrawCount
     }
 
-internal fun MemoryAllocator.map(input: RenderPassDescriptor.ColorAttachment, output: MemorySegment) {
+internal fun MemoryAllocator.map(input: RenderPassDescriptor.ColorAttachment, output: WGPURenderPassColorAttachment) {
     println("color attachment $output")
-    WGPURenderPassColorAttachment.view(output, input.view.handler.handler.handler)
-    WGPURenderPassColorAttachment.loadOp(output, input.loadOp.value)
-    WGPURenderPassColorAttachment.storeOp(output, input.storeOp.value)
+    output.view = input.view.handler
+    output.loadOp = input.loadOp.uValue
+    output.storeOp = input.storeOp.uValue
     // TODO find how to map this
-    //if (input.depthSlice != null) WGPURenderPassColorAttachment.depthSlice(output, input.depthSlice)
-    if (input.resolveTarget != null) WGPURenderPassColorAttachment.resolveTarget(output, input.resolveTarget.handler.handler.handler)
-    map(input.clearValue, WGPURenderPassColorAttachment.clearValue(output))
+    //if (input.depthSlice != null) WGPURenderPassColorAttachment.depthSlice = input.depthSlice)
+    if (input.resolveTarget != null) output.resolveTarget = input.resolveTarget.handler
+    map(input.clearValue, output.clearValue)
 }
 
-internal fun MemoryAllocator.map(input: RenderPassDescriptor.DepthStencilAttachment): MemorySegment =
-    WGPURenderPassDepthStencilAttachment.allocate(this).also { depthStencilAttachment ->
-        WGPURenderPassDepthStencilAttachment.view(depthStencilAttachment, input.view.handler.handler.handler)
-        if (input.depthClearValue != null) WGPURenderPassDepthStencilAttachment.depthClearValue(
-            depthStencilAttachment,
-            input.depthClearValue
-        )
-        if (input.depthLoadOp != null) WGPURenderPassDepthStencilAttachment.depthLoadOp(
-            depthStencilAttachment,
-            input.depthLoadOp.value
-        )
-        if (input.depthStoreOp != null) WGPURenderPassDepthStencilAttachment.depthStoreOp(
-            depthStencilAttachment,
-            input.depthStoreOp.value
-        )
-        WGPURenderPassDepthStencilAttachment.depthReadOnly(depthStencilAttachment, input.depthReadOnly.toInt())
-        WGPURenderPassDepthStencilAttachment.stencilClearValue(depthStencilAttachment, input.stencilClearValue.toInt())
-        if (input.stencilLoadOp != null) WGPURenderPassDepthStencilAttachment.stencilLoadOp(
-            depthStencilAttachment,
-            input.stencilLoadOp.value
-        )
-        if (input.stencilStoreOp != null) WGPURenderPassDepthStencilAttachment.stencilStoreOp(
-            depthStencilAttachment,
-            input.stencilStoreOp.value
-        )
-        WGPURenderPassDepthStencilAttachment.stencilReadOnly(depthStencilAttachment, input.stencilReadOnly.toInt())
+internal fun MemoryAllocator.map(input: RenderPassDescriptor.DepthStencilAttachment): WGPURenderPassDepthStencilAttachment =
+    WGPURenderPassDepthStencilAttachment.allocate(this).also { output ->
+        output.view = input.view.handler
+        if (input.depthClearValue != null) output.depthClearValue = input.depthClearValue
+
+        if (input.depthLoadOp != null) output.depthLoadOp = input.depthLoadOp.uValue
+        if (input.depthStoreOp != null) output.depthStoreOp = input.depthStoreOp.uValue
+        output.depthReadOnly = input.depthReadOnly
+        output.stencilClearValue = input.stencilClearValue
+        if (input.stencilLoadOp != null) output.stencilLoadOp = input.stencilLoadOp.uValue
+        if (input.stencilStoreOp != null) output.stencilStoreOp = input.stencilStoreOp.uValue
+        output.stencilReadOnly = input.stencilReadOnly
     }
