@@ -1,9 +1,9 @@
 package io.ygdrasil.wgpu.mapper
 
+import ffi.MemoryAllocator
 import io.ygdrasil.wgpu.QuerySetDescriptor
-import java.lang.foreign.Arena
-import java.lang.foreign.MemorySegment
+import webgpu.WGPUQuerySetDescriptor
 
-internal fun Arena.map(input: QuerySetDescriptor): MemorySegment {
+internal fun MemoryAllocator.map(input: QuerySetDescriptor): WGPUQuerySetDescriptor {
     TODO()
 }

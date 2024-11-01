@@ -2,8 +2,6 @@ package io.ygdrasil.wgpu
 
 
 import io.ygdrasil.wgpu.internal.jvm.confined
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUExtent3D
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUTextureDataLayout
 import io.ygdrasil.wgpu.internal.jvm.toPointerArray
 import io.ygdrasil.wgpu.mapper.map
 import webgpu.WGPUQueue
@@ -23,15 +21,15 @@ actual class Queue(internal val handler: WGPUQueue) {
 
             wgpuQueueSubmit(
                 handler,
-                commandsBuffer.size.toLong(),
+                commandsBuffer.size.toULong(),
                 commands
             )
         } else {
 
             wgpuQueueSubmit(
                 handler,
-                0L,
-                MemorySegment.NULL
+                0uL,
+                null
             )
         }
     }

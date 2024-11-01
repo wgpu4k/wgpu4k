@@ -14,7 +14,7 @@ actual class PipelineLayout(internal val handler: WGPUPipelineLayout) : AutoClos
 
 actual class RenderPipeline(internal val handler: WGPURenderPipeline) : AutoCloseable {
 
-	actual fun getBindGroupLayout(index: Int): BindGroupLayout {
+	actual fun getBindGroupLayout(index: UInt): BindGroupLayout {
 		return wgpuRenderPipelineGetBindGroupLayout(handler, index)
 			?.let { BindGroupLayout(it) } ?: error("fail to get bindgroup layout")
 	}

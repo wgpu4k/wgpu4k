@@ -2,8 +2,25 @@ package io.ygdrasil.wgpu
 
 import ffi.memoryScope
 import io.ygdrasil.wgpu.mapper.map
-import webgpu.*
-import java.lang.foreign.MemorySegment
+import webgpu.WGPUCommandEncoderDescriptor
+import webgpu.WGPUDevice
+import webgpu.WGPUSupportedLimits
+import webgpu.wgpuDeviceCreateBindGroup
+import webgpu.wgpuDeviceCreateBindGroupLayout
+import webgpu.wgpuDeviceCreateBuffer
+import webgpu.wgpuDeviceCreateCommandEncoder
+import webgpu.wgpuDeviceCreateComputePipeline
+import webgpu.wgpuDeviceCreatePipelineLayout
+import webgpu.wgpuDeviceCreateQuerySet
+import webgpu.wgpuDeviceCreateRenderBundleEncoder
+import webgpu.wgpuDeviceCreateRenderPipeline
+import webgpu.wgpuDeviceCreateSampler
+import webgpu.wgpuDeviceCreateShaderModule
+import webgpu.wgpuDeviceCreateTexture
+import webgpu.wgpuDeviceGetLimits
+import webgpu.wgpuDeviceGetQueue
+import webgpu.wgpuDeviceHasFeature
+import webgpu.wgpuDeviceRelease
 
 actual class Device(internal val handler: WGPUDevice) : AutoCloseable {
 
@@ -12,14 +29,14 @@ actual class Device(internal val handler: WGPUDevice) : AutoCloseable {
     actual val features: Set<Feature> by lazy {
         Feature.entries
             .mapNotNull { feature ->
-                feature.takeIf { wgpuDeviceHasFeature(handler, feature.value) == 1 }
+                feature.takeIf { wgpuDeviceHasFeature(handler, feature.uValue) }
             }
             .toSet()
     }
 
     actual val limits: Limits = memoryScope { scope ->
         val supportedLimits = WGPUSupportedLimits.allocate(scope)
-        wgpuAdapterGetLimits(handler, supportedLimits)
+        wgpuDeviceGetLimits(handler, supportedLimits)
         map(supportedLimits.limits)
     }
 
@@ -97,7 +114,8 @@ actual class Device(internal val handler: WGPUDevice) : AutoCloseable {
     }
 
     actual suspend fun poll() {
-        wgpuDevicePoll(handler, 1, MemorySegment.NULL)
+        //TODO: implement this
+        //wgpuDevicePoll(handler, 1, MemorySegment.NULL)
     }
 
     actual override fun close() {

@@ -6,7 +6,7 @@ expect class PipelineLayout : AutoCloseable {
 }
 
 expect class RenderPipeline : AutoCloseable {
-    fun getBindGroupLayout(index: Int): BindGroupLayout
+    fun getBindGroupLayout(index: UInt): BindGroupLayout
 
     override fun close()
 }
