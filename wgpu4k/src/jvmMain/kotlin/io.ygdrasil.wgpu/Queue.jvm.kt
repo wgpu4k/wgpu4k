@@ -1,23 +1,29 @@
 package io.ygdrasil.wgpu
 
 
-import io.ygdrasil.wgpu.internal.jvm.confined
+import ffi.MemoryAllocator
+import ffi.NativeAddress
+import ffi.memoryScope
 import io.ygdrasil.wgpu.internal.jvm.toPointerArray
 import io.ygdrasil.wgpu.mapper.map
+import webgpu.WGPUExtent3D
 import webgpu.WGPUQueue
+import webgpu.WGPUTextureDataLayout
 import webgpu.wgpuQueueSubmit
 import webgpu.wgpuQueueWriteBuffer
 import webgpu.wgpuQueueWriteTexture
-import java.lang.foreign.Arena
-import java.lang.foreign.MemorySegment
 import java.lang.foreign.ValueLayout
 
 actual class Queue(internal val handler: WGPUQueue) {
 
-    actual fun submit(commandsBuffer: List<CommandBuffer>) = confined { arena ->
+    actual fun submit(commandsBuffer: List<CommandBuffer>) = memoryScope { scope ->
         if (commandsBuffer.isNotEmpty()) {
 
-            val commands = commandsBuffer.map { it.handler }.toPointerArray(arena)
+            scope.allocate((Long.SIZE_BYTES * commandsBuffer.size).toLong())
+
+
+
+            val commands = commandsBuffer.map { it.handler }.toPointerArray(scope)
 
             wgpuQueueSubmit(
                 handler,
@@ -40,13 +46,13 @@ actual class Queue(internal val handler: WGPUQueue) {
         data: ShortArray,
         dataOffset: GPUSize64,
         size: GPUSize64
-    ) = confined { arena ->
+    ) = memoryScope { scope ->
         wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
-            data.toBuffer(dataOffset, arena),
-            (size * Short.SIZE_BYTES)
+            data.toBuffer(dataOffset, scope),
+            size * Short.SIZE_BYTES.toULong()
         )
     }
 
@@ -56,13 +62,13 @@ actual class Queue(internal val handler: WGPUQueue) {
         data: FloatArray,
         dataOffset: GPUSize64,
         size: GPUSize64
-    ) = confined { arena ->
+    ) = memoryScope { scope ->
         wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
-            data.toBuffer(dataOffset, arena),
-            (size * Float.SIZE_BYTES)
+            data.toBuffer(dataOffset, scope),
+            size * Float.SIZE_BYTES.toULong()
         )
     }
 
@@ -72,13 +78,13 @@ actual class Queue(internal val handler: WGPUQueue) {
         data: IntArray,
         dataOffset: GPUSize64,
         size: GPUSize64
-    ) = confined { arena ->
+    ) = memoryScope { scope ->
         wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
-            data.toBuffer(dataOffset, arena),
-            (size * Float.SIZE_BYTES)
+            data.toBuffer(dataOffset, scope),
+            size * Float.SIZE_BYTES.toULong()
         )
     }
 
@@ -88,13 +94,13 @@ actual class Queue(internal val handler: WGPUQueue) {
         data: ByteArray,
         dataOffset: GPUSize64,
         size: GPUSize64,
-    ) = confined { arena ->
+    ) = memoryScope { scope ->
         wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
-            data.toBuffer(dataOffset, arena),
-            size * Byte.SIZE_BYTES
+            data.toBuffer(dataOffset, scope),
+            size * Byte.SIZE_BYTES.toULong()
         )
     }
 
@@ -104,13 +110,13 @@ actual class Queue(internal val handler: WGPUQueue) {
         data: DoubleArray,
         dataOffset: GPUSize64,
         size: GPUSize64,
-    ) = confined { arena ->
+    ) = memoryScope { scope ->
         wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
-            data.toBuffer(dataOffset, arena),
-            size * Double.SIZE_BYTES
+            data.toBuffer(dataOffset, scope),
+            size * Double.SIZE_BYTES.toULong()
         )
     }
 
@@ -120,13 +126,13 @@ actual class Queue(internal val handler: WGPUQueue) {
         data: LongArray,
         dataOffset: GPUSize64,
         size: GPUSize64,
-    ) = confined { arena ->
+    ) = memoryScope { scope ->
         wgpuQueueWriteBuffer(
             handler,
             buffer.handler,
             bufferOffset,
-            data.toBuffer(dataOffset, arena),
-            size * Long.SIZE_BYTES
+            data.toBuffer(dataOffset, scope),
+            size * Long.SIZE_BYTES.toULong()
         )
     }
 
@@ -135,14 +141,14 @@ actual class Queue(internal val handler: WGPUQueue) {
         data: FloatArray,
         dataLayout: TextureDataLayout,
         size: Size3D,
-    ) = confined { arena ->
+    ) = memoryScope { scope ->
         wgpuQueueWriteTexture(
             handler,
-            arena.map(destination),
-            data.toBuffer(0, arena),
-            Float.SIZE_BYTES * data.size.toLong(),
-            arena.map(dataLayout),
-            arena.map(size)
+            scope.map(destination),
+            data.toBuffer(0u, scope),
+            (Float.SIZE_BYTES * data.size).toULong(),
+            scope.map(dataLayout),
+            scope.map(size)
         )
     }
 
@@ -151,14 +157,14 @@ actual class Queue(internal val handler: WGPUQueue) {
         data: DoubleArray,
         dataLayout: TextureDataLayout,
         size: Size3D,
-    ) = confined { arena ->
+    ) = memoryScope { scope ->
         wgpuQueueWriteTexture(
             handler,
-            arena.map(destination),
-            data.toBuffer(0, arena),
-            Double.SIZE_BYTES * data.size.toLong(),
-            arena.map(dataLayout),
-            arena.map(size)
+            scope.map(destination),
+            data.toBuffer(0u, scope),
+            (Double.SIZE_BYTES * data.size).toULong(),
+            scope.map(dataLayout),
+            scope.map(size)
         )
     }
 
@@ -167,14 +173,14 @@ actual class Queue(internal val handler: WGPUQueue) {
         data: ByteArray,
         dataLayout: TextureDataLayout,
         size: Size3D,
-    ) = confined { arena ->
+    ) = memoryScope { scope ->
         wgpuQueueWriteTexture(
             handler,
-            arena.map(destination),
-            data.toBuffer(0, arena),
-            Byte.SIZE_BYTES * data.size.toLong(),
-            arena.map(dataLayout),
-            arena.map(size)
+            scope.map(destination),
+            data.toBuffer(0u, scope),
+            (Byte.SIZE_BYTES * data.size).toULong(),
+            scope.map(dataLayout),
+            scope.map(size)
         )
     }
 
@@ -183,14 +189,14 @@ actual class Queue(internal val handler: WGPUQueue) {
         data: ShortArray,
         dataLayout: TextureDataLayout,
         size: Size3D,
-    ) = confined { arena ->
+    ) = memoryScope { scope ->
         wgpuQueueWriteTexture(
             handler,
-            arena.map(destination),
-            data.toBuffer(0, arena),
-            Short.SIZE_BYTES * data.size.toLong(),
-            arena.map(dataLayout),
-            arena.map(size)
+            scope.map(destination),
+            data.toBuffer(0u, scope),
+            (Short.SIZE_BYTES * data.size).toULong(),
+            scope.map(dataLayout),
+            scope.map(size)
         )
     }
 
@@ -199,14 +205,14 @@ actual class Queue(internal val handler: WGPUQueue) {
         data: IntArray,
         dataLayout: TextureDataLayout,
         size: Size3D,
-    ) = confined { arena ->
+    ) = memoryScope { scope ->
         wgpuQueueWriteTexture(
             handler,
-            arena.map(destination),
-            data.toBuffer(0, arena),
-            Int.SIZE_BYTES * data.size.toLong(),
-            arena.map(dataLayout),
-            arena.map(size)
+            scope.map(destination),
+            data.toBuffer(0u, scope),
+            (Int.SIZE_BYTES * data.size).toULong(),
+            scope.map(dataLayout),
+            scope.map(size)
         )
     }
 
@@ -215,14 +221,14 @@ actual class Queue(internal val handler: WGPUQueue) {
         data: LongArray,
         dataLayout: TextureDataLayout,
         size: Size3D,
-    ) = confined { arena ->
+    ) = memoryScope { scope ->
         wgpuQueueWriteTexture(
             handler,
-            arena.map(destination),
-            data.toBuffer(0, arena),
-            Long.SIZE_BYTES * data.size.toLong(),
-            arena.map(dataLayout),
-            arena.map(size)
+            scope.map(destination),
+            data.toBuffer(0u, scope),
+            (Long.SIZE_BYTES * data.size).toULong(),
+            scope.map(dataLayout),
+            scope.map(size)
         )
     }
 
@@ -230,72 +236,73 @@ actual class Queue(internal val handler: WGPUQueue) {
         source: ImageCopyExternalImage,
         destination: ImageCopyTextureTagged,
         copySize: GPUIntegerCoordinates
-    ) = confined { arena ->
+    ) = memoryScope { scope ->
 
         val image = (source.source as? ImageBitmapHolder)
             ?: error("ImageBitmapHolder required as source")
 
         val bytePerPixel = destination.texture.format.getBytesPerPixel()
+            .toUInt()
 
         wgpuQueueWriteTexture(
             handler,
-            arena.map(destination),
+            scope.map(destination),
             image.data,
-            (image.width * bytePerPixel * image.height).toLong(),
-            WGPUTextureDataLayout.allocate(arena).also { dataLayout ->
-                WGPUTextureDataLayout.offset(dataLayout, 0)
-                WGPUTextureDataLayout.bytesPerRow(dataLayout, image.width * bytePerPixel)
-                WGPUTextureDataLayout.rowsPerImage(dataLayout, image.height)
+            (image.width * bytePerPixel * image.height).toULong(),
+            WGPUTextureDataLayout.allocate(scope).also { dataLayout ->
+                dataLayout.offset = 0u
+                dataLayout.bytesPerRow = image.width * bytePerPixel
+                dataLayout.rowsPerImage = image.height
             },
-            WGPUExtent3D.allocate(arena).also { size3D ->
-                WGPUExtent3D.width(size3D, image.width)
-                WGPUExtent3D.height(size3D, image.height)
-                WGPUExtent3D.depthOrArrayLayers(size3D, 1)
+            WGPUExtent3D.allocate(scope).also { size3D ->
+                size3D.width = image.width
+                size3D.height = image.height
+                size3D.depthOrArrayLayers = 1u
             }
         )
 
     }
 
-    private fun DoubleArray.toBuffer(dataOffset: GPUSize64, arena: Arena): MemorySegment {
+    private fun DoubleArray.toBuffer(dataOffset: GPUSize64, scope: MemoryAllocator): NativeAddress {
         if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
-        return arena.allocateFrom(ValueLayout.JAVA_DOUBLE, *this)
+        return scope.allocateFrom(ValueLayout.JAVA_DOUBLE, *this)
     }
 
-    private fun FloatArray.toBuffer(dataOffset: GPUSize64, arena: Arena): MemorySegment {
+    private fun FloatArray.toBuffer(dataOffset: GPUSize64, scope: MemoryAllocator): NativeAddress {
         if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
-        return arena.allocateFrom(ValueLayout.JAVA_FLOAT, *this)
+        return scope.allocateFrom(ValueLayout.JAVA_FLOAT, *this)
     }
 
-    private fun LongArray.toBuffer(dataOffset: GPUSize64, arena: Arena): MemorySegment {
+    private fun LongArray.toBuffer(dataOffset: GPUSize64, scope: MemoryAllocator): NativeAddress {
         if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
-        return arena.allocateFrom(ValueLayout.JAVA_LONG, *this)
+        return scope.allocateFrom(ValueLayout.JAVA_LONG, *this)
     }
 
-    private fun IntArray.toBuffer(dataOffset: GPUSize64, arena: Arena): MemorySegment {
+    private fun IntArray.toBuffer(dataOffset: GPUSize64, scope: MemoryAllocator): NativeAddress {
         if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
-        return arena.allocateFrom(ValueLayout.JAVA_INT, *this)
+        return scope.allocateFrom(ValueLayout.JAVA_INT, *this)
     }
 
-    private fun ShortArray.toBuffer(dataOffset: GPUSize64, arena: Arena): MemorySegment {
+    private fun ShortArray.toBuffer(dataOffset: GPUSize64, scope: MemoryAllocator): NativeAddress {
         if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
-        return arena.allocateFrom(ValueLayout.JAVA_SHORT, *this)
+        return scope.allocateFrom(ValueLayout.JAVA_SHORT, *this)
     }
 
-    private fun ByteArray.toBuffer(dataOffset: GPUSize64, arena: Arena): MemorySegment {
+    private fun ByteArray.toBuffer(dataOffset: GPUSize64, scope: MemoryAllocator): NativeAddress {
         if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
-        return arena.allocateFrom(ValueLayout.JAVA_BYTE, *this)
+        return scope.allocateFrom(ValueLayout.JAVA_BYTE, *this)
     }
 }
 
 actual class ImageBitmapHolder(
-    val arena: Arena,
-    val data: MemorySegment,
-    actual val width: Int,
-    actual val height: Int
+    val scop: MemoryAllocator,
+    val data: NativeAddress,
+    actual val width: UInt,
+    actual val height: UInt
 ) : DrawableHolder, AutoCloseable {
 
     actual override fun close() {
-        arena.close()
+        scop.close()
     }
 }
 

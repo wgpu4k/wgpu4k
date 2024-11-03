@@ -104,8 +104,8 @@ expect class Queue {
 
 expect sealed interface DrawableHolder
 expect class ImageBitmapHolder : DrawableHolder, AutoCloseable {
-    val width: Int
-    val height: Int
+    val width: UInt
+    val height: UInt
 
     override fun close()
 }
