@@ -1,12 +1,12 @@
 
 package io.ygdrasil.wgpu.mapper
 
-import java.lang.foreign.Arena
-import java.lang.foreign.MemorySegment
-import java.lang.foreign.ValueLayout
+import ffi.ArrayHolder
+import ffi.MemoryAllocator
 
-internal fun Arena.map(input: List<Int>): MemorySegment {
-    if (input.isEmpty()) return MemorySegment.NULL
-    return allocate((Int.SIZE_BYTES * input.size).toLong())
-        .also { output -> input.forEachIndexed { index, value -> output.setAtIndex(ValueLayout.JAVA_INT, index.toLong(), value) }}
+internal fun MemoryAllocator.map(input: List<UInt>): ArrayHolder<UInt>? {
+    if (input.isEmpty()) return null
+    return allocateBuffer((Int.SIZE_BYTES * input.size).toULong())
+        .also { buffer -> buffer.writeUInts(input.toUIntArray()) }
+        .let { ArrayHolder(it.handler) }
 }

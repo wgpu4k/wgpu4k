@@ -1,6 +1,6 @@
 package io.ygdrasil.wgpu
 
-import io.ygdrasil.wgpu.internal.jvm.confined
+import ffi.memoryScope
 import io.ygdrasil.wgpu.mapper.map
 import webgpu.WGPURenderBundleEncoder
 import webgpu.wgpuRenderBundleEncoderDraw
@@ -11,18 +11,17 @@ import webgpu.wgpuRenderBundleEncoderSetBindGroup
 import webgpu.wgpuRenderBundleEncoderSetIndexBuffer
 import webgpu.wgpuRenderBundleEncoderSetPipeline
 import webgpu.wgpuRenderBundleEncoderSetVertexBuffer
-import java.lang.foreign.MemorySegment
 
 actual class RenderBundleEncoder(internal val handler: WGPURenderBundleEncoder) : AutoCloseable {
 
-    actual fun finish(descriptor: RenderBundleDescriptor): RenderBundle  = confined { arena ->
-        arena.map(descriptor)
+    actual fun finish(descriptor: RenderBundleDescriptor): RenderBundle  = memoryScope { scope ->
+        scope.map(descriptor)
             .let { wgpuRenderBundleEncoderFinish(handler, it) }
-            .let(::RenderBundle)
+            ?.let(::RenderBundle) ?: error("fail to create render bundle")
     }
 
     actual fun setBindGroup(index: GPUIndex32, bindGroup: BindGroup){
-        wgpuRenderBundleEncoderSetBindGroup(handler, index, bindGroup.handler,0, MemorySegment.NULL)
+        wgpuRenderBundleEncoderSetBindGroup(handler, index, bindGroup.handler,0u, null)
     }
 
     actual fun setPipeline(renderPipeline: RenderPipeline) {
@@ -34,7 +33,7 @@ actual class RenderBundleEncoder(internal val handler: WGPURenderBundleEncoder) 
     }
 
     actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
-        wgpuRenderBundleEncoderSetIndexBuffer(handler, buffer.handler, indexFormat.value, offset, size)
+        wgpuRenderBundleEncoderSetIndexBuffer(handler, buffer.handler, indexFormat.uValue, offset, size)
     }
 
     actual fun drawIndexed(indexCount: GPUSize32, instanceCount: GPUSize32, firstIndex: GPUSize32, baseVertex: GPUSignedOffset32, firstInstance: GPUSize32) {

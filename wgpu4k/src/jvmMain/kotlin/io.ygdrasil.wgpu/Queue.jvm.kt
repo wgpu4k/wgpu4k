@@ -1,29 +1,27 @@
 package io.ygdrasil.wgpu
 
 
+import ffi.ArrayHolder
 import ffi.MemoryAllocator
 import ffi.NativeAddress
 import ffi.memoryScope
-import io.ygdrasil.wgpu.internal.jvm.toPointerArray
 import io.ygdrasil.wgpu.mapper.map
+import webgpu.WGPUCommandBuffer
 import webgpu.WGPUExtent3D
 import webgpu.WGPUQueue
 import webgpu.WGPUTextureDataLayout
 import webgpu.wgpuQueueSubmit
 import webgpu.wgpuQueueWriteBuffer
 import webgpu.wgpuQueueWriteTexture
-import java.lang.foreign.ValueLayout
 
 actual class Queue(internal val handler: WGPUQueue) {
 
     actual fun submit(commandsBuffer: List<CommandBuffer>) = memoryScope { scope ->
         if (commandsBuffer.isNotEmpty()) {
 
-            scope.allocate((Long.SIZE_BYTES * commandsBuffer.size).toLong())
-
-
-
-            val commands = commandsBuffer.map { it.handler }.toPointerArray(scope)
+            val commands = scope.bufferOfAddresses(commandsBuffer.map { it.handler.handler })
+                .handler
+                .let { ArrayHolder<WGPUCommandBuffer>(it) }
 
             wgpuQueueSubmit(
                 handler,
@@ -264,33 +262,45 @@ actual class Queue(internal val handler: WGPUQueue) {
     }
 
     private fun DoubleArray.toBuffer(dataOffset: GPUSize64, scope: MemoryAllocator): NativeAddress {
-        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
-        return scope.allocateFrom(ValueLayout.JAVA_DOUBLE, *this)
+        val memorySize = (size.toULong() - dataOffset) * Double.SIZE_BYTES.toULong()
+        return scope.allocateBuffer(memorySize)
+            .also { buffer -> buffer.writeDoubles(this, dataOffset) }
+            .handler
     }
 
     private fun FloatArray.toBuffer(dataOffset: GPUSize64, scope: MemoryAllocator): NativeAddress {
-        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
-        return scope.allocateFrom(ValueLayout.JAVA_FLOAT, *this)
+        val memorySize = (size.toULong() - dataOffset) * Float.SIZE_BYTES.toULong()
+        return scope.allocateBuffer(memorySize)
+            .also { buffer -> buffer.writeFloats(this, dataOffset) }
+            .handler
     }
 
     private fun LongArray.toBuffer(dataOffset: GPUSize64, scope: MemoryAllocator): NativeAddress {
-        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
-        return scope.allocateFrom(ValueLayout.JAVA_LONG, *this)
+        val memorySize = (size.toULong() - dataOffset) * Long.SIZE_BYTES.toULong()
+        return scope.allocateBuffer(memorySize)
+            .also { buffer -> buffer.writeLongs(this, dataOffset) }
+            .handler
     }
 
     private fun IntArray.toBuffer(dataOffset: GPUSize64, scope: MemoryAllocator): NativeAddress {
-        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
-        return scope.allocateFrom(ValueLayout.JAVA_INT, *this)
+        val memorySize = (size.toULong() - dataOffset) * Int.SIZE_BYTES.toULong()
+        return scope.allocateBuffer(memorySize)
+            .also { buffer -> buffer.writeInts(this, dataOffset) }
+            .handler
     }
 
     private fun ShortArray.toBuffer(dataOffset: GPUSize64, scope: MemoryAllocator): NativeAddress {
-        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
-        return scope.allocateFrom(ValueLayout.JAVA_SHORT, *this)
+        val memorySize = (size.toULong() - dataOffset) * Short.SIZE_BYTES.toULong()
+        return scope.allocateBuffer(memorySize)
+            .also { buffer -> buffer.writeShorts(this, dataOffset) }
+            .handler
     }
 
     private fun ByteArray.toBuffer(dataOffset: GPUSize64, scope: MemoryAllocator): NativeAddress {
-        if (dataOffset != 0L) error("data offset not yet supported") // TODO support dataOffset
-        return scope.allocateFrom(ValueLayout.JAVA_BYTE, *this)
+        val memorySize = (size.toULong() - dataOffset) * Byte.SIZE_BYTES.toULong()
+        return scope.allocateBuffer(memorySize)
+            .also { buffer -> buffer.writeBytes(this, dataOffset) }
+            .handler
     }
 }
 

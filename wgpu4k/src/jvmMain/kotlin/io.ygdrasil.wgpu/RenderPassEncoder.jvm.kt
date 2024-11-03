@@ -1,8 +1,7 @@
 package io.ygdrasil.wgpu
 
+import ffi.ArrayHolder
 import ffi.memoryScope
-import io.ygdrasil.wgpu.internal.jvm.confined
-import io.ygdrasil.wgpu.internal.jvm.toPointerArray
 import io.ygdrasil.wgpu.mapper.map
 import webgpu.WGPURenderPassEncoder
 import webgpu.wgpuRenderPassEncoderBeginOcclusionQuery
@@ -60,34 +59,36 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) {
         wgpuRenderPassEncoderDrawIndexedIndirect(handler, indirectBuffer.handler, indirectOffset)
     }
 
-    actual fun setBindGroup(index: Int, bindGroup: BindGroup, dynamicOffsets: List<Int>) = confined { arena ->
+    actual fun setBindGroup(index: UInt, bindGroup: BindGroup, dynamicOffsets: List<UInt>) = memoryScope { scope ->
         wgpuRenderPassEncoderSetBindGroup(
             handler,
             index,
             bindGroup.handler,
-            dynamicOffsets.size.toLong(),
-            arena.map(dynamicOffsets)
+            dynamicOffsets.size.toULong(),
+            scope.map(dynamicOffsets)
         )
     }
 
-    actual fun setVertexBuffer(slot: Int, buffer: Buffer) {
+    actual fun setVertexBuffer(slot: UInt, buffer: Buffer) {
         wgpuRenderPassEncoderSetVertexBuffer(
             handler,
             slot,
             buffer.handler,
-            0L,
+            0u,
             buffer.size
         )
     }
 
     actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
-        wgpuRenderPassEncoderSetIndexBuffer(handler, buffer.handler, indexFormat.value, offset, size)
+        wgpuRenderPassEncoderSetIndexBuffer(handler, buffer.handler, indexFormat.uValue, offset, size)
     }
-    actual fun executeBundles(bundles: List<RenderBundle>) = confined { arena ->
+    actual fun executeBundles(bundles: List<RenderBundle>) = memoryScope { scope ->
         wgpuRenderPassEncoderExecuteBundles(
             handler,
-            bundles.size.toLong(),
-            bundles.map { it.handler }.toPointerArray(arena)
+            bundles.size.toULong(),
+            scope.bufferOfAddresses(bundles.map { it.handler.handler })
+                .handler
+                .let { ArrayHolder(it) }
         )
     }
 
@@ -112,7 +113,7 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) {
     }
 
     actual fun setStencilReference(reference: GPUStencilValue) {
-        wgpuRenderPassEncoderSetStencilReference(handler, reference.toInt())
+        wgpuRenderPassEncoderSetStencilReference(handler, reference)
     }
 
     actual fun beginOcclusionQuery(queryIndex: GPUSize32) {

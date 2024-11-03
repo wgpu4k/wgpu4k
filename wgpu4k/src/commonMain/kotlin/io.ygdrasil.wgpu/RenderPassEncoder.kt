@@ -24,9 +24,9 @@ expect class RenderPassEncoder {
     fun drawIndirect(indirectBuffer: Buffer, indirectOffset: GPUSize64 = 0u)
     fun drawIndexedIndirect(indirectBuffer: Buffer, indirectOffset: GPUSize64 = 0u)
 
-    fun setBindGroup(index: Int, bindGroup: BindGroup, dynamicOffsets:List<Int> = listOf())
+    fun setBindGroup(index: UInt, bindGroup: BindGroup, dynamicOffsets:List<UInt> = listOf())
 
-    fun setVertexBuffer(slot: Int, buffer: Buffer)
+    fun setVertexBuffer(slot: UInt, buffer: Buffer)
 
     fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64 = 0u, size: GPUSize64 = buffer.size)
 

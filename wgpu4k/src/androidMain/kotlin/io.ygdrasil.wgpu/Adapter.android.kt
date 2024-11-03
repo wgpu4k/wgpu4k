@@ -1,7 +1,6 @@
 package io.ygdrasil.wgpu
 
 import ffi.Callback
-import ffi.WGPURequestDevice
 import io.ygdrasil.wgpu.internal.jna.WGPUSupportedLimits
 import io.ygdrasil.wgpu.internal.scoped
 import io.ygdrasil.wgpu.internal.toAddress

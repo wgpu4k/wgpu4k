@@ -3,24 +3,18 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.jvm.confined
 import io.ygdrasil.wgpu.internal.jvm.exportAndLoadLibrary
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUChainedStruct
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUInstanceRequestAdapterCallback
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPURequestAdapterOptions
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptor
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptorFromMetalLayer
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptorFromWindowsHWND
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUSurfaceDescriptorFromXlibWindow
-import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import io.ygdrasil.wgpu.mapper.map
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import webgpu.WGPUInstance
+import webgpu.wgpuInstanceRelease
 import java.lang.foreign.MemorySegment
 
 
-class WGPU(private val handler: MemorySegment) : AutoCloseable {
+class WGPU(private val handler: WGPUInstance) : AutoCloseable {
 
     override fun close() {
-        wgpu_h.wgpuInstanceRelease(handler)
+        wgpuInstanceRelease(handler)
     }
 
     fun requestAdapter(
@@ -31,7 +25,7 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
         val adapterState = MutableStateFlow<MemorySegment?>(null)
 
         val handleRequestAdapter = WGPUInstanceRequestAdapterCallback.allocate({ statusAsInt, adapter, message, param4 ->
-            if (statusAsInt == wgpu_h.WGPURequestAdapterStatus_Success()) {
+            if (statusAsInt == WGPURequestAdapterStatus_Success()) {
                 adapterState.update { adapter }
             } else {
 
@@ -50,7 +44,7 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
         WGPURequestAdapterOptions.compatibleSurface(options, surface.handler)
         if (powerPreference != null) WGPURequestAdapterOptions.powerPreference(options, powerPreference.value)
 
-        wgpu_h.wgpuInstanceRequestAdapter(handler, options, handleRequestAdapter, MemorySegment.NULL)
+        wgpuInstanceRequestAdapter(handler, options, handleRequestAdapter, MemorySegment.NULL)
 
 
         adapterState.value?.let { Adapter(it) }
@@ -64,12 +58,12 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
                     WGPUSurfaceDescriptorFromMetalLayer.chain(
                         nextInChain,
                         WGPUChainedStruct.allocate(arena).also { chain ->
-                            WGPUChainedStruct.sType(chain, wgpu_h.WGPUSType_SurfaceDescriptorFromMetalLayer())
+                            WGPUChainedStruct.sType(chain, WGPUSType_SurfaceDescriptorFromMetalLayer())
                         })
                     WGPUSurfaceDescriptorFromMetalLayer.layer(nextInChain, layer)
                 })
 
-            wgpu_h.wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+            wgpuInstanceCreateSurface(handler, surfaceDescriptor)
         }
     }
 
@@ -81,13 +75,13 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
                     WGPUSurfaceDescriptorFromXlibWindow.chain(
                         nextInChain,
                         WGPUChainedStruct.allocate(arena).also { chain ->
-                            WGPUChainedStruct.sType(chain, wgpu_h.WGPUSType_SurfaceDescriptorFromXlibWindow())
+                            WGPUChainedStruct.sType(chain, WGPUSType_SurfaceDescriptorFromXlibWindow())
                         })
                     WGPUSurfaceDescriptorFromXlibWindow.display(nextInChain, display)
                     WGPUSurfaceDescriptorFromXlibWindow.window(nextInChain, window)
                 })
 
-            wgpu_h.wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+            wgpuInstanceCreateSurface(handler, surfaceDescriptor)
         }
     }
 
@@ -99,13 +93,13 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
                     WGPUSurfaceDescriptorFromWindowsHWND.chain(
                         nextInChain,
                         WGPUChainedStruct.allocate(arena).also { chain ->
-                            WGPUChainedStruct.sType(chain, wgpu_h.WGPUSType_SurfaceDescriptorFromWindowsHWND())
+                            WGPUChainedStruct.sType(chain, WGPUSType_SurfaceDescriptorFromWindowsHWND())
                         })
                     WGPUSurfaceDescriptorFromWindowsHWND.hwnd(nextInChain, hwnd)
                     WGPUSurfaceDescriptorFromWindowsHWND.hinstance(nextInChain, hinstance)
                 })
 
-            wgpu_h.wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+            wgpuInstanceCreateSurface(handler, surfaceDescriptor)
         }
     }
 
@@ -121,7 +115,7 @@ class WGPU(private val handler: MemorySegment) : AutoCloseable {
 
         fun createInstance(backend: WGPUInstanceBackend? = null): WGPU? = confined { arena ->
             backend?.let { arena.map(backend) }
-                .let { wgpu_h.wgpuCreateInstance(it ?: MemorySegment.NULL) }
+                .let { wgpuCreateInstance(it ?: MemorySegment.NULL) }
                 ?.let { WGPU(it) }
         }
     }
