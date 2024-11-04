@@ -68,7 +68,7 @@ android {
 
 dependencies {
     implementation(projects.wgpu4kScenes)
-    implementation("androidx.core:core-ktx:1.7.0")
+    implementation("androidx.core:core-ktx:1.15.0")
     implementation("androidx.compose.ui:ui:1.2.0")
     implementation("androidx.compose.material:material:1.2.0")
     implementation("androidx.compose.ui:ui-tooling-preview:1.2.0")
