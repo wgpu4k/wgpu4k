@@ -1,15 +1,26 @@
 package io.ygdrasil.wgpu
 
 
-import io.ygdrasil.wgpu.internal.jvm.confined
+import ffi.NativeAddress
+import ffi.memoryScope
 import io.ygdrasil.wgpu.internal.jvm.exportAndLoadLibrary
 import io.ygdrasil.wgpu.mapper.map
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
+import webgpu.WGPUAdapter
 import webgpu.WGPUInstance
+import webgpu.WGPURequestAdapterCallback
+import webgpu.WGPURequestAdapterCallbackInfo
+import webgpu.WGPURequestAdapterOptions
+import webgpu.WGPURequestAdapterStatus
+import webgpu.WGPUStringView
+import webgpu.WGPUSurface
+import webgpu.WGPUSurfaceDescriptor
+import webgpu.WGPUSurfaceSourceMetalLayer
+import webgpu.WGPUSurfaceSourceWindowsHWND
+import webgpu.WGPUSurfaceSourceXlibWindow
+import webgpu.wgpuCreateInstance
+import webgpu.wgpuInstanceCreateSurface
 import webgpu.wgpuInstanceRelease
-import java.lang.foreign.MemorySegment
-
+import webgpu.wgpuInstanceRequestAdapter
 
 class WGPU(private val handler: WGPUInstance) : AutoCloseable {
 
@@ -20,87 +31,72 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
     fun requestAdapter(
         surface: Surface,
         powerPreference: PowerPreference? = null
-    ): Adapter? = confined { arena ->
+    ): Adapter? = memoryScope { scope ->
 
-        val adapterState = MutableStateFlow<MemorySegment?>(null)
+        val options = WGPURequestAdapterOptions.allocate(scope)
+        options.compatibleSurface = surface.handler
+        if (powerPreference != null) options.powerPreference = powerPreference.value.toUInt()
 
-        val handleRequestAdapter = WGPUInstanceRequestAdapterCallback.allocate({ statusAsInt, adapter, message, param4 ->
-            if (statusAsInt == WGPURequestAdapterStatus_Success()) {
-                adapterState.update { adapter }
-            } else {
-
-                println(
-                    "request_adapter status=${WGPURequestAdapterStatus.of(statusAsInt)} message=${
-                        message.getString(
-                            0
-                        )
-                    }"
-                )
+        var fetchedAdapter: WGPUAdapter? = null
+        val callback = WGPURequestAdapterCallback.allocate(scope, object : WGPURequestAdapterCallback {
+            override fun invoke(
+                status: WGPURequestAdapterStatus,
+                adapter: WGPUAdapter?,
+                message: WGPUStringView?,
+                userdata1: NativeAddress?,
+                userdata2: NativeAddress?
+            ) {
+                if (status != 1u && adapter == null) error("fail to get adapter")
+                fetchedAdapter = adapter
             }
-        }, arena)
+        })
 
+        val callbackInfo = WGPURequestAdapterCallbackInfo.allocate(scope).apply {
+            this.callback = callback
+            this.userdata2 = scope.bufferOfAddress(callback.handler).handler
+        }
 
-        val options = WGPURequestAdapterOptions.allocate(arena)
-        WGPURequestAdapterOptions.compatibleSurface(options, surface.handler)
-        if (powerPreference != null) WGPURequestAdapterOptions.powerPreference(options, powerPreference.value)
+        wgpuInstanceRequestAdapter(handler, options, callbackInfo)
 
-        wgpuInstanceRequestAdapter(handler, options, handleRequestAdapter, MemorySegment.NULL)
-
-
-        adapterState.value?.let { Adapter(it) }
+        fetchedAdapter?.let { Adapter(it) }
     }
 
-    fun getSurfaceFromMetalLayer(layer: MemorySegment): MemorySegment = confined { arena ->
-        WGPUSurfaceDescriptor.allocate(arena).let { surfaceDescriptor ->
-            WGPUSurfaceDescriptor.nextInChain(
-                surfaceDescriptor,
-                WGPUSurfaceDescriptorFromMetalLayer.allocate(arena).also { nextInChain ->
-                    WGPUSurfaceDescriptorFromMetalLayer.chain(
-                        nextInChain,
-                        WGPUChainedStruct.allocate(arena).also { chain ->
-                            WGPUChainedStruct.sType(chain, WGPUSType_SurfaceDescriptorFromMetalLayer())
-                        })
-                    WGPUSurfaceDescriptorFromMetalLayer.layer(nextInChain, layer)
-                })
+    private fun getSurfaceFromMetalLayer(instance: WGPUInstance, metalLayer: NativeAddress): WGPUSurface? = memoryScope { scope ->
 
-            wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+        val surfaceDescriptor = WGPUSurfaceDescriptor.allocate(scope).apply {
+            nextInChain = WGPUSurfaceSourceMetalLayer.allocate(scope).apply {
+                chain.sType = 0x00000004u
+                layer = metalLayer
+            }.handler
         }
+
+        return wgpuInstanceCreateSurface(instance, surfaceDescriptor)
     }
 
-    fun getSurfaceFromX11Window(display: MemorySegment, window: Long): MemorySegment? = confined { arena ->
-        WGPUSurfaceDescriptor.allocate(arena).let { surfaceDescriptor ->
-            WGPUSurfaceDescriptor.nextInChain(
-                surfaceDescriptor,
-                WGPUSurfaceDescriptorFromXlibWindow.allocate(arena).also { nextInChain ->
-                    WGPUSurfaceDescriptorFromXlibWindow.chain(
-                        nextInChain,
-                        WGPUChainedStruct.allocate(arena).also { chain ->
-                            WGPUChainedStruct.sType(chain, WGPUSType_SurfaceDescriptorFromXlibWindow())
-                        })
-                    WGPUSurfaceDescriptorFromXlibWindow.display(nextInChain, display)
-                    WGPUSurfaceDescriptorFromXlibWindow.window(nextInChain, window)
-                })
+    fun getSurfaceFromX11Window(instance: WGPUInstance, display: NativeAddress, window: Long): WGPUSurface? = memoryScope { scope ->
 
-            wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+        val surfaceDescriptor = WGPUSurfaceDescriptor.allocate(scope).apply {
+            nextInChain = WGPUSurfaceSourceXlibWindow.allocate(scope).apply {
+                chain.sType = 0x00000006u
+                this.display = display
+                this.window = window.toULong()
+            }.handler
         }
+
+        return wgpuInstanceCreateSurface(instance, surfaceDescriptor)
     }
 
-    fun getSurfaceFromWindows(hinstance: MemorySegment, hwnd: MemorySegment): MemorySegment? = confined { arena ->
-        WGPUSurfaceDescriptor.allocate(arena).let { surfaceDescriptor ->
-            WGPUSurfaceDescriptor.nextInChain(
-                surfaceDescriptor,
-                WGPUSurfaceDescriptorFromWindowsHWND.allocate(arena).also { nextInChain ->
-                    WGPUSurfaceDescriptorFromWindowsHWND.chain(
-                        nextInChain,
-                        WGPUChainedStruct.allocate(arena).also { chain ->
-                            WGPUChainedStruct.sType(chain, WGPUSType_SurfaceDescriptorFromWindowsHWND())
-                        })
-                    WGPUSurfaceDescriptorFromWindowsHWND.hwnd(nextInChain, hwnd)
-                    WGPUSurfaceDescriptorFromWindowsHWND.hinstance(nextInChain, hinstance)
-                })
+    fun getSurfaceFromWindows(instance: WGPUInstance, hinstance: NativeAddress, hwnd: NativeAddress): WGPUSurface? = memoryScope { scope ->
 
-            wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+        val surfaceDescriptor = WGPUSurfaceDescriptor.allocate(scope).apply {
+            nextInChain = WGPUSurfaceSourceWindowsHWND.allocate(scope).apply {
+                chain.sType = 0x00000005u
+                this.hwnd = hwnd
+                this.hinstance = hinstance
+            }.handler
         }
+
+        return wgpuInstanceCreateSurface(instance, surfaceDescriptor)
     }
 
     companion object {
@@ -113,9 +109,9 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
             exportAndLoadLibrary()
         }
 
-        fun createInstance(backend: WGPUInstanceBackend? = null): WGPU? = confined { arena ->
-            backend?.let { arena.map(backend) }
-                .let { wgpuCreateInstance(it ?: MemorySegment.NULL) }
+        fun createInstance(backend: WGPUInstanceBackend? = null): WGPU? = memoryScope { scope ->
+            backend?.let { scope.map(backend) }
+                .let { wgpuCreateInstance(it) }
                 ?.let { WGPU(it) }
         }
     }
@@ -135,17 +131,3 @@ enum class WGPUInstanceBackend(val value: Int) {
 
 }
 
-enum class WGPURequestAdapterStatus(
-    val `value`: Int,
-) {
-    Success(0),
-    Unavailable(1),
-    Error(2),
-    Unknown(3);
-
-    companion object {
-        fun of(`value`: Int): WGPURequestAdapterStatus? = entries.find {
-            it.value == value
-        }
-    }
-}

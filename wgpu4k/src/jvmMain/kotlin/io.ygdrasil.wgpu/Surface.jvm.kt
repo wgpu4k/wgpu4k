@@ -1,17 +1,20 @@
 package io.ygdrasil.wgpu
 
+import ffi.ArrayHolder
 import ffi.MemoryAllocator
+import ffi.MemoryBuffer
 import ffi.memoryScope
+import webgpu.WGPUCompositeAlphaMode
 import webgpu.WGPUSurface
 import webgpu.WGPUSurfaceCapabilities
 import webgpu.WGPUSurfaceConfiguration
 import webgpu.WGPUSurfaceTexture
+import webgpu.WGPUTextureFormat
 import webgpu.wgpuSurfaceConfigure
 import webgpu.wgpuSurfaceGetCapabilities
 import webgpu.wgpuSurfaceGetCurrentTexture
 import webgpu.wgpuSurfacePresent
 import webgpu.wgpuSurfaceRelease
-import java.lang.foreign.ValueLayout
 
 actual class Surface(
 	internal val handler: WGPUSurface,
@@ -52,23 +55,11 @@ actual class Surface(
 		val surfaceCapabilities = WGPUSurfaceCapabilities.allocate(scope)
 		wgpuSurfaceGetCapabilities(handler, adapter.handler, surfaceCapabilities)
 
-		val formats = surfaceCapabilities.formats
-		val formatCount = surfaceCapabilities.formatCount
-		_supportedFormats = (0..formatCount.toInt()).map { index ->
-			formats.get(ValueLayout.JAVA_INT, index * ValueLayout.JAVA_INT.byteOffset())
-				.let { value -> TextureFormat.of(value).also { if (it == null) println("ignoring undefined format with value $value") } }
+		val formats = surfaceCapabilities.formats ?: error("fail to get formats")
+		_supportedFormats = surfaceCapabilities.toTextureFormats(formats)
 
-		}.mapNotNull { it }
-			.toSet()
-
-		val alphaModes = surfaceCapabilities.alphaModes
-		val alphaModeCount = surfaceCapabilities.alphaModeCount
-		_supportedAlphaMode = (0..alphaModeCount.toInt()).map { index ->
-			alphaModes.get(ValueLayout.JAVA_INT, index * ValueLayout.JAVA_INT.byteOffset())
-				.let { value -> CompositeAlphaMode.of(value).also { if (it == null) println("ignoring undefined format with value $value") } }
-		}.mapNotNull { it }
-			.toSet()
-
+		val alphaModes = surfaceCapabilities.alphaModes ?: error("fail to get alpha modes")
+		_supportedAlphaMode = surfaceCapabilities.toAlphaMode(alphaModes)
 
 		println("supportedTextureFormats: $supportedFormats")
 		println("supportedAlphaMode: $supportedAlphaMode")
@@ -83,6 +74,34 @@ actual class Surface(
 			_supportedAlphaMode = setOf(CompositeAlphaMode.inherit)
 		}
 	}
+
+	private fun WGPUSurfaceCapabilities.toTextureFormats(
+		formats: ArrayHolder<WGPUTextureFormat>
+	) = UIntArray(formatCount.toInt()) { 0u }
+		.also {
+			MemoryBuffer(formats.handler, formatCount * Int.SIZE_BYTES.toULong())
+				.readUInts(it)
+		}
+		.map {
+			TextureFormat.of(it.toInt())
+				.also { if (it == null) println("ignoring undefined format with value $it") }
+		}
+		.filterNotNull()
+		.toSet()
+
+	private fun WGPUSurfaceCapabilities.toAlphaMode(
+		alphaModes: ArrayHolder<WGPUCompositeAlphaMode>
+	) = UIntArray(formatCount.toInt()) { 0u }
+		.also {
+			MemoryBuffer(alphaModes.handler, formatCount * Int.SIZE_BYTES.toULong())
+				.readUInts(it)
+		}
+		.map {
+			CompositeAlphaMode.of(it.toInt())
+				.also { if (it == null) println("ignoring undefined alpha mode with value $it") }
+		}
+		.filterNotNull()
+		.toSet()
 
 	actual fun configure(surfaceConfiguration: SurfaceConfiguration) = memoryScope { scope ->
 		wgpuSurfaceConfigure(handler, scope.map(surfaceConfiguration))
