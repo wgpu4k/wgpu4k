@@ -6,6 +6,7 @@ import io.ygdrasil.wgpu.toFlagULong
 import webgpu.WGPUBindGroupLayoutDescriptor
 import webgpu.WGPUBindGroupLayoutEntry
 import webgpu.WGPUChainedStruct
+import webgpu.WGPUNativeSType_BindGroupEntryExtras
 
 fun MemoryAllocator.map(input: BindGroupLayoutDescriptor): WGPUBindGroupLayoutDescriptor = WGPUBindGroupLayoutDescriptor.allocate(this) .also{ output ->
     if (input.label != null) map(input.label, output.label)
@@ -33,16 +34,16 @@ fun MemoryAllocator.map(input: BindGroupLayoutDescriptor.Entry, output: WGPUBind
             buffer.type = bindingType.type.uValue
 
             val chain = WGPUChainedStruct.allocate(this)
-            chain.sType = WGPUSType_BindGroupEntryExtras
+            chain.sType = WGPUNativeSType_BindGroupEntryExtras
             buffer.nextInChain = chain.handler
         }
 
         is BindGroupLayoutDescriptor.Entry.SamplerBindingLayout -> {
             val sampler = output.sampler
-            sampler.type = bindingType.type.value
+            sampler.type = bindingType.type.value.toUInt()
 
             val chain = WGPUChainedStruct.allocate(this)
-            chain.sType = WGPUSType_BindGroupEntryExtras
+            chain.sType = WGPUNativeSType_BindGroupEntryExtras
             sampler.nextInChain = chain.handler
         }
 
@@ -53,7 +54,7 @@ fun MemoryAllocator.map(input: BindGroupLayoutDescriptor.Entry, output: WGPUBind
             texture.viewDimension = bindingType.viewDimension.uValue
 
             val chain = WGPUChainedStruct.allocate(this)
-            chain.sType = WGPUSType_BindGroupEntryExtras
+            chain.sType = WGPUNativeSType_BindGroupEntryExtras
             texture.nextInChain = chain.handler
         }
 
@@ -64,8 +65,8 @@ fun MemoryAllocator.map(input: BindGroupLayoutDescriptor.Entry, output: WGPUBind
             storageTexture.viewDimension = bindingType.viewDimension.uValue
 
             val chain = WGPUChainedStruct.allocate(this)
-            chain.sType = WGPUSType_BindGroupEntryExtras
-            storageTexture.nextInChain = chain
+            chain.sType = WGPUNativeSType_BindGroupEntryExtras
+            storageTexture.nextInChain = chain.handler
 
         }
     }

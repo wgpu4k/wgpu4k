@@ -7,7 +7,7 @@ import webgpu.WGPUImageCopyTexture
 internal fun MemoryAllocator.map(input: ImageCopyTextureTagged) = WGPUImageCopyTexture.allocate(this).also { output ->
     output.texture = input.texture.handler
     output.mipLevel = input.mipLevel
-    output.origin = map(input.origin)
+    map(input.origin, output.origin)
     output.aspect = input.aspect.uValue
 }
 

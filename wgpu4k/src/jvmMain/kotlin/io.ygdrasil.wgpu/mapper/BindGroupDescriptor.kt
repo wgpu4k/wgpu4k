@@ -10,12 +10,9 @@ internal fun MemoryAllocator.map(input: BindGroupDescriptor): WGPUBindGroupDescr
     output.layout = input.layout.handler
     if (input.entries.isNotEmpty()) {
         output.entryCount = input.entries.size.toULong()
-        val entries = WGPUBindGroupEntry.allocateArray(input.entries.size.toLong(), this)
-        input.entries.forEachIndexed { index, entry ->
-            map(entry, WGPUBindGroupEntry.asSlice(entries, index.toLong()))
+        output.entries = WGPUBindGroupEntry.allocateArray(this, input.entries.size.toUInt()) { index, entry ->
+            map(input.entries[index.toInt()], entry)
         }
-        output.entries = entries
-
     }
 }
 
@@ -30,7 +27,7 @@ private fun MemoryAllocator.map(input: BindGroupDescriptor.BindGroupEntry, outpu
         }
 
         is BindGroupDescriptor.SamplerBinding -> output.sampler = resource.sampler.handler
-        is BindGroupDescriptor.TextureViewBinding -> output.textureView = resource.view.handler.handler.handler
+        is BindGroupDescriptor.TextureViewBinding -> output.textureView = resource.view.handler
     }
 }
 

@@ -2,7 +2,6 @@ package io.ygdrasil.wgpu.mapper
 
 import ffi.MemoryAllocator
 import io.ygdrasil.wgpu.WGPUInstanceBackend
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUInstanceExtras
 import webgpu.WGPUInstanceDescriptor
 
 internal fun MemoryAllocator.map(backend: WGPUInstanceBackend) = WGPUInstanceDescriptor.allocate(this).also { output ->

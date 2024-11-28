@@ -18,9 +18,10 @@ fun MemoryAllocator.map(input: ComputePipelineDescriptor.ProgrammableStage, outp
     if (input.entryPoint != null)  map(input.entryPoint, output.entryPoint)
     if (input.constants.isNotEmpty()) {
         output.constantCount = input.constants.size.toULong()
-        val constants = WGPUConstantEntry.allocateArray(input.constants.size.toLong(), this)
-        input.constants.entries.forEachIndexed { index, entry -> map(entry, WGPUConstantEntry.asSlice(constants, index.toLong())) }
-        output.constants = constants
+        val entries = input.constants.entries.toList()
+        output.constants = WGPUConstantEntry.allocateArray(this, input.constants.size.toUInt()) { index, entry ->
+            map(entries[index.toInt()], entry)
+        }
     }
 }
 
