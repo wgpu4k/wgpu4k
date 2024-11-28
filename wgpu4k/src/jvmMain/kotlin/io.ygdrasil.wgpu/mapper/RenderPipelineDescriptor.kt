@@ -20,18 +20,18 @@ import java.lang.foreign.MemorySegment
 internal fun MemoryAllocator.map(input: RenderPipelineDescriptor) = WGPURenderPipelineDescriptor.allocate(this).also { output ->
     map(input.vertex, output.vertex)
     if (input.label != null) map(input.label, output.label)
-    if (input.layout != null) output.layout = input.layout.handler)
+    if (input.layout != null) output.layout = input.layout.handler
     map(input.primitive, output.primitive)
-    if (input.depthStencil != null) output.depthStencil = map(input.depthStencil))
-    if (input.fragment != null) output.fragment = map(input.fragment))
+    if (input.depthStencil != null) output.depthStencil = map(input.depthStencil)
+    if (input.fragment != null) output.fragment = map(input.fragment)
     map(input.multisample, output.multisample)
 }
 
 fun MemoryAllocator.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState, output: WGPUColorTargetState) {
     println("colorTargetState $output")
-    output.format = input.format.value)
-    output.writeMask = input.writeMask.value)
-    output.blend = map(input.blend))
+    output.format = input.format.value
+    output.writeMask = input.writeMask.value
+    output.blend = map(input.blend)
 }
 
 fun MemoryAllocator.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState): WGPUBlendState =
@@ -48,9 +48,9 @@ fun map(
     output: WGPUBlendComponent
 ) {
     println("blend component $output")
-    output.operation = input.operation.value)
-    output.srcFactor = input.srcFactor.value)
-    output.dstFactor = input.dstFactor.value)
+    output.operation = input.operation.value
+    output.srcFactor = input.srcFactor.value
+    output.dstFactor = input.dstFactor.value
 }
 
 private fun MemoryAllocator.map(input: RenderPipelineDescriptor.FragmentState): WGPUFragmentState =
@@ -73,7 +73,7 @@ private fun MemoryAllocator.map(input: RenderPipelineDescriptor.FragmentState): 
 private fun MemoryAllocator.map(input: RenderPipelineDescriptor.DepthStencilState): WGPUDepthStencilState =
     WGPUDepthStencilState.allocate(this)
         .also { output ->
-            output.format = input.format.value)
+            output.format = input.format.value
             if (input.depthWriteEnabled != null) output.depthWriteEnabled(
                 output,
                 input.depthWriteEnabled.toInt()
@@ -84,40 +84,40 @@ private fun MemoryAllocator.map(input: RenderPipelineDescriptor.DepthStencilStat
             )
             map(input.stencilFront, output.stencilFront)
             map(input.stencilBack, output.stencilBack)
-            output.stencilReadMask = input.stencilReadMask.toInt())
-            output.stencilWriteMask = input.stencilWriteMask.toInt())
-            output.depthBias = input.depthBias)
-            output.depthBiasSlopeScale = input.depthBiasSlopeScale)
-            output.depthBiasClamp = input.depthBiasClamp)
+            output.stencilReadMask = input.stencilReadMask.toInt()
+            output.stencilWriteMask = input.stencilWriteMask.toInt()
+            output.depthBias = input.depthBias
+            output.depthBiasSlopeScale = input.depthBiasSlopeScale
+            output.depthBiasClamp = input.depthBiasClamp
         }
 
 fun map(input: RenderPipelineDescriptor.DepthStencilState.StencilFaceState, output: WGPUStencilFaceState) {
-    output.compare = input.compare.value)
-    output.failOp = input.failOp.value)
-    output.depthFailOp = input.depthFailOp.value)
-    output.passOp = input.passOp.value)
+    output.compare = input.compare.value
+    output.failOp = input.failOp.value
+    output.depthFailOp = input.depthFailOp.value
+    output.passOp = input.passOp.value
 }
 
 private fun map(input: RenderPipelineDescriptor.MultisampleState, output: WGPUMultisampleState) {
-    output.count = input.count)
-    output.mask = input.mask.toInt())
-    output.alphaToCoverageEnabled = input.alphaToCoverageEnabled.toInt())
+    output.count = input.count
+    output.mask = input.mask.toInt()
+    output.alphaToCoverageEnabled = input.alphaToCoverageEnabled.toInt()
 }
 
 private fun map(input: RenderPipelineDescriptor.PrimitiveState, output: WGPUPrimitiveState) {
-    output.topology = input.topology.value)
-    if (input.stripIndexFormat != null) output.stripIndexFormat = input.stripIndexFormat.value)
-    output.frontFace = input.frontFace.value)
-    output.cullMode = input.cullMode.value)
+    output.topology = input.topology.value
+    if (input.stripIndexFormat != null) output.stripIndexFormat = input.stripIndexFormat.value
+    output.frontFace = input.frontFace.value
+    output.cullMode = input.cullMode.value
     //TODO check how to map unclippedDepth https://docs.rs/wgpu/latest/wgpu/struct.PrimitiveState.html
 }
 
 private fun MemoryAllocator.map(input: RenderPipelineDescriptor.VertexState, output: WGPUVertexState) {
     println("vertex $output")
-    output.module = input.module.handler)
-    output.entryPoint = allocateFrom(input.entryPoint))
+    output.module = input.module.handler
+    output.entryPoint = allocateFrom(input.entryPoint)
     // TODO learn how to map this
-    output.constants = MemorySegment.NULL)
+    output.constants = MemorySegment.NULL
     output.constantCount = 0L)
     if (input.buffers.isNotEmpty()) {
         val buffers = WGPUVertexBufferLayout.allocateArray(input.buffers.size.toLong(), this)
@@ -126,7 +126,7 @@ private fun MemoryAllocator.map(input: RenderPipelineDescriptor.VertexState, out
             map(vertexBufferLayout, WGPUVertexBufferLayout.asSlice(buffers, index.toLong()))
         }
         output.buffers = buffers)
-        output.bufferCount = input.buffers.size.toLong())
+        output.bufferCount = input.buffers.size.toLong()
     }
 }
 
@@ -135,9 +135,9 @@ private fun map(
     output: WGPUVertexAttribute
 ) {
     println("attribute $output")
-    output.format = input.format.value)
-    output.offset = input.offset)
-    output.shaderLocation = input.shaderLocation)
+    output.format = input.format.value
+    output.offset = input.offset
+    output.shaderLocation = input.shaderLocation
 }
 
 private fun MemoryAllocator.map(
@@ -152,9 +152,9 @@ private fun MemoryAllocator.map(
         input.attributes.forEachIndexed { index, vertexAttribute ->
             map(vertexAttribute, WGPUVertexAttribute.asSlice(attributes, index.toLong()))
         }
-        output.attributes = attributes)
-        output.attributeCount = input.attributes.size.toLong())
+        output.attributes = attributes
+        output.attributeCount = input.attributes.size.toLong()
     }
-    output.stepMode = input.stepMode.value)
+    output.stepMode = input.stepMode.value
 }
 

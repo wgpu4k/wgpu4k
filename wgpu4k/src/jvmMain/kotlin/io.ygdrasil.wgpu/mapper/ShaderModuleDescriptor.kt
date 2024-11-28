@@ -2,8 +2,6 @@ package io.ygdrasil.wgpu.mapper
 
 import ffi.MemoryAllocator
 import io.ygdrasil.wgpu.ShaderModuleDescriptor
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUShaderModuleCompilationHint
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPUShaderModuleWGSLDescriptor
 import webgpu.WGPUShaderModuleDescriptor
 import java.lang.foreign.MemorySegment
 
