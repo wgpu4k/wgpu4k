@@ -12,7 +12,7 @@ fun MemoryAllocator.map(input: RenderBundleEncoderDescriptor): WGPURenderBundleE
         if (input.colorFormats.isNotEmpty()) {
             output.colorFormatCount = input.colorFormats.size.toULong()
 
-            output.colorFormats = allocateBuffer(Int.SIZE_BYTES * output.colorFormatCount)
+            output.colorFormats = allocateBuffer(Int.SIZE_BYTES.toULong() * output.colorFormatCount)
                 .also { it.writeInts(input.colorFormats.map { it.value }.toIntArray()) }
                 .let { ArrayHolder(it.handler) }
         }
