@@ -2,7 +2,6 @@ package io.ygdrasil.wgpu.mapper
 
 import ffi.MemoryAllocator
 import io.ygdrasil.wgpu.RenderPipelineDescriptor
-import io.ygdrasil.wgpu.toInt
 import webgpu.WGPUBlendComponent
 import webgpu.WGPUBlendState
 import webgpu.WGPUColorTargetState
@@ -15,6 +14,7 @@ import webgpu.WGPUStencilFaceState
 import webgpu.WGPUVertexAttribute
 import webgpu.WGPUVertexBufferLayout
 import webgpu.WGPUVertexState
+import webgpu.toUInt
 import java.lang.foreign.MemorySegment
 
 internal fun MemoryAllocator.map(input: RenderPipelineDescriptor) = WGPURenderPipelineDescriptor.allocate(this).also { output ->
@@ -29,8 +29,8 @@ internal fun MemoryAllocator.map(input: RenderPipelineDescriptor) = WGPURenderPi
 
 fun MemoryAllocator.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState, output: WGPUColorTargetState) {
     println("colorTargetState $output")
-    output.format = input.format.value
-    output.writeMask = input.writeMask.value
+    output.format = input.format.uValue
+    output.writeMask = input.writeMask.value.toULong()
     output.blend = map(input.blend)
 }
 
@@ -48,67 +48,61 @@ fun map(
     output: WGPUBlendComponent
 ) {
     println("blend component $output")
-    output.operation = input.operation.value
-    output.srcFactor = input.srcFactor.value
-    output.dstFactor = input.dstFactor.value
+    output.operation = input.operation.uValue
+    output.srcFactor = input.srcFactor.uValue
+    output.dstFactor = input.dstFactor.uValue
 }
 
 private fun MemoryAllocator.map(input: RenderPipelineDescriptor.FragmentState): WGPUFragmentState =
     WGPUFragmentState.allocate(this)
         .also { fragmentState ->
             println("fragment $fragmentState")
-            WGPUFragmentState.module(fragmentState, input.module.handler)
-            WGPUFragmentState.entryPoint(fragmentState, allocateFrom(input.entryPoint))
+            fragmentState.module = input.module.handler
+            map(input.entryPoint, fragmentState.entryPoint)
             if (input.targets.isNotEmpty()) {
-                WGPUFragmentState.targetCount(fragmentState, input.targets.size.toLong())
+                fragmentState.targetCount = input.targets.size.toULong()
                 val colorTargets = WGPUColorTargetState.allocateArray(input.targets.size.toLong(), this)
                 println("colorTargets $colorTargets")
                 input.targets.forEachIndexed { index, colorTargetState ->
                     map(colorTargetState, WGPUColorTargetState.asSlice(colorTargets, index.toLong()))
                 }
-                WGPUFragmentState.targets(fragmentState, colorTargets)
+                fragmentState.targets = colorTargets
             }
         }
 
 private fun MemoryAllocator.map(input: RenderPipelineDescriptor.DepthStencilState): WGPUDepthStencilState =
     WGPUDepthStencilState.allocate(this)
         .also { output ->
-            output.format = input.format.value
-            if (input.depthWriteEnabled != null) output.depthWriteEnabled(
-                output,
-                input.depthWriteEnabled.toInt()
-            )
-            if (input.depthCompare != null) output.depthCompare(
-                output,
-                input.depthCompare.value
-            )
+            output.format = input.format.uValue
+            if (input.depthWriteEnabled != null) output.depthWriteEnabled = input.depthWriteEnabled.toUInt()
+            if (input.depthCompare != null) output.depthCompare = input.depthCompare.uValue
             map(input.stencilFront, output.stencilFront)
             map(input.stencilBack, output.stencilBack)
-            output.stencilReadMask = input.stencilReadMask.toInt()
-            output.stencilWriteMask = input.stencilWriteMask.toInt()
+            output.stencilReadMask = input.stencilReadMask
+            output.stencilWriteMask = input.stencilWriteMask
             output.depthBias = input.depthBias
             output.depthBiasSlopeScale = input.depthBiasSlopeScale
             output.depthBiasClamp = input.depthBiasClamp
         }
 
 fun map(input: RenderPipelineDescriptor.DepthStencilState.StencilFaceState, output: WGPUStencilFaceState) {
-    output.compare = input.compare.value
-    output.failOp = input.failOp.value
-    output.depthFailOp = input.depthFailOp.value
-    output.passOp = input.passOp.value
+    output.compare = input.compare.uValue
+    output.failOp = input.failOp.uValue
+    output.depthFailOp = input.depthFailOp.uValue
+    output.passOp = input.passOp.uValue
 }
 
 private fun map(input: RenderPipelineDescriptor.MultisampleState, output: WGPUMultisampleState) {
     output.count = input.count
-    output.mask = input.mask.toInt()
-    output.alphaToCoverageEnabled = input.alphaToCoverageEnabled.toInt()
+    output.mask = input.mask
+    output.alphaToCoverageEnabled = input.alphaToCoverageEnabled
 }
 
 private fun map(input: RenderPipelineDescriptor.PrimitiveState, output: WGPUPrimitiveState) {
-    output.topology = input.topology.value
-    if (input.stripIndexFormat != null) output.stripIndexFormat = input.stripIndexFormat.value
-    output.frontFace = input.frontFace.value
-    output.cullMode = input.cullMode.value
+    output.topology = input.topology.uValue
+    if (input.stripIndexFormat != null) output.stripIndexFormat = input.stripIndexFormat.uValue
+    output.frontFace = input.frontFace.uValue
+    output.cullMode = input.cullMode.uValue
     //TODO check how to map unclippedDepth https://docs.rs/wgpu/latest/wgpu/struct.PrimitiveState.html
 }
 
@@ -118,7 +112,7 @@ private fun MemoryAllocator.map(input: RenderPipelineDescriptor.VertexState, out
     output.entryPoint = allocateFrom(input.entryPoint)
     // TODO learn how to map this
     output.constants = MemorySegment.NULL
-    output.constantCount = 0L)
+    output.constantCount = 0uL
     if (input.buffers.isNotEmpty()) {
         val buffers = WGPUVertexBufferLayout.allocateArray(input.buffers.size.toLong(), this)
         println("buffers $buffers")
@@ -135,7 +129,7 @@ private fun map(
     output: WGPUVertexAttribute
 ) {
     println("attribute $output")
-    output.format = input.format.value
+    output.format = input.format.uValue
     output.offset = input.offset
     output.shaderLocation = input.shaderLocation
 }
