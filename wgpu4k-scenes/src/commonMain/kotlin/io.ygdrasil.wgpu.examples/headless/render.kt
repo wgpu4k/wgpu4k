@@ -31,10 +31,10 @@ suspend fun captureScene() {
             scene.bind()
             scene.initialize()
 
-            val textureData = IntArray(renderingContext.width * renderingContext.height)
+            val textureData = IntArray(renderingContext.width.toInt() * renderingContext.height.toInt())
             val outputStagingBuffer = context.device.createBuffer(
                 BufferDescriptor(
-                    size = (textureData.size * Int.SIZE_BYTES).toLong(),
+                    size = (textureData.size * Int.SIZE_BYTES).toULong(),
                     usage = setOf(BufferUsage.copydst, BufferUsage.mapread),
                     mappedAtCreation = false,
                 )
@@ -48,16 +48,16 @@ suspend fun captureScene() {
                 commandEncoder.copyTextureToBuffer(
                     ImageCopyTexture(
                         texture = renderingContext.getCurrentTexture(),
-                        mipLevel = 0,
+                        mipLevel = 0u,
                         origin = Origin3D.Zero,
                         aspect = TextureAspect.all,
                     ),
                     ImageCopyBuffer(
                         buffer = outputStagingBuffer,
-                        offset = 0,
+                        offset = 0u,
                         // This needs to be a multiple of 256. Normally we would need to pad
                         // it but we here know it will work out anyways.
-                        bytesPerRow = renderingContext.width * 4,
+                        bytesPerRow = renderingContext.width * 4u,
                         rowsPerImage = renderingContext.height,
                     ),
                     Size3D(
@@ -71,7 +71,11 @@ suspend fun captureScene() {
                 // Complete async work
                 context.device.poll()
                 outputStagingBuffer.mapInto(buffer = textureData)
-                val image = Bitmap32(width = renderingContext.width, height = renderingContext.height, textureData)
+                val image = Bitmap32(
+                    width = renderingContext.width.toInt(),
+                    height = renderingContext.height.toInt(),
+                    textureData
+                )
 
                 val path = screenshotPath ?: error("screenshot path not set")
                 val screenshotsVfs = localVfs(path)["jvm"].also { it.mkdirs() }.jail()

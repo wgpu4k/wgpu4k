@@ -47,7 +47,11 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
 
         val depthTexture = device.createTexture(
             TextureDescriptor(
-                size = Size3D(width = renderingContext.width, height = renderingContext.height, depthOrArrayLayers = 1),
+                size = Size3D(
+                    width = renderingContext.width,
+                    height = renderingContext.height,
+                    depthOrArrayLayers = 1u
+                ),
                 format = TextureFormat.depth24plusstencil8,
                 usage = setOf(TextureUsage.renderAttachment)
             )
@@ -68,7 +72,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
                 depthClearValue = 1f,
                 depthStoreOp = StoreOp.store,
                 stencilLoadOp = LoadOp.clear,
-                stencilClearValue = 0,
+                stencilClearValue = 0u,
                 stencilStoreOp = StoreOp.store
             )
         )
@@ -77,7 +81,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
             BindGroupLayoutDescriptor(
                 entries = listOf(
                     Entry(
-                        binding = 0,
+                        binding = 0u,
                         visibility = setOf(ShaderStage.vertex),
                         bindingType = Entry.BufferBindingLayout(type = BufferBindingType.uniform)
                     )
@@ -87,7 +91,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
 
         viewParamBuf = device.createBuffer(
             BufferDescriptor(
-                size = 4 * 4 * 4, usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
+                size = 4uL * 4uL * 4uL, usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
             )
         ).bind()
 
@@ -96,7 +100,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
                 layout = viewParamsLayout,
                 entries = listOf(
                     BindGroupEntry(
-                        binding = 0,
+                        binding = 0u,
                         resource = BindGroupDescriptor.BufferBinding(buffer = viewParamBuf)
                     )
                 )
@@ -151,8 +155,8 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
     }
 
 
-    fun getProjectionMatrix(width: Int, height: Int): Matrix4 {
-        val aspect = width / height.toDouble()
+    fun getProjectionMatrix(width: UInt, height: UInt): Matrix4 {
+        val aspect = width.toDouble() / height.toDouble()
         val fox = Angle.fromRadians((2 * PI) / 5)
         return Matrix4.perspective(fox, aspect, 1.0, 100.0)
     }

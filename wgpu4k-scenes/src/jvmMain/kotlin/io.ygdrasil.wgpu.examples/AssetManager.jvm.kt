@@ -16,7 +16,7 @@ internal actual fun Bitmap32.toBitmapHolder(textureFormat: ColorFormat): ImageBi
     return ImageBitmapHolder(
         arena,
         arena.allocateFrom(ValueLayout.JAVA_BYTE, *extractBytes(textureFormat)),
-        width,
-        height
+        width.toUInt(),
+        height.toUInt()
     )
 }

@@ -39,7 +39,7 @@ suspend fun uploadGLBModel(
 
         val gpuImg = device.createTexture(
             TextureDescriptor(
-                size = Size3D(width = bitmap.width, height = bitmap.height, depthOrArrayLayers = 1),
+                size = Size3D(width = bitmap.width, height = bitmap.height, depthOrArrayLayers = 1u),
                 format = textureFormat,
                 usage = setOf(TextureUsage.textureBinding, TextureUsage.copyDst, TextureUsage.renderAttachment)
             )
@@ -62,7 +62,7 @@ suspend fun uploadGLBModel(
     }
 
     val textures = gltf2.textures.mapIndexed { index, texture ->
-        val sampler = if (texture.sampler != null) samplers[texture.sampler!!] else defaultSampler
+        val sampler = if (texture.sampler != null) samplers[texture.sampler] else defaultSampler
         GLTFTexture(sampler, images[texture.source])
     }
 
@@ -84,7 +84,7 @@ suspend fun uploadGLBModel(
                 val topology = GLTFRenderMode.of(primitive.mode) ?: error("topology not found")
 
                 val indices: GLTFAccessor? = if (primitive.indices != null) {
-                    val accessor = gltf2.accessors[primitive.indices!!]
+                    val accessor = gltf2.accessors[primitive.indices]
                     val viewID = accessor.bufferView
                     bufferViews[viewID].needsUpload = true
                     bufferViews[viewID].addUsage(BufferUsage.index)
@@ -111,7 +111,7 @@ suspend fun uploadGLBModel(
                 }
 
                 val material = if (primitive.material != null) {
-                    materials[primitive.material!!]
+                    materials[primitive.material]
                 } else {
                     defaultMaterial
                 }

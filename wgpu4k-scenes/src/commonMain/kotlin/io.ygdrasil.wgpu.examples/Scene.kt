@@ -46,7 +46,7 @@ suspend fun loadScenes(wgpuContext: WGPUContext, resourceBasePath: String = ""):
     val dummyTexture by lazy {
         device.createTexture(
             TextureDescriptor(
-                size = Size3D(1, 1),
+                size = Size3D(1u, 1u),
                 format = TextureFormat.depth24plus,
                 usage = setOf(TextureUsage.renderAttachment),
             )

@@ -3,7 +3,10 @@ package io.ygdrasil.wgpu.examples.helper.glb
 import io.ygdrasil.wgpu.AddressMode
 import io.ygdrasil.wgpu.BindGroup
 import io.ygdrasil.wgpu.BindGroupDescriptor
-import io.ygdrasil.wgpu.BindGroupDescriptor.*
+import io.ygdrasil.wgpu.BindGroupDescriptor.BindGroupEntry
+import io.ygdrasil.wgpu.BindGroupDescriptor.BufferBinding
+import io.ygdrasil.wgpu.BindGroupDescriptor.SamplerBinding
+import io.ygdrasil.wgpu.BindGroupDescriptor.TextureViewBinding
 import io.ygdrasil.wgpu.BindGroupLayout
 import io.ygdrasil.wgpu.BindGroupLayoutDescriptor
 import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry
@@ -61,12 +64,12 @@ class GLTFPrimitive(
 
         val vertexBuffers = mutableListOf(
             VertexBufferLayout(
-                arrayStride = positions.byteStride.toLong(),
+                arrayStride = positions.byteStride.toULong(),
                 attributes = listOf(
                     VertexBufferLayout.VertexAttribute(
                         format = VertexFormat.float32x3,
-                        offset = 0,
-                        shaderLocation = 0
+                        offset = 0u,
+                        shaderLocation = 0u
                     )
                 )
             )
@@ -75,12 +78,12 @@ class GLTFPrimitive(
         if (normals != null) {
             vertexBuffers.add(
                 VertexBufferLayout(
-                    arrayStride = normals.byteStride.toLong(),
+                    arrayStride = normals.byteStride.toULong(),
                     attributes = listOf(
                         VertexBufferLayout.VertexAttribute(
                             format = VertexFormat.float32x3,
-                            offset = 0,
-                            shaderLocation = 1
+                            offset = 0u,
+                            shaderLocation = 1u
                         )
                     )
                 )
@@ -91,12 +94,12 @@ class GLTFPrimitive(
         if (texcoords.size > 0) {
             vertexBuffers.add(
                 VertexBufferLayout(
-                    arrayStride = texcoords[0].byteStride.toLong(),
+                    arrayStride = texcoords[0].byteStride.toULong(),
                     attributes = listOf(
                         VertexBufferLayout.VertexAttribute(
                             format = VertexFormat.float32x2,
-                            offset = 0,
-                            shaderLocation = 2
+                            offset = 0u,
+                            shaderLocation = 2u
                         )
                     )
                 )
@@ -155,23 +158,23 @@ class GLTFPrimitive(
         println(pipelineDescriptor)
         val renderPipeline = device.createRenderPipeline(pipelineDescriptor)
 
-        bundleEncoder.setBindGroup(2, material.bindGroup)
+        bundleEncoder.setBindGroup(2u, material.bindGroup)
         bundleEncoder.setPipeline(renderPipeline)
         bundleEncoder.setVertexBuffer(
-            0,
+            0u,
             positions.view.gpuBuffer ?: error("fail to get buffer"),
-            positions.byteOffset.toLong()
+            positions.byteOffset.toULong()
         )
         if (normals != null) {
             bundleEncoder.setVertexBuffer(
-                1, normals.view.gpuBuffer ?: error("fail to get buffer"), normals.byteOffset.toLong()
+                1u, normals.view.gpuBuffer ?: error("fail to get buffer"), normals.byteOffset.toULong()
             )
         }
         if (texcoords.size > 0) {
             bundleEncoder.setVertexBuffer(
-                2,
+                2u,
                 texcoords[0].view.gpuBuffer ?: error("fail to get buffer"),
-                texcoords[0].byteOffset.toLong()
+                texcoords[0].byteOffset.toULong()
             )
         }
         if (indices != null) {
@@ -181,11 +184,11 @@ class GLTFPrimitive(
             bundleEncoder.setIndexBuffer(
                 indices.view.gpuBuffer ?: error("fail to get buffer"),
                 indexFormat,
-                indices.byteOffset.toLong()
+                indices.byteOffset.toULong()
             )
-            bundleEncoder.drawIndexed(indices.count)
+            bundleEncoder.drawIndexed(indices.count.toUInt())
         } else {
-            bundleEncoder.draw(positions.count)
+            bundleEncoder.draw(positions.count.toUInt())
         }
     }
 }
@@ -201,17 +204,17 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
 
     init {
         if (material?.pbrMetallicRoughness != null) {
-            val it = material.pbrMetallicRoughness!!
+            val it = material.pbrMetallicRoughness
             baseColorFactor = it.baseColorFactor ?: baseColorFactor
             if (it.baseColorTexture != null) {
-                baseColorTexture = textures[it.baseColorTexture!!.index]
+                baseColorTexture = textures[it.baseColorTexture.index]
             }
             metallicFactor = it.metallicFactor ?: metallicFactor
             roughnessFactor = it.roughnessFactor?: roughnessFactor
 
         }
         if (material?.emissiveFactor != null) {
-            val it = material.emissiveFactor!!
+            val it = material.emissiveFactor
             emissiveFactor = floatArrayOf(it[0], it[1], it[2], 1f)
         }
     }
@@ -219,19 +222,19 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
     fun upload(device: Device) {
         val buf = device.createBuffer(
             BufferDescriptor(
-                size = 3 * 4 * 4,
+                size = 3uL * 4uL * 4uL,
                 setOf(BufferUsage.uniform),
                 mappedAtCreation = true
             )
         )
         buf.mapFrom(baseColorFactor)
-        buf.mapFrom(emissiveFactor, 4 * Float.SIZE_BYTES)
-        buf.mapFrom(floatArrayOf(metallicFactor, roughnessFactor), 8 * Float.SIZE_BYTES)
+        buf.mapFrom(emissiveFactor, 4uL * Float.SIZE_BYTES.toULong())
+        buf.mapFrom(floatArrayOf(metallicFactor, roughnessFactor), 4uL * Float.SIZE_BYTES.toULong())
         buf.unmap()
 
         val layoutEntries = mutableListOf(
             Entry(
-                binding = 0,
+                binding = 0u,
                 visibility = setOf(ShaderStage.fragment),
                 bindingType = BufferBindingLayout(
                     type = BufferBindingType.uniform
@@ -240,7 +243,7 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
         )
         val bindGroupEntries = mutableListOf(
             BindGroupEntry(
-                binding = 0,
+                binding = 0u,
                 resource = BufferBinding(
                     buffer = buf
                 )
@@ -250,24 +253,24 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
         baseColorTexture?.let {
             layoutEntries.add(
                 Entry(
-                    binding = 1,
+                    binding = 1u,
                     visibility = setOf(ShaderStage.fragment),
                     bindingType = SamplerBindingLayout(),
                 )
             )
             layoutEntries.add(
                 Entry(
-                    binding = 2,
+                    binding = 2u,
                     visibility = setOf(ShaderStage.fragment),
                     bindingType = Entry.TextureBindingLayout(),
                 )
             )
 
             bindGroupEntries.add(
-                BindGroupEntry(binding = 1, resource = SamplerBinding(it.sampler))
+                BindGroupEntry(binding = 1u, resource = SamplerBinding(it.sampler))
             )
             bindGroupEntries.add(
-                BindGroupEntry(binding = 2, resource = TextureViewBinding(it.imageView))
+                BindGroupEntry(binding = 2u, resource = TextureViewBinding(it.imageView))
             )
         }
 
@@ -314,7 +317,7 @@ class GLTFBufferView(bufferView: GLTF2.BufferView, buffer: GLTF2.Buffer) {
         // Note: must align to 4 byte size when mapped at creation is true
         val buf = device.createBuffer(
             BufferDescriptor(
-                size = alignTo(this.buffer.size, 4).toLong(),
+                size = alignTo(this.buffer.size, 4).toULong(),
                 usage = this.usage,
                 mappedAtCreation = true
             )
@@ -432,8 +435,8 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
             )
         )
 
-        bundleEncoder.setBindGroup(0, viewParamsBindGroup)
-        bundleEncoder.setBindGroup(1, bindGroup)
+        bundleEncoder.setBindGroup(0u, viewParamsBindGroup)
+        bundleEncoder.setBindGroup(1u, bindGroup)
 
         for (primitive in mesh.primitives) {
             primitive.buildRenderBundle(
