@@ -15,7 +15,6 @@ import webgpu.WGPUVertexAttribute
 import webgpu.WGPUVertexBufferLayout
 import webgpu.WGPUVertexState
 import webgpu.toUInt
-import java.lang.foreign.MemorySegment
 
 internal fun MemoryAllocator.map(input: RenderPipelineDescriptor) = WGPURenderPipelineDescriptor.allocate(this).also { output ->
     map(input.vertex, output.vertex)
@@ -61,11 +60,12 @@ private fun MemoryAllocator.map(input: RenderPipelineDescriptor.FragmentState): 
             map(input.entryPoint, fragmentState.entryPoint)
             if (input.targets.isNotEmpty()) {
                 fragmentState.targetCount = input.targets.size.toULong()
-                val colorTargets = WGPUColorTargetState.allocateArray(input.targets.size.toLong(), this)
-                println("colorTargets $colorTargets")
-                input.targets.forEachIndexed { index, colorTargetState ->
-                    map(colorTargetState, WGPUColorTargetState.asSlice(colorTargets, index.toLong()))
-                }
+                val colorTargets =
+                    WGPUColorTargetState.allocateArray(this, input.targets.size.toUInt(), { index, value ->
+                        val colorTargetState = input.targets[index.toInt()]
+                        map(colorTargetState, value)
+
+                    })
                 fragmentState.targets = colorTargets
             }
         }
@@ -109,18 +109,16 @@ private fun map(input: RenderPipelineDescriptor.PrimitiveState, output: WGPUPrim
 private fun MemoryAllocator.map(input: RenderPipelineDescriptor.VertexState, output: WGPUVertexState) {
     println("vertex $output")
     output.module = input.module.handler
-    output.entryPoint = allocateFrom(input.entryPoint)
+    map(input.entryPoint, output.entryPoint)
     // TODO learn how to map this
-    output.constants = MemorySegment.NULL
     output.constantCount = 0uL
     if (input.buffers.isNotEmpty()) {
-        val buffers = WGPUVertexBufferLayout.allocateArray(input.buffers.size.toLong(), this)
-        println("buffers $buffers")
-        input.buffers.forEachIndexed { index, vertexBufferLayout ->
-            map(vertexBufferLayout, WGPUVertexBufferLayout.asSlice(buffers, index.toLong()))
-        }
-        output.buffers = buffers)
-        output.bufferCount = input.buffers.size.toLong()
+        output.buffers = WGPUVertexBufferLayout.allocateArray(this, input.buffers.size.toUInt(), { index, value ->
+            val vertexBufferLayout = input.buffers[index.toInt()]
+            map(vertexBufferLayout, value)
+
+        })
+        output.bufferCount = input.buffers.size.toULong()
     }
 }
 
@@ -141,14 +139,12 @@ private fun MemoryAllocator.map(
     println("buffer $output")
     output.arrayStride = input.arrayStride
     if (input.attributes.isNotEmpty()) {
-        val attributes = WGPUVertexAttribute.allocateArray(input.attributes.size.toLong(), this)
-        println("attributes $attributes")
-        input.attributes.forEachIndexed { index, vertexAttribute ->
-            map(vertexAttribute, WGPUVertexAttribute.asSlice(attributes, index.toLong()))
-        }
-        output.attributes = attributes
-        output.attributeCount = input.attributes.size.toLong()
+        output.attributes = WGPUVertexAttribute.allocateArray(this, input.attributes.size.toUInt(), { index, value ->
+            val vertexAttribute = input.attributes[index.toInt()]
+            map(vertexAttribute, value)
+        })
+        output.attributeCount = input.attributes.size.toULong()
     }
-    output.stepMode = input.stepMode.value
+    output.stepMode = input.stepMode.uValue
 }
 
