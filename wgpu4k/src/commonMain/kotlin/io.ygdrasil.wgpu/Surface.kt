@@ -24,7 +24,7 @@ expect class Surface : AutoCloseable {
      */
     fun present()
 
-    fun configure(surfaceConfiguration: SurfaceConfiguration, width: UInt, height: UInt)
+    fun configure(surfaceConfiguration: SurfaceConfiguration)
 
     override fun close()
 }
@@ -37,6 +37,8 @@ data class SurfaceConfiguration(
     val colorSpace: PredefinedColorSpace = PredefinedColorSpace.srgb,
     val alphaMode: CompositeAlphaMode = CompositeAlphaMode.opaque,
     val presentMode: PresentMode = PresentMode.fifo,
+    val width: UInt? = null,
+    val height: UInt? = null
 )
 
 data class SurfaceTexture(

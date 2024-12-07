@@ -51,7 +51,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		// Create a vertex buffer from the cube data.
 		verticesBuffer = device.createBuffer(
 			BufferDescriptor(
-				size = (cubeVertexArray.size * Float.SIZE_BYTES).toLong(),
+				size = (cubeVertexArray.size * Float.SIZE_BYTES).toULong(),
 				usage = setOf(BufferUsage.vertex),
 				mappedAtCreation = true
 			)
@@ -74,12 +74,12 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 							arrayStride = cubeVertexSize,
 							attributes = listOf(
 								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
-									shaderLocation = 0,
+									shaderLocation = 0u,
 									offset = cubePositionOffset,
 									format = VertexFormat.float32x4
 								),
 								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
-									shaderLocation = 1,
+									shaderLocation = 1u,
 									offset = cubeUVOffset,
 									format = VertexFormat.float32x2
 								)
@@ -109,7 +109,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 					format = TextureFormat.depth24plus
 				),
 				multisample = RenderPipelineDescriptor.MultisampleState(
-					count = 1,
+					count = 1u,
 					mask = 0xFFFFFFFu
 				)
 			)
@@ -123,7 +123,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			)
 		).bind()
 
-		val uniformBufferSize = 4L * 16L; // 4x4 matrix
+		val uniformBufferSize = 4uL * 16uL // 4x4 matrix
 		uniformBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = uniformBufferSize,
@@ -133,10 +133,10 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 		uniformBindGroup = device.createBindGroup(
 			BindGroupDescriptor(
-				layout = renderPipeline.getBindGroupLayout(0),
+				layout = renderPipeline.getBindGroupLayout(0u),
 				entries = listOf(
 					BindGroupDescriptor.BindGroupEntry(
-						binding = 0,
+						binding = 0u,
 						resource = BindGroupDescriptor.BufferBinding(
 							buffer = uniformBuffer
 						)
@@ -163,7 +163,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		)
 
 
-		val aspect = renderingContext.width / renderingContext.height.toDouble()
+		val aspect = renderingContext.width.toDouble() / renderingContext.height.toDouble()
 		val fox = Angle.fromRadians((2 * PI) / 5)
 		projectionMatrix = Matrix4.perspective(fox, aspect, 1.0, 100.0)
 	}
@@ -177,10 +177,10 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 		device.queue.writeBuffer(
 			uniformBuffer,
-			0,
+			0u,
 			transformationMatrix,
-			0,
-			transformationMatrix.size.toLong()
+			0u,
+			transformationMatrix.size.toULong()
 		)
 
 		renderPassDescriptor = renderPassDescriptor.copy(
@@ -198,8 +198,8 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 		encoder.beginRenderPass(renderPassDescriptor) {
 			setPipeline(renderPipeline)
-			setBindGroup(0, uniformBindGroup)
-			setVertexBuffer(0, verticesBuffer)
+			setBindGroup(0u, uniformBindGroup)
+			setVertexBuffer(0u, verticesBuffer)
 			draw(cubeVertexCount)
 			end()
 		}

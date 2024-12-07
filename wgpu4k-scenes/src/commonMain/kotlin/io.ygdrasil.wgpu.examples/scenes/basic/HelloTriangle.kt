@@ -66,7 +66,7 @@ class HelloTriangleScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
             )
         ) {
             setPipeline(renderPipeline)
-            draw(3)
+            draw(3u)
             end()
         }
 

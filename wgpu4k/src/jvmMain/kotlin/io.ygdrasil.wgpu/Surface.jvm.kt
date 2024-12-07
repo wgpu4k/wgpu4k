@@ -104,9 +104,9 @@ actual class Surface(
 		.filterNotNull()
 		.toSet()
 
-	actual fun configure(surfaceConfiguration: SurfaceConfiguration, width: UInt, height: UInt) = memoryScope { scope ->
-		_width = width
-		_height = height
+	actual fun configure(surfaceConfiguration: SurfaceConfiguration) = memoryScope { scope ->
+		_width = surfaceConfiguration.width
+		_height = surfaceConfiguration.height
 		wgpuSurfaceConfigure(handler, scope.map(surfaceConfiguration))
 	}
 

@@ -381,7 +381,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
     fun upload(device: Device) {
         gpuUniforms = device.createBuffer(
             BufferDescriptor(
-                size = 4 * 4 * 4,
+                size = 4uL * 4uL * 4uL,
                 usage = setOf(BufferUsage.uniform),
                 mappedAtCreation = true
             )
@@ -402,7 +402,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
             BindGroupLayoutDescriptor(
                 entries = listOf(
                     Entry(
-                        binding = 0,
+                        binding = 0u,
                         visibility = setOf(ShaderStage.vertex),
                         bindingType = BufferBindingLayout(type = BufferBindingType.uniform)
                     )
@@ -415,7 +415,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
                 layout = nodeParamsLayout,
                 entries = listOf(
                     BindGroupEntry(
-                        binding = 0,
+                        binding = 0u,
                         resource = BufferBinding(
                             buffer = gpuUniforms
                         )

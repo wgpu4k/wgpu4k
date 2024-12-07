@@ -55,14 +55,14 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 	lateinit var verticesBuffer: Buffer
 
 	val modelMatrix = Matrix4.scale(1000, 1000, 1000)
-	val depthLayer = 6
+	val depthLayer = 6u
 
 	override suspend fun initialize() = with(autoClosableContext) {
 
 		// Create a vertex buffer from the cube data.
 		verticesBuffer = device.createBuffer(
 			BufferDescriptor(
-				size = (cubeVertexArray.size * Float.SIZE_BYTES).toLong(),
+				size = (cubeVertexArray.size * Float.SIZE_BYTES).toULong(),
 				usage = setOf(BufferUsage.vertex),
 				mappedAtCreation = true
 			)
@@ -85,12 +85,12 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 							arrayStride = cubeVertexSize,
 							attributes = listOf(
 								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
-									shaderLocation = 0,
+									shaderLocation = 0u,
 									offset = cubePositionOffset,
 									format = VertexFormat.float32x4
 								),
 								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
-									shaderLocation = 1,
+									shaderLocation = 1u,
 									offset = cubeUVOffset,
 									format = VertexFormat.float32x2
 								)
@@ -152,12 +152,12 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 		imageBitmaps.forEachIndexed { index, imageBitmap ->
 			device.queue.copyExternalImageToTexture(
 				ImageCopyExternalImage(source = imageBitmap),
-				ImageCopyTextureTagged(texture = cubemapTexture, origin = Origin3D(0, 0, index)),
+				ImageCopyTextureTagged(texture = cubemapTexture, origin = Origin3D(0u, 0u, index.toUInt())),
 				imageBitmap.width to imageBitmap.height
 			)
 		}
 
-		val uniformBufferSize = 4L * 16L // 4x4 matrix
+		val uniformBufferSize = 4uL * 16uL // 4x4 matrix
 		uniformBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = uniformBufferSize,
@@ -175,24 +175,24 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 
 		uniformBindGroup = device.createBindGroup(
 			BindGroupDescriptor(
-				layout = renderPipeline.getBindGroupLayout(0),
+				layout = renderPipeline.getBindGroupLayout(0u),
 				entries = listOf(
 					BindGroupDescriptor.BindGroupEntry(
-						binding = 0,
+						binding = 0u,
 						resource = BindGroupDescriptor.BufferBinding(
 							buffer = uniformBuffer,
-							offset = 0,
+							offset = 0u,
 							size = uniformBufferSize
 						)
 					),
 					BindGroupDescriptor.BindGroupEntry(
-						binding = 1,
+						binding = 1u,
 						resource = BindGroupDescriptor.SamplerBinding(
 							sampler = sampler
 						)
 					),
 					BindGroupDescriptor.BindGroupEntry(
-						binding = 2,
+						binding = 2u,
 						resource = BindGroupDescriptor.TextureViewBinding(
 							view = cubemapTexture.createView(
 								TextureViewDescriptor(
@@ -224,7 +224,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 		)
 
 
-		val aspect = renderingContext.width / renderingContext.height.toDouble()
+		val aspect = renderingContext.width.toDouble() / renderingContext.height.toDouble()
 		val fox = Angle.fromRadians((2 * PI) / 5)
 		projectionMatrix = Matrix4.perspective(fox, aspect, 1.0, 3000.0)
 
@@ -239,10 +239,10 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 		)
 		device.queue.writeBuffer(
 			uniformBuffer,
-			0,
+			0u,
 			transformationMatrix,
-			0,
-			transformationMatrix.size.toLong()
+			0u,
+			transformationMatrix.size.toULong()
 		)
 
 		renderPassDescriptor = renderPassDescriptor.copy(
@@ -260,8 +260,8 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 
 		encoder.beginRenderPass(renderPassDescriptor) {
 			setPipeline(renderPipeline)
-			setBindGroup(0, uniformBindGroup)
-			setVertexBuffer(0, verticesBuffer)
+			setBindGroup(0u, uniformBindGroup)
+			setVertexBuffer(0u, verticesBuffer)
 			draw(cubeVertexCount)
 			end()
 		}

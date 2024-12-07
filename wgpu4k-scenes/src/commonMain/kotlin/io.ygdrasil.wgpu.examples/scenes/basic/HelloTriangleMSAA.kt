@@ -23,7 +23,7 @@ class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
     lateinit var renderPipeline: RenderPipeline
     lateinit var textureView: TextureView
-    val  sampleCount = 4
+    val sampleCount = 4u
 
     override suspend fun initialize() = with(autoClosableContext) {
         renderPipeline = device.createRenderPipeline(
@@ -87,7 +87,7 @@ class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
             )
         ) {
             setPipeline(renderPipeline)
-            draw(3)
+            draw(3u)
             end()
         }
 

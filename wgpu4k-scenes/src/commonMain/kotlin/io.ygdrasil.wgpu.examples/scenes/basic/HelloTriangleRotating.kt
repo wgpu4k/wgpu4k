@@ -52,7 +52,7 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
             )
         ).bind()
 
-        val uniformBufferSize = 4L * 16L; // 4x4 matrix
+        val uniformBufferSize = 4uL * 16uL // 4x4 matrix
         uniformBuffer = device.createBuffer(
             BufferDescriptor(
                 size = uniformBufferSize,
@@ -62,10 +62,10 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
 
         uniformBindGroup = device.createBindGroup(
             BindGroupDescriptor(
-                layout = renderPipeline.getBindGroupLayout(0).bind(),
+                layout = renderPipeline.getBindGroupLayout(0u).bind(),
                 entries = listOf(
                     BindGroupDescriptor.BindGroupEntry(
-                        binding = 0,
+                        binding = 0u,
                         resource = BindGroupDescriptor.BufferBinding(
                             buffer = uniformBuffer
                         )
@@ -83,10 +83,10 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
 
         device.queue.writeBuffer(
             uniformBuffer,
-            0,
+            0u,
             transformationMatrix,
-            0,
-            transformationMatrix.size.toLong()
+            0u,
+            transformationMatrix.size.toULong()
         )
 
         val encoder = device.createCommandEncoder()
@@ -108,8 +108,8 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
             )
         ) {
             setPipeline(renderPipeline)
-            setBindGroup(0, uniformBindGroup)
-            draw(3)
+            setBindGroup(0u, uniformBindGroup)
+            draw(3u)
             end()
         }
 

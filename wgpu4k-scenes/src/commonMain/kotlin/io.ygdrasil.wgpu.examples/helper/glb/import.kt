@@ -39,7 +39,7 @@ suspend fun uploadGLBModel(
 
         val gpuImg = device.createTexture(
             TextureDescriptor(
-                size = Size3D(width = bitmap.width, height = bitmap.height, depthOrArrayLayers = 1u),
+                size = Size3D(width = bitmap.width.toUInt(), height = bitmap.height.toUInt(), depthOrArrayLayers = 1u),
                 format = textureFormat,
                 usage = setOf(TextureUsage.textureBinding, TextureUsage.copyDst, TextureUsage.renderAttachment)
             )
@@ -50,7 +50,7 @@ suspend fun uploadGLBModel(
         device.queue.copyExternalImageToTexture(
             src,
             dst,
-            bitmap.width to bitmap.height
+            bitmap.width.toUInt() to bitmap.height.toUInt()
         )
 
         gpuImg
