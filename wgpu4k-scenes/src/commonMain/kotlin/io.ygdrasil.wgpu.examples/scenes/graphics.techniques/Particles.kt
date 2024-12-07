@@ -75,7 +75,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
 
         particlesBuffer = device.createBuffer(
             BufferDescriptor(
-                size = (numParticles * particleInstanceByteSize).toLong(),
+                size = (numParticles * particleInstanceByteSize).toULong(),
                 usage = setOf(BufferUsage.vertex, BufferUsage.storage),
             )
         ).bind()
@@ -93,32 +93,32 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                         RenderPipelineDescriptor.VertexState.VertexBufferLayout
                             (
                             // instanced particles buffer
-                            arrayStride = particleInstanceByteSize.toLong(),
+                            arrayStride = particleInstanceByteSize.toULong(),
                             stepMode = VertexStepMode.instance,
                             attributes = listOf(
                                 RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
                                     // position
-                                    shaderLocation = 0,
-                                    offset = particlePositionOffset.toLong(),
+                                    shaderLocation = 0u,
+                                    offset = particlePositionOffset.toULong(),
                                     format = VertexFormat.float32x3,
                                 ),
                                 RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
                                     // color
-                                    shaderLocation = 1,
-                                    offset = particleColorOffset.toLong(),
+                                    shaderLocation = 1u,
+                                    offset = particleColorOffset.toULong(),
                                     format = VertexFormat.float32x4,
                                 ),
                             ),
                         ),
                         RenderPipelineDescriptor.VertexState.VertexBufferLayout(
                             // quad vertex buffer
-                            arrayStride = 2 * 4, // vec2f
+                            arrayStride = 2u * 4u, // vec2f
                             stepMode = VertexStepMode.vertex,
                             attributes = listOf(
                                 RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
                                     // vertex positions
-                                    shaderLocation = 2,
-                                    offset = 0,
+                                    shaderLocation = 2u,
+                                    offset = 0u,
                                     format = VertexFormat.float32x2,
                                 ),
                             ),
@@ -175,20 +175,20 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                 4 + // padding
                 3 * 4 + // up : vec3f
                 4 + // padding
-                0;
+                0
         uniformBuffer = device.createBuffer(
             BufferDescriptor(
-                size = uniformBufferSize.toLong(),
+                size = uniformBufferSize.toULong(),
                 usage = setOf(BufferUsage.uniform, BufferUsage.copydst),
             )
-        ).bind();
+        ).bind()
 
         uniformBindGroup = device.createBindGroup(
             BindGroupDescriptor(
-                layout = renderPipeline.getBindGroupLayout(0),
+                layout = renderPipeline.getBindGroupLayout(0u),
                 entries = listOf(
                     BindGroupDescriptor.BindGroupEntry(
-                        binding = 0,
+                        binding = 0u,
                         resource = BindGroupDescriptor.BufferBinding(
                             buffer = uniformBuffer,
                         ),
@@ -220,7 +220,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         //////////////////////////////////////////////////////////////////////////////
         quadVertexBuffer = device.createBuffer(
             BufferDescriptor(
-                size = 6 * 2 * 4, // 6x vec2f
+                size = 6u * 2u * 4u, // 6x vec2f
                 usage = setOf(BufferUsage.vertex),
                 mappedAtCreation = true,
             )
@@ -235,9 +235,9 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         //////////////////////////////////////////////////////////////////////////////
         // Texture
         //////////////////////////////////////////////////////////////////////////////
-        var textureWidth = 1
-        var textureHeight = 1
-        var numMipLevels = 1
+        var textureWidth = 1u
+        var textureHeight = 1u
+        var numMipLevels = 1u
 
         val imageBitmap = webgpu4kotlin
 
@@ -246,8 +246,8 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
             textureWidth < imageBitmap.width ||
             textureHeight < imageBitmap.height
         ) {
-            textureWidth *= 2
-            textureHeight *= 2
+            textureWidth *= 2u
+            textureHeight *= 2u
             numMipLevels++
         }
         val texture = device.createTexture(
@@ -302,63 +302,63 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
 
         val probabilityMapUBOBuffer = device.createBuffer(
             BufferDescriptor(
-                size = probabilityMapUBOBufferSize.toLong(),
+                size = probabilityMapUBOBufferSize.toULong(),
                 usage = setOf(BufferUsage.uniform, BufferUsage.copydst),
             )
         )
         val buffer_a = device.createBuffer(
             BufferDescriptor(
-                size = textureWidth * textureHeight * 4L,
+                size = textureWidth * textureHeight * 4uL,
                 usage = setOf(BufferUsage.storage),
             )
         )
         val buffer_b = device.createBuffer(
             BufferDescriptor(
-                size = textureWidth * textureHeight * 4L,
+                size = textureWidth * textureHeight * 4uL,
                 usage = setOf(BufferUsage.storage),
             )
         )
         device.queue.writeBuffer(
             probabilityMapUBOBuffer,
-            0,
-            IntArray(1) { textureWidth }
+            0u,
+            IntArray(1) { textureWidth.toInt() }
         )
 
         val commandEncoder = device.createCommandEncoder()
-        (0 until numMipLevels).forEach { level ->
-            val levelWidth = textureWidth shr level
-            val levelHeight = textureHeight shr level
-            val pipeline = if (level == 0) probabilityMapImportLevelPipeline.getBindGroupLayout(0)
-            else probabilityMapExportLevelPipeline.getBindGroupLayout(0)
+        (0u until numMipLevels).forEach { level ->
+            val levelWidth = textureWidth shr level.toInt()
+            val levelHeight = textureHeight shr level.toInt()
+            val pipeline = if (level == 0u) probabilityMapImportLevelPipeline.getBindGroupLayout(0u)
+            else probabilityMapExportLevelPipeline.getBindGroupLayout(0u)
             val probabilityMapBindGroup = device.createBindGroup(
                 BindGroupDescriptor(
                     layout = pipeline,
                     entries = listOf(
                         BindGroupDescriptor.BindGroupEntry(
                             // ubo
-                            binding = 0,
+                            binding = 0u,
                             resource = BindGroupDescriptor.BufferBinding(buffer = probabilityMapUBOBuffer),
                         ),
                         BindGroupDescriptor.BindGroupEntry(
                             // buf_in
-                            binding = 1,
-                            resource = BindGroupDescriptor.BufferBinding(if (level and 1 != 0) buffer_a else buffer_b)
+                            binding = 1u,
+                            resource = BindGroupDescriptor.BufferBinding(if (level and 1u != 0u) buffer_a else buffer_b)
                         ),
                         BindGroupDescriptor.BindGroupEntry(
                             // buf_out
-                            binding = 2,
-                            resource = BindGroupDescriptor.BufferBinding(if (level and 1 != 0) buffer_b else buffer_a)
+                            binding = 2u,
+                            resource = BindGroupDescriptor.BufferBinding(if (level and 1u != 0u) buffer_b else buffer_a)
                         ),
                         BindGroupDescriptor.BindGroupEntry(
                             // tex_in / tex_out
-                            binding = 3,
+                            binding = 3u,
                             resource = BindGroupDescriptor.TextureViewBinding(
                                 view = texture.createView(
                                     TextureViewDescriptor(
                                         format = TextureFormat.rgba8unorm,
                                         dimension = TextureViewDimension._2d,
                                         baseMipLevel = level,
-                                        mipLevelCount = 1,
+                                        mipLevelCount = 1u,
                                     )
                                 ).bind()
                             ),
@@ -368,21 +368,21 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
             )
 
 
-            if (level == 0) {
+            if (level == 0u) {
                 val passEncoder = commandEncoder.beginComputePass()
                 passEncoder.setPipeline(probabilityMapImportLevelPipeline)
-                passEncoder.setBindGroup(0, probabilityMapBindGroup)
-                passEncoder.dispatchWorkgroups(ceil(levelWidth / 64.0).toInt(), levelHeight)
+                passEncoder.setBindGroup(0u, probabilityMapBindGroup)
+                passEncoder.dispatchWorkgroups(ceil(levelWidth.toDouble() / 64.0).toUInt(), levelHeight)
                 passEncoder.end()
             } else {
                 val passEncoder = commandEncoder.beginComputePass()
-                passEncoder.setPipeline(probabilityMapExportLevelPipeline);
-                passEncoder.setBindGroup(0, probabilityMapBindGroup);
-                passEncoder.dispatchWorkgroups(ceil(levelWidth / 64.0).toInt(), levelHeight)
+                passEncoder.setPipeline(probabilityMapExportLevelPipeline)
+                passEncoder.setBindGroup(0u, probabilityMapBindGroup)
+                passEncoder.dispatchWorkgroups(ceil(levelWidth.toDouble() / 64.0).toUInt(), levelHeight)
                 passEncoder.end()
             }
         }
-        device.queue.submit(listOf(commandEncoder.finish()));
+        device.queue.submit(listOf(commandEncoder.finish()))
         //////////////////////////////////////////////////////////////////////////////
         // Simulation compute pipeline
         //////////////////////////////////////////////////////////////////////////////
@@ -393,7 +393,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                 0
         simulationUBOBuffer = device.createBuffer(
             BufferDescriptor(
-                size = simulationUBOBufferSize.toLong(),
+                size = simulationUBOBufferSize.toULong(),
                 usage = setOf(BufferUsage.uniform, BufferUsage.copydst),
             )
         )
@@ -413,31 +413,31 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
 
         computeBindGroup = device.createBindGroup(
             BindGroupDescriptor(
-                layout = computePipeline.getBindGroupLayout(0),
+                layout = computePipeline.getBindGroupLayout(0u),
                 entries = listOf(
                     BindGroupDescriptor.BindGroupEntry(
-                        binding = 0,
+                        binding = 0u,
                         resource = BindGroupDescriptor.BufferBinding(
                             buffer = simulationUBOBuffer,
                         ),
                     ),
                     BindGroupDescriptor.BindGroupEntry(
-                        binding = 1,
+                        binding = 1u,
                         resource = BindGroupDescriptor.BufferBinding(
                             buffer = particlesBuffer,
-                            offset = 0,
-                            size = (numParticles * particleInstanceByteSize).toLong(),
+                            offset = 0u,
+                            size = (numParticles * particleInstanceByteSize).toULong(),
                         ),
                     ),
                     BindGroupDescriptor.BindGroupEntry(
-                        binding = 2,
+                        binding = 2u,
                         resource = BindGroupDescriptor.TextureViewBinding(texture.createView()),
                     ),
                 ),
             )
         )
 
-        val aspect = renderingContext.width / renderingContext.height.toDouble()
+        val aspect = renderingContext.width.toDouble() / renderingContext.height.toDouble()
         val fox = Angle.fromRadians((2 * PI) / 5)
         projectionMatrix = Matrix4.perspective(fox, aspect, 1.0, 100.0)
 
@@ -450,7 +450,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
 
         device.queue.writeBuffer(
             simulationUBOBuffer,
-            0,
+            0u,
             floatArrayOf(
                 if (simulate) deltaTime else 0.0f,
                 0.0f,
@@ -467,7 +467,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
 
         device.queue.writeBuffer(
             uniformBuffer,
-            0,
+            0u,
             floatArrayOf(
                 // modelViewProjectionMatrix
                 mvp[0], mvp[1], mvp[2], mvp[3],
@@ -499,17 +499,17 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
 
         commandEncoder.beginComputePass().apply {
             setPipeline(computePipeline)
-            setBindGroup(0, computeBindGroup)
-            dispatchWorkgroups(ceil(numParticles / 64.0).toInt())
+            setBindGroup(0u, computeBindGroup)
+            dispatchWorkgroups(ceil(numParticles / 64.0).toUInt())
             end()
         }
 
         commandEncoder.beginRenderPass(renderPassDescriptor).apply {
             setPipeline(renderPipeline)
-            setBindGroup(0, uniformBindGroup)
-            setVertexBuffer(0, particlesBuffer)
-            setVertexBuffer(1, quadVertexBuffer)
-            draw(6, numParticles, 0, 0)
+            setBindGroup(0u, uniformBindGroup)
+            setVertexBuffer(0u, particlesBuffer)
+            setVertexBuffer(1u, quadVertexBuffer)
+            draw(6u, numParticles.toUInt(), 0u, 0u)
             end()
         }
 

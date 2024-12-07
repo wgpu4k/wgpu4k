@@ -39,7 +39,7 @@ import kotlin.math.PI
 
 class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
-	val offset = 256L; // uniformBindGroup offset must be 256-byte aligned
+	val offset = 256uL // uniformBindGroup offset must be 256-byte aligned
 
 	lateinit var renderPipeline: RenderPipeline
 	lateinit var projectionMatrix1: Matrix4
@@ -55,7 +55,7 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		// Create a vertex buffer from the cube data.
 		verticesBuffer = device.createBuffer(
 			BufferDescriptor(
-				size = (cubeVertexArray.size * Float.SIZE_BYTES).toLong(),
+				size = (cubeVertexArray.size * Float.SIZE_BYTES).toULong(),
 				usage = setOf(BufferUsage.vertex),
 				mappedAtCreation = true
 			)
@@ -78,12 +78,12 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 							arrayStride = cubeVertexSize,
 							attributes = listOf(
 								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
-									shaderLocation = 0,
+									shaderLocation = 0u,
 									offset = cubePositionOffset,
 									format = VertexFormat.float32x4
 								),
 								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
-									shaderLocation = 1,
+									shaderLocation = 1u,
 									offset = cubeUVOffset,
 									format = VertexFormat.float32x2
 								)
@@ -123,8 +123,8 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			)
 		).bind()
 
-		val matrixSize = 4L * 16L; // 4x4 matrix
-		val uniformBufferSize = offset + matrixSize;
+		val matrixSize = 4uL * 16uL // 4x4 matrix
+		val uniformBufferSize = offset + matrixSize
 		uniformBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = uniformBufferSize,
@@ -134,13 +134,13 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 		uniformBindGroup1 = device.createBindGroup(
 			BindGroupDescriptor(
-				layout = renderPipeline.getBindGroupLayout(0),
+				layout = renderPipeline.getBindGroupLayout(0u),
 				entries = listOf(
 					BindGroupDescriptor.BindGroupEntry(
-						binding = 0,
+						binding = 0u,
 						resource = BindGroupDescriptor.BufferBinding(
 							buffer = uniformBuffer,
-							offset = 0,
+							offset = 0u,
 							size = matrixSize
 						)
 					)
@@ -150,10 +150,10 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 		uniformBindGroup2 = device.createBindGroup(
 			BindGroupDescriptor(
-				layout = renderPipeline.getBindGroupLayout(0),
+				layout = renderPipeline.getBindGroupLayout(0u),
 				entries = listOf(
 					BindGroupDescriptor.BindGroupEntry(
-						binding = 0,
+						binding = 0u,
 						resource = BindGroupDescriptor.BufferBinding(
 							buffer = uniformBuffer,
 							offset = offset,
@@ -182,7 +182,7 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		)
 
 
-		val aspect = renderingContext.width / renderingContext.height.toDouble()
+		val aspect = renderingContext.width.toDouble() / renderingContext.height.toDouble()
 		val fox = Angle.fromRadians((2 * PI) / 5)
 		projectionMatrix1 = Matrix4.perspective(fox, aspect, 1.0, 100.0)
 			.translated(-2.0, 0.0, -7.0)
@@ -202,17 +202,17 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		)
 		device.queue.writeBuffer(
 			uniformBuffer,
-			0,
+			0u,
 			transformationMatrix1,
-			0,
-			transformationMatrix1.size.toLong()
+			0u,
+			transformationMatrix1.size.toULong()
 		)
 		device.queue.writeBuffer(
 			uniformBuffer,
 			offset,
 			transformationMatrix2,
-			0,
-			transformationMatrix2.size.toLong()
+			0u,
+			transformationMatrix2.size.toULong()
 		)
 
 		renderPassDescriptor = renderPassDescriptor.copy(
@@ -230,16 +230,16 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 		encoder.beginRenderPass(renderPassDescriptor) {
 			setPipeline(renderPipeline)
-			setBindGroup(0, uniformBindGroup1)
-			setVertexBuffer(0, verticesBuffer)
+			setBindGroup(0u, uniformBindGroup1)
+			setVertexBuffer(0u, verticesBuffer)
 
 			// Bind the bind group (with the transformation matrix) for
 			// each cube, and draw.
-			setBindGroup(0, uniformBindGroup1);
-			draw(cubeVertexCount);
+			setBindGroup(0u, uniformBindGroup1)
+			draw(cubeVertexCount)
 
-			setBindGroup(0, uniformBindGroup2);
-			draw(cubeVertexCount);
+			setBindGroup(0u, uniformBindGroup2)
+			draw(cubeVertexCount)
 
 			end()
 		}
