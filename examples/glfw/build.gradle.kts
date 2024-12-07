@@ -12,6 +12,7 @@ val windowsLib = getLibraryProject()
 
 dependencies {
 	implementation(projects.wgpu4kScenes)
+	implementation(libs.wgpu4k.native)
 }
 
 application {

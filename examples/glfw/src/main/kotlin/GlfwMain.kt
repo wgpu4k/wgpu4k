@@ -1,23 +1,36 @@
 package io.ygdrasil.wgpu.examples
 
+import ffi.NativeAddress
+import ffi.globalMemory
 import io.ygdrasil.wgpu.GLFWContext
 import io.ygdrasil.wgpu.WGPU.Companion.loadLibrary
 import io.ygdrasil.wgpu.glfwContextRenderer
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPULogCallback
-import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
 import kotlinx.coroutines.runBlocking
-import org.lwjgl.glfw.GLFW.*
-import java.lang.foreign.Arena
-import java.lang.foreign.MemorySegment
+import org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN
+import org.lwjgl.glfw.GLFW.GLFW_KEY_PAGE_DOWN
+import org.lwjgl.glfw.GLFW.GLFW_KEY_PAGE_UP
+import org.lwjgl.glfw.GLFW.GLFW_KEY_UP
+import org.lwjgl.glfw.GLFW.GLFW_PRESS
+import org.lwjgl.glfw.GLFW.glfwPollEvents
+import org.lwjgl.glfw.GLFW.glfwSetKeyCallback
+import org.lwjgl.glfw.GLFW.glfwShowWindow
+import org.lwjgl.glfw.GLFW.glfwWindowShouldClose
+import webgpu.WGPULogCallback
+import webgpu.WGPULogLevel
+import webgpu.WGPUStringView
+import webgpu.wgpuSetLogCallback
+import webgpu.wgpuSetLogLevel
 
-val callback = WGPULogCallback.allocate({ level, message, data ->
-    println("LOG {$level} ${message.getString(0)}")
-}, Arena.global())
+val callback = WGPULogCallback.allocate(globalMemory, object : WGPULogCallback {
+    override fun invoke(level: WGPULogLevel, message: WGPUStringView?, userdata: NativeAddress?) {
+        println("LOG {$level} ${message?.data?.toKString(message.length)}")
+    }
+})
 
 fun main() = runBlocking {
     loadLibrary()
-    wgpu_h.wgpuSetLogLevel(1)
-    wgpu_h.wgpuSetLogCallback(callback, MemorySegment.NULL)
+    wgpuSetLogLevel(1u)
+    wgpuSetLogCallback(callback, globalMemory.bufferOfAddress(callback.handler).handler)
 
     val glfwContext = glfwContextRenderer(width = 640, height = 480, title = "GLFW+WebGPU")
 
