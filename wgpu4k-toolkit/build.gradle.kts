@@ -108,7 +108,6 @@ kotlin {
         }
 
 
-
         commonTest {
             dependencies {
                 implementation(libs.bundles.kotest)
@@ -120,6 +119,7 @@ kotlin {
                 api(libs.rococoa)
                 api(libs.jnaPlatform)
                 api(libs.jna)
+                implementation(libs.wgpu4k.native)
 
                 api("org.lwjgl:lwjgl:$lwjglVersion")
                 api("org.lwjgl:lwjgl-glfw:$lwjglVersion")

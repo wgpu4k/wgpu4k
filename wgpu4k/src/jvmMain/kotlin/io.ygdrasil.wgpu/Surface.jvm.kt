@@ -17,17 +17,18 @@ import webgpu.wgpuSurfacePresent
 import webgpu.wgpuSurfaceRelease
 
 actual class Surface(
-	internal val handler: WGPUSurface,
-	private val sizeProvider: () -> Pair<UInt, UInt>
+	internal val handler: WGPUSurface
 ) : AutoCloseable {
 
 	private var _supportedFormats: Set<TextureFormat> = setOf()
 	private var _supportedAlphaMode: Set<CompositeAlphaMode> = setOf()
+	private var _width: UInt? = null
+	private var _height: UInt? = null
 
 	actual val width: UInt
-		get() = sizeProvider().first
+		get() = _width ?: error("width not yet initialized, call configure() first")
 	actual val height: UInt
-		get() = sizeProvider().second
+		get() = _height ?: error("height not yet initialized, call configure() first")
 
 	actual val preferredCanvasFormat: TextureFormat? = null
 	actual val supportedFormats: Set<TextureFormat>
@@ -103,7 +104,9 @@ actual class Surface(
 		.filterNotNull()
 		.toSet()
 
-	actual fun configure(surfaceConfiguration: SurfaceConfiguration) = memoryScope { scope ->
+	actual fun configure(surfaceConfiguration: SurfaceConfiguration, width: UInt, height: UInt) = memoryScope { scope ->
+		_width = width
+		_height = height
 		wgpuSurfaceConfigure(handler, scope.map(surfaceConfiguration))
 	}
 

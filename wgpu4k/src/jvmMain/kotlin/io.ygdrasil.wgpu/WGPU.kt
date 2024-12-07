@@ -12,7 +12,6 @@ import webgpu.WGPURequestAdapterCallbackInfo
 import webgpu.WGPURequestAdapterOptions
 import webgpu.WGPURequestAdapterStatus
 import webgpu.WGPUStringView
-import webgpu.WGPUSurface
 import webgpu.WGPUSurfaceDescriptor
 import webgpu.WGPUSurfaceSourceMetalLayer
 import webgpu.WGPUSurfaceSourceWindowsHWND
@@ -61,7 +60,7 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
         fetchedAdapter?.let { Adapter(it) }
     }
 
-    private fun getSurfaceFromMetalLayer(instance: WGPUInstance, metalLayer: NativeAddress): WGPUSurface? = memoryScope { scope ->
+    fun getSurfaceFromMetalLayer(metalLayer: NativeAddress): Surface? = memoryScope { scope ->
 
         val surfaceDescriptor = WGPUSurfaceDescriptor.allocate(scope).apply {
             nextInChain = WGPUSurfaceSourceMetalLayer.allocate(scope).apply {
@@ -70,10 +69,11 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
             }.handler
         }
 
-        return wgpuInstanceCreateSurface(instance, surfaceDescriptor)
+        return wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+            ?.let(::Surface)
     }
 
-    fun getSurfaceFromX11Window(instance: WGPUInstance, display: NativeAddress, window: Long): WGPUSurface? = memoryScope { scope ->
+    fun getSurfaceFromX11Window(display: NativeAddress, window: Long): Surface? = memoryScope { scope ->
 
         val surfaceDescriptor = WGPUSurfaceDescriptor.allocate(scope).apply {
             nextInChain = WGPUSurfaceSourceXlibWindow.allocate(scope).apply {
@@ -83,10 +83,11 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
             }.handler
         }
 
-        return wgpuInstanceCreateSurface(instance, surfaceDescriptor)
+        return wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+            ?.let(::Surface)
     }
 
-    fun getSurfaceFromWindows(instance: WGPUInstance, hinstance: NativeAddress, hwnd: NativeAddress): WGPUSurface? = memoryScope { scope ->
+    fun getSurfaceFromWindows(hinstance: NativeAddress, hwnd: NativeAddress): Surface? = memoryScope { scope ->
 
         val surfaceDescriptor = WGPUSurfaceDescriptor.allocate(scope).apply {
             nextInChain = WGPUSurfaceSourceWindowsHWND.allocate(scope).apply {
@@ -96,7 +97,8 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
             }.handler
         }
 
-        return wgpuInstanceCreateSurface(instance, surfaceDescriptor)
+        return wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+            ?.let(::Surface)
     }
 
     companion object {

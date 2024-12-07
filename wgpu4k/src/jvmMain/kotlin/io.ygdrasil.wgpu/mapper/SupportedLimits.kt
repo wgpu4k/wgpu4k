@@ -26,7 +26,6 @@ internal fun map(input: WGPUSupportedLimits): SupportedLimits = SupportedLimits(
     maxBufferSize = input.limits.maxBufferSize,
     maxVertexAttributes = input.limits.maxVertexAttributes,
     maxVertexBufferArrayStride = input.limits.maxVertexBufferArrayStride,
-    maxInterStageShaderComponents = input.limits.maxInterStageShaderComponents,
     maxInterStageShaderVariables = input.limits.maxInterStageShaderVariables,
     maxColorAttachments = input.limits.maxColorAttachments,
     maxColorAttachmentBytesPerSample = input.limits.maxColorAttachmentBytesPerSample,

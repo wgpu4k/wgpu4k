@@ -24,7 +24,7 @@ expect class Surface : AutoCloseable {
      */
     fun present()
 
-    fun configure(surfaceConfiguration: SurfaceConfiguration)
+    fun configure(surfaceConfiguration: SurfaceConfiguration, width: UInt, height: UInt)
 
     override fun close()
 }

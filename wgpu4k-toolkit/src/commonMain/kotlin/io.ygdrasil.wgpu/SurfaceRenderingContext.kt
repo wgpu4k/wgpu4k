@@ -4,9 +4,9 @@ class SurfaceRenderingContext(
     private val surface: Surface
 ) : RenderingContext {
 
-    override val width: Int
+    override val width: UInt
         get() = surface.width
-    override val height: Int
+    override val height: UInt
         get() = surface.height
     override val textureFormat: TextureFormat
         get() = surface.preferredCanvasFormat
