@@ -1,20 +1,12 @@
 package io.ygdrasil.wgpu.examples
 
+import ffi.LibraryLoader
 import ffi.NativeAddress
 import ffi.globalMemory
 import io.ygdrasil.wgpu.GLFWContext
-import io.ygdrasil.wgpu.WGPU.Companion.loadLibrary
 import io.ygdrasil.wgpu.glfwContextRenderer
 import kotlinx.coroutines.runBlocking
-import org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN
-import org.lwjgl.glfw.GLFW.GLFW_KEY_PAGE_DOWN
-import org.lwjgl.glfw.GLFW.GLFW_KEY_PAGE_UP
-import org.lwjgl.glfw.GLFW.GLFW_KEY_UP
-import org.lwjgl.glfw.GLFW.GLFW_PRESS
-import org.lwjgl.glfw.GLFW.glfwPollEvents
-import org.lwjgl.glfw.GLFW.glfwSetKeyCallback
-import org.lwjgl.glfw.GLFW.glfwShowWindow
-import org.lwjgl.glfw.GLFW.glfwWindowShouldClose
+import org.lwjgl.glfw.GLFW.*
 import webgpu.WGPULogCallback
 import webgpu.WGPULogLevel
 import webgpu.WGPUStringView
@@ -28,7 +20,7 @@ val callback = WGPULogCallback.allocate(globalMemory, object : WGPULogCallback {
 })
 
 fun main() = runBlocking {
-    loadLibrary()
+    LibraryLoader.load()
     wgpuSetLogLevel(1u)
     wgpuSetLogCallback(callback, globalMemory.bufferOfAddress(callback.handler).handler)
 

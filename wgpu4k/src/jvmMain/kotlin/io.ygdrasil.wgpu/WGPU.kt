@@ -3,7 +3,6 @@ package io.ygdrasil.wgpu
 
 import ffi.NativeAddress
 import ffi.memoryScope
-import io.ygdrasil.wgpu.internal.jvm.exportAndLoadLibrary
 import io.ygdrasil.wgpu.mapper.map
 import webgpu.WGPUAdapter
 import webgpu.WGPUInstance
@@ -102,14 +101,6 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
     }
 
     companion object {
-
-        private var libraryLoaded = false
-
-        fun loadLibrary() {
-            if (libraryLoaded) return
-            libraryLoaded = true
-            exportAndLoadLibrary()
-        }
 
         fun createInstance(backend: WGPUInstanceBackend? = null): WGPU? = memoryScope { scope ->
             backend?.let { scope.map(backend) }
