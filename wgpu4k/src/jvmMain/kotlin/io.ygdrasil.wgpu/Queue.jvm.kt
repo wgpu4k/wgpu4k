@@ -9,7 +9,7 @@ import io.ygdrasil.wgpu.mapper.map
 import webgpu.WGPUCommandBuffer
 import webgpu.WGPUExtent3D
 import webgpu.WGPUQueue
-import webgpu.WGPUTextureDataLayout
+import webgpu.WGPUTexelCopyBufferLayout
 import webgpu.wgpuQueueSubmit
 import webgpu.wgpuQueueWriteBuffer
 import webgpu.wgpuQueueWriteTexture
@@ -247,7 +247,7 @@ actual class Queue(internal val handler: WGPUQueue) {
             scope.map(destination),
             image.data,
             (image.width * bytePerPixel * image.height).toULong(),
-            WGPUTextureDataLayout.allocate(scope).also { dataLayout ->
+            WGPUTexelCopyBufferLayout.allocate(scope).also { dataLayout ->
                 dataLayout.offset = 0u
                 dataLayout.bytesPerRow = image.width * bytePerPixel
                 dataLayout.rowsPerImage = image.height

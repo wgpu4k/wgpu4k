@@ -13,13 +13,13 @@ pluginManagement {
 
 dependencyResolutionManagement {
 	repositories {
+		//wgpu4k snapshot & preview repository
+		maven("https://gitlab.com/api/v4/projects/25805863/packages/maven")
 		google()
 		mavenCentral()
 		//mavenLocal()
 		// Snapshot central repository
 		maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
-		//wgpu4k snapshot & preview repository
-		maven("https://gitlab.com/api/v4/projects/25805863/packages/maven")
 
 	}
 }

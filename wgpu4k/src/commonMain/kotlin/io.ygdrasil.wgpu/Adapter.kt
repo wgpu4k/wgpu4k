@@ -8,7 +8,7 @@ expect class Adapter : AutoCloseable {
 
     val features: Set<Feature>
 
-    val limits: SupportedLimits
+    val limits: Limits
 
     suspend fun requestDevice(descriptor: DeviceDescriptor = DeviceDescriptor()): Device?
 

@@ -5,11 +5,11 @@ import ffi.memoryScope
 import io.ygdrasil.wgpu.mapper.map
 import webgpu.WGPUAdapter
 import webgpu.WGPUDevice
+import webgpu.WGPULimits
 import webgpu.WGPURequestDeviceCallback
 import webgpu.WGPURequestDeviceCallbackInfo
 import webgpu.WGPURequestDeviceStatus
 import webgpu.WGPUStringView
-import webgpu.WGPUSupportedLimits
 import webgpu.wgpuAdapterGetLimits
 import webgpu.wgpuAdapterHasFeature
 import webgpu.wgpuAdapterRelease
@@ -25,10 +25,11 @@ actual class Adapter(internal val handler: WGPUAdapter) : AutoCloseable {
 			.toSet()
 	}
 
-	actual val limits: SupportedLimits = memoryScope { scope ->
-		val supportedLimits = WGPUSupportedLimits.allocate(scope)
+	actual val limits: Limits = memoryScope { scope ->
+		val supportedLimits = WGPULimits.allocate(scope)
 		wgpuAdapterGetLimits(handler, supportedLimits)
-		map(supportedLimits)
+	 	val test: Limits = map(supportedLimits)
+		test
 	}
 
 	actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? = memoryScope { scope ->
