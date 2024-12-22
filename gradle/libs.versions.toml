@@ -1,7 +1,7 @@
 [versions]
 kotest = "6.0.0.M1"
-jna = "5.14.0"
-kotlin = "2.0.20"
+jna = "5.15.0"
+kotlin = "2.1.0"
 kotlinx-serialization-json = "1.7.2"
 ktor = "2.3.12"
 playwright = "1.46.0"
@@ -13,6 +13,8 @@ rococoa = "0.0.1"
 wgpu4k-native = "0.0.1-SNAPSHOT"
 android-native-helper = "0.0.1"
 glfw-native = "0.0.1"
+download = "5.6.0"
+kaml = "0.66.0"
 
 [libraries]
 jetbrains-kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
@@ -24,7 +26,6 @@ coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotlin-multiplatform = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 android-library = { module = "com.android.library:com.android.library.gradle.plugin", version.ref = "agp" }
-jreleaser-plugin = { module = "org.jreleaser:org.jreleaser.gradle.plugin", version.ref = "jreleaser" }
 korlibs-image = { module = "com.soywiz:korlibs-image", version.ref = "korge" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
@@ -35,6 +36,15 @@ rococoa = { module = "io.ygdrasil:rococoa", version.ref = "rococoa" }
 wgpu4k-native = { module = "io.ygdrasil:wgpu4k-native", version.ref = "wgpu4k-native" }
 glfw-native = { module = "io.ygdrasil:glfw-native", version.ref = "glfw-native" }
 android-native-helper = { module = "io.ygdrasil:android-native-helper", version.ref = "android-native-helper" }
+
+# Generator & Release
+commons-io = { module = "commons-io:commons-io", version = "2.16.1" }
+gson = { module = "com.google.code.gson:gson", version = "2.11.0" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version = "4.12.0" }
+zip4j = { module = "net.lingala.zip4j:zip4j", version = "2.11.5" }
+download = { module = "de.undercouch.download:de.undercouch.download.gradle.plugin", version.ref = "download" }
+kaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
+jreleaser-plugin = { module = "org.jreleaser:org.jreleaser.gradle.plugin", version.ref = "jreleaser" }
 
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
