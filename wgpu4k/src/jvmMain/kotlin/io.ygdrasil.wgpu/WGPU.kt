@@ -10,6 +10,9 @@ import webgpu.WGPURequestAdapterCallback
 import webgpu.WGPURequestAdapterCallbackInfo
 import webgpu.WGPURequestAdapterOptions
 import webgpu.WGPURequestAdapterStatus
+import webgpu.WGPUSType_SurfaceSourceMetalLayer
+import webgpu.WGPUSType_SurfaceSourceWindowsHWND
+import webgpu.WGPUSType_SurfaceSourceXlibWindow
 import webgpu.WGPUStringView
 import webgpu.WGPUSurfaceDescriptor
 import webgpu.WGPUSurfaceSourceMetalLayer
@@ -63,7 +66,7 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
 
         val surfaceDescriptor = WGPUSurfaceDescriptor.allocate(scope).apply {
             nextInChain = WGPUSurfaceSourceMetalLayer.allocate(scope).apply {
-                chain.sType = 0x00000004u
+                chain.sType = WGPUSType_SurfaceSourceMetalLayer
                 layer = metalLayer
             }.handler
         }
@@ -76,7 +79,7 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
 
         val surfaceDescriptor = WGPUSurfaceDescriptor.allocate(scope).apply {
             nextInChain = WGPUSurfaceSourceXlibWindow.allocate(scope).apply {
-                chain.sType = 0x00000006u
+                chain.sType = WGPUSType_SurfaceSourceXlibWindow
                 this.display = display
                 this.window = window.toULong()
             }.handler
@@ -90,7 +93,7 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
 
         val surfaceDescriptor = WGPUSurfaceDescriptor.allocate(scope).apply {
             nextInChain = WGPUSurfaceSourceWindowsHWND.allocate(scope).apply {
-                chain.sType = 0x00000005u
+                chain.sType = WGPUSType_SurfaceSourceWindowsHWND
                 this.hwnd = hwnd
                 this.hinstance = hinstance
             }.handler

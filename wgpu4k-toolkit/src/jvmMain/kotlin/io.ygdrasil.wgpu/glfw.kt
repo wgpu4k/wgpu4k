@@ -8,15 +8,7 @@ import ffi.NativeAddress
 import io.ygdrasil.wgpu.WGPU.Companion.createInstance
 import io.ygdrasil.wgpu.internal.Os
 import io.ygdrasil.wgpu.internal.Platform
-import org.lwjgl.glfw.GLFW.GLFW_CLIENT_API
-import org.lwjgl.glfw.GLFW.GLFW_FALSE
-import org.lwjgl.glfw.GLFW.GLFW_NO_API
-import org.lwjgl.glfw.GLFW.GLFW_RESIZABLE
-import org.lwjgl.glfw.GLFW.GLFW_VISIBLE
-import org.lwjgl.glfw.GLFW.glfwCreateWindow
-import org.lwjgl.glfw.GLFW.glfwDestroyWindow
-import org.lwjgl.glfw.GLFW.glfwInit
-import org.lwjgl.glfw.GLFW.glfwWindowHint
+import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
 import org.lwjgl.glfw.GLFWNativeWin32.glfwGetWin32Window
 import org.lwjgl.glfw.GLFWNativeX11.glfwGetX11Display
@@ -37,6 +29,8 @@ suspend fun glfwContextRenderer(width: Int = 1, height: Int = 1, title: String =
 
     val wgpu = createInstance() ?: error("fail to wgpu instance")
     val surface = wgpu.getSurface(windowHandler)
+    surface._width = width.toUInt()
+    surface._height = height.toUInt()
 
     val adapter = wgpu.requestAdapter(surface)
         ?: error("fail to get adapter")

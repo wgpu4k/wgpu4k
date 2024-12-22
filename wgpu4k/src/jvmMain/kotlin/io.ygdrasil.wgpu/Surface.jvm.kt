@@ -22,13 +22,13 @@ actual class Surface(
 
 	private var _supportedFormats: Set<TextureFormat> = setOf()
 	private var _supportedAlphaMode: Set<CompositeAlphaMode> = setOf()
-	private var _width: UInt? = null
-	private var _height: UInt? = null
+	var _width: UInt? = null
+	var _height: UInt? = null
 
 	actual val width: UInt
-		get() = _width ?: error("width not yet initialized, call configure() first")
+		get() = _width ?: error("width not yet initialized")
 	actual val height: UInt
-		get() = _height ?: error("height not yet initialized, call configure() first")
+		get() = _height ?: error("height not yet initialized")
 
 	actual val preferredCanvasFormat: TextureFormat? = null
 	actual val supportedFormats: Set<TextureFormat>
@@ -105,8 +105,6 @@ actual class Surface(
 		.toSet()
 
 	actual fun configure(surfaceConfiguration: SurfaceConfiguration) = memoryScope { scope ->
-		_width = surfaceConfiguration.width
-		_height = surfaceConfiguration.height
 		wgpuSurfaceConfigure(handler, scope.map(surfaceConfiguration))
 	}
 
