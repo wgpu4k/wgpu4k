@@ -2,6 +2,7 @@ rootProject.name = "wgpu4k-root"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
+	includeBuild("generator")
 	repositories {
 		gradlePluginPortal()
 		google()
