@@ -49,7 +49,6 @@ kotlin {
         nodejs()
     }
 
-    // Apply the default hierarchy.
     applyDefaultHierarchyTemplate()
 
     sourceSets {
@@ -58,30 +57,36 @@ kotlin {
             languageSettings.optIn("kotlin.ExperimentalUnsignedTypes")
         }
 
-        commonMain.dependencies {
-            implementation(libs.coroutines)
+        commonMain {
+            dependencies {
+                implementation(libs.coroutines)
+            }
         }
 
         val commonNativeMain by creating {
             dependsOn(commonMain.get())
 
-            dependencies.implementation(libs.wgpu4k.native)
+            dependencies { implementation(libs.wgpu4k.native) }
         }
 
         jvmMain { dependsOn(commonNativeMain) }
         nativeMain { dependsOn(commonNativeMain) }
         androidMain {
             dependsOn(commonNativeMain)
-            dependencies.implementation(libs.android.native.helper)
+            dependencies { implementation(libs.android.native.helper) }
         }
 
-        commonTest.dependencies {
-            implementation(libs.bundles.kotest)
+        commonTest {
+            dependencies {
+                implementation(libs.bundles.kotest)
+            }
         }
 
-        jvmTest.dependencies {
-            implementation(libs.kotest.runner.junit5)
-            implementation(libs.kotlin.reflect)
+        jvmTest {
+            dependencies {
+                implementation(libs.kotest.runner.junit5)
+                implementation(libs.kotlin.reflect)
+            }
         }
 
     }

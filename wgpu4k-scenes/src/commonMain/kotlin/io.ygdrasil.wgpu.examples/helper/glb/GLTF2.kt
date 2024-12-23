@@ -524,11 +524,6 @@ data class GLTF2(
         val ncomponent get() = type.ncomponent
         val bytesPerEntry get() = componentTType.bytesSize * ncomponent
 
-        fun VarType.Companion.BOOL(count: Int) =
-            when (count) { 0 -> VarType.TVOID; 1 -> VarType.Bool1; 2 -> VarType.Bool2; 3 -> VarType.Bool3; 4 -> VarType.Bool4; else -> invalidOp; }
-        fun VarType.Companion.MAT(count: Int) =
-            when (count) { 0 -> VarType.TVOID; 1 -> VarType.Float1; 2 -> VarType.Mat2; 3 -> VarType.Mat3; 4 -> VarType.Mat4; else -> invalidOp; }
-
         fun VarType.Companion.gen(kind: VarKind, ncomponent: Int, type: AccessorType): VarType {
             return when (type) {
                 AccessorType.MAT2 -> MAT(2)
@@ -932,8 +927,8 @@ interface GLTF2Holder {
     val GLTF2.Scene.childrenNodes: List<GLTF2.Node> get() = this.childrenNodes(gltf) ?: emptyList()
 }
 
-fun GLTF2.Node.childrenNodes(gltf: GLTF2): List<GLTF2.Node>? = this.children.map { gltf.nodes[it] }
-fun GLTF2.Scene.childrenNodes(gltf: GLTF2): List<GLTF2.Node>? = this.nodes.map { gltf.nodes[it] }
+fun GLTF2.Node.childrenNodes(gltf: GLTF2): List<GLTF2.Node> = this.children.map { gltf.nodes[it] }
+fun GLTF2.Scene.childrenNodes(gltf: GLTF2): List<GLTF2.Node> = this.nodes.map { gltf.nodes[it] }
 fun GLTF2.Node.mesh(gltf: GLTF2): GLTF2.Mesh = gltf.meshes[this.mesh ?: error("cannot get mesh")]
 
 enum class GLTFRenderMode(val value: Int) {
