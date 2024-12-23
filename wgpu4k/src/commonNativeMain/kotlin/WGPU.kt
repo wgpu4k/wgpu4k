@@ -11,13 +11,19 @@ import webgpu.WGPURequestAdapterCallbackInfo
 import webgpu.WGPURequestAdapterOptions
 import webgpu.WGPURequestAdapterStatus
 import webgpu.WGPURequestAdapterStatus_Success
+import webgpu.WGPUSType_SurfaceSourceAndroidNativeWindow
 import webgpu.WGPUSType_SurfaceSourceMetalLayer
+import webgpu.WGPUSType_SurfaceSourceWaylandSurface
 import webgpu.WGPUSType_SurfaceSourceWindowsHWND
+import webgpu.WGPUSType_SurfaceSourceXCBWindow
 import webgpu.WGPUSType_SurfaceSourceXlibWindow
 import webgpu.WGPUStringView
 import webgpu.WGPUSurfaceDescriptor
+import webgpu.WGPUSurfaceSourceAndroidNativeWindow
 import webgpu.WGPUSurfaceSourceMetalLayer
+import webgpu.WGPUSurfaceSourceWaylandSurface
 import webgpu.WGPUSurfaceSourceWindowsHWND
+import webgpu.WGPUSurfaceSourceXCBWindow
 import webgpu.WGPUSurfaceSourceXlibWindow
 import webgpu.wgpuCreateInstance
 import webgpu.wgpuInstanceCreateSurface
@@ -83,6 +89,47 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
                 chain.sType = WGPUSType_SurfaceSourceXlibWindow
                 this.display = display
                 this.window = window.toULong()
+            }.handler
+        }
+
+        return wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+            ?.let(::Surface)
+    }
+
+    fun getSurfaceFromXCBWindow(connection: NativeAddress, window: UInt): Surface? = memoryScope { scope ->
+
+        val surfaceDescriptor = WGPUSurfaceDescriptor.allocate(scope).apply {
+            nextInChain = WGPUSurfaceSourceXCBWindow.allocate(scope).apply {
+                chain.sType = WGPUSType_SurfaceSourceXCBWindow
+                this.window = window
+                this.connection = connection
+            }.handler
+        }
+
+        return wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+            ?.let(::Surface)
+    }
+
+    fun getSurfaceFromAndroidWindow(window: NativeAddress): Surface? = memoryScope { scope ->
+
+        val surfaceDescriptor = WGPUSurfaceDescriptor.allocate(scope).apply {
+            nextInChain = WGPUSurfaceSourceAndroidNativeWindow.allocate(scope).apply {
+                chain.sType = WGPUSType_SurfaceSourceAndroidNativeWindow
+                this.window = window
+            }.handler
+        }
+
+        return wgpuInstanceCreateSurface(handler, surfaceDescriptor)
+            ?.let(::Surface)
+    }
+
+    fun getSurfaceFromWaylandWindow(display: NativeAddress, surface: NativeAddress): Surface? = memoryScope { scope ->
+
+        val surfaceDescriptor = WGPUSurfaceDescriptor.allocate(scope).apply {
+            nextInChain = WGPUSurfaceSourceWaylandSurface.allocate(scope).apply {
+                chain.sType = WGPUSType_SurfaceSourceWaylandSurface
+                this.display = display
+                this.surface = surface
             }.handler
         }
 
