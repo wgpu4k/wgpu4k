@@ -31,7 +31,8 @@ kotlin {
     macosX64()
     linuxArm64()
     linuxX64()
-    configureMingwX64(project)
+    mingwX64()
+    //configureMingwX64(project)
 
     if (isAndroidConfigured) androidTarget {
         compilerOptions {
@@ -48,17 +49,25 @@ kotlin {
         nodejs()
     }
 
+    // Apply the default hierarchy again. It'll create, for example, the iosMain source set:
+    applyDefaultHierarchyTemplate()
+
     sourceSets {
 
         all {
             languageSettings.optIn("kotlin.ExperimentalUnsignedTypes")
         }
 
-        jvmMain {
+        val commonNative by creating {
+            dependsOn(commonMain.get())
+
             dependencies {
                 implementation(libs.wgpu4k.native)
             }
         }
+
+        jvmMain { dependsOn(commonNative) }
+        nativeMain { dependsOn(commonNative) }
 
         commonMain {
             dependencies {
@@ -79,11 +88,6 @@ kotlin {
             }
         }
 
-        nativeMain {
-            dependencies {
-                implementation(libs.wgpu4k.native)
-            }
-        }
 
         androidMain {
             dependencies {
