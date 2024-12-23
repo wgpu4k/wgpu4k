@@ -10,6 +10,7 @@ import webgpu.WGPURequestAdapterCallback
 import webgpu.WGPURequestAdapterCallbackInfo
 import webgpu.WGPURequestAdapterOptions
 import webgpu.WGPURequestAdapterStatus
+import webgpu.WGPURequestAdapterStatus_Success
 import webgpu.WGPUSType_SurfaceSourceMetalLayer
 import webgpu.WGPUSType_SurfaceSourceWindowsHWND
 import webgpu.WGPUSType_SurfaceSourceXlibWindow
@@ -47,7 +48,7 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
                 userdata1: NativeAddress?,
                 userdata2: NativeAddress?
             ) {
-                if (status != 1u && adapter == null) error("fail to get adapter")
+                if (status != WGPURequestAdapterStatus_Success && adapter == null) error("fail to get adapter")
                 fetchedAdapter = adapter
             }
         })

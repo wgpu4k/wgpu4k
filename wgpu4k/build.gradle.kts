@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -8,7 +7,8 @@ plugins {
     if (isAndroidConfigured) id("android")
 }
 
-val resourcesDirectory = project.file("src").resolve("jvmMain").resolve("resources")
+val resourcesDirectory = project.file("src")
+    .resolve("jvmMain").resolve("resources")
 
 kotlin {
 
@@ -18,7 +18,6 @@ kotlin {
     }
 
     jvm {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget = JvmTarget.JVM_22
         }
@@ -35,7 +34,6 @@ kotlin {
     configureMingwX64(project)
 
     if (isAndroidConfigured) androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget = JvmTarget.JVM_22
         }
@@ -82,7 +80,6 @@ kotlin {
         }
 
         nativeMain {
-
             dependencies {
                 implementation(libs.wgpu4k.native)
             }
@@ -99,7 +96,7 @@ kotlin {
         }
 
     }
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+
     compilerOptions {
         allWarningsAsErrors = true
         freeCompilerArgs.add("-Xexpect-actual-classes")

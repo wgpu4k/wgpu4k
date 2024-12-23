@@ -1,29 +1,29 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="run glfw sample" type="GradleRunConfiguration" factoryName="Gradle">
-        <ExternalSystemSettings>
-            <option name="env">
-                <map>
-                    <entry key="RUST_BACKTRACE" value="1"/>
-                </map>
-            </option>
-            <option name="executionName"/>
-            <option name="externalProjectPath" value="$PROJECT_DIR$/examples/glfw"/>
-            <option name="externalSystemIdString" value="GRADLE"/>
-            <option name="scriptParameters" value=""/>
-            <option name="taskDescriptions">
-                <list/>
-            </option>
-            <option name="taskNames">
-                <list>
-                    <option value="run"/>
-                </list>
-            </option>
-            <option name="vmOptions"/>
-        </ExternalSystemSettings>
-        <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-        <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-        <DebugAllEnabled>false</DebugAllEnabled>
-        <RunAsTest>false</RunAsTest>
-        <method v="2"/>
-    </configuration>
+  <configuration default="false" name="run glfw sample" type="GradleRunConfiguration" factoryName="Gradle">
+    <ExternalSystemSettings>
+      <option name="env">
+        <map>
+          <entry key="RUST_BACKTRACE" value="1"/>
+        </map>
+      </option>
+      <option name="executionName"/>
+      <option name="externalProjectPath" value="$PROJECT_DIR$/examples/glfw"/>
+      <option name="externalSystemIdString" value="GRADLE"/>
+      <option name="scriptParameters" value="--stacktrace"/>
+      <option name="taskDescriptions">
+        <list/>
+      </option>
+      <option name="taskNames">
+        <list>
+          <option value="run"/>
+        </list>
+      </option>
+      <option name="vmOptions"/>
+    </ExternalSystemSettings>
+    <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+    <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+    <DebugAllEnabled>false</DebugAllEnabled>
+    <RunAsTest>false</RunAsTest>
+    <method v="2"/>
+  </configuration>
 </component>
