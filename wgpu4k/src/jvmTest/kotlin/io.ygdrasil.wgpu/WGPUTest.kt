@@ -3,7 +3,7 @@ package io.ygdrasil.wgpu
 import io.kotest.core.spec.style.FreeSpec
 import io.ygdrasil.wgpu.internal.jvm.Os
 import io.ygdrasil.wgpu.internal.jvm.Platform
-import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
+import webgpu.wgpuSetLogLevel
 
 class WGPUTest : FreeSpec({
 
@@ -12,10 +12,10 @@ class WGPUTest : FreeSpec({
             // Given nothing
 
             // When
-            WGPU.loadLibrary()
+            loadLibrary()
 
             // Then should not crash
-            wgpu_h.wgpuSetLogLevel(1)
+            wgpuSetLogLevel(1)
 
         }
 

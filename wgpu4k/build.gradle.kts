@@ -49,7 +49,7 @@ kotlin {
         nodejs()
     }
 
-    // Apply the default hierarchy again. It'll create, for example, the iosMain source set:
+    // Apply the default hierarchy.
     applyDefaultHierarchyTemplate()
 
     sourceSets {
@@ -58,45 +58,30 @@ kotlin {
             languageSettings.optIn("kotlin.ExperimentalUnsignedTypes")
         }
 
-        val commonNative by creating {
+        commonMain.dependencies {
+            implementation(libs.coroutines)
+        }
+
+        val commonNativeMain by creating {
             dependsOn(commonMain.get())
 
-            dependencies {
-                implementation(libs.wgpu4k.native)
-            }
+            dependencies.implementation(libs.wgpu4k.native)
         }
 
-        jvmMain { dependsOn(commonNative) }
-        nativeMain { dependsOn(commonNative) }
-
-        commonMain {
-            dependencies {
-                implementation(libs.coroutines)
-            }
-        }
-
-        commonTest {
-            dependencies {
-                implementation(libs.bundles.kotest)
-            }
-        }
-
-        jvmTest {
-            dependencies {
-                implementation(libs.kotest.runner.junit5)
-                implementation(libs.kotlin.reflect)
-            }
-        }
-
-
+        jvmMain { dependsOn(commonNativeMain) }
+        nativeMain { dependsOn(commonNativeMain) }
         androidMain {
-            dependencies {
-                val jna = libs.jna.get()
-                implementation("${jna.module.group}:${jna.module.name}:${jna.versionConstraint}:@aar")
-                implementation(libs.jetbrains.kotlin.reflect)
-                implementation(libs.android.native.helper)
-                implementation(libs.wgpu4k.native)
-            }
+            dependsOn(commonNativeMain)
+            dependencies.implementation(libs.android.native.helper)
+        }
+
+        commonTest.dependencies {
+            implementation(libs.bundles.kotest)
+        }
+
+        jvmTest.dependencies {
+            implementation(libs.kotest.runner.junit5)
+            implementation(libs.kotlin.reflect)
         }
 
     }
