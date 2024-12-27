@@ -9,13 +9,13 @@ import generator.enumeration.toWebEnumerations
 import java.io.File
 
 val enumerationCommonMainFile = Paths.commonMain
-    .resolve("test.enumerations.kt")
+    .resolve("webgpu.enumerations.kt")
 
 val enumerationWebMainFile = Paths.commonWebMain
-    .resolve("test.enumerations.kt")
+    .resolve("webgpu.enumerations.web.kt")
 
 val enumerationNativeMainFile = Paths.commonNativeMain
-    .resolve("test.enumerations.kt")
+    .resolve("webgpu.enumerations.native.kt")
 
 private val header = """
     $disclamer

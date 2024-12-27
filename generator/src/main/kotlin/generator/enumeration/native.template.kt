@@ -7,13 +7,13 @@ import domain.YamlModel
 fun List<YamlModel.Enum>.toNativeEnumerations() = templateBuilder {
     forEach { enumeration ->
         val name = enumeration.name.convertToKotlinClassName()
-        appendBlock("actual enum class $name") {
+        appendBlock("actual enum class $name(val value: UInt)") {
             enumeration.values
                 .filter { it.name != "undefined" }
                 .forEach { value ->
-                    val name = value.name.convertToKotlinClassName()
-                        .fixNameStartingWithNumeric()
-                    appendLine("$name,")
+                    val originalValueName = value.name.convertToKotlinClassName()
+                    val valueName = originalValueName.fixNameStartingWithNumeric()
+                    appendLine("$valueName(webgpu.WGPU${name}_$originalValueName),")
                 }
         }
     }
