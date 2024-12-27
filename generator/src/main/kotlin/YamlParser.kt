@@ -1,23 +1,25 @@
 import com.charleskorn.kaml.Yaml
 import domain.YamlModel
+import generator.enumerationCommonMainFile
+import generator.generateCommonEnumerations
 import java.io.File
 
 
 object Paths {
     private val base = File(".")
-    private val sourceBase = basePath
+    private val sourceBase = base
         .resolve("wgpu4k")
         .resolve("src")
 
-    val commonMain = sourceBasePath
+    val commonMain = sourceBase
         .resolve("commonMain")
         .resolve("kotlin")
 
-    val commonNativeMain = sourceBasePath
+    val commonNativeMain = sourceBase
         .resolve("commonNativeMain")
         .resolve("kotlin")
 
-    val commonWebMain = sourceBasePath
+    val commonWebMain = sourceBase
         .resolve("commonWebMain")
         .resolve("kotlin")
 }
@@ -29,18 +31,6 @@ val commonMainBasePath = sourceBasePath
     .resolve("commonMain")
     .resolve("kotlin")
 
-val androidMainBasePath = sourceBasePath
-    .resolve("commonNativeMain")
-    .resolve("kotlin")
-
-
-val jvmMainBasePath = sourceBasePath
-    .resolve("jvmMain")
-    .resolve("kotlin")
-val nativeMainBasePath = sourceBasePath
-    .resolve("nativeMain")
-    .resolve("kotlin")
-
 fun main() {
 
     println("Base path: ${basePath.absolutePath}")
@@ -48,43 +38,7 @@ fun main() {
     val webgpuModel = loadWebGPUYaml()
         .merge(loadExtraYaml())
 
-
-//    typesCommonMainFile.generateTypesCommonMain(webgpuCModel.pointers)
-//
-//
-//    commonMainBasePath.apply {
-//        generateCommonCallback(webgpuCModel.callbacks)
-//    }
-//
-//    jvmMainBasePath.apply {
-//        generateJvmCallback(webgpuCModel.callbacks)
-//    }
-//
-//    nativeMainBasePath.apply {
-//        generateNativeFunctions(webgpuCModel.functions)
-//        generateNativeCallback(webgpuCModel.callbacks)
-//    }
-//
-//    jvmNativeFunctionsMainFile.generateJvmNativeFunctions(webgpuCModel.functions)
-//
-//    functionsCommonMainFile.generateCommonFunctions(webgpuCModel.functions)
-//    functionsJvmMainFile.generateJvmFunctions(webgpuCModel.functions)
-//
-//    structuresCommonMainFile.generateCommonStructures(webgpuCModel.structures)
-//
-//
-//
-//    structuresJvmMainFile.generateJvmStructures(webgpuCModel.structures)
-//    structuresNativeMainFile.generateNativeStructures(webgpuCModel.structures)
-//
-//    enumerationCommonMainFile.generateCommonEnumerations(webgpuCModel.enumerations)
-//
-//    androidMainBasePath.apply {
-//        generateAndroidCallback(webgpuCModel.callbacks)
-//        generateAndroidStructures(webgpuCModel.structures)
-//        generateAndroidNativeFunctions(webgpuCModel.functions)
-//        generateAndroidFunctions(webgpuCModel.functions)
-//    }
+    enumerationCommonMainFile.generateCommonEnumerations(webgpuModel.enums)
 }
 
 fun loadExtraYaml() = readFileFromClasspath("extra.yml")

@@ -1,14 +1,13 @@
 package generator
 
-import builder.templateBuilder
-import commonMainBasePath
+import Paths
 import disclamer
-import domain.CLibraryModel
+import domain.YamlModel
+import generator.enumeration.toCommonEnumerations
 import java.io.File
 
-val enumerationCommonMainFile = commonMainBasePath
-    .resolve("webgpu")
-    .resolve("Enumerations.kt")
+val enumerationCommonMainFile = Paths.commonMain
+    .resolve("test.enumerations.kt")
 
 private val header = """
     $disclamer
@@ -17,20 +16,11 @@ private val header = """
     
 """.trimIndent()
 
-internal fun File.generateCommonEnumerations(enumerations: List<CLibraryModel.Enumeration>) {
+internal fun File.generateCommonEnumerations(enumerations: List<YamlModel.Enum>) {
 
     writeText(header)
 
-    templateBuilder {
-        enumerations.forEach { enumeration ->
-            val type = if (enumeration.size == 32) "UInt" else "ULong"
-            val valueSuffix = if (enumeration.size == 32) "u" else "uL"
-            appendLine("typealias ${enumeration.name} = $type")
-            enumeration.values.forEach { (name, value) ->
-                appendLine("const val ${enumeration.name}_$name : ${enumeration.name} = ${value}$valueSuffix")
-            }
-            newLine()
-        }
-    }.let(::appendText)
+    enumerations.toCommonEnumerations()
+        .let(::appendText)
 
 }
