@@ -1,4 +1,9 @@
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.plugin.KotlinHierarchyTemplate
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
@@ -9,6 +14,62 @@ plugins {
 
 val resourcesDirectory = project.file("src")
     .resolve("jvmMain").resolve("resources")
+
+private val hierarchyTemplate = KotlinHierarchyTemplate {
+    /* natural hierarchy is only applied to default 'main'/'test' compilations (by default) */
+    withSourceSetTree(KotlinSourceSetTree.main, KotlinSourceSetTree.test)
+
+    common {
+        /* All compilations shall be added to the common group by default */
+        withCompilations { true }
+
+        group("commonNative") {
+            group("native") {
+                withNative()
+
+                group("apple") {
+                    withApple()
+
+                    group("ios") {
+                        withIos()
+                    }
+
+                    group("tvos") {
+                        withTvos()
+                    }
+
+                    group("watchos") {
+                        withWatchos()
+                    }
+
+                    group("macos") {
+                        withMacos()
+                    }
+                }
+
+                group("linux") {
+                    withLinux()
+                }
+
+                group("mingw") {
+                    withMingw()
+                }
+
+                group("androidNative") {
+                    withAndroidNative()
+                }
+            }
+
+            withAndroidTarget()
+            withJvm()
+        }
+
+        group("commonWeb") {
+            withJs()
+            withWasm()
+        }
+    }
+}
 
 kotlin {
 
@@ -49,7 +110,7 @@ kotlin {
         nodejs()
     }
 
-    applyDefaultHierarchyTemplate()
+    applyHierarchyTemplate(hierarchyTemplate)
 
     sourceSets {
 
@@ -64,21 +125,15 @@ kotlin {
         }
 
 
-        val commonWebMain by creating { dependsOn(commonMain.get()) }
-        jsMain { dependsOn(commonWebMain) }
-        wasmJsMain { dependsOn(commonWebMain) }
-
-        val commonNativeMain by creating {
-            dependsOn(commonMain.get())
-
+        val commonNativeMain by getting {
             dependencies { implementation(libs.wgpu4k.native) }
         }
 
-        jvmMain { dependsOn(commonNativeMain) }
-        nativeMain { dependsOn(commonNativeMain) }
         androidMain {
-            dependsOn(commonNativeMain)
-            dependencies { implementation(libs.android.native.helper) }
+            dependencies {
+                implementation(libs.wgpu4k.native)
+                implementation(libs.android.native.helper)
+            }
         }
 
         commonTest {
