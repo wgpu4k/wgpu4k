@@ -1,6 +1,6 @@
 plugins {
 	`kotlin-dsl`
-	kotlin("plugin.serialization") version "2.0.20"
+	kotlin("plugin.serialization") version "2.1.0"
 }
 
 
@@ -8,12 +8,11 @@ repositories {
 	gradlePluginPortal()
 	google()
 	mavenCentral()
+	//wgpu4k snapshot & preview repository
+	maven("https://gitlab.com/api/v4/projects/25805863/packages/maven")
 }
 
 dependencies {
-	implementation(libs.download)
-	implementation(libs.kotlin.multiplatform)
-	implementation(libs.jreleaser.plugin)
 	implementation(libs.android.library)
 
 	implementation(libs.gson)
@@ -21,6 +20,7 @@ dependencies {
 	implementation(libs.okhttp)
 	implementation(libs.commons.io)
 
-	implementation("com.charleskorn.kaml:kaml:0.66.0")
+	implementation(libs.kaml)
 
+	implementation(libs.wgpu.specs)
 }

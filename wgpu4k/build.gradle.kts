@@ -63,6 +63,11 @@ kotlin {
             }
         }
 
+
+        val commonWebMain by creating { dependsOn(commonMain.get()) }
+        jsMain { dependsOn(commonWebMain) }
+        wasmJsMain { dependsOn(commonWebMain) }
+
         val commonNativeMain by creating {
             dependsOn(commonMain.get())
 

@@ -10,14 +10,13 @@ korge = "6.0.0"
 agp = "8.5.2"
 jreleaser = "1.13.1"
 rococoa = "0.0.1"
-wgpu4k-native = "0.0.1-SNAPSHOT"
+wgpu4k-native = "0.0.1.v23-SNAPSHOT"
 android-native-helper = "0.0.1"
 glfw-native = "0.0.1"
 download = "5.6.0"
-kaml = "0.66.0"
+kaml = "0.67.0"
 
 [libraries]
-jetbrains-kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotest-core = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
 kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 jna = { module = "net.java.dev.jna:jna", version.ref = "jna" }
@@ -34,6 +33,7 @@ ktor-server-core-jvm = { module = "io.ktor:ktor-server-core-jvm", version.ref = 
 playwright = { module = "com.microsoft.playwright:playwright", version.ref = "playwright" }
 rococoa = { module = "io.ygdrasil:rococoa", version.ref = "rococoa" }
 wgpu4k-native = { module = "io.ygdrasil:wgpu4k-native", version.ref = "wgpu4k-native" }
+wgpu-specs = { module = "io.ygdrasil:wgpu4k-native-specs-jvm", version.ref = "wgpu4k-native" }
 glfw-native = { module = "io.ygdrasil:glfw-native", version.ref = "glfw-native" }
 android-native-helper = { module = "io.ygdrasil:android-native-helper", version.ref = "android-native-helper" }
 

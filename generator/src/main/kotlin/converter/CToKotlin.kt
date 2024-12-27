@@ -7,9 +7,6 @@ fun CLibraryModel.Type.variableType(): String = when(this) {
     else -> "var"
 }
 
-fun CLibraryModel.Type.isFinal(): Boolean
-        = this is CLibraryModel.Reference.StructureField
-
 
 internal fun CLibraryModel.Primitive.toPrimitiveKotlinType(): String = when (this) {
     is CLibraryModel.Primitive.Int32 -> "Int"
@@ -34,27 +31,3 @@ internal fun CLibraryModel.Primitive.toPrimitiveDefaultValue(): String = when (t
 }
 
 
-internal fun CLibraryModel.Type.getOffsetSize() = when(this) {
-    CLibraryModel.Reference.OpaquePointer,
-    is CLibraryModel.Reference.Pointer,
-    CLibraryModel.Reference.CString,
-    is CLibraryModel.Array,
-    is CLibraryModel.Reference.Callback,
-    CLibraryModel.Void,
-    is CLibraryModel.Reference.Structure -> Long.SIZE_BYTES
-
-    CLibraryModel.Primitive.UInt16 -> Short.SIZE_BYTES
-
-    CLibraryModel.Primitive.Bool,
-    CLibraryModel.Primitive.UInt32,
-    CLibraryModel.Primitive.Int32 -> Int.SIZE_BYTES
-
-    CLibraryModel.Primitive.UInt64,
-    CLibraryModel.Primitive.Int64 -> Long.SIZE_BYTES
-
-    CLibraryModel.Primitive.Float32 -> Float.SIZE_BYTES
-    CLibraryModel.Primitive.Float64 -> Double.SIZE_BYTES
-
-    is CLibraryModel.Reference.Enumeration -> Int.SIZE_BYTES
-    is CLibraryModel.Reference.StructureField -> null
-}

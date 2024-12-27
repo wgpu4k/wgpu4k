@@ -3,7 +3,7 @@ package io.ygdrasil.wgpu
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-class EnumerationsTest : FreeSpec ({
+class EnumerationsTest : FreeSpec({
 
     "test flag to int without flag" {
         // Given

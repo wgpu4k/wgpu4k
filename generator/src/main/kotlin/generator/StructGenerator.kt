@@ -1,8 +1,6 @@
 package generator
 
-import androidMainBasePath
 import commonMainBasePath
-import converter.getOffsetSize
 import converter.variableType
 import disclamer
 import domain.CLibraryModel

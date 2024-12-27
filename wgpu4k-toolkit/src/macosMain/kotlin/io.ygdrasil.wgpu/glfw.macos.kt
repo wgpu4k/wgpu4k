@@ -17,7 +17,7 @@ import kotlinx.cinterop.reinterpret
 import platform.AppKit.NSWindow
 import platform.QuartzCore.CAMetalLayer
 
-actual fun WGPU.getSurface(window: CPointer<GLFWwindow>, sizeProvider: () -> Pair<Int, Int>): Surface {
+actual fun WGPU.getSurface(window: CPointer<GLFWwindow>): Surface {
     val nsWindow = interpretObjCPointer<NSWindow>(glfwGetCocoaWindow(window).rawValue)
     nsWindow.contentView()?.setWantsLayer(true)
     val layer = CAMetalLayer.layer()

@@ -1,7 +1,11 @@
 package domain
 
+import com.charleskorn.kaml.YamlList
+import com.charleskorn.kaml.YamlNode
+import com.charleskorn.kaml.YamlNull
+import com.charleskorn.kaml.yamlMap
+import com.charleskorn.kaml.yamlScalar
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Serializable
 data class YamlModel(
@@ -52,7 +56,7 @@ data class YamlModel(
         data class Return(
             val type: String,
             val doc: String,
-            val passed_with_ownership:Boolean = false,
+            val passed_with_ownership: Boolean = false,
             val pointer: String? = null,
         ) {
             val isMutable: Boolean
@@ -129,9 +133,20 @@ data class YamlModel(
     data class Enum(
         val name: String,
         val doc: String,
-        @Transient val entries: List<Entry> = listOf(),
+        val entries: YamlList,
     ) {
-        @Serializable
+
+        val values: List<Entry>
+            get() = entries.items
+                .filter { entry -> entry !is YamlNull }
+                .map { entry ->
+                    val name = entry.yamlMap.get<YamlNode>("name")!!.yamlScalar.content
+                    val doc = entry.yamlMap.get<YamlNode>("doc")!!.yamlScalar.content
+                    val value = entry.yamlMap.get<YamlNode>("value")?.yamlScalar?.content
+                        ?.substringAfter("x")?.toInt(radix = 16)
+                    Entry(name, doc, value)
+                }
+
         data class Entry(
             val name: String,
             val doc: String,
