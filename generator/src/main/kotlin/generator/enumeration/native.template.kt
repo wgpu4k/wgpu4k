@@ -4,10 +4,10 @@ import builder.templateBuilder
 import convertToKotlinClassName
 import domain.YamlModel
 
-fun List<YamlModel.Enum>.toCommonEnumerations() = templateBuilder {
+fun List<YamlModel.Enum>.toNativeEnumerations() = templateBuilder {
     forEach { enumeration ->
         val name = enumeration.name.convertToKotlinClassName()
-        appendBlock("expect enum class $name") {
+        appendBlock("actual enum class $name") {
             enumeration.values
                 .filter { it.name != "undefined" }
                 .forEach { value ->

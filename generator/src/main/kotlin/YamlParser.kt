@@ -1,44 +1,21 @@
 import com.charleskorn.kaml.Yaml
 import domain.YamlModel
 import generator.enumerationCommonMainFile
+import generator.enumerationNativeMainFile
+import generator.enumerationWebMainFile
 import generator.generateCommonEnumerations
-import java.io.File
+import generator.generateNativeEnumerations
+import generator.generateWebEnumerations
 
-
-object Paths {
-    private val base = File(".")
-    private val sourceBase = base
-        .resolve("wgpu4k")
-        .resolve("src")
-
-    val commonMain = sourceBase
-        .resolve("commonMain")
-        .resolve("kotlin")
-
-    val commonNativeMain = sourceBase
-        .resolve("commonNativeMain")
-        .resolve("kotlin")
-
-    val commonWebMain = sourceBase
-        .resolve("commonWebMain")
-        .resolve("kotlin")
-}
-val basePath = File(".")
-val sourceBasePath = basePath
-    .resolve("wgpu4k")
-    .resolve("src")
-val commonMainBasePath = sourceBasePath
-    .resolve("commonMain")
-    .resolve("kotlin")
 
 fun main() {
-
-    println("Base path: ${basePath.absolutePath}")
 
     val webgpuModel = loadWebGPUYaml()
         .merge(loadExtraYaml())
 
     enumerationCommonMainFile.generateCommonEnumerations(webgpuModel.enums)
+    enumerationWebMainFile.generateWebEnumerations(webgpuModel.enums)
+    enumerationNativeMainFile.generateNativeEnumerations(webgpuModel.enums)
 }
 
 fun loadExtraYaml() = readFileFromClasspath("extra.yml")
