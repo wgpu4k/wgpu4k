@@ -6,10 +6,10 @@ import io.ygdrasil.wgpu.mapper.map
 import org.w3c.dom.HTMLCanvasElement
 
 actual class Surface(internal val handler: GPUCanvasContext) : AutoCloseable {
-    actual val width: Int
-        get() = handler.canvas.width
-    actual val height: Int
-        get() = handler.canvas.height
+    actual val width: UInt
+        get() = handler.canvas.width.toUInt()
+    actual val height: UInt
+        get() = handler.canvas.height.toUInt()
 
     actual val preferredCanvasFormat: TextureFormat? by lazy {
         navigator.gpu

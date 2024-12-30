@@ -55,18 +55,19 @@ private val hierarchyTemplate = KotlinHierarchyTemplate {
                     withMingw()
                 }
 
-                group("androidNative") {
+                /*group("androidNative") {
                     withAndroidNative()
-                }
+                }*/
             }
 
-            withAndroidTarget()
             withJvm()
         }
 
+        //withAndroidTarget()
+
         group("commonWeb") {
             withJs()
-            withWasm()
+            withWasmJs()
         }
     }
 }
@@ -131,8 +132,20 @@ kotlin {
 
         androidMain {
             dependencies {
-                implementation(libs.wgpu4k.native)
+                /*
+                val jna = libs.jna.get()
+                api("${jna.module.group}:${jna.module.name}:${jna.versionConstraint}:@aar")
+                val wgpu4k = libs.wgpu4k.native.android.get()
+                implementation("${wgpu4k.module.group}:${wgpu4k.module.name}:${wgpu4k.versionConstraint}:@aar")
+                */
                 implementation(libs.android.native.helper)
+                implementation(libs.wgpu4k.native)
+            }
+        }
+
+        wasmJsMain {
+            dependencies {
+                implementation(libs.kotlinx.browser)
             }
         }
 
@@ -152,7 +165,7 @@ kotlin {
     }
 
     compilerOptions {
-        allWarningsAsErrors = true
+        //allWarningsAsErrors = true
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 }

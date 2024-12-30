@@ -3,8 +3,9 @@ package io.ygdrasil.wgpu
 import android.view.SurfaceHolder
 
 suspend fun androidContextRenderer(surfaceHolder: SurfaceHolder, width: Int, height: Int, deferredRendering: Boolean = false): AndroidContext {
-    val wgpu = WGPU.createInstance(WGPUInstanceBackend.Vulkan)
-    val surface = wgpu.getSurface(surfaceHolder, width, height)
+    val wgpu = WGPU.createInstance(WGPUInstanceBackend.Vulkan) ?: error("Can't create WGPU instance")
+
+    val surface = wgpu.getSurfaceFromAndroidWindow(surfaceHolder)
     val adapter = wgpu.requestAdapter(surface)
     val device = adapter.requestDevice() ?: error("fail to get device")
     surface.computeSurfaceCapabilities(adapter)

@@ -2,6 +2,7 @@ package io.ygdrasil.wgpu
 
 import io.ygdrasil.wgpu.internal.js.GPUCommandEncoder
 import io.ygdrasil.wgpu.internal.js.mapJsArray
+import io.ygdrasil.wgpu.internal.js.toJsNumber
 import io.ygdrasil.wgpu.mapper.map
 
 actual class CommandEncoder(internal val handler: GPUCommandEncoder) : AutoCloseable {

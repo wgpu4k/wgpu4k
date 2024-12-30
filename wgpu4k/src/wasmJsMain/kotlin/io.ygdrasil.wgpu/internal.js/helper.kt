@@ -4,6 +4,7 @@ import org.khronos.webgl.Int8Array
 import org.khronos.webgl.set
 
 private fun infer(value: Short): JsNumber = js("value")
+private fun infer(value: UShort): JsNumber = js("value")
 private fun infer(value: Byte): JsNumber = js("value")
 private fun infer(value: UInt): JsNumber = js("value")
 private fun infer(value: Float): JsNumber = js("value")
@@ -12,11 +13,15 @@ private fun infer(value: Long): JsNumber = js("Number(value)")
 private fun infer(value: ULong): JsNumber = js("Number(value)")
 
 private fun inferBig(value: Long): JsBigInt = js("BigInt(value)")
+private fun inferBig(value: ULong): JsBigInt = js("BigInt(value)")
 
 internal fun Double.toJsNumber(): JsNumber =
     infer(this)
 
 internal fun Float.toJsNumber(): JsNumber =
+    infer(this)
+
+internal fun UShort.toJsNumber(): JsNumber =
     infer(this)
 
 internal fun Short.toJsNumber(): JsNumber =
@@ -31,10 +36,14 @@ internal fun Byte.toJsNumber(): JsNumber =
 internal fun Long.toJsNumber(): JsNumber =
     infer(this)
 
+
 internal fun ULong.toJsNumber(): JsNumber =
     infer(this)
 
 internal fun Long.toJsBigInt(): JsBigInt =
+    inferBig(this)
+
+internal fun ULong.toJsBigInt(): JsBigInt =
     inferBig(this)
 
 internal fun <T : JsAny> createJsObject(): T =

@@ -15,5 +15,5 @@ internal fun map(input: SamplerDescriptor): GPUSamplerDescriptor = createJsObjec
     lodMinClamp = input.lodMinClamp
     lodMaxClamp = input.lodMaxClamp
     if (input.compare != null) compare = input.compare.stringValue
-    maxAnisotropy = input.maxAnisotropy
+    maxAnisotropy = input.maxAnisotropy.toShort()
 }

@@ -1,5 +1,6 @@
 package io.ygdrasil.wgpu
 
+import ffi.LibraryLoader
 import io.kotest.core.spec.style.FreeSpec
 import io.ygdrasil.wgpu.internal.jvm.Os
 import io.ygdrasil.wgpu.internal.jvm.Platform
@@ -12,10 +13,10 @@ class WGPUTest : FreeSpec({
             // Given nothing
 
             // When
-            loadLibrary()
+            LibraryLoader.load()
 
             // Then should not crash
-            wgpuSetLogLevel(1)
+            wgpuSetLogLevel(1u)
 
         }
 

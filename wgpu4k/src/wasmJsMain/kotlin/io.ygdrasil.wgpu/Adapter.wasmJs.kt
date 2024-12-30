@@ -18,7 +18,7 @@ actual class Adapter(internal val handler: GPUAdapter) : AutoCloseable {
             .toSet()
     }
 
-    actual val limits: SupportedLimits by lazy { map(handler.limits) }
+    actual val limits: Limits by lazy { map(handler.limits) }
 
     actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? {
         return handler.requestDevice()

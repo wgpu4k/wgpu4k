@@ -2,6 +2,7 @@
 kotest = "6.0.0.M1"
 jna = "5.15.0"
 kotlin = "2.1.0"
+kotlinx-browser = "0.3"
 kotlinx-serialization-json = "1.7.2"
 ktor = "2.3.12"
 playwright = "1.46.0"
@@ -27,12 +28,14 @@ kotlin-multiplatform = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 android-library = { module = "com.android.library:com.android.library.gradle.plugin", version.ref = "agp" }
 korlibs-image = { module = "com.soywiz:korlibs-image", version.ref = "korge" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+kotlinx-browser = { module = "org.jetbrains.kotlinx:kotlinx-browser", version.ref = "kotlinx-browser" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 ktor-server-netty-jvm = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
 ktor-server-core-jvm = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 playwright = { module = "com.microsoft.playwright:playwright", version.ref = "playwright" }
 rococoa = { module = "io.ygdrasil:rococoa", version.ref = "rococoa" }
 wgpu4k-native = { module = "io.ygdrasil:wgpu4k-native", version.ref = "wgpu4k-native" }
+wgpu4k-native-android = { module = "io.ygdrasil:wgpu4k-native-android", version.ref = "wgpu4k-native" }
 wgpu-specs = { module = "io.ygdrasil:wgpu4k-native-specs-jvm", version.ref = "wgpu4k-native" }
 glfw-native = { module = "io.ygdrasil:glfw-native", version.ref = "glfw-native" }
 android-native-helper = { module = "io.ygdrasil:android-native-helper", version.ref = "android-native-helper" }

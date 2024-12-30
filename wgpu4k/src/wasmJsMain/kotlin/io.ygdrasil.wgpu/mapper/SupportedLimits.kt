@@ -1,9 +1,9 @@
 package io.ygdrasil.wgpu.mapper
 
-import io.ygdrasil.wgpu.SupportedLimits
+import io.ygdrasil.wgpu.Limits
 import io.ygdrasil.wgpu.internal.js.GPUSupportedLimits
 
-internal fun map(input: GPUSupportedLimits): SupportedLimits = SupportedLimits(
+internal fun map(input: GPUSupportedLimits): Limits = Limits(
     maxTextureDimension1D = input.maxTextureDimension1D,
     maxTextureDimension2D = input.maxTextureDimension2D,
     maxTextureDimension3D = input.maxTextureDimension3D,
@@ -26,7 +26,6 @@ internal fun map(input: GPUSupportedLimits): SupportedLimits = SupportedLimits(
     maxBufferSize = input.maxBufferSize,
     maxVertexAttributes = input.maxVertexAttributes,
     maxVertexBufferArrayStride = input.maxVertexBufferArrayStride,
-    maxInterStageShaderComponents = input.maxInterStageShaderComponents,
     maxInterStageShaderVariables = input.maxInterStageShaderVariables,
     maxColorAttachments = input.maxColorAttachments,
     maxColorAttachmentBytesPerSample = input.maxColorAttachmentBytesPerSample,
