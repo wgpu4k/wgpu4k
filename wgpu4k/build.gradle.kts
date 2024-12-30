@@ -61,9 +61,9 @@ private val hierarchyTemplate = KotlinHierarchyTemplate {
             }
 
             withJvm()
+            withAndroidTarget()
         }
 
-        //withAndroidTarget()
 
         group("commonWeb") {
             withJs()
@@ -132,14 +132,7 @@ kotlin {
 
         androidMain {
             dependencies {
-                /*
-                val jna = libs.jna.get()
-                api("${jna.module.group}:${jna.module.name}:${jna.versionConstraint}:@aar")
-                val wgpu4k = libs.wgpu4k.native.android.get()
-                implementation("${wgpu4k.module.group}:${wgpu4k.module.name}:${wgpu4k.versionConstraint}:@aar")
-                */
                 implementation(libs.android.native.helper)
-                implementation(libs.wgpu4k.native)
             }
         }
 
