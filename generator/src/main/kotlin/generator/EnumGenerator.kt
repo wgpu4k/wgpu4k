@@ -19,7 +19,7 @@ val enumerationNativeMainFile = Paths.commonNativeMain
 
 private val header = """
     $disclamer
-    package webgpu
+    package io.ygdrasil.webgpu
     
     
 """.trimIndent()

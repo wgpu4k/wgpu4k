@@ -29,7 +29,7 @@ data class ImageCopyTexture(
     val texture: Texture,
     val mipLevel: GPUIntegerCoordinate = 0u,
     val origin: Origin3D = Origin3D(0u, 0u),
-    val aspect: TextureAspect = TextureAspect.all,
+    val aspect: TextureAspect = TextureAspect.All,
 )
 
 data class ImageCopyBuffer(

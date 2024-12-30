@@ -125,7 +125,7 @@ data class ImageCopyTextureTagged(
     val texture: Texture,
     val mipLevel: GPUIntegerCoordinate = 0u,
     val origin: Origin3D = Origin3D(),
-    val aspect: TextureAspect = TextureAspect.all,
+    val aspect: TextureAspect = TextureAspect.All,
 
     )
 

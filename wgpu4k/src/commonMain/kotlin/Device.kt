@@ -2,7 +2,7 @@ package io.ygdrasil.webgpu
 
 expect class Device : AutoCloseable {
 
-    val features: Set<Feature>
+    val features: Set<FeatureName>
 
     val queue: Queue
 
@@ -55,25 +55,25 @@ data class BindGroupLayoutDescriptor(
         sealed interface BindingType
 
         data class BufferBindingLayout(
-            val type: BufferBindingType = BufferBindingType.uniform,
+            val type: BufferBindingType = BufferBindingType.Uniform,
             val hasDynamicOffset: Boolean = false,
             val minBindingSize: GPUSize64 = 0u,
         ) : BindingType
 
         data class SamplerBindingLayout(
-            val type: SamplerBindingType = SamplerBindingType.filtering,
+            val type: SamplerBindingType = SamplerBindingType.Filtering,
         ) : BindingType
 
         data class TextureBindingLayout(
-            val sampleType: TextureSampleType = TextureSampleType.float,
-            val viewDimension: TextureViewDimension = TextureViewDimension._2d,
+            val sampleType: TextureSampleType = TextureSampleType.Float,
+            val viewDimension: TextureViewDimension = TextureViewDimension.TwoD,
             val multisampled: Boolean = false,
         ) : BindingType
 
         data class StorageTextureBindingLayout(
             val format: TextureFormat,
-            val access: StorageTextureAccess = StorageTextureAccess.writeonly,
-            val viewDimension: TextureViewDimension = TextureViewDimension._2d,
+            val access: StorageTextureAccess = StorageTextureAccess.WriteOnly,
+            val viewDimension: TextureViewDimension = TextureViewDimension.TwoD,
         ) : BindingType
 
     }

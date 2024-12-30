@@ -25,7 +25,7 @@ data class TextureDescriptor(
     val usage: Set<TextureUsage>,
     val mipLevelCount: GPUIntegerCoordinate = 1u,
     val sampleCount: GPUSize32 = 1u,
-    val dimension: TextureDimension = TextureDimension._2d,
+    val dimension: TextureDimension = TextureDimension.TwoD,
     val viewFormats: List<TextureFormat> = listOf(),
     val label: String? = null,
 )
@@ -34,7 +34,7 @@ data class TextureDescriptor(
 fun TextureFormat.getBytesPerPixel(): GPUSize32 {
     return when (this) {
         // Formats with 1 byte per pixel
-        TextureFormat.r8unorm,
+        TextureFormat.R8Unorm,
         TextureFormat.r8snorm,
         TextureFormat.r8uint,
         TextureFormat.r8sint,

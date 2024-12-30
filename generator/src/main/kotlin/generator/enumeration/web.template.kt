@@ -7,13 +7,13 @@ import domain.YamlModel
 fun List<YamlModel.Enum>.toWebEnumerations() = templateBuilder {
     forEach { enumeration ->
         val name = enumeration.name.convertToKotlinClassName()
-        appendBlock("actual enum class $name") {
+        appendBlock("actual enum class $name(val value: String)") {
             enumeration.values
                 .filter { it.name != "undefined" }
                 .forEach { value ->
                     val name = value.name.convertToKotlinClassName()
                         .fixNameStartingWithNumeric()
-                    appendLine("$name,")
+                    appendLine("$name(\"${value.name.replace("_", "-").lowercase()}\"),")
                 }
         }
     }

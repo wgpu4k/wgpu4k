@@ -6,7 +6,7 @@ package io.ygdrasil.webgpu
  */
 expect class Adapter : AutoCloseable {
 
-    val features: Set<Feature>
+    val features: Set<FeatureName>
 
     val limits: Limits
 
@@ -21,7 +21,7 @@ data class DeviceDescriptor(
     /**
      * Specifies the features that are required by the device request. The request will fail if the adapter cannot provide these features. Exactly the specified set of features, and no more or less, will be allowed in validation of API calls on the resulting device.
      */
-    val requiredFeatures: Set<Feature> = setOf(),
+    val requiredFeatures: Set<FeatureName> = setOf(),
     /**
      * Specifies the limits that are required by the device request. The request will fail if the adapter cannot provide these limits. Each key must be the name of a member of supported limits. Exactly the specified limits, and no limit/better or worse, will be allowed in validation of API calls on the resulting device.
      */

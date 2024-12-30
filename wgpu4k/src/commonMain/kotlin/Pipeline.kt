@@ -35,7 +35,7 @@ data class RenderPipelineDescriptor(
         data class VertexBufferLayout(
             val arrayStride: GPUSize64,
             val attributes: List<VertexAttribute> = listOf(),
-            val stepMode: VertexStepMode = VertexStepMode.vertex,
+            val stepMode: VertexStepMode = VertexStepMode.Vertex,
         ) {
             data class VertexAttribute(
                 val format: VertexFormat,
@@ -46,10 +46,10 @@ data class RenderPipelineDescriptor(
     }
 
     data class PrimitiveState(
-        val topology: PrimitiveTopology = PrimitiveTopology.triangleList,
+        val topology: PrimitiveTopology = PrimitiveTopology.TriangleList,
         val stripIndexFormat: IndexFormat? = null,
-        val frontFace: FrontFace = FrontFace.ccw,
-        val cullMode: CullMode = CullMode.none,
+        val frontFace: FrontFace = FrontFace.CCW,
+        val cullMode: CullMode = CullMode.None,
         val unclippedDepth: Boolean = false,
     )
 
@@ -67,10 +67,10 @@ data class RenderPipelineDescriptor(
         val depthBiasClamp: Float = 0f,
     ) {
         data class StencilFaceState(
-            val compare: CompareFunction = CompareFunction.always,
-            val failOp: StencilOperation = StencilOperation.keep,
-            val depthFailOp: StencilOperation = StencilOperation.keep,
-            val passOp: StencilOperation = StencilOperation.keep,
+            val compare: CompareFunction = CompareFunction.Always,
+            val failOp: StencilOperation = StencilOperation.Keep,
+            val depthFailOp: StencilOperation = StencilOperation.Keep,
+            val passOp: StencilOperation = StencilOperation.Keep,
         )
     }
 
@@ -97,9 +97,9 @@ data class RenderPipelineDescriptor(
                 val alpha: BlendComponent = BlendComponent(),
             ) {
                 data class BlendComponent(
-                    val operation: BlendOperation = BlendOperation.add,
-                    val srcFactor: BlendFactor = BlendFactor.one,
-                    val dstFactor: BlendFactor = BlendFactor.zero,
+                    val operation: BlendOperation = BlendOperation.Add,
+                    val srcFactor: BlendFactor = BlendFactor.One,
+                    val dstFactor: BlendFactor = BlendFactor.Zero,
                 )
             }
         }
