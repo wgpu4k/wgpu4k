@@ -1,10 +1,10 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.ShaderModuleDescriptor
-import io.ygdrasil.wgpu.internal.js.GPUShaderModuleCompilationHint
-import io.ygdrasil.wgpu.internal.js.GPUShaderModuleDescriptor
-import io.ygdrasil.wgpu.internal.js.createJsObject
-import io.ygdrasil.wgpu.internal.js.mapJsArray
+import io.ygdrasil.webgpu.ShaderModuleDescriptor
+import io.ygdrasil.webgpu.internal.js.GPUShaderModuleCompilationHint
+import io.ygdrasil.webgpu.internal.js.GPUShaderModuleDescriptor
+import io.ygdrasil.webgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.internal.js.mapJsArray
 
 fun map(input: ShaderModuleDescriptor): GPUShaderModuleDescriptor = createJsObject<GPUShaderModuleDescriptor>().apply {
     code = input.code.toJsString()

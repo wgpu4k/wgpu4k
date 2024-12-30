@@ -1,3 +1,3 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 expect class RenderBundle

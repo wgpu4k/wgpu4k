@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalForeignApi::class)
 
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 import kotlinx.cinterop.COpaque
 import kotlinx.cinterop.COpaquePointer

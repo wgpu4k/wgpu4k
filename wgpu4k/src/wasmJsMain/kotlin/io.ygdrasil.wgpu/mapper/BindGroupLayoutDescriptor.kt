@@ -1,9 +1,20 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.BindGroupLayoutDescriptor
-import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry.*
-import io.ygdrasil.wgpu.internal.js.*
-import io.ygdrasil.wgpu.toFlagInt
+import io.ygdrasil.webgpu.BindGroupLayoutDescriptor
+import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry.BufferBindingLayout
+import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry.SamplerBindingLayout
+import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry.StorageTextureBindingLayout
+import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry.TextureBindingLayout
+import io.ygdrasil.webgpu.internal.js.GPUBindGroupLayoutDescriptor
+import io.ygdrasil.webgpu.internal.js.GPUBindGroupLayoutEntry
+import io.ygdrasil.webgpu.internal.js.GPUBufferBindingLayout
+import io.ygdrasil.webgpu.internal.js.GPUSamplerBindingLayout
+import io.ygdrasil.webgpu.internal.js.GPUStorageTextureBindingLayout
+import io.ygdrasil.webgpu.internal.js.GPUTextureBindingLayout
+import io.ygdrasil.webgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.internal.js.mapJsArray
+import io.ygdrasil.webgpu.internal.js.toJsNumber
+import io.ygdrasil.webgpu.toFlagInt
 
 // TODO: add unit test
 internal fun map(input: BindGroupLayoutDescriptor): GPUBindGroupLayoutDescriptor =

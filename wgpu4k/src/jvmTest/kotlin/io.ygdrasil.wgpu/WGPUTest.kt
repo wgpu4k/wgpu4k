@@ -1,9 +1,9 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 import ffi.LibraryLoader
 import io.kotest.core.spec.style.FreeSpec
-import io.ygdrasil.wgpu.internal.jvm.Os
-import io.ygdrasil.wgpu.internal.jvm.Platform
+import io.ygdrasil.webgpu.internal.jvm.Os
+import io.ygdrasil.webgpu.internal.jvm.Platform
 import webgpu.wgpuSetLogLevel
 
 class WGPUTest : FreeSpec({

@@ -1,14 +1,22 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 import com.sun.jna.Pointer
 import com.sun.jna.platform.win32.Kernel32
 import darwin.CAMetalLayer
 import darwin.NSWindow
 import ffi.NativeAddress
-import io.ygdrasil.wgpu.WGPU.Companion.createInstance
-import io.ygdrasil.wgpu.internal.Os
-import io.ygdrasil.wgpu.internal.Platform
-import org.lwjgl.glfw.GLFW.*
+import io.ygdrasil.webgpu.WGPU.Companion.createInstance
+import io.ygdrasil.webgpu.internal.Os
+import io.ygdrasil.webgpu.internal.Platform
+import org.lwjgl.glfw.GLFW.GLFW_CLIENT_API
+import org.lwjgl.glfw.GLFW.GLFW_FALSE
+import org.lwjgl.glfw.GLFW.GLFW_NO_API
+import org.lwjgl.glfw.GLFW.GLFW_RESIZABLE
+import org.lwjgl.glfw.GLFW.GLFW_VISIBLE
+import org.lwjgl.glfw.GLFW.glfwCreateWindow
+import org.lwjgl.glfw.GLFW.glfwDestroyWindow
+import org.lwjgl.glfw.GLFW.glfwInit
+import org.lwjgl.glfw.GLFW.glfwWindowHint
 import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
 import org.lwjgl.glfw.GLFWNativeWin32.glfwGetWin32Window
 import org.lwjgl.glfw.GLFWNativeX11.glfwGetX11Display

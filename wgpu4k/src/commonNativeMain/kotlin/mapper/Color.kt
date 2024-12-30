@@ -1,7 +1,7 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
-import io.ygdrasil.wgpu.Color
+import io.ygdrasil.webgpu.Color
 import webgpu.WGPUColor
 
 internal fun MemoryAllocator.map(input: Color) = WGPUColor.allocate(this).also { output ->

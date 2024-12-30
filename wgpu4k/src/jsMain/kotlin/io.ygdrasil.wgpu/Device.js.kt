@@ -1,7 +1,7 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUDevice
-import io.ygdrasil.wgpu.mapper.map
+import io.ygdrasil.webgpu.internal.js.GPUDevice
+import io.ygdrasil.webgpu.mapper.map
 import kotlinx.coroutines.await
 
 actual class Device(internal val handler: GPUDevice) : AutoCloseable {

@@ -1,5 +1,5 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUQuerySet
+import io.ygdrasil.webgpu.internal.js.GPUQuerySet
 
 actual class QuerySet(internal val handler: GPUQuerySet)

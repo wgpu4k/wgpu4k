@@ -1,10 +1,10 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.RenderPassDescriptor
-import io.ygdrasil.wgpu.internal.js.GPURenderPassColorAttachment
-import io.ygdrasil.wgpu.internal.js.GPURenderPassDepthStencilAttachment
-import io.ygdrasil.wgpu.internal.js.GPURenderPassDescriptor
-import io.ygdrasil.wgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.RenderPassDescriptor
+import io.ygdrasil.webgpu.internal.js.GPURenderPassColorAttachment
+import io.ygdrasil.webgpu.internal.js.GPURenderPassDepthStencilAttachment
+import io.ygdrasil.webgpu.internal.js.GPURenderPassDescriptor
+import io.ygdrasil.webgpu.internal.js.createJsObject
 
 internal fun map(input: RenderPassDescriptor): GPURenderPassDescriptor =
     createJsObject<GPURenderPassDescriptor>().apply {

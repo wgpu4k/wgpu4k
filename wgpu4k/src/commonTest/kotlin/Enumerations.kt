@@ -1,4 +1,4 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe

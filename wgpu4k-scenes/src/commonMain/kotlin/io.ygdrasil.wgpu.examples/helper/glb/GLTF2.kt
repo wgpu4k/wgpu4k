@@ -1,5 +1,4 @@
-
-package io.ygdrasil.wgpu.examples.helper.glb
+package io.ygdrasil.webgpu.examples.helper.glb
 
 import korlibs.datastructure.*
 import korlibs.encoding.*
@@ -923,8 +922,8 @@ data class GLTF2AccessorVector(val accessor: GLTF2.Accessor, val buffer: Buffer)
 
 interface GLTF2Holder {
     val gltf: GLTF2
-    val GLTF2.Node.childrenNodes: List<GLTF2.Node> get() = this.childrenNodes(gltf) ?: emptyList()
-    val GLTF2.Scene.childrenNodes: List<GLTF2.Node> get() = this.childrenNodes(gltf) ?: emptyList()
+    val GLTF2.Node.childrenNodes: List<GLTF2.Node> get() = this.childrenNodes(gltf)
+    val GLTF2.Scene.childrenNodes: List<GLTF2.Node> get() = this.childrenNodes(gltf)
 }
 
 fun GLTF2.Node.childrenNodes(gltf: GLTF2): List<GLTF2.Node> = this.children.map { gltf.nodes[it] }

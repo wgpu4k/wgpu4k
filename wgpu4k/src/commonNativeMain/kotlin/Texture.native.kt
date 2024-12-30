@@ -1,7 +1,7 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 import ffi.memoryScope
-import io.ygdrasil.wgpu.mapper.map
+import io.ygdrasil.webgpu.mapper.map
 import webgpu.WGPUTexture
 import webgpu.wgpuTextureCreateView
 import webgpu.wgpuTextureGetDepthOrArrayLayers

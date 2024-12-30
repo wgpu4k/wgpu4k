@@ -1,12 +1,20 @@
-package io.ygdrasil.wgpu.examples
+package io.ygdrasil.webgpu.examples
 
 import ffi.LibraryLoader
 import ffi.NativeAddress
 import ffi.globalMemory
-import io.ygdrasil.wgpu.GLFWContext
-import io.ygdrasil.wgpu.glfwContextRenderer
+import io.ygdrasil.webgpu.GLFWContext
+import io.ygdrasil.webgpu.glfwContextRenderer
 import kotlinx.coroutines.runBlocking
-import org.lwjgl.glfw.GLFW.*
+import org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN
+import org.lwjgl.glfw.GLFW.GLFW_KEY_PAGE_DOWN
+import org.lwjgl.glfw.GLFW.GLFW_KEY_PAGE_UP
+import org.lwjgl.glfw.GLFW.GLFW_KEY_UP
+import org.lwjgl.glfw.GLFW.GLFW_PRESS
+import org.lwjgl.glfw.GLFW.glfwPollEvents
+import org.lwjgl.glfw.GLFW.glfwSetKeyCallback
+import org.lwjgl.glfw.GLFW.glfwShowWindow
+import org.lwjgl.glfw.GLFW.glfwWindowShouldClose
 import webgpu.WGPULogCallback
 import webgpu.WGPULogLevel
 import webgpu.WGPUStringView

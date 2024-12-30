@@ -1,11 +1,11 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 
 import ffi.ArrayHolder
 import ffi.MemoryAllocator
 import ffi.NativeAddress
 import ffi.memoryScope
-import io.ygdrasil.wgpu.mapper.map
+import io.ygdrasil.webgpu.mapper.map
 import webgpu.WGPUCommandBuffer
 import webgpu.WGPUExtent3D
 import webgpu.WGPUQueue

@@ -1,5 +1,4 @@
-
-package io.ygdrasil.wgpu.examples.helper.glb
+package io.ygdrasil.webgpu.examples.helper.glb
 
 import korlibs.math.geom.Matrix4
 
@@ -35,11 +34,11 @@ fun readNodeTransform(node: GLTF2.Node): FloatArray {
 
     if (node.matrix != null) {
         // Both glTF and gl matrix are column major
-        return node.matrix!!
+        return node.matrix
     } else {
-        val scale = if (node.scale != null) node.scale!! else floatArrayOf(1f, 1f, 1f)
-        val rotation = if (node.rotation != null) node.rotation!! else floatArrayOf(0f, 0f, 0f, 1f)
-        val translation = if (node.translation != null) node.translation!! else floatArrayOf(0f, 0f, 0f)
+        val scale = if (node.scale != null) node.scale else floatArrayOf(1f, 1f, 1f)
+        val rotation = if (node.rotation != null) node.rotation else floatArrayOf(0f, 0f, 0f, 1f)
+        val translation = if (node.translation != null) node.translation else floatArrayOf(0f, 0f, 0f)
 
         val matrix = Matrix4.IDENTITY.copyToColumns()
         Matrix4.IDENTITY

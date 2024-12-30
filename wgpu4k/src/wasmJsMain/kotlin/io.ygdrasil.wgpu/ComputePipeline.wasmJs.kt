@@ -1,7 +1,7 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUComputePipeline
-import io.ygdrasil.wgpu.internal.js.toJsNumber
+import io.ygdrasil.webgpu.internal.js.GPUComputePipeline
+import io.ygdrasil.webgpu.internal.js.toJsNumber
 
 actual class ComputePipeline(internal val handler: GPUComputePipeline) : AutoCloseable {
     actual fun getBindGroupLayout(index: GPUSize32): BindGroupLayout =

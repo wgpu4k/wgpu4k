@@ -1,9 +1,9 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.TextureDataLayout
-import io.ygdrasil.wgpu.internal.js.GPUImageDataLayout
-import io.ygdrasil.wgpu.internal.js.createJsObject
-import io.ygdrasil.wgpu.internal.js.toJsBigInt
+import io.ygdrasil.webgpu.TextureDataLayout
+import io.ygdrasil.webgpu.internal.js.GPUImageDataLayout
+import io.ygdrasil.webgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.internal.js.toJsBigInt
 
 internal fun map(input: TextureDataLayout): GPUImageDataLayout = createJsObject<GPUImageDataLayout>().apply {
     offset = input.offset.toJsBigInt()

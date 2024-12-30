@@ -1,7 +1,7 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.Limits
-import io.ygdrasil.wgpu.internal.js.GPUSupportedLimits
+import io.ygdrasil.webgpu.Limits
+import io.ygdrasil.webgpu.internal.js.GPUSupportedLimits
 
 internal fun map(input: GPUSupportedLimits): Limits = Limits(
     maxTextureDimension1D = input.maxTextureDimension1D,

@@ -1,4 +1,4 @@
-package io.ygdrasil.wgpu.internal.jvm
+package io.ygdrasil.webgpu.internal.jvm
 
 internal enum class Os {
     Linux,

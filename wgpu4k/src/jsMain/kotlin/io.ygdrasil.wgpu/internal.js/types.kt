@@ -1,22 +1,24 @@
-package io.ygdrasil.wgpu.internal.js
+@file:Suppress("INLINE_CLASS_IN_EXTERNAL_DECLARATION_WARNING")
 
-import io.ygdrasil.wgpu.GPUBufferDynamicOffset
-import io.ygdrasil.wgpu.GPUBufferUsageFlags
-import io.ygdrasil.wgpu.GPUColorWriteFlags
-import io.ygdrasil.wgpu.GPUDepthBias
-import io.ygdrasil.wgpu.GPUFlagsConstant
-import io.ygdrasil.wgpu.GPUIndex32
-import io.ygdrasil.wgpu.GPUIntegerCoordinate
-import io.ygdrasil.wgpu.GPUIntegerCoordinateOut
-import io.ygdrasil.wgpu.GPUMapModeFlags
-import io.ygdrasil.wgpu.GPUPipelineConstantValue
-import io.ygdrasil.wgpu.GPUShaderStageFlags
-import io.ygdrasil.wgpu.GPUSignedOffset32
-import io.ygdrasil.wgpu.GPUSize32
-import io.ygdrasil.wgpu.GPUSize32Out
-import io.ygdrasil.wgpu.GPUSize64
-import io.ygdrasil.wgpu.GPUStencilValue
-import io.ygdrasil.wgpu.GPUTextureUsageFlags
+package io.ygdrasil.webgpu.internal.js
+
+import io.ygdrasil.webgpu.GPUBufferDynamicOffset
+import io.ygdrasil.webgpu.GPUBufferUsageFlags
+import io.ygdrasil.webgpu.GPUColorWriteFlags
+import io.ygdrasil.webgpu.GPUDepthBias
+import io.ygdrasil.webgpu.GPUFlagsConstant
+import io.ygdrasil.webgpu.GPUIndex32
+import io.ygdrasil.webgpu.GPUIntegerCoordinate
+import io.ygdrasil.webgpu.GPUIntegerCoordinateOut
+import io.ygdrasil.webgpu.GPUMapModeFlags
+import io.ygdrasil.webgpu.GPUPipelineConstantValue
+import io.ygdrasil.webgpu.GPUShaderStageFlags
+import io.ygdrasil.webgpu.GPUSignedOffset32
+import io.ygdrasil.webgpu.GPUSize32
+import io.ygdrasil.webgpu.GPUSize32Out
+import io.ygdrasil.webgpu.GPUSize64
+import io.ygdrasil.webgpu.GPUStencilValue
+import io.ygdrasil.webgpu.GPUTextureUsageFlags
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.ArrayBufferView
 import org.khronos.webgl.Uint32Array

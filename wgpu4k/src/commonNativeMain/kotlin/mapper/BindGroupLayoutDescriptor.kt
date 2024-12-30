@@ -1,8 +1,8 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
-import io.ygdrasil.wgpu.BindGroupLayoutDescriptor
-import io.ygdrasil.wgpu.toFlagULong
+import io.ygdrasil.webgpu.BindGroupLayoutDescriptor
+import io.ygdrasil.webgpu.toFlagULong
 import webgpu.WGPUBindGroupLayoutDescriptor
 import webgpu.WGPUBindGroupLayoutEntry
 import webgpu.WGPUChainedStruct

@@ -1,9 +1,11 @@
 @file:OptIn(ExperimentalForeignApi::class)
 
-import io.ygdrasil.wgpu.*
-import io.ygdrasil.wgpu.examples.Application
-import io.ygdrasil.wgpu.examples.createApplication
-import kotlinx.cinterop.*
+import io.ygdrasil.webgpu.examples.Application
+import io.ygdrasil.webgpu.examples.createApplication
+import io.ygdrasil.webgpu.iosContextRenderer
+import kotlinx.cinterop.CValue
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.useContents
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import platform.CoreGraphics.CGSize

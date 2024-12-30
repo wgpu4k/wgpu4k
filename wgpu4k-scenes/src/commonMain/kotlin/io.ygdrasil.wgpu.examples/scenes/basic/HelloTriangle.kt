@@ -1,18 +1,18 @@
-package io.ygdrasil.wgpu.examples.scenes.basic
+package io.ygdrasil.webgpu.examples.scenes.basic
 
-import io.ygdrasil.wgpu.AutoClosableContext
-import io.ygdrasil.wgpu.Color
-import io.ygdrasil.wgpu.LoadOp
-import io.ygdrasil.wgpu.RenderPassDescriptor
-import io.ygdrasil.wgpu.RenderPipeline
-import io.ygdrasil.wgpu.RenderPipelineDescriptor
-import io.ygdrasil.wgpu.ShaderModuleDescriptor
-import io.ygdrasil.wgpu.StoreOp
-import io.ygdrasil.wgpu.WGPUContext
-import io.ygdrasil.wgpu.beginRenderPass
-import io.ygdrasil.wgpu.examples.Scene
-import io.ygdrasil.wgpu.examples.scenes.shader.fragment.redFragmentShader
-import io.ygdrasil.wgpu.examples.scenes.shader.vertex.triangleVertexShader
+import io.ygdrasil.webgpu.AutoClosableContext
+import io.ygdrasil.webgpu.Color
+import io.ygdrasil.webgpu.LoadOp
+import io.ygdrasil.webgpu.RenderPassDescriptor
+import io.ygdrasil.webgpu.RenderPipeline
+import io.ygdrasil.webgpu.RenderPipelineDescriptor
+import io.ygdrasil.webgpu.ShaderModuleDescriptor
+import io.ygdrasil.webgpu.StoreOp
+import io.ygdrasil.webgpu.WGPUContext
+import io.ygdrasil.webgpu.beginRenderPass
+import io.ygdrasil.webgpu.examples.Scene
+import io.ygdrasil.webgpu.examples.scenes.shader.fragment.redFragmentShader
+import io.ygdrasil.webgpu.examples.scenes.shader.vertex.triangleVertexShader
 
 class HelloTriangleScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 

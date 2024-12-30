@@ -1,12 +1,12 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import io.ygdrasil.wgpu.examples.Application
-import io.ygdrasil.wgpu.examples.createApplication
+import io.ygdrasil.webgpu.examples.Application
+import io.ygdrasil.webgpu.examples.createApplication
 import korlibs.io.android.withAndroidContext
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch

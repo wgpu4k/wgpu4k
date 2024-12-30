@@ -1,23 +1,23 @@
-package io.ygdrasil.wgpu.examples
+package io.ygdrasil.webgpu.examples
 
-import io.ygdrasil.wgpu.AutoClosableContext
-import io.ygdrasil.wgpu.Device
-import io.ygdrasil.wgpu.RenderingContext
-import io.ygdrasil.wgpu.Size3D
-import io.ygdrasil.wgpu.TextureDescriptor
-import io.ygdrasil.wgpu.TextureFormat
-import io.ygdrasil.wgpu.TextureUsage
-import io.ygdrasil.wgpu.WGPUContext
-import io.ygdrasil.wgpu.examples.scenes.basic.CubemapScene
-import io.ygdrasil.wgpu.examples.scenes.basic.FractalCubeScene
-import io.ygdrasil.wgpu.examples.scenes.basic.HelloTriangleMSAAScene
-import io.ygdrasil.wgpu.examples.scenes.basic.HelloTriangleRotatingScene
-import io.ygdrasil.wgpu.examples.scenes.basic.HelloTriangleScene
-import io.ygdrasil.wgpu.examples.scenes.basic.InstancedCubeScene
-import io.ygdrasil.wgpu.examples.scenes.basic.RotatingCubeScene
-import io.ygdrasil.wgpu.examples.scenes.basic.TexturedCubeScene
-import io.ygdrasil.wgpu.examples.scenes.basic.TwoCubesScene
-import io.ygdrasil.wgpu.examples.scenes.graphics.techniques.SkinnedMeshScene
+import io.ygdrasil.webgpu.AutoClosableContext
+import io.ygdrasil.webgpu.Device
+import io.ygdrasil.webgpu.RenderingContext
+import io.ygdrasil.webgpu.Size3D
+import io.ygdrasil.webgpu.TextureDescriptor
+import io.ygdrasil.webgpu.TextureFormat
+import io.ygdrasil.webgpu.TextureUsage
+import io.ygdrasil.webgpu.WGPUContext
+import io.ygdrasil.webgpu.examples.scenes.basic.CubemapScene
+import io.ygdrasil.webgpu.examples.scenes.basic.FractalCubeScene
+import io.ygdrasil.webgpu.examples.scenes.basic.HelloTriangleMSAAScene
+import io.ygdrasil.webgpu.examples.scenes.basic.HelloTriangleRotatingScene
+import io.ygdrasil.webgpu.examples.scenes.basic.HelloTriangleScene
+import io.ygdrasil.webgpu.examples.scenes.basic.InstancedCubeScene
+import io.ygdrasil.webgpu.examples.scenes.basic.RotatingCubeScene
+import io.ygdrasil.webgpu.examples.scenes.basic.TexturedCubeScene
+import io.ygdrasil.webgpu.examples.scenes.basic.TwoCubesScene
+import io.ygdrasil.webgpu.examples.scenes.graphics.techniques.SkinnedMeshScene
 
 suspend fun loadScenes(wgpuContext: WGPUContext, resourceBasePath: String = ""): List<Scene> {
     val textureFormat = wgpuContext.renderingContext.textureFormat

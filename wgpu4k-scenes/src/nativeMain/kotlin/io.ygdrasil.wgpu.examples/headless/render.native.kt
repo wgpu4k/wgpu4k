@@ -1,4 +1,4 @@
-package io.ygdrasil.wgpu.examples.headless
+package io.ygdrasil.webgpu.examples.headless
 
 actual fun getSceneParameter(): SceneParameter {
     TODO("Not yet implemented")

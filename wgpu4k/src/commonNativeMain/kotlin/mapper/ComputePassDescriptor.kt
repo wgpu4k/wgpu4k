@@ -1,7 +1,7 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
-import io.ygdrasil.wgpu.ComputePassDescriptor
+import io.ygdrasil.webgpu.ComputePassDescriptor
 import webgpu.WGPUComputePassDescriptor
 import webgpu.WGPUComputePassTimestampWrites
 

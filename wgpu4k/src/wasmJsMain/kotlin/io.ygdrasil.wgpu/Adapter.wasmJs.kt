@@ -1,10 +1,10 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUAdapter
-import io.ygdrasil.wgpu.internal.js.GPUDevice
-import io.ygdrasil.wgpu.internal.js.GPURequestAdapterOptions
-import io.ygdrasil.wgpu.internal.js.navigator
-import io.ygdrasil.wgpu.mapper.map
+import io.ygdrasil.webgpu.internal.js.GPUAdapter
+import io.ygdrasil.webgpu.internal.js.GPUDevice
+import io.ygdrasil.webgpu.internal.js.GPURequestAdapterOptions
+import io.ygdrasil.webgpu.internal.js.navigator
+import io.ygdrasil.webgpu.mapper.map
 import kotlinx.coroutines.await
 
 actual class Adapter(internal val handler: GPUAdapter) : AutoCloseable {

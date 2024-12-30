@@ -1,4 +1,4 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 import kotlinx.browser.document
 import kotlinx.browser.window

@@ -1,7 +1,7 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
-import io.ygdrasil.wgpu.TextureDataLayout
+import io.ygdrasil.webgpu.TextureDataLayout
 import webgpu.WGPUTexelCopyBufferLayout
 
 internal fun MemoryAllocator.map(input: TextureDataLayout) = WGPUTexelCopyBufferLayout.allocate(this).also { output ->

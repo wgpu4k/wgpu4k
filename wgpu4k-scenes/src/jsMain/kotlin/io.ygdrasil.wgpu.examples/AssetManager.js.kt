@@ -1,6 +1,6 @@
-package io.ygdrasil.wgpu.examples
+package io.ygdrasil.webgpu.examples
 
-import io.ygdrasil.wgpu.ImageBitmapHolder
+import io.ygdrasil.webgpu.ImageBitmapHolder
 import korlibs.image.bitmap.Bitmap32
 import korlibs.image.color.ColorFormat
 import korlibs.io.file.Vfs

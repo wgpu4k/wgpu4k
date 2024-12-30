@@ -1,7 +1,7 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
-import io.ygdrasil.wgpu.BindGroupDescriptor
+import io.ygdrasil.webgpu.BindGroupDescriptor
 import webgpu.WGPUBindGroupDescriptor
 import webgpu.WGPUBindGroupEntry
 

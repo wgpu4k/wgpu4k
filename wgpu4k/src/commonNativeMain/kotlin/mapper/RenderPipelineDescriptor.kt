@@ -1,7 +1,7 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
-import io.ygdrasil.wgpu.RenderPipelineDescriptor
+import io.ygdrasil.webgpu.RenderPipelineDescriptor
 import webgpu.WGPUBlendComponent
 import webgpu.WGPUBlendState
 import webgpu.WGPUColorTargetState

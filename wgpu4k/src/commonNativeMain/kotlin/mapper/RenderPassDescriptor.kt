@@ -1,7 +1,7 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
-import io.ygdrasil.wgpu.RenderPassDescriptor
+import io.ygdrasil.webgpu.RenderPassDescriptor
 import webgpu.WGPURenderPassColorAttachment
 import webgpu.WGPURenderPassDepthStencilAttachment
 import webgpu.WGPURenderPassDescriptor

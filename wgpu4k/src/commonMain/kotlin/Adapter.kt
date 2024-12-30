@@ -1,4 +1,4 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 /**
  * The GPUAdapter interface of the WebGPU API represents a GPU adapter.

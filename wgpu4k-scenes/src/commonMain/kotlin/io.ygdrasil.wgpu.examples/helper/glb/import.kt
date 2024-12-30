@@ -1,14 +1,14 @@
-package io.ygdrasil.wgpu.examples.helper.glb
+package io.ygdrasil.webgpu.examples.helper.glb
 
-import io.ygdrasil.wgpu.BufferUsage
-import io.ygdrasil.wgpu.Device
-import io.ygdrasil.wgpu.ImageCopyExternalImage
-import io.ygdrasil.wgpu.ImageCopyTextureTagged
-import io.ygdrasil.wgpu.Size3D
-import io.ygdrasil.wgpu.TextureDescriptor
-import io.ygdrasil.wgpu.TextureFormat
-import io.ygdrasil.wgpu.TextureUsage
-import io.ygdrasil.wgpu.examples.toBitmapHolder
+import io.ygdrasil.webgpu.BufferUsage
+import io.ygdrasil.webgpu.Device
+import io.ygdrasil.webgpu.ImageCopyExternalImage
+import io.ygdrasil.webgpu.ImageCopyTextureTagged
+import io.ygdrasil.webgpu.Size3D
+import io.ygdrasil.webgpu.TextureDescriptor
+import io.ygdrasil.webgpu.TextureFormat
+import io.ygdrasil.webgpu.TextureUsage
+import io.ygdrasil.webgpu.examples.toBitmapHolder
 import korlibs.image.format.readBitmap
 import korlibs.io.file.std.asMemoryVfsFile
 import korlibs.math.geom.Matrix4

@@ -1,6 +1,6 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.Limits
+import io.ygdrasil.webgpu.Limits
 import webgpu.WGPULimits
 
 internal fun map(input: WGPULimits): Limits = Limits(

@@ -1,4 +1,4 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 /**
  * A GPUSampler encodes transformations and filtering information that can be used in a shader to interpret texture resource data.

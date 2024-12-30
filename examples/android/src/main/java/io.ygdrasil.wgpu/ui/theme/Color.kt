@@ -1,4 +1,4 @@
-package io.ygdrasil.wgpu.ui.theme
+package io.ygdrasil.webgpu.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,6 +1,6 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUComputePipeline
+import io.ygdrasil.webgpu.internal.js.GPUComputePipeline
 
 actual class ComputePipeline(internal val handler: GPUComputePipeline) : AutoCloseable {
 

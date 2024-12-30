@@ -1,9 +1,9 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.SamplerDescriptor
-import io.ygdrasil.wgpu.internal.js.GPUSamplerDescriptor
-import io.ygdrasil.wgpu.internal.js.createJsObject
-import io.ygdrasil.wgpu.internal.js.toJsNumber
+import io.ygdrasil.webgpu.SamplerDescriptor
+import io.ygdrasil.webgpu.internal.js.GPUSamplerDescriptor
+import io.ygdrasil.webgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.internal.js.toJsNumber
 
 internal fun map(input: SamplerDescriptor): GPUSamplerDescriptor = createJsObject<GPUSamplerDescriptor>().apply {
     if (input.label != null) label = input.label.toJsString()

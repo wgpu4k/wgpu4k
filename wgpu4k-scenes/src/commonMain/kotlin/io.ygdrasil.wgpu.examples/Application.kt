@@ -1,13 +1,13 @@
-package io.ygdrasil.wgpu.examples
+package io.ygdrasil.webgpu.examples
 
-import io.ygdrasil.wgpu.CompositeAlphaMode
-import io.ygdrasil.wgpu.Device
-import io.ygdrasil.wgpu.Surface
-import io.ygdrasil.wgpu.SurfaceConfiguration
-import io.ygdrasil.wgpu.SurfaceRenderingContext
-import io.ygdrasil.wgpu.TextureUsage
-import io.ygdrasil.wgpu.WGPUContext
-import io.ygdrasil.wgpu.autoClosableContext
+import io.ygdrasil.webgpu.CompositeAlphaMode
+import io.ygdrasil.webgpu.Device
+import io.ygdrasil.webgpu.Surface
+import io.ygdrasil.webgpu.SurfaceConfiguration
+import io.ygdrasil.webgpu.SurfaceRenderingContext
+import io.ygdrasil.webgpu.TextureUsage
+import io.ygdrasil.webgpu.WGPUContext
+import io.ygdrasil.webgpu.autoClosableContext
 
 suspend fun createApplication(wgpuContext: WGPUContext, resourceBasePath: String = ""): Application {
     wgpuContext.configureRenderingContext()

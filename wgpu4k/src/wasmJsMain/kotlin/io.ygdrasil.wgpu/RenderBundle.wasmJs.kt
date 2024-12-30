@@ -1,5 +1,5 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPURenderBundle
+import io.ygdrasil.webgpu.internal.js.GPURenderBundle
 
 actual class RenderBundle(internal val handler: GPURenderBundle)

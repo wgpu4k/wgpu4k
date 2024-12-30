@@ -1,11 +1,11 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.DeviceDescriptor
-import io.ygdrasil.wgpu.GPUSize64
-import io.ygdrasil.wgpu.QueueDescriptor
-import io.ygdrasil.wgpu.internal.js.GPUDeviceDescriptor
-import io.ygdrasil.wgpu.internal.js.GPUQueueDescriptor
-import io.ygdrasil.wgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.DeviceDescriptor
+import io.ygdrasil.webgpu.GPUSize64
+import io.ygdrasil.webgpu.QueueDescriptor
+import io.ygdrasil.webgpu.internal.js.GPUDeviceDescriptor
+import io.ygdrasil.webgpu.internal.js.GPUQueueDescriptor
+import io.ygdrasil.webgpu.internal.js.createJsObject
 
 // TODO: add unit test
 internal fun map(input: DeviceDescriptor): GPUDeviceDescriptor = createJsObject<GPUDeviceDescriptor>().apply {

@@ -1,9 +1,9 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
 import ffi.ArrayHolder
 import ffi.MemoryAllocator
-import io.ygdrasil.wgpu.TextureDescriptor
-import io.ygdrasil.wgpu.toFlagULong
+import io.ygdrasil.webgpu.TextureDescriptor
+import io.ygdrasil.webgpu.toFlagULong
 import webgpu.WGPUTextureDescriptor
 
 internal fun MemoryAllocator.map(input: TextureDescriptor) = WGPUTextureDescriptor.allocate(this).also { output ->

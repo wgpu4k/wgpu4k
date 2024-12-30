@@ -1,8 +1,8 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUCanvasContext
-import io.ygdrasil.wgpu.internal.js.navigator
-import io.ygdrasil.wgpu.mapper.map
+import io.ygdrasil.webgpu.internal.js.GPUCanvasContext
+import io.ygdrasil.webgpu.internal.js.navigator
+import io.ygdrasil.webgpu.mapper.map
 import org.w3c.dom.HTMLCanvasElement
 
 actual class Surface(internal val handler: GPUCanvasContext) : AutoCloseable {

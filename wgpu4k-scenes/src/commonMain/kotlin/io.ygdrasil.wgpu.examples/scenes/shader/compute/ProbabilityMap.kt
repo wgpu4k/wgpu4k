@@ -1,4 +1,4 @@
-package io.ygdrasil.wgpu.examples.scenes.shader.compute
+package io.ygdrasil.webgpu.examples.scenes.shader.compute
 
 // language=wgsl
 const val probabilityMap = """

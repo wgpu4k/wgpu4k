@@ -1,18 +1,18 @@
-package io.ygdrasil.wgpu.internal.js
+package io.ygdrasil.webgpu.internal.js
 
-import io.ygdrasil.wgpu.GPUBufferUsageFlags
-import io.ygdrasil.wgpu.GPUColorWriteFlags
-import io.ygdrasil.wgpu.GPUFlagsConstant
-import io.ygdrasil.wgpu.GPUIndex32
-import io.ygdrasil.wgpu.GPUIntegerCoordinate
-import io.ygdrasil.wgpu.GPUIntegerCoordinateOut
-import io.ygdrasil.wgpu.GPUMapModeFlags
-import io.ygdrasil.wgpu.GPUShaderStageFlags
-import io.ygdrasil.wgpu.GPUSignedOffset32
-import io.ygdrasil.wgpu.GPUSize32
-import io.ygdrasil.wgpu.GPUSize32Out
-import io.ygdrasil.wgpu.GPUSize64
-import io.ygdrasil.wgpu.GPUTextureUsageFlags
+import io.ygdrasil.webgpu.GPUBufferUsageFlags
+import io.ygdrasil.webgpu.GPUColorWriteFlags
+import io.ygdrasil.webgpu.GPUFlagsConstant
+import io.ygdrasil.webgpu.GPUIndex32
+import io.ygdrasil.webgpu.GPUIntegerCoordinate
+import io.ygdrasil.webgpu.GPUIntegerCoordinateOut
+import io.ygdrasil.webgpu.GPUMapModeFlags
+import io.ygdrasil.webgpu.GPUShaderStageFlags
+import io.ygdrasil.webgpu.GPUSignedOffset32
+import io.ygdrasil.webgpu.GPUSize32
+import io.ygdrasil.webgpu.GPUSize32Out
+import io.ygdrasil.webgpu.GPUSize64
+import io.ygdrasil.webgpu.GPUTextureUsageFlags
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.ArrayBufferView
 import org.khronos.webgl.Uint32Array
@@ -639,7 +639,7 @@ external interface GPURequestAdapterOptions
 
 external interface GPUSampler : GPUObjectBase
 
-external open class BigInt64Array : ArrayBufferView {
+open external class BigInt64Array : ArrayBufferView {
     constructor(length: Int)
     constructor(array: BigInt64Array)
     constructor(array: JsArray<JsBigInt>)

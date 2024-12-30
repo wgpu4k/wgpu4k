@@ -1,8 +1,8 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.Color
-import io.ygdrasil.wgpu.internal.js.GPUColorDict
-import io.ygdrasil.wgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.Color
+import io.ygdrasil.webgpu.internal.js.GPUColorDict
+import io.ygdrasil.webgpu.internal.js.createJsObject
 
 internal fun map(input: Color): GPUColorDict = createJsObject<GPUColorDict>().apply {
     r = input.red

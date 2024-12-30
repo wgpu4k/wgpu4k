@@ -1,8 +1,8 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUPipelineLayout
-import io.ygdrasil.wgpu.internal.js.GPURenderPipeline
-import io.ygdrasil.wgpu.internal.js.toJsNumber
+import io.ygdrasil.webgpu.internal.js.GPUPipelineLayout
+import io.ygdrasil.webgpu.internal.js.GPURenderPipeline
+import io.ygdrasil.webgpu.internal.js.toJsNumber
 
 actual class RenderPipeline(internal val handler: GPURenderPipeline) : AutoCloseable {
 

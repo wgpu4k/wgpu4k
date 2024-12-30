@@ -1,7 +1,7 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUCommandEncoder
-import io.ygdrasil.wgpu.mapper.map
+import io.ygdrasil.webgpu.internal.js.GPUCommandEncoder
+import io.ygdrasil.webgpu.mapper.map
 
 actual class CommandEncoder(private val handler: GPUCommandEncoder) : AutoCloseable {
     actual fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder = map(descriptor)

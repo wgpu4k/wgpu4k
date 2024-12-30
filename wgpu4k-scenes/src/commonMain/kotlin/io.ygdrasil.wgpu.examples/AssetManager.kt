@@ -1,9 +1,9 @@
-package io.ygdrasil.wgpu.examples
+package io.ygdrasil.webgpu.examples
 
-import io.ygdrasil.wgpu.ImageBitmapHolder
-import io.ygdrasil.wgpu.TextureFormat
-import io.ygdrasil.wgpu.examples.helper.glb.GLTF2
-import io.ygdrasil.wgpu.examples.helper.glb.readGLB
+import io.ygdrasil.webgpu.ImageBitmapHolder
+import io.ygdrasil.webgpu.TextureFormat
+import io.ygdrasil.webgpu.examples.helper.glb.GLTF2
+import io.ygdrasil.webgpu.examples.helper.glb.readGLB
 import korlibs.image.bitmap.Bitmap32
 import korlibs.image.color.BGRA
 import korlibs.image.color.ColorFormat
@@ -51,7 +51,7 @@ fun Bitmap32.toBitmapHolder(textureFormat: TextureFormat): ImageBitmapHolder {
     return toBitmapHolder(format)
 }
 
-expect internal fun Bitmap32.toBitmapHolder(textureFormat: ColorFormat): ImageBitmapHolder
+internal expect fun Bitmap32.toBitmapHolder(textureFormat: ColorFormat): ImageBitmapHolder
 
 suspend fun genericAssetManager(textureFormat: TextureFormat, resourceBasePath: String = "") = GenericAssetManager(
     bitmapFrom(textureFormat, "${resourceBasePath}assets/img/Di-3d.png"),

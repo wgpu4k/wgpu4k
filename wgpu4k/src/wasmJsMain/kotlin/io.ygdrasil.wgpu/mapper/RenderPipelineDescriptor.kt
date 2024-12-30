@@ -1,7 +1,21 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.RenderPipelineDescriptor
-import io.ygdrasil.wgpu.internal.js.*
+import io.ygdrasil.webgpu.RenderPipelineDescriptor
+import io.ygdrasil.webgpu.internal.js.GPUBlendComponent
+import io.ygdrasil.webgpu.internal.js.GPUBlendState
+import io.ygdrasil.webgpu.internal.js.GPUColorTargetState
+import io.ygdrasil.webgpu.internal.js.GPUDepthStencilState
+import io.ygdrasil.webgpu.internal.js.GPUFragmentState
+import io.ygdrasil.webgpu.internal.js.GPUMultisampleState
+import io.ygdrasil.webgpu.internal.js.GPUPrimitiveState
+import io.ygdrasil.webgpu.internal.js.GPURenderPipelineDescriptor
+import io.ygdrasil.webgpu.internal.js.GPUStencilFaceState
+import io.ygdrasil.webgpu.internal.js.GPUVertexAttribute
+import io.ygdrasil.webgpu.internal.js.GPUVertexBufferLayout
+import io.ygdrasil.webgpu.internal.js.GPUVertexState
+import io.ygdrasil.webgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.internal.js.mapJsArray
+import io.ygdrasil.webgpu.internal.js.toJsNumber
 
 internal fun map(input: RenderPipelineDescriptor): GPURenderPipelineDescriptor =
     createJsObject<GPURenderPipelineDescriptor>().apply {

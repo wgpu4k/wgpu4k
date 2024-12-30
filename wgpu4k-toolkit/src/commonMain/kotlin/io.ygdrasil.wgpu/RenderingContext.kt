@@ -1,4 +1,4 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 interface RenderingContext: AutoCloseable {
     val width: UInt

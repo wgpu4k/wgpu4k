@@ -1,4 +1,4 @@
-package io.ygdrasil.wgpu.examples.scenes.mesh
+package io.ygdrasil.webgpu.examples.scenes.mesh
 
 object Cube {
 

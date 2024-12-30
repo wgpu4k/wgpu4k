@@ -1,9 +1,9 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.BufferDescriptor
-import io.ygdrasil.wgpu.internal.js.GPUBufferDescriptor
-import io.ygdrasil.wgpu.internal.js.createJsObject
-import io.ygdrasil.wgpu.toFlagInt
+import io.ygdrasil.webgpu.BufferDescriptor
+import io.ygdrasil.webgpu.internal.js.GPUBufferDescriptor
+import io.ygdrasil.webgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.toFlagInt
 
 internal fun map(input: BufferDescriptor): GPUBufferDescriptor = createJsObject<GPUBufferDescriptor>().apply {
     size = input.size

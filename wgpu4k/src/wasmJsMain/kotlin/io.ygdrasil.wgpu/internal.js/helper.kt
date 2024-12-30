@@ -1,4 +1,4 @@
-package io.ygdrasil.wgpu.internal.js
+package io.ygdrasil.webgpu.internal.js
 
 import org.khronos.webgl.Int8Array
 import org.khronos.webgl.set

@@ -1,8 +1,8 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
 import ffi.ArrayHolder
 import ffi.MemoryAllocator
-import io.ygdrasil.wgpu.RenderBundleEncoderDescriptor
+import io.ygdrasil.webgpu.RenderBundleEncoderDescriptor
 import webgpu.WGPURenderBundleEncoderDescriptor
 
 fun MemoryAllocator.map(input: RenderBundleEncoderDescriptor): WGPURenderBundleEncoderDescriptor =

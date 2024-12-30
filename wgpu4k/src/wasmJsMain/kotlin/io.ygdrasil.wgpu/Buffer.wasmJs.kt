@@ -1,9 +1,9 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUBuffer
-import io.ygdrasil.wgpu.internal.js.mapJsArray
-import io.ygdrasil.wgpu.internal.js.toJsNumber
-import io.ygdrasil.wgpu.internal.js.toULong
+import io.ygdrasil.webgpu.internal.js.GPUBuffer
+import io.ygdrasil.webgpu.internal.js.mapJsArray
+import io.ygdrasil.webgpu.internal.js.toJsNumber
+import io.ygdrasil.webgpu.internal.js.toULong
 import org.khronos.webgl.Float32Array
 import org.khronos.webgl.Int16Array
 import org.khronos.webgl.Int32Array

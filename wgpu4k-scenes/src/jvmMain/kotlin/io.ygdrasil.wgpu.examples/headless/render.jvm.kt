@@ -1,4 +1,4 @@
-package io.ygdrasil.wgpu.examples.headless
+package io.ygdrasil.webgpu.examples.headless
 
 
 /*val callback = WGPULogCallback.allocate({ level, message, data ->

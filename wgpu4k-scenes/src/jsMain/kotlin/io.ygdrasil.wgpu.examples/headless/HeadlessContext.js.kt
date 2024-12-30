@@ -1,9 +1,9 @@
-package io.ygdrasil.wgpu.examples.headless
+package io.ygdrasil.webgpu.examples.headless
 
-import io.ygdrasil.wgpu.SurfaceConfiguration
-import io.ygdrasil.wgpu.TextureFormat
-import io.ygdrasil.wgpu.WGPUContext
-import io.ygdrasil.wgpu.canvasContextRenderer
+import io.ygdrasil.webgpu.SurfaceConfiguration
+import io.ygdrasil.webgpu.TextureFormat
+import io.ygdrasil.webgpu.WGPUContext
+import io.ygdrasil.webgpu.canvasContextRenderer
 
 actual suspend fun getHeadlessContext(): WGPUContext {
     val canvas = canvasContextRenderer(deferredRendering = false, width = 256, height = 256)

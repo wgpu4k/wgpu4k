@@ -1,7 +1,7 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPURenderPassEncoder
-import io.ygdrasil.wgpu.mapper.map
+import io.ygdrasil.webgpu.internal.js.GPURenderPassEncoder
+import io.ygdrasil.webgpu.mapper.map
 
 actual class RenderPassEncoder(private val handler: GPURenderPassEncoder) {
 

@@ -1,8 +1,8 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
 import ffi.ArrayHolder
 import ffi.MemoryAllocator
-import io.ygdrasil.wgpu.PipelineLayoutDescriptor
+import io.ygdrasil.webgpu.PipelineLayoutDescriptor
 import webgpu.WGPUPipelineLayoutDescriptor
 
 internal fun MemoryAllocator.map(input: PipelineLayoutDescriptor): WGPUPipelineLayoutDescriptor =

@@ -1,6 +1,6 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUComputePassEncoder
+import io.ygdrasil.webgpu.internal.js.GPUComputePassEncoder
 import org.khronos.webgl.Uint32Array
 
 actual class ComputePassEncoder(internal val handler: GPUComputePassEncoder) : AutoCloseable {

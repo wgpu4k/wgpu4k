@@ -1,8 +1,8 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
-import io.ygdrasil.wgpu.ComputePipelineDescriptor
-import io.ygdrasil.wgpu.GPUPipelineConstantValue
+import io.ygdrasil.webgpu.ComputePipelineDescriptor
+import io.ygdrasil.webgpu.GPUPipelineConstantValue
 import webgpu.WGPUComputePipelineDescriptor
 import webgpu.WGPUConstantEntry
 import webgpu.WGPUProgrammableStageDescriptor

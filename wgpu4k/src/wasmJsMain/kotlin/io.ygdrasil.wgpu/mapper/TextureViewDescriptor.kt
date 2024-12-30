@@ -1,8 +1,8 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.TextureViewDescriptor
-import io.ygdrasil.wgpu.internal.js.GPUTextureViewDescriptor
-import io.ygdrasil.wgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.TextureViewDescriptor
+import io.ygdrasil.webgpu.internal.js.GPUTextureViewDescriptor
+import io.ygdrasil.webgpu.internal.js.createJsObject
 
 internal fun map(input: TextureViewDescriptor): GPUTextureViewDescriptor =
     createJsObject<GPUTextureViewDescriptor>().apply {

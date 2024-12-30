@@ -1,7 +1,8 @@
-package io.ygdrasil.wgpu.examples.helper.glb
-import io.ygdrasil.wgpu.Device
-import io.ygdrasil.wgpu.ShaderModule
-import io.ygdrasil.wgpu.ShaderModuleDescriptor
+package io.ygdrasil.webgpu.examples.helper.glb
+
+import io.ygdrasil.webgpu.Device
+import io.ygdrasil.webgpu.ShaderModule
+import io.ygdrasil.webgpu.ShaderModuleDescriptor
 
 class ShaderCache(private val device: Device) {
     private val shaderCache: MutableMap<String, ShaderModule> = mutableMapOf()

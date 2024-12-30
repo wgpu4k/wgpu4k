@@ -1,8 +1,8 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.CommandEncoderDescriptor
-import io.ygdrasil.wgpu.internal.js.GPUCommandEncoderDescriptor
-import io.ygdrasil.wgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.CommandEncoderDescriptor
+import io.ygdrasil.webgpu.internal.js.GPUCommandEncoderDescriptor
+import io.ygdrasil.webgpu.internal.js.createJsObject
 
 internal fun map(input: CommandEncoderDescriptor): GPUCommandEncoderDescriptor =
     createJsObject<GPUCommandEncoderDescriptor>().apply {

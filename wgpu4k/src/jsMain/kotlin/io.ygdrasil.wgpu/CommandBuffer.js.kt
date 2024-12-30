@@ -1,6 +1,6 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUCommandBuffer
+import io.ygdrasil.webgpu.internal.js.GPUCommandBuffer
 
 actual class CommandBuffer(internal val handler: GPUCommandBuffer) : AutoCloseable {
     actual override fun close() {

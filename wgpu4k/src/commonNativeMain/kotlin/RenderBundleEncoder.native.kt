@@ -1,7 +1,7 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 import ffi.memoryScope
-import io.ygdrasil.wgpu.mapper.map
+import io.ygdrasil.webgpu.mapper.map
 import webgpu.WGPURenderBundleEncoder
 import webgpu.wgpuRenderBundleEncoderDraw
 import webgpu.wgpuRenderBundleEncoderDrawIndexed

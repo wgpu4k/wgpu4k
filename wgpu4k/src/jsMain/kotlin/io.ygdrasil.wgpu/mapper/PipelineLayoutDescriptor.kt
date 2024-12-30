@@ -1,8 +1,8 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.PipelineLayoutDescriptor
-import io.ygdrasil.wgpu.internal.js.GPUPipelineLayoutDescriptor
-import io.ygdrasil.wgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.PipelineLayoutDescriptor
+import io.ygdrasil.webgpu.internal.js.GPUPipelineLayoutDescriptor
+import io.ygdrasil.webgpu.internal.js.createJsObject
 
 internal fun map(input: PipelineLayoutDescriptor): GPUPipelineLayoutDescriptor =
     createJsObject<GPUPipelineLayoutDescriptor>().apply {

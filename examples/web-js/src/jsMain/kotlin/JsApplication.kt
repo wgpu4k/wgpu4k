@@ -1,6 +1,6 @@
-package io.ygdrasil.wgpu.examples
+package io.ygdrasil.webgpu.examples
 
-import io.ygdrasil.wgpu.canvasContextRenderer
+import io.ygdrasil.webgpu.canvasContextRenderer
 import kotlinx.browser.window
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch

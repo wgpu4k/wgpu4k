@@ -1,9 +1,9 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 
 import ffi.NativeAddress
 import ffi.memoryScope
-import io.ygdrasil.wgpu.mapper.map
+import io.ygdrasil.webgpu.mapper.map
 import webgpu.WGPUAdapter
 import webgpu.WGPUInstance
 import webgpu.WGPURequestAdapterCallback

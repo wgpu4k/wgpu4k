@@ -1,7 +1,7 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
-import io.ygdrasil.wgpu.ShaderModuleDescriptor
+import io.ygdrasil.webgpu.ShaderModuleDescriptor
 import webgpu.WGPUSType_ShaderSourceWGSL
 import webgpu.WGPUShaderModuleDescriptor
 import webgpu.WGPUShaderSourceWGSL

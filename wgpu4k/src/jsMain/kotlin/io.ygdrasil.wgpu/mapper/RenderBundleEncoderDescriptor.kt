@@ -1,8 +1,8 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.RenderBundleEncoderDescriptor
-import io.ygdrasil.wgpu.internal.js.GPURenderBundleEncoderDescriptor
-import io.ygdrasil.wgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.RenderBundleEncoderDescriptor
+import io.ygdrasil.webgpu.internal.js.GPURenderBundleEncoderDescriptor
+import io.ygdrasil.webgpu.internal.js.createJsObject
 
 internal fun map(input: RenderBundleEncoderDescriptor): GPURenderBundleEncoderDescriptor =
     createJsObject<GPURenderBundleEncoderDescriptor>().apply {

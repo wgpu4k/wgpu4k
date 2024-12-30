@@ -1,12 +1,12 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.BigInt64Array
-import io.ygdrasil.wgpu.internal.js.GPUExtent3DDict
-import io.ygdrasil.wgpu.internal.js.GPUImageCopyTexture
-import io.ygdrasil.wgpu.internal.js.GPUImageDataLayout
-import io.ygdrasil.wgpu.internal.js.GPUQueue
-import io.ygdrasil.wgpu.internal.js.createJsObject
-import io.ygdrasil.wgpu.mapper.map
+import io.ygdrasil.webgpu.internal.js.BigInt64Array
+import io.ygdrasil.webgpu.internal.js.GPUExtent3DDict
+import io.ygdrasil.webgpu.internal.js.GPUImageCopyTexture
+import io.ygdrasil.webgpu.internal.js.GPUImageDataLayout
+import io.ygdrasil.webgpu.internal.js.GPUQueue
+import io.ygdrasil.webgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.mapper.map
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.Float32Array
 import org.khronos.webgl.Float64Array

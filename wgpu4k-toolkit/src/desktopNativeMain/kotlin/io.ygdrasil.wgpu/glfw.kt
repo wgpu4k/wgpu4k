@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalForeignApi::class)
 
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 import cnames.structs.GLFWwindow
 import glfw.GLFW_CLIENT_API
@@ -12,7 +12,7 @@ import glfw.glfwCreateWindow
 import glfw.glfwDestroyWindow
 import glfw.glfwInit
 import glfw.glfwWindowHint
-import io.ygdrasil.wgpu.WGPU.Companion.createInstance
+import io.ygdrasil.webgpu.WGPU.Companion.createInstance
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.CValuesRef
 import kotlinx.cinterop.ExperimentalForeignApi

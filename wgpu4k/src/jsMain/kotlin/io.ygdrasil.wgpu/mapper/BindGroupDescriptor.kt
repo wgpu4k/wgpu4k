@@ -1,10 +1,10 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.BindGroupDescriptor
-import io.ygdrasil.wgpu.internal.js.GPUBindGroupDescriptor
-import io.ygdrasil.wgpu.internal.js.GPUBindGroupEntry
-import io.ygdrasil.wgpu.internal.js.GPUBufferBinding
-import io.ygdrasil.wgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.BindGroupDescriptor
+import io.ygdrasil.webgpu.internal.js.GPUBindGroupDescriptor
+import io.ygdrasil.webgpu.internal.js.GPUBindGroupEntry
+import io.ygdrasil.webgpu.internal.js.GPUBufferBinding
+import io.ygdrasil.webgpu.internal.js.createJsObject
 
 internal fun map(input: BindGroupDescriptor): GPUBindGroupDescriptor = createJsObject<GPUBindGroupDescriptor>().apply {
     if (input.label != null) label = input.label

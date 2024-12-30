@@ -1,8 +1,8 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUAdapter
-import io.ygdrasil.wgpu.internal.js.GPURequestAdapterOptions
-import io.ygdrasil.wgpu.mapper.map
+import io.ygdrasil.webgpu.internal.js.GPUAdapter
+import io.ygdrasil.webgpu.internal.js.GPURequestAdapterOptions
+import io.ygdrasil.webgpu.mapper.map
 import kotlinx.coroutines.await
 
 suspend fun requestAdapter(options: GPURequestAdapterOptions? = null): Adapter? {

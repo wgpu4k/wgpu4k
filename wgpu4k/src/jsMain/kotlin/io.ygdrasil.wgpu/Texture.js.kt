@@ -1,7 +1,7 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUTexture
-import io.ygdrasil.wgpu.mapper.map
+import io.ygdrasil.webgpu.internal.js.GPUTexture
+import io.ygdrasil.webgpu.mapper.map
 
 actual class Texture(internal val handler: GPUTexture) : AutoCloseable {
 

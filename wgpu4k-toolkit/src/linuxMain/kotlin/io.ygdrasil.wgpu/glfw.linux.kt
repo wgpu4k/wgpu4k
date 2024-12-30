@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalForeignApi::class)
 
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 import cnames.structs.GLFWwindow
 import glfw.glfwGetX11Display

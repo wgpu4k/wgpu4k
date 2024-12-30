@@ -11,10 +11,10 @@ import glfw.glfwPollEvents
 import glfw.glfwSetKeyCallback
 import glfw.glfwShowWindow
 import glfw.glfwWindowShouldClose
-import io.ygdrasil.wgpu.GLFWContext
-import io.ygdrasil.wgpu.examples.Application
-import io.ygdrasil.wgpu.examples.createApplication
-import io.ygdrasil.wgpu.glfwContextRenderer
+import io.ygdrasil.webgpu.GLFWContext
+import io.ygdrasil.webgpu.examples.Application
+import io.ygdrasil.webgpu.examples.createApplication
+import io.ygdrasil.webgpu.glfwContextRenderer
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.reinterpret

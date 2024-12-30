@@ -1,10 +1,10 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.SurfaceConfiguration
-import io.ygdrasil.wgpu.internal.js.GPUCanvasConfiguration
-import io.ygdrasil.wgpu.internal.js.createJsObject
-import io.ygdrasil.wgpu.internal.js.mapJsArray
-import io.ygdrasil.wgpu.toFlagInt
+import io.ygdrasil.webgpu.SurfaceConfiguration
+import io.ygdrasil.webgpu.internal.js.GPUCanvasConfiguration
+import io.ygdrasil.webgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.internal.js.mapJsArray
+import io.ygdrasil.webgpu.toFlagInt
 
 internal fun map(input: SurfaceConfiguration): GPUCanvasConfiguration {
     return createJsObject<GPUCanvasConfiguration>().apply {

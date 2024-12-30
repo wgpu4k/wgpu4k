@@ -1,6 +1,6 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUBuffer
+import io.ygdrasil.webgpu.internal.js.GPUBuffer
 import org.khronos.webgl.Float32Array
 import org.khronos.webgl.Int16Array
 import org.khronos.webgl.Int8Array
