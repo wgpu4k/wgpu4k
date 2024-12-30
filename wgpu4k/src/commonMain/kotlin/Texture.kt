@@ -31,7 +31,6 @@ data class TextureDescriptor(
 )
 
 // Todo double check this
-fun TextureFormat.
 fun TextureFormat.getBytesPerPixel(): GPUSize32 {
     return when (this) {
         // Formats with 1 byte per pixel
