@@ -9,6 +9,6 @@ internal fun MemoryAllocator.map(input: ImageCopyTextureTagged) =
         output.texture = input.texture.handler
         output.mipLevel = input.mipLevel
         map(input.origin, output.origin)
-        output.aspect = input.aspect.uValue
+        output.aspect = input.aspect.value
     }
 

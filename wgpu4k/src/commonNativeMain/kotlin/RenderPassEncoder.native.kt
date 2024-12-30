@@ -80,7 +80,7 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) {
     }
 
     actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
-        wgpuRenderPassEncoderSetIndexBuffer(handler, buffer.handler, indexFormat.uValue, offset, size)
+        wgpuRenderPassEncoderSetIndexBuffer(handler, buffer.handler, indexFormat.value, offset, size)
     }
 
     actual fun executeBundles(bundles: List<RenderBundle>) = memoryScope { scope ->

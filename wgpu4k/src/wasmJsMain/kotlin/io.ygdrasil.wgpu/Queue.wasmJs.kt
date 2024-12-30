@@ -219,7 +219,7 @@ actual class Queue(internal val handler: GPUQueue) {
                 texture = destination.texture.handler
                 mipLevel = destination.mipLevel
                 origin = destination.origin.toArray().mapJsArray { it.toJsNumber() }
-                aspect = destination.aspect.stringValue
+                aspect = destination.aspect.value
             },
             image.data.toInt8Array().buffer,
             createJsObject<GPUImageDataLayout>().apply {

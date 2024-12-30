@@ -29,7 +29,7 @@ internal fun MemoryAllocator.map(input: RenderPipelineDescriptor) =
 
 fun MemoryAllocator.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState, output: WGPUColorTargetState) {
     println("colorTargetState $output")
-    output.format = input.format.uValue
+    output.format = input.format.value
     output.writeMask = input.writeMask.value.toULong()
     output.blend = map(input.blend)
 }
@@ -48,9 +48,9 @@ fun map(
     output: WGPUBlendComponent
 ) {
     println("blend component $output")
-    output.operation = input.operation.uValue
-    output.srcFactor = input.srcFactor.uValue
-    output.dstFactor = input.dstFactor.uValue
+    output.operation = input.operation.value
+    output.srcFactor = input.srcFactor.value
+    output.dstFactor = input.dstFactor.value
 }
 
 private fun MemoryAllocator.map(input: RenderPipelineDescriptor.FragmentState): WGPUFragmentState =
@@ -74,9 +74,9 @@ private fun MemoryAllocator.map(input: RenderPipelineDescriptor.FragmentState): 
 private fun MemoryAllocator.map(input: RenderPipelineDescriptor.DepthStencilState): WGPUDepthStencilState =
     WGPUDepthStencilState.allocate(this)
         .also { output ->
-            output.format = input.format.uValue
+            output.format = input.format.value
             if (input.depthWriteEnabled != null) output.depthWriteEnabled = input.depthWriteEnabled.toUInt()
-            if (input.depthCompare != null) output.depthCompare = input.depthCompare.uValue
+            if (input.depthCompare != null) output.depthCompare = input.depthCompare.value
             map(input.stencilFront, output.stencilFront)
             map(input.stencilBack, output.stencilBack)
             output.stencilReadMask = input.stencilReadMask
@@ -87,10 +87,10 @@ private fun MemoryAllocator.map(input: RenderPipelineDescriptor.DepthStencilStat
         }
 
 fun map(input: RenderPipelineDescriptor.DepthStencilState.StencilFaceState, output: WGPUStencilFaceState) {
-    output.compare = input.compare.uValue
-    output.failOp = input.failOp.uValue
-    output.depthFailOp = input.depthFailOp.uValue
-    output.passOp = input.passOp.uValue
+    output.compare = input.compare.value
+    output.failOp = input.failOp.value
+    output.depthFailOp = input.depthFailOp.value
+    output.passOp = input.passOp.value
 }
 
 private fun map(input: RenderPipelineDescriptor.MultisampleState, output: WGPUMultisampleState) {
@@ -100,10 +100,10 @@ private fun map(input: RenderPipelineDescriptor.MultisampleState, output: WGPUMu
 }
 
 private fun map(input: RenderPipelineDescriptor.PrimitiveState, output: WGPUPrimitiveState) {
-    output.topology = input.topology.uValue
-    if (input.stripIndexFormat != null) output.stripIndexFormat = input.stripIndexFormat.uValue
-    output.frontFace = input.frontFace.uValue
-    output.cullMode = input.cullMode.uValue
+    output.topology = input.topology.value
+    if (input.stripIndexFormat != null) output.stripIndexFormat = input.stripIndexFormat.value
+    output.frontFace = input.frontFace.value
+    output.cullMode = input.cullMode.value
     //TODO check how to map unclippedDepth https://docs.rs/wgpu/latest/wgpu/struct.PrimitiveState.html
 }
 
@@ -128,7 +128,7 @@ private fun map(
     output: WGPUVertexAttribute
 ) {
     println("attribute $output")
-    output.format = input.format.uValue
+    output.format = input.format.value
     output.offset = input.offset
     output.shaderLocation = input.shaderLocation
 }
@@ -146,6 +146,6 @@ private fun MemoryAllocator.map(
         })
         output.attributeCount = input.attributes.size.toULong()
     }
-    output.stepMode = input.stepMode.uValue
+    output.stepMode = input.stepMode.value
 }
 

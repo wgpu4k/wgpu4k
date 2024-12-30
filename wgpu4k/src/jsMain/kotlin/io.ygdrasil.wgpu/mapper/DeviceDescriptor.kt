@@ -9,7 +9,7 @@ import io.ygdrasil.webgpu.internal.js.createJsObject
 
 // TODO: add unit test
 internal fun map(input: DeviceDescriptor): GPUDeviceDescriptor = createJsObject<GPUDeviceDescriptor>().apply {
-    requiredFeatures = input.requiredFeatures.map { it.actualName }.toTypedArray()
+    requiredFeatures = input.requiredFeatures.map { it.value }.toTypedArray()
     requiredLimits = map(input.requiredLimits)
     defaultQueue = map(input.defaultQueue)
     if (input.label != null) label = input.label

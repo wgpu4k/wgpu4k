@@ -26,10 +26,10 @@ actual class Device(internal val handler: WGPUDevice) : AutoCloseable {
 
     actual val queue: Queue by lazy { Queue(wgpuDeviceGetQueue(handler) ?: error("fail to get device queue")) }
 
-    actual val features: Set<Feature> by lazy {
-        Feature.entries
+    actual val features: Set<FeatureName> by lazy {
+        FeatureName.entries
             .mapNotNull { feature ->
-                feature.takeIf { wgpuDeviceHasFeature(handler, feature.uValue) }
+                feature.takeIf { wgpuDeviceHasFeature(handler, feature.value) }
             }
             .toSet()
     }

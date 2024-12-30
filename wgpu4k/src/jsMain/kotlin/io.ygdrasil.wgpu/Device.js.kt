@@ -8,9 +8,9 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
 
     actual val queue: Queue by lazy { Queue(handler.queue) }
 
-    actual val features: Set<Feature> by lazy {
+    actual val features: Set<FeatureName> by lazy {
         handler.features
-            .map { Feature.of(it) ?: error("Unsupported feature $it") }
+            .map { FeatureName.of(it) ?: error("Unsupported feature $it") }
             .toSet()
     }
 

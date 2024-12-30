@@ -31,8 +31,8 @@ internal fun MemoryAllocator.map(input: RenderPassDescriptor): WGPURenderPassDes
 internal fun MemoryAllocator.map(input: RenderPassDescriptor.ColorAttachment, output: WGPURenderPassColorAttachment) {
     println("color attachment $output")
     output.view = input.view.handler
-    output.loadOp = input.loadOp.uValue
-    output.storeOp = input.storeOp.uValue
+    output.loadOp = input.loadOp.value
+    output.storeOp = input.storeOp.value
     // TODO find how to map this
     //if (input.depthSlice != null) WGPURenderPassColorAttachment.depthSlice = input.depthSlice)
     if (input.resolveTarget != null) output.resolveTarget = input.resolveTarget.handler
@@ -44,11 +44,11 @@ internal fun MemoryAllocator.map(input: RenderPassDescriptor.DepthStencilAttachm
         output.view = input.view.handler
         if (input.depthClearValue != null) output.depthClearValue = input.depthClearValue
 
-        if (input.depthLoadOp != null) output.depthLoadOp = input.depthLoadOp.uValue
-        if (input.depthStoreOp != null) output.depthStoreOp = input.depthStoreOp.uValue
+        if (input.depthLoadOp != null) output.depthLoadOp = input.depthLoadOp.value
+        if (input.depthStoreOp != null) output.depthStoreOp = input.depthStoreOp.value
         output.depthReadOnly = input.depthReadOnly
         output.stencilClearValue = input.stencilClearValue
-        if (input.stencilLoadOp != null) output.stencilLoadOp = input.stencilLoadOp.uValue
-        if (input.stencilStoreOp != null) output.stencilStoreOp = input.stencilStoreOp.uValue
+        if (input.stencilLoadOp != null) output.stencilLoadOp = input.stencilLoadOp.value
+        if (input.stencilStoreOp != null) output.stencilStoreOp = input.stencilStoreOp.value
         output.stencilReadOnly = input.stencilReadOnly
     }

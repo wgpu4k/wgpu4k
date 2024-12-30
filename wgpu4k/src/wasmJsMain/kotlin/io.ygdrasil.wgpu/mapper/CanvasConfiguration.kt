@@ -9,11 +9,11 @@ import io.ygdrasil.webgpu.toFlagInt
 internal fun map(input: SurfaceConfiguration): GPUCanvasConfiguration {
     return createJsObject<GPUCanvasConfiguration>().apply {
         device = input.device.handler
-        format = input.format.actualName.toJsString()
+        format = input.format.value.toJsString()
         usage = input.usage.toFlagInt().toJsNumber()
-        viewFormats = input.viewFormats.mapJsArray { it.actualName.toJsString() }
-        colorSpace = input.colorSpace.name.toJsString()
-        alphaMode = input.alphaMode.stringValue.toJsString()
+        viewFormats = input.viewFormats.mapJsArray { it.value.toJsString() }
+        colorSpace = input.colorSpace.value.toJsString()
+        alphaMode = input.alphaMode.value.toJsString()
     }
 }
 

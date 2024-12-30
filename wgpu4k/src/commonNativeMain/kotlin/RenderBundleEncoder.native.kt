@@ -33,7 +33,7 @@ actual class RenderBundleEncoder(internal val handler: WGPURenderBundleEncoder) 
     }
 
     actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
-        wgpuRenderBundleEncoderSetIndexBuffer(handler, buffer.handler, indexFormat.uValue, offset, size)
+        wgpuRenderBundleEncoderSetIndexBuffer(handler, buffer.handler, indexFormat.value, offset, size)
     }
 
     actual fun drawIndexed(

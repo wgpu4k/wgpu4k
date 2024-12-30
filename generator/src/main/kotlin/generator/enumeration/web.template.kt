@@ -15,7 +15,16 @@ fun List<YamlModel.Enum>.toWebEnumerations() = templateBuilder {
                         .fixNameStartingWithNumeric()
                     appendLine("$name(\"${value.name.replace("_", "-").lowercase()}\"),")
                 }
+            appendLine(";")
+            newLine()
+
+            appendBlock("companion object") {
+                appendBlock("fun of(value: String): $name?") {
+                    appendLine("return entries.find { it.value == value }")
+                }
+            }
         }
+        newLine()
     }
 }
 

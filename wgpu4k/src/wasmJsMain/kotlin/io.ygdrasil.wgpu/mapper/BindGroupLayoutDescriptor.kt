@@ -29,28 +29,28 @@ private fun map(input: BindGroupLayoutDescriptor.Entry): GPUBindGroupLayoutEntry
         visibility = input.visibility.toFlagInt()
         if (input.bindingType is BufferBindingLayout) {
             buffer = createJsObject<GPUBufferBindingLayout>().apply {
-                type = input.bindingType.type.stringValue
+                type = input.bindingType.type.value
                 hasDynamicOffset = input.bindingType.hasDynamicOffset
                 minBindingSize = input.bindingType.minBindingSize.toJsNumber()
             }
         }
         if (input.bindingType is SamplerBindingLayout) {
             sampler = createJsObject<GPUSamplerBindingLayout>().apply {
-                type = input.bindingType.type.stringValue
+                type = input.bindingType.type.value
             }
         }
         if (input.bindingType is TextureBindingLayout) {
             texture = createJsObject<GPUTextureBindingLayout>().apply {
-                sampleType = input.bindingType.sampleType.stringValue
-                viewDimension = input.bindingType.viewDimension.stringValue
+                sampleType = input.bindingType.sampleType.value
+                viewDimension = input.bindingType.viewDimension.value
                 multisampled = input.bindingType.multisampled
             }
         }
         if (input.bindingType is StorageTextureBindingLayout) {
             storageTexture = createJsObject<GPUStorageTextureBindingLayout>().apply {
-                access = input.bindingType.access.stringValue
-                format = input.bindingType.format.actualName
-                viewDimension = input.bindingType.viewDimension.stringValue
+                access = input.bindingType.access.value
+                format = input.bindingType.format.value
+                viewDimension = input.bindingType.viewDimension.value
             }
         }
     }

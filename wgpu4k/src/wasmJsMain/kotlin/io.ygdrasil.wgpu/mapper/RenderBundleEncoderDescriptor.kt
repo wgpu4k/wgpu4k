@@ -9,8 +9,8 @@ internal fun map(input: RenderBundleEncoderDescriptor): GPURenderBundleEncoderDe
     createJsObject<GPURenderBundleEncoderDescriptor>().apply {
         depthReadOnly = input.depthReadOnly
         stencilReadOnly = input.stencilReadOnly
-        colorFormats = input.colorFormats.mapJsArray { it.actualName.toJsString() }
-        depthStencilFormat = input.depthStencilFormat.actualName
+        colorFormats = input.colorFormats.mapJsArray { it.value.toJsString() }
+        depthStencilFormat = input.depthStencilFormat.value
         sampleCount = input.sampleCount
         if (input.label != null) label = input.label.toJsString()
     }

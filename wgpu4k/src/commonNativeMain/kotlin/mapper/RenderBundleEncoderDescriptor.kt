@@ -13,11 +13,11 @@ fun MemoryAllocator.map(input: RenderBundleEncoderDescriptor): WGPURenderBundleE
             output.colorFormatCount = input.colorFormats.size.toULong()
 
             output.colorFormats = allocateBuffer(Int.SIZE_BYTES.toULong() * output.colorFormatCount)
-                .also { it.writeInts(input.colorFormats.map { it.value }.toIntArray()) }
+                .also { it.writeUInts(input.colorFormats.map { it.value }.toUIntArray()) }
                 .let { ArrayHolder(it.handler) }
         }
 
-        output.depthStencilFormat = input.depthStencilFormat.uValue
+        output.depthStencilFormat = input.depthStencilFormat.value
         output.sampleCount = input.sampleCount
         output.depthReadOnly = input.depthReadOnly
         output.stencilReadOnly = input.stencilReadOnly

@@ -10,8 +10,8 @@ internal fun map(input: TextureDescriptor): GPUTextureDescriptor = createJsObjec
     size = map(input.size)
     mipLevelCount = input.mipLevelCount
     sampleCount = input.sampleCount
-    dimension = input.dimension.stringValue
-    format = input.format.actualName
+    dimension = input.dimension.value
+    format = input.format.value
     usage = input.usage.toFlagInt()
-    viewFormats = input.viewFormats.map { it.actualName }.toTypedArray()
+    viewFormats = input.viewFormats.map { it.value }.toTypedArray()
 }

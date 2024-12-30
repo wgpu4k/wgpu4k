@@ -17,10 +17,10 @@ import webgpu.wgpuAdapterRequestDevice
 
 actual class Adapter(internal val handler: WGPUAdapter) : AutoCloseable {
 
-    actual val features: Set<Feature> by lazy {
-        Feature.entries
+    actual val features: Set<FeatureName> by lazy {
+        FeatureName.entries
             .mapNotNull { feature ->
-                feature.takeIf { wgpuAdapterHasFeature(handler, feature.uValue) }
+                feature.takeIf { wgpuAdapterHasFeature(handler, feature.value) }
             }
             .toSet()
     }

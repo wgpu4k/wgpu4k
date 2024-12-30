@@ -8,5 +8,5 @@ internal fun map(input: ImageCopyTexture): GPUImageCopyTexture = createJsObject<
     texture = input.texture.handler
     mipLevel = input.mipLevel
     origin = input.origin.toArray()
-    aspect = input.aspect.stringValue
+    aspect = input.aspect.value
 }

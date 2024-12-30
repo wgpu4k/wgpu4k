@@ -15,7 +15,16 @@ fun List<YamlModel.Enum>.toNativeEnumerations() = templateBuilder {
                     val valueName = originalValueName.fixNameStartingWithNumeric()
                     appendLine("$valueName(webgpu.WGPU${name}_$originalValueName),")
                 }
+            appendLine(";")
+            newLine()
+
+            appendBlock("companion object") {
+                appendBlock("fun of(value: UInt): $name?") {
+                    appendLine("return entries.find { it.value == value }")
+                }
+            }
         }
+        newLine()
     }
 }
 

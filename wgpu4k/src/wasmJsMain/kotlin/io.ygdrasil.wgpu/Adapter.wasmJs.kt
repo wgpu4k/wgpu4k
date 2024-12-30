@@ -9,11 +9,11 @@ import kotlinx.coroutines.await
 
 actual class Adapter(internal val handler: GPUAdapter) : AutoCloseable {
 
-    actual val features: Set<Feature> by lazy {
+    actual val features: Set<FeatureName> by lazy {
         (0..handler.features.length)
             .map {  index ->
                 index.let { handler.features[it].toString() }
-                    .let { Feature.of(it) ?: error("Unsupported feature $it") }
+                    .let { FeatureName.of(it) ?: error("Unsupported feature $it") }
             }
             .toSet()
     }

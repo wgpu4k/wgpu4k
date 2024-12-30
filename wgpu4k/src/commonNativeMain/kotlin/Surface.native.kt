@@ -67,12 +67,12 @@ actual class Surface(
 
         if (_supportedFormats.isEmpty()) {
             println("WARNING: fail to get supported textures on surface, will inject rgba8unorm format")
-            _supportedFormats = setOf(TextureFormat.rgba8unorm)
+            _supportedFormats = setOf(TextureFormat.RGBA8Unorm)
         }
 
         if (_supportedAlphaMode.isEmpty()) {
             println("WARNING: fail to get supported alpha mode on surface, will inject inherit alpha mode")
-            _supportedAlphaMode = setOf(CompositeAlphaMode.inherit)
+            _supportedAlphaMode = setOf(CompositeAlphaMode.Inherit)
         }
     }
 
@@ -84,7 +84,7 @@ actual class Surface(
                 .readUInts(it)
         }
         .map {
-            TextureFormat.of(it.toInt())
+            TextureFormat.of(it)
                 .also { if (it == null) println("ignoring undefined format with value $it") }
         }
         .filterNotNull()
@@ -98,7 +98,7 @@ actual class Surface(
                 .readUInts(it)
         }
         .map {
-            CompositeAlphaMode.of(it.toInt())
+            CompositeAlphaMode.of(it)
                 .also { if (it == null) println("ignoring undefined alpha mode with value $it") }
         }
         .filterNotNull()
@@ -116,9 +116,9 @@ actual class Surface(
         WGPUSurfaceConfiguration.allocate(this).also { output ->
             output.device = input.device.handler
             output.usage = input.usage.toFlagULong()
-            output.format = input.format.uValue
-            output.presentMode = input.presentMode.uValue
-            output.alphaMode = input.alphaMode.uValue
+            output.format = input.format.value
+            output.presentMode = input.presentMode.value
+            output.alphaMode = input.alphaMode.value
             output.width = width
             output.height = height
         }

@@ -18,8 +18,10 @@ actual class Surface(internal val handler: GPUCanvasContext) : AutoCloseable {
     }
 
     // @see https://gpuweb.github.io/gpuweb/#canvas-configuration
-    actual val supportedFormats: Set<TextureFormat> = setOf(TextureFormat.bgra8unorm, TextureFormat.rgba8unorm, TextureFormat.rgba16float)
-    actual val supportedAlphaMode: Set<CompositeAlphaMode> = setOf(CompositeAlphaMode.opaque, CompositeAlphaMode.premultiplied)
+    actual val supportedFormats: Set<TextureFormat> =
+        setOf(TextureFormat.BGRA8Unorm, TextureFormat.RGBA8Unorm, TextureFormat.RGBA16Float)
+    actual val supportedAlphaMode: Set<CompositeAlphaMode> =
+        setOf(CompositeAlphaMode.Opaque, CompositeAlphaMode.Premultiplied)
 
     actual fun getCurrentTexture(): SurfaceTexture {
         return handler.getCurrentTexture()
