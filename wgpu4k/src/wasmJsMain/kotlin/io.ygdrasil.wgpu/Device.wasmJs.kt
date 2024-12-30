@@ -16,7 +16,7 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
             .toSet()
     }
 
-    actual val limits: SupportedLimits by lazy { map(handler.limits) }
+    actual val limits: Limits by lazy { map(handler.limits) }
 
     actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder {
         return CommandEncoder(

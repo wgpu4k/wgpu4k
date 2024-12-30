@@ -15,7 +15,6 @@ import io.ygdrasil.wgpu.GPUSignedOffset32
 import io.ygdrasil.wgpu.GPUSize32
 import io.ygdrasil.wgpu.GPUSize32Out
 import io.ygdrasil.wgpu.GPUSize64
-import io.ygdrasil.wgpu.GPUSize64Out
 import io.ygdrasil.wgpu.GPUStencilValue
 import io.ygdrasil.wgpu.GPUTextureUsageFlags
 import org.khronos.webgl.ArrayBuffer
@@ -426,7 +425,7 @@ external interface GPUObjectBase {
 }
 
 external interface GPUPipelineBase {
-    fun getBindGroupLayout(index: Number): GPUBindGroupLayout
+    fun getBindGroupLayout(index: GPUSize32): GPUBindGroupLayout
 }
 
 external interface GPURenderCommandsMixin {
@@ -494,7 +493,7 @@ external interface GPUBindGroup : GPUObjectBase
 external interface GPUBindGroupLayout : GPUObjectBase
 
 external interface GPUBuffer : GPUObjectBase {
-    var size: GPUSize64Out
+    var size: GPUSize64
     var usage: GPUFlagsConstant
     var mapState: String /* "unmapped" | "pending" | "mapped" */
     fun mapAsync(mode: GPUMapModeFlags, offset: GPUSize64, size: GPUSize64): Promise<Any?>
@@ -834,7 +833,7 @@ external interface GPUTextureUsage {
     var RENDER_ATTACHMENT: GPUFlagsConstant
 }
 
-external open class BigInt64Array : ArrayBufferView {
+open external class BigInt64Array : ArrayBufferView {
     constructor(length: Int)
     constructor(array: BigInt64Array)
     constructor(array: Array<Long>)

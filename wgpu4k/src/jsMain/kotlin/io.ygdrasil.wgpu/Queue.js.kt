@@ -219,14 +219,14 @@ actual class Queue(internal val handler: GPUQueue) {
             },
             image.data.unsafeCast<ArrayBuffer>(),
             createJsObject<GPUImageDataLayout>().apply {
-                offset = 0
+                offset = 0u
                 bytesPerRow = image.width * bytePerPixel
                 rowsPerImage = image.height
             },
             createJsObject<GPUExtent3DDict>().apply {
                 width = image.width
                 height = image.height
-                depthOrArrayLayers = 1
+                depthOrArrayLayers = 1u
             }
         )
     }
@@ -234,8 +234,8 @@ actual class Queue(internal val handler: GPUQueue) {
 
 
 actual class ImageBitmapHolder(
-    actual val width: Int,
-    actual val height: Int,
+    actual val width: GPUSize32,
+    actual val height: GPUSize32,
     val data: ByteArray,
 ) : DrawableHolder, AutoCloseable {
     actual override fun close() {

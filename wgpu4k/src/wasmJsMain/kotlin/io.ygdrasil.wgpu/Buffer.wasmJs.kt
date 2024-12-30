@@ -3,14 +3,19 @@ package io.ygdrasil.wgpu
 import io.ygdrasil.wgpu.internal.js.GPUBuffer
 import io.ygdrasil.wgpu.internal.js.mapJsArray
 import io.ygdrasil.wgpu.internal.js.toJsNumber
-import org.khronos.webgl.*
+import io.ygdrasil.wgpu.internal.js.toULong
+import org.khronos.webgl.Float32Array
+import org.khronos.webgl.Int16Array
+import org.khronos.webgl.Int32Array
+import org.khronos.webgl.Int8Array
+import org.khronos.webgl.get
 
 actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
 
     actual val size: GPUSize64
-        get() = handler.size.toInt().toLong()
+        get() = handler.size.toULong()
     actual val usage: Set<BufferUsage>
-        get() = BufferUsage.entries.filter { it.value and handler.usage != 0 }.toSet()
+        get() = BufferUsage.entries.filter { it.value.toULong() and handler.usage != 0uL }.toSet()
     actual val mapState: BufferMapState
         get() = BufferMapState.of(handler.mapState) ?: error("fail to get MapState")
 
@@ -18,7 +23,7 @@ actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
         handler.unmap()
     }
 
-    actual fun mapFrom(buffer: ShortArray, offset: Int) {
+    actual fun mapFrom(buffer: ShortArray, offset: GPUSize64) {
         Int16Array(
             handler.getMappedRange(
                 offset.toJsNumber(),
@@ -28,7 +33,7 @@ actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
             .set(buffer.mapJsArray { it.toJsNumber() }, 0)
     }
 
-    actual fun mapFrom(buffer: FloatArray, offset: Int) {
+    actual fun mapFrom(buffer: FloatArray, offset: GPUSize64) {
         Float32Array(
             handler.getMappedRange(
                 offset.toJsNumber(),
@@ -38,19 +43,19 @@ actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
             .set(buffer.mapJsArray { it.toJsNumber() }, 0)
     }
 
-    actual fun mapFrom(buffer: ByteArray, offset: Int) {
+    actual fun mapFrom(buffer: ByteArray, offset: GPUSize64) {
         Int8Array(handler.getMappedRange(offset.toJsNumber(), buffer.size.toJsNumber()))
             .set(buffer.mapJsArray { it.toJsNumber() }, 0)
     }
 
-    actual fun mapInto(buffer: ByteArray, offset: Int) {
+    actual fun mapInto(buffer: ByteArray, offset: GPUSize64) {
         Int8Array(handler.getMappedRange(offset.toLong().toJsNumber(), buffer.size.toLong().toJsNumber()))
             .also { remoteBuffer ->
                 buffer.indices.forEach { index -> buffer[index] = remoteBuffer.get(index) }
             }
     }
 
-    actual fun mapInto(buffer: IntArray, offset: Int) {
+    actual fun mapInto(buffer: IntArray, offset: GPUSize64) {
         Int32Array(handler.getMappedRange(offset.toLong().toJsNumber(), (buffer.size * Int.SIZE_BYTES).toLong().toJsNumber()))
             .also { remoteBuffer ->
                 buffer.indices.forEach { index -> buffer[index] = remoteBuffer.get(index) }

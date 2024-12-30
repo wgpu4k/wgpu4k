@@ -11,7 +11,7 @@ actual class PipelineLayout(internal var handler: GPUPipelineLayout) : AutoClose
 
 actual class RenderPipeline(internal var handler: GPURenderPipeline) : AutoCloseable {
 
-    actual fun getBindGroupLayout(index: Int) = handler
+    actual fun getBindGroupLayout(index: GPUSize32) = handler
         .getBindGroupLayout(index)
         .let { BindGroupLayout(it) }
 

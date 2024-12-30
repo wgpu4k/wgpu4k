@@ -31,7 +31,7 @@ data class TextureDescriptor(
 )
 
 // Todo double check this
-fun TextureFormat.getBytesPerPixel(): Int {
+fun TextureFormat.getBytesPerPixel(): GPUSize32 {
     return when (this) {
         // Formats with 1 byte per pixel
         TextureFormat.r8unorm,
@@ -39,7 +39,7 @@ fun TextureFormat.getBytesPerPixel(): Int {
         TextureFormat.r8uint,
         TextureFormat.r8sint,
         TextureFormat.stencil8,
-        -> 1
+            -> 1u
 
         // Formats with 2 bytes per pixel
         TextureFormat.rg8unorm,
@@ -50,10 +50,10 @@ fun TextureFormat.getBytesPerPixel(): Int {
         TextureFormat.r16sint,
         TextureFormat.depth16unorm,
         TextureFormat.r16float,
-        -> 2
+            -> 2u
 
         // 24 bit depth is typically 3 bytes. But note that 'plus' might imply additional data
-        TextureFormat.depth24plus -> 3
+        TextureFormat.depth24plus -> 3u
 
         // Formats with 3 or 4 bytes per pixel
         TextureFormat.rgb10a2uint,
@@ -73,15 +73,15 @@ fun TextureFormat.getBytesPerPixel(): Int {
         TextureFormat.rg16uint,
         TextureFormat.rg16sint,
         TextureFormat.depth32float,
-        -> 4
+            -> 4u
 
         // 4 bytes for float, 1 byte for stencil
-        TextureFormat.depth32floatstencil8 -> 5
+        TextureFormat.depth32floatstencil8 -> 5u
 
         // Formats with 6 bytes per pixel
         TextureFormat.rg11b10ufloat,
         TextureFormat.rgb9e5ufloat,
-        -> 6
+            -> 6u
 
         // Formats with 4 bytes per pixel (compressed)
         TextureFormat.etc2rgb8unorm,
@@ -133,13 +133,13 @@ fun TextureFormat.getBytesPerPixel(): Int {
         TextureFormat.rgba16uint,
         TextureFormat.rgba16sint,
         TextureFormat.rgba16float,
-        -> 8
+            -> 8u
 
         // Formats with 16 bytes per pixel
         TextureFormat.rgba32uint,
         TextureFormat.rgba32sint,
         TextureFormat.rgba32float,
-        -> 16
+            -> 16u
 
         // Compressed formats
         TextureFormat.bc1rgbaunorm,
@@ -160,7 +160,7 @@ fun TextureFormat.getBytesPerPixel(): Int {
         TextureFormat.eacr11snorm,
         TextureFormat.eacrg11unorm,
         TextureFormat.eacrg11snorm,
-        -> -1
+            -> 0u
 
 
     }

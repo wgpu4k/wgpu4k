@@ -36,7 +36,6 @@ internal fun Byte.toJsNumber(): JsNumber =
 internal fun Long.toJsNumber(): JsNumber =
     infer(this)
 
-
 internal fun ULong.toJsNumber(): JsNumber =
     infer(this)
 
@@ -134,3 +133,9 @@ internal fun ByteArray.toInt8Array(): Int8Array {
     for (n in 0 until out.length) out[n] = this[n]
     return out
 }
+
+private fun infer(ref: JsNumber): ULong =
+    js("Number(ref)")
+
+internal fun JsNumber.toULong(): ULong = infer(this)
+

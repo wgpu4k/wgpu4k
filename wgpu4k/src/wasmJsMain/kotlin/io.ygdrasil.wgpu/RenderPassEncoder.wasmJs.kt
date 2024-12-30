@@ -47,11 +47,11 @@ actual class RenderPassEncoder(internal val handler: GPURenderPassEncoder) {
         handler.drawIndexedIndirect(indirectBuffer.handler, indirectOffset)
     }
 
-    actual fun setBindGroup(index: Int, bindGroup: BindGroup, dynamicOffsets:List<Int>) {
+    actual fun setBindGroup(index: GPUIndex32, bindGroup: BindGroup, dynamicOffsets: List<GPUIndex32>) {
         handler.setBindGroup(index, bindGroup.handler, map(dynamicOffsets))
     }
 
-    actual fun setVertexBuffer(slot: Int, buffer: Buffer) {
+    actual fun setVertexBuffer(slot: GPUIndex32, buffer: Buffer) {
         handler.setVertexBuffer(slot, buffer.handler)
     }
 

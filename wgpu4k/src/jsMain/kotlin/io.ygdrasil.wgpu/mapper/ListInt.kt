@@ -1,5 +1,7 @@
 package io.ygdrasil.wgpu.mapper
 
-internal fun map(input: List<Int>): Array<ULong> {
-    return input.toIntArray().unsafeCast<Array<ULong>>()
+import io.ygdrasil.wgpu.GPUSize32
+
+internal fun map(input: List<GPUSize32>): Array<ULong> {
+    return input.toUIntArray().unsafeCast<Array<ULong>>()
 }

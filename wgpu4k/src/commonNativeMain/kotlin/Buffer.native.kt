@@ -31,21 +31,21 @@ actual class Buffer(internal val handler: WGPUBuffer) : AutoCloseable {
         wgpuBufferUnmap(handler)
     }
 
-    actual fun mapFrom(buffer: ShortArray, offset: ULong) {
+    actual fun mapFrom(buffer: ShortArray, offset: GPUSize64) {
         val bufferSize = (buffer.size * Short.SIZE_BYTES).toULong()
         wgpuBufferGetMappedRange(handler, offset, bufferSize)
             .asBuffer(bufferSize)
             .writeShorts(buffer)
     }
 
-    actual fun mapFrom(buffer: FloatArray, offset: ULong) {
+    actual fun mapFrom(buffer: FloatArray, offset: GPUSize64) {
         val bufferSize = (buffer.size * Float.SIZE_BYTES).toULong()
         wgpuBufferGetMappedRange(handler, offset, bufferSize)
             .asBuffer(bufferSize)
             .writeFloats(buffer)
     }
 
-    actual fun mapFrom(buffer: ByteArray, offset: ULong) {
+    actual fun mapFrom(buffer: ByteArray, offset: GPUSize64) {
         val bufferSize = (buffer.size * Byte.SIZE_BYTES).toULong()
         wgpuBufferGetMappedRange(handler, offset, bufferSize)
             .asBuffer(bufferSize)
