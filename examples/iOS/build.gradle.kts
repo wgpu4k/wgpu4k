@@ -31,7 +31,7 @@ kotlin {
             baseName = "WgpuApp"
             isStatic = true
             xcf.add(this)
-            binaryOption("bundleId", "io.ygdrasil.wgpu.$xcframeworkName")
+            binaryOption("bundleId", "io.ygdrasil.webgpu.$xcframeworkName")
         }
     }
 
