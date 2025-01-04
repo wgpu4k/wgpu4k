@@ -10,7 +10,7 @@ actual suspend fun getHeadlessContext(): WGPUContext {
     canvas.wgpuContext.surface.configure(
         SurfaceConfiguration(
             canvas.wgpuContext.device,
-            canvas.wgpuContext.surface.preferredCanvasFormat ?: TextureFormat.rgba8unorm,
+            canvas.wgpuContext.surface.preferredCanvasFormat ?: TextureFormat.RGBA8Unorm,
         )
     )
     return canvas.wgpuContext

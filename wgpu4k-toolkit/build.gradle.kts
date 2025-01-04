@@ -142,9 +142,14 @@ kotlin {
             }
 
         }
+
+        androidMain {
+            dependencies {
+                implementation(libs.android.native.helper)
+            }
+        }
     }
 
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
         allWarningsAsErrors = true
         freeCompilerArgs.add("-Xexpect-actual-classes")

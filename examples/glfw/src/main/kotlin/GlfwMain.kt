@@ -1,23 +1,17 @@
 package io.ygdrasil.webgpu.examples
 
 import ffi.LibraryLoader
-import ffi.NativeAddress
 import ffi.globalMemory
 import io.ygdrasil.webgpu.GLFWContext
 import io.ygdrasil.webgpu.glfwContextRenderer
 import io.ygdrasil.wgpu.WGPULogCallback
-import io.ygdrasil.wgpu.WGPULogLevel
-import io.ygdrasil.wgpu.WGPUStringView
 import io.ygdrasil.wgpu.wgpuSetLogCallback
 import io.ygdrasil.wgpu.wgpuSetLogLevel
 import kotlinx.coroutines.runBlocking
 import org.lwjgl.glfw.GLFW.*
 
-val callback = WGPULogCallback.allocate(globalMemory, object : WGPULogCallback {
-    override fun invoke(level: WGPULogLevel, message: WGPUStringView?, userdata: NativeAddress?) {
-        println("LOG {$level} ${message?.data?.toKString(message.length)}")
-    }
-})
+val callback = WGPULogCallback.allocate(globalMemory
+) { level, message, userdata -> println("LOG {$level} ${message?.toKString()}") }
 
 fun main() = runBlocking {
     LibraryLoader.load()

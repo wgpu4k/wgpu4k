@@ -127,13 +127,7 @@ kotlin {
 
 
         val commonNativeMain by getting {
-            dependencies { implementation(libs.wgpu4k.native) }
-        }
-
-        androidMain {
-            dependencies {
-                implementation(libs.android.native.helper)
-            }
+            dependencies { api(libs.wgpu4k.native) }
         }
 
         wasmJsMain {
