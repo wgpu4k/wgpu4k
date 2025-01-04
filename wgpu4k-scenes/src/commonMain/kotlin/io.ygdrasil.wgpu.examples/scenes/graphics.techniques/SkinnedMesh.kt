@@ -52,7 +52,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
                     height = renderingContext.height,
                     depthOrArrayLayers = 1u
                 ),
-                format = TextureFormat.depth24plusstencil8,
+                format = TextureFormat.Depth24PlusStencil8,
                 usage = setOf(TextureUsage.renderAttachment)
             )
         ).bind()
@@ -61,19 +61,19 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
             colorAttachments = listOf(
                 ColorAttachment(
                     view = dummyTexture.createView().bind(),
-                    loadOp = LoadOp.clear,
+                    loadOp = LoadOp.Clear,
                     clearValue = Color(0.3, 0.3, 0.3, 1.0),
-                    storeOp = StoreOp.store
+                    storeOp = StoreOp.Store
                 )
             ),
             depthStencilAttachment = RenderPassDescriptor.DepthStencilAttachment(
                 view = depthTexture.createView().bind(),
-                depthLoadOp = LoadOp.clear,
+                depthLoadOp = LoadOp.Clear,
                 depthClearValue = 1f,
-                depthStoreOp = StoreOp.store,
-                stencilLoadOp = LoadOp.clear,
+                depthStoreOp = StoreOp.Store,
+                stencilLoadOp = LoadOp.Clear,
                 stencilClearValue = 0u,
-                stencilStoreOp = StoreOp.store
+                stencilStoreOp = StoreOp.Store
             )
         )
 
@@ -83,7 +83,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
                     Entry(
                         binding = 0u,
                         visibility = setOf(ShaderStage.vertex),
-                        bindingType = Entry.BufferBindingLayout(type = BufferBindingType.uniform)
+                        bindingType = Entry.BufferBindingLayout(type = BufferBindingType.Uniform)
                     )
                 )
             )
@@ -114,7 +114,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
             shaderCache,
             viewParamsLayout,
             viewParamsBindGroup,
-            renderingContext.textureFormat.actualName,
+            renderingContext.textureFormat,
         )
 
         projectionMatrix = getProjectionMatrix(renderingContext.width, renderingContext.height)

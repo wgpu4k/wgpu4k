@@ -3,10 +3,7 @@ package io.ygdrasil.webgpu.examples.helper.glb
 import io.ygdrasil.webgpu.AddressMode
 import io.ygdrasil.webgpu.BindGroup
 import io.ygdrasil.webgpu.BindGroupDescriptor
-import io.ygdrasil.webgpu.BindGroupDescriptor.BindGroupEntry
-import io.ygdrasil.webgpu.BindGroupDescriptor.BufferBinding
-import io.ygdrasil.webgpu.BindGroupDescriptor.SamplerBinding
-import io.ygdrasil.webgpu.BindGroupDescriptor.TextureViewBinding
+import io.ygdrasil.webgpu.BindGroupDescriptor.*
 import io.ygdrasil.webgpu.BindGroupLayout
 import io.ygdrasil.webgpu.BindGroupLayoutDescriptor
 import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry
@@ -52,8 +49,8 @@ class GLTFPrimitive(
         shaderCache: ShaderCache,
         bindGroupLayouts: Array<BindGroupLayout>,
         bundleEncoder: RenderBundleEncoder,
-        swapChainFormat: String,
-        depthFormat: String,
+        swapChainFormat: TextureFormat,
+        depthFormat: TextureFormat,
     ) {
 
         val shaderModule = shaderCache.getShader(
@@ -67,7 +64,7 @@ class GLTFPrimitive(
                 arrayStride = positions.byteStride.toULong(),
                 attributes = listOf(
                     VertexBufferLayout.VertexAttribute(
-                        format = VertexFormat.float32x3,
+                        format = VertexFormat.Float32x3,
                         offset = 0u,
                         shaderLocation = 0u
                     )
@@ -81,7 +78,7 @@ class GLTFPrimitive(
                     arrayStride = normals.byteStride.toULong(),
                     attributes = listOf(
                         VertexBufferLayout.VertexAttribute(
-                            format = VertexFormat.float32x3,
+                            format = VertexFormat.Float32x2,
                             offset = 0u,
                             shaderLocation = 1u
                         )
@@ -97,7 +94,7 @@ class GLTFPrimitive(
                     arrayStride = texcoords[0].byteStride.toULong(),
                     attributes = listOf(
                         VertexBufferLayout.VertexAttribute(
-                            format = VertexFormat.float32x2,
+                            format = VertexFormat.Float32x2,
                             offset = 0u,
                             shaderLocation = 2u
                         )
@@ -127,19 +124,19 @@ class GLTFPrimitive(
             entryPoint = "fragment_main",
             targets = listOf(
                 FragmentState.ColorTargetState(
-                    format = TextureFormat.of(swapChainFormat) ?: error("fail to get texture format $swapChainFormat")
+                    format = swapChainFormat
                 )
             ),
         )
 
         val primitive = if (topology == GLTFRenderMode.TRIANGLE_STRIP) {
             RenderPipelineDescriptor.PrimitiveState(
-                topology = PrimitiveTopology.triangleStrip,
-                stripIndexFormat = if (indices?.componentType == GLTFComponentType.UNSIGNED_SHORT.value) IndexFormat.uint16 else IndexFormat.uint32,
+                topology = PrimitiveTopology.TriangleStrip,
+                stripIndexFormat = if (indices?.componentType == GLTFComponentType.UNSIGNED_SHORT.value) IndexFormat.Uint16 else IndexFormat.Uint32,
             )
         } else {
             RenderPipelineDescriptor.PrimitiveState(
-                topology = PrimitiveTopology.triangleList
+                topology = PrimitiveTopology.TriangleList
             )
         }
 
@@ -149,9 +146,9 @@ class GLTFPrimitive(
             fragment = fragmentStage,
             primitive = primitive,
             depthStencil = RenderPipelineDescriptor.DepthStencilState(
-                format = TextureFormat.of(depthFormat) ?: error("fail to get depth format $depthFormat"),
+                format = depthFormat,
                 depthWriteEnabled = true,
-                depthCompare = CompareFunction.less
+                depthCompare = CompareFunction.Less
             )
         )
 
@@ -179,7 +176,7 @@ class GLTFPrimitive(
         }
         if (indices != null) {
             val indexFormat =
-                if (indices.componentType == GLTFComponentType.UNSIGNED_SHORT.value) IndexFormat.uint16 else IndexFormat.uint32
+                if (indices.componentType == GLTFComponentType.UNSIGNED_SHORT.value) IndexFormat.Uint16 else IndexFormat.Uint32
 
             bundleEncoder.setIndexBuffer(
                 indices.view.gpuBuffer ?: error("fail to get buffer"),
@@ -237,7 +234,7 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
                 binding = 0u,
                 visibility = setOf(ShaderStage.fragment),
                 bindingType = BufferBindingLayout(
-                    type = BufferBindingType.uniform
+                    type = BufferBindingType.Uniform
                 ),
             )
         )
@@ -356,7 +353,7 @@ class GLBModel(val nodes: List<GLTFNode>) {
         shaderCache: ShaderCache,
         viewParamsLayout: BindGroupLayout,
         viewParamsBindGroup: BindGroup,
-        swapChainFormat: String,
+        swapChainFormat: TextureFormat,
     ): List<RenderBundle> {
         val renderBundles = mutableListOf<RenderBundle>()
         nodes.forEach { node ->
@@ -366,7 +363,7 @@ class GLBModel(val nodes: List<GLTFNode>) {
                 viewParamsLayout,
                 viewParamsBindGroup,
                 swapChainFormat,
-                "depth24plus-stencil8"
+                TextureFormat.Depth24PlusStencil8
             )
             renderBundles.add(bundle)
         }
@@ -395,8 +392,8 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
         shaderCache: ShaderCache,
         viewParamsLayout: BindGroupLayout,
         viewParamsBindGroup: BindGroup,
-        swapChainFormat: String,
-        depthFormat: String,
+        swapChainFormat: TextureFormat,
+        depthFormat: TextureFormat,
     ): RenderBundle {
         val nodeParamsLayout = device.createBindGroupLayout(
             BindGroupLayoutDescriptor(
@@ -404,7 +401,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
                     Entry(
                         binding = 0u,
                         visibility = setOf(ShaderStage.vertex),
-                        bindingType = BufferBindingLayout(type = BufferBindingType.uniform)
+                        bindingType = BufferBindingLayout(type = BufferBindingType.Uniform)
                     )
                 )
             )
@@ -429,9 +426,9 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
         val bundleEncoder = device.createRenderBundleEncoder(
             RenderBundleEncoderDescriptor(
                 colorFormats = listOf(
-                    TextureFormat.of(swapChainFormat) ?: error("fail to get texture format $swapChainFormat")
+                    swapChainFormat
                 ),
-                depthStencilFormat = TextureFormat.of(depthFormat) ?: error("fail to get texture format $depthFormat")
+                depthStencilFormat = depthFormat
             )
         )
 
@@ -461,26 +458,26 @@ class GLTFSampler(private val device: Device, private val samplerNode: GLTF2.Sam
 
     private fun createSampler(): Sampler {
         val magFilter = when (samplerNode?.magFilter) {
-            null, GLTFTextureFilter.LINEAR.value -> FilterMode.linear
-            else -> FilterMode.nearest
+            null, GLTFTextureFilter.LINEAR.value -> FilterMode.Linear
+            else -> FilterMode.Nearest
         }
         val minFilter = when (samplerNode?.minFilter) {
-            null, GLTFTextureFilter.LINEAR.value -> FilterMode.linear
-            else -> FilterMode.nearest
+            null, GLTFTextureFilter.LINEAR.value -> FilterMode.Linear
+            else -> FilterMode.Nearest
         }
 
         val wrapS = when (samplerNode?.wrapS) {
-            GLTFTextureFilter.REPEAT.value -> AddressMode.repeat
-            GLTFTextureFilter.CLAMP_TO_EDGE.value -> AddressMode.clamptoedge
-            null -> AddressMode.repeat
-            else -> AddressMode.mirrorrepeat
+            GLTFTextureFilter.REPEAT.value -> AddressMode.Repeat
+            GLTFTextureFilter.CLAMP_TO_EDGE.value -> AddressMode.ClampToEdge
+            null -> AddressMode.Repeat
+            else -> AddressMode.MirrorRepeat
         }
 
         val wrapT = when (samplerNode?.wrapT) {
-            GLTFTextureFilter.REPEAT.value -> AddressMode.repeat
-            GLTFTextureFilter.CLAMP_TO_EDGE.value -> AddressMode.clamptoedge
-            null -> AddressMode.repeat
-            else -> AddressMode.mirrorrepeat
+            GLTFTextureFilter.REPEAT.value -> AddressMode.Repeat
+            GLTFTextureFilter.CLAMP_TO_EDGE.value -> AddressMode.ClampToEdge
+            null -> AddressMode.Repeat
+            else -> AddressMode.MirrorRepeat
         }
 
         return device.createSampler(

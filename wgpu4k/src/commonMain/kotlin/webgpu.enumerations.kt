@@ -1,6 +1,12 @@
 // This file has been generated DO NOT EDIT !!!
 package io.ygdrasil.webgpu
 
+expect enum class RequestAdapterStatus {
+	Success,
+	Unavailable,
+	Error,
+	Unknown,
+}
 expect enum class AdapterType {
 	DiscreteGPU,
 	IntegratedGPU,
@@ -8,9 +14,9 @@ expect enum class AdapterType {
 	Unknown,
 }
 expect enum class AddressMode {
-	ClampToEdge,
 	Repeat,
 	MirrorRepeat,
+	ClampToEdge,
 }
 expect enum class BackendType {
 	Null,
@@ -21,6 +27,28 @@ expect enum class BackendType {
 	Vulkan,
 	OpenGL,
 	OpenGLES,
+}
+expect enum class BufferBindingType {
+	Uniform,
+	Storage,
+	ReadOnlyStorage,
+}
+expect enum class SamplerBindingType {
+	Filtering,
+	NonFiltering,
+	Comparison,
+}
+expect enum class TextureSampleType {
+	Float,
+	UnfilterableFloat,
+	Depth,
+	Sint,
+	Uint,
+}
+expect enum class StorageTextureAccess {
+	WriteOnly,
+	ReadOnly,
+	ReadWrite,
 }
 expect enum class BlendFactor {
 	Zero,
@@ -36,10 +64,6 @@ expect enum class BlendFactor {
 	SrcAlphaSaturated,
 	Constant,
 	OneMinusConstant,
-	Src1,
-	OneMinusSrc1,
-	Src1Alpha,
-	OneMinusSrc1Alpha,
 }
 expect enum class BlendOperation {
 	Add,
@@ -48,36 +72,36 @@ expect enum class BlendOperation {
 	Min,
 	Max,
 }
-expect enum class BufferBindingType {
-	BindingNotUsed,
-	Uniform,
-	Storage,
-	ReadOnlyStorage,
+expect enum class BufferMapAsyncStatus {
+	Success,
+	ValidationError,
+	Unknown,
+	DeviceLost,
+	DestroyedBeforeCallback,
+	UnmappedBeforeCallback,
+	MappingAlreadyPending,
+	OffsetOutOfRange,
+	SizeOutOfRange,
 }
 expect enum class BufferMapState {
 	Unmapped,
 	Pending,
 	Mapped,
 }
-expect enum class CallbackMode {
-	WaitAnyOnly,
-	AllowProcessEvents,
-	AllowSpontaneous,
-}
 expect enum class CompareFunction {
 	Never,
 	Less,
-	Equal,
 	LessEqual,
 	Greater,
-	NotEqual,
 	GreaterEqual,
+	Equal,
+	NotEqual,
 	Always,
 }
 expect enum class CompilationInfoRequestStatus {
 	Success,
-	InstanceDropped,
 	Error,
+	DeviceLost,
 	Unknown,
 }
 expect enum class CompilationMessageType {
@@ -94,9 +118,10 @@ expect enum class CompositeAlphaMode {
 }
 expect enum class CreatePipelineAsyncStatus {
 	Success,
-	InstanceDropped,
 	ValidationError,
 	InternalError,
+	DeviceLost,
+	DeviceDestroyed,
 	Unknown,
 }
 expect enum class CullMode {
@@ -107,8 +132,6 @@ expect enum class CullMode {
 expect enum class DeviceLostReason {
 	Unknown,
 	Destroyed,
-	InstanceDropped,
-	FailedCreation,
 }
 expect enum class ErrorFilter {
 	Validation,
@@ -121,28 +144,20 @@ expect enum class ErrorType {
 	OutOfMemory,
 	Internal,
 	Unknown,
-}
-expect enum class FeatureLevel {
-	Compatibility,
-	Core,
+	DeviceLost,
 }
 expect enum class FeatureName {
 	DepthClipControl,
 	Depth32FloatStencil8,
 	TimestampQuery,
 	TextureCompressionBC,
-	TextureCompressionBCSliced3D,
 	TextureCompressionETC2,
 	TextureCompressionASTC,
-	TextureCompressionASTCSliced3D,
 	IndirectFirstInstance,
 	ShaderF16,
 	RG11B10UfloatRenderable,
 	BGRA8UnormStorage,
 	Float32Filterable,
-	Float32Blendable,
-	ClipDistances,
-	DualSourceBlending,
 }
 expect enum class FilterMode {
 	Nearest,
@@ -156,29 +171,22 @@ expect enum class IndexFormat {
 	Uint16,
 	Uint32,
 }
-expect enum class LoadOp {
-	Load,
-	Clear,
+expect enum class VertexStepMode {
+	Vertex,
+	Instance,
+	VertexBufferNotUsed,
 }
-expect enum class MapAsyncStatus {
-	Success,
-	InstanceDropped,
-	Error,
-	Aborted,
-	Unknown,
+expect enum class LoadOp {
+	Clear,
+	Load,
 }
 expect enum class MipmapFilterMode {
 	Nearest,
 	Linear,
 }
-expect enum class OptionalBool {
-	False,
-	True,
-}
-expect enum class PopErrorScopeStatus {
-	Success,
-	InstanceDropped,
-	EmptyStack,
+expect enum class StoreOp {
+	Store,
+	Discard,
 }
 expect enum class PowerPreference {
 	LowPower,
@@ -203,43 +211,14 @@ expect enum class QueryType {
 }
 expect enum class QueueWorkDoneStatus {
 	Success,
-	InstanceDropped,
 	Error,
 	Unknown,
-}
-expect enum class RequestAdapterStatus {
-	Success,
-	InstanceDropped,
-	Unavailable,
-	Error,
-	Unknown,
+	DeviceLost,
 }
 expect enum class RequestDeviceStatus {
 	Success,
-	InstanceDropped,
 	Error,
 	Unknown,
-}
-expect enum class SType {
-	ShaderSourceSPIRV,
-	ShaderSourceWGSL,
-	RenderPassMaxDrawCount,
-	SurfaceSourceMetalLayer,
-	SurfaceSourceWindowsHWND,
-	SurfaceSourceXlibWindow,
-	SurfaceSourceWaylandSurface,
-	SurfaceSourceAndroidNativeWindow,
-	SurfaceSourceXCBWindow,
-}
-expect enum class SamplerBindingType {
-	BindingNotUsed,
-	Filtering,
-	NonFiltering,
-	Comparison,
-}
-expect enum class Status {
-	Success,
-	Error,
 }
 expect enum class StencilOperation {
 	Keep,
@@ -251,25 +230,27 @@ expect enum class StencilOperation {
 	IncrementWrap,
 	DecrementWrap,
 }
-expect enum class StorageTextureAccess {
-	BindingNotUsed,
-	WriteOnly,
-	ReadOnly,
-	ReadWrite,
-}
-expect enum class StoreOp {
-	Store,
-	Discard,
+expect enum class SType {
+	Invalid,
+	SurfaceDescriptorFromMetalLayer,
+	SurfaceDescriptorFromWindowsHWND,
+	SurfaceDescriptorFromXlibWindow,
+	SurfaceDescriptorFromCanvasHTMLSelector,
+	ShaderModuleSPIRVDescriptor,
+	ShaderModuleWGSLDescriptor,
+	PrimitiveDepthClipControl,
+	SurfaceDescriptorFromWaylandSurface,
+	SurfaceDescriptorFromAndroidNativeWindow,
+	SurfaceDescriptorFromXcbWindow,
+	RenderPassDescriptorMaxDrawCount,
 }
 expect enum class SurfaceGetCurrentTextureStatus {
-	SuccessOptimal,
-	SuccessSuboptimal,
+	Success,
 	Timeout,
 	Outdated,
 	Lost,
 	OutOfMemory,
 	DeviceLost,
-	Error,
 }
 expect enum class TextureAspect {
 	All,
@@ -378,14 +359,6 @@ expect enum class TextureFormat {
 	ASTC12x12Unorm,
 	ASTC12x12UnormSrgb,
 }
-expect enum class TextureSampleType {
-	BindingNotUsed,
-	Float,
-	UnfilterableFloat,
-	Depth,
-	Sint,
-	Uint,
-}
 expect enum class TextureViewDimension {
 	OneD,
 	TwoD,
@@ -395,31 +368,22 @@ expect enum class TextureViewDimension {
 	ThreeD,
 }
 expect enum class VertexFormat {
-	Uint8,
 	Uint8x2,
 	Uint8x4,
-	Sint8,
 	Sint8x2,
 	Sint8x4,
-	Unorm8,
 	Unorm8x2,
 	Unorm8x4,
-	Snorm8,
 	Snorm8x2,
 	Snorm8x4,
-	Uint16,
 	Uint16x2,
 	Uint16x4,
-	Sint16,
 	Sint16x2,
 	Sint16x4,
-	Unorm16,
 	Unorm16x2,
 	Unorm16x4,
-	Snorm16,
 	Snorm16x2,
 	Snorm16x4,
-	Float16,
 	Float16x2,
 	Float16x4,
 	Float32,
@@ -434,22 +398,8 @@ expect enum class VertexFormat {
 	Sint32x2,
 	Sint32x3,
 	Sint32x4,
-	Unorm1010102,
-	Unorm8x4BGRA,
 }
-expect enum class VertexStepMode {
-	VertexBufferNotUsed,
-	Vertex,
-	Instance,
-}
-expect enum class WaitStatus {
-	Success,
-	TimedOut,
-	UnsupportedTimeout,
-	UnsupportedCount,
-	UnsupportedMixedSources,
-}
-expect enum class WGSLLanguageFeatureName {
+expect enum class WGSLFeatureName {
 	ReadonlyAndReadwriteStorageTextures,
 	Packed4x8IntegerDotProduct,
 	UnrestrictedPointerParameters,

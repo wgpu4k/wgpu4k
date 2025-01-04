@@ -94,32 +94,32 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                             (
                             // instanced particles buffer
                             arrayStride = particleInstanceByteSize.toULong(),
-                            stepMode = VertexStepMode.instance,
+                            stepMode = VertexStepMode.Instance,
                             attributes = listOf(
                                 RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
                                     // position
                                     shaderLocation = 0u,
                                     offset = particlePositionOffset.toULong(),
-                                    format = VertexFormat.float32x3,
+                                    format = VertexFormat.Float32x3,
                                 ),
                                 RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
                                     // color
                                     shaderLocation = 1u,
                                     offset = particleColorOffset.toULong(),
-                                    format = VertexFormat.float32x4,
+                                    format = VertexFormat.Float32x4,
                                 ),
                             ),
                         ),
                         RenderPipelineDescriptor.VertexState.VertexBufferLayout(
                             // quad vertex buffer
                             arrayStride = 2u * 4u, // vec2f
-                            stepMode = VertexStepMode.vertex,
+                            stepMode = VertexStepMode.Vertex,
                             attributes = listOf(
                                 RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
                                     // vertex positions
                                     shaderLocation = 2u,
                                     offset = 0u,
-                                    format = VertexFormat.float32x2,
+                                    format = VertexFormat.Float32x2,
                                 ),
                             ),
                         ),
@@ -137,27 +137,27 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                             format = renderingContext.textureFormat,
                             blend = RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState(
                                 color = RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent(
-                                    srcFactor = BlendFactor.srcalpha,
-                                    dstFactor = BlendFactor.one,
-                                    operation = BlendOperation.add,
+                                    srcFactor = BlendFactor.SrcAlpha,
+                                    dstFactor = BlendFactor.One,
+                                    operation = BlendOperation.Add,
                                 ),
                                 alpha = RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent(
-                                    srcFactor = BlendFactor.zero,
-                                    dstFactor = BlendFactor.one,
-                                    operation = BlendOperation.add
+                                    srcFactor = BlendFactor.Zero,
+                                    dstFactor = BlendFactor.One,
+                                    operation = BlendOperation.Add
                                 ),
                             ),
                         ),
                     ),
                 ),
                 primitive = RenderPipelineDescriptor.PrimitiveState(
-                    topology = PrimitiveTopology.triangleList,
+                    topology = PrimitiveTopology.TriangleList,
                 ),
 
                 depthStencil = RenderPipelineDescriptor.DepthStencilState(
                     depthWriteEnabled = false,
-                    depthCompare = CompareFunction.less,
-                    format = TextureFormat.depth24plus,
+                    depthCompare = CompareFunction.Less,
+                    format = TextureFormat.Depth24Plus,
                 ),
             )
         )
@@ -165,7 +165,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         val depthTexture = device.createTexture(
             TextureDescriptor(
                 size = Size3D(renderingContext.width, renderingContext.height),
-                format = TextureFormat.depth24plus,
+                format = TextureFormat.Depth24Plus,
                 usage = setOf(TextureUsage.renderAttachment),
             )
         )
@@ -202,16 +202,16 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                 RenderPassDescriptor.ColorAttachment(
                     view = dummyTexture.createView().bind(), // Assigned later
                     clearValue = Color(.0, .0, .0, 1.0),
-                    loadOp = LoadOp.clear,
-                    storeOp = StoreOp.store,
+                    loadOp = LoadOp.Clear,
+                    storeOp = StoreOp.Store,
                 ),
             ),
             depthStencilAttachment = RenderPassDescriptor.DepthStencilAttachment(
                 view = depthTexture.createView().bind(),
 
                 depthClearValue = 1.0f,
-                depthLoadOp = LoadOp.clear,
-                depthStoreOp = StoreOp.store,
+                depthLoadOp = LoadOp.Clear,
+                depthStoreOp = StoreOp.Store,
             )
         )
 
@@ -254,7 +254,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
             TextureDescriptor(
                 size = Size3D(imageBitmap.width, imageBitmap.height),
                 mipLevelCount = numMipLevels,
-                format = TextureFormat.rgba8unorm,
+                format = TextureFormat.RGBA8Unorm,
                 usage =
                 setOf(
                     TextureUsage.textureBinding,
@@ -355,8 +355,8 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                             resource = BindGroupDescriptor.TextureViewBinding(
                                 view = texture.createView(
                                     TextureViewDescriptor(
-                                        format = TextureFormat.rgba8unorm,
-                                        dimension = TextureViewDimension._2d,
+                                        format = TextureFormat.RGBA8Unorm,
+                                        dimension = TextureViewDimension.TwoD,
                                         baseMipLevel = level,
                                         mipLevelCount = 1u,
                                     )

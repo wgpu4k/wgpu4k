@@ -8,7 +8,7 @@ import io.ygdrasil.wgpu.WGPUNativeSType_InstanceExtras
 
 internal fun MemoryAllocator.map(backend: WGPUInstanceBackend) = WGPUInstanceDescriptor.allocate(this).also { output ->
     output.nextInChain = WGPUInstanceExtras.allocate(this).also { nextInChain ->
-        nextInChain.backends = backend.value.toULong()
+        nextInChain.backends = backend.value.toUInt()
         nextInChain.chain.sType = WGPUNativeSType_InstanceExtras
     }.handler
 }

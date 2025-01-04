@@ -78,12 +78,12 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
 									shaderLocation = 0u,
 									offset = cubePositionOffset,
-									format = VertexFormat.float32x4
+									format = VertexFormat.Float32x4
 								),
 								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
 									shaderLocation = 1u,
 									offset = cubeUVOffset,
-									format = VertexFormat.float32x2
+									format = VertexFormat.Float32x2
 								)
 							)
 						)
@@ -102,13 +102,13 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 					)
 				),
 				primitive = RenderPipelineDescriptor.PrimitiveState(
-					topology = PrimitiveTopology.triangleList,
-					cullMode = CullMode.back
+					topology = PrimitiveTopology.TriangleList,
+					cullMode = CullMode.Back
 				),
 				depthStencil = RenderPipelineDescriptor.DepthStencilState(
 					depthWriteEnabled = true,
-					depthCompare = CompareFunction.less,
-					format = TextureFormat.depth24plus
+					depthCompare = CompareFunction.Less,
+					format = TextureFormat.Depth24Plus
 				)
 			)
 		).bind()
@@ -116,7 +116,7 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		val depthTexture = device.createTexture(
 			TextureDescriptor(
 				size = Size3D(renderingContext.width, renderingContext.height),
-				format = TextureFormat.depth24plus,
+				format = TextureFormat.Depth24Plus,
 				usage = setOf(TextureUsage.renderAttachment),
 			)
 		).bind()
@@ -166,16 +166,16 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			colorAttachments = listOf(
 				RenderPassDescriptor.ColorAttachment(
 					view = dummyTexture.createView().bind(), // Assigned later
-					loadOp = LoadOp.clear,
+					loadOp = LoadOp.Clear,
 					clearValue = Color(0.5, 0.5, 0.5, 1.0),
-					storeOp = StoreOp.store,
+					storeOp = StoreOp.Store,
 				)
 			),
 			depthStencilAttachment = RenderPassDescriptor.DepthStencilAttachment(
 				view = depthTexture.createView(),
 				depthClearValue = 1.0f,
-				depthLoadOp = LoadOp.clear,
-				depthStoreOp = StoreOp.store
+				depthLoadOp = LoadOp.Clear,
+				depthStoreOp = StoreOp.Store
 			)
 		)
 

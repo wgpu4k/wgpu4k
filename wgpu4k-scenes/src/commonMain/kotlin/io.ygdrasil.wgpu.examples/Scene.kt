@@ -47,7 +47,7 @@ suspend fun loadScenes(wgpuContext: WGPUContext, resourceBasePath: String = ""):
         device.createTexture(
             TextureDescriptor(
                 size = Size3D(1u, 1u),
-                format = TextureFormat.depth24plus,
+                format = TextureFormat.Depth24Plus,
                 usage = setOf(TextureUsage.renderAttachment),
             )
         ).also { with(autoClosableContext) { it.bind() } }

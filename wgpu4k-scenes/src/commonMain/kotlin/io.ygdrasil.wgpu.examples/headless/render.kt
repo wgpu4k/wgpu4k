@@ -50,7 +50,7 @@ suspend fun captureScene() {
                         texture = renderingContext.getCurrentTexture(),
                         mipLevel = 0u,
                         origin = Origin3D.Zero,
-                        aspect = TextureAspect.all,
+                        aspect = TextureAspect.All,
                     ),
                     ImageCopyBuffer(
                         buffer = outputStagingBuffer,

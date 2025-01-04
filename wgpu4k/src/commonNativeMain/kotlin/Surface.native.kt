@@ -115,7 +115,7 @@ actual class Surface(
     private fun MemoryAllocator.map(input: SurfaceConfiguration): WGPUSurfaceConfiguration =
         WGPUSurfaceConfiguration.allocate(this).also { output ->
             output.device = input.device.handler
-            output.usage = input.usage.toFlagULong()
+            output.usage = input.usage.toFlagUInt()
             output.format = input.format.value
             output.presentMode = input.presentMode.value
             output.alphaMode = input.alphaMode.value

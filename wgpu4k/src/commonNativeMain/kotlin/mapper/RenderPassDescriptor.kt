@@ -9,7 +9,7 @@ import io.ygdrasil.wgpu.WGPURenderPassDescriptor
 internal fun MemoryAllocator.map(input: RenderPassDescriptor): WGPURenderPassDescriptor =
     WGPURenderPassDescriptor.allocate(this).also { output ->
         println("render pass descriptor $output")
-        if (input.label != null) map(input.label, output.label)
+        if (input.label != null) output.label = allocateFrom(input.label)
 
         if (input.colorAttachments.isNotEmpty()) {
             output.colorAttachmentCount = input.colorAttachments.size.toULong()

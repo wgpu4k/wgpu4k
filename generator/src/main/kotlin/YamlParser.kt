@@ -11,7 +11,7 @@ import generator.generateWebEnumerations
 fun main() {
 
     val webgpuModel = loadWebGPUYaml()
-    val wgpuMode = loadExtraYaml()
+    val wgpuModel = loadExtraYaml()
 
     enumerationCommonMainFile.generateCommonEnumerations(webgpuModel.enums)
     enumerationWebMainFile.generateWebEnumerations(webgpuModel.enums)

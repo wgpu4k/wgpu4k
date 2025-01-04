@@ -6,5 +6,5 @@ import io.ygdrasil.wgpu.WGPURenderBundleDescriptor
 
 internal fun MemoryAllocator.map(input: RenderBundleDescriptor): WGPURenderBundleDescriptor =
     WGPURenderBundleDescriptor.allocate(this).also { output ->
-        if (input.label != null) map(input.label, output.label)
+        if (input.label != null) output.label = allocateFrom(input.label)
     }

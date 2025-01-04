@@ -7,7 +7,7 @@ import io.ygdrasil.wgpu.WGPUComputePassTimestampWrites
 
 internal fun MemoryAllocator.map(input: ComputePassDescriptor) =
     WGPUComputePassDescriptor.allocate(this).also { output ->
-        if (input.label != null) map(input.label, output.label)
+        if (input.label != null) output.label = allocateFrom(input.label)
         if (input.timestampWrites != null) output.timestampWrites = map(input.timestampWrites)
     }
 

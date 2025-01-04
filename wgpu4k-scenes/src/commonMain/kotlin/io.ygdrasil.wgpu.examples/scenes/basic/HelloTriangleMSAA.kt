@@ -48,7 +48,7 @@ class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
                     )
                 ),
                 primitive = RenderPipelineDescriptor.PrimitiveState(
-                    topology = PrimitiveTopology.triangleList
+                    topology = PrimitiveTopology.TriangleList
                 ),
                 multisample = RenderPipelineDescriptor.MultisampleState(
                     count = sampleCount
@@ -79,9 +79,9 @@ class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
                     RenderPassDescriptor.ColorAttachment(
                         view = textureView,
                         resolveTarget = renderingContext.getCurrentTexture().createView().bind(),
-                        loadOp = LoadOp.clear,
+                        loadOp = LoadOp.Clear,
                         clearValue = Color(.0, .0, .0, 1.0),
-                        storeOp = StoreOp.discard
+                        storeOp = StoreOp.Discard
                     )
                 )
             )

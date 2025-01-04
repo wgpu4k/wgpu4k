@@ -1,15 +1,11 @@
 package io.ygdrasil.webgpu
 
-import ffi.NativeAddress
 import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPUAdapter
+import io.ygdrasil.wgpu.WGPUAdapterRequestDeviceCallback
 import io.ygdrasil.wgpu.WGPUDevice
-import io.ygdrasil.wgpu.WGPULimits
-import io.ygdrasil.wgpu.WGPURequestDeviceCallback
-import io.ygdrasil.wgpu.WGPURequestDeviceCallbackInfo
-import io.ygdrasil.wgpu.WGPURequestDeviceStatus
-import io.ygdrasil.wgpu.WGPUStringView
+import io.ygdrasil.wgpu.WGPUSupportedLimits
 import io.ygdrasil.wgpu.wgpuAdapterGetLimits
 import io.ygdrasil.wgpu.wgpuAdapterHasFeature
 import io.ygdrasil.wgpu.wgpuAdapterRelease
@@ -26,36 +22,21 @@ actual class Adapter(internal val handler: WGPUAdapter) : AutoCloseable {
     }
 
     actual val limits: Limits = memoryScope { scope ->
-        val supportedLimits = WGPULimits.allocate(scope)
+        val supportedLimits = WGPUSupportedLimits.allocate(scope)
         wgpuAdapterGetLimits(handler, supportedLimits)
-        val test: Limits = map(supportedLimits)
+        val test: Limits = map(supportedLimits.limits)
         test
     }
 
     actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? = memoryScope { scope ->
         var fetchedDevice: WGPUDevice? = null
 
-        val callback = WGPURequestDeviceCallback.allocate(scope, object : WGPURequestDeviceCallback {
-
-            override fun invoke(
-                status: WGPURequestDeviceStatus,
-                device: WGPUDevice?,
-                message: WGPUStringView?,
-                userdata1: NativeAddress?,
-                userdata2: NativeAddress?
-            ) {
-                if (status != 1u && device == null) error("fail to get device")
-                fetchedDevice = device
-            }
-
-        })
-
-        val callbackInfo = WGPURequestDeviceCallbackInfo.allocate(scope).apply {
-            this.callback = callback
-            this.userdata2 = scope.bufferOfAddress(callback.handler).handler
+        val callback = WGPUAdapterRequestDeviceCallback.allocate(scope) { status, device, message, userdata ->
+            if (status != 1u && device == null) error("fail to get device")
+            fetchedDevice = device
         }
 
-        wgpuAdapterRequestDevice(handler, null, callbackInfo)
+        wgpuAdapterRequestDevice(handler, null, callback, scope.bufferOfAddress(callback.handler).handler)
 
         fetchedDevice?.let(::Device) ?: error("fail to get device")
 

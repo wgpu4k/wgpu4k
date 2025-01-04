@@ -14,11 +14,9 @@ repositories {
 }
 
 dependencies {
-	implementation(libs.android.library)
 
 	implementation(libs.gson)
 	implementation(libs.zip4j)
-	implementation(libs.okhttp)
 	implementation(libs.commons.io)
 
 	implementation(libs.kaml)

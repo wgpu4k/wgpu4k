@@ -76,8 +76,8 @@ class Application internal constructor(
 
 private fun WGPUContext.configureRenderingContext() {
     val format = renderingContext.textureFormat
-    val alphaMode = CompositeAlphaMode.inherit?.takeIf { surface.supportedAlphaMode.contains(it) }
-        ?: CompositeAlphaMode.opaque
+    val alphaMode = CompositeAlphaMode.Inherit?.takeIf { surface.supportedAlphaMode.contains(it) }
+        ?: CompositeAlphaMode.Opaque
 
     println("Using format $format and alpha mode $alphaMode")
     println("Supported formats: ${surface.supportedFormats}")

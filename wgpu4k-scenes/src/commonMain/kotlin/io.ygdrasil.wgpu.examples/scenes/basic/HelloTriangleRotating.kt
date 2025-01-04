@@ -100,9 +100,9 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
                 colorAttachments = listOf(
                     RenderPassDescriptor.ColorAttachment(
                         view =  texture.createView().bind(),
-                        loadOp = LoadOp.clear,
+                        loadOp = LoadOp.Clear,
                         clearValue = Color(.0, .0, .0, 1.0),
-                        storeOp = StoreOp.store
+                        storeOp = StoreOp.Store
                     )
                 )
             )

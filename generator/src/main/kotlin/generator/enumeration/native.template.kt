@@ -13,7 +13,7 @@ fun List<YamlModel.Enum>.toNativeEnumerations() = templateBuilder {
                 .forEach { value ->
                     val originalValueName = value.name.convertToKotlinClassName()
                     val valueName = originalValueName.fixNameStartingWithNumeric()
-                    appendLine("$valueName(webgpu.WGPU${name}_$originalValueName),")
+                    appendLine("$valueName(io.ygdrasil.wgpu.WGPU${name}_$originalValueName),")
                 }
             appendLine(";")
             newLine()

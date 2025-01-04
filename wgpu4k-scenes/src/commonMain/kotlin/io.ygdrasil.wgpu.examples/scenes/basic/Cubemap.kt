@@ -85,12 +85,12 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
 									shaderLocation = 0u,
 									offset = cubePositionOffset,
-									format = VertexFormat.float32x4
+									format = VertexFormat.Float32x4
 								),
 								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
 									shaderLocation = 1u,
 									offset = cubeUVOffset,
-									format = VertexFormat.float32x2
+									format = VertexFormat.Float32x2
 								)
 							)
 						)
@@ -109,13 +109,13 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 					)
 				),
 				primitive = RenderPipelineDescriptor.PrimitiveState(
-					topology = PrimitiveTopology.triangleList,
-					cullMode = CullMode.none
+					topology = PrimitiveTopology.TriangleList,
+					cullMode = CullMode.None
 				),
 				depthStencil = RenderPipelineDescriptor.DepthStencilState(
 					depthWriteEnabled = true,
-					depthCompare = CompareFunction.less,
-					format = TextureFormat.depth24plus
+					depthCompare = CompareFunction.Less,
+					format = TextureFormat.Depth24Plus
 				)
 			)
 		).bind()
@@ -123,7 +123,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 		val depthTexture = device.createTexture(
 			TextureDescriptor(
 				size = Size3D(renderingContext.width, renderingContext.height),
-				format = TextureFormat.depth24plus,
+				format = TextureFormat.Depth24Plus,
 				usage = setOf(TextureUsage.renderAttachment),
 			)
 		).bind()
@@ -165,8 +165,8 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 
 		val sampler = device.createSampler(
 			SamplerDescriptor(
-				magFilter = FilterMode.linear,
-				minFilter = FilterMode.linear,
+				magFilter = FilterMode.Linear,
+				minFilter = FilterMode.Linear,
 			)
 		).bind()
 
@@ -194,7 +194,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 						resource = BindGroupDescriptor.TextureViewBinding(
 							view = cubemapTexture.createView(
 								TextureViewDescriptor(
-									dimension = TextureViewDimension.cube,
+									dimension = TextureViewDimension.Cube,
 									arrayLayerCount = depthLayer
 								)
 							)
@@ -208,16 +208,16 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 			colorAttachments = listOf(
 				RenderPassDescriptor.ColorAttachment(
 					view = dummyTexture.createView().bind(), // Assigned later
-					loadOp = LoadOp.clear,
+					loadOp = LoadOp.Clear,
 					clearValue = Color(0.5, 0.5, 0.5, 1.0),
-					storeOp = StoreOp.store,
+					storeOp = StoreOp.Store,
 				)
 			),
 			depthStencilAttachment = RenderPassDescriptor.DepthStencilAttachment(
 				view = depthTexture.createView(),
 				depthClearValue = 1.0f,
-				depthLoadOp = LoadOp.clear,
-				depthStoreOp = StoreOp.store
+				depthLoadOp = LoadOp.Clear,
+				depthStoreOp = StoreOp.Store
 			)
 		)
 

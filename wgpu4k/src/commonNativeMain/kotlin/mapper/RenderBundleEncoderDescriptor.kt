@@ -7,7 +7,7 @@ import io.ygdrasil.wgpu.WGPURenderBundleEncoderDescriptor
 
 fun MemoryAllocator.map(input: RenderBundleEncoderDescriptor): WGPURenderBundleEncoderDescriptor =
     WGPURenderBundleEncoderDescriptor.allocate(this).also { output ->
-        if (input.label != null) map(input.label, output.label)
+        if (input.label != null) output.label = allocateFrom(input.label)
 
         if (input.colorFormats.isNotEmpty()) {
             output.colorFormatCount = input.colorFormats.size.toULong()

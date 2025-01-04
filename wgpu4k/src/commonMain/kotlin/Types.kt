@@ -8,7 +8,7 @@ typealias GPUColorWriteFlags = Int
 
 typealias GPUDepthBias = Int
 
-typealias GPUFlagsConstant = ULong
+typealias GPUFlagsConstant = UInt
 
 typealias GPUIndex32 = UInt
 

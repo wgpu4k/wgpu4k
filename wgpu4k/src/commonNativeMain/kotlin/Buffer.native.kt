@@ -4,10 +4,8 @@ import ffi.MemoryBuffer
 import ffi.NativeAddress
 import ffi.memoryScope
 import io.ygdrasil.wgpu.WGPUBuffer
-import io.ygdrasil.wgpu.WGPUBufferMapCallback
-import io.ygdrasil.wgpu.WGPUBufferMapCallbackInfo
-import io.ygdrasil.wgpu.WGPUMapAsyncStatus
-import io.ygdrasil.wgpu.WGPUStringView
+import io.ygdrasil.wgpu.WGPUBufferMapAsyncCallback
+import io.ygdrasil.wgpu.WGPUBufferMapAsyncStatus
 import io.ygdrasil.wgpu.wgpuBufferGetMapState
 import io.ygdrasil.wgpu.wgpuBufferGetMappedRange
 import io.ygdrasil.wgpu.wgpuBufferGetSize
@@ -53,22 +51,18 @@ actual class Buffer(internal val handler: WGPUBuffer) : AutoCloseable {
     }
 
     actual suspend fun map(mode: Set<MapMode>, offset: GPUSize64, size: GPUSize64) = memoryScope { scope ->
-        val callback = WGPUBufferMapCallback.allocate(scope, object : WGPUBufferMapCallback {
-            override fun invoke(
-                status: WGPUMapAsyncStatus,
-                message: WGPUStringView?,
-                userdata1: NativeAddress?,
-                userdata2: NativeAddress?
-            ) {
-                println("mapped")
-            }
-
-        })
-        val bufferCallbackInfo = WGPUBufferMapCallbackInfo.allocate(scope).also {
-            it.callback = callback
-            it.userdata2 = callback.handler
+        val callback = WGPUBufferMapAsyncCallback.allocate(scope) { status: WGPUBufferMapAsyncStatus, userdata: NativeAddress? ->
+            println("mapped")
         }
-        wgpuBufferMapAsync(handler, mode.toFlagULong(), offset, size, bufferCallbackInfo)
+
+        wgpuBufferMapAsync(
+            handler,
+            mode.toFlagUInt(),
+            offset,
+            size,
+            callback,
+            scope.bufferOfAddress(callback.handler).handler
+        )
     }
 
     actual fun mapInto(buffer: ByteArray, offset: ULong) {

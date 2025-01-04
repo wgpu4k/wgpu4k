@@ -9,7 +9,7 @@ allprojects {
 // TODO: remove later
 configurations.all {
 	resolutionStrategy {
-		cacheChangingModulesFor(1, "seconds")
-		cacheDynamicVersionsFor(1, "seconds")
+		cacheChangingModulesFor(0, "seconds")
+		cacheDynamicVersionsFor(0, "seconds")
 	}
 }

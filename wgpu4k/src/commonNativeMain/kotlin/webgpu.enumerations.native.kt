@@ -1,11 +1,25 @@
 // This file has been generated DO NOT EDIT !!!
 package io.ygdrasil.webgpu
 
+actual enum class RequestAdapterStatus(val value: UInt) {
+	Success(io.ygdrasil.wgpu.WGPURequestAdapterStatus_Success),
+	Unavailable(io.ygdrasil.wgpu.WGPURequestAdapterStatus_Unavailable),
+	Error(io.ygdrasil.wgpu.WGPURequestAdapterStatus_Error),
+	Unknown(io.ygdrasil.wgpu.WGPURequestAdapterStatus_Unknown),
+	;
+
+	companion object {
+		fun of(value: UInt): RequestAdapterStatus? {
+			return entries.find { it.value == value }
+		}
+	}
+}
+
 actual enum class AdapterType(val value: UInt) {
-	DiscreteGPU(webgpu.WGPUAdapterType_DiscreteGPU),
-	IntegratedGPU(webgpu.WGPUAdapterType_IntegratedGPU),
-	CPU(webgpu.WGPUAdapterType_CPU),
-	Unknown(webgpu.WGPUAdapterType_Unknown),
+	DiscreteGPU(io.ygdrasil.wgpu.WGPUAdapterType_DiscreteGPU),
+	IntegratedGPU(io.ygdrasil.wgpu.WGPUAdapterType_IntegratedGPU),
+	CPU(io.ygdrasil.wgpu.WGPUAdapterType_CPU),
+	Unknown(io.ygdrasil.wgpu.WGPUAdapterType_Unknown),
 	;
 
 	companion object {
@@ -16,9 +30,9 @@ actual enum class AdapterType(val value: UInt) {
 }
 
 actual enum class AddressMode(val value: UInt) {
-	ClampToEdge(webgpu.WGPUAddressMode_ClampToEdge),
-	Repeat(webgpu.WGPUAddressMode_Repeat),
-	MirrorRepeat(webgpu.WGPUAddressMode_MirrorRepeat),
+	Repeat(io.ygdrasil.wgpu.WGPUAddressMode_Repeat),
+	MirrorRepeat(io.ygdrasil.wgpu.WGPUAddressMode_MirrorRepeat),
+	ClampToEdge(io.ygdrasil.wgpu.WGPUAddressMode_ClampToEdge),
 	;
 
 	companion object {
@@ -29,14 +43,14 @@ actual enum class AddressMode(val value: UInt) {
 }
 
 actual enum class BackendType(val value: UInt) {
-	Null(webgpu.WGPUBackendType_Null),
-	WebGPU(webgpu.WGPUBackendType_WebGPU),
-	D3D11(webgpu.WGPUBackendType_D3D11),
-	D3D12(webgpu.WGPUBackendType_D3D12),
-	Metal(webgpu.WGPUBackendType_Metal),
-	Vulkan(webgpu.WGPUBackendType_Vulkan),
-	OpenGL(webgpu.WGPUBackendType_OpenGL),
-	OpenGLES(webgpu.WGPUBackendType_OpenGLES),
+	Null(io.ygdrasil.wgpu.WGPUBackendType_Null),
+	WebGPU(io.ygdrasil.wgpu.WGPUBackendType_WebGPU),
+	D3D11(io.ygdrasil.wgpu.WGPUBackendType_D3D11),
+	D3D12(io.ygdrasil.wgpu.WGPUBackendType_D3D12),
+	Metal(io.ygdrasil.wgpu.WGPUBackendType_Metal),
+	Vulkan(io.ygdrasil.wgpu.WGPUBackendType_Vulkan),
+	OpenGL(io.ygdrasil.wgpu.WGPUBackendType_OpenGL),
+	OpenGLES(io.ygdrasil.wgpu.WGPUBackendType_OpenGLES),
 	;
 
 	companion object {
@@ -46,24 +60,74 @@ actual enum class BackendType(val value: UInt) {
 	}
 }
 
+actual enum class BufferBindingType(val value: UInt) {
+	Uniform(io.ygdrasil.wgpu.WGPUBufferBindingType_Uniform),
+	Storage(io.ygdrasil.wgpu.WGPUBufferBindingType_Storage),
+	ReadOnlyStorage(io.ygdrasil.wgpu.WGPUBufferBindingType_ReadOnlyStorage),
+	;
+
+	companion object {
+		fun of(value: UInt): BufferBindingType? {
+			return entries.find { it.value == value }
+		}
+	}
+}
+
+actual enum class SamplerBindingType(val value: UInt) {
+	Filtering(io.ygdrasil.wgpu.WGPUSamplerBindingType_Filtering),
+	NonFiltering(io.ygdrasil.wgpu.WGPUSamplerBindingType_NonFiltering),
+	Comparison(io.ygdrasil.wgpu.WGPUSamplerBindingType_Comparison),
+	;
+
+	companion object {
+		fun of(value: UInt): SamplerBindingType? {
+			return entries.find { it.value == value }
+		}
+	}
+}
+
+actual enum class TextureSampleType(val value: UInt) {
+	Float(io.ygdrasil.wgpu.WGPUTextureSampleType_Float),
+	UnfilterableFloat(io.ygdrasil.wgpu.WGPUTextureSampleType_UnfilterableFloat),
+	Depth(io.ygdrasil.wgpu.WGPUTextureSampleType_Depth),
+	Sint(io.ygdrasil.wgpu.WGPUTextureSampleType_Sint),
+	Uint(io.ygdrasil.wgpu.WGPUTextureSampleType_Uint),
+	;
+
+	companion object {
+		fun of(value: UInt): TextureSampleType? {
+			return entries.find { it.value == value }
+		}
+	}
+}
+
+actual enum class StorageTextureAccess(val value: UInt) {
+	WriteOnly(io.ygdrasil.wgpu.WGPUStorageTextureAccess_WriteOnly),
+	ReadOnly(io.ygdrasil.wgpu.WGPUStorageTextureAccess_ReadOnly),
+	ReadWrite(io.ygdrasil.wgpu.WGPUStorageTextureAccess_ReadWrite),
+	;
+
+	companion object {
+		fun of(value: UInt): StorageTextureAccess? {
+			return entries.find { it.value == value }
+		}
+	}
+}
+
 actual enum class BlendFactor(val value: UInt) {
-	Zero(webgpu.WGPUBlendFactor_Zero),
-	One(webgpu.WGPUBlendFactor_One),
-	Src(webgpu.WGPUBlendFactor_Src),
-	OneMinusSrc(webgpu.WGPUBlendFactor_OneMinusSrc),
-	SrcAlpha(webgpu.WGPUBlendFactor_SrcAlpha),
-	OneMinusSrcAlpha(webgpu.WGPUBlendFactor_OneMinusSrcAlpha),
-	Dst(webgpu.WGPUBlendFactor_Dst),
-	OneMinusDst(webgpu.WGPUBlendFactor_OneMinusDst),
-	DstAlpha(webgpu.WGPUBlendFactor_DstAlpha),
-	OneMinusDstAlpha(webgpu.WGPUBlendFactor_OneMinusDstAlpha),
-	SrcAlphaSaturated(webgpu.WGPUBlendFactor_SrcAlphaSaturated),
-	Constant(webgpu.WGPUBlendFactor_Constant),
-	OneMinusConstant(webgpu.WGPUBlendFactor_OneMinusConstant),
-	Src1(webgpu.WGPUBlendFactor_Src1),
-	OneMinusSrc1(webgpu.WGPUBlendFactor_OneMinusSrc1),
-	Src1Alpha(webgpu.WGPUBlendFactor_Src1Alpha),
-	OneMinusSrc1Alpha(webgpu.WGPUBlendFactor_OneMinusSrc1Alpha),
+	Zero(io.ygdrasil.wgpu.WGPUBlendFactor_Zero),
+	One(io.ygdrasil.wgpu.WGPUBlendFactor_One),
+	Src(io.ygdrasil.wgpu.WGPUBlendFactor_Src),
+	OneMinusSrc(io.ygdrasil.wgpu.WGPUBlendFactor_OneMinusSrc),
+	SrcAlpha(io.ygdrasil.wgpu.WGPUBlendFactor_SrcAlpha),
+	OneMinusSrcAlpha(io.ygdrasil.wgpu.WGPUBlendFactor_OneMinusSrcAlpha),
+	Dst(io.ygdrasil.wgpu.WGPUBlendFactor_Dst),
+	OneMinusDst(io.ygdrasil.wgpu.WGPUBlendFactor_OneMinusDst),
+	DstAlpha(io.ygdrasil.wgpu.WGPUBlendFactor_DstAlpha),
+	OneMinusDstAlpha(io.ygdrasil.wgpu.WGPUBlendFactor_OneMinusDstAlpha),
+	SrcAlphaSaturated(io.ygdrasil.wgpu.WGPUBlendFactor_SrcAlphaSaturated),
+	Constant(io.ygdrasil.wgpu.WGPUBlendFactor_Constant),
+	OneMinusConstant(io.ygdrasil.wgpu.WGPUBlendFactor_OneMinusConstant),
 	;
 
 	companion object {
@@ -74,11 +138,11 @@ actual enum class BlendFactor(val value: UInt) {
 }
 
 actual enum class BlendOperation(val value: UInt) {
-	Add(webgpu.WGPUBlendOperation_Add),
-	Subtract(webgpu.WGPUBlendOperation_Subtract),
-	ReverseSubtract(webgpu.WGPUBlendOperation_ReverseSubtract),
-	Min(webgpu.WGPUBlendOperation_Min),
-	Max(webgpu.WGPUBlendOperation_Max),
+	Add(io.ygdrasil.wgpu.WGPUBlendOperation_Add),
+	Subtract(io.ygdrasil.wgpu.WGPUBlendOperation_Subtract),
+	ReverseSubtract(io.ygdrasil.wgpu.WGPUBlendOperation_ReverseSubtract),
+	Min(io.ygdrasil.wgpu.WGPUBlendOperation_Min),
+	Max(io.ygdrasil.wgpu.WGPUBlendOperation_Max),
 	;
 
 	companion object {
@@ -88,24 +152,29 @@ actual enum class BlendOperation(val value: UInt) {
 	}
 }
 
-actual enum class BufferBindingType(val value: UInt) {
-	BindingNotUsed(webgpu.WGPUBufferBindingType_BindingNotUsed),
-	Uniform(webgpu.WGPUBufferBindingType_Uniform),
-	Storage(webgpu.WGPUBufferBindingType_Storage),
-	ReadOnlyStorage(webgpu.WGPUBufferBindingType_ReadOnlyStorage),
+actual enum class BufferMapAsyncStatus(val value: UInt) {
+	Success(io.ygdrasil.wgpu.WGPUBufferMapAsyncStatus_Success),
+	ValidationError(io.ygdrasil.wgpu.WGPUBufferMapAsyncStatus_ValidationError),
+	Unknown(io.ygdrasil.wgpu.WGPUBufferMapAsyncStatus_Unknown),
+	DeviceLost(io.ygdrasil.wgpu.WGPUBufferMapAsyncStatus_DeviceLost),
+	DestroyedBeforeCallback(io.ygdrasil.wgpu.WGPUBufferMapAsyncStatus_DestroyedBeforeCallback),
+	UnmappedBeforeCallback(io.ygdrasil.wgpu.WGPUBufferMapAsyncStatus_UnmappedBeforeCallback),
+	MappingAlreadyPending(io.ygdrasil.wgpu.WGPUBufferMapAsyncStatus_MappingAlreadyPending),
+	OffsetOutOfRange(io.ygdrasil.wgpu.WGPUBufferMapAsyncStatus_OffsetOutOfRange),
+	SizeOutOfRange(io.ygdrasil.wgpu.WGPUBufferMapAsyncStatus_SizeOutOfRange),
 	;
 
 	companion object {
-		fun of(value: UInt): BufferBindingType? {
+		fun of(value: UInt): BufferMapAsyncStatus? {
 			return entries.find { it.value == value }
 		}
 	}
 }
 
 actual enum class BufferMapState(val value: UInt) {
-	Unmapped(webgpu.WGPUBufferMapState_Unmapped),
-	Pending(webgpu.WGPUBufferMapState_Pending),
-	Mapped(webgpu.WGPUBufferMapState_Mapped),
+	Unmapped(io.ygdrasil.wgpu.WGPUBufferMapState_Unmapped),
+	Pending(io.ygdrasil.wgpu.WGPUBufferMapState_Pending),
+	Mapped(io.ygdrasil.wgpu.WGPUBufferMapState_Mapped),
 	;
 
 	companion object {
@@ -115,28 +184,15 @@ actual enum class BufferMapState(val value: UInt) {
 	}
 }
 
-actual enum class CallbackMode(val value: UInt) {
-	WaitAnyOnly(webgpu.WGPUCallbackMode_WaitAnyOnly),
-	AllowProcessEvents(webgpu.WGPUCallbackMode_AllowProcessEvents),
-	AllowSpontaneous(webgpu.WGPUCallbackMode_AllowSpontaneous),
-	;
-
-	companion object {
-		fun of(value: UInt): CallbackMode? {
-			return entries.find { it.value == value }
-		}
-	}
-}
-
 actual enum class CompareFunction(val value: UInt) {
-	Never(webgpu.WGPUCompareFunction_Never),
-	Less(webgpu.WGPUCompareFunction_Less),
-	Equal(webgpu.WGPUCompareFunction_Equal),
-	LessEqual(webgpu.WGPUCompareFunction_LessEqual),
-	Greater(webgpu.WGPUCompareFunction_Greater),
-	NotEqual(webgpu.WGPUCompareFunction_NotEqual),
-	GreaterEqual(webgpu.WGPUCompareFunction_GreaterEqual),
-	Always(webgpu.WGPUCompareFunction_Always),
+	Never(io.ygdrasil.wgpu.WGPUCompareFunction_Never),
+	Less(io.ygdrasil.wgpu.WGPUCompareFunction_Less),
+	LessEqual(io.ygdrasil.wgpu.WGPUCompareFunction_LessEqual),
+	Greater(io.ygdrasil.wgpu.WGPUCompareFunction_Greater),
+	GreaterEqual(io.ygdrasil.wgpu.WGPUCompareFunction_GreaterEqual),
+	Equal(io.ygdrasil.wgpu.WGPUCompareFunction_Equal),
+	NotEqual(io.ygdrasil.wgpu.WGPUCompareFunction_NotEqual),
+	Always(io.ygdrasil.wgpu.WGPUCompareFunction_Always),
 	;
 
 	companion object {
@@ -147,10 +203,10 @@ actual enum class CompareFunction(val value: UInt) {
 }
 
 actual enum class CompilationInfoRequestStatus(val value: UInt) {
-	Success(webgpu.WGPUCompilationInfoRequestStatus_Success),
-	InstanceDropped(webgpu.WGPUCompilationInfoRequestStatus_InstanceDropped),
-	Error(webgpu.WGPUCompilationInfoRequestStatus_Error),
-	Unknown(webgpu.WGPUCompilationInfoRequestStatus_Unknown),
+	Success(io.ygdrasil.wgpu.WGPUCompilationInfoRequestStatus_Success),
+	Error(io.ygdrasil.wgpu.WGPUCompilationInfoRequestStatus_Error),
+	DeviceLost(io.ygdrasil.wgpu.WGPUCompilationInfoRequestStatus_DeviceLost),
+	Unknown(io.ygdrasil.wgpu.WGPUCompilationInfoRequestStatus_Unknown),
 	;
 
 	companion object {
@@ -161,9 +217,9 @@ actual enum class CompilationInfoRequestStatus(val value: UInt) {
 }
 
 actual enum class CompilationMessageType(val value: UInt) {
-	Error(webgpu.WGPUCompilationMessageType_Error),
-	Warning(webgpu.WGPUCompilationMessageType_Warning),
-	Info(webgpu.WGPUCompilationMessageType_Info),
+	Error(io.ygdrasil.wgpu.WGPUCompilationMessageType_Error),
+	Warning(io.ygdrasil.wgpu.WGPUCompilationMessageType_Warning),
+	Info(io.ygdrasil.wgpu.WGPUCompilationMessageType_Info),
 	;
 
 	companion object {
@@ -174,11 +230,11 @@ actual enum class CompilationMessageType(val value: UInt) {
 }
 
 actual enum class CompositeAlphaMode(val value: UInt) {
-	Auto(webgpu.WGPUCompositeAlphaMode_Auto),
-	Opaque(webgpu.WGPUCompositeAlphaMode_Opaque),
-	Premultiplied(webgpu.WGPUCompositeAlphaMode_Premultiplied),
-	Unpremultiplied(webgpu.WGPUCompositeAlphaMode_Unpremultiplied),
-	Inherit(webgpu.WGPUCompositeAlphaMode_Inherit),
+	Auto(io.ygdrasil.wgpu.WGPUCompositeAlphaMode_Auto),
+	Opaque(io.ygdrasil.wgpu.WGPUCompositeAlphaMode_Opaque),
+	Premultiplied(io.ygdrasil.wgpu.WGPUCompositeAlphaMode_Premultiplied),
+	Unpremultiplied(io.ygdrasil.wgpu.WGPUCompositeAlphaMode_Unpremultiplied),
+	Inherit(io.ygdrasil.wgpu.WGPUCompositeAlphaMode_Inherit),
 	;
 
 	companion object {
@@ -189,11 +245,12 @@ actual enum class CompositeAlphaMode(val value: UInt) {
 }
 
 actual enum class CreatePipelineAsyncStatus(val value: UInt) {
-	Success(webgpu.WGPUCreatePipelineAsyncStatus_Success),
-	InstanceDropped(webgpu.WGPUCreatePipelineAsyncStatus_InstanceDropped),
-	ValidationError(webgpu.WGPUCreatePipelineAsyncStatus_ValidationError),
-	InternalError(webgpu.WGPUCreatePipelineAsyncStatus_InternalError),
-	Unknown(webgpu.WGPUCreatePipelineAsyncStatus_Unknown),
+	Success(io.ygdrasil.wgpu.WGPUCreatePipelineAsyncStatus_Success),
+	ValidationError(io.ygdrasil.wgpu.WGPUCreatePipelineAsyncStatus_ValidationError),
+	InternalError(io.ygdrasil.wgpu.WGPUCreatePipelineAsyncStatus_InternalError),
+	DeviceLost(io.ygdrasil.wgpu.WGPUCreatePipelineAsyncStatus_DeviceLost),
+	DeviceDestroyed(io.ygdrasil.wgpu.WGPUCreatePipelineAsyncStatus_DeviceDestroyed),
+	Unknown(io.ygdrasil.wgpu.WGPUCreatePipelineAsyncStatus_Unknown),
 	;
 
 	companion object {
@@ -204,9 +261,9 @@ actual enum class CreatePipelineAsyncStatus(val value: UInt) {
 }
 
 actual enum class CullMode(val value: UInt) {
-	None(webgpu.WGPUCullMode_None),
-	Front(webgpu.WGPUCullMode_Front),
-	Back(webgpu.WGPUCullMode_Back),
+	None(io.ygdrasil.wgpu.WGPUCullMode_None),
+	Front(io.ygdrasil.wgpu.WGPUCullMode_Front),
+	Back(io.ygdrasil.wgpu.WGPUCullMode_Back),
 	;
 
 	companion object {
@@ -217,10 +274,8 @@ actual enum class CullMode(val value: UInt) {
 }
 
 actual enum class DeviceLostReason(val value: UInt) {
-	Unknown(webgpu.WGPUDeviceLostReason_Unknown),
-	Destroyed(webgpu.WGPUDeviceLostReason_Destroyed),
-	InstanceDropped(webgpu.WGPUDeviceLostReason_InstanceDropped),
-	FailedCreation(webgpu.WGPUDeviceLostReason_FailedCreation),
+	Unknown(io.ygdrasil.wgpu.WGPUDeviceLostReason_Unknown),
+	Destroyed(io.ygdrasil.wgpu.WGPUDeviceLostReason_Destroyed),
 	;
 
 	companion object {
@@ -231,9 +286,9 @@ actual enum class DeviceLostReason(val value: UInt) {
 }
 
 actual enum class ErrorFilter(val value: UInt) {
-	Validation(webgpu.WGPUErrorFilter_Validation),
-	OutOfMemory(webgpu.WGPUErrorFilter_OutOfMemory),
-	Internal(webgpu.WGPUErrorFilter_Internal),
+	Validation(io.ygdrasil.wgpu.WGPUErrorFilter_Validation),
+	OutOfMemory(io.ygdrasil.wgpu.WGPUErrorFilter_OutOfMemory),
+	Internal(io.ygdrasil.wgpu.WGPUErrorFilter_Internal),
 	;
 
 	companion object {
@@ -244,11 +299,12 @@ actual enum class ErrorFilter(val value: UInt) {
 }
 
 actual enum class ErrorType(val value: UInt) {
-	NoError(webgpu.WGPUErrorType_NoError),
-	Validation(webgpu.WGPUErrorType_Validation),
-	OutOfMemory(webgpu.WGPUErrorType_OutOfMemory),
-	Internal(webgpu.WGPUErrorType_Internal),
-	Unknown(webgpu.WGPUErrorType_Unknown),
+	NoError(io.ygdrasil.wgpu.WGPUErrorType_NoError),
+	Validation(io.ygdrasil.wgpu.WGPUErrorType_Validation),
+	OutOfMemory(io.ygdrasil.wgpu.WGPUErrorType_OutOfMemory),
+	Internal(io.ygdrasil.wgpu.WGPUErrorType_Internal),
+	Unknown(io.ygdrasil.wgpu.WGPUErrorType_Unknown),
+	DeviceLost(io.ygdrasil.wgpu.WGPUErrorType_DeviceLost),
 	;
 
 	companion object {
@@ -258,35 +314,18 @@ actual enum class ErrorType(val value: UInt) {
 	}
 }
 
-actual enum class FeatureLevel(val value: UInt) {
-	Compatibility(webgpu.WGPUFeatureLevel_Compatibility),
-	Core(webgpu.WGPUFeatureLevel_Core),
-	;
-
-	companion object {
-		fun of(value: UInt): FeatureLevel? {
-			return entries.find { it.value == value }
-		}
-	}
-}
-
 actual enum class FeatureName(val value: UInt) {
-	DepthClipControl(webgpu.WGPUFeatureName_DepthClipControl),
-	Depth32FloatStencil8(webgpu.WGPUFeatureName_Depth32FloatStencil8),
-	TimestampQuery(webgpu.WGPUFeatureName_TimestampQuery),
-	TextureCompressionBC(webgpu.WGPUFeatureName_TextureCompressionBC),
-	TextureCompressionBCSliced3D(webgpu.WGPUFeatureName_TextureCompressionBCSliced3D),
-	TextureCompressionETC2(webgpu.WGPUFeatureName_TextureCompressionETC2),
-	TextureCompressionASTC(webgpu.WGPUFeatureName_TextureCompressionASTC),
-	TextureCompressionASTCSliced3D(webgpu.WGPUFeatureName_TextureCompressionASTCSliced3D),
-	IndirectFirstInstance(webgpu.WGPUFeatureName_IndirectFirstInstance),
-	ShaderF16(webgpu.WGPUFeatureName_ShaderF16),
-	RG11B10UfloatRenderable(webgpu.WGPUFeatureName_RG11B10UfloatRenderable),
-	BGRA8UnormStorage(webgpu.WGPUFeatureName_BGRA8UnormStorage),
-	Float32Filterable(webgpu.WGPUFeatureName_Float32Filterable),
-	Float32Blendable(webgpu.WGPUFeatureName_Float32Blendable),
-	ClipDistances(webgpu.WGPUFeatureName_ClipDistances),
-	DualSourceBlending(webgpu.WGPUFeatureName_DualSourceBlending),
+	DepthClipControl(io.ygdrasil.wgpu.WGPUFeatureName_DepthClipControl),
+	Depth32FloatStencil8(io.ygdrasil.wgpu.WGPUFeatureName_Depth32FloatStencil8),
+	TimestampQuery(io.ygdrasil.wgpu.WGPUFeatureName_TimestampQuery),
+	TextureCompressionBC(io.ygdrasil.wgpu.WGPUFeatureName_TextureCompressionBC),
+	TextureCompressionETC2(io.ygdrasil.wgpu.WGPUFeatureName_TextureCompressionETC2),
+	TextureCompressionASTC(io.ygdrasil.wgpu.WGPUFeatureName_TextureCompressionASTC),
+	IndirectFirstInstance(io.ygdrasil.wgpu.WGPUFeatureName_IndirectFirstInstance),
+	ShaderF16(io.ygdrasil.wgpu.WGPUFeatureName_ShaderF16),
+	RG11B10UfloatRenderable(io.ygdrasil.wgpu.WGPUFeatureName_RG11B10UfloatRenderable),
+	BGRA8UnormStorage(io.ygdrasil.wgpu.WGPUFeatureName_BGRA8UnormStorage),
+	Float32Filterable(io.ygdrasil.wgpu.WGPUFeatureName_Float32Filterable),
 	;
 
 	companion object {
@@ -297,8 +336,8 @@ actual enum class FeatureName(val value: UInt) {
 }
 
 actual enum class FilterMode(val value: UInt) {
-	Nearest(webgpu.WGPUFilterMode_Nearest),
-	Linear(webgpu.WGPUFilterMode_Linear),
+	Nearest(io.ygdrasil.wgpu.WGPUFilterMode_Nearest),
+	Linear(io.ygdrasil.wgpu.WGPUFilterMode_Linear),
 	;
 
 	companion object {
@@ -309,8 +348,8 @@ actual enum class FilterMode(val value: UInt) {
 }
 
 actual enum class FrontFace(val value: UInt) {
-	CCW(webgpu.WGPUFrontFace_CCW),
-	CW(webgpu.WGPUFrontFace_CW),
+	CCW(io.ygdrasil.wgpu.WGPUFrontFace_CCW),
+	CW(io.ygdrasil.wgpu.WGPUFrontFace_CW),
 	;
 
 	companion object {
@@ -321,8 +360,8 @@ actual enum class FrontFace(val value: UInt) {
 }
 
 actual enum class IndexFormat(val value: UInt) {
-	Uint16(webgpu.WGPUIndexFormat_Uint16),
-	Uint32(webgpu.WGPUIndexFormat_Uint32),
+	Uint16(io.ygdrasil.wgpu.WGPUIndexFormat_Uint16),
+	Uint32(io.ygdrasil.wgpu.WGPUIndexFormat_Uint32),
 	;
 
 	companion object {
@@ -332,9 +371,22 @@ actual enum class IndexFormat(val value: UInt) {
 	}
 }
 
+actual enum class VertexStepMode(val value: UInt) {
+	Vertex(io.ygdrasil.wgpu.WGPUVertexStepMode_Vertex),
+	Instance(io.ygdrasil.wgpu.WGPUVertexStepMode_Instance),
+	VertexBufferNotUsed(io.ygdrasil.wgpu.WGPUVertexStepMode_VertexBufferNotUsed),
+	;
+
+	companion object {
+		fun of(value: UInt): VertexStepMode? {
+			return entries.find { it.value == value }
+		}
+	}
+}
+
 actual enum class LoadOp(val value: UInt) {
-	Load(webgpu.WGPULoadOp_Load),
-	Clear(webgpu.WGPULoadOp_Clear),
+	Clear(io.ygdrasil.wgpu.WGPULoadOp_Clear),
+	Load(io.ygdrasil.wgpu.WGPULoadOp_Load),
 	;
 
 	companion object {
@@ -344,24 +396,9 @@ actual enum class LoadOp(val value: UInt) {
 	}
 }
 
-actual enum class MapAsyncStatus(val value: UInt) {
-	Success(webgpu.WGPUMapAsyncStatus_Success),
-	InstanceDropped(webgpu.WGPUMapAsyncStatus_InstanceDropped),
-	Error(webgpu.WGPUMapAsyncStatus_Error),
-	Aborted(webgpu.WGPUMapAsyncStatus_Aborted),
-	Unknown(webgpu.WGPUMapAsyncStatus_Unknown),
-	;
-
-	companion object {
-		fun of(value: UInt): MapAsyncStatus? {
-			return entries.find { it.value == value }
-		}
-	}
-}
-
 actual enum class MipmapFilterMode(val value: UInt) {
-	Nearest(webgpu.WGPUMipmapFilterMode_Nearest),
-	Linear(webgpu.WGPUMipmapFilterMode_Linear),
+	Nearest(io.ygdrasil.wgpu.WGPUMipmapFilterMode_Nearest),
+	Linear(io.ygdrasil.wgpu.WGPUMipmapFilterMode_Linear),
 	;
 
 	companion object {
@@ -371,34 +408,21 @@ actual enum class MipmapFilterMode(val value: UInt) {
 	}
 }
 
-actual enum class OptionalBool(val value: UInt) {
-	False(webgpu.WGPUOptionalBool_False),
-	True(webgpu.WGPUOptionalBool_True),
+actual enum class StoreOp(val value: UInt) {
+	Store(io.ygdrasil.wgpu.WGPUStoreOp_Store),
+	Discard(io.ygdrasil.wgpu.WGPUStoreOp_Discard),
 	;
 
 	companion object {
-		fun of(value: UInt): OptionalBool? {
-			return entries.find { it.value == value }
-		}
-	}
-}
-
-actual enum class PopErrorScopeStatus(val value: UInt) {
-	Success(webgpu.WGPUPopErrorScopeStatus_Success),
-	InstanceDropped(webgpu.WGPUPopErrorScopeStatus_InstanceDropped),
-	EmptyStack(webgpu.WGPUPopErrorScopeStatus_EmptyStack),
-	;
-
-	companion object {
-		fun of(value: UInt): PopErrorScopeStatus? {
+		fun of(value: UInt): StoreOp? {
 			return entries.find { it.value == value }
 		}
 	}
 }
 
 actual enum class PowerPreference(val value: UInt) {
-	LowPower(webgpu.WGPUPowerPreference_LowPower),
-	HighPerformance(webgpu.WGPUPowerPreference_HighPerformance),
+	LowPower(io.ygdrasil.wgpu.WGPUPowerPreference_LowPower),
+	HighPerformance(io.ygdrasil.wgpu.WGPUPowerPreference_HighPerformance),
 	;
 
 	companion object {
@@ -409,10 +433,10 @@ actual enum class PowerPreference(val value: UInt) {
 }
 
 actual enum class PresentMode(val value: UInt) {
-	Fifo(webgpu.WGPUPresentMode_Fifo),
-	FifoRelaxed(webgpu.WGPUPresentMode_FifoRelaxed),
-	Immediate(webgpu.WGPUPresentMode_Immediate),
-	Mailbox(webgpu.WGPUPresentMode_Mailbox),
+	Fifo(io.ygdrasil.wgpu.WGPUPresentMode_Fifo),
+	FifoRelaxed(io.ygdrasil.wgpu.WGPUPresentMode_FifoRelaxed),
+	Immediate(io.ygdrasil.wgpu.WGPUPresentMode_Immediate),
+	Mailbox(io.ygdrasil.wgpu.WGPUPresentMode_Mailbox),
 	;
 
 	companion object {
@@ -423,11 +447,11 @@ actual enum class PresentMode(val value: UInt) {
 }
 
 actual enum class PrimitiveTopology(val value: UInt) {
-	PointList(webgpu.WGPUPrimitiveTopology_PointList),
-	LineList(webgpu.WGPUPrimitiveTopology_LineList),
-	LineStrip(webgpu.WGPUPrimitiveTopology_LineStrip),
-	TriangleList(webgpu.WGPUPrimitiveTopology_TriangleList),
-	TriangleStrip(webgpu.WGPUPrimitiveTopology_TriangleStrip),
+	PointList(io.ygdrasil.wgpu.WGPUPrimitiveTopology_PointList),
+	LineList(io.ygdrasil.wgpu.WGPUPrimitiveTopology_LineList),
+	LineStrip(io.ygdrasil.wgpu.WGPUPrimitiveTopology_LineStrip),
+	TriangleList(io.ygdrasil.wgpu.WGPUPrimitiveTopology_TriangleList),
+	TriangleStrip(io.ygdrasil.wgpu.WGPUPrimitiveTopology_TriangleStrip),
 	;
 
 	companion object {
@@ -438,8 +462,8 @@ actual enum class PrimitiveTopology(val value: UInt) {
 }
 
 actual enum class QueryType(val value: UInt) {
-	Occlusion(webgpu.WGPUQueryType_Occlusion),
-	Timestamp(webgpu.WGPUQueryType_Timestamp),
+	Occlusion(io.ygdrasil.wgpu.WGPUQueryType_Occlusion),
+	Timestamp(io.ygdrasil.wgpu.WGPUQueryType_Timestamp),
 	;
 
 	companion object {
@@ -450,10 +474,10 @@ actual enum class QueryType(val value: UInt) {
 }
 
 actual enum class QueueWorkDoneStatus(val value: UInt) {
-	Success(webgpu.WGPUQueueWorkDoneStatus_Success),
-	InstanceDropped(webgpu.WGPUQueueWorkDoneStatus_InstanceDropped),
-	Error(webgpu.WGPUQueueWorkDoneStatus_Error),
-	Unknown(webgpu.WGPUQueueWorkDoneStatus_Unknown),
+	Success(io.ygdrasil.wgpu.WGPUQueueWorkDoneStatus_Success),
+	Error(io.ygdrasil.wgpu.WGPUQueueWorkDoneStatus_Error),
+	Unknown(io.ygdrasil.wgpu.WGPUQueueWorkDoneStatus_Unknown),
+	DeviceLost(io.ygdrasil.wgpu.WGPUQueueWorkDoneStatus_DeviceLost),
 	;
 
 	companion object {
@@ -463,26 +487,10 @@ actual enum class QueueWorkDoneStatus(val value: UInt) {
 	}
 }
 
-actual enum class RequestAdapterStatus(val value: UInt) {
-	Success(webgpu.WGPURequestAdapterStatus_Success),
-	InstanceDropped(webgpu.WGPURequestAdapterStatus_InstanceDropped),
-	Unavailable(webgpu.WGPURequestAdapterStatus_Unavailable),
-	Error(webgpu.WGPURequestAdapterStatus_Error),
-	Unknown(webgpu.WGPURequestAdapterStatus_Unknown),
-	;
-
-	companion object {
-		fun of(value: UInt): RequestAdapterStatus? {
-			return entries.find { it.value == value }
-		}
-	}
-}
-
 actual enum class RequestDeviceStatus(val value: UInt) {
-	Success(webgpu.WGPURequestDeviceStatus_Success),
-	InstanceDropped(webgpu.WGPURequestDeviceStatus_InstanceDropped),
-	Error(webgpu.WGPURequestDeviceStatus_Error),
-	Unknown(webgpu.WGPURequestDeviceStatus_Unknown),
+	Success(io.ygdrasil.wgpu.WGPURequestDeviceStatus_Success),
+	Error(io.ygdrasil.wgpu.WGPURequestDeviceStatus_Error),
+	Unknown(io.ygdrasil.wgpu.WGPURequestDeviceStatus_Unknown),
 	;
 
 	companion object {
@@ -492,60 +500,15 @@ actual enum class RequestDeviceStatus(val value: UInt) {
 	}
 }
 
-actual enum class SType(val value: UInt) {
-	ShaderSourceSPIRV(webgpu.WGPUSType_ShaderSourceSPIRV),
-	ShaderSourceWGSL(webgpu.WGPUSType_ShaderSourceWGSL),
-	RenderPassMaxDrawCount(webgpu.WGPUSType_RenderPassMaxDrawCount),
-	SurfaceSourceMetalLayer(webgpu.WGPUSType_SurfaceSourceMetalLayer),
-	SurfaceSourceWindowsHWND(webgpu.WGPUSType_SurfaceSourceWindowsHWND),
-	SurfaceSourceXlibWindow(webgpu.WGPUSType_SurfaceSourceXlibWindow),
-	SurfaceSourceWaylandSurface(webgpu.WGPUSType_SurfaceSourceWaylandSurface),
-	SurfaceSourceAndroidNativeWindow(webgpu.WGPUSType_SurfaceSourceAndroidNativeWindow),
-	SurfaceSourceXCBWindow(webgpu.WGPUSType_SurfaceSourceXCBWindow),
-	;
-
-	companion object {
-		fun of(value: UInt): SType? {
-			return entries.find { it.value == value }
-		}
-	}
-}
-
-actual enum class SamplerBindingType(val value: UInt) {
-	BindingNotUsed(webgpu.WGPUSamplerBindingType_BindingNotUsed),
-	Filtering(webgpu.WGPUSamplerBindingType_Filtering),
-	NonFiltering(webgpu.WGPUSamplerBindingType_NonFiltering),
-	Comparison(webgpu.WGPUSamplerBindingType_Comparison),
-	;
-
-	companion object {
-		fun of(value: UInt): SamplerBindingType? {
-			return entries.find { it.value == value }
-		}
-	}
-}
-
-actual enum class Status(val value: UInt) {
-	Success(webgpu.WGPUStatus_Success),
-	Error(webgpu.WGPUStatus_Error),
-	;
-
-	companion object {
-		fun of(value: UInt): Status? {
-			return entries.find { it.value == value }
-		}
-	}
-}
-
 actual enum class StencilOperation(val value: UInt) {
-	Keep(webgpu.WGPUStencilOperation_Keep),
-	Zero(webgpu.WGPUStencilOperation_Zero),
-	Replace(webgpu.WGPUStencilOperation_Replace),
-	Invert(webgpu.WGPUStencilOperation_Invert),
-	IncrementClamp(webgpu.WGPUStencilOperation_IncrementClamp),
-	DecrementClamp(webgpu.WGPUStencilOperation_DecrementClamp),
-	IncrementWrap(webgpu.WGPUStencilOperation_IncrementWrap),
-	DecrementWrap(webgpu.WGPUStencilOperation_DecrementWrap),
+	Keep(io.ygdrasil.wgpu.WGPUStencilOperation_Keep),
+	Zero(io.ygdrasil.wgpu.WGPUStencilOperation_Zero),
+	Replace(io.ygdrasil.wgpu.WGPUStencilOperation_Replace),
+	Invert(io.ygdrasil.wgpu.WGPUStencilOperation_Invert),
+	IncrementClamp(io.ygdrasil.wgpu.WGPUStencilOperation_IncrementClamp),
+	DecrementClamp(io.ygdrasil.wgpu.WGPUStencilOperation_DecrementClamp),
+	IncrementWrap(io.ygdrasil.wgpu.WGPUStencilOperation_IncrementWrap),
+	DecrementWrap(io.ygdrasil.wgpu.WGPUStencilOperation_DecrementWrap),
 	;
 
 	companion object {
@@ -555,41 +518,35 @@ actual enum class StencilOperation(val value: UInt) {
 	}
 }
 
-actual enum class StorageTextureAccess(val value: UInt) {
-	BindingNotUsed(webgpu.WGPUStorageTextureAccess_BindingNotUsed),
-	WriteOnly(webgpu.WGPUStorageTextureAccess_WriteOnly),
-	ReadOnly(webgpu.WGPUStorageTextureAccess_ReadOnly),
-	ReadWrite(webgpu.WGPUStorageTextureAccess_ReadWrite),
+actual enum class SType(val value: UInt) {
+	Invalid(io.ygdrasil.wgpu.WGPUSType_Invalid),
+	SurfaceDescriptorFromMetalLayer(io.ygdrasil.wgpu.WGPUSType_SurfaceDescriptorFromMetalLayer),
+	SurfaceDescriptorFromWindowsHWND(io.ygdrasil.wgpu.WGPUSType_SurfaceDescriptorFromWindowsHWND),
+	SurfaceDescriptorFromXlibWindow(io.ygdrasil.wgpu.WGPUSType_SurfaceDescriptorFromXlibWindow),
+	SurfaceDescriptorFromCanvasHTMLSelector(io.ygdrasil.wgpu.WGPUSType_SurfaceDescriptorFromCanvasHTMLSelector),
+	ShaderModuleSPIRVDescriptor(io.ygdrasil.wgpu.WGPUSType_ShaderModuleSPIRVDescriptor),
+	ShaderModuleWGSLDescriptor(io.ygdrasil.wgpu.WGPUSType_ShaderModuleWGSLDescriptor),
+	PrimitiveDepthClipControl(io.ygdrasil.wgpu.WGPUSType_PrimitiveDepthClipControl),
+	SurfaceDescriptorFromWaylandSurface(io.ygdrasil.wgpu.WGPUSType_SurfaceDescriptorFromWaylandSurface),
+	SurfaceDescriptorFromAndroidNativeWindow(io.ygdrasil.wgpu.WGPUSType_SurfaceDescriptorFromAndroidNativeWindow),
+	SurfaceDescriptorFromXcbWindow(io.ygdrasil.wgpu.WGPUSType_SurfaceDescriptorFromXcbWindow),
+	RenderPassDescriptorMaxDrawCount(io.ygdrasil.wgpu.WGPUSType_RenderPassDescriptorMaxDrawCount),
 	;
 
 	companion object {
-		fun of(value: UInt): StorageTextureAccess? {
-			return entries.find { it.value == value }
-		}
-	}
-}
-
-actual enum class StoreOp(val value: UInt) {
-	Store(webgpu.WGPUStoreOp_Store),
-	Discard(webgpu.WGPUStoreOp_Discard),
-	;
-
-	companion object {
-		fun of(value: UInt): StoreOp? {
+		fun of(value: UInt): SType? {
 			return entries.find { it.value == value }
 		}
 	}
 }
 
 actual enum class SurfaceGetCurrentTextureStatus(val value: UInt) {
-	SuccessOptimal(webgpu.WGPUSurfaceGetCurrentTextureStatus_SuccessOptimal),
-	SuccessSuboptimal(webgpu.WGPUSurfaceGetCurrentTextureStatus_SuccessSuboptimal),
-	Timeout(webgpu.WGPUSurfaceGetCurrentTextureStatus_Timeout),
-	Outdated(webgpu.WGPUSurfaceGetCurrentTextureStatus_Outdated),
-	Lost(webgpu.WGPUSurfaceGetCurrentTextureStatus_Lost),
-	OutOfMemory(webgpu.WGPUSurfaceGetCurrentTextureStatus_OutOfMemory),
-	DeviceLost(webgpu.WGPUSurfaceGetCurrentTextureStatus_DeviceLost),
-	Error(webgpu.WGPUSurfaceGetCurrentTextureStatus_Error),
+	Success(io.ygdrasil.wgpu.WGPUSurfaceGetCurrentTextureStatus_Success),
+	Timeout(io.ygdrasil.wgpu.WGPUSurfaceGetCurrentTextureStatus_Timeout),
+	Outdated(io.ygdrasil.wgpu.WGPUSurfaceGetCurrentTextureStatus_Outdated),
+	Lost(io.ygdrasil.wgpu.WGPUSurfaceGetCurrentTextureStatus_Lost),
+	OutOfMemory(io.ygdrasil.wgpu.WGPUSurfaceGetCurrentTextureStatus_OutOfMemory),
+	DeviceLost(io.ygdrasil.wgpu.WGPUSurfaceGetCurrentTextureStatus_DeviceLost),
 	;
 
 	companion object {
@@ -600,9 +557,9 @@ actual enum class SurfaceGetCurrentTextureStatus(val value: UInt) {
 }
 
 actual enum class TextureAspect(val value: UInt) {
-	All(webgpu.WGPUTextureAspect_All),
-	StencilOnly(webgpu.WGPUTextureAspect_StencilOnly),
-	DepthOnly(webgpu.WGPUTextureAspect_DepthOnly),
+	All(io.ygdrasil.wgpu.WGPUTextureAspect_All),
+	StencilOnly(io.ygdrasil.wgpu.WGPUTextureAspect_StencilOnly),
+	DepthOnly(io.ygdrasil.wgpu.WGPUTextureAspect_DepthOnly),
 	;
 
 	companion object {
@@ -613,9 +570,9 @@ actual enum class TextureAspect(val value: UInt) {
 }
 
 actual enum class TextureDimension(val value: UInt) {
-	OneD(webgpu.WGPUTextureDimension_1D),
-	TwoD(webgpu.WGPUTextureDimension_2D),
-	ThreeD(webgpu.WGPUTextureDimension_3D),
+	OneD(io.ygdrasil.wgpu.WGPUTextureDimension_1D),
+	TwoD(io.ygdrasil.wgpu.WGPUTextureDimension_2D),
+	ThreeD(io.ygdrasil.wgpu.WGPUTextureDimension_3D),
 	;
 
 	companion object {
@@ -626,101 +583,101 @@ actual enum class TextureDimension(val value: UInt) {
 }
 
 actual enum class TextureFormat(val value: UInt) {
-	R8Unorm(webgpu.WGPUTextureFormat_R8Unorm),
-	R8Snorm(webgpu.WGPUTextureFormat_R8Snorm),
-	R8Uint(webgpu.WGPUTextureFormat_R8Uint),
-	R8Sint(webgpu.WGPUTextureFormat_R8Sint),
-	R16Uint(webgpu.WGPUTextureFormat_R16Uint),
-	R16Sint(webgpu.WGPUTextureFormat_R16Sint),
-	R16Float(webgpu.WGPUTextureFormat_R16Float),
-	RG8Unorm(webgpu.WGPUTextureFormat_RG8Unorm),
-	RG8Snorm(webgpu.WGPUTextureFormat_RG8Snorm),
-	RG8Uint(webgpu.WGPUTextureFormat_RG8Uint),
-	RG8Sint(webgpu.WGPUTextureFormat_RG8Sint),
-	R32Float(webgpu.WGPUTextureFormat_R32Float),
-	R32Uint(webgpu.WGPUTextureFormat_R32Uint),
-	R32Sint(webgpu.WGPUTextureFormat_R32Sint),
-	RG16Uint(webgpu.WGPUTextureFormat_RG16Uint),
-	RG16Sint(webgpu.WGPUTextureFormat_RG16Sint),
-	RG16Float(webgpu.WGPUTextureFormat_RG16Float),
-	RGBA8Unorm(webgpu.WGPUTextureFormat_RGBA8Unorm),
-	RGBA8UnormSrgb(webgpu.WGPUTextureFormat_RGBA8UnormSrgb),
-	RGBA8Snorm(webgpu.WGPUTextureFormat_RGBA8Snorm),
-	RGBA8Uint(webgpu.WGPUTextureFormat_RGBA8Uint),
-	RGBA8Sint(webgpu.WGPUTextureFormat_RGBA8Sint),
-	BGRA8Unorm(webgpu.WGPUTextureFormat_BGRA8Unorm),
-	BGRA8UnormSrgb(webgpu.WGPUTextureFormat_BGRA8UnormSrgb),
-	RGB10A2Uint(webgpu.WGPUTextureFormat_RGB10A2Uint),
-	RGB10A2Unorm(webgpu.WGPUTextureFormat_RGB10A2Unorm),
-	RG11B10Ufloat(webgpu.WGPUTextureFormat_RG11B10Ufloat),
-	RGB9E5Ufloat(webgpu.WGPUTextureFormat_RGB9E5Ufloat),
-	RG32Float(webgpu.WGPUTextureFormat_RG32Float),
-	RG32Uint(webgpu.WGPUTextureFormat_RG32Uint),
-	RG32Sint(webgpu.WGPUTextureFormat_RG32Sint),
-	RGBA16Uint(webgpu.WGPUTextureFormat_RGBA16Uint),
-	RGBA16Sint(webgpu.WGPUTextureFormat_RGBA16Sint),
-	RGBA16Float(webgpu.WGPUTextureFormat_RGBA16Float),
-	RGBA32Float(webgpu.WGPUTextureFormat_RGBA32Float),
-	RGBA32Uint(webgpu.WGPUTextureFormat_RGBA32Uint),
-	RGBA32Sint(webgpu.WGPUTextureFormat_RGBA32Sint),
-	Stencil8(webgpu.WGPUTextureFormat_Stencil8),
-	Depth16Unorm(webgpu.WGPUTextureFormat_Depth16Unorm),
-	Depth24Plus(webgpu.WGPUTextureFormat_Depth24Plus),
-	Depth24PlusStencil8(webgpu.WGPUTextureFormat_Depth24PlusStencil8),
-	Depth32Float(webgpu.WGPUTextureFormat_Depth32Float),
-	Depth32FloatStencil8(webgpu.WGPUTextureFormat_Depth32FloatStencil8),
-	BC1RGBAUnorm(webgpu.WGPUTextureFormat_BC1RGBAUnorm),
-	BC1RGBAUnormSrgb(webgpu.WGPUTextureFormat_BC1RGBAUnormSrgb),
-	BC2RGBAUnorm(webgpu.WGPUTextureFormat_BC2RGBAUnorm),
-	BC2RGBAUnormSrgb(webgpu.WGPUTextureFormat_BC2RGBAUnormSrgb),
-	BC3RGBAUnorm(webgpu.WGPUTextureFormat_BC3RGBAUnorm),
-	BC3RGBAUnormSrgb(webgpu.WGPUTextureFormat_BC3RGBAUnormSrgb),
-	BC4RUnorm(webgpu.WGPUTextureFormat_BC4RUnorm),
-	BC4RSnorm(webgpu.WGPUTextureFormat_BC4RSnorm),
-	BC5RGUnorm(webgpu.WGPUTextureFormat_BC5RGUnorm),
-	BC5RGSnorm(webgpu.WGPUTextureFormat_BC5RGSnorm),
-	BC6HRGBUfloat(webgpu.WGPUTextureFormat_BC6HRGBUfloat),
-	BC6HRGBFloat(webgpu.WGPUTextureFormat_BC6HRGBFloat),
-	BC7RGBAUnorm(webgpu.WGPUTextureFormat_BC7RGBAUnorm),
-	BC7RGBAUnormSrgb(webgpu.WGPUTextureFormat_BC7RGBAUnormSrgb),
-	ETC2RGB8Unorm(webgpu.WGPUTextureFormat_ETC2RGB8Unorm),
-	ETC2RGB8UnormSrgb(webgpu.WGPUTextureFormat_ETC2RGB8UnormSrgb),
-	ETC2RGB8A1Unorm(webgpu.WGPUTextureFormat_ETC2RGB8A1Unorm),
-	ETC2RGB8A1UnormSrgb(webgpu.WGPUTextureFormat_ETC2RGB8A1UnormSrgb),
-	ETC2RGBA8Unorm(webgpu.WGPUTextureFormat_ETC2RGBA8Unorm),
-	ETC2RGBA8UnormSrgb(webgpu.WGPUTextureFormat_ETC2RGBA8UnormSrgb),
-	EACR11Unorm(webgpu.WGPUTextureFormat_EACR11Unorm),
-	EACR11Snorm(webgpu.WGPUTextureFormat_EACR11Snorm),
-	EACRG11Unorm(webgpu.WGPUTextureFormat_EACRG11Unorm),
-	EACRG11Snorm(webgpu.WGPUTextureFormat_EACRG11Snorm),
-	ASTC4x4Unorm(webgpu.WGPUTextureFormat_ASTC4x4Unorm),
-	ASTC4x4UnormSrgb(webgpu.WGPUTextureFormat_ASTC4x4UnormSrgb),
-	ASTC5x4Unorm(webgpu.WGPUTextureFormat_ASTC5x4Unorm),
-	ASTC5x4UnormSrgb(webgpu.WGPUTextureFormat_ASTC5x4UnormSrgb),
-	ASTC5x5Unorm(webgpu.WGPUTextureFormat_ASTC5x5Unorm),
-	ASTC5x5UnormSrgb(webgpu.WGPUTextureFormat_ASTC5x5UnormSrgb),
-	ASTC6x5Unorm(webgpu.WGPUTextureFormat_ASTC6x5Unorm),
-	ASTC6x5UnormSrgb(webgpu.WGPUTextureFormat_ASTC6x5UnormSrgb),
-	ASTC6x6Unorm(webgpu.WGPUTextureFormat_ASTC6x6Unorm),
-	ASTC6x6UnormSrgb(webgpu.WGPUTextureFormat_ASTC6x6UnormSrgb),
-	ASTC8x5Unorm(webgpu.WGPUTextureFormat_ASTC8x5Unorm),
-	ASTC8x5UnormSrgb(webgpu.WGPUTextureFormat_ASTC8x5UnormSrgb),
-	ASTC8x6Unorm(webgpu.WGPUTextureFormat_ASTC8x6Unorm),
-	ASTC8x6UnormSrgb(webgpu.WGPUTextureFormat_ASTC8x6UnormSrgb),
-	ASTC8x8Unorm(webgpu.WGPUTextureFormat_ASTC8x8Unorm),
-	ASTC8x8UnormSrgb(webgpu.WGPUTextureFormat_ASTC8x8UnormSrgb),
-	ASTC10x5Unorm(webgpu.WGPUTextureFormat_ASTC10x5Unorm),
-	ASTC10x5UnormSrgb(webgpu.WGPUTextureFormat_ASTC10x5UnormSrgb),
-	ASTC10x6Unorm(webgpu.WGPUTextureFormat_ASTC10x6Unorm),
-	ASTC10x6UnormSrgb(webgpu.WGPUTextureFormat_ASTC10x6UnormSrgb),
-	ASTC10x8Unorm(webgpu.WGPUTextureFormat_ASTC10x8Unorm),
-	ASTC10x8UnormSrgb(webgpu.WGPUTextureFormat_ASTC10x8UnormSrgb),
-	ASTC10x10Unorm(webgpu.WGPUTextureFormat_ASTC10x10Unorm),
-	ASTC10x10UnormSrgb(webgpu.WGPUTextureFormat_ASTC10x10UnormSrgb),
-	ASTC12x10Unorm(webgpu.WGPUTextureFormat_ASTC12x10Unorm),
-	ASTC12x10UnormSrgb(webgpu.WGPUTextureFormat_ASTC12x10UnormSrgb),
-	ASTC12x12Unorm(webgpu.WGPUTextureFormat_ASTC12x12Unorm),
-	ASTC12x12UnormSrgb(webgpu.WGPUTextureFormat_ASTC12x12UnormSrgb),
+	R8Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_R8Unorm),
+	R8Snorm(io.ygdrasil.wgpu.WGPUTextureFormat_R8Snorm),
+	R8Uint(io.ygdrasil.wgpu.WGPUTextureFormat_R8Uint),
+	R8Sint(io.ygdrasil.wgpu.WGPUTextureFormat_R8Sint),
+	R16Uint(io.ygdrasil.wgpu.WGPUTextureFormat_R16Uint),
+	R16Sint(io.ygdrasil.wgpu.WGPUTextureFormat_R16Sint),
+	R16Float(io.ygdrasil.wgpu.WGPUTextureFormat_R16Float),
+	RG8Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_RG8Unorm),
+	RG8Snorm(io.ygdrasil.wgpu.WGPUTextureFormat_RG8Snorm),
+	RG8Uint(io.ygdrasil.wgpu.WGPUTextureFormat_RG8Uint),
+	RG8Sint(io.ygdrasil.wgpu.WGPUTextureFormat_RG8Sint),
+	R32Float(io.ygdrasil.wgpu.WGPUTextureFormat_R32Float),
+	R32Uint(io.ygdrasil.wgpu.WGPUTextureFormat_R32Uint),
+	R32Sint(io.ygdrasil.wgpu.WGPUTextureFormat_R32Sint),
+	RG16Uint(io.ygdrasil.wgpu.WGPUTextureFormat_RG16Uint),
+	RG16Sint(io.ygdrasil.wgpu.WGPUTextureFormat_RG16Sint),
+	RG16Float(io.ygdrasil.wgpu.WGPUTextureFormat_RG16Float),
+	RGBA8Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_RGBA8Unorm),
+	RGBA8UnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_RGBA8UnormSrgb),
+	RGBA8Snorm(io.ygdrasil.wgpu.WGPUTextureFormat_RGBA8Snorm),
+	RGBA8Uint(io.ygdrasil.wgpu.WGPUTextureFormat_RGBA8Uint),
+	RGBA8Sint(io.ygdrasil.wgpu.WGPUTextureFormat_RGBA8Sint),
+	BGRA8Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_BGRA8Unorm),
+	BGRA8UnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_BGRA8UnormSrgb),
+	RGB10A2Uint(io.ygdrasil.wgpu.WGPUTextureFormat_RGB10A2Uint),
+	RGB10A2Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_RGB10A2Unorm),
+	RG11B10Ufloat(io.ygdrasil.wgpu.WGPUTextureFormat_RG11B10Ufloat),
+	RGB9E5Ufloat(io.ygdrasil.wgpu.WGPUTextureFormat_RGB9E5Ufloat),
+	RG32Float(io.ygdrasil.wgpu.WGPUTextureFormat_RG32Float),
+	RG32Uint(io.ygdrasil.wgpu.WGPUTextureFormat_RG32Uint),
+	RG32Sint(io.ygdrasil.wgpu.WGPUTextureFormat_RG32Sint),
+	RGBA16Uint(io.ygdrasil.wgpu.WGPUTextureFormat_RGBA16Uint),
+	RGBA16Sint(io.ygdrasil.wgpu.WGPUTextureFormat_RGBA16Sint),
+	RGBA16Float(io.ygdrasil.wgpu.WGPUTextureFormat_RGBA16Float),
+	RGBA32Float(io.ygdrasil.wgpu.WGPUTextureFormat_RGBA32Float),
+	RGBA32Uint(io.ygdrasil.wgpu.WGPUTextureFormat_RGBA32Uint),
+	RGBA32Sint(io.ygdrasil.wgpu.WGPUTextureFormat_RGBA32Sint),
+	Stencil8(io.ygdrasil.wgpu.WGPUTextureFormat_Stencil8),
+	Depth16Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_Depth16Unorm),
+	Depth24Plus(io.ygdrasil.wgpu.WGPUTextureFormat_Depth24Plus),
+	Depth24PlusStencil8(io.ygdrasil.wgpu.WGPUTextureFormat_Depth24PlusStencil8),
+	Depth32Float(io.ygdrasil.wgpu.WGPUTextureFormat_Depth32Float),
+	Depth32FloatStencil8(io.ygdrasil.wgpu.WGPUTextureFormat_Depth32FloatStencil8),
+	BC1RGBAUnorm(io.ygdrasil.wgpu.WGPUTextureFormat_BC1RGBAUnorm),
+	BC1RGBAUnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_BC1RGBAUnormSrgb),
+	BC2RGBAUnorm(io.ygdrasil.wgpu.WGPUTextureFormat_BC2RGBAUnorm),
+	BC2RGBAUnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_BC2RGBAUnormSrgb),
+	BC3RGBAUnorm(io.ygdrasil.wgpu.WGPUTextureFormat_BC3RGBAUnorm),
+	BC3RGBAUnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_BC3RGBAUnormSrgb),
+	BC4RUnorm(io.ygdrasil.wgpu.WGPUTextureFormat_BC4RUnorm),
+	BC4RSnorm(io.ygdrasil.wgpu.WGPUTextureFormat_BC4RSnorm),
+	BC5RGUnorm(io.ygdrasil.wgpu.WGPUTextureFormat_BC5RGUnorm),
+	BC5RGSnorm(io.ygdrasil.wgpu.WGPUTextureFormat_BC5RGSnorm),
+	BC6HRGBUfloat(io.ygdrasil.wgpu.WGPUTextureFormat_BC6HRGBUfloat),
+	BC6HRGBFloat(io.ygdrasil.wgpu.WGPUTextureFormat_BC6HRGBFloat),
+	BC7RGBAUnorm(io.ygdrasil.wgpu.WGPUTextureFormat_BC7RGBAUnorm),
+	BC7RGBAUnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_BC7RGBAUnormSrgb),
+	ETC2RGB8Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_ETC2RGB8Unorm),
+	ETC2RGB8UnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_ETC2RGB8UnormSrgb),
+	ETC2RGB8A1Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_ETC2RGB8A1Unorm),
+	ETC2RGB8A1UnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_ETC2RGB8A1UnormSrgb),
+	ETC2RGBA8Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_ETC2RGBA8Unorm),
+	ETC2RGBA8UnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_ETC2RGBA8UnormSrgb),
+	EACR11Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_EACR11Unorm),
+	EACR11Snorm(io.ygdrasil.wgpu.WGPUTextureFormat_EACR11Snorm),
+	EACRG11Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_EACRG11Unorm),
+	EACRG11Snorm(io.ygdrasil.wgpu.WGPUTextureFormat_EACRG11Snorm),
+	ASTC4x4Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC4x4Unorm),
+	ASTC4x4UnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC4x4UnormSrgb),
+	ASTC5x4Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC5x4Unorm),
+	ASTC5x4UnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC5x4UnormSrgb),
+	ASTC5x5Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC5x5Unorm),
+	ASTC5x5UnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC5x5UnormSrgb),
+	ASTC6x5Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC6x5Unorm),
+	ASTC6x5UnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC6x5UnormSrgb),
+	ASTC6x6Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC6x6Unorm),
+	ASTC6x6UnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC6x6UnormSrgb),
+	ASTC8x5Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC8x5Unorm),
+	ASTC8x5UnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC8x5UnormSrgb),
+	ASTC8x6Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC8x6Unorm),
+	ASTC8x6UnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC8x6UnormSrgb),
+	ASTC8x8Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC8x8Unorm),
+	ASTC8x8UnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC8x8UnormSrgb),
+	ASTC10x5Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC10x5Unorm),
+	ASTC10x5UnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC10x5UnormSrgb),
+	ASTC10x6Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC10x6Unorm),
+	ASTC10x6UnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC10x6UnormSrgb),
+	ASTC10x8Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC10x8Unorm),
+	ASTC10x8UnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC10x8UnormSrgb),
+	ASTC10x10Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC10x10Unorm),
+	ASTC10x10UnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC10x10UnormSrgb),
+	ASTC12x10Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC12x10Unorm),
+	ASTC12x10UnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC12x10UnormSrgb),
+	ASTC12x12Unorm(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC12x12Unorm),
+	ASTC12x12UnormSrgb(io.ygdrasil.wgpu.WGPUTextureFormat_ASTC12x12UnormSrgb),
 	;
 
 	companion object {
@@ -730,29 +687,13 @@ actual enum class TextureFormat(val value: UInt) {
 	}
 }
 
-actual enum class TextureSampleType(val value: UInt) {
-	BindingNotUsed(webgpu.WGPUTextureSampleType_BindingNotUsed),
-	Float(webgpu.WGPUTextureSampleType_Float),
-	UnfilterableFloat(webgpu.WGPUTextureSampleType_UnfilterableFloat),
-	Depth(webgpu.WGPUTextureSampleType_Depth),
-	Sint(webgpu.WGPUTextureSampleType_Sint),
-	Uint(webgpu.WGPUTextureSampleType_Uint),
-	;
-
-	companion object {
-		fun of(value: UInt): TextureSampleType? {
-			return entries.find { it.value == value }
-		}
-	}
-}
-
 actual enum class TextureViewDimension(val value: UInt) {
-	OneD(webgpu.WGPUTextureViewDimension_1D),
-	TwoD(webgpu.WGPUTextureViewDimension_2D),
-	TwoDArray(webgpu.WGPUTextureViewDimension_2DArray),
-	Cube(webgpu.WGPUTextureViewDimension_Cube),
-	CubeArray(webgpu.WGPUTextureViewDimension_CubeArray),
-	ThreeD(webgpu.WGPUTextureViewDimension_3D),
+	OneD(io.ygdrasil.wgpu.WGPUTextureViewDimension_1D),
+	TwoD(io.ygdrasil.wgpu.WGPUTextureViewDimension_2D),
+	TwoDArray(io.ygdrasil.wgpu.WGPUTextureViewDimension_2DArray),
+	Cube(io.ygdrasil.wgpu.WGPUTextureViewDimension_Cube),
+	CubeArray(io.ygdrasil.wgpu.WGPUTextureViewDimension_CubeArray),
+	ThreeD(io.ygdrasil.wgpu.WGPUTextureViewDimension_3D),
 	;
 
 	companion object {
@@ -763,47 +704,36 @@ actual enum class TextureViewDimension(val value: UInt) {
 }
 
 actual enum class VertexFormat(val value: UInt) {
-	Uint8(webgpu.WGPUVertexFormat_Uint8),
-	Uint8x2(webgpu.WGPUVertexFormat_Uint8x2),
-	Uint8x4(webgpu.WGPUVertexFormat_Uint8x4),
-	Sint8(webgpu.WGPUVertexFormat_Sint8),
-	Sint8x2(webgpu.WGPUVertexFormat_Sint8x2),
-	Sint8x4(webgpu.WGPUVertexFormat_Sint8x4),
-	Unorm8(webgpu.WGPUVertexFormat_Unorm8),
-	Unorm8x2(webgpu.WGPUVertexFormat_Unorm8x2),
-	Unorm8x4(webgpu.WGPUVertexFormat_Unorm8x4),
-	Snorm8(webgpu.WGPUVertexFormat_Snorm8),
-	Snorm8x2(webgpu.WGPUVertexFormat_Snorm8x2),
-	Snorm8x4(webgpu.WGPUVertexFormat_Snorm8x4),
-	Uint16(webgpu.WGPUVertexFormat_Uint16),
-	Uint16x2(webgpu.WGPUVertexFormat_Uint16x2),
-	Uint16x4(webgpu.WGPUVertexFormat_Uint16x4),
-	Sint16(webgpu.WGPUVertexFormat_Sint16),
-	Sint16x2(webgpu.WGPUVertexFormat_Sint16x2),
-	Sint16x4(webgpu.WGPUVertexFormat_Sint16x4),
-	Unorm16(webgpu.WGPUVertexFormat_Unorm16),
-	Unorm16x2(webgpu.WGPUVertexFormat_Unorm16x2),
-	Unorm16x4(webgpu.WGPUVertexFormat_Unorm16x4),
-	Snorm16(webgpu.WGPUVertexFormat_Snorm16),
-	Snorm16x2(webgpu.WGPUVertexFormat_Snorm16x2),
-	Snorm16x4(webgpu.WGPUVertexFormat_Snorm16x4),
-	Float16(webgpu.WGPUVertexFormat_Float16),
-	Float16x2(webgpu.WGPUVertexFormat_Float16x2),
-	Float16x4(webgpu.WGPUVertexFormat_Float16x4),
-	Float32(webgpu.WGPUVertexFormat_Float32),
-	Float32x2(webgpu.WGPUVertexFormat_Float32x2),
-	Float32x3(webgpu.WGPUVertexFormat_Float32x3),
-	Float32x4(webgpu.WGPUVertexFormat_Float32x4),
-	Uint32(webgpu.WGPUVertexFormat_Uint32),
-	Uint32x2(webgpu.WGPUVertexFormat_Uint32x2),
-	Uint32x3(webgpu.WGPUVertexFormat_Uint32x3),
-	Uint32x4(webgpu.WGPUVertexFormat_Uint32x4),
-	Sint32(webgpu.WGPUVertexFormat_Sint32),
-	Sint32x2(webgpu.WGPUVertexFormat_Sint32x2),
-	Sint32x3(webgpu.WGPUVertexFormat_Sint32x3),
-	Sint32x4(webgpu.WGPUVertexFormat_Sint32x4),
-	Unorm1010102(webgpu.WGPUVertexFormat_Unorm1010102),
-	Unorm8x4BGRA(webgpu.WGPUVertexFormat_Unorm8x4BGRA),
+	Uint8x2(io.ygdrasil.wgpu.WGPUVertexFormat_Uint8x2),
+	Uint8x4(io.ygdrasil.wgpu.WGPUVertexFormat_Uint8x4),
+	Sint8x2(io.ygdrasil.wgpu.WGPUVertexFormat_Sint8x2),
+	Sint8x4(io.ygdrasil.wgpu.WGPUVertexFormat_Sint8x4),
+	Unorm8x2(io.ygdrasil.wgpu.WGPUVertexFormat_Unorm8x2),
+	Unorm8x4(io.ygdrasil.wgpu.WGPUVertexFormat_Unorm8x4),
+	Snorm8x2(io.ygdrasil.wgpu.WGPUVertexFormat_Snorm8x2),
+	Snorm8x4(io.ygdrasil.wgpu.WGPUVertexFormat_Snorm8x4),
+	Uint16x2(io.ygdrasil.wgpu.WGPUVertexFormat_Uint16x2),
+	Uint16x4(io.ygdrasil.wgpu.WGPUVertexFormat_Uint16x4),
+	Sint16x2(io.ygdrasil.wgpu.WGPUVertexFormat_Sint16x2),
+	Sint16x4(io.ygdrasil.wgpu.WGPUVertexFormat_Sint16x4),
+	Unorm16x2(io.ygdrasil.wgpu.WGPUVertexFormat_Unorm16x2),
+	Unorm16x4(io.ygdrasil.wgpu.WGPUVertexFormat_Unorm16x4),
+	Snorm16x2(io.ygdrasil.wgpu.WGPUVertexFormat_Snorm16x2),
+	Snorm16x4(io.ygdrasil.wgpu.WGPUVertexFormat_Snorm16x4),
+	Float16x2(io.ygdrasil.wgpu.WGPUVertexFormat_Float16x2),
+	Float16x4(io.ygdrasil.wgpu.WGPUVertexFormat_Float16x4),
+	Float32(io.ygdrasil.wgpu.WGPUVertexFormat_Float32),
+	Float32x2(io.ygdrasil.wgpu.WGPUVertexFormat_Float32x2),
+	Float32x3(io.ygdrasil.wgpu.WGPUVertexFormat_Float32x3),
+	Float32x4(io.ygdrasil.wgpu.WGPUVertexFormat_Float32x4),
+	Uint32(io.ygdrasil.wgpu.WGPUVertexFormat_Uint32),
+	Uint32x2(io.ygdrasil.wgpu.WGPUVertexFormat_Uint32x2),
+	Uint32x3(io.ygdrasil.wgpu.WGPUVertexFormat_Uint32x3),
+	Uint32x4(io.ygdrasil.wgpu.WGPUVertexFormat_Uint32x4),
+	Sint32(io.ygdrasil.wgpu.WGPUVertexFormat_Sint32),
+	Sint32x2(io.ygdrasil.wgpu.WGPUVertexFormat_Sint32x2),
+	Sint32x3(io.ygdrasil.wgpu.WGPUVertexFormat_Sint32x3),
+	Sint32x4(io.ygdrasil.wgpu.WGPUVertexFormat_Sint32x4),
 	;
 
 	companion object {
@@ -813,43 +743,15 @@ actual enum class VertexFormat(val value: UInt) {
 	}
 }
 
-actual enum class VertexStepMode(val value: UInt) {
-	VertexBufferNotUsed(webgpu.WGPUVertexStepMode_VertexBufferNotUsed),
-	Vertex(webgpu.WGPUVertexStepMode_Vertex),
-	Instance(webgpu.WGPUVertexStepMode_Instance),
+actual enum class WGSLFeatureName(val value: UInt) {
+	ReadonlyAndReadwriteStorageTextures(io.ygdrasil.wgpu.WGPUWGSLFeatureName_ReadonlyAndReadwriteStorageTextures),
+	Packed4x8IntegerDotProduct(io.ygdrasil.wgpu.WGPUWGSLFeatureName_Packed4x8IntegerDotProduct),
+	UnrestrictedPointerParameters(io.ygdrasil.wgpu.WGPUWGSLFeatureName_UnrestrictedPointerParameters),
+	PointerCompositeAccess(io.ygdrasil.wgpu.WGPUWGSLFeatureName_PointerCompositeAccess),
 	;
 
 	companion object {
-		fun of(value: UInt): VertexStepMode? {
-			return entries.find { it.value == value }
-		}
-	}
-}
-
-actual enum class WaitStatus(val value: UInt) {
-	Success(webgpu.WGPUWaitStatus_Success),
-	TimedOut(webgpu.WGPUWaitStatus_TimedOut),
-	UnsupportedTimeout(webgpu.WGPUWaitStatus_UnsupportedTimeout),
-	UnsupportedCount(webgpu.WGPUWaitStatus_UnsupportedCount),
-	UnsupportedMixedSources(webgpu.WGPUWaitStatus_UnsupportedMixedSources),
-	;
-
-	companion object {
-		fun of(value: UInt): WaitStatus? {
-			return entries.find { it.value == value }
-		}
-	}
-}
-
-actual enum class WGSLLanguageFeatureName(val value: UInt) {
-	ReadonlyAndReadwriteStorageTextures(webgpu.WGPUWGSLLanguageFeatureName_ReadonlyAndReadwriteStorageTextures),
-	Packed4x8IntegerDotProduct(webgpu.WGPUWGSLLanguageFeatureName_Packed4x8IntegerDotProduct),
-	UnrestrictedPointerParameters(webgpu.WGPUWGSLLanguageFeatureName_UnrestrictedPointerParameters),
-	PointerCompositeAccess(webgpu.WGPUWGSLLanguageFeatureName_PointerCompositeAccess),
-	;
-
-	companion object {
-		fun of(value: UInt): WGSLLanguageFeatureName? {
+		fun of(value: UInt): WGSLFeatureName? {
 			return entries.find { it.value == value }
 		}
 	}

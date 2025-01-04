@@ -6,25 +6,22 @@ import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPUAdapter
 import io.ygdrasil.wgpu.WGPUInstance
-import io.ygdrasil.wgpu.WGPURequestAdapterCallback
-import io.ygdrasil.wgpu.WGPURequestAdapterCallbackInfo
+import io.ygdrasil.wgpu.WGPUInstanceRequestAdapterCallback
 import io.ygdrasil.wgpu.WGPURequestAdapterOptions
-import io.ygdrasil.wgpu.WGPURequestAdapterStatus
 import io.ygdrasil.wgpu.WGPURequestAdapterStatus_Success
-import io.ygdrasil.wgpu.WGPUSType_SurfaceSourceAndroidNativeWindow
-import io.ygdrasil.wgpu.WGPUSType_SurfaceSourceMetalLayer
-import io.ygdrasil.wgpu.WGPUSType_SurfaceSourceWaylandSurface
-import io.ygdrasil.wgpu.WGPUSType_SurfaceSourceWindowsHWND
-import io.ygdrasil.wgpu.WGPUSType_SurfaceSourceXCBWindow
-import io.ygdrasil.wgpu.WGPUSType_SurfaceSourceXlibWindow
-import io.ygdrasil.wgpu.WGPUStringView
+import io.ygdrasil.wgpu.WGPUSType_SurfaceDescriptorFromAndroidNativeWindow
+import io.ygdrasil.wgpu.WGPUSType_SurfaceDescriptorFromMetalLayer
+import io.ygdrasil.wgpu.WGPUSType_SurfaceDescriptorFromWaylandSurface
+import io.ygdrasil.wgpu.WGPUSType_SurfaceDescriptorFromWindowsHWND
+import io.ygdrasil.wgpu.WGPUSType_SurfaceDescriptorFromXcbWindow
+import io.ygdrasil.wgpu.WGPUSType_SurfaceDescriptorFromXlibWindow
 import io.ygdrasil.wgpu.WGPUSurfaceDescriptor
-import io.ygdrasil.wgpu.WGPUSurfaceSourceAndroidNativeWindow
-import io.ygdrasil.wgpu.WGPUSurfaceSourceMetalLayer
-import io.ygdrasil.wgpu.WGPUSurfaceSourceWaylandSurface
-import io.ygdrasil.wgpu.WGPUSurfaceSourceWindowsHWND
-import io.ygdrasil.wgpu.WGPUSurfaceSourceXCBWindow
-import io.ygdrasil.wgpu.WGPUSurfaceSourceXlibWindow
+import io.ygdrasil.wgpu.WGPUSurfaceDescriptorFromAndroidNativeWindow
+import io.ygdrasil.wgpu.WGPUSurfaceDescriptorFromMetalLayer
+import io.ygdrasil.wgpu.WGPUSurfaceDescriptorFromWaylandSurface
+import io.ygdrasil.wgpu.WGPUSurfaceDescriptorFromWindowsHWND
+import io.ygdrasil.wgpu.WGPUSurfaceDescriptorFromXcbWindow
+import io.ygdrasil.wgpu.WGPUSurfaceDescriptorFromXlibWindow
 import io.ygdrasil.wgpu.wgpuCreateInstance
 import io.ygdrasil.wgpu.wgpuInstanceCreateSurface
 import io.ygdrasil.wgpu.wgpuInstanceRelease
@@ -46,25 +43,12 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
         if (powerPreference != null) options.powerPreference = powerPreference.value.toUInt()
 
         var fetchedAdapter: WGPUAdapter? = null
-        val callback = WGPURequestAdapterCallback.allocate(scope, object : WGPURequestAdapterCallback {
-            override fun invoke(
-                status: WGPURequestAdapterStatus,
-                adapter: WGPUAdapter?,
-                message: WGPUStringView?,
-                userdata1: NativeAddress?,
-                userdata2: NativeAddress?
-            ) {
-                if (status != WGPURequestAdapterStatus_Success && adapter == null) error("fail to get adapter")
-                fetchedAdapter = adapter
-            }
-        })
-
-        val callbackInfo = WGPURequestAdapterCallbackInfo.allocate(scope).apply {
-            this.callback = callback
-            this.userdata2 = scope.bufferOfAddress(callback.handler).handler
+        val callback = WGPUInstanceRequestAdapterCallback.allocate(scope) { status, adapter, message, userdata ->
+            if (status != WGPURequestAdapterStatus_Success && adapter == null) error("fail to get adapter")
+            fetchedAdapter = adapter
         }
 
-        wgpuInstanceRequestAdapter(handler, options, callbackInfo)
+        wgpuInstanceRequestAdapter(handler, options, callback, scope.bufferOfAddress(callback.handler).handler)
 
         fetchedAdapter?.let { Adapter(it) }
     }
@@ -72,8 +56,8 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
     fun getSurfaceFromMetalLayer(metalLayer: NativeAddress): Surface? = memoryScope { scope ->
 
         val surfaceDescriptor = WGPUSurfaceDescriptor.allocate(scope).apply {
-            nextInChain = WGPUSurfaceSourceMetalLayer.allocate(scope).apply {
-                chain.sType = WGPUSType_SurfaceSourceMetalLayer
+            nextInChain = WGPUSurfaceDescriptorFromMetalLayer.allocate(scope).apply {
+                chain.sType = WGPUSType_SurfaceDescriptorFromMetalLayer
                 layer = metalLayer
             }.handler
         }
@@ -82,13 +66,13 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
             ?.let(::Surface)
     }
 
-    fun getSurfaceFromX11Window(display: NativeAddress, window: Long): Surface? = memoryScope { scope ->
+    fun getSurfaceFromX11Window(display: NativeAddress, window: ULong): Surface? = memoryScope { scope ->
 
         val surfaceDescriptor = WGPUSurfaceDescriptor.allocate(scope).apply {
-            nextInChain = WGPUSurfaceSourceXlibWindow.allocate(scope).apply {
-                chain.sType = WGPUSType_SurfaceSourceXlibWindow
+            nextInChain = WGPUSurfaceDescriptorFromXlibWindow.allocate(scope).apply {
+                chain.sType = WGPUSType_SurfaceDescriptorFromXlibWindow
                 this.display = display
-                this.window = window.toULong()
+                this.window = window
             }.handler
         }
 
@@ -99,8 +83,8 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
     fun getSurfaceFromXCBWindow(connection: NativeAddress, window: UInt): Surface? = memoryScope { scope ->
 
         val surfaceDescriptor = WGPUSurfaceDescriptor.allocate(scope).apply {
-            nextInChain = WGPUSurfaceSourceXCBWindow.allocate(scope).apply {
-                chain.sType = WGPUSType_SurfaceSourceXCBWindow
+            nextInChain = WGPUSurfaceDescriptorFromXcbWindow.allocate(scope).apply {
+                chain.sType = WGPUSType_SurfaceDescriptorFromXcbWindow
                 this.window = window
                 this.connection = connection
             }.handler
@@ -113,8 +97,8 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
     fun getSurfaceFromAndroidWindow(window: NativeAddress): Surface? = memoryScope { scope ->
 
         val surfaceDescriptor = WGPUSurfaceDescriptor.allocate(scope).apply {
-            nextInChain = WGPUSurfaceSourceAndroidNativeWindow.allocate(scope).apply {
-                chain.sType = WGPUSType_SurfaceSourceAndroidNativeWindow
+            nextInChain = WGPUSurfaceDescriptorFromAndroidNativeWindow.allocate(scope).apply {
+                chain.sType = WGPUSType_SurfaceDescriptorFromAndroidNativeWindow
                 this.window = window
             }.handler
         }
@@ -126,8 +110,8 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
     fun getSurfaceFromWaylandWindow(display: NativeAddress, surface: NativeAddress): Surface? = memoryScope { scope ->
 
         val surfaceDescriptor = WGPUSurfaceDescriptor.allocate(scope).apply {
-            nextInChain = WGPUSurfaceSourceWaylandSurface.allocate(scope).apply {
-                chain.sType = WGPUSType_SurfaceSourceWaylandSurface
+            nextInChain = WGPUSurfaceDescriptorFromWaylandSurface.allocate(scope).apply {
+                chain.sType = WGPUSType_SurfaceDescriptorFromWaylandSurface
                 this.display = display
                 this.surface = surface
             }.handler
@@ -140,8 +124,8 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
     fun getSurfaceFromWindows(hinstance: NativeAddress, hwnd: NativeAddress): Surface? = memoryScope { scope ->
 
         val surfaceDescriptor = WGPUSurfaceDescriptor.allocate(scope).apply {
-            nextInChain = WGPUSurfaceSourceWindowsHWND.allocate(scope).apply {
-                chain.sType = WGPUSType_SurfaceSourceWindowsHWND
+            nextInChain = WGPUSurfaceDescriptorFromWindowsHWND.allocate(scope).apply {
+                chain.sType = WGPUSType_SurfaceDescriptorFromWindowsHWND
                 this.hwnd = hwnd
                 this.hinstance = hinstance
             }.handler

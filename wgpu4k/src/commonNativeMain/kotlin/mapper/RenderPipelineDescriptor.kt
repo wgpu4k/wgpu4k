@@ -14,12 +14,11 @@ import io.ygdrasil.wgpu.WGPUStencilFaceState
 import io.ygdrasil.wgpu.WGPUVertexAttribute
 import io.ygdrasil.wgpu.WGPUVertexBufferLayout
 import io.ygdrasil.wgpu.WGPUVertexState
-import io.ygdrasil.wgpu.toUInt
 
 internal fun MemoryAllocator.map(input: RenderPipelineDescriptor) =
     WGPURenderPipelineDescriptor.allocate(this).also { output ->
         map(input.vertex, output.vertex)
-        if (input.label != null) map(input.label, output.label)
+        if (input.label != null) output.label = allocateFrom(input.label)
         if (input.layout != null) output.layout = input.layout.handler
         map(input.primitive, output.primitive)
         if (input.depthStencil != null) output.depthStencil = map(input.depthStencil)
@@ -30,7 +29,7 @@ internal fun MemoryAllocator.map(input: RenderPipelineDescriptor) =
 fun MemoryAllocator.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState, output: WGPUColorTargetState) {
     println("colorTargetState $output")
     output.format = input.format.value
-    output.writeMask = input.writeMask.value.toULong()
+    output.writeMask = input.writeMask.value.toUInt()
     output.blend = map(input.blend)
 }
 
@@ -58,7 +57,7 @@ private fun MemoryAllocator.map(input: RenderPipelineDescriptor.FragmentState): 
         .also { fragmentState ->
             println("fragment $fragmentState")
             fragmentState.module = input.module.handler
-            map(input.entryPoint, fragmentState.entryPoint)
+            fragmentState.entryPoint = allocateFrom(input.entryPoint)
             if (input.targets.isNotEmpty()) {
                 fragmentState.targetCount = input.targets.size.toULong()
                 val colorTargets =
@@ -75,7 +74,7 @@ private fun MemoryAllocator.map(input: RenderPipelineDescriptor.DepthStencilStat
     WGPUDepthStencilState.allocate(this)
         .also { output ->
             output.format = input.format.value
-            if (input.depthWriteEnabled != null) output.depthWriteEnabled = input.depthWriteEnabled.toUInt()
+            if (input.depthWriteEnabled != null) output.depthWriteEnabled = input.depthWriteEnabled
             if (input.depthCompare != null) output.depthCompare = input.depthCompare.value
             map(input.stencilFront, output.stencilFront)
             map(input.stencilBack, output.stencilBack)
@@ -110,7 +109,7 @@ private fun map(input: RenderPipelineDescriptor.PrimitiveState, output: WGPUPrim
 private fun MemoryAllocator.map(input: RenderPipelineDescriptor.VertexState, output: WGPUVertexState) {
     println("vertex $output")
     output.module = input.module.handler
-    map(input.entryPoint, output.entryPoint)
+    output.entryPoint = allocateFrom(input.entryPoint)
     // TODO learn how to map this
     output.constantCount = 0uL
     if (input.buffers.isNotEmpty()) {
