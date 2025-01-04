@@ -4,7 +4,7 @@ import ffi.ArrayHolder
 import ffi.MemoryAllocator
 import io.ygdrasil.webgpu.TextureDescriptor
 import io.ygdrasil.webgpu.toFlagULong
-import webgpu.WGPUTextureDescriptor
+import io.ygdrasil.wgpu.WGPUTextureDescriptor
 
 internal fun MemoryAllocator.map(input: TextureDescriptor) = WGPUTextureDescriptor.allocate(this).also { output ->
     if (input.label != null) map(input.label, output.label)

@@ -1,8 +1,8 @@
 package io.ygdrasil.webgpu
 
-import webgpu.WGPUComputePipeline
-import webgpu.wgpuComputePipelineGetBindGroupLayout
-import webgpu.wgpuComputePipelineRelease
+import io.ygdrasil.wgpu.WGPUComputePipeline
+import io.ygdrasil.wgpu.wgpuComputePipelineGetBindGroupLayout
+import io.ygdrasil.wgpu.wgpuComputePipelineRelease
 
 actual class ComputePipeline(internal val handler: WGPUComputePipeline) : AutoCloseable {
 

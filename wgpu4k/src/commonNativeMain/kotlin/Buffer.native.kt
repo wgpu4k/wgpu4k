@@ -3,18 +3,18 @@ package io.ygdrasil.webgpu
 import ffi.MemoryBuffer
 import ffi.NativeAddress
 import ffi.memoryScope
-import webgpu.WGPUBuffer
-import webgpu.WGPUBufferMapCallback
-import webgpu.WGPUBufferMapCallbackInfo
-import webgpu.WGPUMapAsyncStatus
-import webgpu.WGPUStringView
-import webgpu.wgpuBufferGetMapState
-import webgpu.wgpuBufferGetMappedRange
-import webgpu.wgpuBufferGetSize
-import webgpu.wgpuBufferGetUsage
-import webgpu.wgpuBufferMapAsync
-import webgpu.wgpuBufferRelease
-import webgpu.wgpuBufferUnmap
+import io.ygdrasil.wgpu.WGPUBuffer
+import io.ygdrasil.wgpu.WGPUBufferMapCallback
+import io.ygdrasil.wgpu.WGPUBufferMapCallbackInfo
+import io.ygdrasil.wgpu.WGPUMapAsyncStatus
+import io.ygdrasil.wgpu.WGPUStringView
+import io.ygdrasil.wgpu.wgpuBufferGetMapState
+import io.ygdrasil.wgpu.wgpuBufferGetMappedRange
+import io.ygdrasil.wgpu.wgpuBufferGetSize
+import io.ygdrasil.wgpu.wgpuBufferGetUsage
+import io.ygdrasil.wgpu.wgpuBufferMapAsync
+import io.ygdrasil.wgpu.wgpuBufferRelease
+import io.ygdrasil.wgpu.wgpuBufferUnmap
 
 actual class Buffer(internal val handler: WGPUBuffer) : AutoCloseable {
 
@@ -22,7 +22,7 @@ actual class Buffer(internal val handler: WGPUBuffer) : AutoCloseable {
         get() = wgpuBufferGetSize(handler)
     actual val usage: Set<BufferUsage>
         get() = wgpuBufferGetUsage(handler)
-            .let { usage -> BufferUsage.entries.filter { it.value.toULong() and usage != 0uL }.toSet() }
+            .let { usage -> BufferUsage.entries.filter { it.value.toUInt() and usage != 0u }.toSet() }
     actual val mapState: BufferMapState
         get() = wgpuBufferGetMapState(handler)
             .let { BufferMapState.of(it) ?: error("Can't get map state: $it") }

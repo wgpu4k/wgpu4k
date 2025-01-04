@@ -5,21 +5,13 @@ import ffi.NativeAddress
 import ffi.globalMemory
 import io.ygdrasil.webgpu.GLFWContext
 import io.ygdrasil.webgpu.glfwContextRenderer
+import io.ygdrasil.wgpu.WGPULogCallback
+import io.ygdrasil.wgpu.WGPULogLevel
+import io.ygdrasil.wgpu.WGPUStringView
+import io.ygdrasil.wgpu.wgpuSetLogCallback
+import io.ygdrasil.wgpu.wgpuSetLogLevel
 import kotlinx.coroutines.runBlocking
-import org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN
-import org.lwjgl.glfw.GLFW.GLFW_KEY_PAGE_DOWN
-import org.lwjgl.glfw.GLFW.GLFW_KEY_PAGE_UP
-import org.lwjgl.glfw.GLFW.GLFW_KEY_UP
-import org.lwjgl.glfw.GLFW.GLFW_PRESS
-import org.lwjgl.glfw.GLFW.glfwPollEvents
-import org.lwjgl.glfw.GLFW.glfwSetKeyCallback
-import org.lwjgl.glfw.GLFW.glfwShowWindow
-import org.lwjgl.glfw.GLFW.glfwWindowShouldClose
-import webgpu.WGPULogCallback
-import webgpu.WGPULogLevel
-import webgpu.WGPUStringView
-import webgpu.wgpuSetLogCallback
-import webgpu.wgpuSetLogLevel
+import org.lwjgl.glfw.GLFW.*
 
 val callback = WGPULogCallback.allocate(globalMemory, object : WGPULogCallback {
     override fun invoke(level: WGPULogLevel, message: WGPUStringView?, userdata: NativeAddress?) {

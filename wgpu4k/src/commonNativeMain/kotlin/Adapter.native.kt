@@ -3,17 +3,17 @@ package io.ygdrasil.webgpu
 import ffi.NativeAddress
 import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
-import webgpu.WGPUAdapter
-import webgpu.WGPUDevice
-import webgpu.WGPULimits
-import webgpu.WGPURequestDeviceCallback
-import webgpu.WGPURequestDeviceCallbackInfo
-import webgpu.WGPURequestDeviceStatus
-import webgpu.WGPUStringView
-import webgpu.wgpuAdapterGetLimits
-import webgpu.wgpuAdapterHasFeature
-import webgpu.wgpuAdapterRelease
-import webgpu.wgpuAdapterRequestDevice
+import io.ygdrasil.wgpu.WGPUAdapter
+import io.ygdrasil.wgpu.WGPUDevice
+import io.ygdrasil.wgpu.WGPULimits
+import io.ygdrasil.wgpu.WGPURequestDeviceCallback
+import io.ygdrasil.wgpu.WGPURequestDeviceCallbackInfo
+import io.ygdrasil.wgpu.WGPURequestDeviceStatus
+import io.ygdrasil.wgpu.WGPUStringView
+import io.ygdrasil.wgpu.wgpuAdapterGetLimits
+import io.ygdrasil.wgpu.wgpuAdapterHasFeature
+import io.ygdrasil.wgpu.wgpuAdapterRelease
+import io.ygdrasil.wgpu.wgpuAdapterRequestDevice
 
 actual class Adapter(internal val handler: WGPUAdapter) : AutoCloseable {
 

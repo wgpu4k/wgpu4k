@@ -1,7 +1,7 @@
 package io.ygdrasil.webgpu
 
-import webgpu.WGPUBindGroup
-import webgpu.wgpuBindGroupRelease
+import io.ygdrasil.wgpu.WGPUBindGroup
+import io.ygdrasil.wgpu.wgpuBindGroupRelease
 
 actual class BindGroup(internal val handler: WGPUBindGroup) : AutoCloseable {
 

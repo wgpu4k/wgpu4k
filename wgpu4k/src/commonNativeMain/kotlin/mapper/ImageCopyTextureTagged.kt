@@ -2,7 +2,7 @@ package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
 import io.ygdrasil.webgpu.ImageCopyTextureTagged
-import webgpu.WGPUTexelCopyTextureInfo
+import io.ygdrasil.wgpu.WGPUTexelCopyTextureInfo
 
 internal fun MemoryAllocator.map(input: ImageCopyTextureTagged) =
     WGPUTexelCopyTextureInfo.allocate(this).also { output ->

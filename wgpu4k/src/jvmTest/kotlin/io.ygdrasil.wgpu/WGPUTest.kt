@@ -4,7 +4,7 @@ import ffi.LibraryLoader
 import io.kotest.core.spec.style.FreeSpec
 import io.ygdrasil.webgpu.internal.jvm.Os
 import io.ygdrasil.webgpu.internal.jvm.Platform
-import webgpu.wgpuSetLogLevel
+import io.ygdrasil.wgpu.wgpuSetLogLevel
 
 class WGPUTest : FreeSpec({
 

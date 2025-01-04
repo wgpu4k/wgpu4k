@@ -4,17 +4,17 @@ import ffi.ArrayHolder
 import ffi.MemoryAllocator
 import ffi.MemoryBuffer
 import ffi.memoryScope
-import webgpu.WGPUCompositeAlphaMode
-import webgpu.WGPUSurface
-import webgpu.WGPUSurfaceCapabilities
-import webgpu.WGPUSurfaceConfiguration
-import webgpu.WGPUSurfaceTexture
-import webgpu.WGPUTextureFormat
-import webgpu.wgpuSurfaceConfigure
-import webgpu.wgpuSurfaceGetCapabilities
-import webgpu.wgpuSurfaceGetCurrentTexture
-import webgpu.wgpuSurfacePresent
-import webgpu.wgpuSurfaceRelease
+import io.ygdrasil.wgpu.WGPUCompositeAlphaMode
+import io.ygdrasil.wgpu.WGPUSurface
+import io.ygdrasil.wgpu.WGPUSurfaceCapabilities
+import io.ygdrasil.wgpu.WGPUSurfaceConfiguration
+import io.ygdrasil.wgpu.WGPUSurfaceTexture
+import io.ygdrasil.wgpu.WGPUTextureFormat
+import io.ygdrasil.wgpu.wgpuSurfaceConfigure
+import io.ygdrasil.wgpu.wgpuSurfaceGetCapabilities
+import io.ygdrasil.wgpu.wgpuSurfaceGetCurrentTexture
+import io.ygdrasil.wgpu.wgpuSurfacePresent
+import io.ygdrasil.wgpu.wgpuSurfaceRelease
 
 actual class Surface(
     internal val handler: WGPUSurface

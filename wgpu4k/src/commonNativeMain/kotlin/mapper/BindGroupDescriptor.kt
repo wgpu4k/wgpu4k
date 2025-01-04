@@ -2,8 +2,8 @@ package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
 import io.ygdrasil.webgpu.BindGroupDescriptor
-import webgpu.WGPUBindGroupDescriptor
-import webgpu.WGPUBindGroupEntry
+import io.ygdrasil.wgpu.WGPUBindGroupDescriptor
+import io.ygdrasil.wgpu.WGPUBindGroupEntry
 
 internal fun MemoryAllocator.map(input: BindGroupDescriptor): WGPUBindGroupDescriptor =
     WGPUBindGroupDescriptor.allocate(this).also { output ->

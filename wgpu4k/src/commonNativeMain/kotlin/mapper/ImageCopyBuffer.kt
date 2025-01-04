@@ -2,8 +2,8 @@ package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
 import io.ygdrasil.webgpu.ImageCopyBuffer
-import webgpu.WGPUTexelCopyBufferInfo
-import webgpu.WGPUTexelCopyBufferLayout
+import io.ygdrasil.wgpu.WGPUTexelCopyBufferInfo
+import io.ygdrasil.wgpu.WGPUTexelCopyBufferLayout
 
 internal fun MemoryAllocator.map(input: ImageCopyBuffer) = WGPUTexelCopyBufferInfo.allocate(this).also { output ->
     output.buffer = input.buffer.handler

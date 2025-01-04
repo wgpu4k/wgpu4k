@@ -3,8 +3,8 @@ package io.ygdrasil.webgpu.mapper
 import ffi.MemoryAllocator
 import io.ygdrasil.webgpu.DeviceDescriptor
 import io.ygdrasil.webgpu.QueueDescriptor
-import webgpu.WGPUDeviceDescriptor
-import webgpu.WGPUQueueDescriptor
+import io.ygdrasil.wgpu.WGPUDeviceDescriptor
+import io.ygdrasil.wgpu.WGPUQueueDescriptor
 
 // TODO add unit tests
 internal fun MemoryAllocator.map(input: DeviceDescriptor): WGPUDeviceDescriptor =

@@ -2,7 +2,7 @@ package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
 import io.ygdrasil.webgpu.Origin3D
-import webgpu.WGPUOrigin3D
+import io.ygdrasil.wgpu.WGPUOrigin3D
 
 internal fun MemoryAllocator.map(input: Origin3D) = WGPUOrigin3D.allocate(this).also { output ->
     map(input, output)

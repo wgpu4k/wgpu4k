@@ -1,7 +1,7 @@
 package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
-import webgpu.WGPUStringView
+import io.ygdrasil.wgpu.WGPUStringView
 
 internal fun MemoryAllocator.map(input: String, output: WGPUStringView) {
     output.data = allocateFrom(input)

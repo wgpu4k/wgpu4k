@@ -2,9 +2,9 @@ package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
 import io.ygdrasil.webgpu.ShaderModuleDescriptor
-import webgpu.WGPUSType_ShaderSourceWGSL
-import webgpu.WGPUShaderModuleDescriptor
-import webgpu.WGPUShaderSourceWGSL
+import io.ygdrasil.wgpu.WGPUSType_ShaderSourceWGSL
+import io.ygdrasil.wgpu.WGPUShaderModuleDescriptor
+import io.ygdrasil.wgpu.WGPUShaderSourceWGSL
 
 internal fun MemoryAllocator.map(input: ShaderModuleDescriptor): WGPUShaderModuleDescriptor =
     WGPUShaderModuleDescriptor.allocate(this).also { output ->

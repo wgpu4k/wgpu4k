@@ -2,7 +2,7 @@ package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
 import io.ygdrasil.webgpu.SamplerDescriptor
-import webgpu.WGPUSamplerDescriptor
+import io.ygdrasil.wgpu.WGPUSamplerDescriptor
 
 
 internal fun MemoryAllocator.map(input: SamplerDescriptor): WGPUSamplerDescriptor =

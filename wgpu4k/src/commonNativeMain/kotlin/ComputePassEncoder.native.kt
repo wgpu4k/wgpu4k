@@ -1,11 +1,11 @@
 package io.ygdrasil.webgpu
 
-import webgpu.WGPUComputePassEncoder
-import webgpu.wgpuComputePassEncoderDispatchWorkgroups
-import webgpu.wgpuComputePassEncoderDispatchWorkgroupsIndirect
-import webgpu.wgpuComputePassEncoderEnd
-import webgpu.wgpuComputePassEncoderRelease
-import webgpu.wgpuComputePassEncoderSetPipeline
+import io.ygdrasil.wgpu.WGPUComputePassEncoder
+import io.ygdrasil.wgpu.wgpuComputePassEncoderDispatchWorkgroups
+import io.ygdrasil.wgpu.wgpuComputePassEncoderDispatchWorkgroupsIndirect
+import io.ygdrasil.wgpu.wgpuComputePassEncoderEnd
+import io.ygdrasil.wgpu.wgpuComputePassEncoderRelease
+import io.ygdrasil.wgpu.wgpuComputePassEncoderSetPipeline
 
 actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : AutoCloseable {
 

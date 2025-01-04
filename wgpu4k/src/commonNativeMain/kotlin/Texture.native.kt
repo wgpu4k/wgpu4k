@@ -2,17 +2,17 @@ package io.ygdrasil.webgpu
 
 import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
-import webgpu.WGPUTexture
-import webgpu.wgpuTextureCreateView
-import webgpu.wgpuTextureGetDepthOrArrayLayers
-import webgpu.wgpuTextureGetDimension
-import webgpu.wgpuTextureGetFormat
-import webgpu.wgpuTextureGetHeight
-import webgpu.wgpuTextureGetMipLevelCount
-import webgpu.wgpuTextureGetSampleCount
-import webgpu.wgpuTextureGetUsage
-import webgpu.wgpuTextureGetWidth
-import webgpu.wgpuTextureRelease
+import io.ygdrasil.wgpu.WGPUTexture
+import io.ygdrasil.wgpu.wgpuTextureCreateView
+import io.ygdrasil.wgpu.wgpuTextureGetDepthOrArrayLayers
+import io.ygdrasil.wgpu.wgpuTextureGetDimension
+import io.ygdrasil.wgpu.wgpuTextureGetFormat
+import io.ygdrasil.wgpu.wgpuTextureGetHeight
+import io.ygdrasil.wgpu.wgpuTextureGetMipLevelCount
+import io.ygdrasil.wgpu.wgpuTextureGetSampleCount
+import io.ygdrasil.wgpu.wgpuTextureGetUsage
+import io.ygdrasil.wgpu.wgpuTextureGetWidth
+import io.ygdrasil.wgpu.wgpuTextureRelease
 
 
 actual class Texture(internal val handler: WGPUTexture) : AutoCloseable {

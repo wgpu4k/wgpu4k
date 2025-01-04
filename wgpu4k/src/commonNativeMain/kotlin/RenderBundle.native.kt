@@ -1,5 +1,5 @@
 package io.ygdrasil.webgpu
 
-import webgpu.WGPURenderBundle
+import io.ygdrasil.wgpu.WGPURenderBundle
 
 actual class RenderBundle(internal val handler: WGPURenderBundle)

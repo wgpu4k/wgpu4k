@@ -1,7 +1,7 @@
 package io.ygdrasil.webgpu
 
-import webgpu.WGPUCommandBuffer
-import webgpu.wgpuCommandBufferRelease
+import io.ygdrasil.wgpu.WGPUCommandBuffer
+import io.ygdrasil.wgpu.wgpuCommandBufferRelease
 
 actual class CommandBuffer(internal val handler: WGPUCommandBuffer) : AutoCloseable {
 

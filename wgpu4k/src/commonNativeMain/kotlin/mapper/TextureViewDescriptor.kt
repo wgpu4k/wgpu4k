@@ -2,7 +2,7 @@ package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
 import io.ygdrasil.webgpu.TextureViewDescriptor
-import webgpu.WGPUTextureViewDescriptor
+import io.ygdrasil.wgpu.WGPUTextureViewDescriptor
 
 internal fun MemoryAllocator.map(input: TextureViewDescriptor) = WGPUTextureViewDescriptor.allocate(this)
     .also { output ->

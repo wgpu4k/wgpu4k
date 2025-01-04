@@ -2,15 +2,15 @@ package io.ygdrasil.webgpu
 
 import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
-import webgpu.WGPURenderBundleEncoder
-import webgpu.wgpuRenderBundleEncoderDraw
-import webgpu.wgpuRenderBundleEncoderDrawIndexed
-import webgpu.wgpuRenderBundleEncoderFinish
-import webgpu.wgpuRenderBundleEncoderRelease
-import webgpu.wgpuRenderBundleEncoderSetBindGroup
-import webgpu.wgpuRenderBundleEncoderSetIndexBuffer
-import webgpu.wgpuRenderBundleEncoderSetPipeline
-import webgpu.wgpuRenderBundleEncoderSetVertexBuffer
+import io.ygdrasil.wgpu.WGPURenderBundleEncoder
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderDraw
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderDrawIndexed
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderFinish
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderRelease
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetBindGroup
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetIndexBuffer
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetPipeline
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetVertexBuffer
 
 actual class RenderBundleEncoder(internal val handler: WGPURenderBundleEncoder) : AutoCloseable {
 

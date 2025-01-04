@@ -6,13 +6,13 @@ import ffi.MemoryAllocator
 import ffi.NativeAddress
 import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
-import webgpu.WGPUCommandBuffer
-import webgpu.WGPUExtent3D
-import webgpu.WGPUQueue
-import webgpu.WGPUTexelCopyBufferLayout
-import webgpu.wgpuQueueSubmit
-import webgpu.wgpuQueueWriteBuffer
-import webgpu.wgpuQueueWriteTexture
+import io.ygdrasil.wgpu.WGPUCommandBuffer
+import io.ygdrasil.wgpu.WGPUExtent3D
+import io.ygdrasil.wgpu.WGPUQueue
+import io.ygdrasil.wgpu.WGPUTexelCopyBufferLayout
+import io.ygdrasil.wgpu.wgpuQueueSubmit
+import io.ygdrasil.wgpu.wgpuQueueWriteBuffer
+import io.ygdrasil.wgpu.wgpuQueueWriteTexture
 
 actual class Queue(internal val handler: WGPUQueue) {
 

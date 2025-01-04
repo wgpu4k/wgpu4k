@@ -2,19 +2,19 @@ package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
 import io.ygdrasil.webgpu.RenderPipelineDescriptor
-import webgpu.WGPUBlendComponent
-import webgpu.WGPUBlendState
-import webgpu.WGPUColorTargetState
-import webgpu.WGPUDepthStencilState
-import webgpu.WGPUFragmentState
-import webgpu.WGPUMultisampleState
-import webgpu.WGPUPrimitiveState
-import webgpu.WGPURenderPipelineDescriptor
-import webgpu.WGPUStencilFaceState
-import webgpu.WGPUVertexAttribute
-import webgpu.WGPUVertexBufferLayout
-import webgpu.WGPUVertexState
-import webgpu.toUInt
+import io.ygdrasil.wgpu.WGPUBlendComponent
+import io.ygdrasil.wgpu.WGPUBlendState
+import io.ygdrasil.wgpu.WGPUColorTargetState
+import io.ygdrasil.wgpu.WGPUDepthStencilState
+import io.ygdrasil.wgpu.WGPUFragmentState
+import io.ygdrasil.wgpu.WGPUMultisampleState
+import io.ygdrasil.wgpu.WGPUPrimitiveState
+import io.ygdrasil.wgpu.WGPURenderPipelineDescriptor
+import io.ygdrasil.wgpu.WGPUStencilFaceState
+import io.ygdrasil.wgpu.WGPUVertexAttribute
+import io.ygdrasil.wgpu.WGPUVertexBufferLayout
+import io.ygdrasil.wgpu.WGPUVertexState
+import io.ygdrasil.wgpu.toUInt
 
 internal fun MemoryAllocator.map(input: RenderPipelineDescriptor) =
     WGPURenderPipelineDescriptor.allocate(this).also { output ->

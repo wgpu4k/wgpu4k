@@ -2,25 +2,25 @@ package io.ygdrasil.webgpu
 
 import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
-import webgpu.WGPUCommandEncoderDescriptor
-import webgpu.WGPUDevice
-import webgpu.WGPULimits
-import webgpu.wgpuDeviceCreateBindGroup
-import webgpu.wgpuDeviceCreateBindGroupLayout
-import webgpu.wgpuDeviceCreateBuffer
-import webgpu.wgpuDeviceCreateCommandEncoder
-import webgpu.wgpuDeviceCreateComputePipeline
-import webgpu.wgpuDeviceCreatePipelineLayout
-import webgpu.wgpuDeviceCreateQuerySet
-import webgpu.wgpuDeviceCreateRenderBundleEncoder
-import webgpu.wgpuDeviceCreateRenderPipeline
-import webgpu.wgpuDeviceCreateSampler
-import webgpu.wgpuDeviceCreateShaderModule
-import webgpu.wgpuDeviceCreateTexture
-import webgpu.wgpuDeviceGetLimits
-import webgpu.wgpuDeviceGetQueue
-import webgpu.wgpuDeviceHasFeature
-import webgpu.wgpuDeviceRelease
+import io.ygdrasil.wgpu.WGPUCommandEncoderDescriptor
+import io.ygdrasil.wgpu.WGPUDevice
+import io.ygdrasil.wgpu.WGPULimits
+import io.ygdrasil.wgpu.wgpuDeviceCreateBindGroup
+import io.ygdrasil.wgpu.wgpuDeviceCreateBindGroupLayout
+import io.ygdrasil.wgpu.wgpuDeviceCreateBuffer
+import io.ygdrasil.wgpu.wgpuDeviceCreateCommandEncoder
+import io.ygdrasil.wgpu.wgpuDeviceCreateComputePipeline
+import io.ygdrasil.wgpu.wgpuDeviceCreatePipelineLayout
+import io.ygdrasil.wgpu.wgpuDeviceCreateQuerySet
+import io.ygdrasil.wgpu.wgpuDeviceCreateRenderBundleEncoder
+import io.ygdrasil.wgpu.wgpuDeviceCreateRenderPipeline
+import io.ygdrasil.wgpu.wgpuDeviceCreateSampler
+import io.ygdrasil.wgpu.wgpuDeviceCreateShaderModule
+import io.ygdrasil.wgpu.wgpuDeviceCreateTexture
+import io.ygdrasil.wgpu.wgpuDeviceGetLimits
+import io.ygdrasil.wgpu.wgpuDeviceGetQueue
+import io.ygdrasil.wgpu.wgpuDeviceHasFeature
+import io.ygdrasil.wgpu.wgpuDeviceRelease
 
 actual class Device(internal val handler: WGPUDevice) : AutoCloseable {
 

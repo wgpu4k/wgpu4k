@@ -3,23 +3,23 @@ package io.ygdrasil.webgpu
 import ffi.ArrayHolder
 import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
-import webgpu.WGPURenderPassEncoder
-import webgpu.wgpuRenderPassEncoderBeginOcclusionQuery
-import webgpu.wgpuRenderPassEncoderDraw
-import webgpu.wgpuRenderPassEncoderDrawIndexed
-import webgpu.wgpuRenderPassEncoderDrawIndexedIndirect
-import webgpu.wgpuRenderPassEncoderEnd
-import webgpu.wgpuRenderPassEncoderEndOcclusionQuery
-import webgpu.wgpuRenderPassEncoderExecuteBundles
-import webgpu.wgpuRenderPassEncoderRelease
-import webgpu.wgpuRenderPassEncoderSetBindGroup
-import webgpu.wgpuRenderPassEncoderSetBlendConstant
-import webgpu.wgpuRenderPassEncoderSetIndexBuffer
-import webgpu.wgpuRenderPassEncoderSetPipeline
-import webgpu.wgpuRenderPassEncoderSetScissorRect
-import webgpu.wgpuRenderPassEncoderSetStencilReference
-import webgpu.wgpuRenderPassEncoderSetVertexBuffer
-import webgpu.wgpuRenderPassEncoderSetViewport
+import io.ygdrasil.wgpu.WGPURenderPassEncoder
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderBeginOcclusionQuery
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderDraw
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderDrawIndexed
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderDrawIndexedIndirect
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderEnd
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderEndOcclusionQuery
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderExecuteBundles
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderRelease
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetBindGroup
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetBlendConstant
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetIndexBuffer
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetPipeline
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetScissorRect
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetStencilReference
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetVertexBuffer
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetViewport
 
 actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) {
 

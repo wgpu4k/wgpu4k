@@ -2,8 +2,8 @@ package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
 import io.ygdrasil.webgpu.ComputePassDescriptor
-import webgpu.WGPUComputePassDescriptor
-import webgpu.WGPUComputePassTimestampWrites
+import io.ygdrasil.wgpu.WGPUComputePassDescriptor
+import io.ygdrasil.wgpu.WGPUComputePassTimestampWrites
 
 internal fun MemoryAllocator.map(input: ComputePassDescriptor) =
     WGPUComputePassDescriptor.allocate(this).also { output ->

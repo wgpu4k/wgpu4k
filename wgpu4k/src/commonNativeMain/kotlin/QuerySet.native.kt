@@ -1,5 +1,5 @@
 package io.ygdrasil.webgpu
 
-import webgpu.WGPUQuerySet
+import io.ygdrasil.wgpu.WGPUQuerySet
 
 actual class QuerySet(internal val handler: WGPUQuerySet)

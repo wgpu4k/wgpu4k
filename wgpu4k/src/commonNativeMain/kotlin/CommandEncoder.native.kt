@@ -3,15 +3,15 @@ package io.ygdrasil.webgpu
 
 import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
-import webgpu.WGPUCommandBufferDescriptor
-import webgpu.WGPUCommandEncoder
-import webgpu.wgpuCommandEncoderBeginComputePass
-import webgpu.wgpuCommandEncoderBeginRenderPass
-import webgpu.wgpuCommandEncoderCopyBufferToTexture
-import webgpu.wgpuCommandEncoderCopyTextureToBuffer
-import webgpu.wgpuCommandEncoderCopyTextureToTexture
-import webgpu.wgpuCommandEncoderFinish
-import webgpu.wgpuCommandEncoderRelease
+import io.ygdrasil.wgpu.WGPUCommandBufferDescriptor
+import io.ygdrasil.wgpu.WGPUCommandEncoder
+import io.ygdrasil.wgpu.wgpuCommandEncoderBeginComputePass
+import io.ygdrasil.wgpu.wgpuCommandEncoderBeginRenderPass
+import io.ygdrasil.wgpu.wgpuCommandEncoderCopyBufferToTexture
+import io.ygdrasil.wgpu.wgpuCommandEncoderCopyTextureToBuffer
+import io.ygdrasil.wgpu.wgpuCommandEncoderCopyTextureToTexture
+import io.ygdrasil.wgpu.wgpuCommandEncoderFinish
+import io.ygdrasil.wgpu.wgpuCommandEncoderRelease
 
 actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : AutoCloseable {
 

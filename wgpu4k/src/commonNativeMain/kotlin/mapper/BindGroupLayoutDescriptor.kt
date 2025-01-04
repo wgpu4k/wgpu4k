@@ -3,10 +3,10 @@ package io.ygdrasil.webgpu.mapper
 import ffi.MemoryAllocator
 import io.ygdrasil.webgpu.BindGroupLayoutDescriptor
 import io.ygdrasil.webgpu.toFlagULong
-import webgpu.WGPUBindGroupLayoutDescriptor
-import webgpu.WGPUBindGroupLayoutEntry
-import webgpu.WGPUChainedStruct
-import webgpu.WGPUNativeSType_BindGroupEntryExtras
+import io.ygdrasil.wgpu.WGPUBindGroupLayoutDescriptor
+import io.ygdrasil.wgpu.WGPUBindGroupLayoutEntry
+import io.ygdrasil.wgpu.WGPUChainedStruct
+import io.ygdrasil.wgpu.WGPUNativeSType_BindGroupEntryExtras
 
 fun MemoryAllocator.map(input: BindGroupLayoutDescriptor): WGPUBindGroupLayoutDescriptor =
     WGPUBindGroupLayoutDescriptor.allocate(this).also { output ->

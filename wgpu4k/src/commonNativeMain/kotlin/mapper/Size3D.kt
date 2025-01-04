@@ -2,7 +2,7 @@ package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
 import io.ygdrasil.webgpu.Size3D
-import webgpu.WGPUExtent3D
+import io.ygdrasil.wgpu.WGPUExtent3D
 
 internal fun MemoryAllocator.map(input: Size3D) = WGPUExtent3D.allocate(this).also { output ->
     map(input, output)

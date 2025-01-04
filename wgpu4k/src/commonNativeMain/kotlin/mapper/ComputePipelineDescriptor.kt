@@ -3,9 +3,9 @@ package io.ygdrasil.webgpu.mapper
 import ffi.MemoryAllocator
 import io.ygdrasil.webgpu.ComputePipelineDescriptor
 import io.ygdrasil.webgpu.GPUPipelineConstantValue
-import webgpu.WGPUComputePipelineDescriptor
-import webgpu.WGPUConstantEntry
-import webgpu.WGPUProgrammableStageDescriptor
+import io.ygdrasil.wgpu.WGPUComputePipelineDescriptor
+import io.ygdrasil.wgpu.WGPUConstantEntry
+import io.ygdrasil.wgpu.WGPUProgrammableStageDescriptor
 
 fun MemoryAllocator.map(input: ComputePipelineDescriptor): WGPUComputePipelineDescriptor =
     WGPUComputePipelineDescriptor.allocate(this).also { output ->

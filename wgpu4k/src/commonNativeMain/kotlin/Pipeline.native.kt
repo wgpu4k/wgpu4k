@@ -1,10 +1,10 @@
 package io.ygdrasil.webgpu
 
-import webgpu.WGPUPipelineLayout
-import webgpu.WGPURenderPipeline
-import webgpu.wgpuPipelineLayoutRelease
-import webgpu.wgpuRenderPipelineGetBindGroupLayout
-import webgpu.wgpuRenderPipelineRelease
+import io.ygdrasil.wgpu.WGPUPipelineLayout
+import io.ygdrasil.wgpu.WGPURenderPipeline
+import io.ygdrasil.wgpu.wgpuPipelineLayoutRelease
+import io.ygdrasil.wgpu.wgpuRenderPipelineGetBindGroupLayout
+import io.ygdrasil.wgpu.wgpuRenderPipelineRelease
 
 actual class PipelineLayout(internal val handler: WGPUPipelineLayout) : AutoCloseable {
     actual override fun close() {

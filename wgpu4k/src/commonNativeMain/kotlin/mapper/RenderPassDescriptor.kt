@@ -2,9 +2,9 @@ package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
 import io.ygdrasil.webgpu.RenderPassDescriptor
-import webgpu.WGPURenderPassColorAttachment
-import webgpu.WGPURenderPassDepthStencilAttachment
-import webgpu.WGPURenderPassDescriptor
+import io.ygdrasil.wgpu.WGPURenderPassColorAttachment
+import io.ygdrasil.wgpu.WGPURenderPassDepthStencilAttachment
+import io.ygdrasil.wgpu.WGPURenderPassDescriptor
 
 internal fun MemoryAllocator.map(input: RenderPassDescriptor): WGPURenderPassDescriptor =
     WGPURenderPassDescriptor.allocate(this).also { output ->
