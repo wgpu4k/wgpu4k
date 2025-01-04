@@ -138,7 +138,7 @@ kotlin {
 
         wasmJsMain {
             dependencies {
-                implementation(libs.kotlinx.browser)
+                api(libs.kotlinx.browser)
             }
         }
 

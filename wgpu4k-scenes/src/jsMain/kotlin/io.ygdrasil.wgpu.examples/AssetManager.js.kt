@@ -11,5 +11,5 @@ actual var customVfs: Vfs
     set(value) {}
 
 internal actual fun Bitmap32.toBitmapHolder(textureFormat: ColorFormat): ImageBitmapHolder {
-    return ImageBitmapHolder(width, height, extractBytes(textureFormat))
+    return ImageBitmapHolder(width.toUInt(), height.toUInt(), extractBytes(textureFormat))
 }
