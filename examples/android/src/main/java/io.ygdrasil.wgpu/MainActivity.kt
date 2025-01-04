@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import io.ygdrasil.webgpu.ui.theme.MyApplicationTheme
+import io.ygdrasil.wgpu.R
 
 class MainActivity : ComponentActivity() {
 
