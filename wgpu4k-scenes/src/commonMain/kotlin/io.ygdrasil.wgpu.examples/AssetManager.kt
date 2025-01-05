@@ -43,8 +43,8 @@ suspend fun glt2From(path: String): GLTF2 = (resourcesVfs[path]
 
 fun Bitmap32.toBitmapHolder(textureFormat: TextureFormat): ImageBitmapHolder {
     val format = when  {
-        textureFormat.name.contains("rgba") -> RGBA
-        textureFormat.name.contains("bgra") -> BGRA
+        textureFormat.name.lowercase().contains("rgba") -> RGBA
+        textureFormat.name.lowercase().contains("bgra") -> BGRA
         else -> error("dont know how to convert this format $textureFormat")
     }
     println("will convert loaded image to format ${format::class.simpleName}")

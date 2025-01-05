@@ -9,7 +9,7 @@ dependencies {
 }
 
 application {
-	mainClass.set("io.ygdrasil.wgpu.examples.GlfwMainKt")
+	mainClass.set("io.ygdrasil.webgpu.examples.GlfwMainKt")
 	if (Platform.os == Os.MacOs) {
 		applicationDefaultJvmArgs += "-XstartOnFirstThread"
 	}
