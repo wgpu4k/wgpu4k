@@ -1,14 +1,17 @@
 package io.ygdrasil.webgpu
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.internal.js.GPUAdapter
 import io.ygdrasil.webgpu.internal.js.GPURequestAdapterOptions
 import io.ygdrasil.webgpu.mapper.map
 import kotlinx.coroutines.await
 
+private val logger = KotlinLogging.logger {}
+
 suspend fun requestAdapter(options: GPURequestAdapterOptions? = null): Adapter? {
     // WebGPU device initialization
     if (navigator.gpu == null) {
-        println("WebGPU not supported on this browser.")
+        logger.error { "WebGPU not supported in this browser." }
         return null
     }
 

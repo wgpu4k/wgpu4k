@@ -122,6 +122,8 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.coroutines)
+                api("io.github.oshai:kotlin-logging:7.0.0")
+                implementation("org.slf4j:slf4j-simple:2.0.3")
             }
         }
 

@@ -1,8 +1,11 @@
 package io.ygdrasil.webgpu.examples.helper.glb
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.Device
 import io.ygdrasil.webgpu.ShaderModule
 import io.ygdrasil.webgpu.ShaderModuleDescriptor
+
+private val logger = KotlinLogging.logger {}
 
 class ShaderCache(private val device: Device) {
     private val shaderCache: MutableMap<String, ShaderModule> = mutableMapOf()
@@ -20,7 +23,7 @@ class ShaderCache(private val device: Device) {
         }
         if (!shaderCache.containsKey(shaderID)) {
             val shaderSource = generateGLTFShader(hasNormals, hasUVs, hasColorTexture)
-            println("new shader added with id $shaderID and code $shaderSource")
+            logger.info { "new shader added with id $shaderID and code $shaderSource" }
             shaderCache[shaderID] = device.createShaderModule(ShaderModuleDescriptor(code = shaderSource))
         }
         return shaderCache[shaderID]!!

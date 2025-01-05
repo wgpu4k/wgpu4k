@@ -74,7 +74,7 @@ val jvmTest = tasks.create("e2eJvmTest") {
 val e2eBrowserTest = tasks.create("e2eBrowserTest") {
     group = "e2eTest"
     doLast {
-        val server = endToEndWebserver(project.projectDir)
+        val server = endToEndWebserver(project.projectDir, logger)
         browser(project.projectDir, logger)
         server.stop()
 

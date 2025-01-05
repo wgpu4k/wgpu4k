@@ -1,5 +1,6 @@
 @file:OptIn(ExperimentalForeignApi::class)
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.examples.Application
 import io.ygdrasil.webgpu.examples.createApplication
 import io.ygdrasil.webgpu.iosContextRenderer
@@ -13,6 +14,8 @@ import platform.MetalKit.MTKView
 import platform.MetalKit.MTKViewDelegateProtocol
 import platform.darwin.NSObject
 
+private val logger = KotlinLogging.logger {}
+
 suspend fun configureApplication(view: MTKView) {
     try {
         val size = view.drawableSize()
@@ -23,7 +26,7 @@ suspend fun configureApplication(view: MTKView) {
         val application = createApplication(context.wgpuContext)
         view.delegate = View(application)
     }catch (e: Throwable) {
-        e.printStackTrace()
+        logger.error(e) { "Failed to configure application" }
         throw e
     }
 
@@ -41,7 +44,7 @@ class View(
             try {
                 application.renderFrame()
             }catch (e: Throwable) {
-                e.printStackTrace()
+                logger.error(e) { "Failed to render frame" }
                 throw e
             }
         }

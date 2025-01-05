@@ -1,5 +1,6 @@
 package io.ygdrasil.webgpu.examples.headless
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.BufferDescriptor
 import io.ygdrasil.webgpu.BufferUsage
 import io.ygdrasil.webgpu.ImageCopyBuffer
@@ -17,6 +18,7 @@ import korlibs.image.format.PNG
 import korlibs.image.format.writeBitmap
 import korlibs.io.file.std.localVfs
 
+private val logger = KotlinLogging.logger {}
 
 suspend fun captureScene() {
     val context = getHeadlessContext()
@@ -81,7 +83,7 @@ suspend fun captureScene() {
                 val screenshotsVfs = localVfs(path)["jvm"].also { it.mkdirs() }.jail()
                 val outputPath = "$sceneName-$frame.png"
                 screenshotsVfs[outputPath]
-                    .also { println("will output texture to ${it.absolutePath}") }
+                    .also { logger.info { "will output texture to ${it.absolutePath}" } }
                     .writeBitmap(image, PNG)
             } else {
                 // Complete async work

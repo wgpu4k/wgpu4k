@@ -1,5 +1,6 @@
 package io.ygdrasil.webgpu.examples
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.CompositeAlphaMode
 import io.ygdrasil.webgpu.Device
 import io.ygdrasil.webgpu.Surface
@@ -8,6 +9,8 @@ import io.ygdrasil.webgpu.SurfaceRenderingContext
 import io.ygdrasil.webgpu.TextureUsage
 import io.ygdrasil.webgpu.WGPUContext
 import io.ygdrasil.webgpu.autoClosableContext
+
+private val logger = KotlinLogging.logger {}
 
 suspend fun createApplication(wgpuContext: WGPUContext, resourceBasePath: String = ""): Application {
     wgpuContext.configureRenderingContext()
@@ -38,12 +41,12 @@ class Application internal constructor(
         private set
 
     suspend fun changeScene(nextScene: Scene) {
-        println("switch to scene ${nextScene::class.simpleName}")
+        logger.info { "switch to scene ${nextScene::class.simpleName}" }
         with(nextScene) {
             try {
                 initialize()
             } catch (e: Throwable) {
-                e.printStackTrace()
+                logger.error(e) { "failed to initialize scene ${nextScene::class.simpleName}" }
                 onError = true
                 throw e
             }
@@ -62,7 +65,7 @@ class Application internal constructor(
             try {
                 render()
             } catch (e: Throwable) {
-                e.printStackTrace()
+                logger.error(e) { "failed to render frame $frame" }
                 onError = true
                 throw e
             }
@@ -79,8 +82,8 @@ private fun WGPUContext.configureRenderingContext() {
     val alphaMode = CompositeAlphaMode.Inherit?.takeIf { surface.supportedAlphaMode.contains(it) }
         ?: CompositeAlphaMode.Opaque
 
-    println("Using format $format and alpha mode $alphaMode")
-    println("Supported formats: ${surface.supportedFormats}")
+    logger.info { "Using format $format and alpha mode $alphaMode" }
+    logger.info { "Supported formats: ${surface.supportedFormats}" }
     surface.configure(
         SurfaceConfiguration(
             device = device,

@@ -1,5 +1,6 @@
 package io.ygdrasil.webgpu.examples
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.ImageBitmapHolder
 import io.ygdrasil.webgpu.TextureFormat
 import io.ygdrasil.webgpu.examples.helper.glb.GLTF2
@@ -12,6 +13,8 @@ import korlibs.image.format.readBitmap
 import korlibs.io.file.Vfs
 import korlibs.io.file.std.resourcesVfs
 import korlibs.io.file.std.rootLocalVfs
+
+private val logger = KotlinLogging.logger {}
 
 expect var customVfs: Vfs
 
@@ -47,7 +50,7 @@ fun Bitmap32.toBitmapHolder(textureFormat: TextureFormat): ImageBitmapHolder {
         textureFormat.name.lowercase().contains("bgra") -> BGRA
         else -> error("dont know how to convert this format $textureFormat")
     }
-    println("will convert loaded image to format ${format::class.simpleName}")
+    logger.debug { "will convert loaded image to format ${format::class.simpleName}" }
     return toBitmapHolder(format)
 }
 

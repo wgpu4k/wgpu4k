@@ -1,6 +1,7 @@
 package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.RenderPipelineDescriptor
 import io.ygdrasil.wgpu.WGPUBlendComponent
 import io.ygdrasil.wgpu.WGPUBlendState
@@ -15,6 +16,8 @@ import io.ygdrasil.wgpu.WGPUVertexAttribute
 import io.ygdrasil.wgpu.WGPUVertexBufferLayout
 import io.ygdrasil.wgpu.WGPUVertexState
 
+private val logger = KotlinLogging.logger {}
+
 internal fun MemoryAllocator.map(input: RenderPipelineDescriptor) =
     WGPURenderPipelineDescriptor.allocate(this).also { output ->
         map(input.vertex, output.vertex)
@@ -27,7 +30,7 @@ internal fun MemoryAllocator.map(input: RenderPipelineDescriptor) =
     }
 
 fun MemoryAllocator.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState, output: WGPUColorTargetState) {
-    println("colorTargetState $output")
+    logger.trace { "colorTargetState $output" }
     output.format = input.format.value
     output.writeMask = input.writeMask.value.toUInt()
     output.blend = map(input.blend)
@@ -36,7 +39,7 @@ fun MemoryAllocator.map(input: RenderPipelineDescriptor.FragmentState.ColorTarge
 fun MemoryAllocator.map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState): WGPUBlendState =
     WGPUBlendState
         .allocate(this).also { output ->
-            println("blend state $output")
+            logger.trace { "blend state $output" }
             map(input.color, output.color)
             map(input.alpha, output.alpha)
 
@@ -46,7 +49,7 @@ fun map(
     input: RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent,
     output: WGPUBlendComponent
 ) {
-    println("blend component $output")
+    logger.trace { "blend component $output" }
     output.operation = input.operation.value
     output.srcFactor = input.srcFactor.value
     output.dstFactor = input.dstFactor.value
@@ -55,7 +58,7 @@ fun map(
 private fun MemoryAllocator.map(input: RenderPipelineDescriptor.FragmentState): WGPUFragmentState =
     WGPUFragmentState.allocate(this)
         .also { fragmentState ->
-            println("fragment $fragmentState")
+            logger.trace { "fragment $fragmentState" }
             fragmentState.module = input.module.handler
             fragmentState.entryPoint = allocateFrom(input.entryPoint)
             if (input.targets.isNotEmpty()) {
@@ -107,7 +110,7 @@ private fun map(input: RenderPipelineDescriptor.PrimitiveState, output: WGPUPrim
 }
 
 private fun MemoryAllocator.map(input: RenderPipelineDescriptor.VertexState, output: WGPUVertexState) {
-    println("vertex $output")
+    logger.trace { "vertex $output" }
     output.module = input.module.handler
     output.entryPoint = allocateFrom(input.entryPoint)
     // TODO learn how to map this
@@ -126,7 +129,7 @@ private fun map(
     input: RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute,
     output: WGPUVertexAttribute
 ) {
-    println("attribute $output")
+    logger.trace { "attribute $output" }
     output.format = input.format.value
     output.offset = input.offset
     output.shaderLocation = input.shaderLocation
@@ -136,7 +139,7 @@ private fun MemoryAllocator.map(
     input: RenderPipelineDescriptor.VertexState.VertexBufferLayout,
     output: WGPUVertexBufferLayout
 ) {
-    println("buffer $output")
+    logger.trace { "buffer $output" }
     output.arrayStride = input.arrayStride
     if (input.attributes.isNotEmpty()) {
         output.attributes = WGPUVertexAttribute.allocateArray(this, input.attributes.size.toUInt(), { index, value ->

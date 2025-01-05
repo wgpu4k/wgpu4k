@@ -4,6 +4,7 @@ import ffi.ArrayHolder
 import ffi.MemoryAllocator
 import ffi.MemoryBuffer
 import ffi.memoryScope
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.wgpu.WGPUCompositeAlphaMode
 import io.ygdrasil.wgpu.WGPUSurface
 import io.ygdrasil.wgpu.WGPUSurfaceCapabilities
@@ -15,6 +16,8 @@ import io.ygdrasil.wgpu.wgpuSurfaceGetCapabilities
 import io.ygdrasil.wgpu.wgpuSurfaceGetCurrentTexture
 import io.ygdrasil.wgpu.wgpuSurfacePresent
 import io.ygdrasil.wgpu.wgpuSurfaceRelease
+
+private val logger = KotlinLogging.logger {}
 
 actual class Surface(
     internal val handler: WGPUSurface
@@ -52,7 +55,7 @@ actual class Surface(
     }
 
     fun computeSurfaceCapabilities(adapter: Adapter) = memoryScope { scope ->
-        println("computeSurfaceCapabilities")
+        logger.trace { "computeSurfaceCapabilities" }
         val surfaceCapabilities = WGPUSurfaceCapabilities.allocate(scope)
         wgpuSurfaceGetCapabilities(handler, adapter.handler, surfaceCapabilities)
 
@@ -62,16 +65,16 @@ actual class Surface(
         val alphaModes = surfaceCapabilities.alphaModes ?: error("fail to get alpha modes")
         _supportedAlphaMode = surfaceCapabilities.toAlphaMode(alphaModes)
 
-        println("supportedTextureFormats: $supportedFormats")
-        println("supportedAlphaMode: $supportedAlphaMode")
+        logger.info { "supportedTextureFormats: $supportedFormats" }
+        logger.info { "supportedAlphaMode: $supportedAlphaMode" }
 
         if (_supportedFormats.isEmpty()) {
-            println("WARNING: fail to get supported textures on surface, will inject rgba8unorm format")
+            logger.warn { "fail to get supported textures on surface, will inject rgba8unorm format" }
             _supportedFormats = setOf(TextureFormat.RGBA8Unorm)
         }
 
         if (_supportedAlphaMode.isEmpty()) {
-            println("WARNING: fail to get supported alpha mode on surface, will inject inherit alpha mode")
+            logger.warn { "fail to get supported alpha mode on surface, will inject inherit alpha mode" }
             _supportedAlphaMode = setOf(CompositeAlphaMode.Inherit)
         }
     }
@@ -85,7 +88,7 @@ actual class Surface(
         }
         .map {
             TextureFormat.of(it)
-                .also { if (it == null) println("ignoring undefined format with value $it") }
+                .also { if (it == null) logger.warn { "ignoring undefined format with value $it" } }
         }
         .filterNotNull()
         .toSet()
@@ -99,7 +102,7 @@ actual class Surface(
         }
         .map {
             CompositeAlphaMode.of(it)
-                .also { if (it == null) println("ignoring undefined alpha mode with value $it") }
+                .also { if (it == null) logger.warn { "ignoring undefined alpha mode with value $it" } }
         }
         .filterNotNull()
         .toSet()

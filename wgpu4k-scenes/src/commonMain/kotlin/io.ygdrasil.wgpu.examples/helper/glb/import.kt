@@ -1,5 +1,6 @@
 package io.ygdrasil.webgpu.examples.helper.glb
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.BufferUsage
 import io.ygdrasil.webgpu.Device
 import io.ygdrasil.webgpu.ImageCopyExternalImage
@@ -13,12 +14,14 @@ import korlibs.image.format.readBitmap
 import korlibs.io.file.std.asMemoryVfsFile
 import korlibs.math.geom.Matrix4
 
+private val logger = KotlinLogging.logger {}
+
 suspend fun uploadGLBModel(
     device: Device,
     gltf2: GLTF2,
     textureFormat: TextureFormat,
 ): GLBModel {
-    println("uploadGLBModel")
+    logger.debug { "uploadGLBModel" }
 
     val bufferViews = gltf2.bufferViews.mapIndexed { index, bufferView ->
         GLTFBufferView(bufferView, gltf2.buffers[bufferView.buffer])

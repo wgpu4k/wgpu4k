@@ -1,5 +1,6 @@
 package io.ygdrasil.webgpu.examples.helper.glb
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import korlibs.datastructure.*
 import korlibs.encoding.*
 import korlibs.image.bitmap.*
@@ -22,6 +23,8 @@ import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
 import kotlin.jvm.JvmInline
 import kotlin.time.measureTimedValue
+
+private val logger = KotlinLogging.logger {}
 
 suspend fun VfsFile.readGLB(): GLTF2 =
     GLTF2.readGLB(this)
@@ -73,7 +76,7 @@ data class GLTF2(
                         ?: bin
                         ?: error("Couldn't load buffer : $buffer")
                 }
-                println("Loaded $vfile in ... $time")
+                logger.info { "Loaded $vfile in ... $time" }
                 buffer.optBuffer = Buffer(bytes)
             }
         }
@@ -93,7 +96,7 @@ data class GLTF2(
                     buffer?.let { nativeImageFormatProvider.decode(it) } ?: Bitmaps.transparent.bmp
                     //buffer?.readBitmap() ?: Bitmaps.transparent.bmp
                 }
-                println("$vfile read in $time, decoded in $timeBitmap...")
+                logger.info { "$vfile read in $time, decoded in $timeBitmap..." }
                 image.bitmap = bitmap
             }
         }
@@ -411,7 +414,6 @@ data class GLTF2(
                         kind
                     )
                 }
-                //println("lookup.ratioClamped=${lookup.ratioClamped}, lookup.lowIndex=${lookup.lowIndex}, lookup.highIndex=${lookup.highIndex}, out=$out : ${out.accessor}")
             }
         }
     }
@@ -752,8 +754,6 @@ data class GLTF2(
 
     companion object {
 
-        val logger = Logger("GLTF2")
-
         suspend fun readGLB(file: VfsFile): GLTF2 = readGLB(
             file.readBytes(),
             file
@@ -787,7 +787,7 @@ data class GLTF2(
                     .decodeFromString<GLTF2>(jsonString)
                     .also { it.ensureLoad(file, bin) }
             } catch (e: Throwable) {
-                println("ERROR parsing: $jsonString")
+                logger.error(e) { "Couldn't parse JSON: $jsonString" }
                 throw e
             }
         }
@@ -854,7 +854,7 @@ data class GLTF2AccessorVector(val accessor: GLTF2.Accessor, val buffer: Buffer)
                 value
             }
         } catch (e: IndexOutOfBoundsException) {
-            println("!! ERROR accessing $index of buffer.sizeInBytes=${buffer.sizeInBytes}, dims=$dims, bytesPerEntry=$bytesPerEntry, size=$size, accessor=$accessor")
+            logger.error(e) { "!! ERROR accessing $index of buffer.sizeInBytes=${buffer.sizeInBytes}, dims=$dims, bytesPerEntry=$bytesPerEntry, size=$size, accessor=$accessor" }
             throw e
         }
     }

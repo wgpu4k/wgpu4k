@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.examples.Application
 import io.ygdrasil.webgpu.examples.createApplication
 import korlibs.io.android.withAndroidContext
@@ -13,6 +14,7 @@ import kotlinx.coroutines.launch
 
 class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     private var application: Application? = null
+    private val logger = KotlinLogging.logger {}
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
@@ -35,18 +37,18 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
                 withAndroidContext(context) {
                     val androidContext = androidContextRenderer(surfaceHolder, width, height)
                     application = createApplication(androidContext.wgpuContext)
-                    println("Created application $application")
+                    logger.info { "Created application $application" }
                     setWillNotDraw(false)
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                logger.error(e) { "Failed to create application" }
             }
         }
 
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
-        println("surfaceDestroyed")
+        logger.info { "surfaceDestroyed" }
         application?.apply {
             currentScene.close()
             wgpuContext.close()
@@ -62,13 +64,13 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
                 application?.renderFrame()
                 invalidate()
             } catch (e: Exception) {
-                e.printStackTrace()
+                logger.error(e) { "Failed to render frame" }
             }
         }
     }
 
     fun changeExample(index: Int) {
-        println("changeExample with index $index")
+        logger.info { "changeExample with index $index" }
         // TODO
     }
 

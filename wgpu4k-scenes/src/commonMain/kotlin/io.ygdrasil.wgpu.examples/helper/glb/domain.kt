@@ -1,5 +1,6 @@
 package io.ygdrasil.webgpu.examples.helper.glb
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.AddressMode
 import io.ygdrasil.webgpu.BindGroup
 import io.ygdrasil.webgpu.BindGroupDescriptor
@@ -33,6 +34,8 @@ import io.ygdrasil.webgpu.TextureFormat
 import io.ygdrasil.webgpu.VertexFormat
 import korlibs.memory.getS8Array
 import kotlin.math.max
+
+private val logger = KotlinLogging.logger {}
 
 class GLTFPrimitive(
     val indices: GLTFAccessor?,
@@ -152,7 +155,8 @@ class GLTFPrimitive(
             )
         )
 
-        println(pipelineDescriptor)
+        logger.debug { "Pipeline descriptor: $pipelineDescriptor" }
+
         val renderPipeline = device.createRenderPipeline(pipelineDescriptor)
 
         bundleEncoder.setBindGroup(2u, material.bindGroup)
