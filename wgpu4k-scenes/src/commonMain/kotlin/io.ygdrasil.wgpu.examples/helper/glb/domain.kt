@@ -81,7 +81,7 @@ class GLTFPrimitive(
                     arrayStride = normals.byteStride.toULong(),
                     attributes = listOf(
                         VertexBufferLayout.VertexAttribute(
-                            format = VertexFormat.Float32x2,
+                            format = VertexFormat.Float32x3,
                             offset = 0u,
                             shaderLocation = 1u
                         )
