@@ -94,7 +94,6 @@ kotlin {
     linuxArm64()
     linuxX64()
     mingwX64()
-    //configureMingwX64(project)
 
     if (isAndroidConfigured) androidTarget {
         compilerOptions {
