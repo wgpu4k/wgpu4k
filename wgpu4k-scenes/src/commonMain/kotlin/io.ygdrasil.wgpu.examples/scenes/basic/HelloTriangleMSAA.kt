@@ -1,29 +1,29 @@
-package io.ygdrasil.wgpu.examples.scenes.basic
+package io.ygdrasil.webgpu.examples.scenes.basic
 
-import io.ygdrasil.wgpu.AutoClosableContext
-import io.ygdrasil.wgpu.Color
-import io.ygdrasil.wgpu.LoadOp
-import io.ygdrasil.wgpu.PrimitiveTopology
-import io.ygdrasil.wgpu.RenderPassDescriptor
-import io.ygdrasil.wgpu.RenderPipeline
-import io.ygdrasil.wgpu.RenderPipelineDescriptor
-import io.ygdrasil.wgpu.ShaderModuleDescriptor
-import io.ygdrasil.wgpu.Size3D
-import io.ygdrasil.wgpu.StoreOp
-import io.ygdrasil.wgpu.TextureDescriptor
-import io.ygdrasil.wgpu.TextureUsage
-import io.ygdrasil.wgpu.TextureView
-import io.ygdrasil.wgpu.WGPUContext
-import io.ygdrasil.wgpu.beginRenderPass
-import io.ygdrasil.wgpu.examples.Scene
-import io.ygdrasil.wgpu.examples.scenes.shader.fragment.redFragmentShader
-import io.ygdrasil.wgpu.examples.scenes.shader.vertex.triangleVertexShader
+import io.ygdrasil.webgpu.AutoClosableContext
+import io.ygdrasil.webgpu.Color
+import io.ygdrasil.webgpu.LoadOp
+import io.ygdrasil.webgpu.PrimitiveTopology
+import io.ygdrasil.webgpu.RenderPassDescriptor
+import io.ygdrasil.webgpu.RenderPipeline
+import io.ygdrasil.webgpu.RenderPipelineDescriptor
+import io.ygdrasil.webgpu.ShaderModuleDescriptor
+import io.ygdrasil.webgpu.Size3D
+import io.ygdrasil.webgpu.StoreOp
+import io.ygdrasil.webgpu.TextureDescriptor
+import io.ygdrasil.webgpu.TextureUsage
+import io.ygdrasil.webgpu.TextureView
+import io.ygdrasil.webgpu.WGPUContext
+import io.ygdrasil.webgpu.beginRenderPass
+import io.ygdrasil.webgpu.examples.Scene
+import io.ygdrasil.webgpu.examples.scenes.shader.fragment.redFragmentShader
+import io.ygdrasil.webgpu.examples.scenes.shader.vertex.triangleVertexShader
 
 class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
     lateinit var renderPipeline: RenderPipeline
     lateinit var textureView: TextureView
-    val  sampleCount = 4
+    val sampleCount = 4u
 
     override suspend fun initialize() = with(autoClosableContext) {
         renderPipeline = device.createRenderPipeline(
@@ -48,7 +48,7 @@ class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
                     )
                 ),
                 primitive = RenderPipelineDescriptor.PrimitiveState(
-                    topology = PrimitiveTopology.trianglelist
+                    topology = PrimitiveTopology.TriangleList
                 ),
                 multisample = RenderPipelineDescriptor.MultisampleState(
                     count = sampleCount
@@ -61,7 +61,7 @@ class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
                 size = Size3D(renderingContext.width, renderingContext.height),
                 sampleCount = sampleCount,
                 format = renderingContext.textureFormat,
-                usage = setOf(TextureUsage.renderattachment),
+                usage = setOf(TextureUsage.renderAttachment),
             )
         ).bind()
         textureView = texture.createView().bind()
@@ -79,15 +79,15 @@ class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
                     RenderPassDescriptor.ColorAttachment(
                         view = textureView,
                         resolveTarget = renderingContext.getCurrentTexture().createView().bind(),
-                        loadOp = LoadOp.clear,
+                        loadOp = LoadOp.Clear,
                         clearValue = Color(.0, .0, .0, 1.0),
-                        storeOp = StoreOp.discard
+                        storeOp = StoreOp.Discard
                     )
                 )
             )
         ) {
             setPipeline(renderPipeline)
-            draw(3)
+            draw(3u)
             end()
         }
 

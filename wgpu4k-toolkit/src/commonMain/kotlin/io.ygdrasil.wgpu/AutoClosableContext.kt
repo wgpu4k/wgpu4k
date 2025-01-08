@@ -1,6 +1,4 @@
-
-
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 suspend fun <T> autoClosableContext(block: suspend AutoClosableContext.() -> T): T = AutoClosableContext()
 	.use { it.block() }

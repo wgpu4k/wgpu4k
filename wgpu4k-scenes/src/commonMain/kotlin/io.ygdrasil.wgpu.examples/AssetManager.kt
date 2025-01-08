@@ -1,9 +1,10 @@
-package io.ygdrasil.wgpu.examples
+package io.ygdrasil.webgpu.examples
 
-import io.ygdrasil.wgpu.ImageBitmapHolder
-import io.ygdrasil.wgpu.TextureFormat
-import io.ygdrasil.wgpu.examples.helper.glb.GLTF2
-import io.ygdrasil.wgpu.examples.helper.glb.readGLB
+import io.github.oshai.kotlinlogging.KotlinLogging
+import io.ygdrasil.webgpu.ImageBitmapHolder
+import io.ygdrasil.webgpu.TextureFormat
+import io.ygdrasil.webgpu.examples.helper.glb.GLTF2
+import io.ygdrasil.webgpu.examples.helper.glb.readGLB
 import korlibs.image.bitmap.Bitmap32
 import korlibs.image.color.BGRA
 import korlibs.image.color.ColorFormat
@@ -12,6 +13,8 @@ import korlibs.image.format.readBitmap
 import korlibs.io.file.Vfs
 import korlibs.io.file.std.resourcesVfs
 import korlibs.io.file.std.rootLocalVfs
+
+private val logger = KotlinLogging.logger {}
 
 expect var customVfs: Vfs
 
@@ -43,15 +46,15 @@ suspend fun glt2From(path: String): GLTF2 = (resourcesVfs[path]
 
 fun Bitmap32.toBitmapHolder(textureFormat: TextureFormat): ImageBitmapHolder {
     val format = when  {
-        textureFormat.name.contains("rgba") -> RGBA
-        textureFormat.name.contains("bgra") -> BGRA
+        textureFormat.name.lowercase().contains("rgba") -> RGBA
+        textureFormat.name.lowercase().contains("bgra") -> BGRA
         else -> error("dont know how to convert this format $textureFormat")
     }
-    println("will convert loaded image to format ${format::class.simpleName}")
+    logger.debug { "will convert loaded image to format ${format::class.simpleName}" }
     return toBitmapHolder(format)
 }
 
-expect internal fun Bitmap32.toBitmapHolder(textureFormat: ColorFormat): ImageBitmapHolder
+internal expect fun Bitmap32.toBitmapHolder(textureFormat: ColorFormat): ImageBitmapHolder
 
 suspend fun genericAssetManager(textureFormat: TextureFormat, resourceBasePath: String = "") = GenericAssetManager(
     bitmapFrom(textureFormat, "${resourceBasePath}assets/img/Di-3d.png"),

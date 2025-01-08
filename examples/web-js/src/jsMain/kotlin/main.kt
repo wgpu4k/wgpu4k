@@ -1,4 +1,4 @@
-import io.ygdrasil.wgpu.examples.jsApplication
+import io.ygdrasil.webgpu.examples.jsApplication
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.HTMLCanvasElement

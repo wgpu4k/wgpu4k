@@ -1,25 +1,47 @@
-package io.ygdrasil.wgpu.examples
+package io.ygdrasil.webgpu.examples
 
-import io.ygdrasil.wgpu.GLFWContext
-import io.ygdrasil.wgpu.WGPU.Companion.loadLibrary
-import io.ygdrasil.wgpu.glfwContextRenderer
-import io.ygdrasil.wgpu.internal.jvm.panama.WGPULogCallback
-import io.ygdrasil.wgpu.internal.jvm.panama.wgpu_h
+import ffi.LibraryLoader
+import ffi.globalMemory
+import io.github.oshai.kotlinlogging.KotlinLogging
+import io.ygdrasil.webgpu.GLFWContext
+import io.ygdrasil.webgpu.glfwContextRenderer
+import io.ygdrasil.wgpu.WGPULogCallback
+import io.ygdrasil.wgpu.WGPULogLevel_Debug
+import io.ygdrasil.wgpu.WGPULogLevel_Error
+import io.ygdrasil.wgpu.WGPULogLevel_Info
+import io.ygdrasil.wgpu.WGPULogLevel_Trace
+import io.ygdrasil.wgpu.WGPULogLevel_Warn
+import io.ygdrasil.wgpu.wgpuSetLogCallback
+import io.ygdrasil.wgpu.wgpuSetLogLevel
 import kotlinx.coroutines.runBlocking
 import org.lwjgl.glfw.GLFW.*
-import java.lang.foreign.Arena
-import java.lang.foreign.MemorySegment
 
-val callback = WGPULogCallback.allocate({ level, message, data ->
-    println("LOG {$level} ${message.getString(0)}")
-}, Arena.global())
+private val logger = KotlinLogging.logger {}
+
+val callback = WGPULogCallback.allocate(globalMemory) { level, cMessage, userdata ->
+    val message = cMessage?.toKString() ?: "empty message"
+    when (level) {
+        WGPULogLevel_Error -> logger.error { message }
+        WGPULogLevel_Warn -> logger.warn { message }
+        WGPULogLevel_Info -> logger.info { message }
+        WGPULogLevel_Debug -> logger.debug { message }
+        WGPULogLevel_Trace -> logger.trace { message }
+        else -> logger.warn { "Unknown log level $level with message $message" }
+    }
+}
 
 fun main() = runBlocking {
-    loadLibrary()
-    wgpu_h.wgpuSetLogLevel(1)
-    wgpu_h.wgpuSetLogCallback(callback, MemorySegment.NULL)
+    LibraryLoader.load()
+    wgpuSetLogLevel(WGPULogLevel_Trace)
+    wgpuSetLogCallback(callback, globalMemory.bufferOfAddress(callback.handler).handler)
 
     val glfwContext = glfwContextRenderer(width = 640, height = 480, title = "GLFW+WebGPU")
+
+    logger.info { "Devices features : ${glfwContext.wgpuContext.device.features}" }
+    logger.info{ "Devices limits : ${glfwContext.wgpuContext.device.limits}" }
+
+    logger.info { "Adapter features : ${glfwContext.wgpuContext.adapter.features}" }
+    logger.info { "Adapter limits : ${glfwContext.wgpuContext.adapter.limits}" }
 
     val application = createApplication(
         glfwContext.wgpuContext

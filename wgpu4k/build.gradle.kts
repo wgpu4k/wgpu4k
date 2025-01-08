@@ -1,5 +1,9 @@
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.plugin.KotlinHierarchyTemplate
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
@@ -8,7 +12,65 @@ plugins {
     if (isAndroidConfigured) id("android")
 }
 
-val resourcesDirectory = project.file("src").resolve("jvmMain").resolve("resources")
+val resourcesDirectory = project.file("src")
+    .resolve("jvmMain").resolve("resources")
+
+private val hierarchyTemplate = KotlinHierarchyTemplate {
+    /* natural hierarchy is only applied to default 'main'/'test' compilations (by default) */
+    withSourceSetTree(KotlinSourceSetTree.main, KotlinSourceSetTree.test)
+
+    common {
+        /* All compilations shall be added to the common group by default */
+        withCompilations { true }
+
+        group("commonNative") {
+            group("native") {
+                withNative()
+
+                group("apple") {
+                    withApple()
+
+                    group("ios") {
+                        withIos()
+                    }
+
+                    group("tvos") {
+                        withTvos()
+                    }
+
+                    group("watchos") {
+                        withWatchos()
+                    }
+
+                    group("macos") {
+                        withMacos()
+                    }
+                }
+
+                group("linux") {
+                    withLinux()
+                }
+
+                group("mingw") {
+                    withMingw()
+                }
+
+                /*group("androidNative") {
+                    withAndroidNative()
+                }*/
+            }
+
+            withJvm()
+            withAndroidTarget()
+        }
+
+
+        group("commonWeb") {
+            withJs()
+            withWasmJs()
+        }
+    }
+}
 
 kotlin {
 
@@ -18,7 +80,6 @@ kotlin {
     }
 
     jvm {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget = JvmTarget.JVM_22
         }
@@ -32,10 +93,9 @@ kotlin {
     macosX64()
     linuxArm64()
     linuxX64()
-    configureMingwX64(project)
+    mingwX64()
 
     if (isAndroidConfigured) androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget = JvmTarget.JVM_22
         }
@@ -50,21 +110,30 @@ kotlin {
         nodejs()
     }
 
+    applyHierarchyTemplate(hierarchyTemplate)
+
     sourceSets {
 
         all {
             languageSettings.optIn("kotlin.ExperimentalUnsignedTypes")
         }
 
-        jvmMain {
-            dependencies {
-                api(libs.wgpu4k.panama)
-            }
-        }
-
         commonMain {
             dependencies {
                 implementation(libs.coroutines)
+                api(libs.kotlin.logging)
+                implementation(libs.slf4j.simple)
+            }
+        }
+
+
+        val commonNativeMain by getting {
+            dependencies { api(libs.wgpu4k.native) }
+        }
+
+        wasmJsMain {
+            dependencies {
+                api(libs.kotlinx.browser)
             }
         }
 
@@ -81,27 +150,10 @@ kotlin {
             }
         }
 
-        nativeMain {
-
-            dependencies {
-                implementation(libs.wgpu4k.native)
-            }
-        }
-
-        androidMain {
-            dependencies {
-                val jna = libs.jna.get()
-                implementation("${jna.module.group}:${jna.module.name}:${jna.versionConstraint}:@aar")
-                implementation(libs.jetbrains.kotlin.reflect)
-                implementation(libs.android.native.helper)
-                implementation(libs.wgpu4k.native)
-            }
-        }
-
     }
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+
     compilerOptions {
-        allWarningsAsErrors = true
+        //allWarningsAsErrors = true
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 }

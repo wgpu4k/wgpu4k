@@ -1,6 +1,6 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUBindGroupLayout
+import io.ygdrasil.webgpu.internal.js.GPUBindGroupLayout
 
 actual class BindGroupLayout(internal val handler: GPUBindGroupLayout) : AutoCloseable {
     actual override fun close() {

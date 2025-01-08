@@ -1,15 +1,15 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUCanvasConfiguration
-import io.ygdrasil.wgpu.internal.js.GPUCanvasContext
-import io.ygdrasil.wgpu.internal.js.GPUDevice
+import io.ygdrasil.webgpu.internal.js.GPUCanvasConfiguration
+import io.ygdrasil.webgpu.internal.js.GPUCanvasContext
+import io.ygdrasil.webgpu.internal.js.GPUDevice
 import org.w3c.dom.HTMLCanvasElement
 
 actual class Surface(private val handler: GPUCanvasContext) : AutoCloseable {
 
-    actual val width: Int
+    actual val width: GPUIndex32
         get() = handler.canvas.width
-    actual val height: Int
+    actual val height: GPUIndex32
         get() = handler.canvas.height
 
     actual val preferredCanvasFormat: TextureFormat? by lazy {
@@ -19,11 +19,13 @@ actual class Surface(private val handler: GPUCanvasContext) : AutoCloseable {
     }
 
     // @see https://gpuweb.github.io/gpuweb/#canvas-configuration
-    actual val supportedFormats: Set<TextureFormat> = setOf(TextureFormat.bgra8unorm, TextureFormat.rgba8unorm, TextureFormat.rgba16float)
-    actual val supportedAlphaMode: Set<CompositeAlphaMode> = setOf(CompositeAlphaMode.opaque, CompositeAlphaMode.premultiplied)
+    actual val supportedFormats: Set<TextureFormat> =
+        setOf(TextureFormat.BGRA8Unorm, TextureFormat.RGBA8Unorm, TextureFormat.RGBA16Float)
+    actual val supportedAlphaMode: Set<CompositeAlphaMode> =
+        setOf(CompositeAlphaMode.Opaque, CompositeAlphaMode.Premultiplied)
 
-    actual fun getCurrentTexture(): Texture {
-        return Texture(handler.getCurrentTexture())
+    actual fun getCurrentTexture(): SurfaceTexture {
+        return SurfaceTexture(Texture(handler.getCurrentTexture()), SurfaceTextureStatus.success)
     }
 
     actual override fun close() {
@@ -34,17 +36,17 @@ actual class Surface(private val handler: GPUCanvasContext) : AutoCloseable {
         // Nothing to do on js
     }
 
-    actual fun configure(canvasConfiguration: CanvasConfiguration) {
-        handler.configure(canvasConfiguration.convert())
+    actual fun configure(surfaceConfiguration: SurfaceConfiguration) {
+        handler.configure(surfaceConfiguration.convert())
     }
 
-    fun CanvasConfiguration.convert(): GPUCanvasConfiguration = object : GPUCanvasConfiguration {
+    fun SurfaceConfiguration.convert(): GPUCanvasConfiguration = object : GPUCanvasConfiguration {
         override var device: GPUDevice = this@convert.device.handler
-        override var format: String = this@convert.format.actualName
+        override var format: String = this@convert.format.value
         override var usage: GPUTextureUsageFlags? = this@convert.usage.toFlagInt()
-        override var viewFormats: Array<String>? = this@convert.viewFormats.map { it.actualName }.toTypedArray()
+        override var viewFormats: Array<String>? = this@convert.viewFormats.map { it.value }.toTypedArray()
         override var colorSpace: Any? = this@convert.colorSpace
-        override var alphaMode: String? = this@convert.alphaMode.stringValue
+        override var alphaMode: String? = this@convert.alphaMode.value
     }
 
 

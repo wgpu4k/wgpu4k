@@ -64,6 +64,9 @@ kotlin {
         tasks.named<Exec>("runDebugExecutableNative").configure {
             args(commonResourcesFile.absolutePath)
         }
+        tasks.named<Exec>("runReleaseExecutableNative").configure {
+            args(commonResourcesFile.absolutePath)
+        }
     }
 }
 

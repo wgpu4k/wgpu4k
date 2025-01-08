@@ -1,4 +1,4 @@
-package io.ygdrasil.wgpu.examples
+package io.ygdrasil.webgpu.examples
 
 enum class Os {
 	Linux,

@@ -1,15 +1,15 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUCanvasContext
-import io.ygdrasil.wgpu.internal.js.navigator
-import io.ygdrasil.wgpu.mapper.map
+import io.ygdrasil.webgpu.internal.js.GPUCanvasContext
+import io.ygdrasil.webgpu.internal.js.navigator
+import io.ygdrasil.webgpu.mapper.map
 import org.w3c.dom.HTMLCanvasElement
 
 actual class Surface(internal val handler: GPUCanvasContext) : AutoCloseable {
-    actual val width: Int
-        get() = handler.canvas.width
-    actual val height: Int
-        get() = handler.canvas.height
+    actual val width: UInt
+        get() = handler.canvas.width.toUInt()
+    actual val height: UInt
+        get() = handler.canvas.height.toUInt()
 
     actual val preferredCanvasFormat: TextureFormat? by lazy {
         navigator.gpu
@@ -18,20 +18,23 @@ actual class Surface(internal val handler: GPUCanvasContext) : AutoCloseable {
     }
 
     // @see https://gpuweb.github.io/gpuweb/#canvas-configuration
-    actual val supportedFormats: Set<TextureFormat> = setOf(TextureFormat.bgra8unorm, TextureFormat.rgba8unorm, TextureFormat.rgba16float)
-    actual val supportedAlphaMode: Set<CompositeAlphaMode> = setOf(CompositeAlphaMode.opaque, CompositeAlphaMode.premultiplied)
+    actual val supportedFormats: Set<TextureFormat> =
+        setOf(TextureFormat.BGRA8Unorm, TextureFormat.RGBA8Unorm, TextureFormat.RGBA16Float)
+    actual val supportedAlphaMode: Set<CompositeAlphaMode> =
+        setOf(CompositeAlphaMode.Opaque, CompositeAlphaMode.Premultiplied)
 
-    actual fun getCurrentTexture(): Texture {
+    actual fun getCurrentTexture(): SurfaceTexture {
         return handler.getCurrentTexture()
             .let(::Texture)
+            .let { SurfaceTexture(it, SurfaceTextureStatus.success) }
     }
 
     actual fun present() {
         // Nothing to do on js
     }
 
-    actual fun configure(canvasConfiguration: CanvasConfiguration) {
-        map(canvasConfiguration)
+    actual fun configure(surfaceConfiguration: SurfaceConfiguration) {
+        map(surfaceConfiguration)
             .let { handler.configure(it) }
     }
 

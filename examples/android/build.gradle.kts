@@ -17,7 +17,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "io.ygdrasil.wgpu"
+        applicationId = "io.ygdrasil.webgpu"
 
         minSdk = 28
         targetSdk = 35
@@ -63,7 +63,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    namespace = "io.ygdrasil.wgpu"
+    namespace = "io.ygdrasil.webgpu"
 }
 
 dependencies {

@@ -1,13 +1,16 @@
-package io.ygdrasil.wgpu.examples
+package io.ygdrasil.webgpu.examples
 
-import io.ygdrasil.wgpu.CanvasConfiguration
-import io.ygdrasil.wgpu.CompositeAlphaMode
-import io.ygdrasil.wgpu.Device
-import io.ygdrasil.wgpu.Surface
-import io.ygdrasil.wgpu.SurfaceRenderingContext
-import io.ygdrasil.wgpu.TextureUsage
-import io.ygdrasil.wgpu.WGPUContext
-import io.ygdrasil.wgpu.autoClosableContext
+import io.github.oshai.kotlinlogging.KotlinLogging
+import io.ygdrasil.webgpu.CompositeAlphaMode
+import io.ygdrasil.webgpu.Device
+import io.ygdrasil.webgpu.Surface
+import io.ygdrasil.webgpu.SurfaceConfiguration
+import io.ygdrasil.webgpu.SurfaceRenderingContext
+import io.ygdrasil.webgpu.TextureUsage
+import io.ygdrasil.webgpu.WGPUContext
+import io.ygdrasil.webgpu.autoClosableContext
+
+private val logger = KotlinLogging.logger {}
 
 suspend fun createApplication(wgpuContext: WGPUContext, resourceBasePath: String = ""): Application {
     wgpuContext.configureRenderingContext()
@@ -38,12 +41,12 @@ class Application internal constructor(
         private set
 
     suspend fun changeScene(nextScene: Scene) {
-        println("switch to scene ${nextScene::class.simpleName}")
+        logger.info { "switch to scene ${nextScene::class.simpleName}" }
         with(nextScene) {
             try {
                 initialize()
             } catch (e: Throwable) {
-                e.printStackTrace()
+                logger.error(e) { "failed to initialize scene ${nextScene::class.simpleName}" }
                 onError = true
                 throw e
             }
@@ -62,7 +65,7 @@ class Application internal constructor(
             try {
                 render()
             } catch (e: Throwable) {
-                e.printStackTrace()
+                logger.error(e) { "failed to render frame $frame" }
                 onError = true
                 throw e
             }
@@ -76,16 +79,16 @@ class Application internal constructor(
 
 private fun WGPUContext.configureRenderingContext() {
     val format = renderingContext.textureFormat
-    val alphaMode = CompositeAlphaMode.inherit?.takeIf { surface.supportedAlphaMode.contains(it) }
-        ?: CompositeAlphaMode.opaque
+    val alphaMode = CompositeAlphaMode.Inherit?.takeIf { surface.supportedAlphaMode.contains(it) }
+        ?: CompositeAlphaMode.Opaque
 
-    println("Using format $format and alpha mode $alphaMode")
-    println("Supported formats: ${surface.supportedFormats}")
+    logger.info { "Using format $format and alpha mode $alphaMode" }
+    logger.info { "Supported formats: ${surface.supportedFormats}" }
     surface.configure(
-        CanvasConfiguration(
+        SurfaceConfiguration(
             device = device,
             format = format,
-            usage = setOf(TextureUsage.renderattachment, TextureUsage.copysrc),
+            usage = setOf(TextureUsage.renderAttachment, TextureUsage.copySrc),
             alphaMode = alphaMode
         )
     )

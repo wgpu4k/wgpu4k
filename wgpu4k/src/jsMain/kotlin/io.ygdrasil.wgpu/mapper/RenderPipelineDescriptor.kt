@@ -1,7 +1,19 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.RenderPipelineDescriptor
-import io.ygdrasil.wgpu.internal.js.*
+import io.ygdrasil.webgpu.RenderPipelineDescriptor
+import io.ygdrasil.webgpu.internal.js.GPUBlendComponent
+import io.ygdrasil.webgpu.internal.js.GPUBlendState
+import io.ygdrasil.webgpu.internal.js.GPUColorTargetState
+import io.ygdrasil.webgpu.internal.js.GPUDepthStencilState
+import io.ygdrasil.webgpu.internal.js.GPUFragmentState
+import io.ygdrasil.webgpu.internal.js.GPUMultisampleState
+import io.ygdrasil.webgpu.internal.js.GPUPrimitiveState
+import io.ygdrasil.webgpu.internal.js.GPURenderPipelineDescriptor
+import io.ygdrasil.webgpu.internal.js.GPUStencilFaceState
+import io.ygdrasil.webgpu.internal.js.GPUVertexAttribute
+import io.ygdrasil.webgpu.internal.js.GPUVertexBufferLayout
+import io.ygdrasil.webgpu.internal.js.GPUVertexState
+import io.ygdrasil.webgpu.internal.js.createJsObject
 
 internal fun map(input: RenderPipelineDescriptor): GPURenderPipelineDescriptor =
     createJsObject<GPURenderPipelineDescriptor>().apply {
@@ -39,7 +51,7 @@ private fun map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout.V
 
 private fun map(input: RenderPipelineDescriptor.PrimitiveState): GPUPrimitiveState =
     createJsObject<GPUPrimitiveState>().apply {
-        topology = input.topology.stringValue
+        topology = input.topology.value
         stripIndexFormat = input.stripIndexFormat?.name ?: undefined
         frontFace = input.frontFace.name
         cullMode = input.cullMode.name
@@ -48,9 +60,9 @@ private fun map(input: RenderPipelineDescriptor.PrimitiveState): GPUPrimitiveSta
 
 private fun map(input: RenderPipelineDescriptor.DepthStencilState): GPUDepthStencilState =
     createJsObject<GPUDepthStencilState>().apply {
-        format = input.format.actualName
+        format = input.format.value
         depthWriteEnabled = input.depthWriteEnabled ?: undefined
-        depthCompare = input.depthCompare?.stringValue ?: undefined
+        depthCompare = input.depthCompare?.value ?: undefined
         stencilFront = map(input.stencilFront)
         stencilBack = map(input.stencilBack)
         stencilReadMask = input.stencilReadMask
@@ -62,10 +74,10 @@ private fun map(input: RenderPipelineDescriptor.DepthStencilState): GPUDepthSten
 
 private fun map(input: RenderPipelineDescriptor.DepthStencilState.StencilFaceState): GPUStencilFaceState =
     createJsObject<GPUStencilFaceState>().apply {
-        compare = input.compare.stringValue
-        failOp = input.failOp.stringValue
-        depthFailOp = input.depthFailOp.stringValue
-        passOp = input.passOp.stringValue
+        compare = input.compare.value
+        failOp = input.failOp.value
+        depthFailOp = input.depthFailOp.value
+        passOp = input.passOp.value
     }
 
 private fun map(input: RenderPipelineDescriptor.MultisampleState): GPUMultisampleState =
@@ -87,7 +99,7 @@ private fun map(input: RenderPipelineDescriptor.FragmentState): GPUFragmentState
 
 private fun map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState): GPUColorTargetState =
     createJsObject<GPUColorTargetState>().apply {
-        format = input.format.actualName
+        format = input.format.value
         blend = map(input.blend)
         writeMask = input.writeMask.value
     }
@@ -100,7 +112,7 @@ private fun map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState.B
 
 private fun map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent): GPUBlendComponent =
     createJsObject<GPUBlendComponent>().apply {
-        operation = input.operation.stringValue
-        srcFactor = input.srcFactor.stringValue
-        dstFactor = input.dstFactor.stringValue
+        operation = input.operation.value
+        srcFactor = input.srcFactor.value
+        dstFactor = input.dstFactor.value
     }

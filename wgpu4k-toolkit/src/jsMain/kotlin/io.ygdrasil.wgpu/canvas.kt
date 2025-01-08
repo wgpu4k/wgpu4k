@@ -1,4 +1,4 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 import kotlinx.browser.document
 import kotlinx.browser.window
@@ -20,7 +20,7 @@ suspend fun canvasContextRenderer(htmlCanvas: HTMLCanvasElement? = null, deferre
     val surface = canvas.getSurface() ?: error("fail to get context")
 
     val renderingContext = when (deferredRendering) {
-        true -> TextureRenderingContext(256, 256, TextureFormat.rgba8unorm, device)
+        true -> TextureRenderingContext(256u, 256u, TextureFormat.RGBA8Unorm, device)
         false -> SurfaceRenderingContext(surface)
     }
 

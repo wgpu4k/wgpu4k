@@ -1,6 +1,6 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUTextureView
+import io.ygdrasil.webgpu.internal.js.GPUTextureView
 
 actual class TextureView(internal val handler: GPUTextureView) : AutoCloseable {
 

@@ -1,6 +1,18 @@
-package io.ygdrasil.wgpu.internal.js
+package io.ygdrasil.webgpu.internal.js
 
-import io.ygdrasil.wgpu.*
+import io.ygdrasil.webgpu.GPUBufferUsageFlags
+import io.ygdrasil.webgpu.GPUColorWriteFlags
+import io.ygdrasil.webgpu.GPUFlagsConstant
+import io.ygdrasil.webgpu.GPUIndex32
+import io.ygdrasil.webgpu.GPUIntegerCoordinate
+import io.ygdrasil.webgpu.GPUIntegerCoordinateOut
+import io.ygdrasil.webgpu.GPUMapModeFlags
+import io.ygdrasil.webgpu.GPUShaderStageFlags
+import io.ygdrasil.webgpu.GPUSignedOffset32
+import io.ygdrasil.webgpu.GPUSize32
+import io.ygdrasil.webgpu.GPUSize32Out
+import io.ygdrasil.webgpu.GPUSize64
+import io.ygdrasil.webgpu.GPUTextureUsageFlags
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.ArrayBufferView
 import org.khronos.webgl.Uint32Array
@@ -27,6 +39,8 @@ external interface GPU {
 }
 
 external interface GPUAdapter : JsAny {
+    var features: JsArray<JsString>
+    var limits: GPUSupportedLimits
     var isFallbackAdapter: Boolean
     fun requestDevice(descriptor: GPUDeviceDescriptor = definedExternally): Promise<GPUDevice>
     fun requestAdapterInfo(): Promise<GPUAdapterInfo>
@@ -34,6 +48,8 @@ external interface GPUAdapter : JsAny {
 
 external class GPUDevice : JsAny {
     var queue: GPUQueue
+    var features: JsArray<JsString>
+    var limits: GPUSupportedLimits
     fun createBindGroup(descriptor: GPUBindGroupDescriptor): GPUBindGroup
     fun createTexture(descriptor: GPUTextureDescriptor): GPUTexture
     fun createBuffer(descriptor: GPUBufferDescriptor): GPUBuffer
@@ -46,6 +62,41 @@ external class GPUDevice : JsAny {
     fun createBindGroupLayout(descriptor: GPUBindGroupLayoutDescriptor): GPUBindGroupLayout
     fun createRenderBundleEncoder(descriptor: GPURenderBundleEncoderDescriptor): GPURenderBundleEncoder
     fun createQuerySet(descriptor: GPUQuerySetDescriptor): GPUQuerySet
+}
+
+external interface GPUSupportedLimits {
+    var maxTextureDimension1D: GPUSize32
+    var maxTextureDimension2D: GPUSize32
+    var maxTextureDimension3D: GPUSize32
+    var maxTextureArrayLayers: GPUSize32
+    var maxBindGroups: GPUSize32
+    var maxBindGroupsPlusVertexBuffers: GPUSize32
+    var maxBindingsPerBindGroup: GPUSize32
+    var maxDynamicUniformBuffersPerPipelineLayout: GPUSize32
+    var maxDynamicStorageBuffersPerPipelineLayout: GPUSize32
+    var maxSampledTexturesPerShaderStage: GPUSize32
+    var maxSamplersPerShaderStage: GPUSize32
+    var maxStorageBuffersPerShaderStage: GPUSize32
+    var maxStorageTexturesPerShaderStage: GPUSize32
+    var maxUniformBuffersPerShaderStage: GPUSize32
+    var maxUniformBufferBindingSize: GPUSize64
+    var maxStorageBufferBindingSize: GPUSize64
+    var minUniformBufferOffsetAlignment: GPUSize32
+    var minStorageBufferOffsetAlignment: GPUSize32
+    var maxVertexBuffers: GPUSize32
+    var maxBufferSize: GPUSize64
+    var maxVertexAttributes: GPUSize32
+    var maxVertexBufferArrayStride: GPUSize32
+    var maxInterStageShaderComponents: GPUSize32
+    var maxInterStageShaderVariables: GPUSize32
+    var maxColorAttachments: GPUSize32
+    var maxColorAttachmentBytesPerSample: GPUSize32
+    var maxComputeWorkgroupStorageSize: GPUSize32
+    var maxComputeInvocationsPerWorkgroup: GPUSize32
+    var maxComputeWorkgroupSizeX: GPUSize32
+    var maxComputeWorkgroupSizeY: GPUSize32
+    var maxComputeWorkgroupSizeZ: GPUSize32
+    var maxComputeWorkgroupsPerDimension: GPUSize32
 }
 
 external interface GPUPipelineLayoutDescriptor : GPUObjectDescriptorBase {
@@ -133,7 +184,19 @@ external interface GPUImageCopyBuffer : GPUImageDataLayout {
 
 external interface GPURenderPassEncoder : GPUObjectBase, GPUCommandsMixin, GPUDebugCommandsMixin,
     GPUBindingCommandsMixin, GPURenderCommandsMixin {
+    fun setViewport(x: JsNumber, y: JsNumber, width: JsNumber, height: JsNumber, minDepth: JsNumber, maxDepth: JsNumber)
+    fun setScissorRect(
+        x: JsNumber,
+        y: JsNumber,
+        width: JsNumber,
+        height: JsNumber,
+    )
 
+    fun setBlendConstant(color: JsArray<JsNumber>)
+    fun setBlendConstant(color: GPUColorDict)
+    fun setStencilReference(reference: JsNumber)
+    fun beginOcclusionQuery(queryIndex: GPUSize32)
+    fun endOcclusionQuery()
     fun executeBundles(bundles: JsArray<GPURenderBundle>)
     fun end()
 }
@@ -243,11 +306,14 @@ external interface GPURenderCommandsMixin {
 
     fun drawIndexed(
         indexCount: GPUSize32,
-        instanceCount: GPUSize32 = definedExternally,
-        firstIndex: GPUSize32 = definedExternally,
-        baseVertex: GPUSignedOffset32 = definedExternally,
-        firstInstance: GPUSize32 = definedExternally,
+        instanceCount: GPUSize32,
+        firstIndex: GPUSize32,
+        baseVertex: GPUSignedOffset32,
+        firstInstance: GPUSize32,
     )
+
+    fun drawIndirect(indirectBuffer: GPUBuffer, indirectOffset: GPUSize64)
+    fun drawIndexedIndirect(indirectBuffer: GPUBuffer, indirectOffset: GPUSize64)
 }
 
 typealias GPURenderBundleDescriptor = GPUObjectDescriptorBase
@@ -315,8 +381,15 @@ external interface GPUQueue : GPUObjectBase {
         buffer: GPUBuffer,
         bufferOffset: JsNumber,
         data: ArrayBufferView,
-        dataOffset: JsNumber = definedExternally,
-        size: JsNumber = definedExternally,
+        dataOffset: JsNumber,
+        size: JsNumber,
+    )
+
+    fun writeTexture(
+        destination: GPUImageCopyTexture,
+        data: ArrayBufferView,
+        dataLayout: GPUImageDataLayout,
+        size: GPUExtent3DDict,
     )
 
     fun writeTexture(
@@ -330,9 +403,9 @@ external interface GPUQueue : GPUObjectBase {
 }
 
 external interface GPUImageDataLayout : JsAny {
-    var offset: JsNumber
-    var bytesPerRow: GPUSize32
-    var rowsPerImage: GPUSize32
+    var offset: JsBigInt
+    var bytesPerRow: GPUSize32?
+    var rowsPerImage: GPUSize32?
 }
 
 external interface GPUImageCopyTexture : JsAny {
@@ -565,3 +638,21 @@ external interface GPUTexture {
 external interface GPURequestAdapterOptions
 
 external interface GPUSampler : GPUObjectBase
+
+open external class BigInt64Array : ArrayBufferView {
+    constructor(length: Int)
+    constructor(array: BigInt64Array)
+    constructor(array: JsArray<JsBigInt>)
+    constructor(buffer: ArrayBuffer, byteOffset: Int = definedExternally, length: Int = definedExternally)
+    open val length: Int
+    override val buffer: ArrayBuffer
+    override val byteOffset: Int
+    override val byteLength: Int
+    fun set(array: BigInt64Array, offset: Int = definedExternally)
+    fun set(array: JsArray<JsBigInt>, offset: Int = definedExternally)
+    fun subarray(start: Int, end: Int): BigInt64Array
+
+    companion object {
+        val BYTES_PER_ELEMENT: Int
+    }
+}

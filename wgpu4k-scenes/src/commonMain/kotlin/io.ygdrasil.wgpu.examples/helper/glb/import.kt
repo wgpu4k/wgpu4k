@@ -1,24 +1,27 @@
-package io.ygdrasil.wgpu.examples.helper.glb
+package io.ygdrasil.webgpu.examples.helper.glb
 
-import io.ygdrasil.wgpu.BufferUsage
-import io.ygdrasil.wgpu.Device
-import io.ygdrasil.wgpu.ImageCopyExternalImage
-import io.ygdrasil.wgpu.ImageCopyTextureTagged
-import io.ygdrasil.wgpu.Size3D
-import io.ygdrasil.wgpu.TextureDescriptor
-import io.ygdrasil.wgpu.TextureFormat
-import io.ygdrasil.wgpu.TextureUsage
-import io.ygdrasil.wgpu.examples.toBitmapHolder
+import io.github.oshai.kotlinlogging.KotlinLogging
+import io.ygdrasil.webgpu.BufferUsage
+import io.ygdrasil.webgpu.Device
+import io.ygdrasil.webgpu.ImageCopyExternalImage
+import io.ygdrasil.webgpu.ImageCopyTextureTagged
+import io.ygdrasil.webgpu.Size3D
+import io.ygdrasil.webgpu.TextureDescriptor
+import io.ygdrasil.webgpu.TextureFormat
+import io.ygdrasil.webgpu.TextureUsage
+import io.ygdrasil.webgpu.examples.toBitmapHolder
 import korlibs.image.format.readBitmap
 import korlibs.io.file.std.asMemoryVfsFile
 import korlibs.math.geom.Matrix4
+
+private val logger = KotlinLogging.logger {}
 
 suspend fun uploadGLBModel(
     device: Device,
     gltf2: GLTF2,
     textureFormat: TextureFormat,
 ): GLBModel {
-    println("uploadGLBModel")
+    logger.debug { "uploadGLBModel" }
 
     val bufferViews = gltf2.bufferViews.mapIndexed { index, bufferView ->
         GLTFBufferView(bufferView, gltf2.buffers[bufferView.buffer])
@@ -39,9 +42,9 @@ suspend fun uploadGLBModel(
 
         val gpuImg = device.createTexture(
             TextureDescriptor(
-                size = Size3D(width = bitmap.width, height = bitmap.height, depthOrArrayLayers = 1),
+                size = Size3D(width = bitmap.width.toUInt(), height = bitmap.height.toUInt(), depthOrArrayLayers = 1u),
                 format = textureFormat,
-                usage = setOf(TextureUsage.texturebinding, TextureUsage.copydst, TextureUsage.renderattachment)
+                usage = setOf(TextureUsage.textureBinding, TextureUsage.copyDst, TextureUsage.renderAttachment)
             )
         )
 
@@ -50,7 +53,7 @@ suspend fun uploadGLBModel(
         device.queue.copyExternalImageToTexture(
             src,
             dst,
-            bitmap.width to bitmap.height
+            bitmap.width.toUInt() to bitmap.height.toUInt()
         )
 
         gpuImg
@@ -62,7 +65,7 @@ suspend fun uploadGLBModel(
     }
 
     val textures = gltf2.textures.mapIndexed { index, texture ->
-        val sampler = if (texture.sampler != null) samplers[texture.sampler!!] else defaultSampler
+        val sampler = if (texture.sampler != null) samplers[texture.sampler] else defaultSampler
         GLTFTexture(sampler, images[texture.source])
     }
 
@@ -84,7 +87,7 @@ suspend fun uploadGLBModel(
                 val topology = GLTFRenderMode.of(primitive.mode) ?: error("topology not found")
 
                 val indices: GLTFAccessor? = if (primitive.indices != null) {
-                    val accessor = gltf2.accessors[primitive.indices!!]
+                    val accessor = gltf2.accessors[primitive.indices]
                     val viewID = accessor.bufferView
                     bufferViews[viewID].needsUpload = true
                     bufferViews[viewID].addUsage(BufferUsage.index)
@@ -111,7 +114,7 @@ suspend fun uploadGLBModel(
                 }
 
                 val material = if (primitive.material != null) {
-                    materials[primitive.material!!]
+                    materials[primitive.material]
                 } else {
                     defaultMaterial
                 }

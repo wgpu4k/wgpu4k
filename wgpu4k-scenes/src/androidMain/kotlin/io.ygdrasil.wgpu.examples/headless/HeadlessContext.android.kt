@@ -1,6 +1,6 @@
-package io.ygdrasil.wgpu.examples.headless
+package io.ygdrasil.webgpu.examples.headless
 
-import io.ygdrasil.wgpu.WGPUContext
+import io.ygdrasil.webgpu.WGPUContext
 
 actual suspend fun getHeadlessContext(): WGPUContext {
     TODO("Not yet implemented")

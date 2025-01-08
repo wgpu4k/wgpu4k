@@ -1,5 +1,5 @@
-import io.ygdrasil.wgpu.canvasContextRenderer
-import io.ygdrasil.wgpu.examples.createApplication
+import io.ygdrasil.webgpu.canvasContextRenderer
+import io.ygdrasil.webgpu.examples.createApplication
 import kotlinx.browser.window
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch

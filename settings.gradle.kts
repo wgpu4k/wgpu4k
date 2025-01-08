@@ -2,11 +2,11 @@ rootProject.name = "wgpu4k-root"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
+	includeBuild("generator")
 	repositories {
 		gradlePluginPortal()
 		google()
 		mavenCentral()
-		mavenLocal()
 		maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
 		maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
 	}
@@ -14,11 +14,11 @@ pluginManagement {
 
 dependencyResolutionManagement {
 	repositories {
-		google()
 		mavenLocal()
+		//wgpu4k snapshot & preview repository
+		maven("https://gitlab.com/api/v4/projects/25805863/packages/maven")
+		google()
 		mavenCentral()
-		// Snapshot central repository
-		maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
 
 	}
 }

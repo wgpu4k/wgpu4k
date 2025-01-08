@@ -1,8 +1,8 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 class TextureRenderingContext(
-    override val width: Int,
-    override val height: Int,
+    override val width: UInt,
+    override val height: UInt,
     override val textureFormat: TextureFormat,
     device: Device,
 ) : RenderingContext {
@@ -13,9 +13,9 @@ class TextureRenderingContext(
         texture = device.createTexture(
             TextureDescriptor(
                 label = "render texture",
-                size = Size3D(256, 256),
+                size = Size3D(256u, 256u),
                 format = textureFormat,
-                usage = setOf(TextureUsage.renderattachment, TextureUsage.copysrc, TextureUsage.copydst)
+                usage = setOf(TextureUsage.renderAttachment, TextureUsage.copySrc, TextureUsage.copyDst)
             )
         )
     }

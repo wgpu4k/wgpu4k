@@ -1,23 +1,23 @@
-package io.ygdrasil.wgpu.examples.scenes.basic
+package io.ygdrasil.webgpu.examples.scenes.basic
 
-import io.ygdrasil.wgpu.AutoClosableContext
-import io.ygdrasil.wgpu.BindGroup
-import io.ygdrasil.wgpu.BindGroupDescriptor
-import io.ygdrasil.wgpu.Buffer
-import io.ygdrasil.wgpu.BufferDescriptor
-import io.ygdrasil.wgpu.BufferUsage
-import io.ygdrasil.wgpu.Color
-import io.ygdrasil.wgpu.LoadOp
-import io.ygdrasil.wgpu.RenderPassDescriptor
-import io.ygdrasil.wgpu.RenderPipeline
-import io.ygdrasil.wgpu.RenderPipelineDescriptor
-import io.ygdrasil.wgpu.ShaderModuleDescriptor
-import io.ygdrasil.wgpu.StoreOp
-import io.ygdrasil.wgpu.WGPUContext
-import io.ygdrasil.wgpu.beginRenderPass
-import io.ygdrasil.wgpu.examples.Scene
-import io.ygdrasil.wgpu.examples.scenes.shader.fragment.redFragmentShader
-import io.ygdrasil.wgpu.examples.scenes.shader.vertex.basicVertexPositionShader
+import io.ygdrasil.webgpu.AutoClosableContext
+import io.ygdrasil.webgpu.BindGroup
+import io.ygdrasil.webgpu.BindGroupDescriptor
+import io.ygdrasil.webgpu.Buffer
+import io.ygdrasil.webgpu.BufferDescriptor
+import io.ygdrasil.webgpu.BufferUsage
+import io.ygdrasil.webgpu.Color
+import io.ygdrasil.webgpu.LoadOp
+import io.ygdrasil.webgpu.RenderPassDescriptor
+import io.ygdrasil.webgpu.RenderPipeline
+import io.ygdrasil.webgpu.RenderPipelineDescriptor
+import io.ygdrasil.webgpu.ShaderModuleDescriptor
+import io.ygdrasil.webgpu.StoreOp
+import io.ygdrasil.webgpu.WGPUContext
+import io.ygdrasil.webgpu.beginRenderPass
+import io.ygdrasil.webgpu.examples.Scene
+import io.ygdrasil.webgpu.examples.scenes.shader.fragment.redFragmentShader
+import io.ygdrasil.webgpu.examples.scenes.shader.vertex.basicVertexPositionShader
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 
@@ -52,7 +52,7 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
             )
         ).bind()
 
-        val uniformBufferSize = 4L * 16L; // 4x4 matrix
+        val uniformBufferSize = 4uL * 16uL // 4x4 matrix
         uniformBuffer = device.createBuffer(
             BufferDescriptor(
                 size = uniformBufferSize,
@@ -62,10 +62,10 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
 
         uniformBindGroup = device.createBindGroup(
             BindGroupDescriptor(
-                layout = renderPipeline.getBindGroupLayout(0).bind(),
+                layout = renderPipeline.getBindGroupLayout(0u).bind(),
                 entries = listOf(
                     BindGroupDescriptor.BindGroupEntry(
-                        binding = 0,
+                        binding = 0u,
                         resource = BindGroupDescriptor.BufferBinding(
                             buffer = uniformBuffer
                         )
@@ -83,10 +83,10 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
 
         device.queue.writeBuffer(
             uniformBuffer,
-            0,
+            0u,
             transformationMatrix,
-            0,
-            transformationMatrix.size.toLong()
+            0u,
+            transformationMatrix.size.toULong()
         )
 
         val encoder = device.createCommandEncoder()
@@ -100,16 +100,16 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
                 colorAttachments = listOf(
                     RenderPassDescriptor.ColorAttachment(
                         view =  texture.createView().bind(),
-                        loadOp = LoadOp.clear,
+                        loadOp = LoadOp.Clear,
                         clearValue = Color(.0, .0, .0, 1.0),
-                        storeOp = StoreOp.store
+                        storeOp = StoreOp.Store
                     )
                 )
             )
         ) {
             setPipeline(renderPipeline)
-            setBindGroup(0, uniformBindGroup)
-            draw(3)
+            setBindGroup(0u, uniformBindGroup)
+            draw(3u)
             end()
         }
 

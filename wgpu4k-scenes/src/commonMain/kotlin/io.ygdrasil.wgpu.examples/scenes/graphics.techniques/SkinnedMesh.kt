@@ -1,33 +1,33 @@
 @file:OptIn(DelicateCoroutinesApi::class)
 
-package io.ygdrasil.wgpu.examples.scenes.graphics.techniques
+package io.ygdrasil.webgpu.examples.scenes.graphics.techniques
 
-import io.ygdrasil.wgpu.AutoClosableContext
-import io.ygdrasil.wgpu.BindGroupDescriptor
-import io.ygdrasil.wgpu.BindGroupDescriptor.BindGroupEntry
-import io.ygdrasil.wgpu.BindGroupLayoutDescriptor
-import io.ygdrasil.wgpu.BindGroupLayoutDescriptor.Entry
-import io.ygdrasil.wgpu.Buffer
-import io.ygdrasil.wgpu.BufferBindingType
-import io.ygdrasil.wgpu.BufferDescriptor
-import io.ygdrasil.wgpu.BufferUsage
-import io.ygdrasil.wgpu.Color
-import io.ygdrasil.wgpu.LoadOp
-import io.ygdrasil.wgpu.RenderBundle
-import io.ygdrasil.wgpu.RenderPassDescriptor
-import io.ygdrasil.wgpu.RenderPassDescriptor.ColorAttachment
-import io.ygdrasil.wgpu.ShaderStage
-import io.ygdrasil.wgpu.Size3D
-import io.ygdrasil.wgpu.StoreOp
-import io.ygdrasil.wgpu.TextureDescriptor
-import io.ygdrasil.wgpu.TextureFormat
-import io.ygdrasil.wgpu.TextureUsage
-import io.ygdrasil.wgpu.WGPUContext
-import io.ygdrasil.wgpu.beginRenderPass
-import io.ygdrasil.wgpu.examples.AssetManager
-import io.ygdrasil.wgpu.examples.Scene
-import io.ygdrasil.wgpu.examples.helper.glb.ShaderCache
-import io.ygdrasil.wgpu.examples.helper.glb.uploadGLBModel
+import io.ygdrasil.webgpu.AutoClosableContext
+import io.ygdrasil.webgpu.BindGroupDescriptor
+import io.ygdrasil.webgpu.BindGroupDescriptor.BindGroupEntry
+import io.ygdrasil.webgpu.BindGroupLayoutDescriptor
+import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry
+import io.ygdrasil.webgpu.Buffer
+import io.ygdrasil.webgpu.BufferBindingType
+import io.ygdrasil.webgpu.BufferDescriptor
+import io.ygdrasil.webgpu.BufferUsage
+import io.ygdrasil.webgpu.Color
+import io.ygdrasil.webgpu.LoadOp
+import io.ygdrasil.webgpu.RenderBundle
+import io.ygdrasil.webgpu.RenderPassDescriptor
+import io.ygdrasil.webgpu.RenderPassDescriptor.ColorAttachment
+import io.ygdrasil.webgpu.ShaderStage
+import io.ygdrasil.webgpu.Size3D
+import io.ygdrasil.webgpu.StoreOp
+import io.ygdrasil.webgpu.TextureDescriptor
+import io.ygdrasil.webgpu.TextureFormat
+import io.ygdrasil.webgpu.TextureUsage
+import io.ygdrasil.webgpu.WGPUContext
+import io.ygdrasil.webgpu.beginRenderPass
+import io.ygdrasil.webgpu.examples.AssetManager
+import io.ygdrasil.webgpu.examples.Scene
+import io.ygdrasil.webgpu.examples.helper.glb.ShaderCache
+import io.ygdrasil.webgpu.examples.helper.glb.uploadGLBModel
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -47,9 +47,13 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
 
         val depthTexture = device.createTexture(
             TextureDescriptor(
-                size = Size3D(width = renderingContext.width, height = renderingContext.height, depthOrArrayLayers = 1),
-                format = TextureFormat.depth24plusstencil8,
-                usage = setOf(TextureUsage.renderattachment)
+                size = Size3D(
+                    width = renderingContext.width,
+                    height = renderingContext.height,
+                    depthOrArrayLayers = 1u
+                ),
+                format = TextureFormat.Depth24PlusStencil8,
+                usage = setOf(TextureUsage.renderAttachment)
             )
         ).bind()
 
@@ -57,19 +61,19 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
             colorAttachments = listOf(
                 ColorAttachment(
                     view = dummyTexture.createView().bind(),
-                    loadOp = LoadOp.clear,
+                    loadOp = LoadOp.Clear,
                     clearValue = Color(0.3, 0.3, 0.3, 1.0),
-                    storeOp = StoreOp.store
+                    storeOp = StoreOp.Store
                 )
             ),
             depthStencilAttachment = RenderPassDescriptor.DepthStencilAttachment(
                 view = depthTexture.createView().bind(),
-                depthLoadOp = LoadOp.clear,
+                depthLoadOp = LoadOp.Clear,
                 depthClearValue = 1f,
-                depthStoreOp = StoreOp.store,
-                stencilLoadOp = LoadOp.clear,
-                stencilClearValue = 0,
-                stencilStoreOp = StoreOp.store
+                depthStoreOp = StoreOp.Store,
+                stencilLoadOp = LoadOp.Clear,
+                stencilClearValue = 0u,
+                stencilStoreOp = StoreOp.Store
             )
         )
 
@@ -77,9 +81,9 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
             BindGroupLayoutDescriptor(
                 entries = listOf(
                     Entry(
-                        binding = 0,
+                        binding = 0u,
                         visibility = setOf(ShaderStage.vertex),
-                        bindingType = Entry.BufferBindingLayout(type = BufferBindingType.uniform)
+                        bindingType = Entry.BufferBindingLayout(type = BufferBindingType.Uniform)
                     )
                 )
             )
@@ -87,7 +91,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
 
         viewParamBuf = device.createBuffer(
             BufferDescriptor(
-                size = 4 * 4 * 4, usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
+                size = 4uL * 4uL * 4uL, usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
             )
         ).bind()
 
@@ -96,7 +100,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
                 layout = viewParamsLayout,
                 entries = listOf(
                     BindGroupEntry(
-                        binding = 0,
+                        binding = 0u,
                         resource = BindGroupDescriptor.BufferBinding(buffer = viewParamBuf)
                     )
                 )
@@ -110,7 +114,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
             shaderCache,
             viewParamsLayout,
             viewParamsBindGroup,
-            renderingContext.textureFormat.actualName,
+            renderingContext.textureFormat,
         )
 
         projectionMatrix = getProjectionMatrix(renderingContext.width, renderingContext.height)
@@ -133,10 +137,10 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
 
         device.queue.writeBuffer(
             viewParamBuf,
-            0L,
+            0uL,
             transformationMatrix,
-            0L,
-            transformationMatrix.size.toLong()
+            0uL,
+            transformationMatrix.size.toULong()
         )
 
         val commandEncoder = device.createCommandEncoder().bind()
@@ -151,8 +155,8 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
     }
 
 
-    fun getProjectionMatrix(width: Int, height: Int): Matrix4 {
-        val aspect = width / height.toDouble()
+    fun getProjectionMatrix(width: UInt, height: UInt): Matrix4 {
+        val aspect = width.toDouble() / height.toDouble()
         val fox = Angle.fromRadians((2 * PI) / 5)
         return Matrix4.perspective(fox, aspect, 1.0, 100.0)
     }

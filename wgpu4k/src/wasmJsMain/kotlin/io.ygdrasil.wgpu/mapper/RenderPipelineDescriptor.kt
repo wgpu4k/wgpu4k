@@ -1,7 +1,21 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.RenderPipelineDescriptor
-import io.ygdrasil.wgpu.internal.js.*
+import io.ygdrasil.webgpu.RenderPipelineDescriptor
+import io.ygdrasil.webgpu.internal.js.GPUBlendComponent
+import io.ygdrasil.webgpu.internal.js.GPUBlendState
+import io.ygdrasil.webgpu.internal.js.GPUColorTargetState
+import io.ygdrasil.webgpu.internal.js.GPUDepthStencilState
+import io.ygdrasil.webgpu.internal.js.GPUFragmentState
+import io.ygdrasil.webgpu.internal.js.GPUMultisampleState
+import io.ygdrasil.webgpu.internal.js.GPUPrimitiveState
+import io.ygdrasil.webgpu.internal.js.GPURenderPipelineDescriptor
+import io.ygdrasil.webgpu.internal.js.GPUStencilFaceState
+import io.ygdrasil.webgpu.internal.js.GPUVertexAttribute
+import io.ygdrasil.webgpu.internal.js.GPUVertexBufferLayout
+import io.ygdrasil.webgpu.internal.js.GPUVertexState
+import io.ygdrasil.webgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.internal.js.mapJsArray
+import io.ygdrasil.webgpu.internal.js.toJsNumber
 
 internal fun map(input: RenderPipelineDescriptor): GPURenderPipelineDescriptor =
     createJsObject<GPURenderPipelineDescriptor>().apply {
@@ -39,7 +53,7 @@ private fun map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout.V
 
 private fun map(input: RenderPipelineDescriptor.PrimitiveState): GPUPrimitiveState =
     createJsObject<GPUPrimitiveState>().apply {
-        topology = input.topology.stringValue
+        topology = input.topology.value
         if (input.stripIndexFormat?.name != null) stripIndexFormat = input.stripIndexFormat.name
         frontFace = input.frontFace.name
         cullMode = input.cullMode.name
@@ -48,9 +62,9 @@ private fun map(input: RenderPipelineDescriptor.PrimitiveState): GPUPrimitiveSta
 
 private fun map(input: RenderPipelineDescriptor.DepthStencilState): GPUDepthStencilState =
     createJsObject<GPUDepthStencilState>().apply {
-        format = input.format.actualName.toJsString()
+        format = input.format.value.toJsString()
         if (input.depthWriteEnabled != null) depthWriteEnabled = input.depthWriteEnabled
-        if (input.depthCompare?.stringValue != null) depthCompare = input.depthCompare.stringValue.toJsString()
+        if (input.depthCompare?.value != null) depthCompare = input.depthCompare.value.toJsString()
         stencilFront = map(input.stencilFront)
         stencilBack = map(input.stencilBack)
         stencilReadMask = input.stencilReadMask.toJsNumber()
@@ -62,10 +76,10 @@ private fun map(input: RenderPipelineDescriptor.DepthStencilState): GPUDepthSten
 
 private fun map(input: RenderPipelineDescriptor.DepthStencilState.StencilFaceState): GPUStencilFaceState =
     createJsObject<GPUStencilFaceState>().apply {
-        compare = input.compare.stringValue.toJsString()
-        failOp = input.failOp.stringValue.toJsString()
-        depthFailOp = input.depthFailOp.stringValue.toJsString()
-        passOp = input.passOp.stringValue.toJsString()
+        compare = input.compare.value.toJsString()
+        failOp = input.failOp.value.toJsString()
+        depthFailOp = input.depthFailOp.value.toJsString()
+        passOp = input.passOp.value.toJsString()
     }
 
 private fun map(input: RenderPipelineDescriptor.MultisampleState): GPUMultisampleState =
@@ -87,7 +101,7 @@ private fun map(input: RenderPipelineDescriptor.FragmentState): GPUFragmentState
 
 private fun map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState): GPUColorTargetState =
     createJsObject<GPUColorTargetState>().apply {
-        format = input.format.actualName.toJsString()
+        format = input.format.value.toJsString()
         blend = map(input.blend)
         writeMask = input.writeMask.value
     }
@@ -100,7 +114,7 @@ private fun map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState.B
 
 private fun map(input: RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent): GPUBlendComponent =
     createJsObject<GPUBlendComponent>().apply {
-        operation = input.operation.stringValue.toJsString()
-        srcFactor = input.srcFactor.stringValue.toJsString()
-        dstFactor = input.dstFactor.stringValue.toJsString()
+        operation = input.operation.value.toJsString()
+        srcFactor = input.srcFactor.value.toJsString()
+        dstFactor = input.dstFactor.value.toJsString()
     }

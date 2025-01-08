@@ -1,12 +1,27 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUAdapter
-import io.ygdrasil.wgpu.internal.js.GPUDevice
-import io.ygdrasil.wgpu.internal.js.GPURequestAdapterOptions
-import io.ygdrasil.wgpu.internal.js.navigator
+import io.github.oshai.kotlinlogging.KotlinLogging
+import io.ygdrasil.webgpu.internal.js.GPUAdapter
+import io.ygdrasil.webgpu.internal.js.GPUDevice
+import io.ygdrasil.webgpu.internal.js.GPURequestAdapterOptions
+import io.ygdrasil.webgpu.internal.js.navigator
+import io.ygdrasil.webgpu.mapper.map
 import kotlinx.coroutines.await
 
+private val logger = KotlinLogging.logger {}
+
 actual class Adapter(internal val handler: GPUAdapter) : AutoCloseable {
+
+    actual val features: Set<FeatureName> by lazy {
+        (0..handler.features.length)
+            .map {  index ->
+                index.let { handler.features[it].toString() }
+                    .let { FeatureName.of(it) ?: error("Unsupported feature $it") }
+            }
+            .toSet()
+    }
+
+    actual val limits: Limits by lazy { map(handler.limits) }
 
     actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? {
         return handler.requestDevice()
@@ -23,7 +38,7 @@ actual class Adapter(internal val handler: GPUAdapter) : AutoCloseable {
 suspend fun requestAdapter(options: GPURequestAdapterOptions? = null): Adapter? {
     // WebGPU device initialization
     if (navigator.gpu == null) {
-        println("WebGPU not supported on this browser.")
+        logger.error { "WebGPU not supported in this browser." }
         return null
     }
 

@@ -1,6 +1,6 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPU
+import io.ygdrasil.webgpu.internal.js.GPU
 
 external object navigator {
     val gpu: GPU?

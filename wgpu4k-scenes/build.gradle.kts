@@ -44,7 +44,7 @@ kotlin {
             languageSettings.optIn("kotlin.js.ExperimentalJsExport")
         }
 
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation(libs.kotlinx.serialization.json)
                 api(projects.wgpu4kToolkit)
@@ -53,6 +53,11 @@ kotlin {
             }
         }
 
+        jvmMain {
+            dependencies {
+                implementation(libs.wgpu4k.native)
+            }
+        }
     }
 
     @OptIn(ExperimentalKotlinGradlePluginApi::class)

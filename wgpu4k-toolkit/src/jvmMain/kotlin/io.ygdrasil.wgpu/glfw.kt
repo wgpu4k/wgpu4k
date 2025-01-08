@@ -1,12 +1,13 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 import com.sun.jna.Pointer
 import com.sun.jna.platform.win32.Kernel32
 import darwin.CAMetalLayer
 import darwin.NSWindow
-import io.ygdrasil.wgpu.WGPU.Companion.createInstance
-import io.ygdrasil.wgpu.internal.Os
-import io.ygdrasil.wgpu.internal.Platform
+import ffi.NativeAddress
+import io.ygdrasil.webgpu.WGPU.Companion.createInstance
+import io.ygdrasil.webgpu.internal.Os
+import io.ygdrasil.webgpu.internal.Platform
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
 import org.lwjgl.glfw.GLFWNativeWin32.glfwGetWin32Window
@@ -27,12 +28,9 @@ suspend fun glfwContextRenderer(width: Int = 1, height: Int = 1, title: String =
     val windowHandler: Long = glfwCreateWindow(width, height, title, NULL, NULL)
 
     val wgpu = createInstance() ?: error("fail to wgpu instance")
-    val surface = wgpu.getSurface(windowHandler){
-        val width = intArrayOf(1)
-        val height = intArrayOf(1)
-        glfwGetWindowSize(windowHandler, width, height)
-        width[0] to height[0]
-    }
+    val surface = wgpu.getSurface(windowHandler)
+    surface._width = width.toUInt()
+    surface._height = height.toUInt()
 
     val adapter = wgpu.requestAdapter(surface)
         ?: error("fail to get adapter")
@@ -41,7 +39,7 @@ suspend fun glfwContextRenderer(width: Int = 1, height: Int = 1, title: String =
         ?: error("fail to get device")
 
     val renderingContext = when (deferredRendering) {
-        true -> TextureRenderingContext(256, 256, TextureFormat.rgba8unorm, device)
+        true -> TextureRenderingContext(256u, 256u, TextureFormat.RGBA8Unorm, device)
         false -> {
             surface.computeSurfaceCapabilities(adapter)
             SurfaceRenderingContext(surface)
@@ -65,15 +63,15 @@ class GLFWContext(
     }
 }
 
-fun WGPU.getSurface(window: Long, sizeProvider: () -> Pair<Int, Int>): Surface = when (Platform.os) {
+private fun WGPU.getSurface(window: Long): Surface = when (Platform.os) {
     Os.Linux -> {
-        val display = glfwGetX11Display().let { MemorySegment.ofAddress(it) }
-        val x11_window = glfwGetX11Window(window)
+        val display = glfwGetX11Display().toNativeAddress()
+        val x11_window = glfwGetX11Window(window).toULong()
         getSurfaceFromX11Window(display, x11_window) ?: error("fail to get surface on Linux")
     }
     Os.Window -> {
-        val hwnd = glfwGetWin32Window(window).let { MemorySegment.ofAddress(it) }
-        val hinstance = Kernel32.INSTANCE.GetModuleHandle(null).pointer.toMemory()
+        val hwnd = glfwGetWin32Window(window).toNativeAddress()
+        val hinstance = Kernel32.INSTANCE.GetModuleHandle(null).pointer.toNativeAddress()
         getSurfaceFromWindows(hinstance, hwnd) ?: error("fail to get surface on Windows")
     }
     Os.MacOs -> {
@@ -82,12 +80,15 @@ fun WGPU.getSurface(window: Long, sizeProvider: () -> Pair<Int, Int>): Surface =
         nswindow.contentView()?.setWantsLayer(true)
         val layer = CAMetalLayer.layer()
         nswindow.contentView()?.setLayer(layer.id().toLong().toPointer())
-        getSurfaceFromMetalLayer(MemorySegment.ofAddress(layer.id().toLong()))
+        getSurfaceFromMetalLayer(layer.id().toLong().toNativeAddress())
     }
-}.also { if( it == MemorySegment.NULL) error("fail to get surface") }
-    .let { Surface(it, sizeProvider) }
+} ?: error("fail to get surface")
 
 
 private fun Long.toPointer(): Pointer = Pointer(this)
 
-private fun Pointer.toMemory() = MemorySegment.ofAddress(Pointer.nativeValue(this))
+fun Pointer.toNativeAddress() = let { MemorySegment.ofAddress(Pointer.nativeValue(this)) }
+    .let { NativeAddress(it) }
+
+fun Long.toNativeAddress() = let { MemorySegment.ofAddress(it) }
+    .let { NativeAddress(it) }

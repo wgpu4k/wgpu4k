@@ -1,5 +1,6 @@
-package io.ygdrasil.wgpu.examples.scenes.shader.fragment
+package io.ygdrasil.webgpu.examples.scenes.shader.fragment
 
+// language=wgsl
 const val sampleSelfShader = """
 @binding(1) @group(0) var mySampler: sampler;
 @binding(2) @group(0) var myTexture: texture_2d<f32>;

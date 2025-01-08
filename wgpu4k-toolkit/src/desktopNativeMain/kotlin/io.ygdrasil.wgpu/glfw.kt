@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalForeignApi::class)
 
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
 import cnames.structs.GLFWwindow
 import glfw.GLFW_CLIENT_API
@@ -10,18 +10,12 @@ import glfw.GLFW_RESIZABLE
 import glfw.GLFW_VISIBLE
 import glfw.glfwCreateWindow
 import glfw.glfwDestroyWindow
-import glfw.glfwGetWindowSize
 import glfw.glfwInit
 import glfw.glfwWindowHint
-import io.ygdrasil.wgpu.WGPU.Companion.createInstance
+import io.ygdrasil.webgpu.WGPU.Companion.createInstance
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.CValuesRef
 import kotlinx.cinterop.ExperimentalForeignApi
-import kotlinx.cinterop.IntVar
-import kotlinx.cinterop.alloc
-import kotlinx.cinterop.memScoped
-import kotlinx.cinterop.ptr
-import kotlinx.cinterop.value
 
 suspend fun glfwContextRenderer(
     width: Int = 1,
@@ -39,15 +33,9 @@ suspend fun glfwContextRenderer(
         ?: error("fail to create windows")
 
     val wgpu = createInstance() ?: error("fail to wgpu instance")
-    val surface = wgpu.getSurface(windowHandler) {
-        memScoped {
-            val width = alloc<IntVar>()
-            val height = alloc<IntVar>()
-            glfwGetWindowSize(windowHandler, width.ptr, height.ptr)
-            width.value.toInt() to height.value.toInt()
-        }
-    }
-
+    val surface = wgpu.getSurface(windowHandler)
+    surface._width = width.toUInt()
+    surface._height = height.toUInt()
 
     val adapter = wgpu.requestAdapter(surface)
         ?: error("fail to get adapter")
@@ -58,7 +46,7 @@ suspend fun glfwContextRenderer(
     surface.computeSurfaceCapabilities(adapter)
 
     val renderingContext = when (deferredRendering) {
-        true -> TextureRenderingContext(256, 256, TextureFormat.rgba8unorm, device)
+        true -> TextureRenderingContext(256u, 256u, TextureFormat.RGBA8Unorm, device)
         false -> SurfaceRenderingContext(surface)
     }
 
@@ -80,4 +68,4 @@ class GLFWContext(
 }
 
 
-expect fun WGPU.getSurface(window: CPointer<GLFWwindow>, sizeProvider: () -> Pair<Int, Int>): Surface
+expect fun WGPU.getSurface(window: CPointer<GLFWwindow>): Surface

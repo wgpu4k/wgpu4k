@@ -1,6 +1,6 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUShaderModule
+import io.ygdrasil.webgpu.internal.js.GPUShaderModule
 
 actual class ShaderModule(internal val handler: GPUShaderModule) : AutoCloseable {
 

@@ -1,12 +1,20 @@
-package io.ygdrasil.wgpu
+package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.internal.js.GPUDevice
-import io.ygdrasil.wgpu.mapper.map
+import io.ygdrasil.webgpu.internal.js.GPUDevice
+import io.ygdrasil.webgpu.mapper.map
 import kotlinx.coroutines.await
 
 actual class Device(internal val handler: GPUDevice) : AutoCloseable {
 
     actual val queue: Queue by lazy { Queue(handler.queue) }
+
+    actual val features: Set<FeatureName> by lazy {
+        handler.features
+            .map { FeatureName.of(it) ?: error("Unsupported feature $it") }
+            .toSet()
+    }
+
+    actual val limits: Limits by lazy { map(handler.limits) }
 
     actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder {
         return CommandEncoder(
@@ -76,6 +84,7 @@ actual class Device(internal val handler: GPUDevice) : AutoCloseable {
     actual override fun close() {
         // Nothing on JS
     }
+
 }
 
 

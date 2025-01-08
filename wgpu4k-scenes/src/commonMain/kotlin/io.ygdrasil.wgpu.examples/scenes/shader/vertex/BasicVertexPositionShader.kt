@@ -1,5 +1,6 @@
-package io.ygdrasil.wgpu.examples.scenes.shader.vertex
+package io.ygdrasil.webgpu.examples.scenes.shader.vertex
 
+// language=wgsl
 const val basicVertexPositionShader = """
 struct Uniforms {
   modelViewProjectionMatrix : mat4x4<f32>,

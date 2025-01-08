@@ -1,9 +1,9 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.ComputePipelineDescriptor
-import io.ygdrasil.wgpu.internal.js.GPUComputePipelineDescriptor
-import io.ygdrasil.wgpu.internal.js.GPUProgrammableStage
-import io.ygdrasil.wgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.ComputePipelineDescriptor
+import io.ygdrasil.webgpu.internal.js.GPUComputePipelineDescriptor
+import io.ygdrasil.webgpu.internal.js.GPUProgrammableStage
+import io.ygdrasil.webgpu.internal.js.createJsObject
 
 internal fun map(input: ComputePipelineDescriptor): GPUComputePipelineDescriptor =
     createJsObject<GPUComputePipelineDescriptor>().apply {

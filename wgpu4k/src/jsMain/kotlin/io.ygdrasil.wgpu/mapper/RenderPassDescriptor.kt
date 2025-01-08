@@ -1,8 +1,10 @@
-package io.ygdrasil.wgpu.mapper
+package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.wgpu.Color
-import io.ygdrasil.wgpu.RenderPassDescriptor
-import io.ygdrasil.wgpu.internal.js.*
+import io.ygdrasil.webgpu.RenderPassDescriptor
+import io.ygdrasil.webgpu.internal.js.GPURenderPassColorAttachment
+import io.ygdrasil.webgpu.internal.js.GPURenderPassDepthStencilAttachment
+import io.ygdrasil.webgpu.internal.js.GPURenderPassDescriptor
+import io.ygdrasil.webgpu.internal.js.createJsObject
 
 internal fun map(input: RenderPassDescriptor): GPURenderPassDescriptor =
     createJsObject<GPURenderPassDescriptor>().apply {
@@ -37,9 +39,3 @@ private fun map(input: RenderPassDescriptor.ColorAttachment): GPURenderPassColor
         clearValue = map(input.clearValue)
     }
 
-private fun map(input: Color): GPUColorDict = createJsObject<GPUColorDict>().apply {
-    r = input.red
-    g = input.green
-    b = input.blue
-    a = input.alpha
-}
