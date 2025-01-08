@@ -53,7 +53,7 @@ publishing {
                 name.set(project.name)
                 description.set(libraryDescription)
                 url.set("https://github.com/wgpu4k/wgpu4k")
-                inceptionYear.set("2024")
+                inceptionYear.set("2025")
                 licenses {
                     license {
                         name.set("MIT")
