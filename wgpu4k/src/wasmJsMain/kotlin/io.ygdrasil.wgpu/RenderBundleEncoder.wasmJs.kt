@@ -24,7 +24,7 @@ actual class RenderBundleEncoder(internal val handler: GPURenderBundleEncoder) :
     }
 
     actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
-        handler.setIndexBuffer(buffer.handler, indexFormat.name, offset.toJsNumber(), size.toJsNumber())
+        handler.setIndexBuffer(buffer.handler, indexFormat.value, offset.toJsNumber(), size.toJsNumber())
     }
 
     actual fun drawIndexed(

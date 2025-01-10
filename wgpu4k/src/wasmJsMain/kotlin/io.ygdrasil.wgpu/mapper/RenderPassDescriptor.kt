@@ -22,20 +22,20 @@ private fun map(input: RenderPassDescriptor.DepthStencilAttachment): GPURenderPa
     createJsObject<GPURenderPassDepthStencilAttachment>().apply {
         view = input.view.handler
         if (input.depthClearValue != null) depthClearValue = input.depthClearValue
-        if (input.depthLoadOp != null) depthLoadOp = input.depthLoadOp.name
-        if (input.depthStoreOp != null) depthStoreOp = input.depthStoreOp.name
+        if (input.depthLoadOp != null) depthLoadOp = input.depthLoadOp.value
+        if (input.depthStoreOp != null) depthStoreOp = input.depthStoreOp.value
         depthReadOnly = input.depthReadOnly
         stencilClearValue = input.stencilClearValue.toJsNumber()
-        if (input.stencilLoadOp != null) stencilLoadOp = input.stencilLoadOp.name
-        if (input.stencilStoreOp != null) stencilStoreOp = input.stencilStoreOp.name
+        if (input.stencilLoadOp != null) stencilLoadOp = input.stencilLoadOp.value
+        if (input.stencilStoreOp != null) stencilStoreOp = input.stencilStoreOp.value
         stencilReadOnly = input.stencilReadOnly
     }
 
 private fun map(input: RenderPassDescriptor.ColorAttachment): GPURenderPassColorAttachment =
     createJsObject<GPURenderPassColorAttachment>().apply {
         view = input.view.handler
-        loadOp = input.loadOp.name
-        storeOp = input.storeOp.name
+        loadOp = input.loadOp.value
+        storeOp = input.storeOp.value
         if (input.depthSlice != null) depthSlice = input.depthSlice.toJsNumber()
         if (input.resolveTarget != null) resolveTarget = input.resolveTarget.handler
         clearValue = map(input.clearValue)

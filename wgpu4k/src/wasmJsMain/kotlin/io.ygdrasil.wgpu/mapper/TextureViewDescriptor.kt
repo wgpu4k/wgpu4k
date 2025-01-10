@@ -9,7 +9,7 @@ internal fun map(input: TextureViewDescriptor): GPUTextureViewDescriptor =
         if (input.label != null) label = input.label.toJsString()
         if (input.format != null) format = input.format.value
         if (input.dimension?.value != null) dimension = input.dimension.value
-        aspect = input.aspect.name
+        aspect = input.aspect.value
         baseMipLevel = input.baseMipLevel
         mipLevelCount = input.mipLevelCount
         baseArrayLayer = input.baseArrayLayer

@@ -6,6 +6,6 @@ import io.ygdrasil.webgpu.internal.js.createJsObject
 
 internal fun map(input: QuerySetDescriptor): GPUQuerySetDescriptor = createJsObject<GPUQuerySetDescriptor>().apply {
     if (input.label != null) label = input.label
-    type = input.type.name
+    type = input.type.value
     count = input.count
 }
