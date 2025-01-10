@@ -504,9 +504,13 @@ external interface GPUBuffer : GPUObjectBase {
     fun destroy()
 }
 
+external interface HtmlElementWithSize {
+    var width: Number
+    var height: Number
+}
 
 external interface GPUCanvasContext {
-    var canvas: dynamic /* HTMLCanvasElement | OffscreenCanvas */
+    var canvas: HtmlElementWithSize /* HTMLCanvasElement | OffscreenCanvas */
     fun configure(configuration: GPUCanvasConfiguration)
     fun unconfigure()
     fun getCurrentTexture(): GPUTexture

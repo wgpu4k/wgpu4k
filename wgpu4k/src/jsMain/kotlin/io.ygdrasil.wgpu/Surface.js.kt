@@ -8,9 +8,10 @@ import org.w3c.dom.HTMLCanvasElement
 actual class Surface(private val handler: GPUCanvasContext) : AutoCloseable {
 
     actual val width: GPUIndex32
-        get() = handler.canvas.width
+        get() = handler.canvas.width.toInt().toUInt()
+
     actual val height: GPUIndex32
-        get() = handler.canvas.height
+        get() = handler.canvas.height.toInt().toUInt()
 
     actual val preferredCanvasFormat: TextureFormat? by lazy {
         navigator.gpu
