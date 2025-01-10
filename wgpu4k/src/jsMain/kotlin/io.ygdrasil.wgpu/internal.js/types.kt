@@ -2,7 +2,6 @@
 
 package io.ygdrasil.webgpu.internal.js
 
-import io.ygdrasil.webgpu.GPUBufferDynamicOffset
 import io.ygdrasil.webgpu.GPUBufferUsageFlags
 import io.ygdrasil.webgpu.GPUColorWriteFlags
 import io.ygdrasil.webgpu.GPUDepthBias
@@ -401,7 +400,7 @@ external interface GPUBindingCommandsMixin {
     fun setBindGroup(
         index: GPUIndex32,
         bindGroup: GPUBindGroup?,
-        dynamicOffsets: Array<GPUBufferDynamicOffset> = definedExternally,
+        dynamicOffsets: Uint32Array = definedExternally,
     )
 
     fun setBindGroup(index: GPUIndex32, bindGroup: GPUBindGroup?)

@@ -14,7 +14,7 @@ actual class ComputePassEncoder(internal val handler: GPUComputePassEncoder) : A
         handler.dispatchWorkgroupsIndirect(indirectBuffer.handler, indirectOffset)
 
     actual fun setBindGroup(index: GPUIndex32, bindGroup: BindGroup?, dynamicOffsets: Array<GPUBufferDynamicOffset>) =
-        handler.setBindGroup(index, bindGroup?.handler, dynamicOffsets)
+        handler.setBindGroup(index, bindGroup?.handler, dynamicOffsets.unsafeCast<Uint32Array>())
 
     actual fun setBindGroup(index: GPUIndex32, bindGroup: BindGroup?) = handler.setBindGroup(index, bindGroup?.handler)
     actual fun setBindGroup(
