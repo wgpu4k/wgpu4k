@@ -122,7 +122,7 @@ kotlin {
             dependencies {
                 implementation(libs.coroutines)
                 api(libs.kotlin.logging)
-                implementation(libs.slf4j.simple)
+                implementation(libs.logback)
             }
         }
 

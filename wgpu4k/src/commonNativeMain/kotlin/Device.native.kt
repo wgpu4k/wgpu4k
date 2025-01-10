@@ -20,6 +20,7 @@ import io.ygdrasil.wgpu.wgpuDeviceCreateTexture
 import io.ygdrasil.wgpu.wgpuDeviceGetLimits
 import io.ygdrasil.wgpu.wgpuDeviceGetQueue
 import io.ygdrasil.wgpu.wgpuDeviceHasFeature
+import io.ygdrasil.wgpu.wgpuDevicePoll
 import io.ygdrasil.wgpu.wgpuDeviceRelease
 
 actual class Device(internal val handler: WGPUDevice) : AutoCloseable {
@@ -114,8 +115,7 @@ actual class Device(internal val handler: WGPUDevice) : AutoCloseable {
     }
 
     actual suspend fun poll() {
-        //TODO: implement this
-        //wgpuDevicePoll(handler, 1, MemorySegment.NULL)
+        wgpuDevicePoll(handler, true, null)
     }
 
     actual override fun close() {

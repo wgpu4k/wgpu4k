@@ -11,14 +11,14 @@ korge = "6.0.0"
 agp = "8.5.2"
 jreleaser = "1.13.1"
 rococoa = "0.0.1"
-wgpu4k-native = "v22.0.0"
+wgpu4k-native = "v22.0.1"
 android-native-helper = "0.0.1"
 glfw-native = "0.0.1"
 kaml = "0.67.0"
 
 # Logging
 kotlin-logging = "7.0.0"
-slf4j-simple = "2.0.3"
+logback = "1.5.16"
 
 [libraries]
 kotest-core = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
@@ -44,7 +44,7 @@ android-native-helper = { module = "io.ygdrasil:android-native-helper", version.
 
 # Logging
 kotlin-logging = { module = "io.github.oshai:kotlin-logging", version.ref = "kotlin-logging" }
-slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j-simple" }
+logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 
 # Generator & Release
 commons-io = { module = "commons-io:commons-io", version = "2.16.1" }
