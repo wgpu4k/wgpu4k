@@ -128,8 +128,8 @@ external interface GPUDepthStencilState {
     var depthCompare: String? /* "never" | "less" | "equal" | "less-equal" | "greater" | "not-equal" | "greater-equal" | "always" */
     var stencilFront: GPUStencilFaceState?
     var stencilBack: GPUStencilFaceState?
-    var stencilReadMask: GPUStencilValue?
-    var stencilWriteMask: GPUStencilValue?
+    var stencilReadMask: Number?
+    var stencilWriteMask: Number?
     var depthBias: GPUDepthBias?
     var depthBiasSlopeScale: Float?
     var depthBiasClamp: Float?

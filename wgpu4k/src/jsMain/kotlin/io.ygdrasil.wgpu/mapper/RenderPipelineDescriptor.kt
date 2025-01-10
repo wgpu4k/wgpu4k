@@ -14,6 +14,7 @@ import io.ygdrasil.webgpu.internal.js.GPUVertexAttribute
 import io.ygdrasil.webgpu.internal.js.GPUVertexBufferLayout
 import io.ygdrasil.webgpu.internal.js.GPUVertexState
 import io.ygdrasil.webgpu.internal.js.createJsObject
+import io.ygdrasil.wgpu.mapper.map
 
 internal fun map(input: RenderPipelineDescriptor): GPURenderPipelineDescriptor =
     createJsObject<GPURenderPipelineDescriptor>().apply {
@@ -65,8 +66,8 @@ private fun map(input: RenderPipelineDescriptor.DepthStencilState): GPUDepthSten
         depthCompare = input.depthCompare?.value ?: undefined
         stencilFront = map(input.stencilFront)
         stencilBack = map(input.stencilBack)
-        stencilReadMask = input.stencilReadMask
-        stencilWriteMask = input.stencilWriteMask
+        stencilReadMask = map(input.stencilReadMask)
+        stencilWriteMask = map(input.stencilWriteMask)
         depthBias = input.depthBias
         depthBiasSlopeScale = input.depthBiasSlopeScale
         depthBiasClamp = input.depthBiasClamp
