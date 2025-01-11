@@ -3,7 +3,6 @@ package io.ygdrasil.webgpu
 import io.ygdrasil.webgpu.internal.js.GPUBuffer
 import io.ygdrasil.webgpu.internal.js.mapJsArray
 import io.ygdrasil.webgpu.internal.js.toJsNumber
-import io.ygdrasil.webgpu.internal.js.toULong
 import org.khronos.webgl.Float32Array
 import org.khronos.webgl.Int16Array
 import org.khronos.webgl.Int32Array
@@ -13,7 +12,9 @@ import org.khronos.webgl.get
 actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
 
     actual val size: GPUSize64
-        get() = handler.size.toULong()
+        get() = handler
+            .size
+            .toLong().toULong()
     actual val usage: Set<BufferUsage>
         get() = BufferUsage.entries.filter { it.value.toUInt() and handler.usage != 0u }.toSet()
     actual val mapState: BufferMapState

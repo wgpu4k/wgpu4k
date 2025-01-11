@@ -81,7 +81,6 @@ val e2eBrowserTest = tasks.create("e2eBrowserTest") {
     }
 }
 
-
 tasks.create("e2eTest") {
     group = "e2eTest"
     dependsOn(e2eBrowserTest)
@@ -100,7 +99,6 @@ java {
         languageVersion.set(JavaLanguageVersion.of(22))
     }
 }
-
 
 fun getCommonProject() = projects.wgpu4kScenes.identityPath.path
     ?.let(::project) ?: error("Could not find project path")

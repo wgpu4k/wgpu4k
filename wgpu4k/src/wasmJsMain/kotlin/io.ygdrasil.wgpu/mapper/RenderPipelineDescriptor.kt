@@ -41,12 +41,12 @@ private fun map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout):
     createJsObject<GPUVertexBufferLayout>().apply {
         arrayStride = input.arrayStride.toJsNumber()
         attributes = input.attributes.mapJsArray { map(it) }
-        stepMode = input.stepMode.name
+        stepMode = input.stepMode.value
     }
 
 private fun map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute): GPUVertexAttribute =
     createJsObject<GPUVertexAttribute>().apply {
-        format = input.format.name
+        format = input.format.value
         offset = input.offset.toJsNumber()
         shaderLocation = input.shaderLocation.toJsNumber()
     }
@@ -54,9 +54,9 @@ private fun map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout.V
 private fun map(input: RenderPipelineDescriptor.PrimitiveState): GPUPrimitiveState =
     createJsObject<GPUPrimitiveState>().apply {
         topology = input.topology.value
-        if (input.stripIndexFormat?.name != null) stripIndexFormat = input.stripIndexFormat.name
-        frontFace = input.frontFace.name
-        cullMode = input.cullMode.name
+        if (input.stripIndexFormat?.value != null) stripIndexFormat = input.stripIndexFormat.value
+        frontFace = input.frontFace.value
+        cullMode = input.cullMode.value
         unclippedDepth = input.unclippedDepth
     }
 

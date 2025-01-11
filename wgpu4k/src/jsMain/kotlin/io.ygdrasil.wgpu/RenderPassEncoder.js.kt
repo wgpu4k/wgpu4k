@@ -2,6 +2,7 @@ package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.internal.js.GPURenderPassEncoder
 import io.ygdrasil.webgpu.mapper.map
+import org.khronos.webgl.Uint32Array
 
 actual class RenderPassEncoder(private val handler: GPURenderPassEncoder) {
 
@@ -46,7 +47,7 @@ actual class RenderPassEncoder(private val handler: GPURenderPassEncoder) {
     }
 
     actual fun setBindGroup(index: GPUSize32, bindGroup: BindGroup, dynamicOffsets: List<GPUSize32>) {
-        handler.setBindGroup(index, bindGroup.handler, map(dynamicOffsets))
+        handler.setBindGroup(index, bindGroup.handler, dynamicOffsets.toTypedArray().unsafeCast<Uint32Array>())
     }
 
     actual fun setVertexBuffer(slot: GPUSize32, buffer: Buffer) {
@@ -54,7 +55,7 @@ actual class RenderPassEncoder(private val handler: GPURenderPassEncoder) {
     }
 
     actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
-        handler.setIndexBuffer(buffer.handler, indexFormat.name, offset, size)
+        handler.setIndexBuffer(buffer.handler, indexFormat.value, offset, size)
     }
 
     actual fun executeBundles(bundles: List<RenderBundle>) {

@@ -134,8 +134,4 @@ internal fun ByteArray.toInt8Array(): Int8Array {
     return out
 }
 
-private fun infer(ref: JsNumber): ULong =
-    js("Number(ref)")
-
-internal fun JsNumber.toULong(): ULong = infer(this)
 

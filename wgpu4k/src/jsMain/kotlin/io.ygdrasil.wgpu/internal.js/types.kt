@@ -2,7 +2,6 @@
 
 package io.ygdrasil.webgpu.internal.js
 
-import io.ygdrasil.webgpu.GPUBufferDynamicOffset
 import io.ygdrasil.webgpu.GPUBufferUsageFlags
 import io.ygdrasil.webgpu.GPUColorWriteFlags
 import io.ygdrasil.webgpu.GPUDepthBias
@@ -129,8 +128,8 @@ external interface GPUDepthStencilState {
     var depthCompare: String? /* "never" | "less" | "equal" | "less-equal" | "greater" | "not-equal" | "greater-equal" | "always" */
     var stencilFront: GPUStencilFaceState?
     var stencilBack: GPUStencilFaceState?
-    var stencilReadMask: GPUStencilValue?
-    var stencilWriteMask: GPUStencilValue?
+    var stencilReadMask: Number?
+    var stencilWriteMask: Number?
     var depthBias: GPUDepthBias?
     var depthBiasSlopeScale: Float?
     var depthBiasClamp: Float?
@@ -401,7 +400,7 @@ external interface GPUBindingCommandsMixin {
     fun setBindGroup(
         index: GPUIndex32,
         bindGroup: GPUBindGroup?,
-        dynamicOffsets: Array<GPUBufferDynamicOffset> = definedExternally,
+        dynamicOffsets: Uint32Array = definedExternally,
     )
 
     fun setBindGroup(index: GPUIndex32, bindGroup: GPUBindGroup?)
@@ -504,9 +503,13 @@ external interface GPUBuffer : GPUObjectBase {
     fun destroy()
 }
 
+external interface HtmlElementWithSize {
+    var width: Number
+    var height: Number
+}
 
 external interface GPUCanvasContext {
-    var canvas: dynamic /* HTMLCanvasElement | OffscreenCanvas */
+    var canvas: HtmlElementWithSize /* HTMLCanvasElement | OffscreenCanvas */
     fun configure(configuration: GPUCanvasConfiguration)
     fun unconfigure()
     fun getCurrentTexture(): GPUTexture

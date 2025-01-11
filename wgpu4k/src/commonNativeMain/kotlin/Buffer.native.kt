@@ -2,6 +2,7 @@ package io.ygdrasil.webgpu
 
 import ffi.MemoryBuffer
 import ffi.NativeAddress
+import ffi.globalMemory
 import ffi.memoryScope
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.wgpu.WGPUBuffer
@@ -53,11 +54,11 @@ actual class Buffer(internal val handler: WGPUBuffer) : AutoCloseable {
             .writeBytes(buffer)
     }
 
-    actual suspend fun map(mode: Set<MapMode>, offset: GPUSize64, size: GPUSize64) = memoryScope { scope ->
-        val callback = WGPUBufferMapAsyncCallback.allocate(scope) { status: WGPUBufferMapAsyncStatus, userdata: NativeAddress? ->
-            logger.info { "mapped" }
-        }
+    private val callback = WGPUBufferMapAsyncCallback.allocate(globalMemory) { status: WGPUBufferMapAsyncStatus, userdata: NativeAddress? ->
+        logger.info { "mapped" }
+    }
 
+    actual suspend fun map(mode: Set<MapMode>, offset: GPUSize64, size: GPUSize64) = memoryScope { scope ->
         wgpuBufferMapAsync(
             handler,
             mode.toFlagUInt(),

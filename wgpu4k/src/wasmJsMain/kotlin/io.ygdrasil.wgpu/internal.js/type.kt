@@ -231,7 +231,7 @@ external interface GPUBufferDescriptor : GPUObjectDescriptorBase {
 }
 
 external interface GPUBuffer : GPUObjectBase {
-    var size: JsNumber
+    var size: JsBigInt
     var usage: GPUFlagsConstant
     var mapState: String /* "unmapped" | "pending" | "mapped" */
     fun mapAsync(mode: GPUMapModeFlags, offset: JsNumber, size: JsNumber): Promise<JsAny?>

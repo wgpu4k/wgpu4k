@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
@@ -60,7 +59,6 @@ kotlin {
         }
     }
 
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
         // TODO fiw warning and uncomment
         //allWarningsAsErrors = true

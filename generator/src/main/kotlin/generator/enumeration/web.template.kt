@@ -13,7 +13,8 @@ fun List<YamlModel.Enum>.toWebEnumerations() = templateBuilder {
                 .forEach { value ->
                     val name = value.name.convertToKotlinClassName()
                         .fixNameStartingWithNumeric()
-                    appendLine("$name(\"${value.name.replace("_", "-").lowercase()}\"),")
+                    val javascriptValueProvider = getValueProviderFrom(enumeration.name)
+                    appendLine("$name(\"${javascriptValueProvider(value.name)}\"),")
                 }
             appendLine(";")
             newLine()
@@ -27,6 +28,52 @@ fun List<YamlModel.Enum>.toWebEnumerations() = templateBuilder {
         newLine()
     }
 }
+
+private fun getValueProviderFrom(name: String): (String) -> String {
+    when (name) {
+        "texture_format" -> return { textureFormatValueConverter(it) }
+        else -> return { it.replace("_", "-").lowercase() }
+    }
+}
+
+// @see https://gpuweb.github.io/gpuweb/#enumdef-gputextureformat
+private fun textureFormatValueConverter(value: String): String {
+    println("Converting $value")
+    var values = value.lowercase().split("_")
+
+    if (values.size == 1) { return values.first() }
+
+    val suffix = values.last().takeIf { it.isTextureSuffix() }
+        ?.let {
+            values = values.dropLast(1)
+            "-$it"
+        } ?: ""
+
+    val prefix = values.first()
+        .countPrefix()
+        .takeIf { it > 0 }
+        ?.let { prefixes ->
+            println("Found $prefixes prefix(es) ${values.subList(0, prefixes)}")
+            // get prefixes
+            values.subList(0, prefixes)
+                // Join them
+                .joinToString("-")
+                // add prefix separator
+                .let { "$it-"}
+                // Drop prefix from the list
+                .also { values = values.drop(prefixes) }
+        } ?: ""
+
+    return prefix + values.joinToString("") + suffix
+}
+
+private fun String.countPrefix() : Int = when (this) {
+    "etc2", "eac" -> 1
+    "bc1", "bc2", "bc3", "bc4", "bc5", "bc6h", "bc7", "astc" -> 2
+    else -> 0
+}
+
+private fun String.isTextureSuffix(): Boolean = this in listOf("srgb", "stencil8")
 
 private fun String.fixNameStartingWithNumeric(): String {
     return if (first().isDigit()) {

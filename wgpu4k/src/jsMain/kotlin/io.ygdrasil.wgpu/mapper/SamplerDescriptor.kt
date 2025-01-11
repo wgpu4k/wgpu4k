@@ -9,9 +9,9 @@ internal fun map(input: SamplerDescriptor): GPUSamplerDescriptor = createJsObjec
     addressModeU = input.addressModeU.value
     addressModeV = input.addressModeV.value
     addressModeW = input.addressModeW.value
-    magFilter = input.magFilter.name
-    minFilter = input.minFilter.name
-    mipmapFilter = input.mipmapFilter.name
+    magFilter = input.magFilter.value
+    minFilter = input.minFilter.value
+    mipmapFilter = input.mipmapFilter.value
     lodMinClamp = input.lodMinClamp
     lodMaxClamp = input.lodMaxClamp
     if (input.compare != null) compare = input.compare.value
