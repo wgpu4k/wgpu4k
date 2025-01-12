@@ -11,7 +11,7 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.reinterpret
 
-actual fun WGPU.getSurface(
+actual fun WGPU.getNativeSurface(
     window: CPointer<GLFWwindow>
 ): NativeSurface {
 

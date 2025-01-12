@@ -25,14 +25,14 @@ suspend fun glfwContextRenderer(width: Int = 1, height: Int = 1, title: String =
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE)
     // Disable context creation, WGPU will manage that
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API)
+
     val windowHandler: Long = glfwCreateWindow(width, height, title, NULL, NULL)
 
     val wgpu = createInstance() ?: error("fail to wgpu instance")
-    val surface = wgpu.getSurface(windowHandler)
-    surface._width = width.toUInt()
-    surface._height = height.toUInt()
+    val nativeSurface = wgpu.getNativeSurface(windowHandler)
+    val surface = Surface(nativeSurface, windowHandler)
 
-    val adapter = wgpu.requestAdapter(surface)
+    val adapter = wgpu.requestAdapter(nativeSurface)
         ?: error("fail to get adapter")
 
     val device = adapter.requestDevice()
@@ -41,7 +41,7 @@ suspend fun glfwContextRenderer(width: Int = 1, height: Int = 1, title: String =
     val renderingContext = when (deferredRendering) {
         true -> TextureRenderingContext(256u, 256u, TextureFormat.RGBA8Unorm, device)
         false -> {
-            surface.computeSurfaceCapabilities(adapter)
+            nativeSurface.computeSurfaceCapabilities(adapter)
             SurfaceRenderingContext(surface)
         }
     }
@@ -63,7 +63,7 @@ class GLFWContext(
     }
 }
 
-private fun WGPU.getSurface(window: Long): NativeSurface = when (Platform.os) {
+private fun WGPU.getNativeSurface(window: Long): NativeSurface = when (Platform.os) {
     Os.Linux -> {
         val display = glfwGetX11Display().toNativeAddress()
         val x11_window = glfwGetX11Window(window).toULong()

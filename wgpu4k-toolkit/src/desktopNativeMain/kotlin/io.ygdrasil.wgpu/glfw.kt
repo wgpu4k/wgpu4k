@@ -33,17 +33,16 @@ suspend fun glfwContextRenderer(
         ?: error("fail to create windows")
 
     val wgpu = createInstance() ?: error("fail to wgpu instance")
-    val surface = wgpu.getSurface(windowHandler)
-    surface._width = width.toUInt()
-    surface._height = height.toUInt()
+    val nativeSurface = wgpu.getNativeSurface(windowHandler)
+    val surface = Surface(nativeSurface, windowHandler)
 
-    val adapter = wgpu.requestAdapter(surface)
+    val adapter = wgpu.requestAdapter(nativeSurface)
         ?: error("fail to get adapter")
 
     val device = adapter.requestDevice()
         ?: error("fail to get device")
 
-    surface.computeSurfaceCapabilities(adapter)
+    nativeSurface.computeSurfaceCapabilities(adapter)
 
     val renderingContext = when (deferredRendering) {
         true -> TextureRenderingContext(256u, 256u, TextureFormat.RGBA8Unorm, device)
@@ -68,4 +67,4 @@ class GLFWContext(
 }
 
 
-expect fun WGPU.getSurface(window: CPointer<GLFWwindow>): NativeSurface
+expect fun WGPU.getNativeSurface(window: CPointer<GLFWwindow>): NativeSurface

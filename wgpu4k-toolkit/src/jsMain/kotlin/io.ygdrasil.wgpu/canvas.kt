@@ -28,10 +28,10 @@ suspend fun canvasContextRenderer(htmlCanvas: HTMLCanvasElement? = null, deferre
     return CanvasContext(
         canvas,
         WGPUContext(
+            surface,
             adapter,
             device,
             renderingContext,
-            surface
         )
     )
 }

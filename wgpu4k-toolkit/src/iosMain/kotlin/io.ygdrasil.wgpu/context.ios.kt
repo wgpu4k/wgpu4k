@@ -16,11 +16,12 @@ suspend fun iosContextRenderer(view: MTKView, width: Int, height: Int, deferredR
     val layer = view.layer
     val layerPointer: COpaquePointer = interpretCPointer<COpaque>(layer.objcPtr())!!.reinterpret()
     val instance = WGPU.createInstance() ?: error("Can't create WGPU instance")
-    val surface = instance.getSurfaceFromMetalLayer(layerPointer.let(::NativeAddress)) ?: error("Can't create Surface")
-    val adapter = instance.requestAdapter(surface) ?: error("Can't create Adapter")
+    val nativeSurface = instance.getSurfaceFromMetalLayer(layerPointer.let(::NativeAddress)) ?: error("Can't create Surface")
+    val adapter = instance.requestAdapter(nativeSurface) ?: error("Can't create Adapter")
     val device = adapter.requestDevice() ?: error("fail to get device")
+    val surface = Surface(nativeSurface, width.toUInt(), height.toUInt())
 
-    surface.computeSurfaceCapabilities(adapter)
+    nativeSurface.computeSurfaceCapabilities(adapter)
 
     val renderingContext = when (deferredRendering) {
         true -> TextureRenderingContext(width.toUInt(), height.toUInt(), TextureFormat.RGBA8Unorm, device)

@@ -25,15 +25,7 @@ class NativeSurface(
 
     private var _supportedFormats: Set<TextureFormat> = setOf()
     private var _supportedAlphaMode: Set<CompositeAlphaMode> = setOf()
-    var _width: UInt? = null
-    var _height: UInt? = null
 
-    val width: UInt
-        get() = _width ?: error("width not yet initialized")
-    val height: UInt
-        get() = _height ?: error("height not yet initialized")
-
-    val preferredCanvasFormat: TextureFormat? = null
     val supportedFormats: Set<TextureFormat>
         get() = _supportedFormats
     val supportedAlphaMode: Set<CompositeAlphaMode>
@@ -107,15 +99,15 @@ class NativeSurface(
         .filterNotNull()
         .toSet()
 
-    fun configure(surfaceConfiguration: SurfaceConfiguration) = memoryScope { scope ->
-        wgpuSurfaceConfigure(handler, scope.map(surfaceConfiguration))
+    fun configure(surfaceConfiguration: SurfaceConfiguration, width: UInt, height: UInt) = memoryScope { scope ->
+        wgpuSurfaceConfigure(handler, scope.map(surfaceConfiguration, width, height))
     }
 
     override fun close() {
         wgpuSurfaceRelease(handler)
     }
 
-    private fun MemoryAllocator.map(input: SurfaceConfiguration): WGPUSurfaceConfiguration =
+    private fun MemoryAllocator.map(input: SurfaceConfiguration, width: UInt, height: UInt): WGPUSurfaceConfiguration =
         WGPUSurfaceConfiguration.allocate(this).also { output ->
             output.device = input.device.handler
             output.usage = input.usage.toFlagUInt()
