@@ -63,7 +63,7 @@ class GLFWContext(
     }
 }
 
-private fun WGPU.getSurface(window: Long): Surface = when (Platform.os) {
+private fun WGPU.getSurface(window: Long): NativeSurface = when (Platform.os) {
     Os.Linux -> {
         val display = glfwGetX11Display().toNativeAddress()
         val x11_window = glfwGetX11Window(window).toULong()

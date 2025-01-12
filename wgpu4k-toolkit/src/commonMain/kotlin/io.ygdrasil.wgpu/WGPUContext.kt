@@ -1,10 +1,10 @@
 package io.ygdrasil.webgpu
 
 class WGPUContext(
-    val surface: Surface,
     val adapter: Adapter,
     val device: Device,
     val renderingContext: RenderingContext,
+    val surface: Surface
 ) : AutoCloseable {
 
 

@@ -13,7 +13,7 @@ import kotlinx.cinterop.reinterpret
 
 actual fun WGPU.getSurface(
     window: CPointer<GLFWwindow>
-): Surface {
+): NativeSurface {
 
     val display: COpaquePointer = glfwGetX11Display(window)?.reinterpret() ?: error("fail to get X11 display")
     val x11_window = glfwGetX11Window(window).takeIf { it != 0uL } ?: error("fail to get X11 window")

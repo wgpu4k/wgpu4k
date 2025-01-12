@@ -68,4 +68,4 @@ class GLFWContext(
 }
 
 
-expect fun WGPU.getSurface(window: CPointer<GLFWwindow>): Surface
+expect fun WGPU.getSurface(window: CPointer<GLFWwindow>): NativeSurface

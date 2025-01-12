@@ -1,7 +1,7 @@
 package io.ygdrasil.webgpu
 
 class SurfaceRenderingContext(
-    private val surface: Surface
+    private val surface: Surface,
 ) : RenderingContext {
 
     override val width: UInt
