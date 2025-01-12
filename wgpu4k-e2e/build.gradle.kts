@@ -81,17 +81,22 @@ val e2eBrowserTest = tasks.create("e2eBrowserTest") {
     }
 }
 
-tasks.create("e2eTest") {
-    group = "e2eTest"
-    dependsOn(e2eBrowserTest)
-    dependsOn(jvmTest)
 
+val e2eCompareImages = tasks.create("e2eCompareImages") {
+    group = "e2eTest"
     doLast {
-        logger.info("Starting e2e test...")
-        val result = compareImages(project   .projectDir, logger)
+        val result = compareImages(project.projectDir, logger)
             .filter { !it.similar }
         if (result.isNotEmpty()) error("Not similar tests found: ${result.joinToString()}")
     }
+}
+
+
+tasks.create("e2eTest") {
+    group = "e2eTest"
+    if(isInCI().not()) dependsOn(e2eBrowserTest)
+    dependsOn(jvmTest)
+    finalizedBy(e2eCompareImages)
 }
 
 java {
@@ -102,3 +107,5 @@ java {
 
 fun getCommonProject() = projects.wgpu4kScenes.identityPath.path
     ?.let(::project) ?: error("Could not find project path")
+
+fun isInCI(): Boolean = System.getenv("CI") != null

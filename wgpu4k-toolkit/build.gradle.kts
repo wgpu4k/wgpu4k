@@ -83,6 +83,11 @@ kotlin {
                     }
 
                 }
+
+                group("commonWeb") {
+                    withJs()
+                    withWasmJs()
+                }
             }
         }
     )

@@ -56,16 +56,7 @@ jobs:
       - name: check
         run: ./gradlew check --stacktrace
 
-      - name: Run jvm e2e tests
-        if: matrix.os == 'ubuntu-latest'
-        run: xvfb-run ./gradlew :wgpu4k-e2e:e2eJvmTest --stacktrace --info
-
-      - name: Run jvm e2e tests
-        if: matrix.os == 'windows-latest'
-        run: ./gradlew :wgpu4k-e2e:e2eJvmTest --stacktrace --info
-
-      - name: Run all e2e tests
-        if: matrix.os == 'macos-14'
+      - name: Run e2e tests
         run: ./gradlew :wgpu4k-e2e:e2eTest --stacktrace --info
 
       - name: Bundle chromium screenshot

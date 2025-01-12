@@ -19,27 +19,19 @@ import io.ygdrasil.wgpu.wgpuSurfaceRelease
 
 private val logger = KotlinLogging.logger {}
 
-actual class Surface(
+class NativeSurface(
     internal val handler: WGPUSurface
 ) : AutoCloseable {
 
     private var _supportedFormats: Set<TextureFormat> = setOf()
     private var _supportedAlphaMode: Set<CompositeAlphaMode> = setOf()
-    var _width: UInt? = null
-    var _height: UInt? = null
 
-    actual val width: UInt
-        get() = _width ?: error("width not yet initialized")
-    actual val height: UInt
-        get() = _height ?: error("height not yet initialized")
-
-    actual val preferredCanvasFormat: TextureFormat? = null
-    actual val supportedFormats: Set<TextureFormat>
+    val supportedFormats: Set<TextureFormat>
         get() = _supportedFormats
-    actual val supportedAlphaMode: Set<CompositeAlphaMode>
+    val supportedAlphaMode: Set<CompositeAlphaMode>
         get() = _supportedAlphaMode
 
-    actual fun getCurrentTexture(): SurfaceTexture = memoryScope { scope ->
+    fun getCurrentTexture(): SurfaceTexture = memoryScope { scope ->
         WGPUSurfaceTexture.allocate(scope).let { surfaceTexture ->
             wgpuSurfaceGetCurrentTexture(handler, surfaceTexture)
             surfaceTexture.status
@@ -50,7 +42,7 @@ actual class Surface(
         }
     }
 
-    actual fun present() {
+    fun present() {
         wgpuSurfacePresent(handler)
     }
 
@@ -107,15 +99,15 @@ actual class Surface(
         .filterNotNull()
         .toSet()
 
-    actual fun configure(surfaceConfiguration: SurfaceConfiguration) = memoryScope { scope ->
-        wgpuSurfaceConfigure(handler, scope.map(surfaceConfiguration))
+    fun configure(surfaceConfiguration: SurfaceConfiguration, width: UInt, height: UInt) = memoryScope { scope ->
+        wgpuSurfaceConfigure(handler, scope.map(surfaceConfiguration, width, height))
     }
 
-    actual override fun close() {
+    override fun close() {
         wgpuSurfaceRelease(handler)
     }
 
-    private fun MemoryAllocator.map(input: SurfaceConfiguration): WGPUSurfaceConfiguration =
+    private fun MemoryAllocator.map(input: SurfaceConfiguration, width: UInt, height: UInt): WGPUSurfaceConfiguration =
         WGPUSurfaceConfiguration.allocate(this).also { output ->
             output.device = input.device.handler
             output.usage = input.usage.toFlagUInt()

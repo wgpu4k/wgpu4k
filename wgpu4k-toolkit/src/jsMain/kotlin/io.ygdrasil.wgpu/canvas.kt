@@ -17,7 +17,8 @@ suspend fun canvasContextRenderer(htmlCanvas: HTMLCanvasElement? = null, deferre
 
     val adapter = requestAdapter() ?: error("No appropriate Adapter found.")
     val device = adapter.requestDevice() ?: error("No appropriate Device found.")
-    val surface = canvas.getSurface() ?: error("fail to get context")
+    val canvasSurface = canvas.getCanvasSurface() ?: error("fail to get context")
+    val surface = Surface(canvasSurface)
 
     val renderingContext = when (deferredRendering) {
         true -> TextureRenderingContext(256u, 256u, TextureFormat.RGBA8Unorm, device)
@@ -26,7 +27,12 @@ suspend fun canvasContextRenderer(htmlCanvas: HTMLCanvasElement? = null, deferre
 
     return CanvasContext(
         canvas,
-        WGPUContext(surface, adapter, device, renderingContext)
+        WGPUContext(
+            surface,
+            adapter,
+            device,
+            renderingContext,
+        )
     )
 }
 

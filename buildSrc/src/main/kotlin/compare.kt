@@ -3,7 +3,7 @@ import korlibs.image.bitmap.Bitmap32
 import korlibs.image.bitmap.computePsnr
 import korlibs.image.format.readBitmap
 import korlibs.io.file.std.toVfs
-import kotlinx.coroutines.*
+import kotlinx.coroutines.runBlocking
 import org.gradle.api.logging.Logger
 import java.io.File
 
@@ -25,15 +25,12 @@ fun compareImages(basePath: File, logger: Logger): List<ComparisonResult> {
         val expectedDirectory = basePath.resolve("expected")
         val expectedImages = (expectedDirectory.listFiles() ?: error("fail to list file in ${expectedDirectory.absolutePath}"))
             .filter { it.extension == "png" }
-        (basePath.listFiles()?: error("fail to list fil in ${expectedDirectory.absolutePath}"))
-            // Remove non directory, build directory and expected directory images
-            .filter { it.isDirectory && it != expectedDirectory && it.name.startsWith("build").not() }
+        (basePath.listFiles()?: error("fail to list files in ${expectedDirectory.absolutePath}"))
+            // Remove non directory, build, src and expected directory images
+            .filter { it.isDirectory && it != expectedDirectory && it.name.startsWith("build").not() && it.name.startsWith("src").not()}
             .flatMap { directory ->
                 logger.info("will compare image on  ${directory.absolutePath}")
-                (directory.listFiles() ?: error("fail to list fil in ${directory.absolutePath}"))
-                    .filter { it.extension == "png" }
-                    .filter { it.name != "gpu.png" } // Filter this image wich is only to debug
-                    .map { imageFile -> imageFile to (expectedImages.find { imageFile.name == it.name } ?: error("failed to find miror image of ${imageFile.absolutePath}")) }
+                expectedImages.map { expectedFile -> directory.resolve(expectedFile.name) to expectedFile }
                     .map { (actual, expected) ->
                         logger.info("will test $actual, $expected")
                         val bitmap1 = actual.toVfs().readBitmap().toBMP32().premultipliedIfRequired()
