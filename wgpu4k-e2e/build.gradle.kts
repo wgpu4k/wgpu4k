@@ -96,7 +96,7 @@ tasks.create("e2eTest") {
     group = "e2eTest"
     dependsOn(e2eBrowserTest)
     dependsOn(jvmTest)
-    dependsOn(e2eCompareImages)
+    finalizedBy(e2eCompareImages)
 }
 
 java {
