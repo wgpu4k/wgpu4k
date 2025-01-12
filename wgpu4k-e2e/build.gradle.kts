@@ -94,7 +94,7 @@ val e2eCompareImages = tasks.create("e2eCompareImages") {
 
 tasks.create("e2eTest") {
     group = "e2eTest"
-    dependsOn(e2eBrowserTest)
+    if(isInCI().not()) dependsOn(e2eBrowserTest)
     dependsOn(jvmTest)
     finalizedBy(e2eCompareImages)
 }
@@ -107,3 +107,5 @@ java {
 
 fun getCommonProject() = projects.wgpu4kScenes.identityPath.path
     ?.let(::project) ?: error("Could not find project path")
+
+fun isInCI(): Boolean = System.getenv("CI") != null
