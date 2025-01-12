@@ -81,17 +81,22 @@ val e2eBrowserTest = tasks.create("e2eBrowserTest") {
     }
 }
 
+
+val e2eCompareImages = tasks.create("e2eCompareImages") {
+    group = "e2eTest"
+    doLast {
+        val result = compareImages(project.projectDir, logger)
+            .filter { !it.similar }
+        if (result.isNotEmpty()) error("Not similar tests found: ${result.joinToString()}")
+    }
+}
+
+
 tasks.create("e2eTest") {
     group = "e2eTest"
     dependsOn(e2eBrowserTest)
     dependsOn(jvmTest)
-
-    doLast {
-        logger.info("Starting e2e test...")
-        val result = compareImages(project   .projectDir, logger)
-            .filter { !it.similar }
-        if (result.isNotEmpty()) error("Not similar tests found: ${result.joinToString()}")
-    }
+    dependsOn(e2eCompareImages)
 }
 
 java {
