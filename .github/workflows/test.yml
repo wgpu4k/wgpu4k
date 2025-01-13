@@ -57,7 +57,12 @@ jobs:
         run: ./gradlew check --stacktrace
 
       - name: Run e2e tests
+        if: matrix.os != 'ubuntu-latest'
         run: ./gradlew :wgpu4k-e2e:e2eTest --stacktrace --info
+
+      - name: Run e2e tests
+        if: matrix.os == 'ubuntu-latest'
+        run: xvfb-run ./gradlew :wgpu4k-e2e:e2eTest --stacktrace --info
 
       - name: Bundle chromium screenshot
         uses: vimtor/action-zip@v1.2
