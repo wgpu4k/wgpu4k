@@ -74,6 +74,7 @@ val jvmTest = tasks.create("e2eJvmTest") {
 val e2eBrowserTest = tasks.create("e2eBrowserTest") {
     group = "e2eTest"
     doLast {
+        project.projectDir.resolve("js-chromium").mkdir()
         val server = endToEndWebserver(project.projectDir, logger)
         browser(project.projectDir, logger)
         server.stop()
@@ -85,6 +86,7 @@ val e2eBrowserTest = tasks.create("e2eBrowserTest") {
 val e2eCompareImages = tasks.create("e2eCompareImages") {
     group = "e2eTest"
     doLast {
+        project.projectDir.resolve("jvm").mkdir()
         val result = compareImages(project.projectDir, logger)
             .filter { !it.similar }
         if (result.isNotEmpty()) error("Not similar tests found: ${result.joinToString()}")
