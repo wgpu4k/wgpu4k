@@ -30,10 +30,13 @@ gradle-app.setting
 *.jar
 **/node_modules/
 /.kotlin/
-/wgpu4k-e2e/jvm/
-/wgpu4k-e2e/js-chromium/
 /local.properties
 /examples/iosApp/iOSApp.xcodeproj/xcuserdata/
 
 *.deb
 *.xcuserstate
+
+# Ignore e2e tests result directories
+/wgpu4k-e2e/jvm/
+/wgpu4k-e2e/js-chromium/
+/wgpu4k-e2e/wasm-chromium/
