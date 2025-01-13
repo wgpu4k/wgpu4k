@@ -8,6 +8,16 @@ val commonResourcesFile = getCommonProject()
     .resolve("commonMain")
     .resolve("resources")
 
+val jsPagePath = project.projectDir.resolve("build")
+    .resolve("dist")
+    .resolve("js")
+    .resolve("productionExecutable")
+
+val wasmPagePath = project.projectDir.resolve("build")
+    .resolve("dist")
+    .resolve("wasmJs")
+    .resolve("productionExecutable")
+
 kotlin {
 
     jvm {
@@ -19,11 +29,24 @@ kotlin {
         browser()
     }
 
+    wasmJs {
+        binaries.executable()
+        browser()
+    }
+
     sourceSets {
         commonMain {
             dependencies {
                 implementation(projects.wgpu4kScenes)
             }
+        }
+
+        wasmJsMain {
+            resources.setSrcDirs(
+                resources.srcDirs + setOf(
+                    commonResourcesFile
+                )
+            )
         }
 
         jsMain {
@@ -71,17 +94,29 @@ val jvmTest = tasks.create("e2eJvmTest") {
     jvmTasks.forEach { tasks -> dependsOn(tasks) }
 }
 
-val e2eBrowserTest = tasks.create("e2eBrowserTest") {
+val e2eJsBrowserTest = tasks.create("e2eJsBrowserTest") {
     group = "e2eTest"
     doLast {
-        project.projectDir.resolve("js-chromium").mkdir()
-        val server = endToEndWebserver(project.projectDir, logger)
-        browser(project.projectDir, logger)
+        val prefixPath = "js"
+        project.projectDir.resolve("$prefixPath-chromium").mkdir()
+        val server = endToEndWebserver(jsPagePath, logger)
+        browser(project.projectDir, logger, prefixPath)
         server.stop()
 
     }
 }
 
+val e2eWasmBrowserTest = tasks.create("e2eWasmBrowserTest") {
+    group = "e2eTest"
+    doLast {
+        val prefixPath = "wasm"
+        project.projectDir.resolve("$prefixPath-chromium").mkdir()
+        val server = endToEndWebserver(wasmPagePath, logger)
+        browser(project.projectDir, logger, prefixPath)
+        server.stop()
+
+    }
+}
 
 val e2eCompareImages = tasks.create("e2eCompareImages") {
     group = "e2eTest"
@@ -93,10 +128,11 @@ val e2eCompareImages = tasks.create("e2eCompareImages") {
     }
 }
 
-
 tasks.create("e2eTest") {
     group = "e2eTest"
-    if(isInCI().not()) dependsOn(e2eBrowserTest)
+    if(isInCI().not()) dependsOn(e2eJsBrowserTest)
+    // uncomment when wasm is stable
+    // if(isInCI().not()) dependsOn(e2eWasmBrowserTest)
     dependsOn(jvmTest)
     finalizedBy(e2eCompareImages)
 }

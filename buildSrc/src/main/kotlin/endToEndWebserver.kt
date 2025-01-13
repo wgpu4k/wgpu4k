@@ -22,11 +22,7 @@ val scenes = listOf(
     "TexturedCubeScene" to listOf(0, 10, 50, 100),
 )
 
-fun endToEndWebserver(basePath: File, logger: Logger): NettyApplicationEngine {
-    val pagePath = basePath.resolve("build")
-        .resolve("dist")
-        .resolve("js")
-        .resolve("productionExecutable")
+fun endToEndWebserver(pagePath: File, logger: Logger): NettyApplicationEngine {
     logger.info("serve page from ${pagePath.absolutePath}")
     return embeddedServer(Netty, port = 9000) {
 
@@ -40,7 +36,7 @@ fun endToEndWebserver(basePath: File, logger: Logger): NettyApplicationEngine {
 }
 
 
-fun browser(projectDir: File, logger: Logger) {
+fun browser(projectDir: File, logger: Logger, prefixPath: String) {
     logger.info("start to browser")
 
     Playwright.create().use { playwright ->
@@ -61,7 +57,7 @@ fun browser(projectDir: File, logger: Logger) {
                     Page.ScreenshotOptions()
                         .setPath(
                             projectDir
-                                .resolve("js-${browserType.name()}")
+                                .resolve("$prefixPath-${browserType.name()}")
                                 .also { it.mkdirs() }
                                 .resolve("gpu.png")
                                 .toPath()
@@ -84,7 +80,7 @@ fun browser(projectDir: File, logger: Logger) {
                                 Page.ScreenshotOptions()
                                     .setPath(
                                         projectDir
-                                            .resolve("js-${browserType.name()}")
+                                            .resolve("$prefixPath-${browserType.name()}")
                                             .also { it.mkdirs() }
                                             .resolve("$sceneName-$frame.png")
                                             .toPath()
