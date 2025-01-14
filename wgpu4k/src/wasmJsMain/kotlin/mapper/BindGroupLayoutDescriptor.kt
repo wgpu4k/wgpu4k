@@ -1,10 +1,7 @@
 package io.ygdrasil.webgpu.mapper
 
 import io.ygdrasil.webgpu.BindGroupLayoutDescriptor
-import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry.BufferBindingLayout
-import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry.SamplerBindingLayout
-import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry.StorageTextureBindingLayout
-import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry.TextureBindingLayout
+import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry.*
 import io.ygdrasil.webgpu.internal.js.GPUBindGroupLayoutDescriptor
 import io.ygdrasil.webgpu.internal.js.GPUBindGroupLayoutEntry
 import io.ygdrasil.webgpu.internal.js.GPUBufferBindingLayout
@@ -12,13 +9,15 @@ import io.ygdrasil.webgpu.internal.js.GPUSamplerBindingLayout
 import io.ygdrasil.webgpu.internal.js.GPUStorageTextureBindingLayout
 import io.ygdrasil.webgpu.internal.js.GPUTextureBindingLayout
 import io.ygdrasil.webgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.internal.js.mapJsArray
+import io.ygdrasil.webgpu.internal.js.toJsNumber
 import io.ygdrasil.webgpu.toFlagInt
 
 // TODO: add unit test
 internal fun map(input: BindGroupLayoutDescriptor): GPUBindGroupLayoutDescriptor =
     createJsObject<GPUBindGroupLayoutDescriptor>().apply {
-        if (input.label != null) label = input.label
-        entries = input.entries.map { map(it) }.toTypedArray()
+        if (input.label != null) label = input.label.toJsString()
+        entries = input.entries.mapJsArray { map(it) }
     }
 
 private fun map(input: BindGroupLayoutDescriptor.Entry): GPUBindGroupLayoutEntry =
@@ -29,7 +28,7 @@ private fun map(input: BindGroupLayoutDescriptor.Entry): GPUBindGroupLayoutEntry
             buffer = createJsObject<GPUBufferBindingLayout>().apply {
                 type = input.bindingType.type.value
                 hasDynamicOffset = input.bindingType.hasDynamicOffset
-                minBindingSize = input.bindingType.minBindingSize
+                minBindingSize = input.bindingType.minBindingSize.toJsNumber()
             }
         }
         if (input.bindingType is SamplerBindingLayout) {
