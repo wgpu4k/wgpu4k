@@ -3,7 +3,6 @@ import publish.centralPortalPublish
 
 plugins {
     `maven-publish`
-    id("org.jreleaser")
     signing
     id("org.jetbrains.dokka")
 }
