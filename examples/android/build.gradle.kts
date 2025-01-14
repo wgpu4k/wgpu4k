@@ -58,9 +58,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "2.0.0"
     }
-    packagingOptions {
+    packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/{AL2.0,LGPL2.1,INDEX.LIST}"
         }
     }
     namespace = "io.ygdrasil.webgpu"
