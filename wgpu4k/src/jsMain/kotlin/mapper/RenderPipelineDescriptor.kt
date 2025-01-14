@@ -14,7 +14,6 @@ import io.ygdrasil.webgpu.internal.js.GPUVertexAttribute
 import io.ygdrasil.webgpu.internal.js.GPUVertexBufferLayout
 import io.ygdrasil.webgpu.internal.js.GPUVertexState
 import io.ygdrasil.webgpu.internal.js.createJsObject
-import io.ygdrasil.wgpu.mapper.map
 
 internal fun map(input: RenderPipelineDescriptor): GPURenderPipelineDescriptor =
     createJsObject<GPURenderPipelineDescriptor>().apply {
