@@ -1,7 +1,10 @@
 package io.ygdrasil.webgpu.mapper
 
 import io.ygdrasil.webgpu.BindGroupLayoutDescriptor
-import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry.*
+import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry.BufferBindingLayout
+import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry.SamplerBindingLayout
+import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry.StorageTextureBindingLayout
+import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry.TextureBindingLayout
 import io.ygdrasil.webgpu.internal.js.GPUBindGroupLayoutDescriptor
 import io.ygdrasil.webgpu.internal.js.GPUBindGroupLayoutEntry
 import io.ygdrasil.webgpu.internal.js.GPUBufferBindingLayout
