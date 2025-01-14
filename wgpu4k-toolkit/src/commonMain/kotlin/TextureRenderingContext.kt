@@ -15,7 +15,7 @@ class TextureRenderingContext(
                 label = "render texture",
                 size = Size3D(256u, 256u),
                 format = textureFormat,
-                usage = setOf(TextureUsage.renderAttachment, TextureUsage.copySrc, TextureUsage.copyDst)
+                usage = setOf(TextureUsage.RenderAttachment, TextureUsage.CopySrc, TextureUsage.CopyDst)
             )
         )
     }

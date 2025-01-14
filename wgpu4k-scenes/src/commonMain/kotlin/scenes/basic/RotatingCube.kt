@@ -50,7 +50,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		verticesBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = (cubeVertexArray.size * Float.SIZE_BYTES).toULong(),
-				usage = setOf(BufferUsage.vertex),
+				usage = setOf(BufferUsage.Vertex),
 				mappedAtCreation = true
 			)
 		).bind()
@@ -117,7 +117,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			TextureDescriptor(
 				size = Size3D(renderingContext.width, renderingContext.height),
 				format = TextureFormat.Depth24Plus,
-				usage = setOf(TextureUsage.renderAttachment),
+				usage = setOf(TextureUsage.RenderAttachment),
 			)
 		).bind()
 
@@ -125,7 +125,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		uniformBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = uniformBufferSize,
-				usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
+				usage = setOf(BufferUsage.Uniform, BufferUsage.CopyDst)
 			)
 		).bind()
 

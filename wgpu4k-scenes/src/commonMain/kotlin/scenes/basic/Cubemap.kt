@@ -61,7 +61,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 		verticesBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = (cubeVertexArray.size * Float.SIZE_BYTES).toULong(),
-				usage = setOf(BufferUsage.vertex),
+				usage = setOf(BufferUsage.Vertex),
 				mappedAtCreation = true
 			)
 		)
@@ -124,7 +124,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 			TextureDescriptor(
 				size = Size3D(renderingContext.width, renderingContext.height),
 				format = TextureFormat.Depth24Plus,
-				usage = setOf(TextureUsage.renderAttachment),
+				usage = setOf(TextureUsage.RenderAttachment),
 			)
 		).bind()
 
@@ -143,7 +143,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 				// Assume each image has the same size.
 				size = Size3D(imageBitmaps[0].width, imageBitmaps[0].height, depthLayer),
 				format = renderingContext.textureFormat,
-				usage = setOf(TextureUsage.textureBinding, TextureUsage.copyDst, TextureUsage.renderAttachment),
+				usage = setOf(TextureUsage.TextureBinding, TextureUsage.CopyDst, TextureUsage.RenderAttachment),
 			)
 		).bind()
 
@@ -159,7 +159,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 		uniformBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = uniformBufferSize,
-				usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
+				usage = setOf(BufferUsage.Uniform, BufferUsage.CopyDst)
 			)
 		).bind()
 

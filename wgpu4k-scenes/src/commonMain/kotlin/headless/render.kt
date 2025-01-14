@@ -37,7 +37,7 @@ suspend fun captureScene() {
             val outputStagingBuffer = context.device.createBuffer(
                 BufferDescriptor(
                     size = (textureData.size * Int.SIZE_BYTES).toULong(),
-                    usage = setOf(BufferUsage.copydst, BufferUsage.mapread),
+                    usage = setOf(BufferUsage.CopyDst, BufferUsage.MapRead),
                     mappedAtCreation = false,
                 )
             )
@@ -69,7 +69,7 @@ suspend fun captureScene() {
                 )
 
                 context.device.queue.submit(listOf(commandEncoder.finish()))
-                outputStagingBuffer.map(setOf(MapMode.read))
+                outputStagingBuffer.map(setOf(MapMode.Read))
                 // Complete async work
                 context.device.poll()
                 outputStagingBuffer.mapInto(buffer = textureData)
