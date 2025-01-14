@@ -20,6 +20,7 @@ dependencies {
 	implementation(libs.okhttp)
 	implementation(libs.zip4j)
 	implementation(libs.commons.io)
+	implementation(libs.dokka)
 
 	implementation(libs.android.library)
 }
