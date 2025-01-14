@@ -1,54 +1,42 @@
-import org.jreleaser.model.Active
+import publish.PublishingType
+import publish.centralPortalPublish
 
 plugins {
     `maven-publish`
     id("org.jreleaser")
+    signing
+    id("org.jetbrains.dokka")
 }
 
 
 val libraryDescription = "Webgpu binding to kotlin multiplatform"
 
-jreleaser {
-    gitRootSearch = true
+val signingKey = System.getenv("JRELEASER_GPG_SECRET_KEY")
+val signingPassword = System.getenv("JRELEASER_GPG_PASSPHRASE")
 
-    project {
-        description = libraryDescription
-        copyright = "MIT"
-    }
-
+if (!isSnapshot()) {
     signing {
-        active.set(Active.ALWAYS)
-        armored = true
-        artifacts = true
+        useInMemoryPgpKeys(signingKey, signingPassword)
+        sign(publishing.publications)
     }
-    deploy {
-        active.set(Active.ALWAYS)
-        maven {
-            active.set(Active.ALWAYS)
-            mavenCentral {
-                active.set(Active.ALWAYS)
-                this.create("sonatype") {
-                    active.set(Active.ALWAYS)
-                    url = "https://central.sonatype.com/api/v1/publisher"
-                    stagingRepository("build/staging-deploy")
-                }
-            }
-        }
-    }
+}
 
-    release {
-        github {
-            skipRelease = true
-            skipTag = true
-            overwrite = false
-            token = "none"
-        }
-    }
+project.centralPortalPublish {
+    username = System.getenv("JRELEASER_MAVENCENTRAL_USERNAME")
+    password = System.getenv("JRELEASER_MAVENCENTRAL_PASSWORD")
+    publishingType = PublishingType.USER_MANAGED
+    url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
+}
+
+val javadocJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("javadoc")
+    from(tasks.findByName("dokkaHtml"))
 }
 
 publishing {
     publications {
         withType<MavenPublication> {
+            artifact(javadocJar)
             pom {
                 name.set(project.name)
                 description.set(libraryDescription)
@@ -75,9 +63,11 @@ publishing {
         }
     }
 
+
     repositories {
         maven {
             if (isSnapshot()) {
+                logger.info("publishing is configure as snapshot")
                 name = "GitLab"
                 url = uri("https://gitlab.com/api/v4/projects/25805863/packages/maven")
                 credentials(HttpHeaderCredentials::class) {
@@ -88,8 +78,18 @@ publishing {
                     create<HttpHeaderAuthentication>("header")
                 }
             } else {
+                name = "Local"
+                logger.info("publishing is configure as release")
                 url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
+                logger.info("publishing path is ${url.path}")
             }
         }
+    }
+}
+
+if (!isSnapshot()) {
+    val signingTasks = tasks.withType<Sign>()
+    tasks.withType<AbstractPublishToMaven>().configureEach {
+        dependsOn(signingTasks)
     }
 }

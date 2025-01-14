@@ -16,8 +16,12 @@ dependencies {
     implementation(libs.bundles.korlibs)
 	implementation(libs.coroutines)
 	implementation(libs.kotlin.multiplatform)
+
+	implementation(libs.okhttp)
+	implementation(libs.zip4j)
+	implementation(libs.commons.io)
+
 	implementation(libs.android.library)
-	implementation(libs.jreleaser.plugin)
 }
 
 val isAndroidConfigured: Boolean
