@@ -56,7 +56,7 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
         uniformBuffer = device.createBuffer(
             BufferDescriptor(
                 size = uniformBufferSize,
-                usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
+                usage = setOf(BufferUsage.Uniform, BufferUsage.CopyDst)
             )
         ).bind()
 

@@ -44,7 +44,7 @@ suspend fun uploadGLBModel(
             TextureDescriptor(
                 size = Size3D(width = bitmap.width.toUInt(), height = bitmap.height.toUInt(), depthOrArrayLayers = 1u),
                 format = textureFormat,
-                usage = setOf(TextureUsage.textureBinding, TextureUsage.copyDst, TextureUsage.renderAttachment)
+                usage = setOf(TextureUsage.TextureBinding, TextureUsage.CopyDst, TextureUsage.RenderAttachment)
             )
         )
 
@@ -90,7 +90,7 @@ suspend fun uploadGLBModel(
                     val accessor = gltf2.accessors[primitive.indices]
                     val viewID = accessor.bufferView
                     bufferViews[viewID].needsUpload = true
-                    bufferViews[viewID].addUsage(BufferUsage.index)
+                    bufferViews[viewID].addUsage(BufferUsage.Index)
                     GLTFAccessor(bufferViews[viewID], accessor)
                 } else null
 
@@ -101,7 +101,7 @@ suspend fun uploadGLBModel(
                     val accessor = gltf2.accessors[index]
                     val viewID = accessor.bufferView
                     bufferViews[viewID].needsUpload = true
-                    bufferViews[viewID].addUsage(BufferUsage.vertex)
+                    bufferViews[viewID].addUsage(BufferUsage.Vertex)
                     when (attribute.str) {
                         "POSITION" -> positions = GLTFAccessor(bufferViews[viewID], accessor)
                         "NORMAL" -> normals = GLTFAccessor(bufferViews[viewID], accessor)

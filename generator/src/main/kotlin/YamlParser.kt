@@ -1,8 +1,10 @@
 import com.charleskorn.kaml.Yaml
 import domain.YamlModel
+import generator.bitflagCommonMainFile
 import generator.enumerationCommonMainFile
 import generator.enumerationNativeMainFile
 import generator.enumerationWebMainFile
+import generator.generateCommonBitflag
 import generator.generateCommonEnumerations
 import generator.generateNativeEnumerations
 import generator.generateWebEnumerations
@@ -16,6 +18,8 @@ fun main() {
     enumerationCommonMainFile.generateCommonEnumerations(webgpuModel.enums)
     enumerationWebMainFile.generateWebEnumerations(webgpuModel.enums)
     enumerationNativeMainFile.generateNativeEnumerations(webgpuModel.enums)
+
+    bitflagCommonMainFile.generateCommonBitflag(webgpuModel.bitflags)
 }
 
 fun loadExtraYaml() = readFileFromClasspath("extra.yml")

@@ -4,7 +4,10 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.AddressMode
 import io.ygdrasil.webgpu.BindGroup
 import io.ygdrasil.webgpu.BindGroupDescriptor
-import io.ygdrasil.webgpu.BindGroupDescriptor.*
+import io.ygdrasil.webgpu.BindGroupDescriptor.BindGroupEntry
+import io.ygdrasil.webgpu.BindGroupDescriptor.BufferBinding
+import io.ygdrasil.webgpu.BindGroupDescriptor.SamplerBinding
+import io.ygdrasil.webgpu.BindGroupDescriptor.TextureViewBinding
 import io.ygdrasil.webgpu.BindGroupLayout
 import io.ygdrasil.webgpu.BindGroupLayoutDescriptor
 import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry
@@ -224,7 +227,7 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
         val buf = device.createBuffer(
             BufferDescriptor(
                 size = 3uL * 4uL * 4uL,
-                setOf(BufferUsage.uniform),
+                setOf(BufferUsage.Uniform),
                 mappedAtCreation = true
             )
         )
@@ -236,7 +239,7 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
         val layoutEntries = mutableListOf(
             Entry(
                 binding = 0u,
-                visibility = setOf(ShaderStage.fragment),
+                visibility = setOf(ShaderStage.Fragment),
                 bindingType = BufferBindingLayout(
                     type = BufferBindingType.Uniform
                 ),
@@ -255,14 +258,14 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
             layoutEntries.add(
                 Entry(
                     binding = 1u,
-                    visibility = setOf(ShaderStage.fragment),
+                    visibility = setOf(ShaderStage.Fragment),
                     bindingType = SamplerBindingLayout(),
                 )
             )
             layoutEntries.add(
                 Entry(
                     binding = 2u,
-                    visibility = setOf(ShaderStage.fragment),
+                    visibility = setOf(ShaderStage.Fragment),
                     bindingType = Entry.TextureBindingLayout(),
                 )
             )
@@ -383,7 +386,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
         gpuUniforms = device.createBuffer(
             BufferDescriptor(
                 size = 4uL * 4uL * 4uL,
-                usage = setOf(BufferUsage.uniform),
+                usage = setOf(BufferUsage.Uniform),
                 mappedAtCreation = true
             )
         )
@@ -404,7 +407,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
                 entries = listOf(
                     Entry(
                         binding = 0u,
-                        visibility = setOf(ShaderStage.vertex),
+                        visibility = setOf(ShaderStage.Vertex),
                         bindingType = BufferBindingLayout(type = BufferBindingType.Uniform)
                     )
                 )

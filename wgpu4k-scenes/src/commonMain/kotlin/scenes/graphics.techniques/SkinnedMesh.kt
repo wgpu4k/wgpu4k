@@ -53,7 +53,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
                     depthOrArrayLayers = 1u
                 ),
                 format = TextureFormat.Depth24PlusStencil8,
-                usage = setOf(TextureUsage.renderAttachment)
+                usage = setOf(TextureUsage.RenderAttachment)
             )
         ).bind()
 
@@ -82,7 +82,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
                 entries = listOf(
                     Entry(
                         binding = 0u,
-                        visibility = setOf(ShaderStage.vertex),
+                        visibility = setOf(ShaderStage.Vertex),
                         bindingType = Entry.BufferBindingLayout(type = BufferBindingType.Uniform)
                     )
                 )
@@ -91,7 +91,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
 
         viewParamBuf = device.createBuffer(
             BufferDescriptor(
-                size = 4uL * 4uL * 4uL, usage = setOf(BufferUsage.uniform, BufferUsage.copydst)
+                size = 4uL * 4uL * 4uL, usage = setOf(BufferUsage.Uniform, BufferUsage.CopyDst)
             )
         ).bind()
 

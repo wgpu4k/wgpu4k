@@ -19,25 +19,25 @@ class EnumerationsTest : FreeSpec({
 
     "test flag to int with one flag" {
         // Given
-        val withFlags = setOf(BufferUsage.vertex)
+        val withFlags = setOf(BufferUsage.Vertex)
 
         // When
         val intFlag = withFlags.toFlagInt()
 
         // Then
 
-        intFlag shouldBe BufferUsage.vertex.value
+        intFlag shouldBe BufferUsage.Vertex.value
     }
 
     "test flag to int with multiple flags" {
         // Given
-        val withFlags = setOf(BufferUsage.vertex, BufferUsage.copydst, BufferUsage.uniform)
+        val withFlags = setOf(BufferUsage.Vertex, BufferUsage.CopyDst, BufferUsage.Uniform)
 
         // When
         val intFlag = withFlags.toFlagInt()
 
         // Then
 
-        intFlag shouldBe (BufferUsage.vertex.value or BufferUsage.copydst.value or BufferUsage.uniform.value)
+        intFlag shouldBe (BufferUsage.Vertex.value or BufferUsage.CopyDst.value or BufferUsage.Uniform.value)
     }
 })

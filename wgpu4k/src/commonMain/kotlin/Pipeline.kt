@@ -89,7 +89,7 @@ data class RenderPipelineDescriptor(
 
         data class ColorTargetState(
             val format: TextureFormat,
-            val writeMask: ColorWriteMask = ColorWriteMask.all,
+            val writeMask: ColorWriteMask = ColorWriteMask.All,
             val blend: BlendState = BlendState(),
         ) {
             data class BlendState(
