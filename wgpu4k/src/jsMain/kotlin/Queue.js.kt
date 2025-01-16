@@ -3,9 +3,9 @@ package io.ygdrasil.webgpu
 import io.ygdrasil.webgpu.internal.js.BigInt64Array
 import io.ygdrasil.webgpu.internal.js.GPUExtent3DDict
 import io.ygdrasil.webgpu.internal.js.GPUImageCopyTexture
-import io.ygdrasil.webgpu.internal.js.GPUImageDataLayout
 import io.ygdrasil.webgpu.internal.js.GPUQueue
 import io.ygdrasil.webgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.internal.web.newGPUImageDataLayout
 import io.ygdrasil.webgpu.mapper.map
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.Float32Array
@@ -218,11 +218,11 @@ actual class Queue(internal val handler: GPUQueue) {
                 aspect = destination.aspect.value
             },
             image.data.unsafeCast<ArrayBuffer>(),
-            createJsObject<GPUImageDataLayout>().apply {
-                offset = 0u
-                bytesPerRow = image.width * bytePerPixel
+            newGPUImageDataLayout(
+                offset = 0uL,
+                bytesPerRow = image.width * bytePerPixel,
                 rowsPerImage = image.height
-            },
+            ),
             createJsObject<GPUExtent3DDict>().apply {
                 width = image.width
                 height = image.height

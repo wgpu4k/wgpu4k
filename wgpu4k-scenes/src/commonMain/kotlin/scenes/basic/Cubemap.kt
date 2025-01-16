@@ -1,5 +1,6 @@
 package io.ygdrasil.webgpu.examples.scenes.basic
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.AutoClosableContext
 import io.ygdrasil.webgpu.BindGroup
 import io.ygdrasil.webgpu.BindGroupDescriptor
@@ -43,6 +44,8 @@ import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
 
+private val logger = KotlinLogging.logger {}
+
 class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene(wgpuContext), AssetManager by assetManager {
 
 	lateinit var renderPipeline: RenderPipeline
@@ -56,7 +59,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 	val depthLayer = 6u
 
 	override suspend fun initialize() = with(autoClosableContext) {
-
+		logger.trace { "Initializing CubeMapScene" }
 		// Create a vertex buffer from the cube data.
 		verticesBuffer = device.createBuffer(
 			BufferDescriptor(
@@ -148,6 +151,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 		).bind()
 
 		imageBitmaps.forEachIndexed { index, imageBitmap ->
+			logger.debug { "Copying image bitmap to texture: $index" }
 			device.queue.copyExternalImageToTexture(
 				ImageCopyExternalImage(source = imageBitmap),
 				ImageCopyTextureTagged(texture = cubemapTexture, origin = Origin3D(0u, 0u, index.toUInt())),
@@ -169,7 +173,6 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 				minFilter = FilterMode.Linear,
 			)
 		).bind()
-
 
 		uniformBindGroup = device.createBindGroup(
 			BindGroupDescriptor(
@@ -226,7 +229,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 		val fox = Angle.fromRadians((2 * PI) / 5)
 		projectionMatrix = Matrix4.perspective(fox, aspect, 1.0, 3000.0)
 
-
+		logger.trace { "Initialized CubeMapScene" }
 	}
 
 	override suspend fun AutoClosableContext.render() {

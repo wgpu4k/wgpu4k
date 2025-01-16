@@ -25,6 +25,9 @@ kotlin {
     wasmJs {
         binaries.executable()
         browser()
+        compilerOptions {
+            freeCompilerArgs.add("-Xwasm-use-new-exception-proposal")
+        }
     }
 
     sourceSets {

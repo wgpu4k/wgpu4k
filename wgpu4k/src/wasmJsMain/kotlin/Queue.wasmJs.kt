@@ -1,15 +1,16 @@
 package io.ygdrasil.webgpu
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.internal.js.BigInt64Array
 import io.ygdrasil.webgpu.internal.js.GPUExtent3DDict
 import io.ygdrasil.webgpu.internal.js.GPUImageCopyTexture
-import io.ygdrasil.webgpu.internal.js.GPUImageDataLayout
 import io.ygdrasil.webgpu.internal.js.GPUQueue
 import io.ygdrasil.webgpu.internal.js.createJsObject
 import io.ygdrasil.webgpu.internal.js.mapJsArray
 import io.ygdrasil.webgpu.internal.js.toInt8Array
 import io.ygdrasil.webgpu.internal.js.toJsBigInt
 import io.ygdrasil.webgpu.internal.js.toJsNumber
+import io.ygdrasil.webgpu.internal.web.newGPUImageDataLayout
 import io.ygdrasil.webgpu.mapper.map
 import org.khronos.webgl.Float32Array
 import org.khronos.webgl.Float64Array
@@ -17,7 +18,10 @@ import org.khronos.webgl.Int16Array
 import org.khronos.webgl.Int32Array
 import org.khronos.webgl.Int8Array
 
+
 actual class Queue(internal val handler: GPUQueue) {
+
+    private val logger = KotlinLogging.logger {}
 
     actual fun submit(commandsBuffer: List<CommandBuffer>) {
         handler.submit(commandsBuffer.mapJsArray { it.handler })
@@ -208,11 +212,12 @@ actual class Queue(internal val handler: GPUQueue) {
         destination: ImageCopyTextureTagged,
         copySize: GPUIntegerCoordinates,
     ) {
-
+        logger.trace { "copyExternalImageToTexture" }
         val image = (source.source as? ImageBitmapHolder)
             ?: error("ImageBitmapHolder required as source")
 
         val bytePerPixel = destination.texture.format.getBytesPerPixel()
+        logger.debug { "bytePerPixel: $bytePerPixel" }
 
         handler.writeTexture(
             createJsObject<GPUImageCopyTexture>().apply {
@@ -222,11 +227,11 @@ actual class Queue(internal val handler: GPUQueue) {
                 aspect = destination.aspect.value
             },
             image.data.toInt8Array().buffer,
-            createJsObject<GPUImageDataLayout>().apply {
-                offset = 0L.toJsBigInt()
-                bytesPerRow = image.width * bytePerPixel
+            newGPUImageDataLayout(
+                offset = 0uL,
+                bytesPerRow = image.width * bytePerPixel,
                 rowsPerImage = image.height
-            },
+            ),
             createJsObject<GPUExtent3DDict>().apply {
                 width = image.width
                 height = image.height
