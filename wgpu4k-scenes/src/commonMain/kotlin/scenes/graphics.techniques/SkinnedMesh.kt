@@ -2,6 +2,7 @@
 
 package io.ygdrasil.webgpu.examples.scenes.graphics.techniques
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.AutoClosableContext
 import io.ygdrasil.webgpu.BindGroupDescriptor
 import io.ygdrasil.webgpu.BindGroupDescriptor.BindGroupEntry
@@ -33,7 +34,10 @@ import korlibs.math.geom.Matrix4
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlin.math.PI
 
+
 class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene(wgpuContext), AssetManager by assetManager {
+
+    private val logger = KotlinLogging.logger {}
 
     internal lateinit var renderBundles: List<RenderBundle>
     internal lateinit var viewParamBuf: Buffer
@@ -42,7 +46,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
     internal lateinit var shaderCache: ShaderCache
 
     override suspend fun initialize() = with(autoClosableContext) {
-
+        logger.info { "Initializing SkinnedMeshScene" }
         shaderCache = ShaderCache(device)
 
         val depthTexture = device.createTexture(
@@ -107,8 +111,10 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
             )
         ).bind()
 
+        logger.debug { "Loading box mesh" }
         val model = uploadGLBModel(device, boxMesh, renderingContext.textureFormat)
 
+        logger.debug { "Creating render bundles" }
         renderBundles = model.buildRenderBundles(
             device,
             shaderCache,
@@ -118,6 +124,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
         )
 
         projectionMatrix = getProjectionMatrix(renderingContext.width, renderingContext.height)
+        logger.info { "SkinnedMeshScene initialized" }
     }
 
     override suspend fun AutoClosableContext.render() {

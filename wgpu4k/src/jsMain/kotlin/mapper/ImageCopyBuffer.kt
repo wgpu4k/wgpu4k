@@ -6,7 +6,7 @@ import io.ygdrasil.webgpu.internal.js.createJsObject
 
 internal fun map(input: ImageCopyBuffer): GPUImageCopyBuffer = createJsObject<GPUImageCopyBuffer>().apply {
     buffer = input.buffer.handler
-    offset = input.offset
-    bytesPerRow = input.bytesPerRow
-    rowsPerImage = input.rowsPerImage
+    offset = map(input.offset)
+    bytesPerRow = map(input.bytesPerRow)
+    rowsPerImage = map(input.rowsPerImage)
 }

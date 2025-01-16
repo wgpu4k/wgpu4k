@@ -18,6 +18,7 @@ import io.ygdrasil.webgpu.GPUSize32Out
 import io.ygdrasil.webgpu.GPUSize64
 import io.ygdrasil.webgpu.GPUStencilValue
 import io.ygdrasil.webgpu.GPUTextureUsageFlags
+import io.ygdrasil.webgpu.internal.web.GPUImageDataLayout
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.ArrayBufferView
 import org.khronos.webgl.Uint32Array
@@ -181,12 +182,6 @@ external interface GPUImageCopyTexture {
 external interface GPUImageCopyTextureTagged : GPUImageCopyTexture {
     var colorSpace: String
     var premultipliedAlpha: Boolean
-}
-
-external interface GPUImageDataLayout {
-    var offset: GPUSize64?
-    var bytesPerRow: GPUSize32?
-    var rowsPerImage: GPUSize32?
 }
 
 external interface GPUMultisampleState {

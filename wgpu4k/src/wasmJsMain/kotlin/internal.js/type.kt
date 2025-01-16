@@ -13,6 +13,7 @@ import io.ygdrasil.webgpu.GPUSize32
 import io.ygdrasil.webgpu.GPUSize32Out
 import io.ygdrasil.webgpu.GPUSize64
 import io.ygdrasil.webgpu.GPUTextureUsageFlags
+import io.ygdrasil.webgpu.internal.web.GPUImageDataLayout
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.ArrayBufferView
 import org.khronos.webgl.Uint32Array
@@ -400,12 +401,6 @@ external interface GPUQueue : GPUObjectBase {
     )
 
     fun onSubmittedWorkDone(): Promise<Nothing?>
-}
-
-external interface GPUImageDataLayout : JsAny {
-    var offset: JsBigInt
-    var bytesPerRow: GPUSize32?
-    var rowsPerImage: GPUSize32?
 }
 
 external interface GPUImageCopyTexture : JsAny {
