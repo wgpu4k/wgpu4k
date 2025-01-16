@@ -403,12 +403,6 @@ external interface GPUQueue : GPUObjectBase {
     fun onSubmittedWorkDone(): Promise<Nothing?>
 }
 
-/*external interface GPUImageDataLayout : JsAny {
-    var offset: JsBigInt
-    var bytesPerRow: GPUSize32?
-    var rowsPerImage: GPUSize32?
-}*/
-
 external interface GPUImageCopyTexture : JsAny {
     var texture: GPUTexture
     var mipLevel: GPUIntegerCoordinate

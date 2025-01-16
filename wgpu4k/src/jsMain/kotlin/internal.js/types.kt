@@ -184,12 +184,6 @@ external interface GPUImageCopyTextureTagged : GPUImageCopyTexture {
     var premultipliedAlpha: Boolean
 }
 
-/*external interface GPUImageDataLayout {
-    var offset: GPUSize64?
-    var bytesPerRow: GPUSize32?
-    var rowsPerImage: GPUSize32?
-}*/
-
 external interface GPUMultisampleState {
     var count: GPUSize32?
 
