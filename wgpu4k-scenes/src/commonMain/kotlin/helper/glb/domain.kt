@@ -224,17 +224,18 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
     }
 
     fun upload(device: Device) {
-        val buf = device.createBuffer(
+        logger.debug { "Uploading material for node" }
+        val buffer = device.createBuffer(
             BufferDescriptor(
-                size = 3uL * 4uL * 4uL,
+                size = (2uL * 4uL * 4uL) * Float.SIZE_BYTES.toULong(),
                 setOf(BufferUsage.Uniform),
                 mappedAtCreation = true
             )
         )
-        buf.mapFrom(baseColorFactor)
-        buf.mapFrom(emissiveFactor, 4uL * Float.SIZE_BYTES.toULong())
-        buf.mapFrom(floatArrayOf(metallicFactor, roughnessFactor), 4uL * Float.SIZE_BYTES.toULong())
-        buf.unmap()
+        buffer.mapFrom(baseColorFactor)
+        buffer.mapFrom(emissiveFactor, 4uL * Float.SIZE_BYTES.toULong())
+        buffer.mapFrom(floatArrayOf(metallicFactor, roughnessFactor), 8uL * Float.SIZE_BYTES.toULong())
+        buffer.unmap()
 
         val layoutEntries = mutableListOf(
             Entry(
@@ -249,7 +250,7 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
             BindGroupEntry(
                 binding = 0u,
                 resource = BufferBinding(
-                    buffer = buf
+                    buffer = buffer
                 )
             )
         )
@@ -383,6 +384,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
     lateinit var bindGroup: BindGroup
 
     fun upload(device: Device) {
+        logger.debug { "Uploading uniform buffer for node $name" }
         gpuUniforms = device.createBuffer(
             BufferDescriptor(
                 size = 4uL * 4uL * 4uL,

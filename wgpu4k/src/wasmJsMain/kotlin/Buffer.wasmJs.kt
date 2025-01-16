@@ -1,5 +1,6 @@
 package io.ygdrasil.webgpu
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.internal.js.GPUBuffer
 import io.ygdrasil.webgpu.internal.js.mapJsArray
 import io.ygdrasil.webgpu.internal.js.toJsNumber
@@ -10,6 +11,8 @@ import org.khronos.webgl.Int8Array
 import org.khronos.webgl.get
 
 actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
+
+    private val logger = KotlinLogging.logger {}
 
     actual val size: GPUSize64
         get() = handler
@@ -35,6 +38,7 @@ actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
     }
 
     actual fun mapFrom(buffer: FloatArray, offset: GPUSize64) {
+        logger.debug { "mapping float array with size ${buffer.size} and offset $offset" }
         Float32Array(
             handler.getMappedRange(
                 offset.toJsNumber(),

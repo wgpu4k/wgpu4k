@@ -74,6 +74,7 @@ suspend fun uploadGLBModel(
         GLTFMaterial(material, textures)
     }
 
+    logger.debug { "uploadGLBModel: meshes" }
     val meshes = gltf2.meshes.map { mesh ->
         val primitives = mesh.primitives
             .filter { primitive ->
@@ -123,6 +124,7 @@ suspend fun uploadGLBModel(
         GLTFMesh(mesh.name ?: "", primitives)
     }
 
+    logger.debug { "uploadGLBModel: upload ${bufferViews.size} buffer views" }
     // Upload the different views used by meshes
     bufferViews.forEach { bufferView ->
         if (bufferView.needsUpload) {
@@ -130,8 +132,11 @@ suspend fun uploadGLBModel(
         }
     }
 
+    logger.debug { "uploadGLBModel: upload default material" }
     defaultMaterial.upload(device)
+    logger.debug { "uploadGLBModel: upload ${materials.size} materials" }
     materials.forEach { material -> material.upload(device) }
+
 
     val nodes = makeGLTFSingleLevel(gltf2, meshes)
     nodes.forEach { it.upload(device) }
@@ -139,6 +144,7 @@ suspend fun uploadGLBModel(
 }
 
 fun makeGLTFSingleLevel(gltF2: GLTF2, meshes: List<GLTFMesh>): List<GLTFNode> {
+    logger.debug { "makeGLTFSingleLevel" }
     val rootTfm = Matrix4.IDENTITY.copyToColumns()
     return gltF2.scenes[gltF2.scene]
         .nodes
@@ -155,6 +161,7 @@ fun loadNodes(
     meshes: List<GLTFMesh>,
     createdNodes: MutableList<GLTFNode> = mutableListOf(),
 ): List<GLTFNode> {
+    logger.debug { "loadNodes: ${node.name}" }
     var tfm = readNodeTransform(node)
     tfm = multiply(tfm, parent_transform, tfm)
     val mesh = meshes[node.mesh!!]

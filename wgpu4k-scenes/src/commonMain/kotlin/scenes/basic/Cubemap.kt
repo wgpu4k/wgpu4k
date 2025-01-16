@@ -44,9 +44,10 @@ import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
 
-private val logger = KotlinLogging.logger {}
 
 class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene(wgpuContext), AssetManager by assetManager {
+
+	private val logger = KotlinLogging.logger {}
 
 	lateinit var renderPipeline: RenderPipeline
 	lateinit var projectionMatrix: Matrix4
