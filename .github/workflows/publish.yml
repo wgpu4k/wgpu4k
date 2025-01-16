@@ -16,14 +16,13 @@ jobs:
           java-version: 22
           cache: 'gradle'
       - name: Build and publish with Gradle
-        run: ./gradlew publish --info
+        run: |
+          ./gradlew build
+          ./gradlew publish publishToCentralPortal --info
         env:
           SNAPSHOT: "false"
           VERSION: ${{ github.event.release.tag_name }}
-          SONATYPE_LOGIN: ${{ secrets.SONATYPE_LOGIN }}
-          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-          PGP_PUBLIC: ${{ secrets.PGP_PUBLIC }}
-          PGP_PRIVATE: ${{ secrets.PGP_PRIVATE }}
-          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
-          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
-
+          MAVENCENTRAL_USERNAME: ${{ secrets.SONATYPE_LOGIN }}
+          MAVENCENTRAL_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          GPG_SECRET_KEY: ${{ secrets.PGP_PRIVATE }}
+          GPG_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}

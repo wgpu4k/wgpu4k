@@ -10,8 +10,8 @@ plugins {
 
 val libraryDescription = "Webgpu binding to kotlin multiplatform"
 
-val signingKey = System.getenv("JRELEASER_GPG_SECRET_KEY")
-val signingPassword = System.getenv("JRELEASER_GPG_PASSPHRASE")
+val signingKey = System.getenv("GPG_SECRET_KEY")
+val signingPassword = System.getenv("GPG_PASSPHRASE")
 
 if (!isSnapshot()) {
     signing {
@@ -21,8 +21,8 @@ if (!isSnapshot()) {
 }
 
 project.centralPortalPublish {
-    username = System.getenv("JRELEASER_MAVENCENTRAL_USERNAME")
-    password = System.getenv("JRELEASER_MAVENCENTRAL_PASSWORD")
+    username = System.getenv("MAVENCENTRAL_USERNAME")
+    password = System.getenv("MAVENCENTRAL_PASSWORD")
     publishingType = PublishingType.USER_MANAGED
     url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
 }
