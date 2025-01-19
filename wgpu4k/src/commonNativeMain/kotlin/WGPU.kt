@@ -147,12 +147,12 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
 
 enum class WGPUInstanceBackend(val value: Int) {
 
-    Vulkan(1 shl 1),
-    GL(1 shl 5),
+    Vulkan(1 shl 0),
+    GL(1 shl 1),
     Metal(1 shl 2),
     DX12(1 shl 3),
     DX11(1 shl 4),
-    BrowserWebGPU(1 shl 6),
+    BrowserWebGPU(1 shl 5),
     Primary(Vulkan.value or Metal.value or DX12.value or BrowserWebGPU.value),
     Secondary(GL.value or DX11.value),
     None(0x00000000);

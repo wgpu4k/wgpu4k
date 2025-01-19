@@ -122,10 +122,20 @@ kotlin {
             dependencies {
                 implementation(libs.coroutines)
                 api(libs.kotlin.logging)
+            }
+        }
+
+        jvmMain {
+            dependencies {
                 implementation(libs.logback)
             }
         }
 
+        if (isAndroidConfigured) androidMain {
+            dependencies {
+                implementation(libs.slf4j.simple)
+            }
+        }
 
         val commonNativeMain by getting {
             dependencies { api(libs.wgpu4k.native) }

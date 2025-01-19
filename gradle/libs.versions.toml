@@ -10,6 +10,7 @@ coroutines = "1.9.0"
 korge = "6.0.0"
 agp = "8.5.2"
 rococoa = "0.0.1"
+slf4j-simple = "2.0.16"
 wgpu4k-native = "v22.0.1"
 android-native-helper = "0.0.1"
 glfw-native = "0.0.1"
@@ -35,6 +36,7 @@ ktor-server-netty-jvm = { module = "io.ktor:ktor-server-netty-jvm", version.ref 
 ktor-server-core-jvm = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 playwright = { module = "com.microsoft.playwright:playwright", version.ref = "playwright" }
 rococoa = { module = "io.ygdrasil:rococoa", version.ref = "rococoa" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j-simple" }
 wgpu4k-native = { module = "io.ygdrasil:wgpu4k-native", version.ref = "wgpu4k-native" }
 wgpu-specs = { module = "io.ygdrasil:wgpu4k-native-specs-jvm", version.ref = "wgpu4k-native" }
 glfw-native = { module = "io.ygdrasil:glfw-native", version.ref = "glfw-native" }
