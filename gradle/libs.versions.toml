@@ -11,7 +11,7 @@ korge = "6.0.0"
 agp = "8.5.2"
 rococoa = "0.0.1"
 slf4j-simple = "2.0.16"
-wgpu4k-native = "v22.0.2-SNAPSHOT"
+wgpu4k-native = "v22.0.2"
 android-native-helper = "0.0.1"
 glfw-native = "0.0.1"
 
