@@ -2,13 +2,13 @@ name: Tests
 
 on:
   push:
-    branches: [ main, 'release/**', 'feature/**'  ]
+    branches: [ main, 'release/**', 'feature/**', 'fix/**'  ]
     paths-ignore:
       - '*.md'
       - '*.yml'
       - '.github/workflows/**'
   pull_request:
-    branches: [ main, 'release/**', 'feature/**'  ]
+    branches: [ main, 'release/**', 'feature/**', 'fix/**'  ]
   workflow_dispatch:
 
 concurrency:

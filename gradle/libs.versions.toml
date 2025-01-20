@@ -1,6 +1,6 @@
 [versions]
 kotest = "6.0.0.M1"
-jna = "5.15.0"
+jna = "5.16.0"
 kotlin = "2.1.0"
 kotlinx-browser = "0.3"
 kotlinx-serialization-json = "1.7.2"
@@ -11,7 +11,7 @@ korge = "6.0.0"
 agp = "8.5.2"
 rococoa = "0.0.1"
 slf4j-simple = "2.0.16"
-wgpu4k-native = "v22.0.1"
+wgpu4k-native = "v22.0.2-SNAPSHOT"
 android-native-helper = "0.0.1"
 glfw-native = "0.0.1"
 
