@@ -8,7 +8,7 @@ class CanvasSurface(private val handler: GPUCanvasContext) {
     val width: UInt
         get() = map(handler.canvas.width)
     val height: UInt
-        get() = map(handler.canvas.width)
+        get() = map(handler.canvas.height)
 
     val preferredCanvasFormat: TextureFormat?
         get() = navigator.gpu
