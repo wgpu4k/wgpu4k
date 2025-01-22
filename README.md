@@ -1,7 +1,7 @@
 # WGPU4K: A WebGPU Binding for Kotlin Multi-platform
 [![Tests](https://github.com/wgpu4k/wgpu4k/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/wgpu4k/wgpu4k/actions/workflows/test.yml)
-![Static Badge](https://img.shields.io/badge/Status-Alpha-red?style=plastic)
-![Static Badge](https://img.shields.io/badge/Latest%20version-preview_3-red?style=plastic)
+![Static Badge](https://img.shields.io/badge/Status-Beta-orange?style=plastic)
+![Static Badge](https://img.shields.io/badge/Latest%20version-0.0.3-orange?style=plastic)
 [![Static Badge](https://img.shields.io/badge/Licence-MIT-blue?style=plastic)](https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FMIT_License)
 [![Static Badge](https://img.shields.io/badge/Discord-wgpu4k-purple?style=plastic)](https://discord.gg/qy9KQAP9Kc)
 
@@ -22,7 +22,7 @@ This project focuses on creating a binding for WebGPU which can support Kotlin o
 
 ## Prerequisites
 
-- Gradle 8.9
+- Gradle 8.11
 - JDK 22+
 - A recent version of Chrome or Firefox Nightly for web browser execution. Check compatibility [here][chart].
 
