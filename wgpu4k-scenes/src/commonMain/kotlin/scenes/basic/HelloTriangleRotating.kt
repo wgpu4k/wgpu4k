@@ -55,6 +55,7 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
         val uniformBufferSize = 4uL * 16uL // 4x4 matrix
         uniformBuffer = device.createBuffer(
             BufferDescriptor(
+                label = "Uniform Buffer",
                 size = uniformBufferSize,
                 usage = setOf(BufferUsage.Uniform, BufferUsage.CopyDst)
             )
