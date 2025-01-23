@@ -1,53 +1,68 @@
 # WGPU4K: A WebGPU Binding for Kotlin Multi-platform
-[![Tests](https://github.com/wgpu4k/wgpu4k/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/wgpu4k/wgpu4k/actions/workflows/test.yml)
-![Static Badge](https://img.shields.io/badge/Status-Alpha-red?style=plastic)
-![Static Badge](https://img.shields.io/badge/Latest%20version-preview_3-red?style=plastic)
-[![Static Badge](https://img.shields.io/badge/Licence-MIT-blue?style=plastic)](https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FMIT_License)
-[![Static Badge](https://img.shields.io/badge/Discord-wgpu4k-purple?style=plastic)](https://discord.gg/qy9KQAP9Kc)
 
-This project focuses on creating a binding for WebGPU which can support Kotlin on multiple platforms.
+[![Tests][test-badge]][test-url]
+![Status][status-badge]
+![Latest Version][version-badge]
+[![License][license-badge]][license-url]
+[![Discord][discord-badge]][discord-url]
+
+This project focuses on creating a binding for WebGPU across Web, Desktop, and Mobile.  
+For a low-level library that supports Mobile and Desktop, check out [wgpu4k-native][native-library].
+
+---
 
 ## Table of Contents
 
 1. [Prerequisites](#prerequisites)
-2. [How to run the demo projects from library sources](#how-to-run-the-demo-projects-from-library-sources)
-3. [Getting started](#getting-started)
+2. [How to Execute Examples](#how-to-execute-examples)
+3. [Getting Started](#getting-started)
 4. [Compatibility](#compatibility)
 5. [Backend](#backend)
 6. [Project Phases](#project-phases)
-   1. [Proof of Concept](#proof-of-concept)
-   2. [API Implementation](#api-implementation)
-   3. [API Refinement](#api-refinement)
-   4. [Production](#production)
+
+---
 
 ## Prerequisites
 
-- Gradle 8.9
-- JDK 22+
-- A recent version of Chrome or Firefox Nightly for web browser execution. Check compatibility [here][chart].
+- **Gradle**: 8.11+
+- **JDK**: 22+
+- **Web Browsers**: A recent version of Chrome or Firefox Nightly (check [compatibility here][chart]).
 
-## How to run the demo projects from library sources
+---
 
-```
+## How to Execute Examples
+
+```bash
 git clone https://github.com/wgpu4k/wgpu4k.git
 cd wgpu4k
 ```
-- On desktop JVM: `./gradlew examples:glfw:run`
-- On web js: `./gradlew examples:web-js:jsBrowserRun`
-- On web wasm: `./gradlew examples:web-js:wasmJsBrowserRun`
-- On desktop native (Mac only and still experimental) `./gradlew examples:native:runDebugExecutableNative`
-- On android (experimental) `./gradlew wgpu4k:build` to build the JNI library, then you can run the subproject `android` with android studio ![android-studio-capture.png](android-studio-capture.png)
-- On iOS (experimental) `./gradlew examples:iOS:assembleWgpuAppXCFramework` to build the XC Framework, then you can run the subproject `iosApp` with XCode on a iOS simulator or real device.
 
-Use `page down` and `page up` on your keyboard to switch scene.
+- **Desktop JVM**: `./gradlew examples:glfw:run`
+- **Web JS**: `./gradlew examples:web-js:jsBrowserRun`
+- **Web Wasm**: `./gradlew examples:web-js:wasmJsBrowserRun`
+- **Mac Native (Experimental)**: `./gradlew examples:native:runDebugExecutableNative`
+- **Android (Experimental)**:  Execute the `android` subproject via Android Studio.
+- **iOS (Experimental)**:
+    - Build XCFramework: `./gradlew examples:iOS:assembleWgpuAppXCFramework`.
+    - Run the `iosApp` subproject with XCode (compatible with a simulator or real device).
 
-## Getting started
+> **Tip**: Use `Page Down` and `Page Up` on your keyboard to switch scenes while running examples.
 
-Documentation will be added later, to start you can check out the minimalist project [here][hello-cube] or see scenes implemented to end-to-end tests [here][scenes].
+---
+
+## Getting Started
+
+Documentation is on its way!  
+For now:
+
+- Check out the minimalist project: [Hello Cube][hello-cube]
+- Explore implemented scenes: [Examples/Scenes][scenes].
+
+---
 
 ## Compatibility
 
-| Target       | Windows | Linux | MacOs | iOS | Android |
+| Target       | Windows | Linux | MacOS | iOS | Android |
 |--------------|---------|-------|-------|-----|---------|
 | JVM x64      | ✅       | 🆗    | 🆗    | ❌   | 🛠️     |
 | JVM arm64    | 🔍️     | 🆗    | ✅     | ❌   | 🛠️     |
@@ -56,44 +71,66 @@ Documentation will be added later, to start you can check out the minimalist pro
 | native x64   | 🛠️     | 🔍️   | 🛠️   | 🛠️ | ❌️️     |
 | native arm64 | 🔍️     | 🔍️   | 🛠️   | 🛠️ | ❌️️     |
 
+### Key:
 
-✅ = First class citizen
+- ✅ = First class citizen
+- 🆗 = Best effort
+- ❓ = Untested, could work
+- 🛠️ = Work in progress
+- 🔍 = Not supported yet (open to contributions)
+- ❌ = Not applicable
 
-🆗 = Best effort
-
-❓ = Untested, could work
-
-🛠️ = Work in progress
-
-🔍 = Unsupported yet, open to contributions
-
-❌ = Not applicable 
+---
 
 ## Backend
 
-On JVM we are using the firefox backend, see the [GitHub page][link] to get more information.
+The native backend uses [Firefox WebGPU][backend-info]. For more details, visit the GitHub page.
+
+---
 
 ## Project Phases
 
-### ~~Proof of Concept~~ Done
+### Completed
 
-~~The aim of this phase is to test the technology on as many platforms as possible using elementary examples.~~
+- **Proof of Concept** (Done): Successfully tested WebGPU across multiple platforms using basic examples.
 
-### API Implementation
+### In Progress
 
-The entire API is implemented in this phase.
+1. **API Implementation**: Developing the entire API.
+2. **API Refinement**: Making the API more idiomatic to Kotlin.
 
-### API Refinement
+### Upcoming
 
-In this phase, the API is fine-tuned to be more idiomatic to Kotlin.
+- **Production**: Preparing the project for production use.
 
-### Production
+---
 
-This is the final phase when the project is ready for production.
+<!-- Constants for Badges -->
+
+[test-badge]: https://github.com/wgpu4k/wgpu4k/actions/workflows/test.yml/badge.svg?branch=main
+
+[test-url]: https://github.com/wgpu4k/wgpu4k/actions/workflows/test.yml
+
+[status-badge]: https://img.shields.io/badge/Status-Beta-orange?style=plastic
+
+[version-badge]: https://img.shields.io/badge/Latest%20version-0.0.3-orange?style=plastic
+
+[license-badge]: https://img.shields.io/badge/Licence-MIT-blue?style=plastic
+
+[license-url]: https://en.wikipedia.org/wiki/MIT_License
+
+[discord-badge]: https://img.shields.io/badge/Discord-wgpu4k-purple?style=plastic
+
+[discord-url]: https://discord.gg/qy9KQAP9Kc
 
 <!-- Reference Links -->
 
 [chart]: https://caniuse.com/webgpu
-[link]: https://github.com/gfx-rs/wgpu
+
 [hello-cube]: https://github.com/wgpu4k/hello-cube
-[scenes]: https://github.com/wgpu4k/wgpu4k/tree/main/examples/common/src/commonMain/kotlin/io.ygdrasil.wgpu.examples/scenes/basic
+
+[scenes]: https://github.com/wgpu4k/wgpu4k/tree/main/wgpu4k-scenes/src/commonMain/kotlin/scenes/basic
+
+[native-library]: https://github.com/wgpu4k/wgpu4k-native
+
+[backend-info]: https://github.com/gfx-rs/wgpu
