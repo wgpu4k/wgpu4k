@@ -4,11 +4,11 @@ typealias GPUBufferDynamicOffset = ULong
 
 typealias GPUBufferUsageFlags = Int
 
-typealias GPUColorWriteFlags = Int
+typealias GPUColorWriteFlags = ULong
 
 typealias GPUDepthBias = Int
 
-typealias GPUFlagsConstant = UInt
+typealias GPUFlagsConstant = ULong
 
 typealias GPUIndex32 = UInt
 

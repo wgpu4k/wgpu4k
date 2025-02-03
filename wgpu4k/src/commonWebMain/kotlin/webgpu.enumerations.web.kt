@@ -1,20 +1,6 @@
 // This file has been generated DO NOT EDIT !!!
 package io.ygdrasil.webgpu
 
-actual enum class RequestAdapterStatus(val value: String) {
-	Success("success"),
-	Unavailable("unavailable"),
-	Error("error"),
-	Unknown("unknown"),
-	;
-
-	companion object {
-		fun of(value: String): RequestAdapterStatus? {
-			return entries.find { it.value == value }
-		}
-	}
-}
-
 actual enum class AdapterType(val value: String) {
 	DiscreteGPU("discrete-gpu"),
 	IntegratedGPU("integrated-gpu"),
@@ -30,9 +16,9 @@ actual enum class AdapterType(val value: String) {
 }
 
 actual enum class AddressMode(val value: String) {
+	ClampToEdge("clamp-to-edge"),
 	Repeat("repeat"),
 	MirrorRepeat("mirror-repeat"),
-	ClampToEdge("clamp-to-edge"),
 	;
 
 	companion object {
@@ -60,60 +46,6 @@ actual enum class BackendType(val value: String) {
 	}
 }
 
-actual enum class BufferBindingType(val value: String) {
-	Uniform("uniform"),
-	Storage("storage"),
-	ReadOnlyStorage("read-only-storage"),
-	;
-
-	companion object {
-		fun of(value: String): BufferBindingType? {
-			return entries.find { it.value == value }
-		}
-	}
-}
-
-actual enum class SamplerBindingType(val value: String) {
-	Filtering("filtering"),
-	NonFiltering("non-filtering"),
-	Comparison("comparison"),
-	;
-
-	companion object {
-		fun of(value: String): SamplerBindingType? {
-			return entries.find { it.value == value }
-		}
-	}
-}
-
-actual enum class TextureSampleType(val value: String) {
-	Float("float"),
-	UnfilterableFloat("unfilterable-float"),
-	Depth("depth"),
-	Sint("sint"),
-	Uint("uint"),
-	;
-
-	companion object {
-		fun of(value: String): TextureSampleType? {
-			return entries.find { it.value == value }
-		}
-	}
-}
-
-actual enum class StorageTextureAccess(val value: String) {
-	WriteOnly("write-only"),
-	ReadOnly("read-only"),
-	ReadWrite("read-write"),
-	;
-
-	companion object {
-		fun of(value: String): StorageTextureAccess? {
-			return entries.find { it.value == value }
-		}
-	}
-}
-
 actual enum class BlendFactor(val value: String) {
 	Zero("zero"),
 	One("one"),
@@ -128,6 +60,10 @@ actual enum class BlendFactor(val value: String) {
 	SrcAlphaSaturated("src-alpha-saturated"),
 	Constant("constant"),
 	OneMinusConstant("one-minus-constant"),
+	Src1("src1"),
+	OneMinusSrc1("one-minus-src1"),
+	Src1Alpha("src1-alpha"),
+	OneMinusSrc1Alpha("one-minus-src1-alpha"),
 	;
 
 	companion object {
@@ -152,20 +88,15 @@ actual enum class BlendOperation(val value: String) {
 	}
 }
 
-actual enum class BufferMapAsyncStatus(val value: String) {
-	Success("success"),
-	ValidationError("validation-error"),
-	Unknown("unknown"),
-	DeviceLost("device-lost"),
-	DestroyedBeforeCallback("destroyed-before-callback"),
-	UnmappedBeforeCallback("unmapped-before-callback"),
-	MappingAlreadyPending("mapping-already-pending"),
-	OffsetOutOfRange("offset-out-of-range"),
-	SizeOutOfRange("size-out-of-range"),
+actual enum class BufferBindingType(val value: String) {
+	BindingNotUsed("binding-not-used"),
+	Uniform("uniform"),
+	Storage("storage"),
+	ReadOnlyStorage("read-only-storage"),
 	;
 
 	companion object {
-		fun of(value: String): BufferMapAsyncStatus? {
+		fun of(value: String): BufferBindingType? {
 			return entries.find { it.value == value }
 		}
 	}
@@ -184,14 +115,27 @@ actual enum class BufferMapState(val value: String) {
 	}
 }
 
+actual enum class CallbackMode(val value: String) {
+	WaitAnyOnly("wait-any-only"),
+	AllowProcessEvents("allow-process-events"),
+	AllowSpontaneous("allow-spontaneous"),
+	;
+
+	companion object {
+		fun of(value: String): CallbackMode? {
+			return entries.find { it.value == value }
+		}
+	}
+}
+
 actual enum class CompareFunction(val value: String) {
 	Never("never"),
 	Less("less"),
+	Equal("equal"),
 	LessEqual("less-equal"),
 	Greater("greater"),
-	GreaterEqual("greater-equal"),
-	Equal("equal"),
 	NotEqual("not-equal"),
+	GreaterEqual("greater-equal"),
 	Always("always"),
 	;
 
@@ -204,8 +148,8 @@ actual enum class CompareFunction(val value: String) {
 
 actual enum class CompilationInfoRequestStatus(val value: String) {
 	Success("success"),
+	InstanceDropped("instance-dropped"),
 	Error("error"),
-	DeviceLost("device-lost"),
 	Unknown("unknown"),
 	;
 
@@ -246,10 +190,9 @@ actual enum class CompositeAlphaMode(val value: String) {
 
 actual enum class CreatePipelineAsyncStatus(val value: String) {
 	Success("success"),
+	InstanceDropped("instance-dropped"),
 	ValidationError("validation-error"),
 	InternalError("internal-error"),
-	DeviceLost("device-lost"),
-	DeviceDestroyed("device-destroyed"),
 	Unknown("unknown"),
 	;
 
@@ -276,6 +219,8 @@ actual enum class CullMode(val value: String) {
 actual enum class DeviceLostReason(val value: String) {
 	Unknown("unknown"),
 	Destroyed("destroyed"),
+	InstanceDropped("instance-dropped"),
+	FailedCreation("failed-creation"),
 	;
 
 	companion object {
@@ -304,11 +249,22 @@ actual enum class ErrorType(val value: String) {
 	OutOfMemory("out-of-memory"),
 	Internal("internal"),
 	Unknown("unknown"),
-	DeviceLost("device-lost"),
 	;
 
 	companion object {
 		fun of(value: String): ErrorType? {
+			return entries.find { it.value == value }
+		}
+	}
+}
+
+actual enum class FeatureLevel(val value: String) {
+	Compatibility("compatibility"),
+	Core("core"),
+	;
+
+	companion object {
+		fun of(value: String): FeatureLevel? {
 			return entries.find { it.value == value }
 		}
 	}
@@ -319,13 +275,18 @@ actual enum class FeatureName(val value: String) {
 	Depth32FloatStencil8("depth32-float-stencil8"),
 	TimestampQuery("timestamp-query"),
 	TextureCompressionBC("texture-compression-bc"),
+	TextureCompressionBCSliced3D("texture-compression-bc-sliced-3d"),
 	TextureCompressionETC2("texture-compression-etc2"),
 	TextureCompressionASTC("texture-compression-astc"),
+	TextureCompressionASTCSliced3D("texture-compression-astc-sliced-3d"),
 	IndirectFirstInstance("indirect-first-instance"),
 	ShaderF16("shader-f16"),
 	RG11B10UfloatRenderable("rg11b10-ufloat-renderable"),
 	BGRA8UnormStorage("bgra8-unorm-storage"),
 	Float32Filterable("float32-filterable"),
+	Float32Blendable("float32-blendable"),
+	ClipDistances("clip-distances"),
+	DualSourceBlending("dual-source-blending"),
 	;
 
 	companion object {
@@ -371,26 +332,28 @@ actual enum class IndexFormat(val value: String) {
 	}
 }
 
-actual enum class VertexStepMode(val value: String) {
-	Vertex("vertex"),
-	Instance("instance"),
-	VertexBufferNotUsed("vertex-buffer-not-used"),
+actual enum class LoadOp(val value: String) {
+	Load("load"),
+	Clear("clear"),
 	;
 
 	companion object {
-		fun of(value: String): VertexStepMode? {
+		fun of(value: String): LoadOp? {
 			return entries.find { it.value == value }
 		}
 	}
 }
 
-actual enum class LoadOp(val value: String) {
-	Clear("clear"),
-	Load("load"),
+actual enum class MapAsyncStatus(val value: String) {
+	Success("success"),
+	InstanceDropped("instance-dropped"),
+	Error("error"),
+	Aborted("aborted"),
+	Unknown("unknown"),
 	;
 
 	companion object {
-		fun of(value: String): LoadOp? {
+		fun of(value: String): MapAsyncStatus? {
 			return entries.find { it.value == value }
 		}
 	}
@@ -408,13 +371,26 @@ actual enum class MipmapFilterMode(val value: String) {
 	}
 }
 
-actual enum class StoreOp(val value: String) {
-	Store("store"),
-	Discard("discard"),
+actual enum class OptionalBool(val value: String) {
+	False("false"),
+	True("true"),
 	;
 
 	companion object {
-		fun of(value: String): StoreOp? {
+		fun of(value: String): OptionalBool? {
+			return entries.find { it.value == value }
+		}
+	}
+}
+
+actual enum class PopErrorScopeStatus(val value: String) {
+	Success("success"),
+	InstanceDropped("instance-dropped"),
+	EmptyStack("empty-stack"),
+	;
+
+	companion object {
+		fun of(value: String): PopErrorScopeStatus? {
 			return entries.find { it.value == value }
 		}
 	}
@@ -475,9 +451,9 @@ actual enum class QueryType(val value: String) {
 
 actual enum class QueueWorkDoneStatus(val value: String) {
 	Success("success"),
+	InstanceDropped("instance-dropped"),
 	Error("error"),
 	Unknown("unknown"),
-	DeviceLost("device-lost"),
 	;
 
 	companion object {
@@ -487,14 +463,75 @@ actual enum class QueueWorkDoneStatus(val value: String) {
 	}
 }
 
+actual enum class RequestAdapterStatus(val value: String) {
+	Success("success"),
+	InstanceDropped("instance-dropped"),
+	Unavailable("unavailable"),
+	Error("error"),
+	Unknown("unknown"),
+	;
+
+	companion object {
+		fun of(value: String): RequestAdapterStatus? {
+			return entries.find { it.value == value }
+		}
+	}
+}
+
 actual enum class RequestDeviceStatus(val value: String) {
 	Success("success"),
+	InstanceDropped("instance-dropped"),
 	Error("error"),
 	Unknown("unknown"),
 	;
 
 	companion object {
 		fun of(value: String): RequestDeviceStatus? {
+			return entries.find { it.value == value }
+		}
+	}
+}
+
+actual enum class SType(val value: String) {
+	ShaderSourceSPIRV("shader-source-spirv"),
+	ShaderSourceWGSL("shader-source-wgsl"),
+	RenderPassMaxDrawCount("render-pass-max-draw-count"),
+	SurfaceSourceMetalLayer("surface-source-metal-layer"),
+	SurfaceSourceWindowsHWND("surface-source-windows-hwnd"),
+	SurfaceSourceXlibWindow("surface-source-xlib-window"),
+	SurfaceSourceWaylandSurface("surface-source-wayland-surface"),
+	SurfaceSourceAndroidNativeWindow("surface-source-android-native-window"),
+	SurfaceSourceXCBWindow("surface-source-xcb-window"),
+	;
+
+	companion object {
+		fun of(value: String): SType? {
+			return entries.find { it.value == value }
+		}
+	}
+}
+
+actual enum class SamplerBindingType(val value: String) {
+	BindingNotUsed("binding-not-used"),
+	Filtering("filtering"),
+	NonFiltering("non-filtering"),
+	Comparison("comparison"),
+	;
+
+	companion object {
+		fun of(value: String): SamplerBindingType? {
+			return entries.find { it.value == value }
+		}
+	}
+}
+
+actual enum class Status(val value: String) {
+	Success("success"),
+	Error("error"),
+	;
+
+	companion object {
+		fun of(value: String): Status? {
 			return entries.find { it.value == value }
 		}
 	}
@@ -518,35 +555,41 @@ actual enum class StencilOperation(val value: String) {
 	}
 }
 
-actual enum class SType(val value: String) {
-	Invalid("invalid"),
-	SurfaceDescriptorFromMetalLayer("surface-descriptor-from-metal-layer"),
-	SurfaceDescriptorFromWindowsHWND("surface-descriptor-from-windows-hwnd"),
-	SurfaceDescriptorFromXlibWindow("surface-descriptor-from-xlib-window"),
-	SurfaceDescriptorFromCanvasHTMLSelector("surface-descriptor-from-canvas-html-selector"),
-	ShaderModuleSPIRVDescriptor("shader-module-spirv-descriptor"),
-	ShaderModuleWGSLDescriptor("shader-module-wgsl-descriptor"),
-	PrimitiveDepthClipControl("primitive-depth-clip-control"),
-	SurfaceDescriptorFromWaylandSurface("surface-descriptor-from-wayland-surface"),
-	SurfaceDescriptorFromAndroidNativeWindow("surface-descriptor-from-android-native-window"),
-	SurfaceDescriptorFromXcbWindow("surface-descriptor-from-xcb-window"),
-	RenderPassDescriptorMaxDrawCount("render-pass-descriptor-max-draw-count"),
+actual enum class StorageTextureAccess(val value: String) {
+	BindingNotUsed("binding-not-used"),
+	WriteOnly("write-only"),
+	ReadOnly("read-only"),
+	ReadWrite("read-write"),
 	;
 
 	companion object {
-		fun of(value: String): SType? {
+		fun of(value: String): StorageTextureAccess? {
+			return entries.find { it.value == value }
+		}
+	}
+}
+
+actual enum class StoreOp(val value: String) {
+	Store("store"),
+	Discard("discard"),
+	;
+
+	companion object {
+		fun of(value: String): StoreOp? {
 			return entries.find { it.value == value }
 		}
 	}
 }
 
 actual enum class SurfaceGetCurrentTextureStatus(val value: String) {
-	Success("success"),
+	SuccessOptimal("success-optimal"),
+	SuccessSuboptimal("success-suboptimal"),
 	Timeout("timeout"),
 	Outdated("outdated"),
 	Lost("lost"),
 	OutOfMemory("out-of-memory"),
 	DeviceLost("device-lost"),
+	Error("error"),
 	;
 
 	companion object {
@@ -687,6 +730,22 @@ actual enum class TextureFormat(val value: String) {
 	}
 }
 
+actual enum class TextureSampleType(val value: String) {
+	BindingNotUsed("binding-not-used"),
+	Float("float"),
+	UnfilterableFloat("unfilterable-float"),
+	Depth("depth"),
+	Sint("sint"),
+	Uint("uint"),
+	;
+
+	companion object {
+		fun of(value: String): TextureSampleType? {
+			return entries.find { it.value == value }
+		}
+	}
+}
+
 actual enum class TextureViewDimension(val value: String) {
 	OneD("1d"),
 	TwoD("2d"),
@@ -704,22 +763,31 @@ actual enum class TextureViewDimension(val value: String) {
 }
 
 actual enum class VertexFormat(val value: String) {
+	Uint8("uint8"),
 	Uint8x2("uint8x2"),
 	Uint8x4("uint8x4"),
+	Sint8("sint8"),
 	Sint8x2("sint8x2"),
 	Sint8x4("sint8x4"),
+	Unorm8("unorm8"),
 	Unorm8x2("unorm8x2"),
 	Unorm8x4("unorm8x4"),
+	Snorm8("snorm8"),
 	Snorm8x2("snorm8x2"),
 	Snorm8x4("snorm8x4"),
+	Uint16("uint16"),
 	Uint16x2("uint16x2"),
 	Uint16x4("uint16x4"),
+	Sint16("sint16"),
 	Sint16x2("sint16x2"),
 	Sint16x4("sint16x4"),
+	Unorm16("unorm16"),
 	Unorm16x2("unorm16x2"),
 	Unorm16x4("unorm16x4"),
+	Snorm16("snorm16"),
 	Snorm16x2("snorm16x2"),
 	Snorm16x4("snorm16x4"),
+	Float16("float16"),
 	Float16x2("float16x2"),
 	Float16x4("float16x4"),
 	Float32("float32"),
@@ -734,6 +802,8 @@ actual enum class VertexFormat(val value: String) {
 	Sint32x2("sint32x2"),
 	Sint32x3("sint32x3"),
 	Sint32x4("sint32x4"),
+	Unorm1010102("unorm10--10--10--2"),
+	Unorm8x4BGRA("unorm8x4-b-g-r-a"),
 	;
 
 	companion object {
@@ -743,7 +813,35 @@ actual enum class VertexFormat(val value: String) {
 	}
 }
 
-actual enum class WGSLFeatureName(val value: String) {
+actual enum class VertexStepMode(val value: String) {
+	VertexBufferNotUsed("vertex-buffer-not-used"),
+	Vertex("vertex"),
+	Instance("instance"),
+	;
+
+	companion object {
+		fun of(value: String): VertexStepMode? {
+			return entries.find { it.value == value }
+		}
+	}
+}
+
+actual enum class WaitStatus(val value: String) {
+	Success("success"),
+	TimedOut("timed-out"),
+	UnsupportedTimeout("unsupported-timeout"),
+	UnsupportedCount("unsupported-count"),
+	UnsupportedMixedSources("unsupported-mixed-sources"),
+	;
+
+	companion object {
+		fun of(value: String): WaitStatus? {
+			return entries.find { it.value == value }
+		}
+	}
+}
+
+actual enum class WGSLLanguageFeatureName(val value: String) {
 	ReadonlyAndReadwriteStorageTextures("readonly-and-readwrite-storage-textures"),
 	Packed4x8IntegerDotProduct("packed4x8-integer-dot-product"),
 	UnrestrictedPointerParameters("unrestricted-pointer-parameters"),
@@ -751,7 +849,7 @@ actual enum class WGSLFeatureName(val value: String) {
 	;
 
 	companion object {
-		fun of(value: String): WGSLFeatureName? {
+		fun of(value: String): WGSLLanguageFeatureName? {
 			return entries.find { it.value == value }
 		}
 	}

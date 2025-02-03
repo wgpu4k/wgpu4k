@@ -3,14 +3,14 @@ package io.ygdrasil.webgpu.mapper
 import ffi.ArrayHolder
 import ffi.MemoryAllocator
 import io.ygdrasil.webgpu.TextureDescriptor
-import io.ygdrasil.webgpu.toFlagUInt
+import io.ygdrasil.webgpu.toFlagULong
 import io.ygdrasil.wgpu.WGPUTextureDescriptor
 
 internal fun MemoryAllocator.map(input: TextureDescriptor) = WGPUTextureDescriptor.allocate(this).also { output ->
-    if (input.label != null) output.label = allocateFrom(input.label)
+    if (input.label != null) map(input.label, output.label)
     map(input.size, output.size)
     output.format = input.format.value
-    output.usage = input.usage.toFlagUInt()
+    output.usage = input.usage.toFlagULong()
     output.mipLevelCount = input.mipLevelCount
     output.sampleCount = input.sampleCount
     output.dimension = input.dimension.value

@@ -1,18 +1,15 @@
 package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
-import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.RenderPassDescriptor
 import io.ygdrasil.wgpu.WGPURenderPassColorAttachment
 import io.ygdrasil.wgpu.WGPURenderPassDepthStencilAttachment
 import io.ygdrasil.wgpu.WGPURenderPassDescriptor
 
-private val logger = KotlinLogging.logger {}
-
 internal fun MemoryAllocator.map(input: RenderPassDescriptor): WGPURenderPassDescriptor =
     WGPURenderPassDescriptor.allocate(this).also { output ->
-        logger.trace { "render pass descriptor $output" }
-        if (input.label != null) output.label = allocateFrom(input.label)
+        println("render pass descriptor $output")
+        if (input.label != null) map(input.label, output.label)
 
         if (input.colorAttachments.isNotEmpty()) {
             output.colorAttachmentCount = input.colorAttachments.size.toULong()
@@ -32,7 +29,7 @@ internal fun MemoryAllocator.map(input: RenderPassDescriptor): WGPURenderPassDes
     }
 
 internal fun MemoryAllocator.map(input: RenderPassDescriptor.ColorAttachment, output: WGPURenderPassColorAttachment) {
-    logger.trace { "color attachment $output" }
+    println("color attachment $output")
     output.view = input.view.handler
     output.loadOp = input.loadOp.value
     output.storeOp = input.storeOp.value

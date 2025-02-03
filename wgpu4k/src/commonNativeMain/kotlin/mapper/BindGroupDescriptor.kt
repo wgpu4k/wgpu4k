@@ -7,7 +7,7 @@ import io.ygdrasil.wgpu.WGPUBindGroupEntry
 
 internal fun MemoryAllocator.map(input: BindGroupDescriptor): WGPUBindGroupDescriptor =
     WGPUBindGroupDescriptor.allocate(this).also { output ->
-        if (input.label != null) output.label = allocateFrom(input.label)
+        if (input.label != null) map(input.label, output.label)
         output.layout = input.layout.handler
         if (input.entries.isNotEmpty()) {
             output.entryCount = input.entries.size.toULong()

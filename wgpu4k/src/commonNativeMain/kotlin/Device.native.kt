@@ -4,7 +4,7 @@ import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPUCommandEncoderDescriptor
 import io.ygdrasil.wgpu.WGPUDevice
-import io.ygdrasil.wgpu.WGPUSupportedLimits
+import io.ygdrasil.wgpu.WGPULimits
 import io.ygdrasil.wgpu.wgpuDeviceCreateBindGroup
 import io.ygdrasil.wgpu.wgpuDeviceCreateBindGroupLayout
 import io.ygdrasil.wgpu.wgpuDeviceCreateBuffer
@@ -36,9 +36,9 @@ actual class Device(internal val handler: WGPUDevice) : AutoCloseable {
     }
 
     actual val limits: Limits = memoryScope { scope ->
-        val supportedLimits = WGPUSupportedLimits.allocate(scope)
+        val supportedLimits = WGPULimits.allocate(scope)
         wgpuDeviceGetLimits(handler, supportedLimits)
-        map(supportedLimits.limits)
+        map(supportedLimits)
     }
 
     actual fun createCommandEncoder(descriptor: CommandEncoderDescriptor?): CommandEncoder = memoryScope { scope ->

@@ -14,7 +14,7 @@ import io.ygdrasil.wgpu.wgpuSetLogLevel
 private val logger = KotlinLogging.logger {}
 
 val callback = WGPULogCallback.allocate(globalMemory) { level, cMessage, userdata ->
-    val message = cMessage?.toKString() ?: "empty message"
+    val message = cMessage?.data?.toKString(cMessage.length) ?: "empty message"
     when (level) {
         WGPULogLevel_Error -> logger.error { message }
         WGPULogLevel_Warn -> logger.warn { message }
