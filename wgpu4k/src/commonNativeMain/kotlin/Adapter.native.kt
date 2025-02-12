@@ -1,6 +1,5 @@
 package io.ygdrasil.webgpu
 
-import ffi.NativeAddress
 import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPUAdapter
@@ -8,8 +7,6 @@ import io.ygdrasil.wgpu.WGPUDevice
 import io.ygdrasil.wgpu.WGPULimits
 import io.ygdrasil.wgpu.WGPURequestDeviceCallback
 import io.ygdrasil.wgpu.WGPURequestDeviceCallbackInfo
-import io.ygdrasil.wgpu.WGPURequestDeviceStatus
-import io.ygdrasil.wgpu.WGPUStringView
 import io.ygdrasil.wgpu.wgpuAdapterGetLimits
 import io.ygdrasil.wgpu.wgpuAdapterHasFeature
 import io.ygdrasil.wgpu.wgpuAdapterRelease
@@ -35,20 +32,10 @@ actual class Adapter(internal val handler: WGPUAdapter) : AutoCloseable {
     actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? = memoryScope { scope ->
         var fetchedDevice: WGPUDevice? = null
 
-        val callback = WGPURequestDeviceCallback.allocate(scope, object : WGPURequestDeviceCallback {
-
-            override fun invoke(
-                status: WGPURequestDeviceStatus,
-                device: WGPUDevice?,
-                message: WGPUStringView?,
-                userdata1: NativeAddress?,
-                userdata2: NativeAddress?
-            ) {
-                if (status != 1u && device == null) error("fail to get device")
-                fetchedDevice = device
-            }
-
-        })
+        val callback = WGPURequestDeviceCallback.allocate(scope) { status, device, message, userdata1, userdata2 ->
+            if (status != 1u && device == null) error("fail to get device")
+            fetchedDevice = device
+        }
 
         val callbackInfo = WGPURequestDeviceCallbackInfo.allocate(scope).apply {
             this.callback = callback
