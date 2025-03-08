@@ -120,6 +120,7 @@ kotlin {
 
         commonMain {
             dependencies {
+                api(libs.webgpu.type)
                 implementation(libs.coroutines)
                 api(libs.kotlin.logging)
             }

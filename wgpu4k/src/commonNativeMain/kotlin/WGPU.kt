@@ -38,12 +38,12 @@ class WGPU(private val handler: WGPUInstance) : AutoCloseable {
 
     fun requestAdapter(
         surface: NativeSurface,
-        powerPreference: PowerPreference? = null
+        powerPreference: GPUPowerPreference? = null
     ): Adapter? = memoryScope { scope ->
 
         val options = WGPURequestAdapterOptions.allocate(scope)
         options.compatibleSurface = surface.handler
-        if (powerPreference != null) options.powerPreference = powerPreference.value.toUInt()
+        if (powerPreference != null) options.powerPreference = powerPreference.value
 
         var fetchedAdapter: WGPUAdapter? = null
         val callback = WGPURequestAdapterCallback.allocate(scope, object : WGPURequestAdapterCallback {

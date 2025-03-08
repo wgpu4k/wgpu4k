@@ -9,19 +9,19 @@ import io.ygdrasil.webgpu.BindGroupDescriptor.BindGroupEntry
 import io.ygdrasil.webgpu.BindGroupLayoutDescriptor
 import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry
 import io.ygdrasil.webgpu.Buffer
-import io.ygdrasil.webgpu.BufferBindingType
 import io.ygdrasil.webgpu.BufferDescriptor
 import io.ygdrasil.webgpu.BufferUsage
 import io.ygdrasil.webgpu.Color
-import io.ygdrasil.webgpu.LoadOp
+import io.ygdrasil.webgpu.GPUBufferBindingType
+import io.ygdrasil.webgpu.GPULoadOp
+import io.ygdrasil.webgpu.GPUStoreOp
+import io.ygdrasil.webgpu.GPUTextureFormat
 import io.ygdrasil.webgpu.RenderBundle
 import io.ygdrasil.webgpu.RenderPassDescriptor
 import io.ygdrasil.webgpu.RenderPassDescriptor.ColorAttachment
 import io.ygdrasil.webgpu.ShaderStage
 import io.ygdrasil.webgpu.Size3D
-import io.ygdrasil.webgpu.StoreOp
 import io.ygdrasil.webgpu.TextureDescriptor
-import io.ygdrasil.webgpu.TextureFormat
 import io.ygdrasil.webgpu.TextureUsage
 import io.ygdrasil.webgpu.WGPUContext
 import io.ygdrasil.webgpu.beginRenderPass
@@ -56,7 +56,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
                     height = renderingContext.height,
                     depthOrArrayLayers = 1u
                 ),
-                format = TextureFormat.Depth24PlusStencil8,
+                format = GPUTextureFormat.Depth24PlusStencil8,
                 usage = setOf(TextureUsage.RenderAttachment)
             )
         ).bind()
@@ -65,19 +65,19 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
             colorAttachments = listOf(
                 ColorAttachment(
                     view = dummyTexture.createView().bind(),
-                    loadOp = LoadOp.Clear,
+                    loadOp = GPULoadOp.Clear,
                     clearValue = Color(0.3, 0.3, 0.3, 1.0),
-                    storeOp = StoreOp.Store
+                    storeOp = GPUStoreOp.Store
                 )
             ),
             depthStencilAttachment = RenderPassDescriptor.DepthStencilAttachment(
                 view = depthTexture.createView().bind(),
-                depthLoadOp = LoadOp.Clear,
+                depthLoadOp = GPULoadOp.Clear,
                 depthClearValue = 1f,
-                depthStoreOp = StoreOp.Store,
-                stencilLoadOp = LoadOp.Clear,
+                depthStoreOp = GPUStoreOp.Store,
+                stencilLoadOp = GPULoadOp.Clear,
                 stencilClearValue = 0u,
-                stencilStoreOp = StoreOp.Store
+                stencilStoreOp = GPUStoreOp.Store
             )
         )
 
@@ -87,7 +87,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
                     Entry(
                         binding = 0u,
                         visibility = setOf(ShaderStage.Vertex),
-                        bindingType = Entry.BufferBindingLayout(type = BufferBindingType.Uniform)
+                        bindingType = Entry.BufferBindingLayout(type = GPUBufferBindingType.Uniform)
                     )
                 )
             )

@@ -3,7 +3,7 @@ package io.ygdrasil.webgpu
 class TextureRenderingContext(
     override val width: UInt,
     override val height: UInt,
-    override val textureFormat: TextureFormat,
+    override val textureFormat: GPUTextureFormat,
     device: Device,
 ) : RenderingContext {
 

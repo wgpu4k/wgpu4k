@@ -8,7 +8,15 @@ import ffi.NativeAddress
 import io.ygdrasil.webgpu.WGPU.Companion.createInstance
 import io.ygdrasil.webgpu.internal.Os
 import io.ygdrasil.webgpu.internal.Platform
-import org.lwjgl.glfw.GLFW.*
+import org.lwjgl.glfw.GLFW.GLFW_CLIENT_API
+import org.lwjgl.glfw.GLFW.GLFW_FALSE
+import org.lwjgl.glfw.GLFW.GLFW_NO_API
+import org.lwjgl.glfw.GLFW.GLFW_RESIZABLE
+import org.lwjgl.glfw.GLFW.GLFW_VISIBLE
+import org.lwjgl.glfw.GLFW.glfwCreateWindow
+import org.lwjgl.glfw.GLFW.glfwDestroyWindow
+import org.lwjgl.glfw.GLFW.glfwInit
+import org.lwjgl.glfw.GLFW.glfwWindowHint
 import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
 import org.lwjgl.glfw.GLFWNativeWin32.glfwGetWin32Window
 import org.lwjgl.glfw.GLFWNativeX11.glfwGetX11Display
@@ -39,7 +47,7 @@ suspend fun glfwContextRenderer(width: Int = 1, height: Int = 1, title: String =
         ?: error("fail to get device")
 
     val renderingContext = when (deferredRendering) {
-        true -> TextureRenderingContext(256u, 256u, TextureFormat.RGBA8Unorm, device)
+        true -> TextureRenderingContext(256u, 256u, GPUTextureFormat.RGBA8Unorm, device)
         false -> {
             nativeSurface.computeSurfaceCapabilities(adapter)
             SurfaceRenderingContext(surface)

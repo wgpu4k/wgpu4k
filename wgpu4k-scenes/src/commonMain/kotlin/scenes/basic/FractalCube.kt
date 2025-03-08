@@ -7,24 +7,24 @@ import io.ygdrasil.webgpu.Buffer
 import io.ygdrasil.webgpu.BufferDescriptor
 import io.ygdrasil.webgpu.BufferUsage
 import io.ygdrasil.webgpu.Color
-import io.ygdrasil.webgpu.CompareFunction
-import io.ygdrasil.webgpu.CullMode
-import io.ygdrasil.webgpu.FilterMode
+import io.ygdrasil.webgpu.GPUCompareFunction
+import io.ygdrasil.webgpu.GPUCullMode
+import io.ygdrasil.webgpu.GPUFilterMode
+import io.ygdrasil.webgpu.GPULoadOp
+import io.ygdrasil.webgpu.GPUPrimitiveTopology
+import io.ygdrasil.webgpu.GPUStoreOp
+import io.ygdrasil.webgpu.GPUTextureFormat
+import io.ygdrasil.webgpu.GPUVertexFormat
 import io.ygdrasil.webgpu.ImageCopyTexture
-import io.ygdrasil.webgpu.LoadOp
-import io.ygdrasil.webgpu.PrimitiveTopology
 import io.ygdrasil.webgpu.RenderPassDescriptor
 import io.ygdrasil.webgpu.RenderPipeline
 import io.ygdrasil.webgpu.RenderPipelineDescriptor
 import io.ygdrasil.webgpu.SamplerDescriptor
 import io.ygdrasil.webgpu.ShaderModuleDescriptor
 import io.ygdrasil.webgpu.Size3D
-import io.ygdrasil.webgpu.StoreOp
 import io.ygdrasil.webgpu.Texture
 import io.ygdrasil.webgpu.TextureDescriptor
-import io.ygdrasil.webgpu.TextureFormat
 import io.ygdrasil.webgpu.TextureUsage
-import io.ygdrasil.webgpu.VertexFormat
 import io.ygdrasil.webgpu.WGPUContext
 import io.ygdrasil.webgpu.beginRenderPass
 import io.ygdrasil.webgpu.examples.Scene
@@ -80,12 +80,12 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
 									shaderLocation = 0u,
 									offset = cubePositionOffset,
-									format = VertexFormat.Float32x4
+									format = GPUVertexFormat.Float32x4
 								),
 								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
 									shaderLocation = 1u,
 									offset = cubeUVOffset,
-									format = VertexFormat.Float32x2
+									format = GPUVertexFormat.Float32x2
 								)
 							)
 						)
@@ -104,13 +104,13 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 					)
 				),
 				primitive = RenderPipelineDescriptor.PrimitiveState(
-					topology = PrimitiveTopology.TriangleList,
-					cullMode = CullMode.Back
+					topology = GPUPrimitiveTopology.TriangleList,
+					cullMode = GPUCullMode.Back
 				),
 				depthStencil = RenderPipelineDescriptor.DepthStencilState(
 					depthWriteEnabled = true,
-					depthCompare = CompareFunction.Less,
-					format = TextureFormat.Depth24Plus
+					depthCompare = GPUCompareFunction.Less,
+					format = GPUTextureFormat.Depth24Plus
 				)
 			)
 		).bind()
@@ -118,7 +118,7 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		val depthTexture = device.createTexture(
 			TextureDescriptor(
 				size = Size3D(renderingContext.width, renderingContext.height),
-				format = TextureFormat.Depth24Plus,
+				format = GPUTextureFormat.Depth24Plus,
 				usage = setOf(TextureUsage.RenderAttachment),
 			)
 		).bind()
@@ -144,8 +144,8 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		// Create a sampler with linear filtering for smooth interpolation.
 		val sampler = device.createSampler(
 			SamplerDescriptor(
-				magFilter = FilterMode.Linear,
-				minFilter = FilterMode.Linear,
+				magFilter = GPUFilterMode.Linear,
+				minFilter = GPUFilterMode.Linear,
 			)
 		)
 
@@ -180,16 +180,16 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			colorAttachments = listOf(
 				RenderPassDescriptor.ColorAttachment(
 					view = dummyTexture.createView().bind(), // Assigned later
-					loadOp = LoadOp.Clear,
+					loadOp = GPULoadOp.Clear,
 					clearValue = Color(0.5, 0.5, 0.5, 1.0),
-					storeOp = StoreOp.Store,
+					storeOp = GPUStoreOp.Store,
 				)
 			),
 			depthStencilAttachment = RenderPassDescriptor.DepthStencilAttachment(
 				view = depthTexture.createView(),
 				depthClearValue = 1.0f,
-				depthLoadOp = LoadOp.Clear,
-				depthStoreOp = StoreOp.Store
+				depthLoadOp = GPULoadOp.Clear,
+				depthStoreOp = GPUStoreOp.Store
 			)
 		)
 

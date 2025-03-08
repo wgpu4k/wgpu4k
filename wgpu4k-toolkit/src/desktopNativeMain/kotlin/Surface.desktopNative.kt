@@ -28,9 +28,9 @@ actual class Surface(private val handler: NativeSurface, private val windowHandl
             height.value.toUInt()
         }
 
-    actual val preferredCanvasFormat: TextureFormat? = null
+    actual val preferredCanvasFormat: GPUTextureFormat? = null
 
-    actual val supportedFormats: Set<TextureFormat>
+    actual val supportedFormats: Set<GPUTextureFormat>
         get() = handler.supportedFormats
     actual val supportedAlphaMode: Set<CompositeAlphaMode>
         get() = handler.supportedAlphaMode

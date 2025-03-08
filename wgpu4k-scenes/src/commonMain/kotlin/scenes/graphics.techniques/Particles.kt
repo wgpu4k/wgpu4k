@@ -3,32 +3,32 @@ package io.ygdrasil.webgpu.examples.scenes.graphics.techniques
 import io.ygdrasil.webgpu.AutoClosableContext
 import io.ygdrasil.webgpu.BindGroup
 import io.ygdrasil.webgpu.BindGroupDescriptor
-import io.ygdrasil.webgpu.BlendFactor
-import io.ygdrasil.webgpu.BlendOperation
 import io.ygdrasil.webgpu.Buffer
 import io.ygdrasil.webgpu.BufferDescriptor
 import io.ygdrasil.webgpu.BufferUsage
 import io.ygdrasil.webgpu.Color
-import io.ygdrasil.webgpu.CompareFunction
 import io.ygdrasil.webgpu.ComputePipeline
 import io.ygdrasil.webgpu.ComputePipelineDescriptor
+import io.ygdrasil.webgpu.GPUBlendFactor
+import io.ygdrasil.webgpu.GPUBlendOperation
+import io.ygdrasil.webgpu.GPUCompareFunction
+import io.ygdrasil.webgpu.GPULoadOp
+import io.ygdrasil.webgpu.GPUStoreOp
+import io.ygdrasil.webgpu.GPUTextureFormat
+import io.ygdrasil.webgpu.GPUTextureViewDimension
+import io.ygdrasil.webgpu.GPUVertexFormat
+import io.ygdrasil.webgpu.GPUVertexStepMode
 import io.ygdrasil.webgpu.ImageCopyExternalImage
 import io.ygdrasil.webgpu.ImageCopyTextureTagged
-import io.ygdrasil.webgpu.LoadOp
 import io.ygdrasil.webgpu.PrimitiveTopology
 import io.ygdrasil.webgpu.RenderPassDescriptor
 import io.ygdrasil.webgpu.RenderPipeline
 import io.ygdrasil.webgpu.RenderPipelineDescriptor
 import io.ygdrasil.webgpu.ShaderModuleDescriptor
 import io.ygdrasil.webgpu.Size3D
-import io.ygdrasil.webgpu.StoreOp
 import io.ygdrasil.webgpu.TextureDescriptor
-import io.ygdrasil.webgpu.TextureFormat
 import io.ygdrasil.webgpu.TextureUsage
 import io.ygdrasil.webgpu.TextureViewDescriptor
-import io.ygdrasil.webgpu.TextureViewDimension
-import io.ygdrasil.webgpu.VertexFormat
-import io.ygdrasil.webgpu.VertexStepMode
 import io.ygdrasil.webgpu.WGPUContext
 import io.ygdrasil.webgpu.examples.AssetManager
 import io.ygdrasil.webgpu.examples.Scene
@@ -94,32 +94,32 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                             (
                             // instanced particles buffer
                             arrayStride = particleInstanceByteSize.toULong(),
-                            stepMode = VertexStepMode.Instance,
+                            stepMode = GPUVertexStepMode.Instance,
                             attributes = listOf(
                                 RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
                                     // position
                                     shaderLocation = 0u,
                                     offset = particlePositionOffset.toULong(),
-                                    format = VertexFormat.Float32x3,
+                                    format = GPUVertexFormat.Float32x3,
                                 ),
                                 RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
                                     // color
                                     shaderLocation = 1u,
                                     offset = particleColorOffset.toULong(),
-                                    format = VertexFormat.Float32x4,
+                                    format = GPUVertexFormat.Float32x4,
                                 ),
                             ),
                         ),
                         RenderPipelineDescriptor.VertexState.VertexBufferLayout(
                             // quad vertex buffer
-                            arrayStride = 2u * 4u, // vec2f
-                            stepMode = VertexStepMode.Vertex,
+                            arrayStride = 2uL * 4uL, // vec2f
+                            stepMode = GPUVertexStepMode.Vertex,
                             attributes = listOf(
                                 RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
                                     // vertex positions
                                     shaderLocation = 2u,
                                     offset = 0u,
-                                    format = VertexFormat.Float32x2,
+                                    format = GPUVertexFormat.Float32x2,
                                 ),
                             ),
                         ),
@@ -137,14 +137,14 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                             format = renderingContext.textureFormat,
                             blend = RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState(
                                 color = RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent(
-                                    srcFactor = BlendFactor.SrcAlpha,
-                                    dstFactor = BlendFactor.One,
-                                    operation = BlendOperation.Add,
+                                    srcFactor = GPUBlendFactor.SrcAlpha,
+                                    dstFactor = GPUBlendFactor.One,
+                                    operation = GPUBlendOperation.Add,
                                 ),
                                 alpha = RenderPipelineDescriptor.FragmentState.ColorTargetState.BlendState.BlendComponent(
-                                    srcFactor = BlendFactor.Zero,
-                                    dstFactor = BlendFactor.One,
-                                    operation = BlendOperation.Add
+                                    srcFactor = GPUBlendFactor.Zero,
+                                    dstFactor = GPUBlendFactor.One,
+                                    operation = GPUBlendOperation.Add
                                 ),
                             ),
                         ),
@@ -156,8 +156,8 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
 
                 depthStencil = RenderPipelineDescriptor.DepthStencilState(
                     depthWriteEnabled = false,
-                    depthCompare = CompareFunction.Less,
-                    format = TextureFormat.Depth24Plus,
+                    depthCompare = GPUCompareFunction.Less,
+                    format = GPUTextureFormat.Depth24Plus,
                 ),
             )
         )
@@ -165,7 +165,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         val depthTexture = device.createTexture(
             TextureDescriptor(
                 size = Size3D(renderingContext.width, renderingContext.height),
-                format = TextureFormat.Depth24Plus,
+                format = GPUTextureFormat.Depth24Plus,
                 usage = setOf(TextureUsage.RenderAttachment),
             )
         )
@@ -202,16 +202,16 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                 RenderPassDescriptor.ColorAttachment(
                     view = dummyTexture.createView().bind(), // Assigned later
                     clearValue = Color(.0, .0, .0, 1.0),
-                    loadOp = LoadOp.Clear,
-                    storeOp = StoreOp.Store,
+                    loadOp = GPULoadOp.Clear,
+                    storeOp = GPUStoreOp.Store,
                 ),
             ),
             depthStencilAttachment = RenderPassDescriptor.DepthStencilAttachment(
                 view = depthTexture.createView().bind(),
 
                 depthClearValue = 1.0f,
-                depthLoadOp = LoadOp.Clear,
-                depthStoreOp = StoreOp.Store,
+                depthLoadOp = GPULoadOp.Clear,
+                depthStoreOp = GPUStoreOp.Store,
             )
         )
 
@@ -220,7 +220,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         //////////////////////////////////////////////////////////////////////////////
         quadVertexBuffer = device.createBuffer(
             BufferDescriptor(
-                size = 6u * 2u * 4u, // 6x vec2f
+                size = 6uL * 2uL * 4uL, // 6x vec2f
                 usage = setOf(BufferUsage.Vertex),
                 mappedAtCreation = true,
             )
@@ -254,7 +254,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
             TextureDescriptor(
                 size = Size3D(imageBitmap.width, imageBitmap.height),
                 mipLevelCount = numMipLevels,
-                format = TextureFormat.RGBA8Unorm,
+                format = GPUTextureFormat.RGBA8Unorm,
                 usage =
                 setOf(
                     TextureUsage.TextureBinding,
@@ -355,8 +355,8 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                             resource = BindGroupDescriptor.TextureViewBinding(
                                 view = texture.createView(
                                     TextureViewDescriptor(
-                                        format = TextureFormat.RGBA8Unorm,
-                                        dimension = TextureViewDimension.TwoD,
+                                        format = GPUTextureFormat.RGBA8Unorm,
+                                        dimension = GPUTextureViewDimension.TwoD,
                                         baseMipLevel = level,
                                         mipLevelCount = 1u,
                                     )

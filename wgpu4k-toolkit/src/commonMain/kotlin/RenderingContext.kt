@@ -3,7 +3,7 @@ package io.ygdrasil.webgpu
 interface RenderingContext: AutoCloseable {
     val width: UInt
     val height: UInt
-    val textureFormat: TextureFormat
+    val textureFormat: GPUTextureFormat
 
     fun getCurrentTexture(): Texture
 }
