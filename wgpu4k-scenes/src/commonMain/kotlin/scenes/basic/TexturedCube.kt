@@ -6,7 +6,6 @@ import io.ygdrasil.webgpu.BindGroupDescriptor
 import io.ygdrasil.webgpu.Buffer
 import io.ygdrasil.webgpu.BufferDescriptor
 import io.ygdrasil.webgpu.BufferUsage
-import io.ygdrasil.webgpu.Color
 import io.ygdrasil.webgpu.CompareFunction
 import io.ygdrasil.webgpu.CullMode
 import io.ygdrasil.webgpu.FilterMode

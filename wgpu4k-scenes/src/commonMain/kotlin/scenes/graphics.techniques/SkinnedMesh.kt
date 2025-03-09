@@ -11,7 +11,6 @@ import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry
 import io.ygdrasil.webgpu.Buffer
 import io.ygdrasil.webgpu.BufferDescriptor
 import io.ygdrasil.webgpu.BufferUsage
-import io.ygdrasil.webgpu.Color
 import io.ygdrasil.webgpu.GPUBufferBindingType
 import io.ygdrasil.webgpu.GPULoadOp
 import io.ygdrasil.webgpu.GPUStoreOp

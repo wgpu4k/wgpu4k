@@ -19,18 +19,21 @@ import io.ygdrasil.wgpu.wgpuBufferUnmap
 
 private val logger = KotlinLogging.logger {}
 
-actual class Buffer(internal val handler: WGPUBuffer) : AutoCloseable {
+actual class Buffer(internal val handler: WGPUBuffer) : GPUBuffer {
 
-    actual val size: GPUSize64
+    override var label: String
+        get() = TODO("Not yet implemented")
+        set(value) {}
+    override val size: GPUSize64
         get() = wgpuBufferGetSize(handler)
-    actual val usage: Set<BufferUsage>
+    override val usage: Set<GPUBufferUsage>
         get() = wgpuBufferGetUsage(handler)
-            .let { usage -> BufferUsage.entries.filter { it.value.toULong() and usage != 0uL }.toSet() }
-    actual val mapState: BufferMapState
+            .let { usage -> BufferUsage.entries.filter { it.value and usage != 0uL }.toSet() }
+    override val mapState: GPUBufferMapState
         get() = wgpuBufferGetMapState(handler)
-            .let { BufferMapState.of(it) ?: error("Can't get map state: $it") }
+            .let { GPUBufferMapState.of(it) ?: error("Can't get map state: $it") }
 
-    actual fun unmap() {
+    override fun unmap() {
         wgpuBufferUnmap(handler)
     }
 
@@ -88,8 +91,16 @@ actual class Buffer(internal val handler: WGPUBuffer) : AutoCloseable {
             .readInts(buffer)
     }
 
-    actual override fun close() {
+    override fun close() {
         wgpuBufferRelease(handler)
+    }
+
+    override fun getMappedRange(offset: GPUSize64, size: GPUSize64): ArrayBuffer {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun mapAsync(mode: GPUMapModeFlags, offset: GPUSize64, size: GPUSize64) {
+        TODO("Not yet implemented")
     }
 
 }

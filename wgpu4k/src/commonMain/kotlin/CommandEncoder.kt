@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu
 
-expect class CommandEncoder : AutoCloseable {
+expect class CommandEncoder : GPUCommandEncoder {
 
     fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder
 
@@ -18,10 +18,12 @@ expect class CommandEncoder : AutoCloseable {
 
     fun copyBufferToTexture(source: ImageCopyBuffer, destination: ImageCopyTexture, copySize: Size3D)
 
-    override fun close()
 }
 
-inline fun CommandEncoder.beginRenderPass(descriptor: RenderPassDescriptor, then: RenderPassEncoder.() -> Unit) {
+inline fun GPUCommandEncoder.beginRenderPass(
+    descriptor: GPURenderPassDescriptor,
+    then: GPURenderPassEncoder.() -> Unit
+) {
     beginRenderPass(descriptor).apply(then)
 }
 

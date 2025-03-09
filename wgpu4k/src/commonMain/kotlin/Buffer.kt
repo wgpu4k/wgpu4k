@@ -1,12 +1,6 @@
 package io.ygdrasil.webgpu
 
-expect class Buffer : AutoCloseable {
-
-    val size: GPUSize64
-    val usage: Set<BufferUsage>
-    val mapState: BufferMapState
-
-    fun unmap()
+expect class Buffer : GPUBuffer {
 
     fun mapFrom(buffer: ShortArray, offset: GPUSize64 = 0u)
 
@@ -20,7 +14,6 @@ expect class Buffer : AutoCloseable {
 
     suspend fun map(mode: Set<MapMode>, offset: GPUSize64 = 0u, size: GPUSize64 = this.size)
 
-    override fun close()
 }
 
 data class BufferDescriptor(

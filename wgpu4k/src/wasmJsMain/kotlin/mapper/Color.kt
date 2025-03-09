@@ -1,6 +1,5 @@
 package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.webgpu.Color
 import io.ygdrasil.webgpu.internal.js.GPUColorDict
 import io.ygdrasil.webgpu.internal.js.createJsObject
 

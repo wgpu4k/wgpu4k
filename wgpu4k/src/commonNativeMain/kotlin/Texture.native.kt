@@ -15,7 +15,7 @@ import io.ygdrasil.wgpu.wgpuTextureGetWidth
 import io.ygdrasil.wgpu.wgpuTextureRelease
 
 
-actual class Texture(internal val handler: WGPUTexture) : AutoCloseable {
+actual class Texture(internal val handler: WGPUTexture) : GPUTexture {
 
     actual val width: GPUIntegerCoordinateOut
         get() = wgpuTextureGetWidth(handler)
@@ -30,11 +30,9 @@ actual class Texture(internal val handler: WGPUTexture) : AutoCloseable {
     actual val dimension: TextureDimension
         get() = wgpuTextureGetDimension(handler)
             .let { TextureDimension.of(it) }
-            ?: error("fail to get texture dimension")
     actual val format: TextureFormat
         get() = wgpuTextureGetFormat(handler)
             .let { TextureFormat.of(it) }
-            ?: error("fail to get texture format")
     actual val usage: GPUFlagsConstant
         get() = wgpuTextureGetUsage(handler)
 

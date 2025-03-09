@@ -1,7 +1,6 @@
 package io.ygdrasil.webgpu.examples.scenes.basic
 
 import io.ygdrasil.webgpu.AutoClosableContext
-import io.ygdrasil.webgpu.Color
 import io.ygdrasil.webgpu.LoadOp
 import io.ygdrasil.webgpu.RenderPassDescriptor
 import io.ygdrasil.webgpu.RenderPipeline

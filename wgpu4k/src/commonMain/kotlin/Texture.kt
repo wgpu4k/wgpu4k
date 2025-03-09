@@ -1,34 +1,6 @@
 package io.ygdrasil.webgpu
 
-expect class Texture : AutoCloseable {
-
-    val width: GPUIntegerCoordinateOut
-    val height: GPUIntegerCoordinateOut
-    val depthOrArrayLayers: GPUIntegerCoordinateOut
-    val mipLevelCount: GPUIntegerCoordinateOut
-    val sampleCount: GPUSize32Out
-    val dimension: TextureDimension
-    val format: TextureFormat
-    val usage: GPUFlagsConstant
-
-    fun createView(descriptor: TextureViewDescriptor? = null): TextureView
-
-    override fun close()
-}
-
-/**
- * @see https://www.w3.org/TR/webgpu/#gputexturedescriptor
- */
-data class TextureDescriptor(
-    val size: Size3D,
-    val format: TextureFormat,
-    val usage: Set<TextureUsage>,
-    val mipLevelCount: GPUIntegerCoordinate = 1u,
-    val sampleCount: GPUSize32 = 1u,
-    val dimension: TextureDimension = TextureDimension.TwoD,
-    val viewFormats: List<TextureFormat> = listOf(),
-    val label: String? = null,
-)
+expect class Texture : GPUTexture
 
 // Todo double check this
 fun TextureFormat.getBytesPerPixel(): GPUSize32 {
