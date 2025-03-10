@@ -6,7 +6,7 @@ package io.ygdrasil.webgpu
  */
 expect class Adapter : GPUAdapter {
 
-    override val features: Set<GPUFeatureName>
+    override val features: GPUSupportedFeatures
     override val limits: GPUSupportedLimits
     override val info: GPUAdapterInfo
     override val isFallbackAdapter: Boolean

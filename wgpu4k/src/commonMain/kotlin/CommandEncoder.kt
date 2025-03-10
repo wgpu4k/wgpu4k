@@ -50,7 +50,6 @@ expect class CommandEncoder : GPUCommandEncoder {
     override fun pushDebugGroup(groupLabel: String)
     override fun popDebugGroup()
     override fun insertDebugMarker(markerLabel: String)
-    override fun close()
 
 }
 

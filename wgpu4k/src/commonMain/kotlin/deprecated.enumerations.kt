@@ -60,3 +60,14 @@ typealias TextureViewDimension = GPUTextureViewDimension
 typealias VertexFormat = GPUVertexFormat
 @Deprecated("Use GPUVertexStepMode instead")
 typealias VertexStepMode = GPUVertexStepMode
+
+@Deprecated("Use GPUBufferUsage instead")
+typealias BufferUsage = GPUBufferUsage
+@Deprecated("Use GPUColorWrite instead")
+typealias ColorWriteMask = GPUColorWrite
+@Deprecated("Use GPUMapMode instead")
+typealias MapMode = GPUMapMode
+@Deprecated("Use GPUShaderStage instead")
+typealias ShaderStage = GPUShaderStage
+@Deprecated("Use GPUTextureUsage instead")
+typealias TextureUsage = GPUTextureUsage

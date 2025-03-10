@@ -25,9 +25,9 @@ import io.ygdrasil.wgpu.wgpuDeviceRelease
 
 actual class Device(internal val handler: WGPUDevice) : GPUDevice {
 
-    actual val queue: Queue by lazy { Queue(wgpuDeviceGetQueue(handler) ?: error("fail to get device queue")) }
+    actual override val queue: GPUQueue by lazy { Queue(wgpuDeviceGetQueue(handler) ?: error("fail to get device queue")) }
 
-    actual val features: Set<GPUFeatureName> by lazy {
+    actual override val features: Set<GPUFeatureName> by lazy {
         FeatureName.entries
             .mapNotNull { feature ->
                 feature.takeIf { wgpuDeviceHasFeature(handler, feature.value) }

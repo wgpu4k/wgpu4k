@@ -3,7 +3,7 @@ package io.ygdrasil.webgpu
 expect class Buffer : GPUBuffer {
 
     override val size: GPUSize64Out
-    override val usage: GPUFlagsConstant
+    override val usage: GPUBufferUsageFlags
     override val mapState: GPUBufferMapState
     override var label: String
 

@@ -7,7 +7,7 @@ expect class Texture : GPUTexture {
     override val height: GPUIntegerCoordinateOut
     override val mipLevelCount: GPUIntegerCoordinateOut
     override val sampleCount: GPUSize32Out
-    override val usage: GPUFlagsConstant
+    override val usage: Set<GPUTextureUsage>
     override val width: GPUIntegerCoordinateOut
     override var label: String
     override fun createView(descriptor: GPUTextureViewDescriptor?): GPUTextureView

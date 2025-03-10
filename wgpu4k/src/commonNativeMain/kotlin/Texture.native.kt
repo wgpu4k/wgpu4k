@@ -14,9 +14,11 @@ import io.ygdrasil.wgpu.wgpuTextureGetUsage
 import io.ygdrasil.wgpu.wgpuTextureGetWidth
 import io.ygdrasil.wgpu.wgpuTextureRelease
 
-
 actual class Texture(internal val handler: WGPUTexture) : GPUTexture {
 
+    actual override var label: String
+        get() = TODO("Not yet implemented")
+        set(value) {}
     actual override val width: GPUIntegerCoordinateOut
         get() = wgpuTextureGetWidth(handler)
     actual override val height: GPUIntegerCoordinateOut
@@ -33,7 +35,7 @@ actual class Texture(internal val handler: WGPUTexture) : GPUTexture {
     actual override val format: GPUTextureFormat
         get() = wgpuTextureGetFormat(handler)
             .let { GPUTextureFormat.of(it) ?: error("Unknown texture format $it")}
-    actual override val usage: GPUFlagsConstant
+    actual override val usage: Set<GPUTextureUsage>
         get() = wgpuTextureGetUsage(handler)
 
     actual override fun createView(descriptor: GPUTextureViewDescriptor?): GPUTextureView = memoryScope { scope ->

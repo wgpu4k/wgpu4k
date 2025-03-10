@@ -26,9 +26,9 @@ actual class Buffer(internal val handler: WGPUBuffer) : GPUBuffer {
         set(value) {}
     actual override val size: GPUSize64
         get() = wgpuBufferGetSize(handler)
-    actual override val usage: Set<GPUBufferUsage>
+    actual override val usage: GPUBufferUsageFlags
         get() = wgpuBufferGetUsage(handler)
-            .let { usage -> BufferUsage.entries.filter { it.value and usage != 0uL }.toSet() }
+            .let { usage -> GPUBufferUsage.entries.filter { it.value and usage != 0uL }.toSet() }
     actual override val mapState: GPUBufferMapState
         get() = wgpuBufferGetMapState(handler)
             .let { GPUBufferMapState.of(it) ?: error("Can't get map state: $it") }
