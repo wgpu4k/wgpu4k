@@ -1,31 +1,32 @@
 package io.ygdrasil.webgpu
 
-
 import ffi.ArrayHolder
 import ffi.MemoryAllocator
 import ffi.NativeAddress
 import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPUCommandBuffer
-import io.ygdrasil.wgpu.WGPUExtent3D
 import io.ygdrasil.wgpu.WGPUQueue
-import io.ygdrasil.wgpu.WGPUTexelCopyBufferLayout
 import io.ygdrasil.wgpu.wgpuQueueSubmit
 import io.ygdrasil.wgpu.wgpuQueueWriteBuffer
 import io.ygdrasil.wgpu.wgpuQueueWriteTexture
 
 actual class Queue(internal val handler: WGPUQueue) : GPUQueue {
 
-    actual fun submit(commandsBuffer: List<CommandBuffer>) = memoryScope { scope ->
-        if (commandsBuffer.isNotEmpty()) {
+    actual override var label: String
+        get() = TODO("Not yet implemented")
+        set(value) {}
 
-            val commands = scope.bufferOfAddresses(commandsBuffer.map { it.handler.handler })
+    actual override fun submit(commandBuffers: List<GPUCommandBuffer>)= memoryScope { scope ->
+        if (commandBuffers.isNotEmpty()) {
+
+            val commands = scope.bufferOfAddresses(commandBuffers.map { (it as CommandBuffer).handler.handler })
                 .handler
                 .let { ArrayHolder<WGPUCommandBuffer>(it) }
 
             wgpuQueueSubmit(
                 handler,
-                commandsBuffer.size.toULong(),
+                commandBuffers.size.toULong(),
                 commands
             )
         } else {
@@ -36,6 +37,29 @@ actual class Queue(internal val handler: WGPUQueue) : GPUQueue {
                 null
             )
         }
+    }
+
+    actual override suspend fun onSubmittedWorkDone(): Result<Unit> {
+        TODO("Not yet implemented")
+    }
+
+    actual override fun writeBuffer(
+        buffer: GPUBuffer,
+        bufferOffset: GPUSize64,
+        data: GPUBufferSource,
+        dataOffset: GPUSize64,
+        size: GPUSize64
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    actual override fun writeTexture(
+        destination: GPUTexelCopyTextureInfo,
+        data: GPUBufferSource,
+        dataLayout: GPUTexelCopyBufferLayout,
+        size: GPUExtent3D
+    ) {
+        TODO("Not yet implemented")
     }
 
     actual fun writeBuffer(
@@ -135,10 +159,10 @@ actual class Queue(internal val handler: WGPUQueue) : GPUQueue {
     }
 
     actual fun writeTexture(
-        destination: ImageCopyTexture,
+        destination: GPUTexelCopyTextureInfo,
         data: FloatArray,
-        dataLayout: TextureDataLayout,
-        size: Size3D,
+        dataLayout: GPUTexelCopyBufferLayout,
+        size: GPUExtent3D,
     ) = memoryScope { scope ->
         wgpuQueueWriteTexture(
             handler,
@@ -151,10 +175,10 @@ actual class Queue(internal val handler: WGPUQueue) : GPUQueue {
     }
 
     actual fun writeTexture(
-        destination: ImageCopyTexture,
+        destination: GPUTexelCopyTextureInfo,
         data: DoubleArray,
-        dataLayout: TextureDataLayout,
-        size: Size3D,
+        dataLayout: GPUTexelCopyBufferLayout,
+        size: GPUExtent3D,
     ) = memoryScope { scope ->
         wgpuQueueWriteTexture(
             handler,
@@ -167,10 +191,10 @@ actual class Queue(internal val handler: WGPUQueue) : GPUQueue {
     }
 
     actual fun writeTexture(
-        destination: ImageCopyTexture,
+        destination: GPUTexelCopyTextureInfo,
         data: ByteArray,
-        dataLayout: TextureDataLayout,
-        size: Size3D,
+        dataLayout: GPUTexelCopyBufferLayout,
+        size: GPUExtent3D,
     ) = memoryScope { scope ->
         wgpuQueueWriteTexture(
             handler,
@@ -183,10 +207,10 @@ actual class Queue(internal val handler: WGPUQueue) : GPUQueue {
     }
 
     actual fun writeTexture(
-        destination: ImageCopyTexture,
+        destination: GPUTexelCopyTextureInfo,
         data: ShortArray,
-        dataLayout: TextureDataLayout,
-        size: Size3D,
+        dataLayout: GPUTexelCopyBufferLayout,
+        size: GPUExtent3D,
     ) = memoryScope { scope ->
         wgpuQueueWriteTexture(
             handler,
@@ -199,10 +223,10 @@ actual class Queue(internal val handler: WGPUQueue) : GPUQueue {
     }
 
     actual fun writeTexture(
-        destination: ImageCopyTexture,
+        destination: GPUTexelCopyTextureInfo,
         data: IntArray,
-        dataLayout: TextureDataLayout,
-        size: Size3D,
+        dataLayout: GPUTexelCopyBufferLayout,
+        size: GPUExtent3D,
     ) = memoryScope { scope ->
         wgpuQueueWriteTexture(
             handler,
@@ -215,10 +239,10 @@ actual class Queue(internal val handler: WGPUQueue) : GPUQueue {
     }
 
     actual fun writeTexture(
-        destination: ImageCopyTexture,
+        destination: GPUTexelCopyTextureInfo,
         data: LongArray,
-        dataLayout: TextureDataLayout,
-        size: Size3D,
+        dataLayout: GPUTexelCopyBufferLayout,
+        size: GPUExtent3D,
     ) = memoryScope { scope ->
         wgpuQueueWriteTexture(
             handler,
@@ -230,7 +254,7 @@ actual class Queue(internal val handler: WGPUQueue) : GPUQueue {
         )
     }
 
-    actual fun copyExternalImageToTexture(
+    /*actual fun copyExternalImageToTexture(
         source: GPUImageCopyExternalImage,
         destination: GPUImageCopyTextureTagged,
         copySize: GPUIntegerCoordinates
@@ -258,7 +282,7 @@ actual class Queue(internal val handler: WGPUQueue) : GPUQueue {
             }
         )
 
-    }
+    }*/
 
     private fun DoubleArray.toBuffer(dataOffset: GPUSize64, scope: MemoryAllocator): NativeAddress {
         val memorySize = (size.toULong() - dataOffset) * Double.SIZE_BYTES.toULong()

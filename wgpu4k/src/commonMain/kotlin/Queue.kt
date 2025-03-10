@@ -69,6 +69,47 @@ expect class Queue : GPUQueue {
         size: GPUExtent3D
     )
 
+    fun writeTexture(
+        destination: GPUTexelCopyTextureInfo,
+        data: FloatArray,
+        dataLayout: GPUTexelCopyBufferLayout,
+        size: GPUExtent3D,
+    )
+
+    fun writeTexture(
+        destination: GPUTexelCopyTextureInfo,
+        data: DoubleArray,
+        dataLayout: GPUTexelCopyBufferLayout,
+        size: GPUExtent3D,
+    )
+
+    fun writeTexture(
+        destination: GPUTexelCopyTextureInfo,
+        data: ByteArray,
+        dataLayout: GPUTexelCopyBufferLayout,
+        size: GPUExtent3D,
+    )
+
+    fun writeTexture(
+        destination: GPUTexelCopyTextureInfo,
+        data: ShortArray,
+        dataLayout: GPUTexelCopyBufferLayout,
+        size: GPUExtent3D,
+    )
+
+    fun writeTexture(
+        destination: GPUTexelCopyTextureInfo,
+        data: IntArray,
+        dataLayout: GPUTexelCopyBufferLayout,
+        size: GPUExtent3D,
+    )
+
+    fun writeTexture(
+        destination: GPUTexelCopyTextureInfo,
+        data: LongArray,
+        dataLayout: GPUTexelCopyBufferLayout,
+        size: GPUExtent3D,
+    )
 }
 
 expect sealed interface DrawableHolder
