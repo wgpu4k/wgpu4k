@@ -17,13 +17,13 @@ expect class Device : GPUDevice {
     override fun createShaderModule(descriptor: GPUShaderModuleDescriptor): GPUShaderModule
     override fun createComputePipeline(descriptor: GPUComputePipelineDescriptor): GPUComputePipeline
     override fun createRenderPipeline(descriptor: GPURenderPipelineDescriptor): GPURenderPipeline
-    override suspend fun createComputePipelineAsync(descriptor: GPUComputePipelineDescriptor): GPUComputePipeline
-    override suspend fun createRenderPipelineAsync(descriptor: GPURenderPipelineDescriptor): GPURenderPipeline
+    override suspend fun createComputePipelineAsync(descriptor: GPUComputePipelineDescriptor): Result<GPUComputePipeline>
+    override suspend fun createRenderPipelineAsync(descriptor: GPURenderPipelineDescriptor): Result<GPURenderPipeline>
     override fun createCommandEncoder(descriptor: GPUCommandEncoderDescriptor?): GPUCommandEncoder
     override fun createRenderBundleEncoder(descriptor: GPURenderBundleEncoderDescriptor): GPURenderBundleEncoder
     override fun createQuerySet(descriptor: GPUQuerySetDescriptor): GPUQuerySet
     override fun pushErrorScope(filter: GPUErrorFilter)
-    override suspend fun popErrorScope(): GPUError?
+    override suspend fun popErrorScope(): Result<GPUError?>
 
     suspend fun poll()
 

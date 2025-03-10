@@ -53,7 +53,7 @@ expect class Queue : GPUQueue {
     )
 
     override fun submit(commandBuffers: List<GPUCommandBuffer>)
-    override suspend fun onSubmittedWorkDone()
+    override suspend fun onSubmittedWorkDone() : Result<Unit>
     override fun writeBuffer(
         buffer: GPUBuffer,
         bufferOffset: GPUSize64,

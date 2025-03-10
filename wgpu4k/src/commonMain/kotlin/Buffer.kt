@@ -17,13 +17,14 @@ expect class Buffer : GPUBuffer {
 
     fun mapInto(buffer: IntArray, offset: GPUSize64 = 0u)
 
+    @Deprecated("use mapAsync instead")
     suspend fun map(mode: Set<MapMode>, offset: GPUSize64 = 0u, size: GPUSize64 = this.size)
 
     override suspend fun mapAsync(
         mode: GPUMapModeFlags,
         offset: GPUSize64,
         size: GPUSize64
-    )
+    ) : Result<Unit>
 
     override fun getMappedRange(
         offset: GPUSize64,

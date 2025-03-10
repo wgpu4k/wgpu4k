@@ -1,11 +1,11 @@
 package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
-import io.ygdrasil.webgpu.TextureDataLayout
+import io.ygdrasil.webgpu.GPUTexelCopyBufferLayout
 import io.ygdrasil.wgpu.WGPUTexelCopyBufferLayout
 
-internal fun MemoryAllocator.map(input: TextureDataLayout) = WGPUTexelCopyBufferLayout.allocate(this).also { output ->
+internal fun MemoryAllocator.map(input: GPUTexelCopyBufferLayout) = WGPUTexelCopyBufferLayout.allocate(this).also { output ->
     output.offset = input.offset
-    output.bytesPerRow = input.bytesPerRow ?: 0u
-    output.rowsPerImage = input.rowsPerImage ?: 0u
+    input.bytesPerRow?.let { output.bytesPerRow = it }
+    input.rowsPerImage?.let { output.rowsPerImage = it }
 }

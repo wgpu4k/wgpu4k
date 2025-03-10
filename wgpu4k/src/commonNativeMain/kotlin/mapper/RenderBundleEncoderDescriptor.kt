@@ -2,12 +2,12 @@ package io.ygdrasil.webgpu.mapper
 
 import ffi.ArrayHolder
 import ffi.MemoryAllocator
-import io.ygdrasil.webgpu.RenderBundleEncoderDescriptor
+import io.ygdrasil.webgpu.GPURenderBundleEncoderDescriptor
 import io.ygdrasil.wgpu.WGPURenderBundleEncoderDescriptor
 
-fun MemoryAllocator.map(input: RenderBundleEncoderDescriptor): WGPURenderBundleEncoderDescriptor =
+fun MemoryAllocator.map(input: GPURenderBundleEncoderDescriptor): WGPURenderBundleEncoderDescriptor =
     WGPURenderBundleEncoderDescriptor.allocate(this).also { output ->
-        if (input.label != null) map(input.label, output.label)
+        map(input.label, output.label)
 
         if (input.colorFormats.isNotEmpty()) {
             output.colorFormatCount = input.colorFormats.size.toULong()

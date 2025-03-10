@@ -11,7 +11,7 @@ expect class Adapter : GPUAdapter {
     override val info: GPUAdapterInfo
     override val isFallbackAdapter: Boolean
 
-    override suspend fun requestDevice(descriptor: GPUDeviceDescriptor?): GPUDevice
+    override suspend fun requestDevice(descriptor: GPUDeviceDescriptor?): Result<GPUDevice>
 
     override fun close()
 }

@@ -1,14 +1,14 @@
 package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
-import io.ygdrasil.webgpu.ShaderModuleDescriptor
+import io.ygdrasil.webgpu.GPUShaderModuleDescriptor
 import io.ygdrasil.wgpu.WGPUSType_ShaderSourceWGSL
 import io.ygdrasil.wgpu.WGPUShaderModuleDescriptor
 import io.ygdrasil.wgpu.WGPUShaderSourceWGSL
 
-internal fun MemoryAllocator.map(input: ShaderModuleDescriptor): WGPUShaderModuleDescriptor =
+internal fun MemoryAllocator.map(input: GPUShaderModuleDescriptor): WGPUShaderModuleDescriptor =
     WGPUShaderModuleDescriptor.allocate(this).also { output ->
-        if (input.label != null) map(input.label, output.label)
+        map(input.label, output.label)
         output.nextInChain = mapCode(input.code).handler
 
     }

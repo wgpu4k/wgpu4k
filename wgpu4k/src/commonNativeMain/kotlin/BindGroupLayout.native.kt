@@ -5,7 +5,7 @@ import io.ygdrasil.wgpu.wgpuBindGroupLayoutRelease
 
 actual class BindGroupLayout(internal val handler: WGPUBindGroupLayout) : GPUBindGroupLayout {
 
-    override var label: String
+    actual override var label: String
         get() = TODO("Not yet implemented")
         set(value) {}
 
