@@ -1,19 +1,21 @@
 package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
-import io.ygdrasil.webgpu.ComputePassDescriptor
+import io.ygdrasil.webgpu.GPUComputePassDescriptor
+import io.ygdrasil.webgpu.GPUComputePassTimestampWrites
+import io.ygdrasil.webgpu.QuerySet
 import io.ygdrasil.wgpu.WGPUComputePassDescriptor
 import io.ygdrasil.wgpu.WGPUComputePassTimestampWrites
 
-internal fun MemoryAllocator.map(input: ComputePassDescriptor) =
+internal fun MemoryAllocator.map(input: GPUComputePassDescriptor) =
     WGPUComputePassDescriptor.allocate(this).also { output ->
-        if (input.label != null) map(input.label, output.label)
-        if (input.timestampWrites != null) output.timestampWrites = map(input.timestampWrites)
+        map(input.label, output.label)
+        input.timestampWrites?.let { output.timestampWrites = map(it) }
     }
 
-private fun MemoryAllocator.map(input: ComputePassDescriptor.ComputePassTimestampWrites) =
+private fun MemoryAllocator.map(input: GPUComputePassTimestampWrites): WGPUComputePassTimestampWrites =
     WGPUComputePassTimestampWrites.allocate(this).also { output ->
-        output.querySet = input.querySet.handler
-        if (input.beginningOfPassWriteIndex != null) output.beginningOfPassWriteIndex = input.beginningOfPassWriteIndex
-        if (input.endOfPassWriteIndex != null) output.endOfPassWriteIndex = input.endOfPassWriteIndex
+        output.querySet = (input.querySet as QuerySet).handler
+        input.beginningOfPassWriteIndex?.let { output.beginningOfPassWriteIndex = it }
+        input.endOfPassWriteIndex?.let { output.endOfPassWriteIndex = it }
     }

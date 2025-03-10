@@ -12,24 +12,29 @@ import io.ygdrasil.wgpu.wgpuAdapterHasFeature
 import io.ygdrasil.wgpu.wgpuAdapterRelease
 import io.ygdrasil.wgpu.wgpuAdapterRequestDevice
 
-actual class Adapter(internal val handler: WGPUAdapter) : AutoCloseable {
+actual class Adapter(internal val handler: WGPUAdapter) : GPUAdapter {
 
-    actual val features: Set<FeatureName> by lazy {
-        FeatureName.entries
+    actual override val info: GPUAdapterInfo
+        get() = TODO("Not yet implemented")
+    actual override val isFallbackAdapter: Boolean
+        get() = TODO("Not yet implemented")
+
+    actual override val features: Set<GPUFeatureName> by lazy {
+        GPUFeatureName.entries
             .mapNotNull { feature ->
                 feature.takeIf { wgpuAdapterHasFeature(handler, feature.value) }
             }
             .toSet()
     }
 
-    actual val limits: Limits = memoryScope { scope ->
+    actual override val limits: GPUSupportedLimits = memoryScope { scope ->
         val supportedLimits = WGPULimits.allocate(scope)
         wgpuAdapterGetLimits(handler, supportedLimits)
         val test: Limits = map(supportedLimits)
         test
     }
 
-    actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? = memoryScope { scope ->
+    actual suspend fun requestDevice(descriptor: GPUDeviceDescriptor): Device? = memoryScope { scope ->
         var fetchedDevice: WGPUDevice? = null
 
         val callback = WGPURequestDeviceCallback.allocate(scope) { status, device, message, userdata1, userdata2 ->

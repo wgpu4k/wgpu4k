@@ -14,7 +14,7 @@ import io.ygdrasil.wgpu.wgpuQueueSubmit
 import io.ygdrasil.wgpu.wgpuQueueWriteBuffer
 import io.ygdrasil.wgpu.wgpuQueueWriteTexture
 
-actual class Queue(internal val handler: WGPUQueue) {
+actual class Queue(internal val handler: WGPUQueue) : GPUQueue {
 
     actual fun submit(commandsBuffer: List<CommandBuffer>) = memoryScope { scope ->
         if (commandsBuffer.isNotEmpty()) {
@@ -231,8 +231,8 @@ actual class Queue(internal val handler: WGPUQueue) {
     }
 
     actual fun copyExternalImageToTexture(
-        source: ImageCopyExternalImage,
-        destination: ImageCopyTextureTagged,
+        source: GPUImageCopyExternalImage,
+        destination: GPUImageCopyTextureTagged,
         copySize: GPUIntegerCoordinates
     ) = memoryScope { scope ->
 

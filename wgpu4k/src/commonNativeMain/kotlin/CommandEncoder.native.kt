@@ -13,9 +13,9 @@ import io.ygdrasil.wgpu.wgpuCommandEncoderCopyTextureToTexture
 import io.ygdrasil.wgpu.wgpuCommandEncoderFinish
 import io.ygdrasil.wgpu.wgpuCommandEncoderRelease
 
-actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : AutoCloseable {
+actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : GPUCommandEncoder {
 
-    actual fun beginRenderPass(descriptor: RenderPassDescriptor): RenderPassEncoder = memoryScope { arena ->
+    actual fun beginRenderPass(descriptor: GPURenderPassDescriptor): RenderPassEncoder = memoryScope { arena ->
         arena.map(descriptor)
             .let { wgpuCommandEncoderBeginRenderPass(handler, it) }
             ?.let { RenderPassEncoder(it) }
@@ -30,8 +30,8 @@ actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : AutoClos
     }
 
     actual fun copyTextureToTexture(
-        source: ImageCopyTexture,
-        destination: ImageCopyTexture,
+        source: GPUImageCopyTexture,
+        destination: GPUImageCopyTexture,
         copySize: Size3D
     ) = memoryScope { scope ->
         wgpuCommandEncoderCopyTextureToTexture(
@@ -42,7 +42,7 @@ actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : AutoClos
         )
     }
 
-    actual fun beginComputePass(descriptor: ComputePassDescriptor?): ComputePassEncoder = memoryScope { scope ->
+    actual fun beginComputePass(descriptor: GPUComputePassDescriptor?): ComputePassEncoder = memoryScope { scope ->
         descriptor?.let { scope.map(descriptor) }
             .let { wgpuCommandEncoderBeginComputePass(handler, it) }
             ?.let { ComputePassEncoder(it) }

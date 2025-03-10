@@ -2,15 +2,17 @@ package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
 import io.ygdrasil.webgpu.BindGroupLayoutDescriptor
+import io.ygdrasil.webgpu.GPUBindGroupLayoutDescriptor
+import io.ygdrasil.webgpu.GPUBindGroupLayoutEntry
 import io.ygdrasil.webgpu.toFlagULong
 import io.ygdrasil.wgpu.WGPUBindGroupLayoutDescriptor
 import io.ygdrasil.wgpu.WGPUBindGroupLayoutEntry
 import io.ygdrasil.wgpu.WGPUChainedStruct
 import io.ygdrasil.wgpu.WGPUNativeSType_BindGroupEntryExtras
 
-fun MemoryAllocator.map(input: BindGroupLayoutDescriptor): WGPUBindGroupLayoutDescriptor =
+fun MemoryAllocator.map(input: GPUBindGroupLayoutDescriptor): WGPUBindGroupLayoutDescriptor =
     WGPUBindGroupLayoutDescriptor.allocate(this).also { output ->
-        if (input.label != null) map(input.label, output.label)
+        map(input.label, output.label)
 
         if (input.entries.isNotEmpty()) {
             output.entryCount = input.entries.size.toULong()
@@ -22,7 +24,7 @@ fun MemoryAllocator.map(input: BindGroupLayoutDescriptor): WGPUBindGroupLayoutDe
         }
     }
 
-fun MemoryAllocator.map(input: BindGroupLayoutDescriptor.Entry, output: WGPUBindGroupLayoutEntry) {
+fun MemoryAllocator.map(input: GPUBindGroupLayoutEntry, output: WGPUBindGroupLayoutEntry) {
 
     output.binding = input.binding
     output.visibility = input.visibility.toFlagULong()

@@ -15,3 +15,9 @@ data class SurfaceTexture(
     val status: SurfaceTextureStatus
 )
 
+
+enum class PredefinedColorSpace(val value: String) {
+    srgb("srgb"),
+    displayp3("display-p3")
+}
+

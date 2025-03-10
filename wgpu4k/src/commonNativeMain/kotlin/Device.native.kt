@@ -23,11 +23,11 @@ import io.ygdrasil.wgpu.wgpuDeviceHasFeature
 import io.ygdrasil.wgpu.wgpuDevicePoll
 import io.ygdrasil.wgpu.wgpuDeviceRelease
 
-actual class Device(internal val handler: WGPUDevice) : AutoCloseable {
+actual class Device(internal val handler: WGPUDevice) : GPUDevice {
 
     actual val queue: Queue by lazy { Queue(wgpuDeviceGetQueue(handler) ?: error("fail to get device queue")) }
 
-    actual val features: Set<FeatureName> by lazy {
+    actual val features: Set<GPUFeatureName> by lazy {
         FeatureName.entries
             .mapNotNull { feature ->
                 feature.takeIf { wgpuDeviceHasFeature(handler, feature.value) }
@@ -47,19 +47,19 @@ actual class Device(internal val handler: WGPUDevice) : AutoCloseable {
             ?.let(::CommandEncoder) ?: error("fail to create command encoder")
     }
 
-    actual fun createShaderModule(descriptor: ShaderModuleDescriptor): ShaderModule = memoryScope { scope ->
+    actual fun createShaderModule(descriptor: GPUShaderModuleDescriptor): ShaderModule = memoryScope { scope ->
         scope.map(descriptor)
             .let { wgpuDeviceCreateShaderModule(handler, it) }
             ?.let(::ShaderModule) ?: error("fail to create shader module")
     }
 
-    actual fun createPipelineLayout(descriptor: PipelineLayoutDescriptor): PipelineLayout = memoryScope { scope ->
+    actual fun createPipelineLayout(descriptor: GPUPipelineLayoutDescriptor): PipelineLayout = memoryScope { scope ->
         scope.map(descriptor)
             .let { wgpuDeviceCreatePipelineLayout(handler, it) }
             ?.let(::PipelineLayout) ?: error("fail to create pipeline layout")
     }
 
-    actual fun createRenderPipeline(descriptor: RenderPipelineDescriptor): RenderPipeline = memoryScope { scope ->
+    actual fun createRenderPipeline(descriptor: GPURenderPipelineDescriptor): RenderPipeline = memoryScope { scope ->
         scope.map(descriptor)
             .let { wgpuDeviceCreateRenderPipeline(handler, it) }
             ?.let(::RenderPipeline) ?: error("fail to create render pipeline")
@@ -71,25 +71,25 @@ actual class Device(internal val handler: WGPUDevice) : AutoCloseable {
             ?.let(::Buffer) ?: error("fail to create buffer")
     }
 
-    actual fun createBindGroup(descriptor: BindGroupDescriptor): BindGroup = memoryScope { scope ->
+    actual fun createBindGroup(descriptor: GPUBindGroupDescriptor): BindGroup = memoryScope { scope ->
         scope.map(descriptor)
             .let { wgpuDeviceCreateBindGroup(handler, it) }
             ?.let(::BindGroup) ?: error("fail to create bind group")
     }
 
-    actual fun createTexture(descriptor: TextureDescriptor): Texture = memoryScope { scope ->
+    actual fun createTexture(descriptor: GPUTextureDescriptor): Texture = memoryScope { scope ->
         scope.map(descriptor)
             .let { wgpuDeviceCreateTexture(handler, it) }
             ?.let(::Texture) ?: error("fail to create texture")
     }
 
-    actual fun createSampler(descriptor: SamplerDescriptor): Sampler = memoryScope { scope ->
+    actual fun createSampler(descriptor: GPUSamplerDescriptor): Sampler = memoryScope { scope ->
         scope.map(descriptor)
             .let { wgpuDeviceCreateSampler(handler, it) }
             ?.let(::Sampler) ?: error("fail to create sampler")
     }
 
-    actual fun createComputePipeline(descriptor: ComputePipelineDescriptor): ComputePipeline = memoryScope { scope ->
+    actual fun createComputePipeline(descriptor: GPUComputePipelineDescriptor): ComputePipeline = memoryScope { scope ->
         scope.map(descriptor)
             .let { wgpuDeviceCreateComputePipeline(handler, it) }
             ?.let(::ComputePipeline) ?: error("fail to create compute pipeline")

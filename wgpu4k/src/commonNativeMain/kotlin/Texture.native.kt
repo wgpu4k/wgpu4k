@@ -17,26 +17,26 @@ import io.ygdrasil.wgpu.wgpuTextureRelease
 
 actual class Texture(internal val handler: WGPUTexture) : GPUTexture {
 
-    actual val width: GPUIntegerCoordinateOut
+    actual override val width: GPUIntegerCoordinateOut
         get() = wgpuTextureGetWidth(handler)
-    actual val height: GPUIntegerCoordinateOut
+    actual override val height: GPUIntegerCoordinateOut
         get() = wgpuTextureGetHeight(handler)
-    actual val depthOrArrayLayers: GPUIntegerCoordinateOut
+    actual override val depthOrArrayLayers: GPUIntegerCoordinateOut
         get() = wgpuTextureGetDepthOrArrayLayers(handler)
-    actual val mipLevelCount: GPUIntegerCoordinateOut
+    actual override val mipLevelCount: GPUIntegerCoordinateOut
         get() = wgpuTextureGetMipLevelCount(handler)
-    actual val sampleCount: GPUSize32Out
+    actual override val sampleCount: GPUSize32Out
         get() = wgpuTextureGetSampleCount(handler)
-    actual val dimension: TextureDimension
+    actual override val dimension: GPUTextureDimension
         get() = wgpuTextureGetDimension(handler)
-            .let { TextureDimension.of(it) }
-    actual val format: TextureFormat
+            .let { GPUTextureDimension.of(it) ?: error("Unknown texture dimension $it") }
+    actual override val format: GPUTextureFormat
         get() = wgpuTextureGetFormat(handler)
-            .let { TextureFormat.of(it) }
-    actual val usage: GPUFlagsConstant
+            .let { GPUTextureFormat.of(it) ?: error("Unknown texture format $it")}
+    actual override val usage: GPUFlagsConstant
         get() = wgpuTextureGetUsage(handler)
 
-    actual fun createView(descriptor: TextureViewDescriptor?): TextureView = memoryScope { scope ->
+    actual override fun createView(descriptor: GPUTextureViewDescriptor?): GPUTextureView = memoryScope { scope ->
         descriptor?.let { scope.map(descriptor) }
             .let { wgpuTextureCreateView(handler, it) }
             ?.let { TextureView(it) }

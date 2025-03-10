@@ -7,7 +7,7 @@ import io.ygdrasil.wgpu.wgpuComputePassEncoderEnd
 import io.ygdrasil.wgpu.wgpuComputePassEncoderRelease
 import io.ygdrasil.wgpu.wgpuComputePassEncoderSetPipeline
 
-actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : AutoCloseable {
+actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : GPUComputePassEncoder {
 
     actual fun setPipeline(pipeline: ComputePipeline) {
         wgpuComputePassEncoderSetPipeline(handler, pipeline.handler)

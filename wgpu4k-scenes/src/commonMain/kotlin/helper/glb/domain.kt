@@ -1,7 +1,6 @@
 package io.ygdrasil.webgpu.examples.helper.glb
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.ygdrasil.webgpu.AddressMode
 import io.ygdrasil.webgpu.BindGroup
 import io.ygdrasil.webgpu.BindGroupDescriptor
 import io.ygdrasil.webgpu.BindGroupDescriptor.BindGroupEntry
@@ -19,7 +18,8 @@ import io.ygdrasil.webgpu.BufferDescriptor
 import io.ygdrasil.webgpu.BufferUsage
 import io.ygdrasil.webgpu.CompareFunction
 import io.ygdrasil.webgpu.Device
-import io.ygdrasil.webgpu.FilterMode
+import io.ygdrasil.webgpu.GPUAddressMode
+import io.ygdrasil.webgpu.GPUFilterMode
 import io.ygdrasil.webgpu.IndexFormat
 import io.ygdrasil.webgpu.PipelineLayoutDescriptor
 import io.ygdrasil.webgpu.PrimitiveTopology
@@ -467,26 +467,26 @@ class GLTFSampler(private val device: Device, private val samplerNode: GLTF2.Sam
 
     private fun createSampler(): Sampler {
         val magFilter = when (samplerNode?.magFilter) {
-            null, GLTFTextureFilter.LINEAR.value -> FilterMode.Linear
-            else -> FilterMode.Nearest
+            null, GLTFTextureFilter.LINEAR.value -> GPUFilterMode.Linear
+            else -> GPUFilterMode.Nearest
         }
         val minFilter = when (samplerNode?.minFilter) {
-            null, GLTFTextureFilter.LINEAR.value -> FilterMode.Linear
-            else -> FilterMode.Nearest
+            null, GLTFTextureFilter.LINEAR.value -> GPUFilterMode.Linear
+            else -> GPUFilterMode.Nearest
         }
 
         val wrapS = when (samplerNode?.wrapS) {
-            GLTFTextureFilter.REPEAT.value -> AddressMode.Repeat
-            GLTFTextureFilter.CLAMP_TO_EDGE.value -> AddressMode.ClampToEdge
-            null -> AddressMode.Repeat
-            else -> AddressMode.MirrorRepeat
+            GLTFTextureFilter.REPEAT.value -> GPUAddressMode.Repeat
+            GLTFTextureFilter.CLAMP_TO_EDGE.value -> GPUAddressMode.ClampToEdge
+            null -> GPUAddressMode.Repeat
+            else -> GPUAddressMode.MirrorRepeat
         }
 
         val wrapT = when (samplerNode?.wrapT) {
-            GLTFTextureFilter.REPEAT.value -> AddressMode.Repeat
-            GLTFTextureFilter.CLAMP_TO_EDGE.value -> AddressMode.ClampToEdge
-            null -> AddressMode.Repeat
-            else -> AddressMode.MirrorRepeat
+            GLTFTextureFilter.REPEAT.value -> GPUAddressMode.Repeat
+            GLTFTextureFilter.CLAMP_TO_EDGE.value -> GPUAddressMode.ClampToEdge
+            null -> GPUAddressMode.Repeat
+            else -> GPUAddressMode.MirrorRepeat
         }
 
         return device.createSampler(

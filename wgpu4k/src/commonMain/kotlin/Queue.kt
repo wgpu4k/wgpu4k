@@ -1,8 +1,8 @@
 package io.ygdrasil.webgpu
 
-expect class Queue {
+expect class Queue : GPUQueue {
 
-    fun submit(commandsBuffer: List<CommandBuffer> = listOf())
+    override var label: String
 
     fun writeBuffer(
         buffer: Buffer,
@@ -52,52 +52,21 @@ expect class Queue {
         size: GPUSize64 = data.size.toULong(),
     )
 
-    fun writeTexture(
-        destination: ImageCopyTexture,
-        data: FloatArray,
-        dataLayout: TextureDataLayout,
-        size: Size3D,
+    override fun submit(commandBuffers: List<GPUCommandBuffer>)
+    override suspend fun onSubmittedWorkDone()
+    override fun writeBuffer(
+        buffer: GPUBuffer,
+        bufferOffset: GPUSize64,
+        data: GPUBufferSource,
+        dataOffset: GPUSize64,
+        size: GPUSize64
     )
 
-    fun writeTexture(
-        destination: ImageCopyTexture,
-        data: DoubleArray,
-        dataLayout: TextureDataLayout,
-        size: Size3D,
-    )
-
-    fun writeTexture(
-        destination: ImageCopyTexture,
-        data: ByteArray,
-        dataLayout: TextureDataLayout,
-        size: Size3D,
-    )
-
-    fun writeTexture(
-        destination: ImageCopyTexture,
-        data: ShortArray,
-        dataLayout: TextureDataLayout,
-        size: Size3D,
-    )
-
-    fun writeTexture(
-        destination: ImageCopyTexture,
-        data: IntArray,
-        dataLayout: TextureDataLayout,
-        size: Size3D,
-    )
-
-    fun writeTexture(
-        destination: ImageCopyTexture,
-        data: LongArray,
-        dataLayout: TextureDataLayout,
-        size: Size3D,
-    )
-    
-    fun copyExternalImageToTexture(
-        source: ImageCopyExternalImage,
-        destination: ImageCopyTextureTagged,
-        copySize: GPUIntegerCoordinates,
+    override fun writeTexture(
+        destination: GPUTexelCopyTextureInfo,
+        data: GPUBufferSource,
+        dataLayout: GPUTexelCopyBufferLayout,
+        size: GPUExtent3D
     )
 
 }
@@ -109,34 +78,3 @@ expect class ImageBitmapHolder : DrawableHolder, AutoCloseable {
 
     override fun close()
 }
-
-data class ImageCopyExternalImage(
-    val source: DrawableHolder,
-    /* ImageBitmap | ImageData | HTMLImageElement | HTMLVideoElement | VideoFrame | HTMLCanvasElement | OffscreenCanvas */
-    val origin: GPUIntegerCoordinates = 0u to 0u,
-    /* Iterable<GPUIntegerCoordinate>? | GPUOrigin2DDictStrict? */
-    val flipY: Boolean = false,
-
-    )
-
-data class ImageCopyTextureTagged(
-    val colorSpace: PredefinedColorSpace = PredefinedColorSpace.srgb,
-    val premultipliedAlpha: Boolean = false,
-    val texture: Texture,
-    val mipLevel: GPUIntegerCoordinate = 0u,
-    val origin: Origin3D = Origin3D(),
-    val aspect: TextureAspect = TextureAspect.All,
-
-    )
-
-enum class PredefinedColorSpace(val value: String) {
-    srgb("srgb"),
-    displayp3("display-p3")
-}
-
-
-data class TextureDataLayout (
-    val offset: GPUSize64,
-    val bytesPerRow: GPUSize32? = null,
-    val rowsPerImage: GPUSize32? = null
-)

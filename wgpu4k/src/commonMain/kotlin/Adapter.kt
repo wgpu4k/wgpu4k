@@ -7,10 +7,11 @@ package io.ygdrasil.webgpu
 expect class Adapter : GPUAdapter {
 
     override val features: Set<GPUFeatureName>
-
     override val limits: GPUSupportedLimits
+    override val info: GPUAdapterInfo
+    override val isFallbackAdapter: Boolean
 
-    suspend fun requestDevice(descriptor: DeviceDescriptor = DeviceDescriptor()): Device?
+    override suspend fun requestDevice(descriptor: GPUDeviceDescriptor?): GPUDevice
 
     override fun close()
 }

@@ -1,15 +1,16 @@
 package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
+import io.ygdrasil.webgpu.GPUColor
 import io.ygdrasil.wgpu.WGPUColor
 
-internal fun MemoryAllocator.map(input: Color) = WGPUColor.allocate(this).also { output ->
+internal fun MemoryAllocator.map(input: GPUColor) = WGPUColor.allocate(this).also { output ->
     map(input, output)
 }
 
-internal fun map(input: Color, output: WGPUColor) {
-    output.r = input.red
-    output.g = input.green
-    output.b = input.blue
-    output.a = input.alpha
+internal fun map(input: GPUColor, output: WGPUColor) {
+    output.r = input.r
+    output.g = input.g
+    output.b = input.b
+    output.a = input.a
 }
