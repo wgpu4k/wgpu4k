@@ -2,17 +2,18 @@ package io.ygdrasil.webgpu.examples.headless
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.BufferDescriptor
-import io.ygdrasil.webgpu.BufferUsage
-import io.ygdrasil.webgpu.ImageCopyBuffer
-import io.ygdrasil.webgpu.ImageCopyTexture
-import io.ygdrasil.webgpu.MapMode
+import io.ygdrasil.webgpu.Extent3D
+import io.ygdrasil.webgpu.GPUBufferUsage
+import io.ygdrasil.webgpu.GPUMapMode
+import io.ygdrasil.webgpu.GPUTextureAspect
 import io.ygdrasil.webgpu.Origin3D
-import io.ygdrasil.webgpu.Size3D
-import io.ygdrasil.webgpu.TextureAspect
+import io.ygdrasil.webgpu.TexelCopyBufferInfo
+import io.ygdrasil.webgpu.TexelCopyTextureInfo
 import io.ygdrasil.webgpu.TextureRenderingContext
 import io.ygdrasil.webgpu.autoClosableContext
 import io.ygdrasil.webgpu.examples.Scene
 import io.ygdrasil.webgpu.examples.loadScenes
+import io.ygdrasil.webgpu.poll
 import korlibs.image.bitmap.Bitmap32
 import korlibs.image.format.PNG
 import korlibs.image.format.writeBitmap
@@ -37,7 +38,7 @@ suspend fun captureScene() {
             val outputStagingBuffer = context.device.createBuffer(
                 BufferDescriptor(
                     size = (textureData.size * Int.SIZE_BYTES).toULong(),
-                    usage = setOf(BufferUsage.CopyDst, BufferUsage.MapRead),
+                    usage = setOf(GPUBufferUsage.CopyDst, GPUBufferUsage.MapRead),
                     mappedAtCreation = false,
                 )
             )
@@ -48,13 +49,13 @@ suspend fun captureScene() {
             if (renderingContext is TextureRenderingContext) {
                 val commandEncoder = context.device.createCommandEncoder().bind()
                 commandEncoder.copyTextureToBuffer(
-                    ImageCopyTexture(
+                    TexelCopyTextureInfo(
                         texture = renderingContext.getCurrentTexture(),
                         mipLevel = 0u,
-                        origin = Origin3D.Zero,
-                        aspect = TextureAspect.All,
+                        origin = Origin3D(),
+                        aspect = GPUTextureAspect.All,
                     ),
-                    ImageCopyBuffer(
+                    TexelCopyBufferInfo(
                         buffer = outputStagingBuffer,
                         offset = 0u,
                         // This needs to be a multiple of 256. Normally we would need to pad
@@ -62,14 +63,14 @@ suspend fun captureScene() {
                         bytesPerRow = renderingContext.width * 4u,
                         rowsPerImage = renderingContext.height,
                     ),
-                    Size3D(
+                    Extent3D(
                         width = renderingContext.width,
                         height = renderingContext.height
                     )
                 )
 
                 context.device.queue.submit(listOf(commandEncoder.finish()))
-                outputStagingBuffer.map(setOf(MapMode.Read))
+                outputStagingBuffer.map(setOf(GPUMapMode.Read))
                 // Complete async work
                 context.device.poll()
                 outputStagingBuffer.mapInto(buffer = textureData)

@@ -20,7 +20,6 @@ import io.ygdrasil.wgpu.wgpuDeviceCreateTexture
 import io.ygdrasil.wgpu.wgpuDeviceGetLimits
 import io.ygdrasil.wgpu.wgpuDeviceGetQueue
 import io.ygdrasil.wgpu.wgpuDeviceHasFeature
-import io.ygdrasil.wgpu.wgpuDevicePoll
 import io.ygdrasil.wgpu.wgpuDeviceRelease
 
 actual class Device(internal val handler: WGPUDevice) : GPUDevice {
@@ -135,10 +134,6 @@ actual class Device(internal val handler: WGPUDevice) : GPUDevice {
 
     actual override suspend fun popErrorScope(): Result<GPUError?> {
         TODO("Not yet implemented")
-    }
-
-    actual suspend fun poll() {
-        wgpuDevicePoll(handler, true, null)
     }
 
     actual override fun close() {

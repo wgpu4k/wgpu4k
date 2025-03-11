@@ -10,6 +10,7 @@ import io.ygdrasil.wgpu.wgpuCommandEncoderCopyBufferToTexture
 import io.ygdrasil.wgpu.wgpuCommandEncoderCopyTextureToBuffer
 import io.ygdrasil.wgpu.wgpuCommandEncoderCopyTextureToTexture
 import io.ygdrasil.wgpu.wgpuCommandEncoderFinish
+import io.ygdrasil.wgpu.wgpuCommandEncoderRelease
 
 actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : GPUCommandEncoder {
 
@@ -117,5 +118,9 @@ actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : GPUComma
 
     actual override fun insertDebugMarker(markerLabel: String) {
         TODO("Not yet implemented")
+    }
+
+    actual override fun close() {
+        wgpuCommandEncoderRelease(handler)
     }
 }

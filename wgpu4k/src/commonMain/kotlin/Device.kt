@@ -25,7 +25,7 @@ expect class Device : GPUDevice {
     override fun pushErrorScope(filter: GPUErrorFilter)
     override suspend fun popErrorScope(): Result<GPUError?>
 
-    suspend fun poll()
-
     override fun close()
 }
+
+expect suspend fun GPUDevice.poll(): Result<Unit>
