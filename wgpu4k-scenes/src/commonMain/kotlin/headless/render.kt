@@ -70,7 +70,7 @@ suspend fun captureScene() {
                 )
 
                 context.device.queue.submit(listOf(commandEncoder.finish()))
-                outputStagingBuffer.map(setOf(GPUMapMode.Read))
+                outputStagingBuffer.mapAsync(setOf(GPUMapMode.Read))
                 // Complete async work
                 context.device.poll()
                 outputStagingBuffer.mapInto(buffer = textureData)

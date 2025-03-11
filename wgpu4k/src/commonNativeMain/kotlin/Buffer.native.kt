@@ -8,6 +8,7 @@ import io.ygdrasil.wgpu.WGPUBuffer
 import io.ygdrasil.wgpu.WGPUBufferMapCallback
 import io.ygdrasil.wgpu.WGPUBufferMapCallbackInfo
 import io.ygdrasil.wgpu.WGPUMapAsyncStatus
+import io.ygdrasil.wgpu.WGPUMapAsyncStatus_Success
 import io.ygdrasil.wgpu.WGPUStringView
 import io.ygdrasil.wgpu.wgpuBufferGetMapState
 import io.ygdrasil.wgpu.wgpuBufferGetMappedRange
@@ -16,6 +17,8 @@ import io.ygdrasil.wgpu.wgpuBufferGetUsage
 import io.ygdrasil.wgpu.wgpuBufferMapAsync
 import io.ygdrasil.wgpu.wgpuBufferRelease
 import io.ygdrasil.wgpu.wgpuBufferUnmap
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 private val logger = KotlinLogging.logger {}
 
@@ -58,25 +61,6 @@ actual class Buffer(internal val handler: WGPUBuffer) : GPUBuffer {
             .writeBytes(buffer)
     }
 
-    actual suspend fun map(mode: Set<MapMode>, offset: GPUSize64, size: GPUSize64) = memoryScope { scope ->
-        val callback = WGPUBufferMapCallback.allocate(scope, object : WGPUBufferMapCallback {
-            override fun invoke(
-                status: WGPUMapAsyncStatus,
-                message: WGPUStringView?,
-                userdata1: NativeAddress?,
-                userdata2: NativeAddress?
-            ) {
-                logger.info { "mapped" }
-            }
-
-        })
-        val bufferCallbackInfo = WGPUBufferMapCallbackInfo.allocate(scope).also {
-            it.callback = callback
-            it.userdata2 = callback.handler
-        }
-        wgpuBufferMapAsync(handler, mode.toFlagULong(), offset, size, bufferCallbackInfo)
-    }
-
     actual fun mapInto(buffer: ByteArray, offset: ULong) {
         val bufferSize = (buffer.size * Byte.SIZE_BYTES).toULong()
         wgpuBufferGetMappedRange(handler, offset, bufferSize)
@@ -95,9 +79,31 @@ actual class Buffer(internal val handler: WGPUBuffer) : GPUBuffer {
         TODO("Not yet implemented")
     }
 
-    actual override suspend fun mapAsync(mode: GPUMapModeFlags, offset: GPUSize64, size: GPUSize64) : Result<Unit> {
-        TODO("Not yet implemented")
-    }
+    actual override suspend fun mapAsync(mode: GPUMapModeFlags, offset: GPUSize64, size: GPUSize64): Result<Unit> =
+        suspendCoroutine { continuation ->
+            memoryScope { scope ->
+                val callback = WGPUBufferMapCallback.allocate(scope, object : WGPUBufferMapCallback {
+                    override fun invoke(
+                        status: WGPUMapAsyncStatus,
+                        message: WGPUStringView?,
+                        userdata1: NativeAddress?,
+                        userdata2: NativeAddress?
+                    ) {
+                        logger.info { "mapped" }
+                        continuation.resume(when(status) {
+                            WGPUMapAsyncStatus_Success -> Result.success(Unit)
+                            else -> Result.failure(IllegalStateException("map fail with status: $status and message: ${message?.data?.toKString(message.length)}"))
+                        })
+                    }
+
+                })
+                val bufferCallbackInfo = WGPUBufferMapCallbackInfo.allocate(scope).also {
+                    it.callback = callback
+                    it.userdata2 = callback.handler
+                }
+                wgpuBufferMapAsync(handler, mode.toFlagULong(), offset, size, bufferCallbackInfo)
+            }
+        }
 
     actual override fun close() {
         wgpuBufferRelease(handler)
