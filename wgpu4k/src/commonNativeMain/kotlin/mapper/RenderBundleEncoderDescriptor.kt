@@ -17,7 +17,7 @@ fun MemoryAllocator.map(input: GPURenderBundleEncoderDescriptor): WGPURenderBund
                 .let { ArrayHolder(it.handler) }
         }
 
-        output.depthStencilFormat = input.depthStencilFormat.value
+        input.depthStencilFormat?.let { output.depthStencilFormat = it.value }
         output.sampleCount = input.sampleCount
         output.depthReadOnly = input.depthReadOnly
         output.stencilReadOnly = input.stencilReadOnly

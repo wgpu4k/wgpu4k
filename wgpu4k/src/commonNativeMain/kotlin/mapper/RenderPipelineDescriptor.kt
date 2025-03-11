@@ -14,6 +14,8 @@ import io.ygdrasil.webgpu.GPUVertexAttribute
 import io.ygdrasil.webgpu.GPUVertexBufferLayout
 import io.ygdrasil.webgpu.GPUVertexState
 import io.ygdrasil.webgpu.PipelineLayout
+import io.ygdrasil.webgpu.ShaderModule
+import io.ygdrasil.webgpu.toFlagULong
 import io.ygdrasil.wgpu.WGPUBlendComponent
 import io.ygdrasil.wgpu.WGPUBlendState
 import io.ygdrasil.wgpu.WGPUColorTargetState
@@ -42,8 +44,9 @@ internal fun MemoryAllocator.map(input: GPURenderPipelineDescriptor) =
 fun MemoryAllocator.map(input: GPUColorTargetState, output: WGPUColorTargetState) {
     println("colorTargetState $output")
     output.format = input.format.value
-    output.writeMask = input.writeMask.value.toULong()
-    output.blend = map(input.blend)
+    output.writeMask = input.writeMask.toFlagULong()
+    input.blend?.let { output.blend = map(it) }
+
 }
 
 fun MemoryAllocator.map(input: GPUBlendState): WGPUBlendState =
@@ -69,8 +72,8 @@ private fun MemoryAllocator.map(input: GPUFragmentState): WGPUFragmentState =
     WGPUFragmentState.allocate(this)
         .also { fragmentState ->
             println("fragment $fragmentState")
-            fragmentState.module = input.module.handler
-            map(input.entryPoint, fragmentState.entryPoint)
+            fragmentState.module = (input.module as ShaderModule).handler
+            input.entryPoint?.let { map(it, fragmentState.entryPoint) }
             if (input.targets.isNotEmpty()) {
                 fragmentState.targetCount = input.targets.size.toULong()
                 val colorTargets =
@@ -87,8 +90,8 @@ private fun MemoryAllocator.map(input: GPUDepthStencilState): WGPUDepthStencilSt
     WGPUDepthStencilState.allocate(this)
         .also { output ->
             output.format = input.format.value
-            if (input.depthWriteEnabled != null) output.depthWriteEnabled = input.depthWriteEnabled.toUInt()
-            if (input.depthCompare != null) output.depthCompare = input.depthCompare.value
+            input.depthWriteEnabled?.let { output.depthWriteEnabled = it.toUInt() }
+            input.depthCompare?.let { output.depthCompare = it.value }
             map(input.stencilFront, output.stencilFront)
             map(input.stencilBack, output.stencilBack)
             output.stencilReadMask = input.stencilReadMask
@@ -113,7 +116,7 @@ private fun map(input: GPUMultisampleState, output: WGPUMultisampleState) {
 
 private fun map(input: GPUPrimitiveState, output: WGPUPrimitiveState) {
     output.topology = input.topology.value
-    if (input.stripIndexFormat != null) output.stripIndexFormat = input.stripIndexFormat.value
+    input.stripIndexFormat?.let { output.stripIndexFormat = it.value }
     output.frontFace = input.frontFace.value
     output.cullMode = input.cullMode.value
     //TODO check how to map unclippedDepth https://docs.rs/wgpu/latest/wgpu/struct.PrimitiveState.html
@@ -121,8 +124,8 @@ private fun map(input: GPUPrimitiveState, output: WGPUPrimitiveState) {
 
 private fun MemoryAllocator.map(input: GPUVertexState, output: WGPUVertexState) {
     println("vertex $output")
-    output.module = input.module.handler
-    map(input.entryPoint, output.entryPoint)
+    output.module = (input.module as ShaderModule).handler
+    input.entryPoint?.let { map(it, output.entryPoint) }
     // TODO learn how to map this
     output.constantCount = 0uL
     if (input.buffers.isNotEmpty()) {
