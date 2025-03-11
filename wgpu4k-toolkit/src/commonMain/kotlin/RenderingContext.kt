@@ -5,5 +5,5 @@ interface RenderingContext: AutoCloseable {
     val height: UInt
     val textureFormat: GPUTextureFormat
 
-    fun getCurrentTexture(): Texture
+    fun getCurrentTexture(): GPUTexture
 }

@@ -4,23 +4,23 @@ class TextureRenderingContext(
     override val width: UInt,
     override val height: UInt,
     override val textureFormat: GPUTextureFormat,
-    device: Device,
+    device: GPUDevice,
 ) : RenderingContext {
 
-    private val texture: Texture
+    private val texture: GPUTexture
 
     init {
         texture = device.createTexture(
             TextureDescriptor(
                 label = "render texture",
-                size = Size3D(256u, 256u),
+                size = Extent3D(256u, 256u),
                 format = textureFormat,
-                usage = setOf(TextureUsage.RenderAttachment, TextureUsage.CopySrc, TextureUsage.CopyDst)
+                usage = setOf(GPUTextureUsage.RenderAttachment, GPUTextureUsage.CopySrc, GPUTextureUsage.CopyDst)
             )
         )
     }
 
-    override fun getCurrentTexture(): Texture {
+    override fun getCurrentTexture(): GPUTexture {
         return texture
     }
 
