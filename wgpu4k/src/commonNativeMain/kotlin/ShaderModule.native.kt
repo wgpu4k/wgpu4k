@@ -13,7 +13,7 @@ actual class ShaderModule(internal val handler: WGPUShaderModule) : GPUShaderMod
         wgpuShaderModuleRelease(handler)
     }
 
-    actual override suspend fun getCompilationInfo(): GPUCompilationInfo {
+    actual override suspend fun getCompilationInfo(): Result<GPUCompilationInfo> {
         TODO("Not yet implemented")
     }
 }

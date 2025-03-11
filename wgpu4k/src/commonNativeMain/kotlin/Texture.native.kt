@@ -37,6 +37,7 @@ actual class Texture(internal val handler: WGPUTexture) : GPUTexture {
             .let { GPUTextureFormat.of(it) ?: error("Unknown texture format $it")}
     actual override val usage: Set<GPUTextureUsage>
         get() = wgpuTextureGetUsage(handler)
+            .let { usage -> GPUTextureUsage.entries.filter { it.value and usage != 0uL }.toSet() }
 
     actual override fun createView(descriptor: GPUTextureViewDescriptor?): GPUTextureView = memoryScope { scope ->
         descriptor?.let { scope.map(descriptor) }

@@ -1,7 +1,6 @@
 package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
-import io.ygdrasil.webgpu.BindGroupLayoutDescriptor
 import io.ygdrasil.webgpu.GPUBindGroupLayoutDescriptor
 import io.ygdrasil.webgpu.GPUBindGroupLayoutEntry
 import io.ygdrasil.webgpu.toFlagULong

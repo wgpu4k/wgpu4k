@@ -5,7 +5,7 @@ import io.ygdrasil.wgpu.wgpuSamplerRelease
 
 actual class Sampler(internal val handler: WGPUSampler) : GPUSampler {
 
-    override var label: String
+    actual override var label: String
         get() = TODO("Not yet implemented")
         set(value) {}
 
