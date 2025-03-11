@@ -44,6 +44,7 @@ glfw-native = { module = "io.ygdrasil:glfw-native", version.ref = "glfw-native" 
 android-native-helper = { module = "io.ygdrasil:android-native-helper", version.ref = "android-native-helper" }
 
 # WebGPU
+webgpu-descriptors = { module = "io.ygdrasil:webgpu-ktypes-descriptors", version.ref = "webgpu-ktypes" }
 webgpu-type = { module = "io.ygdrasil:webgpu-ktypes", version.ref = "webgpu-ktypes" }
 wgpu4k-native = { module = "io.ygdrasil:wgpu4k-native", version.ref = "wgpu4k-native" }
 wgpu-specs = { module = "io.ygdrasil:wgpu4k-native-specs-jvm", version.ref = "wgpu4k-native" }

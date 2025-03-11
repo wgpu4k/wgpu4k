@@ -103,6 +103,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(projects.wgpu4k)
+                api(libs.webgpu.descriptors)
             }
         }
 
