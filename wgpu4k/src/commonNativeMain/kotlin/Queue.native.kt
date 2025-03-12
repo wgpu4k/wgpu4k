@@ -48,7 +48,7 @@ actual class Queue(internal val handler: WGPUQueue) : GPUQueue {
         bufferOffset: GPUSize64,
         data: ArrayBuffer,
         dataOffset: GPUSize64,
-        size: GPUSize64
+        size: GPUSize64?
     ) {
         TODO("Not yet implemented")
     }

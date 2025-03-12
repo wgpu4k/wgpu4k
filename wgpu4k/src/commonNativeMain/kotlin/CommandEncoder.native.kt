@@ -48,7 +48,7 @@ actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : GPUComma
     actual override fun clearBuffer(
         buffer: GPUBuffer,
         offset: GPUSize64,
-        size: GPUSize64
+        size: GPUSize64?
     ) {
         TODO("Not yet implemented")
     }

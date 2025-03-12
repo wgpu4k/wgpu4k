@@ -35,7 +35,7 @@ expect class CommandEncoder : GPUCommandEncoder {
     override fun clearBuffer(
         buffer: GPUBuffer,
         offset: GPUSize64,
-        size: GPUSize64
+        size: GPUSize64?
     )
 
     override fun resolveQuerySet(

@@ -45,11 +45,13 @@ actual class RenderBundleEncoder(internal val handler: WGPURenderBundleEncoder) 
         wgpuRenderBundleEncoderSetPipeline(handler, (pipeline as RenderPipeline).handler)
     }
 
-    actual override fun setVertexBuffer(slot: GPUIndex32, buffer: GPUBuffer?, offset: GPUSize64, size: GPUSize64) {
+    actual override fun setVertexBuffer(slot: GPUIndex32, buffer: GPUBuffer?, offset: GPUSize64, size: GPUSize64?) {
+        val size = size ?: (buffer?.size?.minus(offset) ?: 0u)
         wgpuRenderBundleEncoderSetVertexBuffer(handler, slot, buffer?.let { (buffer as Buffer).handler }, offset, size)
     }
 
-    actual override fun setIndexBuffer(buffer: GPUBuffer, indexFormat: GPUIndexFormat, offset: GPUSize64, size: GPUSize64) {
+    actual override fun setIndexBuffer(buffer: GPUBuffer, indexFormat: GPUIndexFormat, offset: GPUSize64, size: GPUSize64?) {
+        val size = size ?: buffer.size.minus(offset)
         wgpuRenderBundleEncoderSetIndexBuffer(handler, (buffer as Buffer).handler, indexFormat.value, offset, size)
     }
 

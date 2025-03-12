@@ -21,14 +21,14 @@ expect class RenderBundleEncoder : GPURenderBundleEncoder {
         buffer: GPUBuffer,
         indexFormat: GPUIndexFormat,
         offset: GPUSize64,
-        size: GPUSize64
+        size: GPUSize64?
     )
 
     override fun setVertexBuffer(
         slot: GPUIndex32,
         buffer: GPUBuffer?,
         offset: GPUSize64,
-        size: GPUSize64
+        size: GPUSize64?
     )
 
     override fun draw(

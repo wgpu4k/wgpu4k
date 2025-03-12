@@ -4,6 +4,7 @@ import ffi.MemoryBuffer
 import ffi.NativeAddress
 import ffi.memoryScope
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.ygdrasil.webgpu.mapper.toArrayBuffer
 import io.ygdrasil.wgpu.WGPUBuffer
 import io.ygdrasil.wgpu.WGPUBufferMapCallback
 import io.ygdrasil.wgpu.WGPUBufferMapCallbackInfo
@@ -40,12 +41,14 @@ actual class Buffer(internal val handler: WGPUBuffer) : GPUBuffer {
         wgpuBufferUnmap(handler)
     }
 
-    actual override fun getMappedRange(offset: GPUSize64, size: GPUSize64): ArrayBuffer {
-        TODO("Not yet implemented")
+    actual override fun getMappedRange(offset: GPUSize64, size: GPUSize64?): ArrayBuffer {
+        return wgpuBufferGetMappedRange(handler, offset, size ?: (this.size - offset))
+            ?.toArrayBuffer() ?: error("Can't get mapped range")
     }
 
-    actual override suspend fun mapAsync(mode: GPUMapModeFlags, offset: GPUSize64, size: GPUSize64): Result<Unit> =
+    actual override suspend fun mapAsync(mode: GPUMapModeFlags, offset: GPUSize64, size: GPUSize64?): Result<Unit> =
         suspendCoroutine { continuation ->
+            val size = size ?: (this.size - offset)
             memoryScope { scope ->
                 val callback = WGPUBufferMapCallback.allocate(scope, object : WGPUBufferMapCallback {
                     override fun invoke(

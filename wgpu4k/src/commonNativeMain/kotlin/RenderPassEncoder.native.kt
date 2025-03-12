@@ -84,8 +84,9 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) : GPU
         slot: GPUIndex32,
         buffer: GPUBuffer?,
         offset: GPUSize64,
-        size: GPUSize64
+        size: GPUSize64?
     ) {
+        val size = size ?: (buffer?.size?.minus(offset) ?: 0u)
         wgpuRenderPassEncoderSetVertexBuffer(
             handler,
             slot,
@@ -95,7 +96,8 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) : GPU
         )
     }
 
-    actual override fun setIndexBuffer(buffer: GPUBuffer, indexFormat: GPUIndexFormat, offset: GPUSize64, size: GPUSize64) {
+    actual override fun setIndexBuffer(buffer: GPUBuffer, indexFormat: GPUIndexFormat, offset: GPUSize64, size: GPUSize64?) {
+        val size = size ?: buffer.size.minus(offset)
         wgpuRenderPassEncoderSetIndexBuffer(handler, (buffer as Buffer).handler, indexFormat.value, offset, size)
     }
 
