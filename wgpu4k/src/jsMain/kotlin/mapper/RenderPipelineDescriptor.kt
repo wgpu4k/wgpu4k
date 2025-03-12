@@ -35,14 +35,14 @@ private fun map(input: RenderPipelineDescriptor.VertexState): GPUVertexState = c
     buffers = input.buffers.map { map(it) }.toTypedArray()
 }
 
-private fun map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout): GPUVertexBufferLayout =
+private fun map(input: RenderPipelineDescriptor.VertexBufferLayout): GPUVertexBufferLayout =
     createJsObject<GPUVertexBufferLayout>().apply {
         arrayStride = input.arrayStride
         attributes = input.attributes.map { map(it) }.toTypedArray()
         stepMode = input.stepMode.value
     }
 
-private fun map(input: RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute): GPUVertexAttribute =
+private fun map(input: RenderPipelineDescriptor.VertexBufferLayout.VertexAttribute): GPUVertexAttribute =
     createJsObject<GPUVertexAttribute>().apply {
         format = input.format.value
         offset = input.offset

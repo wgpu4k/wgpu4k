@@ -1,17 +1,24 @@
 package io.ygdrasil.webgpu.examples.scenes.basic
 
 import io.ygdrasil.webgpu.AutoClosableContext
+import io.ygdrasil.webgpu.Color
+import io.ygdrasil.webgpu.ColorAttachment
+import io.ygdrasil.webgpu.ColorTargetState
+import io.ygdrasil.webgpu.FragmentState
+import io.ygdrasil.webgpu.GPUPrimitiveTopology
+import io.ygdrasil.webgpu.GPURenderPipeline
+import io.ygdrasil.webgpu.GPUTextureView
 import io.ygdrasil.webgpu.LoadOp
-import io.ygdrasil.webgpu.PrimitiveTopology
+import io.ygdrasil.webgpu.MultisampleState
+import io.ygdrasil.webgpu.PrimitiveState
 import io.ygdrasil.webgpu.RenderPassDescriptor
-import io.ygdrasil.webgpu.RenderPipeline
 import io.ygdrasil.webgpu.RenderPipelineDescriptor
 import io.ygdrasil.webgpu.ShaderModuleDescriptor
 import io.ygdrasil.webgpu.Size3D
 import io.ygdrasil.webgpu.StoreOp
 import io.ygdrasil.webgpu.TextureDescriptor
 import io.ygdrasil.webgpu.TextureUsage
-import io.ygdrasil.webgpu.TextureView
+import io.ygdrasil.webgpu.VertexState
 import io.ygdrasil.webgpu.WGPUContext
 import io.ygdrasil.webgpu.beginRenderPass
 import io.ygdrasil.webgpu.examples.Scene
@@ -20,36 +27,36 @@ import io.ygdrasil.webgpu.examples.scenes.shader.vertex.triangleVertexShader
 
 class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
-    lateinit var renderPipeline: RenderPipeline
-    lateinit var textureView: TextureView
+    lateinit var renderPipeline: GPURenderPipeline
+    lateinit var textureView: GPUTextureView
     val sampleCount = 4u
 
     override suspend fun initialize() = with(autoClosableContext) {
         renderPipeline = device.createRenderPipeline(
             RenderPipelineDescriptor(
-                vertex = RenderPipelineDescriptor.VertexState(
+                vertex = VertexState(
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
                             code = triangleVertexShader
                         )
                     ).bind()
                 ),
-                fragment = RenderPipelineDescriptor.FragmentState(
+                fragment = FragmentState(
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
                             code = redFragmentShader
                         )
                     ).bind(),
                     targets = listOf(
-                        RenderPipelineDescriptor.FragmentState.ColorTargetState(
+                        ColorTargetState(
                             format = renderingContext.textureFormat
                         )
                     )
                 ),
-                primitive = RenderPipelineDescriptor.PrimitiveState(
-                    topology = PrimitiveTopology.TriangleList
+                primitive = PrimitiveState(
+                    topology = GPUPrimitiveTopology.TriangleList
                 ),
-                multisample = RenderPipelineDescriptor.MultisampleState(
+                multisample = MultisampleState(
                     count = sampleCount
                 )
             )
@@ -75,7 +82,7 @@ class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
         val renderPassEncoder = encoder.beginRenderPass(
             RenderPassDescriptor(
                 colorAttachments = listOf(
-                    RenderPassDescriptor.ColorAttachment(
+                    ColorAttachment(
                         view = textureView,
                         resolveTarget = renderingContext.getCurrentTexture().createView().bind(),
                         loadOp = LoadOp.Clear,

@@ -64,22 +64,22 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 		renderPipeline = device.createRenderPipeline(
 			RenderPipelineDescriptor(
-				vertex = RenderPipelineDescriptor.VertexState(
+				vertex = VertexState(
 					module = device.createShaderModule(
 						ShaderModuleDescriptor(
 							code = basicVertexShader
 						)
 					).bind(), // bind to autoClosableContext to release it later
 					buffers = listOf(
-						RenderPipelineDescriptor.VertexState.VertexBufferLayout(
+						VertexBufferLayout(
 							arrayStride = cubeVertexSize,
 							attributes = listOf(
-								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
+								VertexAttribute(
 									shaderLocation = 0u,
 									offset = cubePositionOffset,
 									format = VertexFormat.Float32x4
 								),
-								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
+								VertexAttribute(
 									shaderLocation = 1u,
 									offset = cubeUVOffset,
 									format = VertexFormat.Float32x2
@@ -88,23 +88,23 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 						)
 					)
 				),
-				fragment = RenderPipelineDescriptor.FragmentState(
+				fragment = FragmentState(
 					module = device.createShaderModule(
 						ShaderModuleDescriptor(
 							code = vertexPositionColorShader
 						)
 					).bind(), // bind to autoClosableContext to release it later
 					targets = listOf(
-						RenderPipelineDescriptor.FragmentState.ColorTargetState(
+						ColorTargetState(
 							format = renderingContext.textureFormat
 						)
 					)
 				),
-				primitive = RenderPipelineDescriptor.PrimitiveState(
+				primitive = PrimitiveState(
 					topology = PrimitiveTopology.TriangleList,
 					cullMode = CullMode.Back
 				),
-				depthStencil = RenderPipelineDescriptor.DepthStencilState(
+				depthStencil = DepthStencilState(
 					depthWriteEnabled = true,
 					depthCompare = CompareFunction.Less,
 					format = TextureFormat.Depth24Plus
@@ -133,9 +133,9 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			BindGroupDescriptor(
 				layout = renderPipeline.getBindGroupLayout(0u),
 				entries = listOf(
-					BindGroupDescriptor.BindGroupEntry(
+					BindGroupEntry(
 						binding = 0u,
-						resource = BindGroupDescriptor.BufferBinding(
+						resource = BufferBinding(
 							buffer = uniformBuffer,
 							offset = 0u,
 							size = matrixSize
@@ -149,9 +149,9 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			BindGroupDescriptor(
 				layout = renderPipeline.getBindGroupLayout(0u),
 				entries = listOf(
-					BindGroupDescriptor.BindGroupEntry(
+					BindGroupEntry(
 						binding = 0u,
-						resource = BindGroupDescriptor.BufferBinding(
+						resource = BufferBinding(
 							buffer = uniformBuffer,
 							offset = offset,
 							size = matrixSize
@@ -163,14 +163,14 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 		renderPassDescriptor = RenderPassDescriptor(
 			colorAttachments = listOf(
-				RenderPassDescriptor.ColorAttachment(
+				ColorAttachment(
 					view = dummyTexture.createView().bind(), // Assigned later
 					loadOp = LoadOp.Clear,
 					clearValue = Color(0.5, 0.5, 0.5, 1.0),
 					storeOp = StoreOp.Store,
 				)
 			),
-			depthStencilAttachment = RenderPassDescriptor.DepthStencilAttachment(
+			depthStencilAttachment = DepthStencilAttachment(
 				view = depthTexture.createView(),
 				depthClearValue = 1.0f,
 				depthLoadOp = LoadOp.Clear,

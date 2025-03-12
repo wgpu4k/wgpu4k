@@ -1,27 +1,6 @@
 package io.ygdrasil.webgpu.examples.scenes.basic
 
-import io.ygdrasil.webgpu.AutoClosableContext
-import io.ygdrasil.webgpu.BindGroup
-import io.ygdrasil.webgpu.BindGroupDescriptor
-import io.ygdrasil.webgpu.Buffer
-import io.ygdrasil.webgpu.BufferDescriptor
-import io.ygdrasil.webgpu.BufferUsage
-import io.ygdrasil.webgpu.CompareFunction
-import io.ygdrasil.webgpu.CullMode
-import io.ygdrasil.webgpu.LoadOp
-import io.ygdrasil.webgpu.PrimitiveTopology
-import io.ygdrasil.webgpu.RenderPassDescriptor
-import io.ygdrasil.webgpu.RenderPipeline
-import io.ygdrasil.webgpu.RenderPipelineDescriptor
-import io.ygdrasil.webgpu.ShaderModuleDescriptor
-import io.ygdrasil.webgpu.Size3D
-import io.ygdrasil.webgpu.StoreOp
-import io.ygdrasil.webgpu.TextureDescriptor
-import io.ygdrasil.webgpu.TextureFormat
-import io.ygdrasil.webgpu.TextureUsage
-import io.ygdrasil.webgpu.VertexFormat
-import io.ygdrasil.webgpu.WGPUContext
-import io.ygdrasil.webgpu.beginRenderPass
+import io.ygdrasil.webgpu.*
 import io.ygdrasil.webgpu.examples.Scene
 import io.ygdrasil.webgpu.examples.scenes.mesh.Cube
 import io.ygdrasil.webgpu.examples.scenes.shader.fragment.vertexPositionColorShader
@@ -37,12 +16,12 @@ val numInstances = (xCount * yCount).toULong()
 class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 
-	lateinit var renderPipeline: RenderPipeline
+	lateinit var renderPipeline: GPURenderPipeline
 	lateinit var projectionMatrix: Matrix4
-	lateinit var renderPassDescriptor: RenderPassDescriptor
-	lateinit var uniformBuffer: Buffer
-	lateinit var uniformBindGroup: BindGroup
-	lateinit var verticesBuffer: Buffer
+	lateinit var renderPassDescriptor: GPURenderPassDescriptor
+	lateinit var uniformBuffer: GPUBuffer
+	lateinit var uniformBindGroup: GPUBindGroup
+	lateinit var verticesBuffer: GPUBuffer
 	val modelMatrices = Array<Matrix4?>(numInstances.toInt()) { null }
 
 	override suspend fun initialize() = with(autoClosableContext) {
@@ -62,22 +41,22 @@ class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 		renderPipeline = device.createRenderPipeline(
 			RenderPipelineDescriptor(
-				vertex = RenderPipelineDescriptor.VertexState(
+				vertex = VertexState(
 					module = device.createShaderModule(
 						ShaderModuleDescriptor(
 							code = instancedShader
 						)
 					).bind(), // bind to autoClosableContext to release it later
 					buffers = listOf(
-						RenderPipelineDescriptor.VertexState.VertexBufferLayout(
+						VertexBufferLayout(
 							arrayStride = Cube.cubeVertexSize,
 							attributes = listOf(
-								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
+								VertexAttribute(
 									shaderLocation = 0u,
 									offset = Cube.cubePositionOffset,
 									format = VertexFormat.Float32x4
 								),
-								RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
+								VertexAttribute(
 									shaderLocation = 1u,
 									offset = Cube.cubeUVOffset,
 									format = VertexFormat.Float32x2
@@ -86,23 +65,23 @@ class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 						)
 					)
 				),
-				fragment = RenderPipelineDescriptor.FragmentState(
+				fragment = FragmentState(
 					module = device.createShaderModule(
 						ShaderModuleDescriptor(
 							code = vertexPositionColorShader
 						)
 					).bind(), // bind to autoClosableContext to release it later
 					targets = listOf(
-						RenderPipelineDescriptor.FragmentState.ColorTargetState(
+						ColorTargetState(
 							format = renderingContext.textureFormat
 						)
 					)
 				),
-				primitive = RenderPipelineDescriptor.PrimitiveState(
+				primitive = PrimitiveState(
 					topology = PrimitiveTopology.TriangleList,
 					cullMode = CullMode.Back
 				),
-				depthStencil = RenderPipelineDescriptor.DepthStencilState(
+				depthStencil = DepthStencilState(
 					depthWriteEnabled = true,
 					depthCompare = CompareFunction.Less,
 					format = TextureFormat.Depth24Plus
@@ -130,9 +109,9 @@ class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			BindGroupDescriptor(
 				layout = renderPipeline.getBindGroupLayout(0u),
 				entries = listOf(
-					BindGroupDescriptor.BindGroupEntry(
+					BindGroupEntry(
 						binding = 0u,
-						resource = BindGroupDescriptor.BufferBinding(
+						resource = BufferBinding(
 							buffer = uniformBuffer
 						)
 					)
@@ -142,14 +121,14 @@ class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 		renderPassDescriptor = RenderPassDescriptor(
 			colorAttachments = listOf(
-				RenderPassDescriptor.ColorAttachment(
+				ColorAttachment(
 					view = dummyTexture.createView().bind(), // Assigned later
 					loadOp = LoadOp.Clear,
 					clearValue = Color(0.5, 0.5, 0.5, 1.0),
 					storeOp = StoreOp.Store,
 				)
 			),
-			depthStencilAttachment = RenderPassDescriptor.DepthStencilAttachment(
+			depthStencilAttachment = DepthStencilAttachment(
 				view = depthTexture.createView(),
 				depthClearValue = 1.0f,
 				depthLoadOp = LoadOp.Clear,

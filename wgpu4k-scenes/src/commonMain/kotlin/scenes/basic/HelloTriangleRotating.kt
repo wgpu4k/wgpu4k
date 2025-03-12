@@ -1,49 +1,57 @@
 package io.ygdrasil.webgpu.examples.scenes.basic
 
 import io.ygdrasil.webgpu.AutoClosableContext
-import io.ygdrasil.webgpu.BindGroup
 import io.ygdrasil.webgpu.BindGroupDescriptor
-import io.ygdrasil.webgpu.Buffer
+import io.ygdrasil.webgpu.BindGroupEntry
+import io.ygdrasil.webgpu.BufferBinding
 import io.ygdrasil.webgpu.BufferDescriptor
 import io.ygdrasil.webgpu.BufferUsage
+import io.ygdrasil.webgpu.Color
+import io.ygdrasil.webgpu.ColorAttachment
+import io.ygdrasil.webgpu.ColorTargetState
+import io.ygdrasil.webgpu.FragmentState
+import io.ygdrasil.webgpu.GPUBindGroup
+import io.ygdrasil.webgpu.GPUBuffer
+import io.ygdrasil.webgpu.GPURenderPipeline
 import io.ygdrasil.webgpu.LoadOp
 import io.ygdrasil.webgpu.RenderPassDescriptor
-import io.ygdrasil.webgpu.RenderPipeline
 import io.ygdrasil.webgpu.RenderPipelineDescriptor
 import io.ygdrasil.webgpu.ShaderModuleDescriptor
 import io.ygdrasil.webgpu.StoreOp
+import io.ygdrasil.webgpu.VertexState
 import io.ygdrasil.webgpu.WGPUContext
 import io.ygdrasil.webgpu.beginRenderPass
 import io.ygdrasil.webgpu.examples.Scene
 import io.ygdrasil.webgpu.examples.scenes.shader.fragment.redFragmentShader
 import io.ygdrasil.webgpu.examples.scenes.shader.vertex.basicVertexPositionShader
+import io.ygdrasil.webgpu.writeBuffer
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 
 class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
-    lateinit var renderPipeline: RenderPipeline
-    lateinit var uniformBuffer: Buffer
-    lateinit var uniformBindGroup: BindGroup
+    lateinit var renderPipeline: GPURenderPipeline
+    lateinit var uniformBuffer: GPUBuffer
+    lateinit var uniformBindGroup: GPUBindGroup
 
     override suspend  fun initialize() = with(autoClosableContext) {
         renderPipeline = device.createRenderPipeline(
             RenderPipelineDescriptor(
-                vertex = RenderPipelineDescriptor.VertexState(
+                vertex = VertexState(
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
                             code = basicVertexPositionShader
                         )
                     ).bind()
                 ),
-                fragment = RenderPipelineDescriptor.FragmentState(
+                fragment = FragmentState(
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
                             code = redFragmentShader
                         )
                     ).bind(),
                     targets = listOf(
-                        RenderPipelineDescriptor.FragmentState.ColorTargetState(
+                        ColorTargetState(
                             format = renderingContext.textureFormat
                         )
                     )
@@ -64,9 +72,9 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
             BindGroupDescriptor(
                 layout = renderPipeline.getBindGroupLayout(0u).bind(),
                 entries = listOf(
-                    BindGroupDescriptor.BindGroupEntry(
+                    BindGroupEntry(
                         binding = 0u,
-                        resource = BindGroupDescriptor.BufferBinding(
+                        resource = BufferBinding(
                             buffer = uniformBuffer
                         )
                     )
@@ -98,7 +106,7 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
         encoder.beginRenderPass(
             RenderPassDescriptor(
                 colorAttachments = listOf(
-                    RenderPassDescriptor.ColorAttachment(
+                    ColorAttachment(
                         view =  texture.createView().bind(),
                         loadOp = LoadOp.Clear,
                         clearValue = Color(.0, .0, .0, 1.0),

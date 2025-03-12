@@ -5,10 +5,11 @@ import io.ygdrasil.webgpu.Extent3D
 import io.ygdrasil.webgpu.GPUBufferUsage
 import io.ygdrasil.webgpu.GPUDevice
 import io.ygdrasil.webgpu.GPUTextureFormat
+import io.ygdrasil.webgpu.GPUTextureUsage
 import io.ygdrasil.webgpu.ImageCopyExternalImage
 import io.ygdrasil.webgpu.ImageCopyTextureTagged
 import io.ygdrasil.webgpu.TextureDescriptor
-import io.ygdrasil.webgpu.TextureUsage
+import io.ygdrasil.webgpu.copyExternalImageToTexture
 import io.ygdrasil.webgpu.examples.toBitmapHolder
 import korlibs.image.format.readBitmap
 import korlibs.io.file.std.asMemoryVfsFile
@@ -44,7 +45,7 @@ suspend fun uploadGLBModel(
             TextureDescriptor(
                 size = Extent3D(width = bitmap.width.toUInt(), height = bitmap.height.toUInt(), depthOrArrayLayers = 1u),
                 format = textureFormat,
-                usage = setOf(TextureUsage.TextureBinding, TextureUsage.CopyDst, TextureUsage.RenderAttachment)
+                usage = setOf(GPUTextureUsage.TextureBinding, GPUTextureUsage.CopyDst, GPUTextureUsage.RenderAttachment)
             )
         )
 
@@ -53,7 +54,7 @@ suspend fun uploadGLBModel(
         device.queue.copyExternalImageToTexture(
             src,
             dst,
-            bitmap.width.toUInt() to bitmap.height.toUInt()
+            Extent3D(bitmap.width.toUInt(), bitmap.height.toUInt(), 0u)
         )
 
         gpuImg

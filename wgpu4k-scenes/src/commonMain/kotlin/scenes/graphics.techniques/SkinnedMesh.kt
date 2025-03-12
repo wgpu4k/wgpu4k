@@ -5,19 +5,19 @@ package io.ygdrasil.webgpu.examples.scenes.graphics.techniques
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.AutoClosableContext
 import io.ygdrasil.webgpu.BindGroupDescriptor
-import io.ygdrasil.webgpu.BindGroupDescriptor.BindGroupEntry
+import io.ygdrasil.webgpu.BindGroupEntry
 import io.ygdrasil.webgpu.BindGroupLayoutDescriptor
 import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry
 import io.ygdrasil.webgpu.Buffer
 import io.ygdrasil.webgpu.BufferDescriptor
 import io.ygdrasil.webgpu.BufferUsage
+import io.ygdrasil.webgpu.ColorAttachment
 import io.ygdrasil.webgpu.GPUBufferBindingType
 import io.ygdrasil.webgpu.GPULoadOp
 import io.ygdrasil.webgpu.GPUStoreOp
 import io.ygdrasil.webgpu.GPUTextureFormat
 import io.ygdrasil.webgpu.RenderBundle
 import io.ygdrasil.webgpu.RenderPassDescriptor
-import io.ygdrasil.webgpu.RenderPassDescriptor.ColorAttachment
 import io.ygdrasil.webgpu.ShaderStage
 import io.ygdrasil.webgpu.Size3D
 import io.ygdrasil.webgpu.TextureDescriptor
@@ -69,7 +69,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
                     storeOp = GPUStoreOp.Store
                 )
             ),
-            depthStencilAttachment = RenderPassDescriptor.DepthStencilAttachment(
+            depthStencilAttachment = DepthStencilAttachment(
                 view = depthTexture.createView().bind(),
                 depthLoadOp = GPULoadOp.Clear,
                 depthClearValue = 1f,
@@ -104,7 +104,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
                 entries = listOf(
                     BindGroupEntry(
                         binding = 0u,
-                        resource = BindGroupDescriptor.BufferBinding(buffer = viewParamBuf)
+                        resource = BufferBinding(buffer = viewParamBuf)
                     )
                 )
             )

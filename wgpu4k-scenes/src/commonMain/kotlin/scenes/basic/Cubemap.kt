@@ -6,25 +6,29 @@ import io.ygdrasil.webgpu.BindGroupDescriptor
 import io.ygdrasil.webgpu.BindGroupEntry
 import io.ygdrasil.webgpu.BufferBinding
 import io.ygdrasil.webgpu.BufferDescriptor
-import io.ygdrasil.webgpu.BufferUsage
 import io.ygdrasil.webgpu.Color
 import io.ygdrasil.webgpu.ColorTargetState
-import io.ygdrasil.webgpu.CullMode
 import io.ygdrasil.webgpu.DepthStencilState
+import io.ygdrasil.webgpu.Extent3D
 import io.ygdrasil.webgpu.FragmentState
 import io.ygdrasil.webgpu.GPUBindGroup
 import io.ygdrasil.webgpu.GPUBuffer
+import io.ygdrasil.webgpu.GPUBufferUsage
 import io.ygdrasil.webgpu.GPUCompareFunction
+import io.ygdrasil.webgpu.GPUCullMode
 import io.ygdrasil.webgpu.GPUFilterMode
 import io.ygdrasil.webgpu.GPUPrimitiveTopology
 import io.ygdrasil.webgpu.GPURenderPassDescriptor
 import io.ygdrasil.webgpu.GPURenderPipeline
 import io.ygdrasil.webgpu.GPUTextureFormat
+import io.ygdrasil.webgpu.GPUTextureUsage
 import io.ygdrasil.webgpu.ImageCopyExternalImage
 import io.ygdrasil.webgpu.ImageCopyTextureTagged
 import io.ygdrasil.webgpu.LoadOp
 import io.ygdrasil.webgpu.Origin3D
 import io.ygdrasil.webgpu.PrimitiveState
+import io.ygdrasil.webgpu.RenderPassColorAttachment
+import io.ygdrasil.webgpu.RenderPassDepthStencilAttachment
 import io.ygdrasil.webgpu.RenderPassDescriptor
 import io.ygdrasil.webgpu.RenderPipelineDescriptor
 import io.ygdrasil.webgpu.SamplerDescriptor
@@ -33,7 +37,6 @@ import io.ygdrasil.webgpu.Size3D
 import io.ygdrasil.webgpu.StoreOp
 import io.ygdrasil.webgpu.TextureDescriptor
 import io.ygdrasil.webgpu.TextureFormat
-import io.ygdrasil.webgpu.TextureUsage
 import io.ygdrasil.webgpu.TextureViewDescriptor
 import io.ygdrasil.webgpu.TextureViewDimension
 import io.ygdrasil.webgpu.VertexAttribute
@@ -42,6 +45,7 @@ import io.ygdrasil.webgpu.VertexFormat
 import io.ygdrasil.webgpu.VertexState
 import io.ygdrasil.webgpu.WGPUContext
 import io.ygdrasil.webgpu.beginRenderPass
+import io.ygdrasil.webgpu.copyExternalImageToTexture
 import io.ygdrasil.webgpu.examples.AssetManager
 import io.ygdrasil.webgpu.examples.Scene
 import io.ygdrasil.webgpu.examples.scenes.mesh.Cube.cubePositionOffset
@@ -52,6 +56,7 @@ import io.ygdrasil.webgpu.examples.scenes.mesh.Cube.cubeVertexSize
 import io.ygdrasil.webgpu.examples.scenes.shader.fragment.sampleCubemapShader
 import io.ygdrasil.webgpu.examples.scenes.shader.vertex.basicVertexShader
 import io.ygdrasil.webgpu.mapFrom
+import io.ygdrasil.webgpu.writeBuffer
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
@@ -78,7 +83,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
         verticesBuffer = device.createBuffer(
             BufferDescriptor(
                 size = (cubeVertexArray.size * Float.SIZE_BYTES).toULong(),
-                usage = setOf(BufferUsage.Vertex),
+                usage = setOf(GPUBufferUsage.Vertex),
                 mappedAtCreation = true
             )
         )
@@ -127,7 +132,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
                 ),
                 primitive = PrimitiveState(
                     topology = GPUPrimitiveTopology.TriangleList,
-                    cullMode = CullMode.None
+                    cullMode = GPUCullMode.None
                 ),
                 depthStencil = DepthStencilState(
                     depthWriteEnabled = true,
@@ -141,7 +146,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
             TextureDescriptor(
                 size = Size3D(renderingContext.width, renderingContext.height),
                 format = TextureFormat.Depth24Plus,
-                usage = setOf(TextureUsage.RenderAttachment),
+                usage = setOf(GPUTextureUsage.RenderAttachment),
             )
         ).bind()
 
@@ -160,7 +165,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
                 // Assume each image has the same size.
                 size = Size3D(imageBitmaps[0].width, imageBitmaps[0].height, depthLayer),
                 format = renderingContext.textureFormat,
-                usage = setOf(TextureUsage.TextureBinding, TextureUsage.CopyDst, TextureUsage.RenderAttachment),
+                usage = setOf(GPUTextureUsage.TextureBinding, GPUTextureUsage.CopyDst, GPUTextureUsage.RenderAttachment),
             )
         ).bind()
 
@@ -169,7 +174,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
             device.queue.copyExternalImageToTexture(
                 ImageCopyExternalImage(source = imageBitmap),
                 ImageCopyTextureTagged(texture = cubemapTexture, origin = Origin3D(0u, 0u, index.toUInt())),
-                imageBitmap.width to imageBitmap.height
+                Extent3D(imageBitmap.width, imageBitmap.height, 0u)
             )
         }
 
@@ -177,7 +182,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
         uniformBuffer = device.createBuffer(
             BufferDescriptor(
                 size = uniformBufferSize,
-                usage = setOf(BufferUsage.Uniform, BufferUsage.CopyDst)
+                usage = setOf(GPUBufferUsage.Uniform, GPUBufferUsage.CopyDst)
             )
         ).bind()
 
@@ -219,14 +224,14 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
 
         renderPassDescriptor = RenderPassDescriptor(
             colorAttachments = listOf(
-                RenderPassDescriptor.ColorAttachment(
+                RenderPassColorAttachment(
                     view = dummyTexture.createView().bind(), // Assigned later
                     loadOp = LoadOp.Clear,
                     clearValue = Color(0.5, 0.5, 0.5, 1.0),
                     storeOp = StoreOp.Store,
                 )
             ),
-            depthStencilAttachment = RenderPassDescriptor.DepthStencilAttachment(
+            depthStencilAttachment = RenderPassDepthStencilAttachment(
                 view = depthTexture.createView(),
                 depthClearValue = 1.0f,
                 depthLoadOp = LoadOp.Clear,
@@ -256,9 +261,9 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
             transformationMatrix.size.toULong()
         )
 
-        renderPassDescriptor = renderPassDescriptor.copy(
+        renderPassDescriptor = (renderPassDescriptor as RenderPassDescriptor).copy(
             colorAttachments = listOf(
-                renderPassDescriptor.colorAttachments[0].copy(
+                (renderPassDescriptor.colorAttachments[0] as RenderPassColorAttachment).copy(
                     view = renderingContext.getCurrentTexture()
                         .bind()
                         .createView()

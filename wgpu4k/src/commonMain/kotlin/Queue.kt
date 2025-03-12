@@ -3,55 +3,7 @@ package io.ygdrasil.webgpu
 expect class Queue : GPUQueue {
 
     override var label: String
-
-    fun writeBuffer(
-        buffer: Buffer,
-        bufferOffset: GPUSize64,
-        data: ShortArray,
-        dataOffset: GPUSize64 = 0u,
-        size: GPUSize64 = data.size.toULong(),
-    )
-
-    fun writeBuffer(
-        buffer: Buffer,
-        bufferOffset: GPUSize64,
-        data: FloatArray,
-        dataOffset: GPUSize64 = 0u,
-        size: GPUSize64 = data.size.toULong(),
-    )
-
-    fun writeBuffer(
-        buffer: Buffer,
-        bufferOffset: GPUSize64,
-        data: IntArray,
-        dataOffset: GPUSize64 = 0u,
-        size: GPUSize64 = data.size.toULong(),
-    )
-
-    fun writeBuffer(
-        buffer: Buffer,
-        bufferOffset: GPUSize64,
-        data: ByteArray,
-        dataOffset: GPUSize64 = 0u,
-        size: GPUSize64 = data.size.toULong(),
-    )
-
-    fun writeBuffer(
-        buffer: Buffer,
-        bufferOffset: GPUSize64,
-        data: DoubleArray,
-        dataOffset: GPUSize64 = 0u,
-        size: GPUSize64 = data.size.toULong(),
-    )
-
-    fun writeBuffer(
-        buffer: Buffer,
-        bufferOffset: GPUSize64,
-        data: LongArray,
-        dataOffset: GPUSize64 = 0u,
-        size: GPUSize64 = data.size.toULong(),
-    )
-
+    
     override fun submit(commandBuffers: List<GPUCommandBuffer>)
     override suspend fun onSubmittedWorkDone() : Result<Unit>
     override fun writeBuffer(
@@ -69,53 +21,5 @@ expect class Queue : GPUQueue {
         size: GPUExtent3D
     )
 
-    fun writeTexture(
-        destination: GPUTexelCopyTextureInfo,
-        data: FloatArray,
-        dataLayout: GPUTexelCopyBufferLayout,
-        size: GPUExtent3D,
-    )
-
-    fun writeTexture(
-        destination: GPUTexelCopyTextureInfo,
-        data: DoubleArray,
-        dataLayout: GPUTexelCopyBufferLayout,
-        size: GPUExtent3D,
-    )
-
-    fun writeTexture(
-        destination: GPUTexelCopyTextureInfo,
-        data: ByteArray,
-        dataLayout: GPUTexelCopyBufferLayout,
-        size: GPUExtent3D,
-    )
-
-    fun writeTexture(
-        destination: GPUTexelCopyTextureInfo,
-        data: ShortArray,
-        dataLayout: GPUTexelCopyBufferLayout,
-        size: GPUExtent3D,
-    )
-
-    fun writeTexture(
-        destination: GPUTexelCopyTextureInfo,
-        data: IntArray,
-        dataLayout: GPUTexelCopyBufferLayout,
-        size: GPUExtent3D,
-    )
-
-    fun writeTexture(
-        destination: GPUTexelCopyTextureInfo,
-        data: LongArray,
-        dataLayout: GPUTexelCopyBufferLayout,
-        size: GPUExtent3D,
-    )
 }
 
-expect sealed interface DrawableHolder
-expect class ImageBitmapHolder : DrawableHolder, AutoCloseable {
-    val width: UInt
-    val height: UInt
-
-    override fun close()
-}

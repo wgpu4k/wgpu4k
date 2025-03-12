@@ -16,17 +16,17 @@ internal fun map(input: BindGroupDescriptor): GPUBindGroupDescriptor {
     }
 }
 
-private fun map(input: BindGroupDescriptor.BindGroupEntry): GPUBindGroupEntry =
+private fun map(input: BindGroupEntry): GPUBindGroupEntry =
     createJsObject<GPUBindGroupEntry>().apply {
         binding = input.binding
         resource = when (val localResource = input.resource) {
-            is BindGroupDescriptor.SamplerBinding -> localResource.sampler.handler
-            is BindGroupDescriptor.BufferBinding -> createJsObject<GPUBufferBinding>().apply {
+            is SamplerBinding -> localResource.sampler.handler
+            is BufferBinding -> createJsObject<GPUBufferBinding>().apply {
                 buffer = localResource.buffer.handler
                 offset = localResource.offset.toJsNumber()
                 size = localResource.size.toJsNumber()
             }
 
-            is BindGroupDescriptor.TextureViewBinding -> localResource.view.handler
+            is TextureViewBinding -> localResource.view.handler
         }
     }

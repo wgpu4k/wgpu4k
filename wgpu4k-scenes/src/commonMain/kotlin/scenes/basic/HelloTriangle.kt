@@ -1,12 +1,17 @@
 package io.ygdrasil.webgpu.examples.scenes.basic
 
 import io.ygdrasil.webgpu.AutoClosableContext
+import io.ygdrasil.webgpu.Color
+import io.ygdrasil.webgpu.ColorAttachment
+import io.ygdrasil.webgpu.ColorTargetState
+import io.ygdrasil.webgpu.FragmentState
+import io.ygdrasil.webgpu.GPURenderPipeline
 import io.ygdrasil.webgpu.LoadOp
 import io.ygdrasil.webgpu.RenderPassDescriptor
-import io.ygdrasil.webgpu.RenderPipeline
 import io.ygdrasil.webgpu.RenderPipelineDescriptor
 import io.ygdrasil.webgpu.ShaderModuleDescriptor
 import io.ygdrasil.webgpu.StoreOp
+import io.ygdrasil.webgpu.VertexState
 import io.ygdrasil.webgpu.WGPUContext
 import io.ygdrasil.webgpu.beginRenderPass
 import io.ygdrasil.webgpu.examples.Scene
@@ -15,26 +20,26 @@ import io.ygdrasil.webgpu.examples.scenes.shader.vertex.triangleVertexShader
 
 class HelloTriangleScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
-    lateinit var renderPipeline: RenderPipeline
+    lateinit var renderPipeline: GPURenderPipeline
 
     override suspend fun initialize() = with(autoClosableContext) {
         renderPipeline = device.createRenderPipeline(
             RenderPipelineDescriptor(
-                vertex = RenderPipelineDescriptor.VertexState(
+                vertex = VertexState(
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
                             code = triangleVertexShader
                         )
                     ).bind()
                 ),
-                fragment = RenderPipelineDescriptor.FragmentState(
+                fragment = FragmentState(
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
                             code = redFragmentShader
                         )
                     ).bind(),
                     targets = listOf(
-                        RenderPipelineDescriptor.FragmentState.ColorTargetState(
+                        ColorTargetState(
                             format = renderingContext.textureFormat
                         )
                     )
@@ -55,7 +60,7 @@ class HelloTriangleScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
         encoder.beginRenderPass(
             RenderPassDescriptor(
                 colorAttachments = listOf(
-                    RenderPassDescriptor.ColorAttachment(
+                    ColorAttachment(
                         view = texture.createView().bind(),
                         loadOp = LoadOp.Clear,
                         clearValue = Color(.0, .0, .0, 1.0),
