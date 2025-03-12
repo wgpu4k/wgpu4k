@@ -80,6 +80,7 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
         renderPipeline = device.createRenderPipeline(
             RenderPipelineDescriptor(
                 vertex = VertexState(
+                    entryPoint = "main",
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
                             code = basicVertexShader
@@ -104,6 +105,7 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
                     )
                 ),
                 fragment = FragmentState(
+                    entryPoint = "main",
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
                             code = sampleTextureMixColorShader

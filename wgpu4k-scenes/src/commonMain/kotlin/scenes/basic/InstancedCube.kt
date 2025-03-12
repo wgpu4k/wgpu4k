@@ -80,6 +80,7 @@ class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		renderPipeline = device.createRenderPipeline(
 			RenderPipelineDescriptor(
 				vertex = VertexState(
+					entryPoint = "main",
 					module = device.createShaderModule(
 						ShaderModuleDescriptor(
 							code = instancedShader
@@ -104,6 +105,7 @@ class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 					)
 				),
 				fragment = FragmentState(
+					entryPoint = "main",
 					module = device.createShaderModule(
 						ShaderModuleDescriptor(
 							code = vertexPositionColorShader

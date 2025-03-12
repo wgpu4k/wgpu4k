@@ -78,6 +78,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		renderPipeline = device.createRenderPipeline(
 			RenderPipelineDescriptor(
 				vertex = VertexState(
+					entryPoint = "main",
 					module = device.createShaderModule(
 						ShaderModuleDescriptor(
 							code = basicVertexShader
@@ -102,6 +103,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 					)
 				),
 				fragment = FragmentState(
+					entryPoint = "main",
 					module = device.createShaderModule(
 						ShaderModuleDescriptor(
 							code = vertexPositionColorShader

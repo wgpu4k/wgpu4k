@@ -95,6 +95,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
         renderPipeline = device.createRenderPipeline(
             RenderPipelineDescriptor(
                 vertex = VertexState(
+                    entryPoint = "main",
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
                             code = basicVertexShader
@@ -119,6 +120,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
                     )
                 ),
                 fragment = FragmentState(
+                    entryPoint = "main",
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
                             code = sampleCubemapShader

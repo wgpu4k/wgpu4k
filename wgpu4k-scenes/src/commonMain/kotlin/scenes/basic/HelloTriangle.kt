@@ -26,6 +26,7 @@ class HelloTriangleScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
         renderPipeline = device.createRenderPipeline(
             RenderPipelineDescriptor(
                 vertex = VertexState(
+                    entryPoint = "main",
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
                             code = triangleVertexShader
@@ -33,6 +34,7 @@ class HelloTriangleScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
                     ).bind()
                 ),
                 fragment = FragmentState(
+                    entryPoint = "main",
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
                             code = redFragmentShader
