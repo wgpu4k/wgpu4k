@@ -57,14 +57,14 @@ expect class Queue : GPUQueue {
     override fun writeBuffer(
         buffer: GPUBuffer,
         bufferOffset: GPUSize64,
-        data: GPUBufferSource,
+        data: ArrayBuffer,
         dataOffset: GPUSize64,
         size: GPUSize64
     )
 
     override fun writeTexture(
         destination: GPUTexelCopyTextureInfo,
-        data: GPUBufferSource,
+        data: ArrayBuffer,
         dataLayout: GPUTexelCopyBufferLayout,
         size: GPUExtent3D
     )

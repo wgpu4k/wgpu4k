@@ -13,6 +13,7 @@ import io.ygdrasil.webgpu.TextureRenderingContext
 import io.ygdrasil.webgpu.autoClosableContext
 import io.ygdrasil.webgpu.examples.Scene
 import io.ygdrasil.webgpu.examples.loadScenes
+import io.ygdrasil.webgpu.mapInto
 import io.ygdrasil.webgpu.poll
 import korlibs.image.bitmap.Bitmap32
 import korlibs.image.format.PNG

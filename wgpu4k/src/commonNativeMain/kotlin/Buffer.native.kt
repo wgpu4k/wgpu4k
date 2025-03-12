@@ -40,41 +40,6 @@ actual class Buffer(internal val handler: WGPUBuffer) : GPUBuffer {
         wgpuBufferUnmap(handler)
     }
 
-    actual fun mapFrom(buffer: ShortArray, offset: GPUSize64) {
-        val bufferSize = (buffer.size * Short.SIZE_BYTES).toULong()
-        wgpuBufferGetMappedRange(handler, offset, bufferSize)
-            .asBuffer(bufferSize)
-            .writeShorts(buffer)
-    }
-
-    actual fun mapFrom(buffer: FloatArray, offset: GPUSize64) {
-        val bufferSize = (buffer.size * Float.SIZE_BYTES).toULong()
-        wgpuBufferGetMappedRange(handler, offset, bufferSize)
-            .asBuffer(bufferSize)
-            .writeFloats(buffer)
-    }
-
-    actual fun mapFrom(buffer: ByteArray, offset: GPUSize64) {
-        val bufferSize = (buffer.size * Byte.SIZE_BYTES).toULong()
-        wgpuBufferGetMappedRange(handler, offset, bufferSize)
-            .asBuffer(bufferSize)
-            .writeBytes(buffer)
-    }
-
-    actual fun mapInto(buffer: ByteArray, offset: ULong) {
-        val bufferSize = (buffer.size * Byte.SIZE_BYTES).toULong()
-        wgpuBufferGetMappedRange(handler, offset, bufferSize)
-            .asBuffer(bufferSize)
-            .readBytes(buffer)
-    }
-
-    actual fun mapInto(buffer: IntArray, offset: ULong) {
-        val bufferSize = (buffer.size * Int.SIZE_BYTES).toULong()
-        wgpuBufferGetMappedRange(handler, offset, bufferSize)
-            .asBuffer(bufferSize)
-            .readInts(buffer)
-    }
-
     actual override fun getMappedRange(offset: GPUSize64, size: GPUSize64): ArrayBuffer {
         TODO("Not yet implemented")
     }
@@ -112,3 +77,38 @@ actual class Buffer(internal val handler: WGPUBuffer) : GPUBuffer {
 
 private fun NativeAddress?.asBuffer(size: ULong): MemoryBuffer =
     MemoryBuffer((this ?: error("buffer should not be null")), size)
+
+actual fun GPUBuffer.mapFrom(buffer: ShortArray, offset: GPUSize64) {
+    val bufferSize = (buffer.size * Short.SIZE_BYTES).toULong()
+    wgpuBufferGetMappedRange((this as Buffer).handler, offset, bufferSize)
+        .asBuffer(bufferSize)
+        .writeShorts(buffer)
+}
+
+actual fun GPUBuffer.mapFrom(buffer: FloatArray, offset: GPUSize64) {
+    val bufferSize = (buffer.size * Float.SIZE_BYTES).toULong()
+    wgpuBufferGetMappedRange((this as Buffer).handler, offset, bufferSize)
+        .asBuffer(bufferSize)
+        .writeFloats(buffer)
+}
+
+actual fun GPUBuffer.mapFrom(buffer: ByteArray, offset: GPUSize64) {
+    val bufferSize = (buffer.size * Byte.SIZE_BYTES).toULong()
+    wgpuBufferGetMappedRange((this as Buffer).handler, offset, bufferSize)
+        .asBuffer(bufferSize)
+        .writeBytes(buffer)
+}
+
+actual fun GPUBuffer.mapInto(buffer: ByteArray, offset: ULong) {
+    val bufferSize = (buffer.size * Byte.SIZE_BYTES).toULong()
+    wgpuBufferGetMappedRange((this as Buffer).handler, offset, bufferSize)
+        .asBuffer(bufferSize)
+        .readBytes(buffer)
+}
+
+actual fun GPUBuffer.mapInto(buffer: IntArray, offset: ULong) {
+    val bufferSize = (buffer.size * Int.SIZE_BYTES).toULong()
+    wgpuBufferGetMappedRange((this as Buffer).handler, offset, bufferSize)
+        .asBuffer(bufferSize)
+        .readInts(buffer)
+}

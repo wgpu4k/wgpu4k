@@ -46,7 +46,7 @@ actual class Queue(internal val handler: WGPUQueue) : GPUQueue {
     actual override fun writeBuffer(
         buffer: GPUBuffer,
         bufferOffset: GPUSize64,
-        data: GPUBufferSource,
+        data: ArrayBuffer,
         dataOffset: GPUSize64,
         size: GPUSize64
     ) {
@@ -55,7 +55,7 @@ actual class Queue(internal val handler: WGPUQueue) : GPUQueue {
 
     actual override fun writeTexture(
         destination: GPUTexelCopyTextureInfo,
-        data: GPUBufferSource,
+        data: ArrayBuffer,
         dataLayout: GPUTexelCopyBufferLayout,
         size: GPUExtent3D
     ) {
