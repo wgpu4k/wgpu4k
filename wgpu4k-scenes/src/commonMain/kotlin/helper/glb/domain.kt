@@ -7,7 +7,6 @@ import io.ygdrasil.webgpu.BindGroupEntry
 import io.ygdrasil.webgpu.BindGroupLayout
 import io.ygdrasil.webgpu.BindGroupLayoutDescriptor
 import io.ygdrasil.webgpu.BindGroupLayoutEntry
-import io.ygdrasil.webgpu.Buffer
 import io.ygdrasil.webgpu.BufferBinding
 import io.ygdrasil.webgpu.BufferBindingLayout
 import io.ygdrasil.webgpu.BufferBindingType
@@ -30,20 +29,19 @@ import io.ygdrasil.webgpu.GPUIndexFormat
 import io.ygdrasil.webgpu.GPUPrimitiveTopology
 import io.ygdrasil.webgpu.GPURenderBundle
 import io.ygdrasil.webgpu.GPURenderBundleEncoder
+import io.ygdrasil.webgpu.GPUSampler
 import io.ygdrasil.webgpu.GPUShaderStage
+import io.ygdrasil.webgpu.GPUTexture
 import io.ygdrasil.webgpu.GPUTextureFormat
 import io.ygdrasil.webgpu.GPUVertexFormat
 import io.ygdrasil.webgpu.IndexFormat
 import io.ygdrasil.webgpu.PipelineLayoutDescriptor
 import io.ygdrasil.webgpu.PrimitiveState
-import io.ygdrasil.webgpu.RenderBundle
 import io.ygdrasil.webgpu.RenderBundleEncoderDescriptor
 import io.ygdrasil.webgpu.RenderPipelineDescriptor
-import io.ygdrasil.webgpu.Sampler
 import io.ygdrasil.webgpu.SamplerBindingLayout
 import io.ygdrasil.webgpu.SamplerDescriptor
 import io.ygdrasil.webgpu.ShaderStage
-import io.ygdrasil.webgpu.Texture
 import io.ygdrasil.webgpu.TextureBindingLayout
 import io.ygdrasil.webgpu.TextureFormat
 import io.ygdrasil.webgpu.VertexAttribute
@@ -66,9 +64,9 @@ class GLTFPrimitive(
 
     // Build the primitive render commands into the bundle
     fun buildRenderBundle(
-        device: Device,
+        device: GPUDevice,
         shaderCache: ShaderCache,
-        bindGroupLayouts: Array<BindGroupLayout>,
+        bindGroupLayouts: Array<GPUBindGroupLayout>,
         bundleEncoder: GPURenderBundleEncoder,
         swapChainFormat: GPUTextureFormat,
         depthFormat: GPUTextureFormat,
@@ -238,7 +236,7 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
         }
     }
 
-    fun upload(device: Device) {
+    fun upload(device: GPUDevice) {
         logger.debug { "Uploading material for node" }
         val buffer = device.createBuffer(
             BufferDescriptor(
@@ -287,10 +285,10 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
             )
 
             bindGroupEntries.add(
-                BindGroupEntry(binding = 1u, resource = SamplerBinding(it.sampler))
+                BindGroupEntry(binding = 1u, resource = it.sampler)
             )
             bindGroupEntries.add(
-                BindGroupEntry(binding = 2u, resource = TextureViewBinding(it.imageView))
+                BindGroupEntry(binding = 2u, resource = it.imageView)
             )
         }
 
@@ -311,7 +309,7 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
     }
 }
 
-class GLTFTexture(sampler: GLTFSampler, image: Texture) {
+class GLTFTexture(sampler: GLTFSampler, image: GPUTexture) {
     val sampler = sampler.sampler
     val imageView = image.createView()
 }
@@ -322,7 +320,7 @@ class GLTFBufferView(bufferView: GLTF2.BufferView, buffer: GLTF2.Buffer) {
     var byteStride: Int = bufferView.byteStride
     var buffer: ByteArray
     var needsUpload = false
-    var gpuBuffer: Buffer? = null
+    var gpuBuffer: GPUBuffer? = null
     private val usage = mutableSetOf<BufferUsage>()
 
     init {
@@ -333,7 +331,7 @@ class GLTFBufferView(bufferView: GLTF2.BufferView, buffer: GLTF2.Buffer) {
         this.usage.add(usage)
     }
 
-    fun upload(device: Device) {
+    fun upload(device: GPUDevice) {
         // Note: must align to 4 byte size when mapped at creation is true
         val buf = device.createBuffer(
             BufferDescriptor(
@@ -376,9 +374,9 @@ class GLBModel(val nodes: List<GLTFNode>) {
         shaderCache: ShaderCache,
         viewParamsLayout: BindGroupLayout,
         viewParamsBindGroup: BindGroup,
-        swapChainFormat: TextureFormat,
-    ): List<RenderBundle> {
-        val renderBundles = mutableListOf<RenderBundle>()
+        swapChainFormat: GPUTextureFormat,
+    ): List<GPURenderBundle> {
+        val renderBundles = mutableListOf<GPURenderBundle>()
         nodes.forEach { node ->
             val bundle = node.buildRenderBundle(
                 device,
@@ -398,7 +396,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
     lateinit var gpuUniforms: GPUBuffer
     lateinit var bindGroup: GPUBindGroup
 
-    fun upload(device: Device) {
+    fun upload(device: GPUDevice) {
         logger.debug { "Uploading uniform buffer for node $name" }
         gpuUniforms = device.createBuffer(
             BufferDescriptor(
@@ -480,7 +478,7 @@ class GLTFSampler(private val device: GPUDevice, private val samplerNode: GLTF2.
 
     val sampler = createSampler()
 
-    private fun createSampler(): Sampler {
+    private fun createSampler(): GPUSampler {
         val magFilter = when (samplerNode?.magFilter) {
             null, GLTFTextureFilter.LINEAR.value -> GPUFilterMode.Linear
             else -> GPUFilterMode.Nearest

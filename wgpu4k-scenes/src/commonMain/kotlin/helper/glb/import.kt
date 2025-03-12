@@ -2,12 +2,12 @@ package io.ygdrasil.webgpu.examples.helper.glb
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.BufferUsage
-import io.ygdrasil.webgpu.Device
+import io.ygdrasil.webgpu.GPUDevice
+import io.ygdrasil.webgpu.GPUTextureFormat
 import io.ygdrasil.webgpu.ImageCopyExternalImage
 import io.ygdrasil.webgpu.ImageCopyTextureTagged
 import io.ygdrasil.webgpu.Size3D
 import io.ygdrasil.webgpu.TextureDescriptor
-import io.ygdrasil.webgpu.TextureFormat
 import io.ygdrasil.webgpu.TextureUsage
 import io.ygdrasil.webgpu.examples.toBitmapHolder
 import korlibs.image.format.readBitmap
@@ -17,9 +17,9 @@ import korlibs.math.geom.Matrix4
 private val logger = KotlinLogging.logger {}
 
 suspend fun uploadGLBModel(
-    device: Device,
+    device: GPUDevice,
     gltf2: GLTF2,
-    textureFormat: TextureFormat,
+    textureFormat: GPUTextureFormat,
 ): GLBModel {
     logger.debug { "uploadGLBModel" }
 
