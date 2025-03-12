@@ -1,12 +1,12 @@
 package io.ygdrasil.webgpu.examples.helper.glb
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.ygdrasil.webgpu.BufferUsage
+import io.ygdrasil.webgpu.Extent3D
+import io.ygdrasil.webgpu.GPUBufferUsage
 import io.ygdrasil.webgpu.GPUDevice
 import io.ygdrasil.webgpu.GPUTextureFormat
 import io.ygdrasil.webgpu.ImageCopyExternalImage
 import io.ygdrasil.webgpu.ImageCopyTextureTagged
-import io.ygdrasil.webgpu.Size3D
 import io.ygdrasil.webgpu.TextureDescriptor
 import io.ygdrasil.webgpu.TextureUsage
 import io.ygdrasil.webgpu.examples.toBitmapHolder
@@ -42,7 +42,7 @@ suspend fun uploadGLBModel(
 
         val gpuImg = device.createTexture(
             TextureDescriptor(
-                size = Size3D(width = bitmap.width.toUInt(), height = bitmap.height.toUInt(), depthOrArrayLayers = 1u),
+                size = Extent3D(width = bitmap.width.toUInt(), height = bitmap.height.toUInt(), depthOrArrayLayers = 1u),
                 format = textureFormat,
                 usage = setOf(TextureUsage.TextureBinding, TextureUsage.CopyDst, TextureUsage.RenderAttachment)
             )
@@ -91,7 +91,7 @@ suspend fun uploadGLBModel(
                     val accessor = gltf2.accessors[primitive.indices]
                     val viewID = accessor.bufferView
                     bufferViews[viewID].needsUpload = true
-                    bufferViews[viewID].addUsage(BufferUsage.Index)
+                    bufferViews[viewID].addUsage(GPUBufferUsage.Index)
                     GLTFAccessor(bufferViews[viewID], accessor)
                 } else null
 
@@ -102,7 +102,7 @@ suspend fun uploadGLBModel(
                     val accessor = gltf2.accessors[index]
                     val viewID = accessor.bufferView
                     bufferViews[viewID].needsUpload = true
-                    bufferViews[viewID].addUsage(BufferUsage.Vertex)
+                    bufferViews[viewID].addUsage(GPUBufferUsage.Vertex)
                     when (attribute.str) {
                         "POSITION" -> positions = GLTFAccessor(bufferViews[viewID], accessor)
                         "NORMAL" -> normals = GLTFAccessor(bufferViews[viewID], accessor)
