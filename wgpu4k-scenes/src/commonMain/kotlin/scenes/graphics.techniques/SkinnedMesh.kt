@@ -11,23 +11,22 @@ import io.ygdrasil.webgpu.BindGroupLayoutEntry
 import io.ygdrasil.webgpu.BufferBinding
 import io.ygdrasil.webgpu.BufferBindingLayout
 import io.ygdrasil.webgpu.BufferDescriptor
-import io.ygdrasil.webgpu.BufferUsage
 import io.ygdrasil.webgpu.Color
-import io.ygdrasil.webgpu.ColorAttachment
-import io.ygdrasil.webgpu.DepthStencilAttachment
+import io.ygdrasil.webgpu.Extent3D
 import io.ygdrasil.webgpu.GPUBuffer
 import io.ygdrasil.webgpu.GPUBufferBindingType
+import io.ygdrasil.webgpu.GPUBufferUsage
 import io.ygdrasil.webgpu.GPULoadOp
 import io.ygdrasil.webgpu.GPURenderBundle
 import io.ygdrasil.webgpu.GPURenderPassDescriptor
+import io.ygdrasil.webgpu.GPUShaderStage
 import io.ygdrasil.webgpu.GPUStoreOp
 import io.ygdrasil.webgpu.GPUTextureFormat
+import io.ygdrasil.webgpu.GPUTextureUsage
 import io.ygdrasil.webgpu.RenderPassColorAttachment
+import io.ygdrasil.webgpu.RenderPassDepthStencilAttachment
 import io.ygdrasil.webgpu.RenderPassDescriptor
-import io.ygdrasil.webgpu.ShaderStage
-import io.ygdrasil.webgpu.Size3D
 import io.ygdrasil.webgpu.TextureDescriptor
-import io.ygdrasil.webgpu.TextureUsage
 import io.ygdrasil.webgpu.WGPUContext
 import io.ygdrasil.webgpu.beginRenderPass
 import io.ygdrasil.webgpu.examples.AssetManager
@@ -57,26 +56,26 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
 
         val depthTexture = device.createTexture(
             TextureDescriptor(
-                size = Size3D(
+                size = Extent3D(
                     width = renderingContext.width,
                     height = renderingContext.height,
                     depthOrArrayLayers = 1u
                 ),
                 format = GPUTextureFormat.Depth24PlusStencil8,
-                usage = setOf(TextureUsage.RenderAttachment)
+                usage = setOf(GPUTextureUsage.RenderAttachment)
             )
         ).bind()
 
         renderPassDesc = RenderPassDescriptor(
             colorAttachments = listOf(
-                ColorAttachment(
+                RenderPassColorAttachment(
                     view = dummyTexture.createView().bind(),
                     loadOp = GPULoadOp.Clear,
                     clearValue = Color(0.3, 0.3, 0.3, 1.0),
                     storeOp = GPUStoreOp.Store
                 )
             ),
-            depthStencilAttachment = DepthStencilAttachment(
+            depthStencilAttachment = RenderPassDepthStencilAttachment(
                 view = depthTexture.createView().bind(),
                 depthLoadOp = GPULoadOp.Clear,
                 depthClearValue = 1f,
@@ -92,7 +91,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
                 entries = listOf(
                     BindGroupLayoutEntry(
                         binding = 0u,
-                        visibility = setOf(ShaderStage.Vertex),
+                        visibility = setOf(GPUShaderStage.Vertex),
                         buffer = BufferBindingLayout(type = GPUBufferBindingType.Uniform)
                     )
                 )
@@ -101,7 +100,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
 
         viewParamBuf = device.createBuffer(
             BufferDescriptor(
-                size = 4uL * 4uL * 4uL, usage = setOf(BufferUsage.Uniform, BufferUsage.CopyDst)
+                size = 4uL * 4uL * 4uL, usage = setOf(GPUBufferUsage.Uniform, GPUBufferUsage.CopyDst)
             )
         ).bind()
 
