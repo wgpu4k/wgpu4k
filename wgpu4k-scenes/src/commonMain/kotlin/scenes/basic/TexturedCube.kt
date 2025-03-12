@@ -1,20 +1,32 @@
 package io.ygdrasil.webgpu.examples.scenes.basic
 
 import io.ygdrasil.webgpu.AutoClosableContext
-import io.ygdrasil.webgpu.BindGroup
 import io.ygdrasil.webgpu.BindGroupDescriptor
-import io.ygdrasil.webgpu.Buffer
+import io.ygdrasil.webgpu.BindGroupEntry
+import io.ygdrasil.webgpu.BufferBinding
 import io.ygdrasil.webgpu.BufferDescriptor
 import io.ygdrasil.webgpu.BufferUsage
+import io.ygdrasil.webgpu.Color
+import io.ygdrasil.webgpu.ColorAttachment
+import io.ygdrasil.webgpu.ColorTargetState
 import io.ygdrasil.webgpu.CompareFunction
 import io.ygdrasil.webgpu.CullMode
+import io.ygdrasil.webgpu.DepthStencilAttachment
+import io.ygdrasil.webgpu.DepthStencilState
+import io.ygdrasil.webgpu.Extent3D
 import io.ygdrasil.webgpu.FilterMode
+import io.ygdrasil.webgpu.FragmentState
+import io.ygdrasil.webgpu.GPUBindGroup
+import io.ygdrasil.webgpu.GPUBuffer
+import io.ygdrasil.webgpu.GPURenderPassDescriptor
+import io.ygdrasil.webgpu.GPURenderPipeline
 import io.ygdrasil.webgpu.ImageCopyExternalImage
 import io.ygdrasil.webgpu.ImageCopyTextureTagged
 import io.ygdrasil.webgpu.LoadOp
+import io.ygdrasil.webgpu.PrimitiveState
 import io.ygdrasil.webgpu.PrimitiveTopology
+import io.ygdrasil.webgpu.RenderPassColorAttachment
 import io.ygdrasil.webgpu.RenderPassDescriptor
-import io.ygdrasil.webgpu.RenderPipeline
 import io.ygdrasil.webgpu.RenderPipelineDescriptor
 import io.ygdrasil.webgpu.SamplerDescriptor
 import io.ygdrasil.webgpu.ShaderModuleDescriptor
@@ -23,26 +35,32 @@ import io.ygdrasil.webgpu.StoreOp
 import io.ygdrasil.webgpu.TextureDescriptor
 import io.ygdrasil.webgpu.TextureFormat
 import io.ygdrasil.webgpu.TextureUsage
+import io.ygdrasil.webgpu.VertexAttribute
+import io.ygdrasil.webgpu.VertexBufferLayout
 import io.ygdrasil.webgpu.VertexFormat
+import io.ygdrasil.webgpu.VertexState
 import io.ygdrasil.webgpu.WGPUContext
 import io.ygdrasil.webgpu.beginRenderPass
+import io.ygdrasil.webgpu.copyExternalImageToTexture
 import io.ygdrasil.webgpu.examples.AssetManager
 import io.ygdrasil.webgpu.examples.Scene
 import io.ygdrasil.webgpu.examples.scenes.mesh.Cube
 import io.ygdrasil.webgpu.examples.scenes.shader.fragment.sampleTextureMixColorShader
 import io.ygdrasil.webgpu.examples.scenes.shader.vertex.basicVertexShader
+import io.ygdrasil.webgpu.mapFrom
+import io.ygdrasil.webgpu.writeBuffer
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
 
 class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene(wgpuContext), AssetManager by assetManager {
 
-    lateinit var renderPipeline: RenderPipeline
+    lateinit var renderPipeline: GPURenderPipeline
     lateinit var projectionMatrix: Matrix4
-    lateinit var renderPassDescriptor: RenderPassDescriptor
-    lateinit var uniformBuffer: Buffer
-    lateinit var uniformBindGroup: BindGroup
-    lateinit var verticesBuffer: Buffer
+    lateinit var renderPassDescriptor: GPURenderPassDescriptor
+    lateinit var uniformBuffer: GPUBuffer
+    lateinit var uniformBindGroup: GPUBindGroup
+    lateinit var verticesBuffer: GPUBuffer
 
     override suspend fun initialize() = with(autoClosableContext) {
 
@@ -140,7 +158,7 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
         device.queue.copyExternalImageToTexture(
             ImageCopyExternalImage(source = Di3d),
             ImageCopyTextureTagged(texture = cubeTexture),
-            imageBitmapWidth to imageBitmapHeight
+            Extent3D(imageBitmapWidth, imageBitmapHeight, 0u)
         )
 
         // Create a sampler with linear filtering for smooth interpolation.
@@ -163,15 +181,11 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
                     ),
                     BindGroupEntry(
                         binding = 1u,
-                        resource = SamplerBinding(
-                            sampler = sampler
-                        )
+                        resource = sampler
                     ),
                     BindGroupEntry(
                         binding = 2u,
-                        resource = TextureViewBinding(
-                            view = cubeTexture.createView()
-                        )
+                        resource = cubeTexture.createView().bind()
                     )
                 )
             )
@@ -214,9 +228,9 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
             transformationMatrix.size.toULong()
         )
 
-        renderPassDescriptor = renderPassDescriptor.copy(
+        renderPassDescriptor = (renderPassDescriptor as RenderPassDescriptor).copy(
             colorAttachments = listOf(
-                renderPassDescriptor.colorAttachments[0].copy(
+                (renderPassDescriptor.colorAttachments[0] as RenderPassColorAttachment).copy(
                     view = renderingContext.getCurrentTexture()
                         .bind()
                         .createView()

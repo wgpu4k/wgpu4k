@@ -1,10 +1,48 @@
 package io.ygdrasil.webgpu.examples.scenes.basic
 
-import io.ygdrasil.webgpu.*
+import io.ygdrasil.webgpu.AutoClosableContext
+import io.ygdrasil.webgpu.BindGroupDescriptor
+import io.ygdrasil.webgpu.BindGroupEntry
+import io.ygdrasil.webgpu.BufferBinding
+import io.ygdrasil.webgpu.BufferDescriptor
+import io.ygdrasil.webgpu.BufferUsage
+import io.ygdrasil.webgpu.Color
+import io.ygdrasil.webgpu.ColorAttachment
+import io.ygdrasil.webgpu.ColorTargetState
+import io.ygdrasil.webgpu.CompareFunction
+import io.ygdrasil.webgpu.CullMode
+import io.ygdrasil.webgpu.DepthStencilAttachment
+import io.ygdrasil.webgpu.DepthStencilState
+import io.ygdrasil.webgpu.Extent3D
+import io.ygdrasil.webgpu.FragmentState
+import io.ygdrasil.webgpu.GPUBindGroup
+import io.ygdrasil.webgpu.GPUBuffer
+import io.ygdrasil.webgpu.GPURenderPassDescriptor
+import io.ygdrasil.webgpu.GPURenderPipeline
+import io.ygdrasil.webgpu.GPUTextureFormat
+import io.ygdrasil.webgpu.GPUTextureUsage
+import io.ygdrasil.webgpu.LoadOp
+import io.ygdrasil.webgpu.PrimitiveState
+import io.ygdrasil.webgpu.PrimitiveTopology
+import io.ygdrasil.webgpu.RenderPassColorAttachment
+import io.ygdrasil.webgpu.RenderPassDescriptor
+import io.ygdrasil.webgpu.RenderPipelineDescriptor
+import io.ygdrasil.webgpu.ShaderModuleDescriptor
+import io.ygdrasil.webgpu.StoreOp
+import io.ygdrasil.webgpu.TextureDescriptor
+import io.ygdrasil.webgpu.TextureFormat
+import io.ygdrasil.webgpu.VertexAttribute
+import io.ygdrasil.webgpu.VertexBufferLayout
+import io.ygdrasil.webgpu.VertexFormat
+import io.ygdrasil.webgpu.VertexState
+import io.ygdrasil.webgpu.WGPUContext
+import io.ygdrasil.webgpu.beginRenderPass
 import io.ygdrasil.webgpu.examples.Scene
 import io.ygdrasil.webgpu.examples.scenes.mesh.Cube
 import io.ygdrasil.webgpu.examples.scenes.shader.fragment.vertexPositionColorShader
 import io.ygdrasil.webgpu.examples.scenes.shader.vertex.instancedShader
+import io.ygdrasil.webgpu.mapFrom
+import io.ygdrasil.webgpu.writeBuffer
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
@@ -91,9 +129,9 @@ class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 		val depthTexture = device.createTexture(
 			TextureDescriptor(
-				size = Size3D(renderingContext.width, renderingContext.height),
-				format = TextureFormat.Depth24Plus,
-				usage = setOf(TextureUsage.RenderAttachment),
+				size = Extent3D(renderingContext.width, renderingContext.height),
+				format = GPUTextureFormat.Depth24Plus,
+				usage = setOf(GPUTextureUsage.RenderAttachment),
 			)
 		).bind()
 
@@ -170,9 +208,9 @@ class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			transformationMatrix.size.toULong()
 		)
 
-		renderPassDescriptor = renderPassDescriptor.copy(
+		renderPassDescriptor = (renderPassDescriptor as RenderPassDescriptor).copy(
 			colorAttachments = listOf(
-				renderPassDescriptor.colorAttachments[0].copy(
+				(renderPassDescriptor.colorAttachments[0] as RenderPassColorAttachment).copy(
 					view = renderingContext.getCurrentTexture()
 						.bind()
 						.createView()

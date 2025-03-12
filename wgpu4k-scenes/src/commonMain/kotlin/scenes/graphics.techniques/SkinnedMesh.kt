@@ -7,16 +7,22 @@ import io.ygdrasil.webgpu.AutoClosableContext
 import io.ygdrasil.webgpu.BindGroupDescriptor
 import io.ygdrasil.webgpu.BindGroupEntry
 import io.ygdrasil.webgpu.BindGroupLayoutDescriptor
-import io.ygdrasil.webgpu.BindGroupLayoutDescriptor.Entry
-import io.ygdrasil.webgpu.Buffer
+import io.ygdrasil.webgpu.BindGroupLayoutEntry
+import io.ygdrasil.webgpu.BufferBinding
+import io.ygdrasil.webgpu.BufferBindingLayout
 import io.ygdrasil.webgpu.BufferDescriptor
 import io.ygdrasil.webgpu.BufferUsage
+import io.ygdrasil.webgpu.Color
 import io.ygdrasil.webgpu.ColorAttachment
+import io.ygdrasil.webgpu.DepthStencilAttachment
+import io.ygdrasil.webgpu.GPUBuffer
 import io.ygdrasil.webgpu.GPUBufferBindingType
 import io.ygdrasil.webgpu.GPULoadOp
+import io.ygdrasil.webgpu.GPURenderBundle
+import io.ygdrasil.webgpu.GPURenderPassDescriptor
 import io.ygdrasil.webgpu.GPUStoreOp
 import io.ygdrasil.webgpu.GPUTextureFormat
-import io.ygdrasil.webgpu.RenderBundle
+import io.ygdrasil.webgpu.RenderPassColorAttachment
 import io.ygdrasil.webgpu.RenderPassDescriptor
 import io.ygdrasil.webgpu.ShaderStage
 import io.ygdrasil.webgpu.Size3D
@@ -28,6 +34,7 @@ import io.ygdrasil.webgpu.examples.AssetManager
 import io.ygdrasil.webgpu.examples.Scene
 import io.ygdrasil.webgpu.examples.helper.glb.ShaderCache
 import io.ygdrasil.webgpu.examples.helper.glb.uploadGLBModel
+import io.ygdrasil.webgpu.writeBuffer
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -38,10 +45,10 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
 
     private val logger = KotlinLogging.logger {}
 
-    internal lateinit var renderBundles: List<RenderBundle>
-    internal lateinit var viewParamBuf: Buffer
+    internal lateinit var renderBundles: List<GPURenderBundle>
+    internal lateinit var viewParamBuf: GPUBuffer
     internal lateinit var projectionMatrix: Matrix4
-    internal lateinit var renderPassDesc: RenderPassDescriptor
+    internal lateinit var renderPassDesc: GPURenderPassDescriptor
     internal lateinit var shaderCache: ShaderCache
 
     override suspend fun initialize() = with(autoClosableContext) {
@@ -83,10 +90,10 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
         val viewParamsLayout = device.createBindGroupLayout(
             BindGroupLayoutDescriptor(
                 entries = listOf(
-                    Entry(
+                    BindGroupLayoutEntry(
                         binding = 0u,
                         visibility = setOf(ShaderStage.Vertex),
-                        bindingType = Entry.BufferBindingLayout(type = GPUBufferBindingType.Uniform)
+                        buffer = BufferBindingLayout(type = GPUBufferBindingType.Uniform)
                     )
                 )
             )
@@ -128,9 +135,9 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
 
     override suspend fun AutoClosableContext.render() {
 
-        val renderPassDesc = renderPassDesc.copy(
+        val renderPassDesc = (renderPassDesc as RenderPassDescriptor).copy(
             colorAttachments = listOf(
-                renderPassDesc.colorAttachments[0].copy(
+                (renderPassDesc.colorAttachments[0] as RenderPassColorAttachment).copy(
                     view = renderingContext.getCurrentTexture().createView().bind()
                 )
             )

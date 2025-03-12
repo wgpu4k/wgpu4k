@@ -1,10 +1,8 @@
 package io.ygdrasil.webgpu.examples.helper.glb
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.ygdrasil.webgpu.BindGroup
 import io.ygdrasil.webgpu.BindGroupDescriptor
 import io.ygdrasil.webgpu.BindGroupEntry
-import io.ygdrasil.webgpu.BindGroupLayout
 import io.ygdrasil.webgpu.BindGroupLayoutDescriptor
 import io.ygdrasil.webgpu.BindGroupLayoutEntry
 import io.ygdrasil.webgpu.BufferBinding
@@ -15,7 +13,6 @@ import io.ygdrasil.webgpu.BufferUsage
 import io.ygdrasil.webgpu.ColorTargetState
 import io.ygdrasil.webgpu.CompareFunction
 import io.ygdrasil.webgpu.DepthStencilState
-import io.ygdrasil.webgpu.Device
 import io.ygdrasil.webgpu.FragmentState
 import io.ygdrasil.webgpu.GPUAddressMode
 import io.ygdrasil.webgpu.GPUBindGroup
@@ -370,10 +367,10 @@ class GLTFAccessor(val view: GLTFBufferView, accessor: GLTF2.Accessor) {
 class GLBModel(val nodes: List<GLTFNode>) {
 
     fun buildRenderBundles(
-        device: Device,
+        device: GPUDevice,
         shaderCache: ShaderCache,
-        viewParamsLayout: BindGroupLayout,
-        viewParamsBindGroup: BindGroup,
+        viewParamsLayout: GPUBindGroupLayout,
+        viewParamsBindGroup: GPUBindGroup,
         swapChainFormat: GPUTextureFormat,
     ): List<GPURenderBundle> {
         val renderBundles = mutableListOf<GPURenderBundle>()
