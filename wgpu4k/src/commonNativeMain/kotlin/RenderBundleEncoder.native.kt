@@ -27,11 +27,8 @@ actual class RenderBundleEncoder(internal val handler: WGPURenderBundleEncoder) 
     actual override fun setBindGroup(
         index: GPUIndex32,
         bindGroup: GPUBindGroup?,
-        dynamicOffsetsData: List<UInt>,
-        dynamicOffsetsDataStart: GPUSize64,
-        dynamicOffsetsDataLength: GPUSize32
+        dynamicOffsetsData: List<UInt>
     ) = memoryScope { scope ->
-        // TODO: use dynamicOffsetsDataStart and dynamicOffsetsDataLength
         wgpuRenderBundleEncoderSetBindGroup(
             handler,
             index,

@@ -23,9 +23,7 @@ expect class ComputePassEncoder : GPUComputePassEncoder {
     override fun setBindGroup(
         index: GPUIndex32,
         bindGroup: GPUBindGroup?,
-        dynamicOffsetsData: List<UInt>,
-        dynamicOffsetsDataStart: GPUSize64,
-        dynamicOffsetsDataLength: GPUSize32
+        dynamicOffsetsData: List<UInt>
     )
 
 }

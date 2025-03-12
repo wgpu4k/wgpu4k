@@ -66,11 +66,8 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) : GPU
     actual override fun setBindGroup(
         index: GPUIndex32,
         bindGroup: GPUBindGroup?,
-        dynamicOffsetsData: List<UInt>,
-        dynamicOffsetsDataStart: GPUSize64,
-        dynamicOffsetsDataLength: GPUSize32
+        dynamicOffsetsData: List<UInt>
     ) = memoryScope { scope ->
-        // TODO: use dynamicOffsetsDataStart and dynamicOffsetsDataLength
         wgpuRenderPassEncoderSetBindGroup(
             handler,
             index,

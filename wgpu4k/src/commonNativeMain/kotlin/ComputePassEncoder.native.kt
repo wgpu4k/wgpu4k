@@ -52,9 +52,7 @@ actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : 
     actual override fun setBindGroup(
         index: GPUIndex32,
         bindGroup: GPUBindGroup?,
-        dynamicOffsetsData: List<UInt>,
-        dynamicOffsetsDataStart: GPUSize64,
-        dynamicOffsetsDataLength: GPUSize32
+        dynamicOffsetsData: List<UInt>
     ) {
         TODO("Not yet implemented")
     }
