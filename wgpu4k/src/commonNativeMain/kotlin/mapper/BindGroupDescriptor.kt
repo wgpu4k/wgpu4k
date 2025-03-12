@@ -30,7 +30,7 @@ private fun MemoryAllocator.map(input: GPUBindGroupEntry, output: WGPUBindGroupE
 
     when (val resource = input.resource) {
         is GPUBufferBinding -> {
-            output.size = resource.size ?: 0u
+            output.size = resource.size ?: resource.buffer.size
             output.offset = resource.offset
             output.buffer = (resource.buffer as Buffer).handler
         }
