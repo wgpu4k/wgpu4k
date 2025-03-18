@@ -1,25 +1,11 @@
 package io.ygdrasil.webgpu
 
-import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.internal.js.GPUBuffer
 import org.khronos.webgl.Float32Array
 import org.khronos.webgl.Int16Array
 import org.khronos.webgl.Int8Array
 
 actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
-
-    private val logger = KotlinLogging.logger {}
-
-    actual val size: GPUSize64
-        get() = handler.size
-    actual val usage: Set<BufferUsage>
-        get() = BufferUsage.entries.filter { it.value and handler.usage != 0uL }.toSet()
-    actual val mapState: BufferMapState
-        get() = BufferMapState.of(handler.mapState) ?: error("fail to get MapState")
-
-    actual fun unmap() {
-        handler.unmap()
-    }
 
     actual fun mapFrom(buffer: ShortArray, offset: GPUSize64) {
         Int16Array(handler.getMappedRange(offset, buffer.size.toULong() * Short.SIZE_BYTES.toULong()))
@@ -53,8 +39,5 @@ actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
         handler.mapAsync(mode.toFlagInt(), offset, size)
     }
 
-    actual override fun close() {
-        //Nothing to do on JS
-    }
 
 }

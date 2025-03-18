@@ -1,10 +1,7 @@
 package io.ygdrasil.webgpu
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.ygdrasil.webgpu.internal.js.GPUAdapter
-import io.ygdrasil.webgpu.internal.js.GPURequestAdapterOptions
 import io.ygdrasil.webgpu.mapper.map
-import kotlinx.coroutines.await
 
 private val logger = KotlinLogging.logger {}
 
@@ -15,25 +12,30 @@ suspend fun requestAdapter(options: GPURequestAdapterOptions? = null): Adapter? 
         return null
     }
 
-    return navigator.gpu.requestAdapter().await()?.let {
+    return navigator.gpu.requestAdapter().wait<WGPUAdapter>()?.let {
         Adapter(it)
     }
 }
 
-actual class Adapter(val handler: GPUAdapter) : AutoCloseable {
+actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
 
-    actual val features: Set<FeatureName> by lazy {
+    actual override val features: Set<FeatureName> by lazy {
         handler.features
             .map { FeatureName.of(it) ?: error("Unsupported feature $it") }
             .toSet()
     }
 
-    actual val limits: Limits by lazy { map(handler.limits) }
+    actual override val limits: GPUSupportedLimits by lazy { map(handler.limits) }
 
-    actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? {
+    override val info: GPUAdapterInfo
+        get() = TODO("Not yet implemented")
+    override val isFallbackAdapter: Boolean
+        get() = TODO("Not yet implemented")
+
+    actual override suspend fun requestDevice(descriptor: GPUDeviceDescriptor?): Result<GPUDevice> {
         return map(descriptor)
             .let { handler.requestDevice(it) }
-            .await()
+            .wait<WGPUDevice>()
             .let(::Device)
     }
 
