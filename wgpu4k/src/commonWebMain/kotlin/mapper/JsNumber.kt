@@ -1,8 +1,9 @@
 package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.webgpu.internal.web.JsNumber
+import io.ygdrasil.webgpu.JsNumber
 
-expect internal fun map(value: JsNumber): UInt
+
+expect internal fun map(value: JsNumber): UInt = value.toUInt()
 
 expect internal fun map(value: Int): JsNumber
 
