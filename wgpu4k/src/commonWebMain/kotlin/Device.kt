@@ -3,6 +3,9 @@ package io.ygdrasil.webgpu
 import io.ygdrasil.webgpu.mapper.map
 
 actual class Device(internal val handler: WGPUDevice) : GPUDevice {
+    actual override var label: String
+        get() = handler.label
+        set(value) { handler.label = value }
 
     actual override val queue: GPUQueue by lazy { Queue(handler.queue) }
 
