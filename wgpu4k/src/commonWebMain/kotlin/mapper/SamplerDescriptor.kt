@@ -1,11 +1,11 @@
 package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.webgpu.SamplerDescriptor
-import io.ygdrasil.webgpu.internal.js.GPUSamplerDescriptor
-import io.ygdrasil.webgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.GPUSamplerDescriptor
+import io.ygdrasil.webgpu.WGPUSamplerDescriptor
+import io.ygdrasil.webgpu.createJsObject
 
-internal fun map(input: SamplerDescriptor): GPUSamplerDescriptor = createJsObject<GPUSamplerDescriptor>().apply {
-    if (input.label != null) label = input.label
+internal fun map(input: GPUSamplerDescriptor): WGPUSamplerDescriptor = createJsObject<WGPUSamplerDescriptor>().apply {
+    label = input.label
     addressModeU = input.addressModeU.value
     addressModeV = input.addressModeV.value
     addressModeW = input.addressModeW.value
