@@ -80,9 +80,6 @@ actual class Device(internal val handler: WGPUDevice) : GPUDevice {
             .let { handler.createQuerySet(it) }
             .let(::QuerySet)
 
-    actual suspend fun poll() {
-        // TODO
-    }
 
     actual override fun close() {
         handler.destroy()
