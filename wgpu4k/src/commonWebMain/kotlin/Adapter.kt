@@ -19,9 +19,9 @@ suspend fun requestAdapter(options: GPURequestAdapterOptions? = null): Adapter? 
 
 actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
 
-    actual override val features: Set<FeatureName> by lazy {
+    actual override val features: Set<GPUFeatureName> by lazy {
         handler.features
-            .map { FeatureName.of(it) ?: error("Unsupported feature $it") }
+            .map { GPUFeatureName.of(it) ?: error("Unsupported feature $it") }
             .toSet()
     }
 
