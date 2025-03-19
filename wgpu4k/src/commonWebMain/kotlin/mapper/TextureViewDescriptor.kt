@@ -1,12 +1,12 @@
 package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.webgpu.TextureViewDescriptor
-import io.ygdrasil.webgpu.internal.js.GPUTextureViewDescriptor
-import io.ygdrasil.webgpu.internal.js.createJsObject
+import io.ygdrasil.webgpu.GPUTextureViewDescriptor
+import io.ygdrasil.webgpu.WGPUTextureViewDescriptor
+import io.ygdrasil.webgpu.createJsObject
 
-internal fun map(input: TextureViewDescriptor): GPUTextureViewDescriptor =
-    createJsObject<GPUTextureViewDescriptor>().apply {
-        if (input.label != null) label = input.label
+internal fun map(input: GPUTextureViewDescriptor): WGPUTextureViewDescriptor =
+    createJsObject<WGPUTextureViewDescriptor>().apply {
+        label = input.label
         if (input.format != null) format = input.format.value
         if (input.dimension?.value != null) dimension = input.dimension.value
         aspect = input.aspect.value
