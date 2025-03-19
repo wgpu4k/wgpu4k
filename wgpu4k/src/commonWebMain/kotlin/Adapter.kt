@@ -12,7 +12,7 @@ suspend fun requestAdapter(options: GPURequestAdapterOptions? = null): Adapter? 
         return null
     }
 
-    return navigator.gpu.requestAdapter().wait<WGPUAdapter>()?.let {
+    return navigator?.gpu?.requestAdapter()?.wait<WGPUAdapter?>()?.let {
         Adapter(it)
     }
 }
@@ -20,8 +20,8 @@ suspend fun requestAdapter(options: GPURequestAdapterOptions? = null): Adapter? 
 actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
 
     actual override val features: Set<GPUFeatureName> by lazy {
-        handler.features
-            .map { GPUFeatureName.of(it) ?: error("Unsupported feature $it") }
+        GPUFeatureName.entries
+            .filter { handler.features.has(it.value.asJsString().castAs()) }
             .toSet()
     }
 
@@ -33,10 +33,13 @@ actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
         get() = handler.isFallbackAdapter
 
     actual override suspend fun requestDevice(descriptor: GPUDeviceDescriptor?): Result<GPUDevice> {
-        return map(descriptor)
-            .let { handler.requestDevice(it) }
-            .wait<WGPUDevice>()
-            .let(::Device)
+        return runCatching {
+            when (descriptor) {
+                null -> handler.requestDevice()
+                else -> handler.requestDevice(map(descriptor))
+            }.wait<WGPUDevice?>()
+                ?.let(::Device) ?: error("Failed to create a GPU device")
+        }
     }
 
     actual override fun close() {
