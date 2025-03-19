@@ -27,10 +27,10 @@ actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
 
     actual override val limits: GPUSupportedLimits by lazy { map(handler.limits) }
 
-    override val info: GPUAdapterInfo
+    actual override val info: GPUAdapterInfo
         get() = TODO("Not yet implemented")
-    override val isFallbackAdapter: Boolean
-        get() = TODO("Not yet implemented")
+    actual override val isFallbackAdapter: Boolean
+        get() = handler.isFallbackAdapter
 
     actual override suspend fun requestDevice(descriptor: GPUDeviceDescriptor?): Result<GPUDevice> {
         return map(descriptor)
