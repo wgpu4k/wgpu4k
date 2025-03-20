@@ -2,6 +2,7 @@ package io.ygdrasil.webgpu.mapper
 
 import io.ygdrasil.webgpu.GPUSamplerDescriptor
 import io.ygdrasil.webgpu.WGPUSamplerDescriptor
+import io.ygdrasil.webgpu.asJsNumber
 import io.ygdrasil.webgpu.createJsObject
 
 internal fun map(input: GPUSamplerDescriptor): WGPUSamplerDescriptor = createJsObject<WGPUSamplerDescriptor>().apply {
@@ -12,8 +13,8 @@ internal fun map(input: GPUSamplerDescriptor): WGPUSamplerDescriptor = createJsO
     magFilter = input.magFilter.value
     minFilter = input.minFilter.value
     mipmapFilter = input.mipmapFilter.value
-    lodMinClamp = input.lodMinClamp
-    lodMaxClamp = input.lodMaxClamp
-    if (input.compare != null) compare = input.compare.value
-    maxAnisotropy = input.maxAnisotropy.toShort()
+    lodMinClamp = input.lodMinClamp.asJsNumber()
+    lodMaxClamp = input.lodMaxClamp.asJsNumber()
+    input.compare?.let { compare = it.value }
+    maxAnisotropy = input.maxAnisotropy.asJsNumber()
 }

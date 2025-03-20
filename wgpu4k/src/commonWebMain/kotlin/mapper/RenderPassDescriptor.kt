@@ -9,11 +9,12 @@ import io.ygdrasil.webgpu.WGPURenderPassDepthStencilAttachment
 import io.ygdrasil.webgpu.WGPURenderPassDescriptor
 import io.ygdrasil.webgpu.asJsNumber
 import io.ygdrasil.webgpu.createJsObject
+import io.ygdrasil.webgpu.mapJsArray
 
 internal fun map(input: GPURenderPassDescriptor): WGPURenderPassDescriptor =
     createJsObject<WGPURenderPassDescriptor>().apply {
         label = input.label
-        colorAttachments = input.colorAttachments.map { map(it) }.toTypedArray()
+        colorAttachments = input.colorAttachments.mapJsArray { map(it) }
         if (input.depthStencilAttachment != null) depthStencilAttachment = map(input.depthStencilAttachment)
         // TODO map this occlusionQuerySet
         // TODO map this timestampWrites
@@ -23,13 +24,13 @@ internal fun map(input: GPURenderPassDescriptor): WGPURenderPassDescriptor =
 private fun map(input: GPURenderPassDepthStencilAttachment): WGPURenderPassDepthStencilAttachment =
     createJsObject<WGPURenderPassDepthStencilAttachment>().apply {
         view = (input.view as TextureView).handler
-        if (input.depthClearValue != null) depthClearValue = input.depthClearValue
-        if (input.depthLoadOp != null) depthLoadOp = input.depthLoadOp.value
-        if (input.depthStoreOp != null) depthStoreOp = input.depthStoreOp.value
+        input.depthClearValue?.let { depthClearValue = it.asJsNumber() }
+        input.depthLoadOp?.let { depthLoadOp = it.value }
+        input.depthStoreOp?.let { depthStoreOp = it.value }
         depthReadOnly = input.depthReadOnly
         stencilClearValue = input.stencilClearValue.asJsNumber()
-        if (input.stencilLoadOp != null) stencilLoadOp = input.stencilLoadOp.value
-        if (input.stencilStoreOp != null) stencilStoreOp = input.stencilStoreOp.value
+        input.stencilLoadOp?.let { stencilLoadOp = it.value }
+        input.stencilStoreOp?.let { stencilStoreOp = it.value }
         stencilReadOnly = input.stencilReadOnly
     }
 
@@ -38,8 +39,8 @@ private fun map(input: GPURenderPassColorAttachment): WGPURenderPassColorAttachm
         view = (input.view as TextureView).handler
         loadOp = input.loadOp.value
         storeOp = input.storeOp.value
-        if (input.depthSlice != null) depthSlice = input.depthSlice
+        input.depthSlice?.let { depthSlice = it.asJsNumber() }
         if (input.resolveTarget != null) resolveTarget = (input.resolveTarget as TextureView).handler
-        clearValue = map(input.clearValue)
+        input.clearValue?.let { clearValue = map(it) }
     }
 

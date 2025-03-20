@@ -5,13 +5,11 @@ import io.ygdrasil.webgpu.GPUShaderModuleDescriptor
 import io.ygdrasil.webgpu.WGPUShaderModuleCompilationHint
 import io.ygdrasil.webgpu.WGPUShaderModuleDescriptor
 import io.ygdrasil.webgpu.createJsObject
+import io.ygdrasil.webgpu.mapJsArray
 
 fun map(input: GPUShaderModuleDescriptor): WGPUShaderModuleDescriptor = createJsObject<WGPUShaderModuleDescriptor>().apply {
     code = input.code
-    compilationHints = input
-        .compilationHints
-        .map { map(it) }
-        ?.toTypedArray()
+    compilationHints = input.compilationHints.mapJsArray { map(it) }
     label = input.label
 }
 
