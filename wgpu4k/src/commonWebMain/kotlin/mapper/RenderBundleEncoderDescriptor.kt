@@ -2,6 +2,7 @@ package io.ygdrasil.webgpu.mapper
 
 import io.ygdrasil.webgpu.GPURenderBundleEncoderDescriptor
 import io.ygdrasil.webgpu.WGPURenderBundleEncoderDescriptor
+import io.ygdrasil.webgpu.asJsNumber
 import io.ygdrasil.webgpu.asJsString
 import io.ygdrasil.webgpu.castAs
 import io.ygdrasil.webgpu.createJsObject
@@ -13,6 +14,6 @@ internal fun map(input: GPURenderBundleEncoderDescriptor): WGPURenderBundleEncod
         depthReadOnly = input.depthReadOnly
         stencilReadOnly = input.stencilReadOnly
         colorFormats = input.colorFormats.mapJsArray { it.value.asJsString().castAs() }
-        depthStencilFormat = input.depthStencilFormat.value
-        sampleCount = input.sampleCount
+        input.depthStencilFormat?.let { depthStencilFormat = it.value }
+        sampleCount = input.sampleCount.asJsNumber()
     }

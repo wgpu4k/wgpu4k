@@ -7,6 +7,7 @@ import io.ygdrasil.webgpu.TextureView
 import io.ygdrasil.webgpu.WGPURenderPassColorAttachment
 import io.ygdrasil.webgpu.WGPURenderPassDepthStencilAttachment
 import io.ygdrasil.webgpu.WGPURenderPassDescriptor
+import io.ygdrasil.webgpu.asJsNumber
 import io.ygdrasil.webgpu.createJsObject
 
 internal fun map(input: GPURenderPassDescriptor): WGPURenderPassDescriptor =
@@ -16,7 +17,7 @@ internal fun map(input: GPURenderPassDescriptor): WGPURenderPassDescriptor =
         if (input.depthStencilAttachment != null) depthStencilAttachment = map(input.depthStencilAttachment)
         // TODO map this occlusionQuerySet
         // TODO map this timestampWrites
-        maxDrawCount = input.maxDrawCount
+        maxDrawCount = input.maxDrawCount.asJsNumber()
     }
 
 private fun map(input: GPURenderPassDepthStencilAttachment): WGPURenderPassDepthStencilAttachment =
@@ -26,7 +27,7 @@ private fun map(input: GPURenderPassDepthStencilAttachment): WGPURenderPassDepth
         if (input.depthLoadOp != null) depthLoadOp = input.depthLoadOp.value
         if (input.depthStoreOp != null) depthStoreOp = input.depthStoreOp.value
         depthReadOnly = input.depthReadOnly
-        stencilClearValue = input.stencilClearValue
+        stencilClearValue = input.stencilClearValue.asJsNumber()
         if (input.stencilLoadOp != null) stencilLoadOp = input.stencilLoadOp.value
         if (input.stencilStoreOp != null) stencilStoreOp = input.stencilStoreOp.value
         stencilReadOnly = input.stencilReadOnly

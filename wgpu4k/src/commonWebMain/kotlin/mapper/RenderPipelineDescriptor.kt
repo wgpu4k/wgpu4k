@@ -12,6 +12,7 @@ import io.ygdrasil.webgpu.GPUStencilFaceState
 import io.ygdrasil.webgpu.GPUVertexAttribute
 import io.ygdrasil.webgpu.GPUVertexBufferLayout
 import io.ygdrasil.webgpu.GPUVertexState
+import io.ygdrasil.webgpu.ShaderModule
 import io.ygdrasil.webgpu.WGPUBlendComponent
 import io.ygdrasil.webgpu.WGPUBlendState
 import io.ygdrasil.webgpu.WGPUColorTargetState
@@ -38,7 +39,7 @@ internal fun map(input: GPURenderPipelineDescriptor): WGPURenderPipelineDescript
     }
 
 private fun map(input: GPUVertexState): WGPUVertexState = createJsObject<WGPUVertexState>().apply {
-    module = input.module.handler
+    module = (input.module as ShaderModule).handler
     entryPoint = input.entryPoint
 
     // TODO map this
