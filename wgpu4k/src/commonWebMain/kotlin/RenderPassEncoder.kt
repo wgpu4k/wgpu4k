@@ -12,11 +12,11 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder): GPUR
         handler.end()
     }
 
-    actual override fun setPipeline(renderPipeline: GPURenderPipeline) {
-        handler.setPipeline(renderPipeline.handler)
+    actual override fun setPipeline(pipeline: GPURenderPipeline) {
+        handler.setPipeline((pipeline as RenderPipeline).handler)
     }
 
-    override fun setIndexBuffer(
+    actual override fun setIndexBuffer(
         buffer: GPUBuffer,
         indexFormat: GPUIndexFormat,
         offset: GPUSize64,
@@ -25,7 +25,7 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder): GPUR
         TODO("Not yet implemented")
     }
 
-    override fun setVertexBuffer(
+    actual override fun setVertexBuffer(
         slot: GPUIndex32,
         buffer: GPUBuffer?,
         offset: GPUSize64,
@@ -41,10 +41,10 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder): GPUR
         firstInstance: GPUSize32,
     ) {
         handler.draw(
-            vertexCount,
-            instanceCount,
-            firstVertex,
-            firstInstance
+            vertexCount.asJsNumber(),
+            instanceCount.asJsNumber(),
+            firstVertex.asJsNumber(),
+            firstInstance.asJsNumber()
         )
     }
 
@@ -55,17 +55,23 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder): GPUR
         baseVertex: GPUSignedOffset32,
         firstInstance: GPUSize32,
     ) {
-        handler.drawIndexed(indexCount, instanceCount, firstIndex, baseVertex, firstInstance)
+        handler.drawIndexed(
+            indexCount.asJsNumber(),
+            instanceCount.asJsNumber(),
+            firstIndex.asJsNumber(),
+            baseVertex.asJsNumber(),
+            firstInstance.asJsNumber()
+        )
     }
 
-    override fun drawIndirect(
+    actual override fun drawIndirect(
         indirectBuffer: GPUBuffer,
         indirectOffset: GPUSize64
     ) {
         TODO("Not yet implemented")
     }
 
-    override fun drawIndexedIndirect(
+    actual override fun drawIndexedIndirect(
         indirectBuffer: GPUBuffer,
         indirectOffset: GPUSize64
     ) {
@@ -73,12 +79,17 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder): GPUR
     }
 
     actual override fun executeBundles(bundles: List<GPURenderBundle>) {
-        handler.executeBundles(bundles.map { it.handler }.toTypedArray())
+        handler.executeBundles(bundles.mapJsArray { (it as RenderBundle).handler })
     }
 
     actual override fun setViewport(x: Float, y: Float, width: Float, height: Float, minDepth: Float, maxDepth: Float) {
         handler.setViewport(
-            x, y, width, height, minDepth, maxDepth
+            x.asJsNumber(),
+            y.asJsNumber(),
+            width.asJsNumber(),
+            height.asJsNumber(),
+            minDepth.asJsNumber(),
+            maxDepth.asJsNumber()
         )
     }
 
@@ -88,7 +99,12 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder): GPUR
         width: GPUIntegerCoordinate,
         height: GPUIntegerCoordinate,
     ) {
-        handler.setScissorRect(x, y, width, height)
+        handler.setScissorRect(
+            x.asJsNumber(),
+            y.asJsNumber(),
+            width.asJsNumber(),
+            height.asJsNumber()
+        )
     }
 
     actual override fun setBlendConstant(color: GPUColor) {
@@ -96,30 +112,30 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder): GPUR
     }
 
     actual override fun setStencilReference(reference: GPUStencilValue) {
-        handler.setStencilReference(reference)
+        handler.setStencilReference(reference.asJsNumber())
     }
 
     actual override fun beginOcclusionQuery(queryIndex: GPUSize32) {
-        handler.beginOcclusionQuery(queryIndex)
+        handler.beginOcclusionQuery(queryIndex.asJsNumber())
     }
 
     actual override fun endOcclusionQuery() {
         handler.endOcclusionQuery()
     }
 
-    override fun pushDebugGroup(groupLabel: String) {
+    actual override fun pushDebugGroup(groupLabel: String) {
         TODO("Not yet implemented")
     }
 
-    override fun popDebugGroup() {
+    actual override fun popDebugGroup() {
         TODO("Not yet implemented")
     }
 
-    override fun insertDebugMarker(markerLabel: String) {
+    actual override fun insertDebugMarker(markerLabel: String) {
         TODO("Not yet implemented")
     }
 
-    override fun setBindGroup(
+    actual override fun setBindGroup(
         index: GPUIndex32,
         bindGroup: GPUBindGroup?,
         dynamicOffsetsData: List<UInt>

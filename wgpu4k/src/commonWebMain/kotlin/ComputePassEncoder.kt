@@ -1,5 +1,7 @@
 package io.ygdrasil.webgpu
 
+import io.ygdrasil.webgpu.mapper.map
+
 actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : GPUComputePassEncoder {
     actual override var label: String
         get() = handler.label
@@ -20,7 +22,7 @@ actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : 
     )
 
     actual override fun dispatchWorkgroupsIndirect(indirectBuffer: GPUBuffer, indirectOffset: GPUSize64) =
-        handler.dispatchWorkgroupsIndirect((indirectBuffer as Buffer).handler, indirectOffset)
+        handler.dispatchWorkgroupsIndirect((indirectBuffer as Buffer).handler, indirectOffset.asJsNumber())
 
     actual override fun pushDebugGroup(groupLabel: String) {
         TODO("Not yet implemented")
@@ -39,7 +41,11 @@ actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : 
         bindGroup: GPUBindGroup?,
         dynamicOffsetsData: List<UInt>
     ) {
-        handler.setBindGroup(index, bindGroup, dynamicOffsetsData)
+        handler.setBindGroup(
+            index.asJsNumber(),
+            (bindGroup as BindGroup).handler,
+            map(dynamicOffsetsData)
+        )
     }
 
     actual override fun end() = handler.end()

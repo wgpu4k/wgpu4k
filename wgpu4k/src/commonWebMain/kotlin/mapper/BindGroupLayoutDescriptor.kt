@@ -8,6 +8,7 @@ import io.ygdrasil.webgpu.WGPUBufferBindingLayout
 import io.ygdrasil.webgpu.WGPUSamplerBindingLayout
 import io.ygdrasil.webgpu.WGPUStorageTextureBindingLayout
 import io.ygdrasil.webgpu.WGPUTextureBindingLayout
+import io.ygdrasil.webgpu.asJsNumber
 import io.ygdrasil.webgpu.createJsObject
 import io.ygdrasil.webgpu.mapJsArray
 import io.ygdrasil.webgpu.toFlagInt
@@ -24,13 +25,13 @@ internal fun map(input: GPUBindGroupLayoutDescriptor): WGPUBindGroupLayoutDescri
 
 private fun map(input: GPUBindGroupLayoutEntry): WGPUBindGroupLayoutEntry =
     createJsObject<WGPUBindGroupLayoutEntry>().apply {
-        binding = input.binding
-        visibility = input.visibility.toFlagInt()
+        binding = input.binding.asJsNumber()
+        visibility = input.visibility.toFlagInt().asJsNumber()
         input.buffer?.let { input ->
             buffer = createJsObject<WGPUBufferBindingLayout>().apply {
                 type = input.type.value
                 hasDynamicOffset = input.hasDynamicOffset
-                minBindingSize = input.minBindingSize
+                minBindingSize = input.minBindingSize.asJsNumber()
             }
         }
         input.sampler?.let { input ->

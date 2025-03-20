@@ -8,21 +8,21 @@ actual class Texture(internal val handler: WGPUTexture) : GPUTexture {
         get() = handler.label
         set(value) { handler.label = value }
     actual override val width: GPUIntegerCoordinateOut
-        get() = handler.width
+        get() = handler.width.asUInt()
     actual override val height: GPUIntegerCoordinateOut
-        get() = handler.height
+        get() = handler.height.asUInt()
     actual override val depthOrArrayLayers: GPUIntegerCoordinateOut
-        get() = handler.depthOrArrayLayers
+        get() = handler.depthOrArrayLayers.asUInt()
     actual override val mipLevelCount: GPUIntegerCoordinateOut
-        get() = handler.mipLevelCount
+        get() = handler.mipLevelCount.asUInt()
     actual override val sampleCount: GPUSize32Out
-        get() = handler.sampleCount
-    actual override val dimension: TextureDimension
+        get() = handler.sampleCount.asUInt()
+    actual override val dimension: GPUTextureDimension
         get() = GPUTextureDimension.of(handler.dimension) ?: error("unsupported texture dimension ${handler.dimension}")
     actual override val format: GPUTextureFormat
         get() = GPUTextureFormat.of(handler.format) ?: error("unsupported texture format ${handler.format}")
-    actual override val usage: GPUFlagsConstant
-        get() = handler.usage
+    actual override val usage: Set<GPUTextureUsage>
+        get() = GPUTextureUsage.entries.filter { (it.value or handler.usage.asULong()) != 0uL }.toSet()
 
     actual override fun createView(descriptor: GPUTextureViewDescriptor?): GPUTextureView {
         return TextureView(

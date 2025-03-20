@@ -7,8 +7,8 @@ actual class RenderPipeline(internal var handler: WGPURenderPipeline) : GPURende
         set(value) { handler.label = value }
 
     actual override fun getBindGroupLayout(index: GPUSize32): GPUBindGroupLayout = handler
-        .getBindGroupLayout(index)
-        .let { BindGroupLayout(it) }
+        .getBindGroupLayout(index.asJsNumber())
+        .let(::BindGroupLayout)
 
 
     actual override fun close() {

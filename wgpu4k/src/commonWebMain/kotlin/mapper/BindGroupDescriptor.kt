@@ -12,6 +12,7 @@ import io.ygdrasil.webgpu.TextureView
 import io.ygdrasil.webgpu.WGPUBindGroupDescriptor
 import io.ygdrasil.webgpu.WGPUBindGroupEntry
 import io.ygdrasil.webgpu.WGPUBufferBinding
+import io.ygdrasil.webgpu.asJsNumber
 import io.ygdrasil.webgpu.createJsObject
 import io.ygdrasil.webgpu.mapJsArray
 
@@ -26,13 +27,13 @@ internal fun map(input: GPUBindGroupDescriptor): WGPUBindGroupDescriptor = creat
 
 private fun map(input: GPUBindGroupEntry): WGPUBindGroupEntry =
     createJsObject<WGPUBindGroupEntry>().apply {
-        binding = input.binding
+        binding = input.binding.asJsNumber()
         resource = when (val localResource = input.resource) {
             is GPUSampler -> (localResource as Sampler).handler
             is GPUBufferBinding -> createJsObject<WGPUBufferBinding>().apply {
                 buffer = (localResource.buffer as Buffer).handler
-                offset = localResource.offset
-                size = localResource.size
+                offset = localResource.offset.asJsNumber()
+                localResource.size?.let { size = it.asJsNumber() }
             }
 
             is GPUTextureView -> (localResource as TextureView).handler

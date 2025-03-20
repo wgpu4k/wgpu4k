@@ -6,7 +6,7 @@ actual class ComputePipeline(internal val handler: WGPUComputePipeline) : GPUCom
         set(value) { handler.label = value }
 
     actual override fun getBindGroupLayout(index: GPUSize32): GPUBindGroupLayout =
-        handler.getBindGroupLayout(index)
+        handler.getBindGroupLayout(index.asJsNumber())
             .let { BindGroupLayout(it) }
 
     actual override fun close() {
