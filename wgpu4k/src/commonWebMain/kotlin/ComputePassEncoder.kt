@@ -13,25 +13,28 @@ actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : 
         workgroupCountX: GPUSize32,
         workgroupCountY: GPUSize32,
         workgroupCountZ: GPUSize32
-    ) =
-        handler.dispatchWorkgroups(workgroupCountX, workgroupCountY, workgroupCountZ)
+    ) = handler.dispatchWorkgroups(
+        workgroupCountX.asJsNumber(),
+        workgroupCountY.asJsNumber(),
+        workgroupCountZ.asJsNumber()
+    )
 
     actual override fun dispatchWorkgroupsIndirect(indirectBuffer: GPUBuffer, indirectOffset: GPUSize64) =
         handler.dispatchWorkgroupsIndirect((indirectBuffer as Buffer).handler, indirectOffset)
 
-    override fun pushDebugGroup(groupLabel: String) {
+    actual override fun pushDebugGroup(groupLabel: String) {
         TODO("Not yet implemented")
     }
 
-    override fun popDebugGroup() {
+    actual override fun popDebugGroup() {
         TODO("Not yet implemented")
     }
 
-    override fun insertDebugMarker(markerLabel: String) {
+    actual override fun insertDebugMarker(markerLabel: String) {
         TODO("Not yet implemented")
     }
 
-    override fun setBindGroup(
+    actual override fun setBindGroup(
         index: GPUIndex32,
         bindGroup: GPUBindGroup?,
         dynamicOffsetsData: List<UInt>

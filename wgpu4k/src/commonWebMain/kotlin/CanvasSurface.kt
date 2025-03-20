@@ -8,14 +8,15 @@ class CanvasSurface(private val handler: WGPUCanvasContext) {
     val height: UInt
         get() = handler.canvas.castAs<HTMLCanvasElement>().height.asUInt()
 
-    val preferredCanvasFormat: TextureFormat?
+    val preferredCanvasFormat: GPUTextureFormat?
         get() = navigator.gpu
             ?.getPreferredCanvasFormat()
-            ?.let { TextureFormat.of(it) }
+            ?.let { GPUTextureFormat.of(it) }
 
     fun getCurrentTexture(): SurfaceTexture {
         return handler.getCurrentTexture()
-            .let { SurfaceTexture(map(it), SurfaceTextureStatus.success) }
+            .let { Texture(it) }
+            .let { SurfaceTexture(it, SurfaceTextureStatus.success) }
     }
 
     fun present() {

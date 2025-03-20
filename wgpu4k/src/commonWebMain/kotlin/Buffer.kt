@@ -10,9 +10,9 @@ actual class Buffer(internal val handler: WGPUBuffer) : GPUBuffer {
         get() = handler.label
         set(value) { handler.label = value }
     actual override val size: GPUSize64
-        get() = handler.size
+        get() = handler.size.asULong()
     actual override val usage: Set<GPUBufferUsage>
-        get() = GPUBufferUsage.entries.filter { it.value and handler.usage != 0uL }.toSet()
+        get() = GPUBufferUsage.entries.filter { it.value and handler.usage.asULong() != 0uL }.toSet()
     actual override val mapState: GPUBufferMapState
         get() = GPUBufferMapState.of(handler.mapState) ?: error("fail to get MapState")
 

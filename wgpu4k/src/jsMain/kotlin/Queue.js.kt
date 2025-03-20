@@ -1,20 +1,7 @@
 package io.ygdrasil.webgpu
 
-import io.ygdrasil.webgpu.internal.js.BigInt64Array
-import io.ygdrasil.webgpu.internal.js.GPUExtent3DDict
-import io.ygdrasil.webgpu.internal.js.GPUImageCopyTexture
-import io.ygdrasil.webgpu.internal.js.GPUQueue
-import io.ygdrasil.webgpu.internal.js.createJsObject
-import io.ygdrasil.webgpu.internal.web.newGPUImageDataLayout
-import io.ygdrasil.webgpu.mapper.map
-import org.khronos.webgl.ArrayBuffer
-import org.khronos.webgl.Float32Array
-import org.khronos.webgl.Float64Array
-import org.khronos.webgl.Int16Array
-import org.khronos.webgl.Int32Array
-import org.khronos.webgl.Int8Array
 
-actual class Queue(internal val handler: GPUQueue) {
+/*actual class Queue(internal val handler: GPUQueue) {
     actual fun submit(commandsBuffer: List<CommandBuffer>) {
         handler.submit(commandsBuffer.map { it.handler }.toTypedArray())
     }
@@ -230,7 +217,7 @@ actual class Queue(internal val handler: GPUQueue) {
             }
         )
     }
-}
+}*/
 
 
 actual class ImageBitmapHolder(

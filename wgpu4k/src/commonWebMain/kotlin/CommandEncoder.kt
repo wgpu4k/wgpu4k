@@ -6,18 +6,21 @@ actual class CommandEncoder(private val handler: WGPUCommandEncoder) : GPUComman
 
     actual override var label: String
         get() = handler.label
-        set(value) { handler.label = value }
+        set(value) {
+            handler.label = value
+        }
 
     actual override fun beginRenderPass(descriptor: GPURenderPassDescriptor): GPURenderPassEncoder = map(descriptor)
-        .let { handler.beginRenderPass(it) }
+        .let(handler::beginRenderPass)
         .let(::RenderPassEncoder)
 
     actual override fun beginComputePass(descriptor: GPUComputePassDescriptor?): GPUComputePassEncoder =
-        descriptor?.let { map(it) }
-            .let { handler.beginComputePass(it) }
-            .let { ComputePassEncoder(it) }
+        when (descriptor) {
+            null -> handler.beginComputePass()
+            else -> handler.beginComputePass(map(descriptor))
+        }.let(::ComputePassEncoder)
 
-    override fun copyBufferToBuffer(
+    actual override fun copyBufferToBuffer(
         source: GPUBuffer,
         sourceOffset: GPUSize64,
         destination: GPUBuffer,
@@ -27,7 +30,7 @@ actual class CommandEncoder(private val handler: WGPUCommandEncoder) : GPUComman
         TODO("Not yet implemented")
     }
 
-    override fun copyBufferToTexture(
+    actual override fun copyBufferToTexture(
         source: GPUTexelCopyBufferInfo,
         destination: GPUTexelCopyTextureInfo,
         copySize: GPUExtent3D
@@ -35,7 +38,7 @@ actual class CommandEncoder(private val handler: WGPUCommandEncoder) : GPUComman
         TODO("Not yet implemented")
     }
 
-    override fun copyTextureToBuffer(
+    actual override fun copyTextureToBuffer(
         source: GPUTexelCopyTextureInfo,
         destination: GPUTexelCopyBufferInfo,
         copySize: GPUExtent3D
@@ -43,7 +46,7 @@ actual class CommandEncoder(private val handler: WGPUCommandEncoder) : GPUComman
         TODO("Not yet implemented")
     }
 
-    override fun copyTextureToTexture(
+    actual override fun copyTextureToTexture(
         source: GPUTexelCopyTextureInfo,
         destination: GPUTexelCopyTextureInfo,
         copySize: GPUExtent3D
@@ -51,7 +54,7 @@ actual class CommandEncoder(private val handler: WGPUCommandEncoder) : GPUComman
         TODO("Not yet implemented")
     }
 
-    override fun clearBuffer(
+    actual override fun clearBuffer(
         buffer: GPUBuffer,
         offset: GPUSize64,
         size: GPUSize64?
@@ -59,7 +62,7 @@ actual class CommandEncoder(private val handler: WGPUCommandEncoder) : GPUComman
         TODO("Not yet implemented")
     }
 
-    override fun resolveQuerySet(
+    actual override fun resolveQuerySet(
         querySet: GPUQuerySet,
         firstQuery: GPUSize32,
         queryCount: GPUSize32,
@@ -69,22 +72,24 @@ actual class CommandEncoder(private val handler: WGPUCommandEncoder) : GPUComman
         TODO("Not yet implemented")
     }
 
-    override fun finish(descriptor: GPUCommandBufferDescriptor?): GPUCommandBuffer {
+    actual override fun finish(descriptor: GPUCommandBufferDescriptor?): GPUCommandBuffer = when (descriptor) {
+        null -> handler.finish()
+        else -> handler.finish(map(descriptor))
+    }.let(::CommandBuffer)
+
+    actual override fun pushDebugGroup(groupLabel: String) {
+        TODO("Not yet implemented")
+    }
+
+    actual override fun popDebugGroup() {
+        TODO("Not yet implemented")
+    }
+
+    actual override fun insertDebugMarker(markerLabel: String) {
         TODO("Not yet implemented")
     }
 
     actual override fun close() {
         // Nothing to do
-    }
-    override fun pushDebugGroup(groupLabel: String) {
-        TODO("Not yet implemented")
-    }
-
-    override fun popDebugGroup() {
-        TODO("Not yet implemented")
-    }
-
-    override fun insertDebugMarker(markerLabel: String) {
-        TODO("Not yet implemented")
     }
 }

@@ -11,7 +11,7 @@ data class SurfaceConfiguration(
 )
 
 data class SurfaceTexture(
-    val texture: Texture,
+    val texture: GPUTexture,
     val status: SurfaceTextureStatus
 )
 

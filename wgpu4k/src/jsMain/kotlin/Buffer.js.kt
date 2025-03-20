@@ -1,11 +1,6 @@
 package io.ygdrasil.webgpu
 
-import io.ygdrasil.webgpu.internal.js.GPUBuffer
-import org.khronos.webgl.Float32Array
-import org.khronos.webgl.Int16Array
-import org.khronos.webgl.Int8Array
-
-actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
+/*actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
 
     actual fun mapFrom(buffer: ShortArray, offset: GPUSize64) {
         Int16Array(handler.getMappedRange(offset, buffer.size.toULong() * Short.SIZE_BYTES.toULong()))
@@ -40,4 +35,4 @@ actual class Buffer(internal val handler: GPUBuffer) : AutoCloseable {
     }
 
 
-}
+}*/
