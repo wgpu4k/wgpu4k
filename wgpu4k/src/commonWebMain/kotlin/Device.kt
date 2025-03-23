@@ -94,9 +94,8 @@ actual class Device(val handler: WGPUDevice) : GPUDevice {
     }
 
     actual override suspend fun popErrorScope(): Result<GPUError?> = runCatching {
-        return handler.popErrorScope()
+        handler.popErrorScope()
             .wait<GPUError>()
-            .let { Result.success(it) }
     }
 
     actual override fun close() {

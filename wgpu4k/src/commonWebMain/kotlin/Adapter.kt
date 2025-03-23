@@ -8,11 +8,11 @@ private val logger = KotlinLogging.logger {}
 suspend fun requestAdapter(options: GPURequestAdapterOptions? = null): Result<Adapter> = runCatching {
     val gpu = navigator.gpu ?: error("WebGPU not supported in this browser.")
 
-    return when (options) {
+    when (options) {
         null -> gpu.requestAdapter()
         else -> gpu.requestAdapter(map(options))
     }.wait<WGPUAdapter>()
-        .let { Result.success(Adapter(it)) }
+        .let { Adapter(it) }
 }
 
 actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
