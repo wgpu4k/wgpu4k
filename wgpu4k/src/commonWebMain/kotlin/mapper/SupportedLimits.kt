@@ -1,10 +1,51 @@
 package io.ygdrasil.webgpu.mapper
 
 import io.ygdrasil.webgpu.GPUSupportedLimits
+import io.ygdrasil.webgpu.JsMap
+import io.ygdrasil.webgpu.JsObject
 import io.ygdrasil.webgpu.Limits
 import io.ygdrasil.webgpu.WGPUSupportedLimits
+import io.ygdrasil.webgpu.asJsNumber
+import io.ygdrasil.webgpu.asJsString
 import io.ygdrasil.webgpu.asUInt
 import io.ygdrasil.webgpu.asULong
+import io.ygdrasil.webgpu.castAs
+import io.ygdrasil.webgpu.toJsMap
+
+internal fun map(input: GPUSupportedLimits): JsMap<JsObject, JsObject> = mapOf(
+    "maxTextureDimension1D" to input.maxTextureDimension1D.asJsNumber(),
+    "maxTextureDimension2D" to input.maxTextureDimension2D.asJsNumber(),
+    "maxTextureDimension3D" to input.maxTextureDimension3D.asJsNumber(),
+    "maxTextureArrayLayers" to input.maxTextureArrayLayers.asJsNumber(),
+    "maxBindGroups" to input.maxBindGroups.asJsNumber(),
+    "maxBindGroupsPlusVertexBuffers" to input.maxBindGroupsPlusVertexBuffers.asJsNumber(),
+    "maxBindingsPerBindGroup" to input.maxBindingsPerBindGroup.asJsNumber(),
+    "maxDynamicUniformBuffersPerPipelineLayout" to input.maxDynamicUniformBuffersPerPipelineLayout.asJsNumber(),
+    "maxDynamicStorageBuffersPerPipelineLayout" to input.maxDynamicStorageBuffersPerPipelineLayout.asJsNumber(),
+    "maxSampledTexturesPerShaderStage" to input.maxSampledTexturesPerShaderStage.asJsNumber(),
+    "maxSamplersPerShaderStage" to input.maxSamplersPerShaderStage.asJsNumber(),
+    "maxStorageBuffersPerShaderStage" to input.maxStorageBuffersPerShaderStage.asJsNumber(),
+    "maxStorageTexturesPerShaderStage" to input.maxStorageTexturesPerShaderStage.asJsNumber(),
+    "maxUniformBuffersPerShaderStage" to input.maxUniformBuffersPerShaderStage.asJsNumber(),
+    "maxUniformBufferBindingSize" to input.maxUniformBufferBindingSize.asJsNumber(),
+    "maxStorageBufferBindingSize" to input.maxStorageBufferBindingSize.asJsNumber(),
+    "minUniformBufferOffsetAlignment" to input.minUniformBufferOffsetAlignment.asJsNumber(),
+    "minStorageBufferOffsetAlignment" to input.minStorageBufferOffsetAlignment.asJsNumber(),
+    "maxVertexBuffers" to input.maxVertexBuffers.asJsNumber(),
+    "maxBufferSize" to input.maxBufferSize.asJsNumber(),
+    "maxVertexAttributes" to input.maxVertexAttributes.asJsNumber(),
+    "maxVertexBufferArrayStride" to input.maxVertexBufferArrayStride.asJsNumber(),
+    "maxInterStageShaderVariables" to input.maxInterStageShaderVariables.asJsNumber(),
+    "maxColorAttachments" to input.maxColorAttachments.asJsNumber(),
+    "maxColorAttachmentBytesPerSample" to input.maxColorAttachmentBytesPerSample.asJsNumber(),
+    "maxComputeWorkgroupStorageSize" to input.maxComputeWorkgroupStorageSize.asJsNumber(),
+    "maxComputeInvocationsPerWorkgroup" to input.maxComputeInvocationsPerWorkgroup.asJsNumber(),
+    "maxComputeWorkgroupSizeX" to input.maxComputeWorkgroupSizeX.asJsNumber(),
+    "maxComputeWorkgroupSizeY" to input.maxComputeWorkgroupSizeY.asJsNumber(),
+    "maxComputeWorkgroupSizeZ" to input.maxComputeWorkgroupSizeZ.asJsNumber(),
+    "maxComputeWorkgroupsPerDimension" to input.maxComputeWorkgroupsPerDimension.asJsNumber(),
+).mapKeys { it.key.asJsString().castAs() }
+    .toJsMap<JsObject, JsObject>()
 
 internal fun map(input: WGPUSupportedLimits): GPUSupportedLimits = Limits(
     maxTextureDimension1D = input.maxTextureDimension1D.asUInt(),

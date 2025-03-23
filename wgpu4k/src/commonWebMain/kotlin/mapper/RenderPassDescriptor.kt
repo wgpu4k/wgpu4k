@@ -15,7 +15,7 @@ internal fun map(input: GPURenderPassDescriptor): WGPURenderPassDescriptor =
     createJsObject<WGPURenderPassDescriptor>().apply {
         label = input.label
         colorAttachments = input.colorAttachments.mapJsArray { map(it) }
-        if (input.depthStencilAttachment != null) depthStencilAttachment = map(input.depthStencilAttachment)
+        input.depthStencilAttachment?.let { depthStencilAttachment = map(it) }
         // TODO map this occlusionQuerySet
         // TODO map this timestampWrites
         maxDrawCount = input.maxDrawCount.asJsNumber()
