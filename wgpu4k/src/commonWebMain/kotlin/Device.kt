@@ -2,7 +2,7 @@ package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.map
 
-actual class Device(internal val handler: WGPUDevice) : GPUDevice {
+actual class Device(val handler: WGPUDevice) : GPUDevice {
     actual override var label: String
         get() = handler.label
         set(value) { handler.label = value }

@@ -220,14 +220,3 @@ package io.ygdrasil.webgpu
 }*/
 
 
-actual class ImageBitmapHolder(
-    actual val width: GPUSize32,
-    actual val height: GPUSize32,
-    val data: ByteArray,
-) : DrawableHolder, AutoCloseable {
-    actual override fun close() {
-        // Nothing to do
-    }
-}
-
-actual sealed interface DrawableHolder

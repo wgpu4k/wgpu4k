@@ -27,5 +27,3 @@ expect class Device : GPUDevice {
 
     override fun close()
 }
-
-expect suspend fun GPUDevice.poll(): Result<Unit>

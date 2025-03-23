@@ -1,10 +1,10 @@
 package io.ygdrasil.webgpu.examples
 
+import io.ygdrasil.webgpu.HTMLCanvasElement
 import io.ygdrasil.webgpu.canvasContextRenderer
 import kotlinx.browser.window
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import org.w3c.dom.HTMLCanvasElement
 
 external fun setInterval(render: () -> Unit, updateInterval: Int)
 

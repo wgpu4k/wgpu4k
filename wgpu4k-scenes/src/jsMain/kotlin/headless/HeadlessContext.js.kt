@@ -1,7 +1,7 @@
 package io.ygdrasil.webgpu.examples.headless
 
+import io.ygdrasil.webgpu.GPUTextureFormat
 import io.ygdrasil.webgpu.SurfaceConfiguration
-import io.ygdrasil.webgpu.TextureFormat
 import io.ygdrasil.webgpu.WGPUContext
 import io.ygdrasil.webgpu.canvasContextRenderer
 
@@ -10,7 +10,7 @@ actual suspend fun getHeadlessContext(): WGPUContext {
     canvas.wgpuContext.surface.configure(
         SurfaceConfiguration(
             canvas.wgpuContext.device,
-            canvas.wgpuContext.surface.preferredCanvasFormat ?: TextureFormat.RGBA8Unorm,
+            canvas.wgpuContext.surface.preferredCanvasFormat ?: GPUTextureFormat.RGBA8Unorm,
         )
     )
     return canvas.wgpuContext

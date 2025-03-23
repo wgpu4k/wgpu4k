@@ -5,16 +5,14 @@ import io.ygdrasil.webgpu.mapper.map
 
 private val logger = KotlinLogging.logger {}
 
-suspend fun requestAdapter(options: GPURequestAdapterOptions? = null): Adapter? {
-    // WebGPU device initialization
-    if (navigator.gpu == null) {
-        logger.error { "WebGPU not supported in this browser." }
-        return null
-    }
+suspend fun requestAdapter(options: GPURequestAdapterOptions? = null): Result<Adapter> = runCatching {
+    val gpu = navigator.gpu ?: error("WebGPU not supported in this browser.")
 
-    return navigator?.gpu?.requestAdapter()?.wait<WGPUAdapter?>()?.let {
-        Adapter(it)
-    }
+    return when (options) {
+        null -> gpu.requestAdapter()
+        else -> gpu.requestAdapter(map(options))
+    }.wait<WGPUAdapter>()
+        .let { Result.success(Adapter(it)) }
 }
 
 actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
@@ -45,4 +43,12 @@ actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
     actual override fun close() {
         // Nothing to do on JS
     }
+}
+
+
+private fun map(input: GPURequestAdapterOptions) = createJsObject<WGPURequestAdapterOptions>().apply {
+    featureLevel = input.featureLevel
+    input.powerPreference?.let { powerPreference = it.value }
+    forceFallbackAdapter = input.forceFallbackAdapter
+    xrCompatible = input.xrCompatible
 }
