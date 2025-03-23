@@ -12,7 +12,7 @@ actual fun GPUBuffer.mapFrom(buffer: ShortArray, offset: GPUSize64) {
     Int16Array(
         handler.getMappedRange(
             offset.asJsNumber(),
-            (buffer.size.toLong() * Short.SIZE_BYTES).toJsNumber()
+            (buffer.size.toLong() * Short.SIZE_BYTES).asJsNumber()
         )
     ).set(map(buffer).unsafeCast<kotlin.js.JsArray<kotlin.js.JsNumber>>(), 0)
 }
@@ -23,7 +23,7 @@ actual fun GPUBuffer.mapFrom(buffer: FloatArray, offset: GPUSize64) {
     Float32Array(
         handler.getMappedRange(
             offset.asJsNumber(),
-            (buffer.size.toLong() * Float.SIZE_BYTES).toJsNumber()
+            (buffer.size.toLong() * Float.SIZE_BYTES).asJsNumber()
         )
     ).set(map(buffer).unsafeCast<kotlin.js.JsArray<kotlin.js.JsNumber>>(), 0)
 }
@@ -31,14 +31,14 @@ actual fun GPUBuffer.mapFrom(buffer: FloatArray, offset: GPUSize64) {
 @Deprecated(message = "use getMappedRange instead")
 actual fun GPUBuffer.mapFrom(buffer: ByteArray, offset: GPUSize64) {
     val handler = (this as Buffer).handler
-    Int8Array(handler.getMappedRange(offset.asJsNumber(), buffer.size.toJsNumber()))
+    Int8Array(handler.getMappedRange(offset.asJsNumber(), buffer.size.asJsNumber()))
         .set(map(buffer).unsafeCast<kotlin.js.JsArray<kotlin.js.JsNumber>>(), 0)
 }
 
 @Deprecated(message = "use getMappedRange instead")
 actual fun GPUBuffer.mapInto(buffer: ByteArray, offset: GPUSize64) {
     val handler = (this as Buffer).handler
-    Int8Array(handler.getMappedRange(offset.toLong().toJsNumber(), buffer.size.toLong().toJsNumber()))
+    Int8Array(handler.getMappedRange(offset.asJsNumber(), buffer.size.asJsNumber()))
         .also { remoteBuffer ->
             buffer.indices.forEach { index -> buffer[index] = remoteBuffer.get(index) }
         }
@@ -49,8 +49,8 @@ actual fun GPUBuffer.mapInto(buffer: IntArray, offset: GPUSize64) {
     val handler = (this as Buffer).handler
     Int32Array(
         handler.getMappedRange(
-            offset.toLong().toJsNumber(),
-            (buffer.size * Int.SIZE_BYTES).toLong().toJsNumber()
+            offset.toLong().asJsNumber(),
+            (buffer.size * Int.SIZE_BYTES).asJsNumber()
         )
     )
         .also { remoteBuffer ->
@@ -60,18 +60,18 @@ actual fun GPUBuffer.mapInto(buffer: IntArray, offset: GPUSize64) {
 
 private fun map(buffer: ShortArray) = jsArray<JsNumber>().also {
     buffer.forEachIndexed { index, value ->
-        set(it, index, value.toJsNumber())
+        set(it, index, value.asJsNumber())
     }
 }
 
 private fun map(buffer: FloatArray) = jsArray<JsNumber>().also {
     buffer.forEachIndexed { index, value ->
-        set(it, index, value.toJsNumber())
+        set(it, index, value.asJsNumber())
     }
 }
 
 private fun map(buffer: ByteArray) = jsArray<JsNumber>().also {
     buffer.forEachIndexed { index, value ->
-        set(it, index, value.toJsNumber())
+        set(it, index, value.asJsNumber())
     }
 }
