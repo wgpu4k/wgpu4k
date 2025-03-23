@@ -60,7 +60,7 @@ actual fun GPUQueue.writeBuffer(
         bufferOffset.asJsNumber(),
         data.asArrayBuffer(),
         dataOffset.asJsNumber(),
-        size.asJsNumber()
+        (Short.SIZE_BYTES.toULong() * size).asJsNumber()
     )
 }
 
@@ -77,7 +77,7 @@ actual fun GPUQueue.writeBuffer(
         bufferOffset.asJsNumber(),
         data.asArrayBuffer(),
         dataOffset.asJsNumber(),
-        size.asJsNumber()
+        (Float.SIZE_BYTES.toULong() * size).asJsNumber()
     )
 }
 
@@ -94,7 +94,7 @@ actual fun GPUQueue.writeBuffer(
         bufferOffset.asJsNumber(),
         data.asArrayBuffer(),
         dataOffset.asJsNumber(),
-        size.asJsNumber()
+        (Int.SIZE_BYTES.toULong() * size).asJsNumber()
     )
 }
 
@@ -128,7 +128,7 @@ actual fun GPUQueue.writeBuffer(
         bufferOffset.asJsNumber(),
         data.asArrayBuffer(),
         dataOffset.asJsNumber(),
-        size.asJsNumber()
+        (Double.SIZE_BYTES.toULong() * size).asJsNumber()
     )
 }
 
@@ -145,7 +145,7 @@ actual fun GPUQueue.writeBuffer(
         bufferOffset.asJsNumber(),
         data.asArrayBuffer(),
         dataOffset.asJsNumber(),
-        size.asJsNumber()
+        (Long.SIZE_BYTES.toULong() * size).asJsNumber()
     )
 }
 

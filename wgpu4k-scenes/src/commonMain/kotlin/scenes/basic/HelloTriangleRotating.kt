@@ -5,19 +5,19 @@ import io.ygdrasil.webgpu.BindGroupDescriptor
 import io.ygdrasil.webgpu.BindGroupEntry
 import io.ygdrasil.webgpu.BufferBinding
 import io.ygdrasil.webgpu.BufferDescriptor
-import io.ygdrasil.webgpu.BufferUsage
 import io.ygdrasil.webgpu.Color
-import io.ygdrasil.webgpu.ColorAttachment
 import io.ygdrasil.webgpu.ColorTargetState
 import io.ygdrasil.webgpu.FragmentState
 import io.ygdrasil.webgpu.GPUBindGroup
 import io.ygdrasil.webgpu.GPUBuffer
+import io.ygdrasil.webgpu.GPUBufferUsage
+import io.ygdrasil.webgpu.GPULoadOp
 import io.ygdrasil.webgpu.GPURenderPipeline
-import io.ygdrasil.webgpu.LoadOp
+import io.ygdrasil.webgpu.GPUStoreOp
+import io.ygdrasil.webgpu.RenderPassColorAttachment
 import io.ygdrasil.webgpu.RenderPassDescriptor
 import io.ygdrasil.webgpu.RenderPipelineDescriptor
 import io.ygdrasil.webgpu.ShaderModuleDescriptor
-import io.ygdrasil.webgpu.StoreOp
 import io.ygdrasil.webgpu.VertexState
 import io.ygdrasil.webgpu.WGPUContext
 import io.ygdrasil.webgpu.beginRenderPass
@@ -66,7 +66,7 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
             BufferDescriptor(
                 label = "Uniform Buffer",
                 size = uniformBufferSize,
-                usage = setOf(BufferUsage.Uniform, BufferUsage.CopyDst)
+                usage = setOf(GPUBufferUsage.Uniform, GPUBufferUsage.CopyDst)
             )
         ).bind()
 
@@ -94,9 +94,7 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
         device.queue.writeBuffer(
             uniformBuffer,
             0u,
-            transformationMatrix,
-            0u,
-            transformationMatrix.size.toULong()
+            transformationMatrix
         )
 
         val encoder = device.createCommandEncoder()
@@ -108,11 +106,11 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
         encoder.beginRenderPass(
             RenderPassDescriptor(
                 colorAttachments = listOf(
-                    ColorAttachment(
+                    RenderPassColorAttachment(
                         view =  texture.createView().bind(),
-                        loadOp = LoadOp.Clear,
+                        loadOp = GPULoadOp.Clear,
                         clearValue = Color(.0, .0, .0, 1.0),
-                        storeOp = StoreOp.Store
+                        storeOp = GPUStoreOp.Store
                     )
                 )
             )
