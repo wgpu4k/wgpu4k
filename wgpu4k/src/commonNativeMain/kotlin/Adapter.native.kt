@@ -32,8 +32,7 @@ actual class Adapter(internal val handler: WGPUAdapter) : GPUAdapter {
     actual override val limits: GPUSupportedLimits = memoryScope { scope ->
         val supportedLimits = WGPULimits.allocate(scope)
         wgpuAdapterGetLimits(handler, supportedLimits)
-        val test: Limits = map(supportedLimits)
-        test
+        map(supportedLimits)
     }
 
     actual override suspend fun requestDevice(descriptor: GPUDeviceDescriptor?): Result<GPUDevice> = suspendCoroutine { continuation ->
