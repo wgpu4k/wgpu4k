@@ -28,7 +28,7 @@ kotlin {
         compilerOptions {
             // Enable only when need tp debug, this required special activation on browser
             // Use chrome://flags/#enable-experimental-webassembly-features on chrome
-            //freeCompilerArgs.add("-Xwasm-use-new-exception-proposal")
+            freeCompilerArgs.add("-Xwasm-use-new-exception-proposal")
         }
     }
 
