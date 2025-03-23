@@ -2,22 +2,22 @@ package io.ygdrasil.webgpu.examples.scenes.basic
 
 import io.ygdrasil.webgpu.AutoClosableContext
 import io.ygdrasil.webgpu.Color
-import io.ygdrasil.webgpu.ColorAttachment
 import io.ygdrasil.webgpu.ColorTargetState
+import io.ygdrasil.webgpu.Extent3D
 import io.ygdrasil.webgpu.FragmentState
+import io.ygdrasil.webgpu.GPULoadOp
 import io.ygdrasil.webgpu.GPUPrimitiveTopology
 import io.ygdrasil.webgpu.GPURenderPipeline
+import io.ygdrasil.webgpu.GPUStoreOp
+import io.ygdrasil.webgpu.GPUTextureUsage
 import io.ygdrasil.webgpu.GPUTextureView
-import io.ygdrasil.webgpu.LoadOp
 import io.ygdrasil.webgpu.MultisampleState
 import io.ygdrasil.webgpu.PrimitiveState
+import io.ygdrasil.webgpu.RenderPassColorAttachment
 import io.ygdrasil.webgpu.RenderPassDescriptor
 import io.ygdrasil.webgpu.RenderPipelineDescriptor
 import io.ygdrasil.webgpu.ShaderModuleDescriptor
-import io.ygdrasil.webgpu.Size3D
-import io.ygdrasil.webgpu.StoreOp
 import io.ygdrasil.webgpu.TextureDescriptor
-import io.ygdrasil.webgpu.TextureUsage
 import io.ygdrasil.webgpu.VertexState
 import io.ygdrasil.webgpu.WGPUContext
 import io.ygdrasil.webgpu.beginRenderPass
@@ -66,10 +66,10 @@ class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
         val texture = device.createTexture(
             TextureDescriptor(
-                size = Size3D(renderingContext.width, renderingContext.height),
+                size = Extent3D(renderingContext.width, renderingContext.height),
                 sampleCount = sampleCount,
                 format = renderingContext.textureFormat,
-                usage = setOf(TextureUsage.RenderAttachment),
+                usage = setOf(GPUTextureUsage.RenderAttachment),
             )
         ).bind()
         textureView = texture.createView().bind()
@@ -81,15 +81,15 @@ class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
         val encoder = device.createCommandEncoder()
             .bind()
 
-        val renderPassEncoder = encoder.beginRenderPass(
+        encoder.beginRenderPass(
             RenderPassDescriptor(
                 colorAttachments = listOf(
-                    ColorAttachment(
+                    RenderPassColorAttachment(
                         view = textureView,
                         resolveTarget = renderingContext.getCurrentTexture().createView().bind(),
-                        loadOp = LoadOp.Clear,
+                        loadOp = GPULoadOp.Clear,
                         clearValue = Color(.0, .0, .0, 1.0),
-                        storeOp = StoreOp.Discard
+                        storeOp = GPUStoreOp.Discard
                     )
                 )
             )
