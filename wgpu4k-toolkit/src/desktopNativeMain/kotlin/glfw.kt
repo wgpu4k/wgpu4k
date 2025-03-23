@@ -40,7 +40,7 @@ suspend fun glfwContextRenderer(
         ?: error("fail to get adapter")
 
     val device = adapter.requestDevice()
-        ?: error("fail to get device")
+        .getOrThrow()
 
     nativeSurface.computeSurfaceCapabilities(adapter)
 
