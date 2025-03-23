@@ -21,8 +21,18 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder): GPUR
         indexFormat: GPUIndexFormat,
         offset: GPUSize64,
         size: GPUSize64?
-    ) {
-        TODO("Not yet implemented")
+    ) = when (size) {
+        null -> handler.setIndexBuffer(
+            (buffer as Buffer).handler,
+            indexFormat.value,
+            offset.asJsNumber()
+        )
+        else -> handler.setIndexBuffer(
+            (buffer as Buffer).handler,
+            indexFormat.value,
+            offset.asJsNumber(),
+            size.asJsNumber()
+        )
     }
 
     actual override fun setVertexBuffer(
@@ -30,8 +40,18 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder): GPUR
         buffer: GPUBuffer?,
         offset: GPUSize64,
         size: GPUSize64?
-    ) {
-        TODO("Not yet implemented")
+    ) = when (size) {
+        null -> handler.setVertexBuffer(
+            slot.asJsNumber(),
+            (buffer as Buffer).handler,
+            offset.asJsNumber()
+        )
+        else -> handler.setVertexBuffer(
+            slot.asJsNumber(),
+            (buffer as Buffer).handler,
+            offset.asJsNumber(),
+            size.asJsNumber()
+        )
     }
 
     actual override fun draw(
@@ -68,14 +88,14 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder): GPUR
         indirectBuffer: GPUBuffer,
         indirectOffset: GPUSize64
     ) {
-        TODO("Not yet implemented")
+        handler.drawIndirect((indirectBuffer as Buffer).handler, indirectOffset.asJsNumber())
     }
 
     actual override fun drawIndexedIndirect(
         indirectBuffer: GPUBuffer,
         indirectOffset: GPUSize64
     ) {
-        TODO("Not yet implemented")
+        handler.drawIndexedIndirect((indirectBuffer as Buffer).handler, indirectOffset.asJsNumber())
     }
 
     actual override fun executeBundles(bundles: List<GPURenderBundle>) {
@@ -124,15 +144,15 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder): GPUR
     }
 
     actual override fun pushDebugGroup(groupLabel: String) {
-        TODO("Not yet implemented")
+        handler.pushDebugGroup(groupLabel)
     }
 
     actual override fun popDebugGroup() {
-        TODO("Not yet implemented")
+        handler.popDebugGroup()
     }
 
     actual override fun insertDebugMarker(markerLabel: String) {
-        TODO("Not yet implemented")
+        handler.insertDebugMarker(markerLabel)
     }
 
     actual override fun setBindGroup(
@@ -140,7 +160,11 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder): GPUR
         bindGroup: GPUBindGroup?,
         dynamicOffsetsData: List<UInt>
     ) {
-        TODO("Not yet implemented")
+        handler.setBindGroup(
+            index.asJsNumber(),
+            (bindGroup as BindGroup).handler,
+            map(dynamicOffsetsData)
+        )
     }
 
 }
