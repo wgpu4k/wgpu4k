@@ -17,7 +17,7 @@ actual class Device(val handler: WGPUDevice) : GPUDevice {
 
     actual override val limits: GPUSupportedLimits by lazy { map(handler.limits) }
     actual override val adapterInfo: GPUAdapterInfo
-        get() = TODO("Not yet implemented")
+        get() = map(handler.adapterInfo)
 
     actual override fun createCommandEncoder(descriptor: GPUCommandEncoderDescriptor?): GPUCommandEncoder {
         return CommandEncoder(
@@ -43,13 +43,12 @@ actual class Device(val handler: WGPUDevice) : GPUDevice {
         .let(::RenderPipeline)
 
     actual override suspend fun createComputePipelineAsync(descriptor: GPUComputePipelineDescriptor): Result<GPUComputePipeline> {
-        TODO("Not yet implemented")
+        TODO("createComputePipelineAsync not yet implemented")
     }
 
     actual override suspend fun createRenderPipelineAsync(descriptor: GPURenderPipelineDescriptor): Result<GPURenderPipeline> {
-        TODO("Not yet implemented")
+        TODO("createRenderPipelineAsync not yet implemented")
     }
-
 
     actual override fun createBuffer(descriptor: GPUBufferDescriptor): GPUBuffer = map(descriptor)
         .let { handler.createBuffer(it) }
@@ -91,11 +90,13 @@ actual class Device(val handler: WGPUDevice) : GPUDevice {
             .let(::QuerySet)
 
     actual override fun pushErrorScope(filter: GPUErrorFilter) {
-        TODO("Not yet implemented")
+        handler.pushErrorScope(filter.value)
     }
 
-    actual override suspend fun popErrorScope(): Result<GPUError?> {
-        TODO("Not yet implemented")
+    actual override suspend fun popErrorScope(): Result<GPUError?> = runCatching {
+        return handler.popErrorScope()
+            .wait<GPUError>()
+            .let { Result.success(it) }
     }
 
     actual override fun close() {

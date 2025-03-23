@@ -27,7 +27,13 @@ actual class CommandEncoder(private val handler: WGPUCommandEncoder) : GPUComman
         destinationOffset: GPUSize64,
         size: GPUSize64
     ) {
-        TODO("Not yet implemented")
+        handler.copyBufferToBuffer(
+            (source as Buffer).handler,
+            sourceOffset.asJsNumber(),
+            (destination as Buffer).handler,
+            destinationOffset.asJsNumber(),
+            size.asJsNumber()
+        )
     }
 
     actual override fun copyBufferToTexture(
@@ -35,7 +41,11 @@ actual class CommandEncoder(private val handler: WGPUCommandEncoder) : GPUComman
         destination: GPUTexelCopyTextureInfo,
         copySize: GPUExtent3D
     ) {
-        TODO("Not yet implemented")
+        handler.copyBufferToTexture(
+            map(source),
+            map(destination),
+            map(copySize)
+        )
     }
 
     actual override fun copyTextureToBuffer(
@@ -43,7 +53,11 @@ actual class CommandEncoder(private val handler: WGPUCommandEncoder) : GPUComman
         destination: GPUTexelCopyBufferInfo,
         copySize: GPUExtent3D
     ) {
-        TODO("Not yet implemented")
+        handler.copyTextureToBuffer(
+            map(source),
+            map(destination),
+            map(copySize)
+        )
     }
 
     actual override fun copyTextureToTexture(
@@ -51,15 +65,27 @@ actual class CommandEncoder(private val handler: WGPUCommandEncoder) : GPUComman
         destination: GPUTexelCopyTextureInfo,
         copySize: GPUExtent3D
     ) {
-        TODO("Not yet implemented")
+        handler.copyTextureToTexture(
+            map(source),
+            map(destination),
+            map(copySize)
+        )
     }
 
     actual override fun clearBuffer(
         buffer: GPUBuffer,
         offset: GPUSize64,
         size: GPUSize64?
-    ) {
-        TODO("Not yet implemented")
+    ) = when (size) {
+        null -> handler.clearBuffer(
+            (buffer as Buffer).handler,
+            offset.asJsNumber()
+        )
+        else -> handler.clearBuffer(
+            (buffer as Buffer).handler,
+            offset.asJsNumber(),
+            size.asJsNumber()
+        )
     }
 
     actual override fun resolveQuerySet(
@@ -69,7 +95,13 @@ actual class CommandEncoder(private val handler: WGPUCommandEncoder) : GPUComman
         destination: GPUBuffer,
         destinationOffset: GPUSize64
     ) {
-        TODO("Not yet implemented")
+        handler.resolveQuerySet(
+            (querySet as QuerySet).handler,
+            firstQuery.asJsNumber(),
+            queryCount.asJsNumber(),
+            (destination as Buffer).handler,
+            destinationOffset.asJsNumber()
+        )
     }
 
     actual override fun finish(descriptor: GPUCommandBufferDescriptor?): GPUCommandBuffer = when (descriptor) {
@@ -78,15 +110,15 @@ actual class CommandEncoder(private val handler: WGPUCommandEncoder) : GPUComman
     }.let(::CommandBuffer)
 
     actual override fun pushDebugGroup(groupLabel: String) {
-        TODO("Not yet implemented")
+        handler.pushDebugGroup(groupLabel)
     }
 
     actual override fun popDebugGroup() {
-        TODO("Not yet implemented")
+        handler.popDebugGroup()
     }
 
     actual override fun insertDebugMarker(markerLabel: String) {
-        TODO("Not yet implemented")
+        handler.insertDebugMarker(markerLabel)
     }
 
     actual override fun close() {

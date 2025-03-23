@@ -25,15 +25,15 @@ actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : 
         handler.dispatchWorkgroupsIndirect((indirectBuffer as Buffer).handler, indirectOffset.asJsNumber())
 
     actual override fun pushDebugGroup(groupLabel: String) {
-        TODO("Not yet implemented")
+        handler.pushDebugGroup(groupLabel)
     }
 
     actual override fun popDebugGroup() {
-        TODO("Not yet implemented")
+        handler.popDebugGroup()
     }
 
     actual override fun insertDebugMarker(markerLabel: String) {
-        TODO("Not yet implemented")
+        handler.insertDebugMarker(markerLabel)
     }
 
     actual override fun setBindGroup(
