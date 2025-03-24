@@ -1,7 +1,7 @@
 [versions]
 kotest = "6.0.0.M2"
 jna = "5.16.0"
-kotlin = "2.1.10"
+kotlin = "2.1.20"
 kotlinx-browser = "0.3"
 kotlinx-serialization-json = "1.7.3"
 ktor = "2.3.12"
@@ -16,7 +16,7 @@ glfw-native = "0.0.1"
 
 # WebGPU
 wgpu4k-native = "v24.0.1"
-webgpu-ktypes = "0.0.0-SNAPSHOT"
+webgpu-ktypes = "0.0.1-SNAPSHOT"
 
 # Logging
 kotlin-logging = "7.0.3"
