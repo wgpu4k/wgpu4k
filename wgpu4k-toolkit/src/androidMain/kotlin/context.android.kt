@@ -16,7 +16,7 @@ suspend fun androidContextRenderer(surfaceHolder: SurfaceHolder, width: Int, hei
 
     val renderingContext = when (deferredRendering) {
         true -> TextureRenderingContext(width.toUInt(), height.toUInt(), GPUTextureFormat.RGBA8Unorm, device)
-        false -> SurfaceRenderingContext(surface)
+        false -> SurfaceRenderingContext(surface, surface.supportedFormats.first())
     }
 
     return AndroidContext(

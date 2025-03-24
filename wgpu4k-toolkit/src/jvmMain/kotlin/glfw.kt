@@ -50,7 +50,7 @@ suspend fun glfwContextRenderer(width: Int = 1, height: Int = 1, title: String =
         true -> TextureRenderingContext(256u, 256u, GPUTextureFormat.RGBA8Unorm, device)
         false -> {
             nativeSurface.computeSurfaceCapabilities(adapter)
-            SurfaceRenderingContext(surface)
+            SurfaceRenderingContext(surface, surface.supportedFormats.first())
         }
     }
 

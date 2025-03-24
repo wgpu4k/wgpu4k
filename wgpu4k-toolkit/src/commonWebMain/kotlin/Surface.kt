@@ -6,9 +6,6 @@ actual class Surface(private val handler: WGPUCanvasContext) : AutoCloseable {
     actual val height: UInt
         get() = handler.canvas.castAs<HTMLCanvasElement>().height.asUInt()
 
-    actual val preferredCanvasFormat: GPUTextureFormat?
-        get() = navigator.gpu?.getPreferredCanvasFormat()?.let { GPUTextureFormat.of(it) }
-
     // @see https://gpuweb.github.io/gpuweb/#canvas-configuration
     actual val supportedFormats: Set<GPUTextureFormat> =
         setOf(GPUTextureFormat.BGRA8Unorm, GPUTextureFormat.RGBA8Unorm, GPUTextureFormat.RGBA16Float)
@@ -45,7 +42,7 @@ suspend fun canvasContextRenderer(htmlCanvas: HTMLCanvasElement? = null, deferre
 
     val renderingContext = when (deferredRendering) {
         true -> TextureRenderingContext(256u, 256u, GPUTextureFormat.RGBA8Unorm, device)
-        false -> SurfaceRenderingContext(surface)
+        false -> SurfaceRenderingContext(surface, navigator.gpu?.getPreferredCanvasFormat()?.let { GPUTextureFormat.of(it) ?: error("format not found $it") } ?: error("WebGPU not supported"))
     }
 
     return CanvasContext(

@@ -46,7 +46,7 @@ suspend fun glfwContextRenderer(
 
     val renderingContext = when (deferredRendering) {
         true -> TextureRenderingContext(256u, 256u, GPUTextureFormat.RGBA8Unorm, device)
-        false -> SurfaceRenderingContext(surface)
+        false -> SurfaceRenderingContext(surface, surface.supportedFormats.first())
     }
 
     return GLFWContext(

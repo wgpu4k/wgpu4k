@@ -25,7 +25,7 @@ suspend fun iosContextRenderer(view: MTKView, width: Int, height: Int, deferredR
 
     val renderingContext = when (deferredRendering) {
         true -> TextureRenderingContext(width.toUInt(), height.toUInt(), GPUTextureFormat.RGBA8Unorm, device)
-        false -> SurfaceRenderingContext(surface)
+        false -> SurfaceRenderingContext(surface, surface.supportedFormats.first())
     }
 
     return IosContext(

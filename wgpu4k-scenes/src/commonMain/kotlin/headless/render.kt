@@ -29,25 +29,24 @@ suspend fun captureScene() {
     val renderingContext = context.renderingContext
     val availableScenes = loadScenes(context)
     availableScenes.findWithName(sceneName).let { scene ->
-
+        logger.info { "Rendering frame $frame of $sceneName" }
         autoClosableContext {
             context.bind()
             scene.bind()
             scene.initialize()
 
-            val textureData = IntArray(renderingContext.width.toInt() * renderingContext.height.toInt())
-            val outputStagingBuffer = context.device.createBuffer(
-                BufferDescriptor(
-                    size = (textureData.size * Int.SIZE_BYTES).toULong(),
-                    usage = setOf(GPUBufferUsage.CopyDst, GPUBufferUsage.MapRead),
-                    mappedAtCreation = false,
-                )
-            )
-
             scene.frame = frame
             with(scene) { render() }
 
             if (renderingContext is TextureRenderingContext) {
+                val textureData = IntArray(renderingContext.width.toInt() * renderingContext.height.toInt())
+                val outputStagingBuffer = context.device.createBuffer(
+                    BufferDescriptor(
+                        size = (textureData.size * Int.SIZE_BYTES).toULong(),
+                        usage = setOf(GPUBufferUsage.CopyDst, GPUBufferUsage.MapRead),
+                        mappedAtCreation = false,
+                    )
+                )
                 val commandEncoder = context.device.createCommandEncoder().bind()
                 commandEncoder.copyTextureToBuffer(
                     TexelCopyTextureInfo(
@@ -69,11 +68,10 @@ suspend fun captureScene() {
                         height = renderingContext.height
                     )
                 )
-
+                logger.info { "Copying texture to staging buffer" }
                 context.device.queue.submit(listOf(commandEncoder.finish()))
+                logger.info { "Mapping ..." }
                 outputStagingBuffer.mapAsync(setOf(GPUMapMode.Read))
-                // Complete async work
-                context.device.poll()
                 outputStagingBuffer.mapInto(buffer = textureData)
                 val image = Bitmap32(
                     width = renderingContext.width.toInt(),
@@ -84,6 +82,7 @@ suspend fun captureScene() {
                 val path = screenshotPath ?: error("screenshot path not set")
                 val screenshotsVfs = localVfs(path)["jvm"].also { it.mkdirs() }.jail()
                 val outputPath = "$sceneName-$frame.png"
+                logger.info { "saving to $outputPath" }
                 screenshotsVfs[outputPath]
                     .also { logger.info { "will output texture to ${it.absolutePath}" } }
                     .writeBitmap(image, PNG)

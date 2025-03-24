@@ -5,8 +5,6 @@ expect class Surface: AutoCloseable {
     val width: UInt
     val height: UInt
 
-    val preferredCanvasFormat: GPUTextureFormat?
-
     val supportedFormats: Set<GPUTextureFormat>
     val supportedAlphaMode: Set<CompositeAlphaMode>
 
