@@ -82,7 +82,7 @@ actual class Device(internal val handler: WGPUDevice) : GPUDevice {
     actual override fun createBuffer(descriptor: GPUBufferDescriptor): GPUBuffer = memoryScope { scope ->
         scope.map(descriptor)
             .let { wgpuDeviceCreateBuffer(handler, it) }
-            ?.let(::Buffer) ?: error("fail to create buffer")
+            ?.let { Buffer(it, this)} ?: error("fail to create buffer")
     }
 
     actual override fun createBindGroup(descriptor: GPUBindGroupDescriptor): GPUBindGroup = memoryScope { scope ->

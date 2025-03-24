@@ -17,12 +17,13 @@ import io.ygdrasil.wgpu.wgpuBufferGetUsage
 import io.ygdrasil.wgpu.wgpuBufferMapAsync
 import io.ygdrasil.wgpu.wgpuBufferRelease
 import io.ygdrasil.wgpu.wgpuBufferUnmap
+import io.ygdrasil.wgpu.wgpuDevicePoll
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 private val logger = KotlinLogging.logger {}
 
-actual class Buffer(internal val handler: WGPUBuffer) : GPUBuffer {
+actual class Buffer(val handler: WGPUBuffer, private val device: Device) : GPUBuffer {
 
     actual override var label: String
         get() = TODO("Not yet implemented")
@@ -57,10 +58,20 @@ actual class Buffer(internal val handler: WGPUBuffer) : GPUBuffer {
                         userdata2: NativeAddress?
                     ) {
                         logger.info { "mapped" }
-                        continuation.resume(when(status) {
-                            WGPUMapAsyncStatus_Success -> Result.success(Unit)
-                            else -> Result.failure(IllegalStateException("map fail with status: $status and message: ${message?.data?.toKString(message.length)}"))
-                        })
+                        continuation.resume(
+                            when (status) {
+                                WGPUMapAsyncStatus_Success -> Result.success(Unit)
+                                else -> Result.failure(
+                                    IllegalStateException(
+                                        "map fail with status: $status and message: ${
+                                            message?.data?.toKString(
+                                                message.length
+                                            )
+                                        }"
+                                    )
+                                )
+                            }
+                        )
                     }
 
                 })
@@ -69,6 +80,7 @@ actual class Buffer(internal val handler: WGPUBuffer) : GPUBuffer {
                     it.userdata2 = callback.handler
                 }
                 wgpuBufferMapAsync(handler, mode.toFlagULong(), offset, size, bufferCallbackInfo)
+                wgpuDevicePoll(device.handler, true, null)
             }
         }
 
