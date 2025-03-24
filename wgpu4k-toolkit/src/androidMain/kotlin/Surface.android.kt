@@ -2,8 +2,6 @@ package io.ygdrasil.webgpu
 
 actual class Surface(private val handler: NativeSurface, actual val width: UInt, actual val height: UInt) : AutoCloseable {
 
-    actual val preferredCanvasFormat: GPUTextureFormat? = null
-
     actual val supportedFormats: Set<GPUTextureFormat>
         get() = handler.supportedFormats
     actual val supportedAlphaMode: Set<CompositeAlphaMode>
