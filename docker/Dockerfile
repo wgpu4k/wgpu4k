@@ -3,7 +3,7 @@ FROM ubuntu:latest
 
 RUN apt-get update && \
     apt-get install -y git unzip curl zip mesa-common-dev gdebi-core xvfb libasound2t64 libglfw3-dev libxtst6 weston \
-    libwayland-cursor0 libxcursor1 adwaita-icon-theme hicolor-icon-theme && \
+    libwayland-cursor0 libxcursor1 adwaita-icon-theme-full hicolor-icon-theme && \
     apt-get clean;
 
 COPY chrome-128.deb /tmp/
@@ -12,8 +12,8 @@ RUN rm /tmp/chrome-128.deb
 
 # Créer le script wayland-run
 RUN echo '#!/bin/bash\n\
-WAYLAND_SOCK="wayland-test-$$"\n\
-WAYLAND_PATH="/tmp/$WAYLAND_SOCK"\n\
+WAYLAND_SOCK="wayland-test-app"\n\
+WAYLAND_PATH="/tmp/user-runtime-dir/$WAYLAND_SOCK"\n\
 \n\
 # Démarrer Weston en arrière-plan\n\
 weston --backend=headless-backend.so --socket="$WAYLAND_SOCK" --width=1024 --height=768 &\n\
@@ -64,10 +64,6 @@ ENV PATH="$JAVA_HOME/bin:$PATH"
 RUN echo "alias wayland-run='/usr/local/bin/wayland-run'" >> /home/user/.bashrc
 RUN mkdir /tmp/user-runtime-dir
 RUN echo "export XDG_RUNTIME_DIR=/tmp/user-runtime-dir" >> ~/.bashrc
-
-# Créer le répertoire pour les thèmes personnels
-RUN mkdir -p /home/user/.icons && \
-    mkdir -p /home/user/.local/share/icons
 
 ENV DISPLAY :1
 
