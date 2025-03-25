@@ -149,9 +149,11 @@ kotlin {
 
         }
 
-        androidMain {
-            dependencies {
-                implementation(libs.android.native.helper)
+        if (isAndroidConfigured) {
+            androidMain {
+                dependencies {
+                    implementation(libs.android.native.helper)
+                }
             }
         }
     }
