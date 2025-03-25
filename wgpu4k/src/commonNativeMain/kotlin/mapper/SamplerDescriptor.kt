@@ -1,13 +1,12 @@
 package io.ygdrasil.webgpu.mapper
 
 import ffi.MemoryAllocator
-import io.ygdrasil.webgpu.SamplerDescriptor
+import io.ygdrasil.webgpu.GPUSamplerDescriptor
 import io.ygdrasil.wgpu.WGPUSamplerDescriptor
 
-
-internal fun MemoryAllocator.map(input: SamplerDescriptor): WGPUSamplerDescriptor =
+internal fun MemoryAllocator.map(input: GPUSamplerDescriptor): WGPUSamplerDescriptor =
     WGPUSamplerDescriptor.allocate(this).also { output ->
-        if (input.label != null) output.label = allocateFrom(input.label)
+        map(input.label, output.label)
 
         output.addressModeU = input.addressModeU.value
         output.addressModeV = input.addressModeV.value
@@ -20,7 +19,7 @@ internal fun MemoryAllocator.map(input: SamplerDescriptor): WGPUSamplerDescripto
         output.lodMinClamp = input.lodMinClamp
         output.lodMaxClamp = input.lodMaxClamp
 
-        if (input.compare != null) output.compare = input.compare.value
+        input.compare?.let { output.compare = it.value }
         output.maxAnisotropy = input.maxAnisotropy
 
     }

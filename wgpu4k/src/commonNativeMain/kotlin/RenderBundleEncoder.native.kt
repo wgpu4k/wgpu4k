@@ -12,31 +12,47 @@ import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetIndexBuffer
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetPipeline
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetVertexBuffer
 
-actual class RenderBundleEncoder(internal val handler: WGPURenderBundleEncoder) : AutoCloseable {
+actual class RenderBundleEncoder(internal val handler: WGPURenderBundleEncoder) : GPURenderBundleEncoder {
 
-    actual fun finish(descriptor: RenderBundleDescriptor): RenderBundle = memoryScope { scope ->
-        scope.map(descriptor)
+    actual override var label: String
+        get() = TODO("Not yet implemented")
+        set(value) {}
+
+    actual override fun finish(descriptor: GPURenderBundleDescriptor?): GPURenderBundle = memoryScope { scope ->
+        descriptor?.let {scope.map(descriptor) }
             .let { wgpuRenderBundleEncoderFinish(handler, it) }
             ?.let(::RenderBundle) ?: error("fail to create render bundle")
     }
 
-    actual fun setBindGroup(index: GPUIndex32, bindGroup: BindGroup) {
-        wgpuRenderBundleEncoderSetBindGroup(handler, index, bindGroup.handler, 0u, null)
+    actual override fun setBindGroup(
+        index: GPUIndex32,
+        bindGroup: GPUBindGroup?,
+        dynamicOffsetsData: List<UInt>
+    ) = memoryScope { scope ->
+        wgpuRenderBundleEncoderSetBindGroup(
+            handler,
+            index,
+            (bindGroup as BindGroup).handler,
+            dynamicOffsetsData.size.toULong(),
+            scope.map(dynamicOffsetsData)
+        )
     }
 
-    actual fun setPipeline(renderPipeline: RenderPipeline) {
-        wgpuRenderBundleEncoderSetPipeline(handler, renderPipeline.handler)
+    actual override fun setPipeline(pipeline: GPURenderPipeline) {
+        wgpuRenderBundleEncoderSetPipeline(handler, (pipeline as RenderPipeline).handler)
     }
 
-    actual fun setVertexBuffer(slot: GPUIndex32, buffer: Buffer, offset: GPUSize64, size: GPUSize64) {
-        wgpuRenderBundleEncoderSetVertexBuffer(handler, slot, buffer.handler, offset, size)
+    actual override fun setVertexBuffer(slot: GPUIndex32, buffer: GPUBuffer?, offset: GPUSize64, size: GPUSize64?) {
+        val size = size ?: (buffer?.size?.minus(offset) ?: 0u)
+        wgpuRenderBundleEncoderSetVertexBuffer(handler, slot, buffer?.let { (buffer as Buffer).handler }, offset, size)
     }
 
-    actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
-        wgpuRenderBundleEncoderSetIndexBuffer(handler, buffer.handler, indexFormat.value, offset, size)
+    actual override fun setIndexBuffer(buffer: GPUBuffer, indexFormat: GPUIndexFormat, offset: GPUSize64, size: GPUSize64?) {
+        val size = size ?: buffer.size.minus(offset)
+        wgpuRenderBundleEncoderSetIndexBuffer(handler, (buffer as Buffer).handler, indexFormat.value, offset, size)
     }
 
-    actual fun drawIndexed(
+    actual override fun drawIndexed(
         indexCount: GPUSize32,
         instanceCount: GPUSize32,
         firstIndex: GPUSize32,
@@ -46,7 +62,21 @@ actual class RenderBundleEncoder(internal val handler: WGPURenderBundleEncoder) 
         wgpuRenderBundleEncoderDrawIndexed(handler, indexCount, instanceCount, firstIndex, baseVertex, firstInstance)
     }
 
-    actual fun draw(
+    actual override fun drawIndirect(
+        indirectBuffer: GPUBuffer,
+        indirectOffset: GPUSize64
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    actual override fun drawIndexedIndirect(
+        indirectBuffer: GPUBuffer,
+        indirectOffset: GPUSize64
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    actual override fun draw(
         vertexCount: GPUSize32,
         instanceCount: GPUSize32,
         firstVertex: GPUSize32,
@@ -57,5 +87,17 @@ actual class RenderBundleEncoder(internal val handler: WGPURenderBundleEncoder) 
 
     actual override fun close() {
         wgpuRenderBundleEncoderRelease(handler)
+    }
+
+    actual override fun pushDebugGroup(groupLabel: String) {
+        TODO("Not yet implemented")
+    }
+
+    actual override fun popDebugGroup() {
+        TODO("Not yet implemented")
+    }
+
+    actual override fun insertDebugMarker(markerLabel: String) {
+        TODO("Not yet implemented")
     }
 }

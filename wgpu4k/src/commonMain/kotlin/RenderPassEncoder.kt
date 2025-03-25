@@ -1,51 +1,78 @@
 package io.ygdrasil.webgpu
 
-expect class RenderPassEncoder {
+expect class RenderPassEncoder: GPURenderPassEncoder {
 
-    fun end()
+    override var label: String
 
-    fun setPipeline(renderPipeline: RenderPipeline)
-
-    fun draw(
-        vertexCount: GPUSize32,
-        instanceCount: GPUSize32 = 1u,
-        firstVertex: GPUSize32 = 0u,
-        firstInstance: GPUSize32 = 0u,
+    override fun setViewport(
+        x: Float,
+        y: Float,
+        width: Float,
+        height: Float,
+        minDepth: Float,
+        maxDepth: Float
     )
 
-    fun drawIndexed(
-        indexCount: GPUSize32,
-        instanceCount: GPUSize32 = 1u,
-        firstIndex: GPUSize32 = 0u,
-        baseVertex: GPUSignedOffset32 = 0,
-        firstInstance: GPUSize32 = 0u,
-    )
-
-    fun drawIndirect(indirectBuffer: Buffer, indirectOffset: GPUSize64 = 0u)
-    fun drawIndexedIndirect(indirectBuffer: Buffer, indirectOffset: GPUSize64 = 0u)
-
-    fun setBindGroup(index: GPUIndex32, bindGroup: BindGroup, dynamicOffsets: List<GPUIndex32> = listOf())
-
-    fun setVertexBuffer(slot: GPUIndex32, buffer: Buffer)
-
-    fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64 = 0u, size: GPUSize64 = buffer.size)
-
-    fun executeBundles(bundles: List<RenderBundle>)
-
-    fun setViewport(x: Float, y: Float, width: Float, height: Float, minDepth: Float, maxDepth: Float)
-
-    fun setScissorRect(
+    override fun setScissorRect(
         x: GPUIntegerCoordinate,
         y: GPUIntegerCoordinate,
         width: GPUIntegerCoordinate,
-        height: GPUIntegerCoordinate,
+        height: GPUIntegerCoordinate
     )
 
-    fun setBlendConstant(color: Color)
+    override fun setBlendConstant(color: GPUColor)
+    override fun setStencilReference(reference: GPUStencilValue)
+    override fun beginOcclusionQuery(queryIndex: GPUSize32)
+    override fun endOcclusionQuery()
+    override fun executeBundles(bundles: List<GPURenderBundle>)
+    override fun end()
+    override fun pushDebugGroup(groupLabel: String)
+    override fun popDebugGroup()
+    override fun insertDebugMarker(markerLabel: String)
+    override fun setBindGroup(
+        index: GPUIndex32,
+        bindGroup: GPUBindGroup?,
+        dynamicOffsetsData: List<UInt>
+    )
 
-    fun setStencilReference(reference: GPUStencilValue)
+    override fun setPipeline(pipeline: GPURenderPipeline)
+    override fun setIndexBuffer(
+        buffer: GPUBuffer,
+        indexFormat: GPUIndexFormat,
+        offset: GPUSize64,
+        size: GPUSize64?
+    )
 
-    fun beginOcclusionQuery(queryIndex: GPUSize32)
+    override fun setVertexBuffer(
+        slot: GPUIndex32,
+        buffer: GPUBuffer?,
+        offset: GPUSize64,
+        size: GPUSize64?
+    )
 
-    fun endOcclusionQuery()
+    override fun draw(
+        vertexCount: GPUSize32,
+        instanceCount: GPUSize32,
+        firstVertex: GPUSize32,
+        firstInstance: GPUSize32
+    )
+
+    override fun drawIndexed(
+        indexCount: GPUSize32,
+        instanceCount: GPUSize32,
+        firstIndex: GPUSize32,
+        baseVertex: GPUSignedOffset32,
+        firstInstance: GPUSize32
+    )
+
+    override fun drawIndirect(
+        indirectBuffer: GPUBuffer,
+        indirectOffset: GPUSize64
+    )
+
+    override fun drawIndexedIndirect(
+        indirectBuffer: GPUBuffer,
+        indirectOffset: GPUSize64
+    )
+
 }

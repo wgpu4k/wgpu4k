@@ -14,31 +14,32 @@ import io.ygdrasil.wgpu.wgpuTextureGetUsage
 import io.ygdrasil.wgpu.wgpuTextureGetWidth
 import io.ygdrasil.wgpu.wgpuTextureRelease
 
+actual class Texture(internal val handler: WGPUTexture) : GPUTexture {
 
-actual class Texture(internal val handler: WGPUTexture) : AutoCloseable {
-
-    actual val width: GPUIntegerCoordinateOut
+    actual override var label: String
+        get() = TODO("Not yet implemented")
+        set(value) {}
+    actual override val width: GPUIntegerCoordinateOut
         get() = wgpuTextureGetWidth(handler)
-    actual val height: GPUIntegerCoordinateOut
+    actual override val height: GPUIntegerCoordinateOut
         get() = wgpuTextureGetHeight(handler)
-    actual val depthOrArrayLayers: GPUIntegerCoordinateOut
+    actual override val depthOrArrayLayers: GPUIntegerCoordinateOut
         get() = wgpuTextureGetDepthOrArrayLayers(handler)
-    actual val mipLevelCount: GPUIntegerCoordinateOut
+    actual override val mipLevelCount: GPUIntegerCoordinateOut
         get() = wgpuTextureGetMipLevelCount(handler)
-    actual val sampleCount: GPUSize32Out
+    actual override val sampleCount: GPUSize32Out
         get() = wgpuTextureGetSampleCount(handler)
-    actual val dimension: TextureDimension
+    actual override val dimension: GPUTextureDimension
         get() = wgpuTextureGetDimension(handler)
-            .let { TextureDimension.of(it) }
-            ?: error("fail to get texture dimension")
-    actual val format: TextureFormat
+            .let { GPUTextureDimension.of(it) ?: error("Unknown texture dimension $it") }
+    actual override val format: GPUTextureFormat
         get() = wgpuTextureGetFormat(handler)
-            .let { TextureFormat.of(it) }
-            ?: error("fail to get texture format")
-    actual val usage: GPUFlagsConstant
+            .let { GPUTextureFormat.of(it) ?: error("Unknown texture format $it")}
+    actual override val usage: Set<GPUTextureUsage>
         get() = wgpuTextureGetUsage(handler)
+            .let { usage -> GPUTextureUsage.entries.filter { it.value and usage != 0uL }.toSet() }
 
-    actual fun createView(descriptor: TextureViewDescriptor?): TextureView = memoryScope { scope ->
+    actual override fun createView(descriptor: GPUTextureViewDescriptor?): GPUTextureView = memoryScope { scope ->
         descriptor?.let { scope.map(descriptor) }
             .let { wgpuTextureCreateView(handler, it) }
             ?.let { TextureView(it) }

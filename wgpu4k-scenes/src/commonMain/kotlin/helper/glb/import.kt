@@ -1,14 +1,15 @@
 package io.ygdrasil.webgpu.examples.helper.glb
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.ygdrasil.webgpu.BufferUsage
-import io.ygdrasil.webgpu.Device
+import io.ygdrasil.webgpu.Extent3D
+import io.ygdrasil.webgpu.GPUBufferUsage
+import io.ygdrasil.webgpu.GPUDevice
+import io.ygdrasil.webgpu.GPUTextureFormat
+import io.ygdrasil.webgpu.GPUTextureUsage
 import io.ygdrasil.webgpu.ImageCopyExternalImage
 import io.ygdrasil.webgpu.ImageCopyTextureTagged
-import io.ygdrasil.webgpu.Size3D
 import io.ygdrasil.webgpu.TextureDescriptor
-import io.ygdrasil.webgpu.TextureFormat
-import io.ygdrasil.webgpu.TextureUsage
+import io.ygdrasil.webgpu.copyExternalImageToTexture
 import io.ygdrasil.webgpu.examples.toBitmapHolder
 import korlibs.image.format.readBitmap
 import korlibs.io.file.std.asMemoryVfsFile
@@ -17,9 +18,9 @@ import korlibs.math.geom.Matrix4
 private val logger = KotlinLogging.logger {}
 
 suspend fun uploadGLBModel(
-    device: Device,
+    device: GPUDevice,
     gltf2: GLTF2,
-    textureFormat: TextureFormat,
+    textureFormat: GPUTextureFormat,
 ): GLBModel {
     logger.debug { "uploadGLBModel" }
 
@@ -42,9 +43,9 @@ suspend fun uploadGLBModel(
 
         val gpuImg = device.createTexture(
             TextureDescriptor(
-                size = Size3D(width = bitmap.width.toUInt(), height = bitmap.height.toUInt(), depthOrArrayLayers = 1u),
+                size = Extent3D(width = bitmap.width.toUInt(), height = bitmap.height.toUInt(), depthOrArrayLayers = 1u),
                 format = textureFormat,
-                usage = setOf(TextureUsage.TextureBinding, TextureUsage.CopyDst, TextureUsage.RenderAttachment)
+                usage = setOf(GPUTextureUsage.TextureBinding, GPUTextureUsage.CopyDst, GPUTextureUsage.RenderAttachment)
             )
         )
 
@@ -53,7 +54,7 @@ suspend fun uploadGLBModel(
         device.queue.copyExternalImageToTexture(
             src,
             dst,
-            bitmap.width.toUInt() to bitmap.height.toUInt()
+            Extent3D(bitmap.width.toUInt(), bitmap.height.toUInt(), 0u)
         )
 
         gpuImg
@@ -91,7 +92,7 @@ suspend fun uploadGLBModel(
                     val accessor = gltf2.accessors[primitive.indices]
                     val viewID = accessor.bufferView
                     bufferViews[viewID].needsUpload = true
-                    bufferViews[viewID].addUsage(BufferUsage.Index)
+                    bufferViews[viewID].addUsage(GPUBufferUsage.Index)
                     GLTFAccessor(bufferViews[viewID], accessor)
                 } else null
 
@@ -102,7 +103,7 @@ suspend fun uploadGLBModel(
                     val accessor = gltf2.accessors[index]
                     val viewID = accessor.bufferView
                     bufferViews[viewID].needsUpload = true
-                    bufferViews[viewID].addUsage(BufferUsage.Vertex)
+                    bufferViews[viewID].addUsage(GPUBufferUsage.Vertex)
                     when (attribute.str) {
                         "POSITION" -> positions = GLTFAccessor(bufferViews[viewID], accessor)
                         "NORMAL" -> normals = GLTFAccessor(bufferViews[viewID], accessor)

@@ -10,11 +10,11 @@ class EnumerationsTest : FreeSpec({
         val noflag = setOf<BufferUsage>()
 
         // When
-        val intFlag = noflag.toFlagInt()
+        val intFlag = noflag.toFlagULong()
 
         // Then
 
-        intFlag shouldBe 0
+        intFlag shouldBe 0uL
     }
 
     "test flag to int with one flag" {
@@ -22,7 +22,7 @@ class EnumerationsTest : FreeSpec({
         val withFlags = setOf(BufferUsage.Vertex)
 
         // When
-        val intFlag = withFlags.toFlagInt()
+        val intFlag = withFlags.toFlagULong()
 
         // Then
 
@@ -34,7 +34,7 @@ class EnumerationsTest : FreeSpec({
         val withFlags = setOf(BufferUsage.Vertex, BufferUsage.CopyDst, BufferUsage.Uniform)
 
         // When
-        val intFlag = withFlags.toFlagInt()
+        val intFlag = withFlags.toFlagULong()
 
         // Then
 

@@ -1,41 +1,59 @@
 package io.ygdrasil.webgpu
 
-expect class RenderBundleEncoder : AutoCloseable {
+expect class RenderBundleEncoder : GPURenderBundleEncoder {
 
-    fun finish(descriptor: RenderBundleDescriptor = RenderBundleDescriptor()): RenderBundle
+    override var label: String
 
-    fun setBindGroup(index: GPUIndex32, bindGroup: BindGroup)
-
-    fun setPipeline(renderPipeline: RenderPipeline)
-
-    fun setVertexBuffer(slot: GPUIndex32, buffer: Buffer, offset: GPUSize64 = 0u, size: GPUSize64 = buffer.size)
-
-    fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64 = 0u, size: GPUSize64 = buffer.size)
-
-    fun drawIndexed(
-        indexCount: GPUSize32,
-        instanceCount: GPUSize32 = 1u,
-        firstIndex: GPUSize32 = 0u,
-        baseVertex: GPUSignedOffset32 = 0,
-        firstInstance: GPUSize32 = 0u,
+    override fun finish(descriptor: GPURenderBundleDescriptor?): GPURenderBundle
+    override fun pushDebugGroup(groupLabel: String)
+    override fun popDebugGroup()
+    override fun insertDebugMarker(markerLabel: String)
+    override fun setBindGroup(
+        index: GPUIndex32,
+        bindGroup: GPUBindGroup?,
+        dynamicOffsetsData: List<UInt>
     )
 
-    fun draw(
+    override fun setPipeline(pipeline: GPURenderPipeline)
+    override fun setIndexBuffer(
+        buffer: GPUBuffer,
+        indexFormat: GPUIndexFormat,
+        offset: GPUSize64,
+        size: GPUSize64?
+    )
+
+    override fun setVertexBuffer(
+        slot: GPUIndex32,
+        buffer: GPUBuffer?,
+        offset: GPUSize64,
+        size: GPUSize64?
+    )
+
+    override fun draw(
         vertexCount: GPUSize32,
-        instanceCount: GPUSize32 = 1u,
-        firstVertex: GPUSize32 = 0u,
-        firstInstance: GPUSize32 = 0u,
+        instanceCount: GPUSize32,
+        firstVertex: GPUSize32,
+        firstInstance: GPUSize32
     )
 
-    /*
-     TODO add
-     fun drawIndexed(indexCount: GPUSize32, instanceCount: GPUSize32 = definedExternally, firstIndex: GPUSize32 = definedExternally, baseVertex: GPUSignedOffset32 = definedExternally, firstInstance: GPUSize32 = definedExternally): Nothing?
-     fun drawIndirect(indirectBuffer: GPUBuffer, indirectOffset: GPUSize64): Nothing?
-     fun drawIndexedIndirect(indirectBuffer: GPUBuffer, indirectOffset: GPUSize64): Nothing?
-     */
+    override fun drawIndexed(
+        indexCount: GPUSize32,
+        instanceCount: GPUSize32,
+        firstIndex: GPUSize32,
+        baseVertex: GPUSignedOffset32,
+        firstInstance: GPUSize32
+    )
+
+    override fun drawIndirect(
+        indirectBuffer: GPUBuffer,
+        indirectOffset: GPUSize64
+    )
+
+    override fun drawIndexedIndirect(
+        indirectBuffer: GPUBuffer,
+        indirectOffset: GPUSize64
+    )
 
     override fun close()
+
 }
-
-
-class RenderBundleDescriptor(val label: String? = null)

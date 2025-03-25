@@ -1,9 +1,10 @@
 package io.ygdrasil.webgpu.mapper
 
+import io.ygdrasil.webgpu.GPUSupportedLimits
 import io.ygdrasil.webgpu.Limits
 import io.ygdrasil.wgpu.WGPULimits
 
-internal fun map(input: WGPULimits): Limits = Limits(
+internal fun map(input: WGPULimits): GPUSupportedLimits = Limits(
     maxTextureDimension1D = input.maxTextureDimension1D,
     maxTextureDimension2D = input.maxTextureDimension2D,
     maxTextureDimension3D = input.maxTextureDimension3D,

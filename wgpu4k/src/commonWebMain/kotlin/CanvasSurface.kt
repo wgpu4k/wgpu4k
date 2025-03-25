@@ -1,23 +1,22 @@
 package io.ygdrasil.webgpu
 
-import io.ygdrasil.webgpu.internal.web.GPUCanvasContext
-import io.ygdrasil.webgpu.internal.web.navigator
 import io.ygdrasil.webgpu.mapper.map
 
-class CanvasSurface(private val handler: GPUCanvasContext) {
+class CanvasSurface(private val handler: WGPUCanvasContext) {
     val width: UInt
-        get() = map(handler.canvas.width)
+        get() = handler.canvas.castAs<HTMLCanvasElement>().width.asUInt()
     val height: UInt
-        get() = map(handler.canvas.height)
+        get() = handler.canvas.castAs<HTMLCanvasElement>().height.asUInt()
 
-    val preferredCanvasFormat: TextureFormat?
+    val preferredCanvasFormat: GPUTextureFormat?
         get() = navigator.gpu
             ?.getPreferredCanvasFormat()
-            ?.let { TextureFormat.of(it) }
+            ?.let { GPUTextureFormat.of(it) }
 
     fun getCurrentTexture(): SurfaceTexture {
         return handler.getCurrentTexture()
-            .let { SurfaceTexture(map(it), SurfaceTextureStatus.success) }
+            .let { Texture(it) }
+            .let { SurfaceTexture(it, SurfaceTextureStatus.success) }
     }
 
     fun present() {

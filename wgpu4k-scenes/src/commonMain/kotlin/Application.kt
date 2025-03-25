@@ -2,11 +2,11 @@ package io.ygdrasil.webgpu.examples
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.CompositeAlphaMode
-import io.ygdrasil.webgpu.Device
+import io.ygdrasil.webgpu.GPUDevice
+import io.ygdrasil.webgpu.GPUTextureUsage
 import io.ygdrasil.webgpu.Surface
 import io.ygdrasil.webgpu.SurfaceConfiguration
 import io.ygdrasil.webgpu.SurfaceRenderingContext
-import io.ygdrasil.webgpu.TextureUsage
 import io.ygdrasil.webgpu.WGPUContext
 import io.ygdrasil.webgpu.autoClosableContext
 
@@ -32,7 +32,7 @@ class Application internal constructor(
 
     internal val surface: Surface
         get() = wgpuContext.surface
-    internal val device: Device
+    internal val device: GPUDevice
         get() = wgpuContext.device
 
     private var onError = false
@@ -88,7 +88,7 @@ private fun WGPUContext.configureRenderingContext() {
         SurfaceConfiguration(
             device = device,
             format = format,
-            usage = setOf(TextureUsage.RenderAttachment, TextureUsage.CopySrc),
+            usage = setOf(GPUTextureUsage.RenderAttachment, GPUTextureUsage.CopySrc),
             alphaMode = alphaMode
         )
     )

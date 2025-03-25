@@ -1,19 +1,19 @@
 package io.ygdrasil.webgpu
 
 
-fun VertexFormat.sizeInBytes(): Int = when (this) {
-    VertexFormat.Uint8x2, VertexFormat.Sint8x2, VertexFormat.Unorm8x2, VertexFormat.Snorm8x2 -> 2
-    VertexFormat.Uint8x4, VertexFormat.Sint8x4, VertexFormat.Unorm8x4, VertexFormat.Snorm8x4, VertexFormat.Uint16x2, VertexFormat.Sint16x2, VertexFormat.Unorm16x2, VertexFormat.Snorm16x2, VertexFormat.Float16x2, VertexFormat.Float32, VertexFormat.Uint32, VertexFormat.Sint32 -> 4
-    VertexFormat.Uint16x4, VertexFormat.Sint16x4, VertexFormat.Unorm16x4, VertexFormat.Snorm16x4, VertexFormat.Float16x4, VertexFormat.Float32x2, VertexFormat.Uint32x2, VertexFormat.Sint32x2 -> 8
-    VertexFormat.Float32x3, VertexFormat.Uint32x3, VertexFormat.Sint32x3 -> 12
-    VertexFormat.Float32x4, VertexFormat.Uint32x4, VertexFormat.Sint32x4 -> 16
+fun GPUVertexFormat.sizeInBytes(): Int = when (this) {
+    GPUVertexFormat.Uint8x2, GPUVertexFormat.Sint8x2, GPUVertexFormat.Unorm8x2, GPUVertexFormat.Snorm8x2 -> 2
+    GPUVertexFormat.Uint8x4, GPUVertexFormat.Sint8x4, GPUVertexFormat.Unorm8x4, GPUVertexFormat.Snorm8x4, GPUVertexFormat.Uint16x2, GPUVertexFormat.Sint16x2, GPUVertexFormat.Unorm16x2, GPUVertexFormat.Snorm16x2, GPUVertexFormat.Float16x2, GPUVertexFormat.Float32, GPUVertexFormat.Uint32, GPUVertexFormat.Sint32 -> 4
+    GPUVertexFormat.Uint16x4, GPUVertexFormat.Sint16x4, GPUVertexFormat.Unorm16x4, GPUVertexFormat.Snorm16x4, GPUVertexFormat.Float16x4, GPUVertexFormat.Float32x2, GPUVertexFormat.Uint32x2, GPUVertexFormat.Sint32x2 -> 8
+    GPUVertexFormat.Float32x3, GPUVertexFormat.Uint32x3, GPUVertexFormat.Sint32x3 -> 12
+    GPUVertexFormat.Float32x4, GPUVertexFormat.Uint32x4, GPUVertexFormat.Sint32x4 -> 16
     else -> error("Unsupported vertex format $this")
 }
 
-fun VertexFormat.components(): Int = when (this) {
-    VertexFormat.Float32, VertexFormat.Uint32, VertexFormat.Sint32 -> 1
-    VertexFormat.Uint8x2, VertexFormat.Sint8x2, VertexFormat.Unorm8x2, VertexFormat.Snorm8x2, VertexFormat.Uint16x2, VertexFormat.Sint16x2, VertexFormat.Unorm16x2, VertexFormat.Snorm16x2, VertexFormat.Float16x2, VertexFormat.Float32x2, VertexFormat.Uint32x2, VertexFormat.Sint32x2 -> 2
-    VertexFormat.Float32x3, VertexFormat.Uint32x3, VertexFormat.Sint32x3 -> 3
-    VertexFormat.Uint8x4, VertexFormat.Sint8x4, VertexFormat.Unorm8x4, VertexFormat.Snorm8x4, VertexFormat.Uint16x4, VertexFormat.Sint16x4, VertexFormat.Unorm16x4, VertexFormat.Snorm16x4, VertexFormat.Float16x4, VertexFormat.Float32x4, VertexFormat.Uint32x4, VertexFormat.Sint32x4 -> 4
+fun GPUVertexFormat.components(): Int = when (this) {
+    GPUVertexFormat.Float32, GPUVertexFormat.Uint32, GPUVertexFormat.Sint32 -> 1
+    GPUVertexFormat.Uint8x2, GPUVertexFormat.Sint8x2, GPUVertexFormat.Unorm8x2, GPUVertexFormat.Snorm8x2, GPUVertexFormat.Uint16x2, GPUVertexFormat.Sint16x2, GPUVertexFormat.Unorm16x2, GPUVertexFormat.Snorm16x2, GPUVertexFormat.Float16x2, GPUVertexFormat.Float32x2, GPUVertexFormat.Uint32x2, GPUVertexFormat.Sint32x2 -> 2
+    GPUVertexFormat.Float32x3, GPUVertexFormat.Uint32x3, GPUVertexFormat.Sint32x3 -> 3
+    GPUVertexFormat.Uint8x4, GPUVertexFormat.Sint8x4, GPUVertexFormat.Unorm8x4, GPUVertexFormat.Snorm8x4, GPUVertexFormat.Uint16x4, GPUVertexFormat.Sint16x4, GPUVertexFormat.Unorm16x4, GPUVertexFormat.Snorm16x4, GPUVertexFormat.Float16x4, GPUVertexFormat.Float32x4, GPUVertexFormat.Uint32x4, GPUVertexFormat.Sint32x4 -> 4
     else -> error("Unsupported vertex format $this")
 }

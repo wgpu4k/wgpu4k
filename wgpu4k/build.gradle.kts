@@ -120,6 +120,7 @@ kotlin {
 
         commonMain {
             dependencies {
+                api(libs.webgpu.types)
                 implementation(libs.coroutines)
                 api(libs.kotlin.logging)
             }
@@ -139,6 +140,10 @@ kotlin {
 
         val commonNativeMain by getting {
             dependencies { api(libs.wgpu4k.native) }
+        }
+
+        val commonWebMain by getting {
+            dependencies { api(libs.webgpu.web) }
         }
 
         wasmJsMain {
