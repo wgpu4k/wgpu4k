@@ -14,12 +14,20 @@ import io.ygdrasil.wgpu.WGPULogLevel_Warn
 import io.ygdrasil.wgpu.wgpuSetLogCallback
 import io.ygdrasil.wgpu.wgpuSetLogLevel
 import kotlinx.coroutines.runBlocking
-import org.lwjgl.glfw.GLFW.*
+import org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN
+import org.lwjgl.glfw.GLFW.GLFW_KEY_PAGE_DOWN
+import org.lwjgl.glfw.GLFW.GLFW_KEY_PAGE_UP
+import org.lwjgl.glfw.GLFW.GLFW_KEY_UP
+import org.lwjgl.glfw.GLFW.GLFW_PRESS
+import org.lwjgl.glfw.GLFW.glfwPollEvents
+import org.lwjgl.glfw.GLFW.glfwSetKeyCallback
+import org.lwjgl.glfw.GLFW.glfwShowWindow
+import org.lwjgl.glfw.GLFW.glfwWindowShouldClose
 
 private val logger = KotlinLogging.logger {}
 
 val callback = WGPULogCallback.allocate(globalMemory) { level, cMessage, userdata ->
-    val message = cMessage?.toKString() ?: "empty message"
+    val message = cMessage?.data?.toKString(cMessage.length) ?: "empty message"
     when (level) {
         WGPULogLevel_Error -> logger.error { message }
         WGPULogLevel_Warn -> logger.warn { message }

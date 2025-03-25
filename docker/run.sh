@@ -1,1 +1,1 @@
- docker run -it -v ${PWD}:/app ubuntu-wgpu4k /bin/bash
+ docker run -it -v ${PWD}/..:/app ubuntu-wgpu4k /bin/bash

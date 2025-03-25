@@ -1,6 +1,8 @@
 package io.ygdrasil.webgpu
 
-expect class CommandBuffer : AutoCloseable {
+expect class CommandBuffer : GPUCommandBuffer {
+
+    override var label: String
 
     override fun close()
 }

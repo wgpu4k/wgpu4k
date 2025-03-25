@@ -1,12 +1,12 @@
 package io.ygdrasil.webgpu.examples
 
 import io.ygdrasil.webgpu.AutoClosableContext
-import io.ygdrasil.webgpu.Device
+import io.ygdrasil.webgpu.Extent3D
+import io.ygdrasil.webgpu.GPUDevice
+import io.ygdrasil.webgpu.GPUTextureFormat
+import io.ygdrasil.webgpu.GPUTextureUsage
 import io.ygdrasil.webgpu.RenderingContext
-import io.ygdrasil.webgpu.Size3D
 import io.ygdrasil.webgpu.TextureDescriptor
-import io.ygdrasil.webgpu.TextureFormat
-import io.ygdrasil.webgpu.TextureUsage
 import io.ygdrasil.webgpu.WGPUContext
 import io.ygdrasil.webgpu.examples.scenes.basic.CubemapScene
 import io.ygdrasil.webgpu.examples.scenes.basic.FractalCubeScene
@@ -46,14 +46,14 @@ suspend fun loadScenes(wgpuContext: WGPUContext, resourceBasePath: String = ""):
     val dummyTexture by lazy {
         device.createTexture(
             TextureDescriptor(
-                size = Size3D(1u, 1u),
-                format = TextureFormat.Depth24Plus,
-                usage = setOf(TextureUsage.RenderAttachment),
+                size = Extent3D(1u, 1u),
+                format = GPUTextureFormat.Depth24Plus,
+                usage = setOf(GPUTextureUsage.RenderAttachment),
             )
         ).also { with(autoClosableContext) { it.bind() } }
     }
 
-    internal val device: Device
+    internal val device: GPUDevice
         get() = context.device
 
     internal val renderingContext: RenderingContext

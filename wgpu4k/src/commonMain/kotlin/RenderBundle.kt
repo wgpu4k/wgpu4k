@@ -1,3 +1,5 @@
 package io.ygdrasil.webgpu
 
-expect class RenderBundle
+expect class RenderBundle : GPURenderBundle {
+    override var label: String
+}

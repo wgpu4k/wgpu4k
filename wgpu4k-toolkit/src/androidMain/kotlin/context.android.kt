@@ -10,13 +10,13 @@ suspend fun androidContextRenderer(surfaceHolder: SurfaceHolder, width: Int, hei
         .let { NativeAddress(it) }
     val nativeSurface = wgpu.getSurfaceFromAndroidWindow(window) ?: error("Can't create Surface")
     val adapter = wgpu.requestAdapter(nativeSurface) ?: error("Can't create Adapter")
-    val device = adapter.requestDevice() ?: error("fail to get device")
+    val device = adapter.requestDevice().getOrThrow()
     val surface = Surface(nativeSurface, width.toUInt(), height.toUInt())
     nativeSurface.computeSurfaceCapabilities(adapter)
 
     val renderingContext = when (deferredRendering) {
-        true -> TextureRenderingContext(width.toUInt(), height.toUInt(), TextureFormat.RGBA8Unorm, device)
-        false -> SurfaceRenderingContext(surface)
+        true -> TextureRenderingContext(width.toUInt(), height.toUInt(), GPUTextureFormat.RGBA8Unorm, device)
+        false -> SurfaceRenderingContext(surface, surface.supportedFormats.first())
     }
 
     return AndroidContext(

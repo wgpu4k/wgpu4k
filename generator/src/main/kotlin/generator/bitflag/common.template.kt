@@ -10,7 +10,7 @@ private fun indexToFlagValue(base: Int): Int = if (base == 0) 0 else 1 shl (base
 fun List<YamlModel.Bitflag>.toBitflagEnumerations() = templateBuilder {
     forEach { bitflag ->
         val name = bitflag.name.convertToKotlinClassName()
-        appendBlock("enum class $name(override val value: Int, override val uValue: UInt): EnumerationWithValue") {
+        appendBlock("enum class $name(override val value: ULong): EnumerationWithValue") {
             bitflag.entries
                 .forEachIndexed { index, entry ->
                     // Calculate first if that a combination
@@ -18,7 +18,7 @@ fun List<YamlModel.Bitflag>.toBitflagEnumerations() = templateBuilder {
                         ?: indexToFlagValue(index)
 
                     val name = entry.name.convertToKotlinClassName()
-                    appendLine("$name($value, ${value}u),")
+                    appendLine("$name(${value}uL),")
                 }
         }
     }

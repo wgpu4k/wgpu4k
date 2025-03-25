@@ -1,21 +1,32 @@
 package io.ygdrasil.webgpu.examples.scenes.basic
 
 import io.ygdrasil.webgpu.AutoClosableContext
-import io.ygdrasil.webgpu.BindGroup
 import io.ygdrasil.webgpu.BindGroupDescriptor
-import io.ygdrasil.webgpu.Buffer
+import io.ygdrasil.webgpu.BindGroupEntry
+import io.ygdrasil.webgpu.BufferBinding
 import io.ygdrasil.webgpu.BufferDescriptor
 import io.ygdrasil.webgpu.BufferUsage
 import io.ygdrasil.webgpu.Color
+import io.ygdrasil.webgpu.ColorAttachment
+import io.ygdrasil.webgpu.ColorTargetState
 import io.ygdrasil.webgpu.CompareFunction
 import io.ygdrasil.webgpu.CullMode
+import io.ygdrasil.webgpu.DepthStencilAttachment
+import io.ygdrasil.webgpu.DepthStencilState
+import io.ygdrasil.webgpu.Extent3D
 import io.ygdrasil.webgpu.FilterMode
+import io.ygdrasil.webgpu.FragmentState
+import io.ygdrasil.webgpu.GPUBindGroup
+import io.ygdrasil.webgpu.GPUBuffer
+import io.ygdrasil.webgpu.GPURenderPassDescriptor
+import io.ygdrasil.webgpu.GPURenderPipeline
 import io.ygdrasil.webgpu.ImageCopyExternalImage
 import io.ygdrasil.webgpu.ImageCopyTextureTagged
 import io.ygdrasil.webgpu.LoadOp
+import io.ygdrasil.webgpu.PrimitiveState
 import io.ygdrasil.webgpu.PrimitiveTopology
+import io.ygdrasil.webgpu.RenderPassColorAttachment
 import io.ygdrasil.webgpu.RenderPassDescriptor
-import io.ygdrasil.webgpu.RenderPipeline
 import io.ygdrasil.webgpu.RenderPipelineDescriptor
 import io.ygdrasil.webgpu.SamplerDescriptor
 import io.ygdrasil.webgpu.ShaderModuleDescriptor
@@ -24,26 +35,32 @@ import io.ygdrasil.webgpu.StoreOp
 import io.ygdrasil.webgpu.TextureDescriptor
 import io.ygdrasil.webgpu.TextureFormat
 import io.ygdrasil.webgpu.TextureUsage
+import io.ygdrasil.webgpu.VertexAttribute
+import io.ygdrasil.webgpu.VertexBufferLayout
 import io.ygdrasil.webgpu.VertexFormat
+import io.ygdrasil.webgpu.VertexState
 import io.ygdrasil.webgpu.WGPUContext
 import io.ygdrasil.webgpu.beginRenderPass
+import io.ygdrasil.webgpu.copyExternalImageToTexture
 import io.ygdrasil.webgpu.examples.AssetManager
 import io.ygdrasil.webgpu.examples.Scene
 import io.ygdrasil.webgpu.examples.scenes.mesh.Cube
 import io.ygdrasil.webgpu.examples.scenes.shader.fragment.sampleTextureMixColorShader
 import io.ygdrasil.webgpu.examples.scenes.shader.vertex.basicVertexShader
+import io.ygdrasil.webgpu.mapFrom
+import io.ygdrasil.webgpu.writeBuffer
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
 
 class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene(wgpuContext), AssetManager by assetManager {
 
-    lateinit var renderPipeline: RenderPipeline
+    lateinit var renderPipeline: GPURenderPipeline
     lateinit var projectionMatrix: Matrix4
-    lateinit var renderPassDescriptor: RenderPassDescriptor
-    lateinit var uniformBuffer: Buffer
-    lateinit var uniformBindGroup: BindGroup
-    lateinit var verticesBuffer: Buffer
+    lateinit var renderPassDescriptor: GPURenderPassDescriptor
+    lateinit var uniformBuffer: GPUBuffer
+    lateinit var uniformBindGroup: GPUBindGroup
+    lateinit var verticesBuffer: GPUBuffer
 
     override suspend fun initialize() = with(autoClosableContext) {
 
@@ -62,22 +79,23 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
 
         renderPipeline = device.createRenderPipeline(
             RenderPipelineDescriptor(
-                vertex = RenderPipelineDescriptor.VertexState(
+                vertex = VertexState(
+                    entryPoint = "main",
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
                             code = basicVertexShader
                         )
                     ).bind(), // bind to autoClosableContext to release it later
                     buffers = listOf(
-                        RenderPipelineDescriptor.VertexState.VertexBufferLayout(
+                        VertexBufferLayout(
                             arrayStride = Cube.cubeVertexSize,
                             attributes = listOf(
-                                RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
+                                VertexAttribute(
                                     shaderLocation = 0u,
                                     offset = Cube.cubePositionOffset,
                                     format = VertexFormat.Float32x4
                                 ),
-                                RenderPipelineDescriptor.VertexState.VertexBufferLayout.VertexAttribute(
+                                VertexAttribute(
                                     shaderLocation = 1u,
                                     offset = Cube.cubeUVOffset,
                                     format = VertexFormat.Float32x2
@@ -86,23 +104,24 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
                         )
                     )
                 ),
-                fragment = RenderPipelineDescriptor.FragmentState(
+                fragment = FragmentState(
+                    entryPoint = "main",
                     module = device.createShaderModule(
                         ShaderModuleDescriptor(
                             code = sampleTextureMixColorShader
                         )
                     ).bind(), // bind to autoClosableContext to release it later
                     targets = listOf(
-                        RenderPipelineDescriptor.FragmentState.ColorTargetState(
+                        ColorTargetState(
                             format = renderingContext.textureFormat
                         )
                     )
                 ),
-                primitive = RenderPipelineDescriptor.PrimitiveState(
+                primitive = PrimitiveState(
                     topology = PrimitiveTopology.TriangleList,
                     cullMode = CullMode.Back
                 ),
-                depthStencil = RenderPipelineDescriptor.DepthStencilState(
+                depthStencil = DepthStencilState(
                     depthWriteEnabled = true,
                     depthCompare = CompareFunction.Less,
                     format = TextureFormat.Depth24Plus
@@ -141,7 +160,7 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
         device.queue.copyExternalImageToTexture(
             ImageCopyExternalImage(source = Di3d),
             ImageCopyTextureTagged(texture = cubeTexture),
-            imageBitmapWidth to imageBitmapHeight
+            Extent3D(imageBitmapWidth, imageBitmapHeight, 0u)
         )
 
         // Create a sampler with linear filtering for smooth interpolation.
@@ -156,23 +175,19 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
             BindGroupDescriptor(
                 layout = renderPipeline.getBindGroupLayout(0u),
                 entries = listOf(
-                    BindGroupDescriptor.BindGroupEntry(
+                    BindGroupEntry(
                         binding = 0u,
-                        resource = BindGroupDescriptor.BufferBinding(
+                        resource = BufferBinding(
                             buffer = uniformBuffer
                         )
                     ),
-                    BindGroupDescriptor.BindGroupEntry(
+                    BindGroupEntry(
                         binding = 1u,
-                        resource = BindGroupDescriptor.SamplerBinding(
-                            sampler = sampler
-                        )
+                        resource = sampler
                     ),
-                    BindGroupDescriptor.BindGroupEntry(
+                    BindGroupEntry(
                         binding = 2u,
-                        resource = BindGroupDescriptor.TextureViewBinding(
-                            view = cubeTexture.createView()
-                        )
+                        resource = cubeTexture.createView().bind()
                     )
                 )
             )
@@ -180,14 +195,14 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
 
         renderPassDescriptor = RenderPassDescriptor(
             colorAttachments = listOf(
-                RenderPassDescriptor.ColorAttachment(
+                ColorAttachment(
                     view = dummyTexture.createView().bind(), // Assigned later
                     loadOp = LoadOp.Clear,
                     clearValue = Color(0.5, 0.5, 0.5, 1.0),
                     storeOp = StoreOp.Store,
                 )
             ),
-            depthStencilAttachment = RenderPassDescriptor.DepthStencilAttachment(
+            depthStencilAttachment = DepthStencilAttachment(
                 view = depthTexture.createView(),
                 depthClearValue = 1.0f,
                 depthLoadOp = LoadOp.Clear,
@@ -215,9 +230,9 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
             transformationMatrix.size.toULong()
         )
 
-        renderPassDescriptor = renderPassDescriptor.copy(
+        renderPassDescriptor = (renderPassDescriptor as RenderPassDescriptor).copy(
             colorAttachments = listOf(
-                renderPassDescriptor.colorAttachments[0].copy(
+                (renderPassDescriptor.colorAttachments[0] as RenderPassColorAttachment).copy(
                     view = renderingContext.getCurrentTexture()
                         .bind()
                         .createView()

@@ -1,16 +1,16 @@
 package io.ygdrasil.webgpu.examples.helper.glb
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.ygdrasil.webgpu.Device
-import io.ygdrasil.webgpu.ShaderModule
+import io.ygdrasil.webgpu.GPUDevice
+import io.ygdrasil.webgpu.GPUShaderModule
 import io.ygdrasil.webgpu.ShaderModuleDescriptor
 
 private val logger = KotlinLogging.logger {}
 
-class ShaderCache(private val device: Device) {
-    private val shaderCache: MutableMap<String, ShaderModule> = mutableMapOf()
+class ShaderCache(private val device: GPUDevice) {
+    private val shaderCache: MutableMap<String, GPUShaderModule> = mutableMapOf()
 
-    fun getShader(hasNormals: Boolean, hasUVs: Boolean, hasColorTexture: Boolean): ShaderModule {
+    fun getShader(hasNormals: Boolean, hasUVs: Boolean, hasColorTexture: Boolean): GPUShaderModule {
         var shaderID = "io.ygdrasil.wgpu.examples/helper/glb"
         if (hasNormals) {
             shaderID += "n"

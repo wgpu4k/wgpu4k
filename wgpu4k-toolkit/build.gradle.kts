@@ -103,6 +103,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(projects.wgpu4k)
+                api(libs.webgpu.descriptors)
             }
         }
 
@@ -148,9 +149,11 @@ kotlin {
 
         }
 
-        androidMain {
-            dependencies {
-                implementation(libs.android.native.helper)
+        if (isAndroidConfigured) {
+            androidMain {
+                dependencies {
+                    implementation(libs.android.native.helper)
+                }
             }
         }
     }

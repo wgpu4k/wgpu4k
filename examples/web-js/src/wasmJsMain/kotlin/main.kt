@@ -1,7 +1,9 @@
+@file:Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
+
+import io.ygdrasil.webgpu.HTMLCanvasElement
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.DocumentReadyState
-import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.LOADING
 
 fun main() {

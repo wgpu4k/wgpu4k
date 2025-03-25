@@ -21,18 +21,22 @@ import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetStencilReference
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetVertexBuffer
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetViewport
 
-actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) {
+actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) : GPURenderPassEncoder {
 
-    actual fun end() {
+    actual override var label: String
+        get() = TODO("Not yet implemented")
+        set(value) {}
+
+    actual override fun end() {
         wgpuRenderPassEncoderEnd(handler)
         close()
     }
 
-    actual fun setPipeline(renderPipeline: RenderPipeline) {
-        wgpuRenderPassEncoderSetPipeline(handler, renderPipeline.handler)
+    actual override fun setPipeline(pipeline: GPURenderPipeline) {
+        wgpuRenderPassEncoderSetPipeline(handler, (pipeline as RenderPipeline).handler)
     }
 
-    actual fun draw(
+    actual override fun draw(
         vertexCount: GPUSize32,
         instanceCount: GPUSize32,
         firstVertex: GPUSize32,
@@ -41,7 +45,7 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) {
         wgpuRenderPassEncoderDraw(handler, vertexCount, instanceCount, firstVertex, firstInstance)
     }
 
-    actual fun drawIndexed(
+    actual override fun drawIndexed(
         indexCount: GPUSize32,
         instanceCount: GPUSize32,
         firstIndex: GPUSize32,
@@ -51,56 +55,67 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) {
         wgpuRenderPassEncoderDrawIndexed(handler, indexCount, instanceCount, firstIndex, baseVertex, firstInstance)
     }
 
-    actual fun drawIndirect(indirectBuffer: Buffer, indirectOffset: GPUSize64) {
-        wgpuRenderPassEncoderDrawIndexedIndirect(handler, indirectBuffer.handler, indirectOffset)
+    actual override fun drawIndirect(indirectBuffer: GPUBuffer, indirectOffset: GPUSize64) {
+        wgpuRenderPassEncoderDrawIndexedIndirect(handler, (indirectBuffer as Buffer).handler, indirectOffset)
     }
 
-    actual fun drawIndexedIndirect(indirectBuffer: Buffer, indirectOffset: GPUSize64) {
-        wgpuRenderPassEncoderDrawIndexedIndirect(handler, indirectBuffer.handler, indirectOffset)
+    actual override fun drawIndexedIndirect(indirectBuffer: GPUBuffer, indirectOffset: GPUSize64) {
+        wgpuRenderPassEncoderDrawIndexedIndirect(handler, (indirectBuffer as Buffer).handler, indirectOffset)
     }
 
-    actual fun setBindGroup(index: UInt, bindGroup: BindGroup, dynamicOffsets: List<UInt>) = memoryScope { scope ->
+    actual override fun setBindGroup(
+        index: GPUIndex32,
+        bindGroup: GPUBindGroup?,
+        dynamicOffsetsData: List<UInt>
+    ) = memoryScope { scope ->
         wgpuRenderPassEncoderSetBindGroup(
             handler,
             index,
-            bindGroup.handler,
-            dynamicOffsets.size.toULong(),
-            scope.map(dynamicOffsets)
+            (bindGroup as BindGroup).handler,
+            dynamicOffsetsData.size.toULong(),
+            scope.map(dynamicOffsetsData)
         )
     }
 
-    actual fun setVertexBuffer(slot: UInt, buffer: Buffer) {
+    actual override fun setVertexBuffer(
+        slot: GPUIndex32,
+        buffer: GPUBuffer?,
+        offset: GPUSize64,
+        size: GPUSize64?
+    ) {
+        val size = size ?: (buffer?.size?.minus(offset) ?: 0u)
         wgpuRenderPassEncoderSetVertexBuffer(
             handler,
             slot,
-            buffer.handler,
-            0u,
-            buffer.size
+            buffer?.let {(buffer as Buffer).handler},
+            offset,
+            size
         )
     }
 
-    actual fun setIndexBuffer(buffer: Buffer, indexFormat: IndexFormat, offset: GPUSize64, size: GPUSize64) {
-        wgpuRenderPassEncoderSetIndexBuffer(handler, buffer.handler, indexFormat.value, offset, size)
+    actual override fun setIndexBuffer(buffer: GPUBuffer, indexFormat: GPUIndexFormat, offset: GPUSize64, size: GPUSize64?) {
+        val size = size ?: buffer.size.minus(offset)
+        wgpuRenderPassEncoderSetIndexBuffer(handler, (buffer as Buffer).handler, indexFormat.value, offset, size)
     }
 
-    actual fun executeBundles(bundles: List<RenderBundle>) = memoryScope { scope ->
+    actual override fun executeBundles(bundles: List<GPURenderBundle>) = memoryScope { scope ->
         wgpuRenderPassEncoderExecuteBundles(
             handler,
             bundles.size.toULong(),
-            scope.bufferOfAddresses(bundles.map { it.handler.handler })
+            scope.bufferOfAddresses(bundles.map { (it as RenderBundle).handler.handler })
                 .handler
                 .let { ArrayHolder(it) }
         )
     }
 
-    actual fun setViewport(x: Float, y: Float, width: Float, height: Float, minDepth: Float, maxDepth: Float) {
+    actual override fun setViewport(x: Float, y: Float, width: Float, height: Float, minDepth: Float, maxDepth: Float) {
         wgpuRenderPassEncoderSetViewport(
             handler,
             x, y, width, height, minDepth, maxDepth
         )
     }
 
-    actual fun setScissorRect(
+    actual override fun setScissorRect(
         x: GPUIntegerCoordinate,
         y: GPUIntegerCoordinate,
         width: GPUIntegerCoordinate,
@@ -109,24 +124,36 @@ actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) {
         wgpuRenderPassEncoderSetScissorRect(handler, x, y, width, height)
     }
 
-    actual fun setBlendConstant(color: Color) = memoryScope { scope ->
+    actual override fun setBlendConstant(color: GPUColor) = memoryScope { scope ->
         wgpuRenderPassEncoderSetBlendConstant(handler, scope.map(color))
     }
 
-    actual fun setStencilReference(reference: GPUStencilValue) {
+    actual override fun setStencilReference(reference: GPUStencilValue) {
         wgpuRenderPassEncoderSetStencilReference(handler, reference)
     }
 
-    actual fun beginOcclusionQuery(queryIndex: GPUSize32) {
+    actual override fun beginOcclusionQuery(queryIndex: GPUSize32) {
         wgpuRenderPassEncoderBeginOcclusionQuery(handler, queryIndex)
     }
 
-    actual fun endOcclusionQuery() {
+    actual override fun endOcclusionQuery() {
         wgpuRenderPassEncoderEndOcclusionQuery(handler)
     }
 
     private fun close() {
         wgpuRenderPassEncoderRelease(handler)
+    }
+
+    actual override fun pushDebugGroup(groupLabel: String) {
+        TODO("Not yet implemented")
+    }
+
+    actual override fun popDebugGroup() {
+        TODO("Not yet implemented")
+    }
+
+    actual override fun insertDebugMarker(markerLabel: String) {
+        TODO("Not yet implemented")
     }
 
 }

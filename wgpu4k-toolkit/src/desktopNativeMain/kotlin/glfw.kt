@@ -40,13 +40,13 @@ suspend fun glfwContextRenderer(
         ?: error("fail to get adapter")
 
     val device = adapter.requestDevice()
-        ?: error("fail to get device")
+        .getOrThrow()
 
     nativeSurface.computeSurfaceCapabilities(adapter)
 
     val renderingContext = when (deferredRendering) {
-        true -> TextureRenderingContext(256u, 256u, TextureFormat.RGBA8Unorm, device)
-        false -> SurfaceRenderingContext(surface)
+        true -> TextureRenderingContext(256u, 256u, GPUTextureFormat.RGBA8Unorm, device)
+        false -> SurfaceRenderingContext(surface, surface.supportedFormats.first())
     }
 
     return GLFWContext(

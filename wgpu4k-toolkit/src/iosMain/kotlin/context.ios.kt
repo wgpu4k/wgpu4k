@@ -18,14 +18,14 @@ suspend fun iosContextRenderer(view: MTKView, width: Int, height: Int, deferredR
     val instance = WGPU.createInstance() ?: error("Can't create WGPU instance")
     val nativeSurface = instance.getSurfaceFromMetalLayer(layerPointer.let(::NativeAddress)) ?: error("Can't create Surface")
     val adapter = instance.requestAdapter(nativeSurface) ?: error("Can't create Adapter")
-    val device = adapter.requestDevice() ?: error("fail to get device")
+    val device = adapter.requestDevice().getOrThrow()
     val surface = Surface(nativeSurface, width.toUInt(), height.toUInt())
 
     nativeSurface.computeSurfaceCapabilities(adapter)
 
     val renderingContext = when (deferredRendering) {
-        true -> TextureRenderingContext(width.toUInt(), height.toUInt(), TextureFormat.RGBA8Unorm, device)
-        false -> SurfaceRenderingContext(surface)
+        true -> TextureRenderingContext(width.toUInt(), height.toUInt(), GPUTextureFormat.RGBA8Unorm, device)
+        false -> SurfaceRenderingContext(surface, surface.supportedFormats.first())
     }
 
     return IosContext(

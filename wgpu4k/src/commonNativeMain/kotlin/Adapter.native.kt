@@ -3,43 +3,58 @@ package io.ygdrasil.webgpu
 import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPUAdapter
-import io.ygdrasil.wgpu.WGPUAdapterRequestDeviceCallback
-import io.ygdrasil.wgpu.WGPUDevice
-import io.ygdrasil.wgpu.WGPUSupportedLimits
+import io.ygdrasil.wgpu.WGPULimits
+import io.ygdrasil.wgpu.WGPURequestDeviceCallback
+import io.ygdrasil.wgpu.WGPURequestDeviceCallbackInfo
+import io.ygdrasil.wgpu.WGPURequestDeviceStatus_Success
 import io.ygdrasil.wgpu.wgpuAdapterGetLimits
 import io.ygdrasil.wgpu.wgpuAdapterHasFeature
 import io.ygdrasil.wgpu.wgpuAdapterRelease
 import io.ygdrasil.wgpu.wgpuAdapterRequestDevice
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
-actual class Adapter(internal val handler: WGPUAdapter) : AutoCloseable {
+actual class Adapter(internal val handler: WGPUAdapter) : GPUAdapter {
 
-    actual val features: Set<FeatureName> by lazy {
-        FeatureName.entries
+    actual override val info: GPUAdapterInfo
+        get() = TODO("Not yet implemented")
+    actual override val isFallbackAdapter: Boolean
+        get() = TODO("Not yet implemented")
+
+    actual override val features: GPUSupportedFeatures by lazy {
+        GPUFeatureName.entries
             .mapNotNull { feature ->
                 feature.takeIf { wgpuAdapterHasFeature(handler, feature.value) }
             }
             .toSet()
     }
 
-    actual val limits: Limits = memoryScope { scope ->
-        val supportedLimits = WGPUSupportedLimits.allocate(scope)
+    actual override val limits: GPUSupportedLimits = memoryScope { scope ->
+        val supportedLimits = WGPULimits.allocate(scope)
         wgpuAdapterGetLimits(handler, supportedLimits)
-        val test: Limits = map(supportedLimits.limits)
-        test
+        map(supportedLimits)
     }
 
-    actual suspend fun requestDevice(descriptor: DeviceDescriptor): Device? = memoryScope { scope ->
-        var fetchedDevice: WGPUDevice? = null
+    actual override suspend fun requestDevice(descriptor: GPUDeviceDescriptor?): Result<GPUDevice> = suspendCoroutine { continuation ->
+        memoryScope { scope ->
 
-        val callback = WGPUAdapterRequestDeviceCallback.allocate(scope) { status, device, message, userdata ->
-            if (status != 1u && device == null) error("fail to get device")
-            fetchedDevice = device
+            val callback = WGPURequestDeviceCallback.allocate(scope) { status, device, message, userdata1, userdata2 ->
+                continuation.resume(when(status) {
+                    WGPURequestDeviceStatus_Success -> when (device) {
+                        null -> Result.failure(IllegalStateException("Device is null"))
+                        else -> Result.success(Device(device))
+                    }
+                    else -> Result.failure(IllegalStateException("request Device fail with status: $status and message: ${message?.data?.toKString(message.length)}"))
+                })
+            }
+
+            val callbackInfo = WGPURequestDeviceCallbackInfo.allocate(scope).apply {
+                this.callback = callback
+                this.userdata2 = scope.bufferOfAddress(callback.handler).handler
+            }
+
+            wgpuAdapterRequestDevice(handler, descriptor?.let { scope.map(it) }, callbackInfo)
         }
-
-        wgpuAdapterRequestDevice(handler, null, callback, scope.bufferOfAddress(callback.handler).handler)
-
-        fetchedDevice?.let(::Device) ?: error("fail to get device")
-
     }
 
     actual override fun close() {
