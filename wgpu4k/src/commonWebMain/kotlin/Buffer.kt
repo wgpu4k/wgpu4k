@@ -2,7 +2,7 @@ package io.ygdrasil.webgpu
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-actual class Buffer(internal val handler: WGPUBuffer) : GPUBuffer {
+actual class Buffer(val handler: WGPUBuffer) : GPUBuffer {
 
     private val logger = KotlinLogging.logger {}
 

@@ -1,5 +1,6 @@
 package io.ygdrasil.webgpu
 
+@WGPULowLevel
 expect class Buffer : GPUBuffer {
 
     override val size: GPUSize64Out

@@ -2,7 +2,7 @@ package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.map
 
-actual class CommandEncoder(private val handler: WGPUCommandEncoder) : GPUCommandEncoder {
+actual class CommandEncoder(val handler: WGPUCommandEncoder) : GPUCommandEncoder {
 
     actual override var label: String
         get() = handler.label

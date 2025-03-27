@@ -6,7 +6,7 @@ import io.ygdrasil.wgpu.wgpuComputePassEncoderDispatchWorkgroupsIndirect
 import io.ygdrasil.wgpu.wgpuComputePassEncoderEnd
 import io.ygdrasil.wgpu.wgpuComputePassEncoderSetPipeline
 
-actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : GPUComputePassEncoder {
+actual class ComputePassEncoder(val handler: WGPUComputePassEncoder) : GPUComputePassEncoder {
 
     actual override var label: String
         get() = TODO("Not yet implemented")

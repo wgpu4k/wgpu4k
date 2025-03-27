@@ -1,5 +1,6 @@
 package io.ygdrasil.webgpu
 
+@WGPULowLevel
 expect class Device : GPUDevice {
 
     override var label: String

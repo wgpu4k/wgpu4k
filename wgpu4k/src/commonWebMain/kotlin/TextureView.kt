@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu
 
-actual class TextureView(internal val handler: WGPUTextureView) : GPUTextureView {
+actual class TextureView(val handler: WGPUTextureView) : GPUTextureView {
 
     actual override var label: String
         get() = handler.label

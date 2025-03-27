@@ -14,7 +14,7 @@ import io.ygdrasil.wgpu.wgpuTextureGetUsage
 import io.ygdrasil.wgpu.wgpuTextureGetWidth
 import io.ygdrasil.wgpu.wgpuTextureRelease
 
-actual class Texture(internal val handler: WGPUTexture) : GPUTexture {
+actual class Texture(val handler: WGPUTexture) : GPUTexture {
 
     actual override var label: String
         get() = TODO("Not yet implemented")

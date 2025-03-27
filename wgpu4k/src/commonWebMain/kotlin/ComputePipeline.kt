@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu
 
-actual class ComputePipeline(internal val handler: WGPUComputePipeline) : GPUComputePipeline {
+actual class ComputePipeline(val handler: WGPUComputePipeline) : GPUComputePipeline {
     actual override var label: String
         get() = handler.label
         set(value) { handler.label = value }

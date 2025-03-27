@@ -20,7 +20,7 @@ import io.ygdrasil.wgpu.wgpuSurfaceRelease
 private val logger = KotlinLogging.logger {}
 
 class NativeSurface(
-    internal val handler: WGPUSurface
+    val handler: WGPUSurface
 ) : AutoCloseable {
 
     private var _supportedFormats: Set<TextureFormat> = setOf()

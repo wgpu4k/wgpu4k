@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu
 
-actual class CommandBuffer(internal val handler: WGPUCommandBuffer) : GPUCommandBuffer {
+actual class CommandBuffer(val handler: WGPUCommandBuffer) : GPUCommandBuffer {
 
     actual override var label: String
         get() = handler.label

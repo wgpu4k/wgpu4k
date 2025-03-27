@@ -1,5 +1,6 @@
 package io.ygdrasil.webgpu
 
+@WGPULowLevel
 expect class RenderPassEncoder: GPURenderPassEncoder {
 
     override var label: String

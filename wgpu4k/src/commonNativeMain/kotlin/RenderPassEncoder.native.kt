@@ -21,7 +21,7 @@ import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetStencilReference
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetVertexBuffer
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetViewport
 
-actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder) : GPURenderPassEncoder {
+actual class RenderPassEncoder(val handler: WGPURenderPassEncoder) : GPURenderPassEncoder {
 
     actual override var label: String
         get() = TODO("Not yet implemented")

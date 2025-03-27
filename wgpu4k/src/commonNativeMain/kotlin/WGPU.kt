@@ -30,7 +30,7 @@ import io.ygdrasil.wgpu.wgpuInstanceCreateSurface
 import io.ygdrasil.wgpu.wgpuInstanceRelease
 import io.ygdrasil.wgpu.wgpuInstanceRequestAdapter
 
-class WGPU(private val handler: WGPUInstance) : AutoCloseable {
+class WGPU(val handler: WGPUInstance) : AutoCloseable {
 
     override fun close() {
         wgpuInstanceRelease(handler)

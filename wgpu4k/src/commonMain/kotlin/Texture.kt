@@ -1,5 +1,6 @@
 package io.ygdrasil.webgpu
 
+@WGPULowLevel
 expect class Texture : GPUTexture {
     override val depthOrArrayLayers: GPUIntegerCoordinateOut
     override val dimension: GPUTextureDimension

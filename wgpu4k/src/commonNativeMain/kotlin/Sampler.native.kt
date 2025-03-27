@@ -3,7 +3,7 @@ package io.ygdrasil.webgpu
 import io.ygdrasil.wgpu.WGPUSampler
 import io.ygdrasil.wgpu.wgpuSamplerRelease
 
-actual class Sampler(internal val handler: WGPUSampler) : GPUSampler {
+actual class Sampler(val handler: WGPUSampler) : GPUSampler {
 
     actual override var label: String
         get() = TODO("Not yet implemented")
