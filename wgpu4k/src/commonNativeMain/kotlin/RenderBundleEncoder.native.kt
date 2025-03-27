@@ -12,7 +12,7 @@ import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetIndexBuffer
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetPipeline
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetVertexBuffer
 
-actual class RenderBundleEncoder(internal val handler: WGPURenderBundleEncoder) : GPURenderBundleEncoder {
+actual class RenderBundleEncoder(val handler: WGPURenderBundleEncoder) : GPURenderBundleEncoder {
 
     actual override var label: String
         get() = TODO("Not yet implemented")

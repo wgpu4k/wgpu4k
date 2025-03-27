@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu
 
-actual class BindGroupLayout(internal val handler: WGPUBindGroupLayout) : GPUBindGroupLayout {
+actual class BindGroupLayout(val handler: WGPUBindGroupLayout) : GPUBindGroupLayout {
 
     actual override var label: String
         get() = handler.label

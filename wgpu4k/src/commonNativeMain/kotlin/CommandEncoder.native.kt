@@ -12,7 +12,7 @@ import io.ygdrasil.wgpu.wgpuCommandEncoderCopyTextureToTexture
 import io.ygdrasil.wgpu.wgpuCommandEncoderFinish
 import io.ygdrasil.wgpu.wgpuCommandEncoderRelease
 
-actual class CommandEncoder(internal val handler: WGPUCommandEncoder) : GPUCommandEncoder {
+actual class CommandEncoder(val handler: WGPUCommandEncoder) : GPUCommandEncoder {
 
     actual override var label: String
         get() = TODO("Not yet implemented")

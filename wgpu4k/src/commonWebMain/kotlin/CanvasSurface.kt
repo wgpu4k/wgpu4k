@@ -2,7 +2,7 @@ package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.map
 
-class CanvasSurface(private val handler: WGPUCanvasContext) {
+class CanvasSurface(val handler: WGPUCanvasContext) {
     val width: UInt
         get() = handler.canvas.castAs<HTMLCanvasElement>().width.asUInt()
     val height: UInt

@@ -6,7 +6,7 @@ import io.ygdrasil.wgpu.WGPUCommandBuffer
 import io.ygdrasil.wgpu.WGPUQueue
 import io.ygdrasil.wgpu.wgpuQueueSubmit
 
-actual class Queue(internal val handler: WGPUQueue) : GPUQueue {
+actual class Queue(val handler: WGPUQueue) : GPUQueue {
 
     actual override var label: String
         get() = TODO("Not yet implemented")

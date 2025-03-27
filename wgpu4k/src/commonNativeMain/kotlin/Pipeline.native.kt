@@ -6,7 +6,7 @@ import io.ygdrasil.wgpu.wgpuPipelineLayoutRelease
 import io.ygdrasil.wgpu.wgpuRenderPipelineGetBindGroupLayout
 import io.ygdrasil.wgpu.wgpuRenderPipelineRelease
 
-actual class PipelineLayout(internal val handler: WGPUPipelineLayout) : GPUPipelineLayout {
+actual class PipelineLayout(val handler: WGPUPipelineLayout) : GPUPipelineLayout {
 
     actual override var label: String
         get() = TODO("Not yet implemented")
@@ -17,7 +17,7 @@ actual class PipelineLayout(internal val handler: WGPUPipelineLayout) : GPUPipel
     }
 }
 
-actual class RenderPipeline(internal val handler: WGPURenderPipeline) : GPURenderPipeline {
+actual class RenderPipeline(val handler: WGPURenderPipeline) : GPURenderPipeline {
 
     actual override var label: String
         get() = TODO("Not yet implemented")

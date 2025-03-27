@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu
 
-actual class ShaderModule(internal val handler: WGPUShaderModule) : GPUShaderModule {
+actual class ShaderModule(val handler: WGPUShaderModule) : GPUShaderModule {
     actual override var label: String
         get() = handler.label
         set(value) { handler.label = value }

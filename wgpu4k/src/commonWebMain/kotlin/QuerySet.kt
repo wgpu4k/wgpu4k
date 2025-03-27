@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu
 
-actual class QuerySet(internal val handler: WGPUQuerySet): GPUQuerySet {
+actual class QuerySet(val handler: WGPUQuerySet): GPUQuerySet {
     actual override val count: GPUSize32Out
         get() = handler.count.asUInt()
     actual override val type: GPUQueryType

@@ -4,7 +4,7 @@ import io.ygdrasil.wgpu.WGPUComputePipeline
 import io.ygdrasil.wgpu.wgpuComputePipelineGetBindGroupLayout
 import io.ygdrasil.wgpu.wgpuComputePipelineRelease
 
-actual class ComputePipeline(internal val handler: WGPUComputePipeline) : GPUComputePipeline {
+actual class ComputePipeline(val handler: WGPUComputePipeline) : GPUComputePipeline {
 
     actual override var label: String
         get() = TODO("Not yet implemented")

@@ -1,5 +1,6 @@
 package io.ygdrasil.webgpu
 
+@WGPULowLevel
 expect class Queue : GPUQueue {
 
     override var label: String

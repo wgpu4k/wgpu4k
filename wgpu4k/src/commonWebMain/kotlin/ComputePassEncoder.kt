@@ -2,7 +2,7 @@ package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.map
 
-actual class ComputePassEncoder(internal val handler: WGPUComputePassEncoder) : GPUComputePassEncoder {
+actual class ComputePassEncoder(val handler: WGPUComputePassEncoder) : GPUComputePassEncoder {
     actual override var label: String
         get() = handler.label
         set(value) {

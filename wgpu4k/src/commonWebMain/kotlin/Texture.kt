@@ -2,7 +2,7 @@ package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.map
 
-actual class Texture(internal val handler: WGPUTexture) : GPUTexture {
+actual class Texture(val handler: WGPUTexture) : GPUTexture {
 
     actual override var label: String
         get() = handler.label

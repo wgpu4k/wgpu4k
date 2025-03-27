@@ -2,7 +2,7 @@ package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.map
 
-actual class RenderPassEncoder(private val handler: WGPURenderPassEncoder): GPURenderPassEncoder {
+actual class RenderPassEncoder(val handler: WGPURenderPassEncoder): GPURenderPassEncoder {
 
     actual override var label: String
         get() = handler.label

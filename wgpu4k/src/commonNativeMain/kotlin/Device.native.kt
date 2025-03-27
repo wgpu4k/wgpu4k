@@ -22,7 +22,7 @@ import io.ygdrasil.wgpu.wgpuDeviceGetQueue
 import io.ygdrasil.wgpu.wgpuDeviceHasFeature
 import io.ygdrasil.wgpu.wgpuDeviceRelease
 
-actual class Device(internal val handler: WGPUDevice) : GPUDevice {
+actual class Device(val handler: WGPUDevice) : GPUDevice {
 
     actual override var label: String
         get() = TODO("Not yet implemented")

@@ -2,7 +2,7 @@ package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.map
 
-actual class Queue(internal val handler: WGPUQueue) : GPUQueue {
+actual class Queue(val handler: WGPUQueue) : GPUQueue {
 
     actual override var label: String
         get() = handler.label

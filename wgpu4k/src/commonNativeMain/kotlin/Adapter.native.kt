@@ -14,7 +14,7 @@ import io.ygdrasil.wgpu.wgpuAdapterRequestDevice
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-actual class Adapter(internal val handler: WGPUAdapter) : GPUAdapter {
+actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
 
     actual override val info: GPUAdapterInfo
         get() = TODO("Not yet implemented")

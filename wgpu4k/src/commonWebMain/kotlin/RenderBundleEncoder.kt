@@ -3,7 +3,7 @@ package io.ygdrasil.webgpu
 import io.ygdrasil.webgpu.mapper.map
 
 actual class RenderBundleEncoder(
-    internal val handler: WGPURenderBundleEncoder,
+    val handler: WGPURenderBundleEncoder,
 ) : GPURenderBundleEncoder {
 
     actual override var label: String
