@@ -27,8 +27,6 @@ actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
 
     actual override val info: GPUAdapterInfo
         get() = TODO("Not yet implemented")
-    actual override val isFallbackAdapter: Boolean
-        get() = handler.isFallbackAdapter
 
     actual override suspend fun requestDevice(descriptor: GPUDeviceDescriptor?): Result<GPUDevice> {
         return runCatching {

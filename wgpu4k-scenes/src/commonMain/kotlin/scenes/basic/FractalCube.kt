@@ -9,9 +9,11 @@ import io.ygdrasil.webgpu.BufferUsage
 import io.ygdrasil.webgpu.Color
 import io.ygdrasil.webgpu.ColorTargetState
 import io.ygdrasil.webgpu.DepthStencilState
+import io.ygdrasil.webgpu.Extent3D
 import io.ygdrasil.webgpu.FragmentState
 import io.ygdrasil.webgpu.GPUBindGroup
 import io.ygdrasil.webgpu.GPUBuffer
+import io.ygdrasil.webgpu.GPUBufferUsage
 import io.ygdrasil.webgpu.GPUCompareFunction
 import io.ygdrasil.webgpu.GPUCullMode
 import io.ygdrasil.webgpu.GPUFilterMode
@@ -22,6 +24,7 @@ import io.ygdrasil.webgpu.GPURenderPipeline
 import io.ygdrasil.webgpu.GPUStoreOp
 import io.ygdrasil.webgpu.GPUTexture
 import io.ygdrasil.webgpu.GPUTextureFormat
+import io.ygdrasil.webgpu.GPUTextureUsage
 import io.ygdrasil.webgpu.GPUVertexFormat
 import io.ygdrasil.webgpu.ImageCopyTexture
 import io.ygdrasil.webgpu.PrimitiveState
@@ -143,7 +146,7 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		uniformBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = uniformBufferSize,
-				usage = setOf(BufferUsage.Uniform, BufferUsage.CopyDst)
+				usage = setOf(GPUBufferUsage.Uniform, GPUBufferUsage.CopyDst)
 			)
 		).bind()
 
@@ -151,9 +154,9 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		// sample it on the next frame.
 		cubeTexture = device.createTexture(
 			TextureDescriptor(
-				size = Size3D(renderingContext.width, renderingContext.height),
+				size = Extent3D(renderingContext.width, renderingContext.height),
 				format = renderingContext.textureFormat,
-				usage = setOf(TextureUsage.TextureBinding, TextureUsage.CopyDst),
+				usage = setOf(GPUTextureUsage.TextureBinding, GPUTextureUsage.CopyDst),
 			)
 		)
 

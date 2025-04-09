@@ -6,5 +6,6 @@ internal data class AdapterInfo(
     override val device: String,
     override val subgroupMaxSize: UInt,
     override val subgroupMinSize: UInt,
-    override val vendor: String
+    override val vendor: String,
+    override val isFallbackAdapter: Boolean
 ): GPUAdapterInfo

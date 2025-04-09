@@ -11,5 +11,6 @@ internal fun map(input: WGPUAdapterInfo): GPUAdapterInfo = AdapterInfo(
     device = input.device,
     description = input.description,
     subgroupMinSize = input.subgroupMinSize.asUInt(),
-    subgroupMaxSize = input.subgroupMaxSize.asUInt()
+    subgroupMaxSize = input.subgroupMaxSize.asUInt(),
+    isFallbackAdapter = input.isFallbackAdapter
 )

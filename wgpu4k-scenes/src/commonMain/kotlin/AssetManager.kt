@@ -1,8 +1,8 @@
 package io.ygdrasil.webgpu.examples
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.ygdrasil.webgpu.GPUTextureFormat
 import io.ygdrasil.webgpu.ImageBitmapHolder
-import io.ygdrasil.webgpu.TextureFormat
 import io.ygdrasil.webgpu.examples.helper.glb.GLTF2
 import io.ygdrasil.webgpu.examples.helper.glb.readGLB
 import korlibs.image.bitmap.Bitmap32
@@ -34,7 +34,7 @@ interface AssetManager {
     val boxMesh: GLTF2
 }
 
-suspend fun bitmapFrom(textureFormat: TextureFormat, path: String): ImageBitmapHolder = (resourcesVfs[path]
+suspend fun bitmapFrom(textureFormat: GPUTextureFormat, path: String): ImageBitmapHolder = (resourcesVfs[path]
     .takeIfExists() ?: rootLocalVfs[path].takeIfExists() ?: customVfs[path])
     .readBitmap()
     .toBMP32()
@@ -44,7 +44,7 @@ suspend fun glt2From(path: String): GLTF2 = (resourcesVfs[path]
     .takeIfExists() ?: rootLocalVfs[path].takeIfExists() ?: customVfs[path])
     .readGLB()
 
-fun Bitmap32.toBitmapHolder(textureFormat: TextureFormat): ImageBitmapHolder {
+fun Bitmap32.toBitmapHolder(textureFormat: GPUTextureFormat): ImageBitmapHolder {
     val format = when  {
         textureFormat.name.lowercase().contains("rgba") -> RGBA
         textureFormat.name.lowercase().contains("bgra") -> BGRA
@@ -56,7 +56,7 @@ fun Bitmap32.toBitmapHolder(textureFormat: TextureFormat): ImageBitmapHolder {
 
 internal expect fun Bitmap32.toBitmapHolder(textureFormat: ColorFormat): ImageBitmapHolder
 
-suspend fun genericAssetManager(textureFormat: TextureFormat, resourceBasePath: String = "") = GenericAssetManager(
+suspend fun genericAssetManager(textureFormat: GPUTextureFormat, resourceBasePath: String = "") = GenericAssetManager(
     bitmapFrom(textureFormat, "${resourceBasePath}assets/img/Di-3d.png"),
     bitmapFrom(textureFormat, "${resourceBasePath}assets/img/cubemap/posx.png"),
     bitmapFrom(textureFormat, "${resourceBasePath}assets/img/cubemap/negx.png"),

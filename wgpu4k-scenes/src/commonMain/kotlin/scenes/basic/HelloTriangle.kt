@@ -2,15 +2,15 @@ package io.ygdrasil.webgpu.examples.scenes.basic
 
 import io.ygdrasil.webgpu.AutoClosableContext
 import io.ygdrasil.webgpu.Color
-import io.ygdrasil.webgpu.ColorAttachment
 import io.ygdrasil.webgpu.ColorTargetState
 import io.ygdrasil.webgpu.FragmentState
+import io.ygdrasil.webgpu.GPULoadOp
 import io.ygdrasil.webgpu.GPURenderPipeline
-import io.ygdrasil.webgpu.LoadOp
+import io.ygdrasil.webgpu.GPUStoreOp
+import io.ygdrasil.webgpu.RenderPassColorAttachment
 import io.ygdrasil.webgpu.RenderPassDescriptor
 import io.ygdrasil.webgpu.RenderPipelineDescriptor
 import io.ygdrasil.webgpu.ShaderModuleDescriptor
-import io.ygdrasil.webgpu.StoreOp
 import io.ygdrasil.webgpu.VertexState
 import io.ygdrasil.webgpu.WGPUContext
 import io.ygdrasil.webgpu.beginRenderPass
@@ -62,11 +62,11 @@ class HelloTriangleScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
         encoder.beginRenderPass(
             RenderPassDescriptor(
                 colorAttachments = listOf(
-                    ColorAttachment(
+                    RenderPassColorAttachment(
                         view = texture.createView().bind(),
-                        loadOp = LoadOp.Clear,
+                        loadOp = GPULoadOp.Clear,
                         clearValue = Color(.0, .0, .0, 1.0),
-                        storeOp = StoreOp.Store
+                        storeOp = GPUStoreOp.Store
                     )
                 )
             )

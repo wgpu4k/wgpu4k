@@ -25,15 +25,23 @@ actual class CommandEncoder(val handler: WGPUCommandEncoder) : GPUCommandEncoder
         sourceOffset: GPUSize64,
         destination: GPUBuffer,
         destinationOffset: GPUSize64,
-        size: GPUSize64
+        size: GPUSize64?
     ) {
-        handler.copyBufferToBuffer(
-            (source as Buffer).handler,
-            sourceOffset.asJsNumber(),
-            (destination as Buffer).handler,
-            destinationOffset.asJsNumber(),
-            size.asJsNumber()
-        )
+        when (size) {
+            null ->         handler.copyBufferToBuffer(
+                (source as Buffer).handler,
+                sourceOffset.asJsNumber(),
+                (destination as Buffer).handler,
+                destinationOffset.asJsNumber(),
+            )
+            else -> handler.copyBufferToBuffer(
+                (source as Buffer).handler,
+                sourceOffset.asJsNumber(),
+                (destination as Buffer).handler,
+                destinationOffset.asJsNumber(),
+                size.asJsNumber()
+            )
+        }
     }
 
     actual override fun copyBufferToTexture(
