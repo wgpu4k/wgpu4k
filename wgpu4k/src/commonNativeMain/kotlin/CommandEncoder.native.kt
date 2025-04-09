@@ -75,7 +75,7 @@ actual class CommandEncoder(val handler: WGPUCommandEncoder) : GPUCommandEncoder
         sourceOffset: GPUSize64,
         destination: GPUBuffer,
         destinationOffset: GPUSize64,
-        size: GPUSize64
+        size: GPUSize64?
     ) {
         TODO("Not yet implemented")
     }

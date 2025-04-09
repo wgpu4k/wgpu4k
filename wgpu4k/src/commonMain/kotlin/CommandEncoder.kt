@@ -11,7 +11,7 @@ expect class CommandEncoder : GPUCommandEncoder {
         sourceOffset: GPUSize64,
         destination: GPUBuffer,
         destinationOffset: GPUSize64,
-        size: GPUSize64
+        size: GPUSize64?
     )
 
     override fun copyBufferToTexture(

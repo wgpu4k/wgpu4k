@@ -18,8 +18,6 @@ actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
 
     actual override val info: GPUAdapterInfo
         get() = TODO("Not yet implemented")
-    actual override val isFallbackAdapter: Boolean
-        get() = TODO("Not yet implemented")
 
     actual override val features: GPUSupportedFeatures by lazy {
         GPUFeatureName.entries
