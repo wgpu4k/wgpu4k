@@ -23,10 +23,10 @@ class NativeSurface(
     val handler: WGPUSurface
 ) : AutoCloseable {
 
-    private var _supportedFormats: Set<TextureFormat> = setOf()
+    private var _supportedFormats: Set<GPUTextureFormat> = setOf()
     private var _supportedAlphaMode: Set<CompositeAlphaMode> = setOf()
 
-    val supportedFormats: Set<TextureFormat>
+    val supportedFormats: Set<GPUTextureFormat>
         get() = _supportedFormats
     val supportedAlphaMode: Set<CompositeAlphaMode>
         get() = _supportedAlphaMode
@@ -62,7 +62,7 @@ class NativeSurface(
 
         if (_supportedFormats.isEmpty()) {
             logger.warn { "fail to get supported textures on surface, will inject rgba8unorm format" }
-            _supportedFormats = setOf(TextureFormat.RGBA8Unorm)
+            _supportedFormats = setOf(GPUTextureFormat.RGBA8Unorm)
         }
 
         if (_supportedAlphaMode.isEmpty()) {
@@ -79,7 +79,7 @@ class NativeSurface(
                 .readUInts(it)
         }
         .map {
-            TextureFormat.of(it)
+            GPUTextureFormat.of(it)
                 .also { if (it == null) logger.warn { "ignoring undefined format with value $it" } }
         }
         .filterNotNull()

@@ -7,9 +7,7 @@ import io.ygdrasil.webgpu.BindGroupLayoutDescriptor
 import io.ygdrasil.webgpu.BindGroupLayoutEntry
 import io.ygdrasil.webgpu.BufferBinding
 import io.ygdrasil.webgpu.BufferBindingLayout
-import io.ygdrasil.webgpu.BufferBindingType
 import io.ygdrasil.webgpu.BufferDescriptor
-import io.ygdrasil.webgpu.BufferUsage
 import io.ygdrasil.webgpu.ColorTargetState
 import io.ygdrasil.webgpu.CompareFunction
 import io.ygdrasil.webgpu.DepthStencilState
@@ -318,13 +316,13 @@ class GLTFBufferView(bufferView: GLTF2.BufferView, buffer: GLTF2.Buffer) {
     var buffer: ByteArray
     var needsUpload = false
     var gpuBuffer: GPUBuffer? = null
-    private val usage = mutableSetOf<BufferUsage>()
+    private val usage = mutableSetOf<GPUBufferUsage>()
 
     init {
         this.buffer = buffer.buffer.getS8Array(byteOffset, length)
     }
 
-    internal fun addUsage(usage: BufferUsage) {
+    internal fun addUsage(usage: GPUBufferUsage) {
         this.usage.add(usage)
     }
 
@@ -420,7 +418,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
                     BindGroupLayoutEntry(
                         binding = 0u,
                         visibility = setOf(GPUShaderStage.Vertex),
-                        buffer = BufferBindingLayout(type = BufferBindingType.Uniform)
+                        buffer = BufferBindingLayout(type = GPUBufferBindingType.Uniform)
                     )
                 )
             )
