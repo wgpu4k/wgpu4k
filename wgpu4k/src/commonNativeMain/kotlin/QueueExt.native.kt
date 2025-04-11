@@ -27,8 +27,8 @@ actual class ImageBitmapHolder(
 actual sealed interface DrawableHolder
 
 actual fun GPUQueue.copyExternalImageToTexture(
-    source: ImageCopyExternalImage,
-    destination: ImageCopyTextureTagged,
+    source: @Suppress("DEPRECATION") ImageCopyExternalImage,
+    destination: @Suppress("DEPRECATION") ImageCopyTextureTagged,
     copySize: GPUExtent3D
 ) = memoryScope { scope ->
 
@@ -56,7 +56,7 @@ actual fun GPUQueue.copyExternalImageToTexture(
 
 }
 
-internal fun MemoryAllocator.map(input: ImageCopyTextureTagged) =
+internal fun MemoryAllocator.map(input: @Suppress("DEPRECATION") ImageCopyTextureTagged) =
     WGPUTexelCopyTextureInfo.allocate(this).also { output ->
         output.texture = (input.texture as Texture).handler
         output.mipLevel = input.mipLevel

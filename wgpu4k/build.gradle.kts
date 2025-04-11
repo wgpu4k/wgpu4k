@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinHierarchyTemplate
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
@@ -168,7 +169,13 @@ kotlin {
     }
 
     compilerOptions {
+        // Workaround for https://github.com/kotest/kotest/issues/4521 (fixed but not released)
         //allWarningsAsErrors = true
+        tasks.withType<KotlinCompilationTask<*>>().configureEach {
+            compilerOptions {
+                allWarningsAsErrors = !name.contains("test", ignoreCase = true)
+            }
+        }
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 }
