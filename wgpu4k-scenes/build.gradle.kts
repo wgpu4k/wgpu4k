@@ -61,7 +61,7 @@ kotlin {
 
     compilerOptions {
         // TODO fiw warning and uncomment
-        //allWarningsAsErrors = true
+        allWarningsAsErrors = true
     }
 }
 

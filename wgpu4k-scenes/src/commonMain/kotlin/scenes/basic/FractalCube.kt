@@ -5,7 +5,6 @@ import io.ygdrasil.webgpu.BindGroupDescriptor
 import io.ygdrasil.webgpu.BindGroupEntry
 import io.ygdrasil.webgpu.BufferBinding
 import io.ygdrasil.webgpu.BufferDescriptor
-import io.ygdrasil.webgpu.BufferUsage
 import io.ygdrasil.webgpu.Color
 import io.ygdrasil.webgpu.ColorTargetState
 import io.ygdrasil.webgpu.DepthStencilState
@@ -26,7 +25,6 @@ import io.ygdrasil.webgpu.GPUTexture
 import io.ygdrasil.webgpu.GPUTextureFormat
 import io.ygdrasil.webgpu.GPUTextureUsage
 import io.ygdrasil.webgpu.GPUVertexFormat
-import io.ygdrasil.webgpu.ImageCopyTexture
 import io.ygdrasil.webgpu.PrimitiveState
 import io.ygdrasil.webgpu.RenderPassColorAttachment
 import io.ygdrasil.webgpu.RenderPassDepthStencilAttachment
@@ -34,9 +32,8 @@ import io.ygdrasil.webgpu.RenderPassDescriptor
 import io.ygdrasil.webgpu.RenderPipelineDescriptor
 import io.ygdrasil.webgpu.SamplerDescriptor
 import io.ygdrasil.webgpu.ShaderModuleDescriptor
-import io.ygdrasil.webgpu.Size3D
+import io.ygdrasil.webgpu.TexelCopyTextureInfo
 import io.ygdrasil.webgpu.TextureDescriptor
-import io.ygdrasil.webgpu.TextureUsage
 import io.ygdrasil.webgpu.VertexAttribute
 import io.ygdrasil.webgpu.VertexBufferLayout
 import io.ygdrasil.webgpu.VertexState
@@ -73,7 +70,7 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		verticesBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = (cubeVertexArray.size * Float.SIZE_BYTES).toULong(),
-				usage = setOf(BufferUsage.Vertex),
+				usage = setOf(GPUBufferUsage.Vertex),
 				mappedAtCreation = true
 			)
 		)
@@ -136,9 +133,9 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 		val depthTexture = device.createTexture(
 			TextureDescriptor(
-				size = Size3D(renderingContext.width, renderingContext.height),
+				size = Extent3D(renderingContext.width, renderingContext.height),
 				format = GPUTextureFormat.Depth24Plus,
-				usage = setOf(TextureUsage.RenderAttachment),
+				usage = setOf(GPUTextureUsage.RenderAttachment),
 			)
 		).bind()
 
@@ -253,9 +250,9 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 
 		encoder.copyTextureToTexture(
-			source = ImageCopyTexture(texture = swapChainTexture),
-			destination = ImageCopyTexture(texture = cubeTexture),
-			copySize = Size3D(renderingContext.width, renderingContext.height)
+			source = TexelCopyTextureInfo(texture = swapChainTexture),
+			destination = TexelCopyTextureInfo(texture = cubeTexture),
+			copySize = Extent3D(renderingContext.width, renderingContext.height)
 		)
 
 		val commandBuffer = encoder.finish()

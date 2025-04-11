@@ -5,35 +5,33 @@ import io.ygdrasil.webgpu.BindGroupDescriptor
 import io.ygdrasil.webgpu.BindGroupEntry
 import io.ygdrasil.webgpu.BufferBinding
 import io.ygdrasil.webgpu.BufferDescriptor
-import io.ygdrasil.webgpu.BufferUsage
 import io.ygdrasil.webgpu.Color
-import io.ygdrasil.webgpu.ColorAttachment
 import io.ygdrasil.webgpu.ColorTargetState
-import io.ygdrasil.webgpu.CompareFunction
-import io.ygdrasil.webgpu.CullMode
-import io.ygdrasil.webgpu.DepthStencilAttachment
 import io.ygdrasil.webgpu.DepthStencilState
 import io.ygdrasil.webgpu.Extent3D
 import io.ygdrasil.webgpu.FragmentState
 import io.ygdrasil.webgpu.GPUBindGroup
 import io.ygdrasil.webgpu.GPUBuffer
+import io.ygdrasil.webgpu.GPUBufferUsage
+import io.ygdrasil.webgpu.GPUCompareFunction
+import io.ygdrasil.webgpu.GPUCullMode
+import io.ygdrasil.webgpu.GPULoadOp
+import io.ygdrasil.webgpu.GPUPrimitiveTopology
 import io.ygdrasil.webgpu.GPURenderPassDescriptor
 import io.ygdrasil.webgpu.GPURenderPipeline
+import io.ygdrasil.webgpu.GPUStoreOp
 import io.ygdrasil.webgpu.GPUTextureFormat
 import io.ygdrasil.webgpu.GPUTextureUsage
-import io.ygdrasil.webgpu.LoadOp
+import io.ygdrasil.webgpu.GPUVertexFormat
 import io.ygdrasil.webgpu.PrimitiveState
-import io.ygdrasil.webgpu.PrimitiveTopology
 import io.ygdrasil.webgpu.RenderPassColorAttachment
+import io.ygdrasil.webgpu.RenderPassDepthStencilAttachment
 import io.ygdrasil.webgpu.RenderPassDescriptor
 import io.ygdrasil.webgpu.RenderPipelineDescriptor
 import io.ygdrasil.webgpu.ShaderModuleDescriptor
-import io.ygdrasil.webgpu.StoreOp
 import io.ygdrasil.webgpu.TextureDescriptor
-import io.ygdrasil.webgpu.TextureFormat
 import io.ygdrasil.webgpu.VertexAttribute
 import io.ygdrasil.webgpu.VertexBufferLayout
-import io.ygdrasil.webgpu.VertexFormat
 import io.ygdrasil.webgpu.VertexState
 import io.ygdrasil.webgpu.WGPUContext
 import io.ygdrasil.webgpu.beginRenderPass
@@ -68,7 +66,7 @@ class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		verticesBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = (Cube.cubeVertexArray.size * Float.SIZE_BYTES).toULong(),
-				usage = setOf(BufferUsage.Vertex),
+				usage = setOf(GPUBufferUsage.Vertex),
 				mappedAtCreation = true
 			)
 		)
@@ -93,12 +91,12 @@ class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 								VertexAttribute(
 									shaderLocation = 0u,
 									offset = Cube.cubePositionOffset,
-									format = VertexFormat.Float32x4
+									format = GPUVertexFormat.Float32x4
 								),
 								VertexAttribute(
 									shaderLocation = 1u,
 									offset = Cube.cubeUVOffset,
-									format = VertexFormat.Float32x2
+									format = GPUVertexFormat.Float32x2
 								)
 							)
 						)
@@ -118,13 +116,13 @@ class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 					)
 				),
 				primitive = PrimitiveState(
-					topology = PrimitiveTopology.TriangleList,
-					cullMode = CullMode.Back
+					topology = GPUPrimitiveTopology.TriangleList,
+					cullMode = GPUCullMode.Back
 				),
 				depthStencil = DepthStencilState(
 					depthWriteEnabled = true,
-					depthCompare = CompareFunction.Less,
-					format = TextureFormat.Depth24Plus
+					depthCompare = GPUCompareFunction.Less,
+					format = GPUTextureFormat.Depth24Plus
 				)
 			)
 		).bind()
@@ -141,7 +139,7 @@ class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		uniformBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = uniformBufferSize,
-				usage = setOf(BufferUsage.Uniform, BufferUsage.CopyDst)
+				usage = setOf(GPUBufferUsage.Uniform, GPUBufferUsage.CopyDst)
 			)
 		).bind()
 
@@ -161,18 +159,18 @@ class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
 		renderPassDescriptor = RenderPassDescriptor(
 			colorAttachments = listOf(
-				ColorAttachment(
+				RenderPassColorAttachment(
 					view = dummyTexture.createView().bind(), // Assigned later
-					loadOp = LoadOp.Clear,
+					loadOp = GPULoadOp.Clear,
 					clearValue = Color(0.5, 0.5, 0.5, 1.0),
-					storeOp = StoreOp.Store,
+					storeOp = GPUStoreOp.Store,
 				)
 			),
-			depthStencilAttachment = DepthStencilAttachment(
+			depthStencilAttachment = RenderPassDepthStencilAttachment(
 				view = depthTexture.createView(),
 				depthClearValue = 1.0f,
-				depthLoadOp = LoadOp.Clear,
-				depthStoreOp = StoreOp.Store
+				depthLoadOp = GPULoadOp.Clear,
+				depthStoreOp = GPUStoreOp.Store
 			)
 		)
 

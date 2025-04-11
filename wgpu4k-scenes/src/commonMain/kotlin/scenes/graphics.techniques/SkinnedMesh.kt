@@ -28,12 +28,12 @@ import io.ygdrasil.webgpu.RenderPassDepthStencilAttachment
 import io.ygdrasil.webgpu.RenderPassDescriptor
 import io.ygdrasil.webgpu.TextureDescriptor
 import io.ygdrasil.webgpu.WGPUContext
+import io.ygdrasil.webgpu.asArraybuffer
 import io.ygdrasil.webgpu.beginRenderPass
 import io.ygdrasil.webgpu.examples.AssetManager
 import io.ygdrasil.webgpu.examples.Scene
 import io.ygdrasil.webgpu.examples.helper.glb.ShaderCache
 import io.ygdrasil.webgpu.examples.helper.glb.uploadGLBModel
-import io.ygdrasil.webgpu.writeBuffer
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -147,13 +147,9 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
             projectionMatrix
         )
 
-        device.queue.writeBuffer(
-            viewParamBuf,
-            0uL,
-            transformationMatrix,
-            0uL,
-            transformationMatrix.size.toULong()
-        )
+        transformationMatrix.asArraybuffer {
+            device.queue.writeBuffer(viewParamBuf, 0uL, it)
+        }
 
         val commandEncoder = device.createCommandEncoder().bind()
 

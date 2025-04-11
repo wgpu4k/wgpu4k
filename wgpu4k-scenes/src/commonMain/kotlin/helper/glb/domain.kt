@@ -9,7 +9,6 @@ import io.ygdrasil.webgpu.BufferBinding
 import io.ygdrasil.webgpu.BufferBindingLayout
 import io.ygdrasil.webgpu.BufferDescriptor
 import io.ygdrasil.webgpu.ColorTargetState
-import io.ygdrasil.webgpu.CompareFunction
 import io.ygdrasil.webgpu.DepthStencilState
 import io.ygdrasil.webgpu.FragmentState
 import io.ygdrasil.webgpu.GPUAddressMode
@@ -18,6 +17,7 @@ import io.ygdrasil.webgpu.GPUBindGroupLayout
 import io.ygdrasil.webgpu.GPUBuffer
 import io.ygdrasil.webgpu.GPUBufferBindingType
 import io.ygdrasil.webgpu.GPUBufferUsage
+import io.ygdrasil.webgpu.GPUCompareFunction
 import io.ygdrasil.webgpu.GPUDevice
 import io.ygdrasil.webgpu.GPUFilterMode
 import io.ygdrasil.webgpu.GPUIndexFormat
@@ -29,16 +29,13 @@ import io.ygdrasil.webgpu.GPUShaderStage
 import io.ygdrasil.webgpu.GPUTexture
 import io.ygdrasil.webgpu.GPUTextureFormat
 import io.ygdrasil.webgpu.GPUVertexFormat
-import io.ygdrasil.webgpu.IndexFormat
 import io.ygdrasil.webgpu.PipelineLayoutDescriptor
 import io.ygdrasil.webgpu.PrimitiveState
 import io.ygdrasil.webgpu.RenderBundleEncoderDescriptor
 import io.ygdrasil.webgpu.RenderPipelineDescriptor
 import io.ygdrasil.webgpu.SamplerBindingLayout
 import io.ygdrasil.webgpu.SamplerDescriptor
-import io.ygdrasil.webgpu.ShaderStage
 import io.ygdrasil.webgpu.TextureBindingLayout
-import io.ygdrasil.webgpu.TextureFormat
 import io.ygdrasil.webgpu.VertexAttribute
 import io.ygdrasil.webgpu.VertexBufferLayout
 import io.ygdrasil.webgpu.VertexState
@@ -162,7 +159,7 @@ class GLTFPrimitive(
             depthStencil = DepthStencilState(
                 format = depthFormat,
                 depthWriteEnabled = true,
-                depthCompare = CompareFunction.Less
+                depthCompare = GPUCompareFunction.Less
             )
         )
 
@@ -191,7 +188,7 @@ class GLTFPrimitive(
         }
         if (indices != null) {
             val indexFormat =
-                if (indices.componentType == GLTFComponentType.UNSIGNED_SHORT.value) IndexFormat.Uint16 else IndexFormat.Uint32
+                if (indices.componentType == GLTFComponentType.UNSIGNED_SHORT.value) GPUIndexFormat.Uint16 else GPUIndexFormat.Uint32
 
             bundleEncoder.setIndexBuffer(
                 indices.view.gpuBuffer ?: error("fail to get buffer"),
@@ -267,7 +264,7 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
             layoutEntries.add(
                 BindGroupLayoutEntry(
                     binding = 1u,
-                    visibility = setOf(ShaderStage.Fragment),
+                    visibility = setOf(GPUShaderStage.Fragment),
                     sampler = SamplerBindingLayout(),
                 )
             )
@@ -379,7 +376,7 @@ class GLBModel(val nodes: List<GLTFNode>) {
                 viewParamsLayout,
                 viewParamsBindGroup,
                 swapChainFormat,
-                TextureFormat.Depth24PlusStencil8
+                GPUTextureFormat.Depth24PlusStencil8
             )
             renderBundles.add(bundle)
         }

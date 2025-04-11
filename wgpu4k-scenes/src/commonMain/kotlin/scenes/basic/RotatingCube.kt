@@ -35,6 +35,7 @@ import io.ygdrasil.webgpu.VertexAttribute
 import io.ygdrasil.webgpu.VertexBufferLayout
 import io.ygdrasil.webgpu.VertexState
 import io.ygdrasil.webgpu.WGPUContext
+import io.ygdrasil.webgpu.asArraybuffer
 import io.ygdrasil.webgpu.beginRenderPass
 import io.ygdrasil.webgpu.examples.Scene
 import io.ygdrasil.webgpu.examples.scenes.mesh.Cube.cubePositionOffset
@@ -45,7 +46,6 @@ import io.ygdrasil.webgpu.examples.scenes.mesh.Cube.cubeVertexSize
 import io.ygdrasil.webgpu.examples.scenes.shader.fragment.vertexPositionColorShader
 import io.ygdrasil.webgpu.examples.scenes.shader.vertex.basicVertexShader
 import io.ygdrasil.webgpu.mapFrom
-import io.ygdrasil.webgpu.writeBuffer
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
@@ -71,6 +71,7 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		).bind()
 
 		// Util method to use getMappedRange
+		verticesBuffer.getMappedRange()
 		verticesBuffer.mapFrom(cubeVertexArray)
 		verticesBuffer.unmap()
 
@@ -190,13 +191,9 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			projectionMatrix
 		)
 
-		device.queue.writeBuffer(
-			uniformBuffer,
-			0u,
-			transformationMatrix,
-			0u,
-			transformationMatrix.size.toULong()
-		)
+		transformationMatrix.asArraybuffer {
+			device.queue.writeBuffer(uniformBuffer, 0u, it)
+		}
 
 		renderPassDescriptor = (renderPassDescriptor as RenderPassDescriptor).copy(
 			colorAttachments = listOf(

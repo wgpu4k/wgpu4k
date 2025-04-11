@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package io.ygdrasil.webgpu.examples.scenes.graphics.techniques
 
 import io.ygdrasil.webgpu.AutoClosableContext
@@ -7,12 +9,9 @@ import io.ygdrasil.webgpu.BlendComponent
 import io.ygdrasil.webgpu.BlendState
 import io.ygdrasil.webgpu.BufferBinding
 import io.ygdrasil.webgpu.BufferDescriptor
-import io.ygdrasil.webgpu.BufferUsage
 import io.ygdrasil.webgpu.Color
-import io.ygdrasil.webgpu.ColorAttachment
 import io.ygdrasil.webgpu.ColorTargetState
 import io.ygdrasil.webgpu.ComputePipelineDescriptor
-import io.ygdrasil.webgpu.DepthStencilAttachment
 import io.ygdrasil.webgpu.DepthStencilState
 import io.ygdrasil.webgpu.Extent3D
 import io.ygdrasil.webgpu.FragmentState
@@ -20,28 +19,29 @@ import io.ygdrasil.webgpu.GPUBindGroup
 import io.ygdrasil.webgpu.GPUBlendFactor
 import io.ygdrasil.webgpu.GPUBlendOperation
 import io.ygdrasil.webgpu.GPUBuffer
+import io.ygdrasil.webgpu.GPUBufferUsage
 import io.ygdrasil.webgpu.GPUCompareFunction
 import io.ygdrasil.webgpu.GPUComputePipeline
 import io.ygdrasil.webgpu.GPULoadOp
+import io.ygdrasil.webgpu.GPUPrimitiveTopology
 import io.ygdrasil.webgpu.GPURenderPassDescriptor
 import io.ygdrasil.webgpu.GPURenderPipeline
 import io.ygdrasil.webgpu.GPUStoreOp
 import io.ygdrasil.webgpu.GPUTextureFormat
+import io.ygdrasil.webgpu.GPUTextureUsage
 import io.ygdrasil.webgpu.GPUTextureViewDimension
 import io.ygdrasil.webgpu.GPUVertexFormat
 import io.ygdrasil.webgpu.GPUVertexStepMode
 import io.ygdrasil.webgpu.ImageCopyExternalImage
 import io.ygdrasil.webgpu.ImageCopyTextureTagged
 import io.ygdrasil.webgpu.PrimitiveState
-import io.ygdrasil.webgpu.PrimitiveTopology
 import io.ygdrasil.webgpu.ProgrammableStage
 import io.ygdrasil.webgpu.RenderPassColorAttachment
+import io.ygdrasil.webgpu.RenderPassDepthStencilAttachment
 import io.ygdrasil.webgpu.RenderPassDescriptor
 import io.ygdrasil.webgpu.RenderPipelineDescriptor
 import io.ygdrasil.webgpu.ShaderModuleDescriptor
-import io.ygdrasil.webgpu.Size3D
 import io.ygdrasil.webgpu.TextureDescriptor
-import io.ygdrasil.webgpu.TextureUsage
 import io.ygdrasil.webgpu.TextureViewDescriptor
 import io.ygdrasil.webgpu.VertexAttribute
 import io.ygdrasil.webgpu.VertexBufferLayout
@@ -97,7 +97,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         particlesBuffer = device.createBuffer(
             BufferDescriptor(
                 size = (numParticles * particleInstanceByteSize).toULong(),
-                usage = setOf(BufferUsage.Vertex, BufferUsage.Storage),
+                usage = setOf(GPUBufferUsage.Vertex, GPUBufferUsage.Storage),
             )
         ).bind()
 
@@ -172,7 +172,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                     ),
                 ),
                 primitive = PrimitiveState(
-                    topology = PrimitiveTopology.TriangleList,
+                    topology = GPUPrimitiveTopology.TriangleList,
                 ),
 
                 depthStencil = DepthStencilState(
@@ -185,9 +185,9 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
 
         val depthTexture = device.createTexture(
             TextureDescriptor(
-                size = Size3D(renderingContext.width, renderingContext.height),
+                size = Extent3D(renderingContext.width, renderingContext.height),
                 format = GPUTextureFormat.Depth24Plus,
-                usage = setOf(TextureUsage.RenderAttachment),
+                usage = setOf(GPUTextureUsage.RenderAttachment),
             )
         )
 
@@ -200,7 +200,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         uniformBuffer = device.createBuffer(
             BufferDescriptor(
                 size = uniformBufferSize.toULong(),
-                usage = setOf(BufferUsage.Uniform, BufferUsage.CopyDst),
+                usage = setOf(GPUBufferUsage.Uniform, GPUBufferUsage.CopyDst),
             )
         ).bind()
 
@@ -220,14 +220,14 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
 
         renderPassDescriptor = RenderPassDescriptor(
             colorAttachments = listOf(
-                ColorAttachment(
+                RenderPassColorAttachment(
                     view = dummyTexture.createView().bind(), // Assigned later
                     clearValue = Color(.0, .0, .0, 1.0),
                     loadOp = GPULoadOp.Clear,
                     storeOp = GPUStoreOp.Store,
                 ),
             ),
-            depthStencilAttachment = DepthStencilAttachment(
+            depthStencilAttachment = RenderPassDepthStencilAttachment(
                 view = depthTexture.createView().bind(),
 
                 depthClearValue = 1.0f,
@@ -242,7 +242,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         quadVertexBuffer = device.createBuffer(
             BufferDescriptor(
                 size = 6uL * 2uL * 4uL, // 6x vec2f
-                usage = setOf(BufferUsage.Vertex),
+                usage = setOf(GPUBufferUsage.Vertex),
                 mappedAtCreation = true,
             )
         )
@@ -273,18 +273,19 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         }
         val texture = device.createTexture(
             TextureDescriptor(
-                size = Size3D(imageBitmap.width, imageBitmap.height),
+                size = Extent3D(imageBitmap.width, imageBitmap.height),
                 mipLevelCount = numMipLevels,
                 format = GPUTextureFormat.RGBA8Unorm,
                 usage =
                     setOf(
-                        TextureUsage.TextureBinding,
-                        TextureUsage.StorageBinding,
-                        TextureUsage.CopyDst,
-                        TextureUsage.RenderAttachment
+                        GPUTextureUsage.TextureBinding,
+                        GPUTextureUsage.StorageBinding,
+                        GPUTextureUsage.CopyDst,
+                        GPUTextureUsage.RenderAttachment
                     ),
             )
         )
+        @Suppress("DEPRECATION")
         device.queue.copyExternalImageToTexture(
             ImageCopyExternalImage(source = imageBitmap),
             ImageCopyTextureTagged(texture = texture),
@@ -324,19 +325,19 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         val probabilityMapUBOBuffer = device.createBuffer(
             BufferDescriptor(
                 size = probabilityMapUBOBufferSize.toULong(),
-                usage = setOf(BufferUsage.Uniform, BufferUsage.CopyDst),
+                usage = setOf(GPUBufferUsage.Uniform, GPUBufferUsage.CopyDst),
             )
         )
         val buffer_a = device.createBuffer(
             BufferDescriptor(
                 size = textureWidth * textureHeight * 4uL,
-                usage = setOf(BufferUsage.Storage),
+                usage = setOf(GPUBufferUsage.Storage),
             )
         )
         val buffer_b = device.createBuffer(
             BufferDescriptor(
                 size = textureWidth * textureHeight * 4uL,
-                usage = setOf(BufferUsage.Storage),
+                usage = setOf(GPUBufferUsage.Storage),
             )
         )
         device.queue.writeBuffer(
@@ -413,7 +414,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         simulationUBOBuffer = device.createBuffer(
             BufferDescriptor(
                 size = simulationUBOBufferSize.toULong(),
-                usage = setOf(BufferUsage.Uniform, BufferUsage.CopyDst),
+                usage = setOf(GPUBufferUsage.Uniform, GPUBufferUsage.CopyDst),
             )
         )
 

@@ -51,24 +51,27 @@ kotlin {
                 /* All compilations shall be added to the common group by default */
                 withCompilations { true }
 
-                group("ios") {
-                    withIos()
-                }
 
-                group("desktopNative") {
-
-                    group("macos") {
-                        withMacos()
+                group("native") {
+                    group("ios") {
+                        withIos()
                     }
 
-                    group("linux") {
-                        withLinux()
-                    }
+                    group("desktopNative") {
 
-                    group("mingw") {
-                        withMingw()
-                    }
+                        group("macos") {
+                            withMacos()
+                        }
 
+                        group("linux") {
+                            withLinux()
+                        }
+
+                        group("mingw") {
+                            withMingw()
+                        }
+
+                    }
                 }
 
                 group("commonWeb") {
