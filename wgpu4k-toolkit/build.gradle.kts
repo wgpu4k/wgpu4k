@@ -8,19 +8,6 @@ plugins {
     id("publish")
 }
 
-val commonResourcesFile = getCommonProject()
-    .projectDir
-    .resolve("src")
-    .resolve("commonMain")
-    .resolve("resources")
-
-assert(commonResourcesFile.isDirectory) { "$commonResourcesFile is not a directory" }
-assert(commonResourcesFile.isNotEmpty) { "$commonResourcesFile is empty" }
-
-val resourcesDirectory = project.file("src").resolve("jvmMain").resolve("resources")
-
-val buildNativeResourcesDirectory = project.file("build").resolve("native")
-
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(22))
