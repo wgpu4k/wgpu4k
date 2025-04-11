@@ -9,12 +9,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
     alias(libs.plugins.kotest)
-    id("publish")
-    if (isAndroidConfigured) id("android")
+    publish
+    if (isAndroidConfigured) android
 }
-
-val resourcesDirectory = project.file("src")
-    .resolve("jvmMain").resolve("resources")
 
 private val hierarchyTemplate = KotlinHierarchyTemplate {
     /* natural hierarchy is only applied to default 'main'/'test' compilations (by default) */

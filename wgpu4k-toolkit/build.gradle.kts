@@ -4,8 +4,8 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
-    if (isAndroidConfigured) id("android")
-    id("publish")
+    if (isAndroidConfigured) android
+    publish
 }
 
 java {
