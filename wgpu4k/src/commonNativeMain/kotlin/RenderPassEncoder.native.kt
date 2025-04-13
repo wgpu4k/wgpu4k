@@ -12,6 +12,9 @@ import io.ygdrasil.wgpu.wgpuRenderPassEncoderDrawIndexedIndirect
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderEnd
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderEndOcclusionQuery
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderExecuteBundles
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderInsertDebugMarker
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderPopDebugGroup
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderPushDebugGroup
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderRelease
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetBindGroup
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetBlendConstant
@@ -150,16 +153,20 @@ actual class RenderPassEncoder(val handler: WGPURenderPassEncoder) : GPURenderPa
         wgpuRenderPassEncoderRelease(handler)
     }
 
-    actual override fun pushDebugGroup(groupLabel: String) {
-        TODO("Not yet implemented")
+    actual override fun pushDebugGroup(groupLabel: String) = memoryScope { scope ->
+        val groupLabelWGPUStringView = WGPUStringView.allocate(scope)
+        scope.map(groupLabel, groupLabelWGPUStringView)
+        wgpuRenderPassEncoderPushDebugGroup(handler, groupLabelWGPUStringView)
     }
 
     actual override fun popDebugGroup() {
-        TODO("Not yet implemented")
+        wgpuRenderPassEncoderPopDebugGroup(handler)
     }
 
-    actual override fun insertDebugMarker(markerLabel: String) {
-        TODO("Not yet implemented")
+    actual override fun insertDebugMarker(markerLabel: String) = memoryScope { scope ->
+        val markerLabelWGPUStringView = WGPUStringView.allocate(scope)
+        scope.map(markerLabel, markerLabelWGPUStringView)
+        wgpuRenderPassEncoderInsertDebugMarker(handler, markerLabelWGPUStringView)
     }
 
 }
