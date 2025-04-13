@@ -7,6 +7,8 @@ import io.ygdrasil.wgpu.WGPUStringView
 import io.ygdrasil.wgpu.wgpuComputePassEncoderDispatchWorkgroups
 import io.ygdrasil.wgpu.wgpuComputePassEncoderDispatchWorkgroupsIndirect
 import io.ygdrasil.wgpu.wgpuComputePassEncoderEnd
+import io.ygdrasil.wgpu.wgpuComputePassEncoderPopDebugGroup
+import io.ygdrasil.wgpu.wgpuComputePassEncoderPushDebugGroup
 import io.ygdrasil.wgpu.wgpuComputePassEncoderSetLabel
 import io.ygdrasil.wgpu.wgpuComputePassEncoderSetPipeline
 
@@ -49,16 +51,20 @@ actual class ComputePassEncoder(val handler: WGPUComputePassEncoder) : GPUComput
         wgpuComputePassEncoderEnd(handler)
     }
 
-    actual override fun pushDebugGroup(groupLabel: String) {
-        TODO("Not yet implemented")
+    actual override fun pushDebugGroup(groupLabel: String) = memoryScope { scope ->
+        val groupLabelWGPUStringView = WGPUStringView.allocate(scope)
+        scope.map(groupLabel, groupLabelWGPUStringView)
+        wgpuComputePassEncoderPushDebugGroup(handler, groupLabelWGPUStringView)
     }
 
     actual override fun popDebugGroup() {
-        TODO("Not yet implemented")
+        wgpuComputePassEncoderPopDebugGroup(handler)
     }
 
-    actual override fun insertDebugMarker(markerLabel: String) {
-        TODO("Not yet implemented")
+    actual override fun insertDebugMarker(markerLabel: String) = memoryScope { scope ->
+        val markerLabelWGPUStringView = WGPUStringView.allocate(scope)
+        scope.map(markerLabel, markerLabelWGPUStringView)
+        wgpuComputePassEncoderPushDebugGroup(handler, markerLabelWGPUStringView)
     }
 
     actual override fun setBindGroup(

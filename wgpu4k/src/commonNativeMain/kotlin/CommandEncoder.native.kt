@@ -11,6 +11,9 @@ import io.ygdrasil.wgpu.wgpuCommandEncoderCopyBufferToTexture
 import io.ygdrasil.wgpu.wgpuCommandEncoderCopyTextureToBuffer
 import io.ygdrasil.wgpu.wgpuCommandEncoderCopyTextureToTexture
 import io.ygdrasil.wgpu.wgpuCommandEncoderFinish
+import io.ygdrasil.wgpu.wgpuCommandEncoderInsertDebugMarker
+import io.ygdrasil.wgpu.wgpuCommandEncoderPopDebugGroup
+import io.ygdrasil.wgpu.wgpuCommandEncoderPushDebugGroup
 import io.ygdrasil.wgpu.wgpuCommandEncoderRelease
 import io.ygdrasil.wgpu.wgpuCommandEncoderSetLabel
 
@@ -114,16 +117,20 @@ actual class CommandEncoder(val handler: WGPUCommandEncoder) : GPUCommandEncoder
         )
     }
 
-    actual override fun pushDebugGroup(groupLabel: String) {
-        TODO("Not yet implemented")
+    actual override fun pushDebugGroup(groupLabel: String) = memoryScope { scope ->
+        val groupLabelWGPUStringView = WGPUStringView.allocate(scope)
+        scope.map(groupLabel, groupLabelWGPUStringView)
+        wgpuCommandEncoderPushDebugGroup(handler, groupLabelWGPUStringView)
     }
 
     actual override fun popDebugGroup() {
-        TODO("Not yet implemented")
+        wgpuCommandEncoderPopDebugGroup(handler)
     }
 
-    actual override fun insertDebugMarker(markerLabel: String) {
-        TODO("Not yet implemented")
+    actual override fun insertDebugMarker(markerLabel: String) = memoryScope { scope ->
+        val markerLabelWGPUStringView = WGPUStringView.allocate(scope)
+        scope.map(markerLabel, markerLabelWGPUStringView)
+        wgpuCommandEncoderInsertDebugMarker(handler, markerLabelWGPUStringView)
     }
 
     actual override fun close() {

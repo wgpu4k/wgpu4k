@@ -7,6 +7,9 @@ import io.ygdrasil.wgpu.WGPUStringView
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderDraw
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderDrawIndexed
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderFinish
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderInsertDebugMarker
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderPopDebugGroup
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderPushDebugGroup
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderRelease
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetBindGroup
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetIndexBuffer
@@ -95,15 +98,19 @@ actual class RenderBundleEncoder(val handler: WGPURenderBundleEncoder) : GPURend
         wgpuRenderBundleEncoderRelease(handler)
     }
 
-    actual override fun pushDebugGroup(groupLabel: String) {
-        TODO("Not yet implemented")
+    actual override fun pushDebugGroup(groupLabel: String) = memoryScope { scope ->
+        val groupLabelWGPUStringView = WGPUStringView.allocate(scope)
+        scope.map(groupLabel, groupLabelWGPUStringView)
+        wgpuRenderBundleEncoderPushDebugGroup(handler, groupLabelWGPUStringView)
     }
 
     actual override fun popDebugGroup() {
-        TODO("Not yet implemented")
+        wgpuRenderBundleEncoderPopDebugGroup(handler)
     }
 
-    actual override fun insertDebugMarker(markerLabel: String) {
-        TODO("Not yet implemented")
+    actual override fun insertDebugMarker(markerLabel: String) = memoryScope { scope ->
+        val markerLabelWGPUStringView = WGPUStringView.allocate(scope)
+        scope.map(markerLabel, markerLabelWGPUStringView)
+        wgpuRenderBundleEncoderInsertDebugMarker(handler, markerLabelWGPUStringView)
     }
 }
