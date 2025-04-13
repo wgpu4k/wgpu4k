@@ -9,6 +9,7 @@ import io.ygdrasil.wgpu.wgpuPipelineLayoutRelease
 import io.ygdrasil.wgpu.wgpuPipelineLayoutSetLabel
 import io.ygdrasil.wgpu.wgpuRenderPipelineGetBindGroupLayout
 import io.ygdrasil.wgpu.wgpuRenderPipelineRelease
+import io.ygdrasil.wgpu.wgpuRenderPipelineSetLabel
 
 actual class PipelineLayout(val handler: WGPUPipelineLayout) : GPUPipelineLayout {
 
@@ -29,7 +30,11 @@ actual class RenderPipeline(val handler: WGPURenderPipeline) : GPURenderPipeline
 
     actual override var label: String
         get() = TODO("Not yet implemented")
-        set(value) {}
+        set(value) = memoryScope { scope ->
+            val newLabel = WGPUStringView.allocate(scope)
+                .also { scope.map(value, it) }
+            wgpuRenderPipelineSetLabel(handler, newLabel)
+        }
 
     actual override fun getBindGroupLayout(index: UInt): GPUBindGroupLayout {
         return wgpuRenderPipelineGetBindGroupLayout(handler, index)

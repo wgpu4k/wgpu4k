@@ -6,6 +6,8 @@ import io.ygdrasil.wgpu.WGPURenderBundleEncoder
 import io.ygdrasil.wgpu.WGPUStringView
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderDraw
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderDrawIndexed
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderDrawIndexedIndirect
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderDrawIndirect
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderFinish
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderInsertDebugMarker
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderPopDebugGroup
@@ -75,14 +77,14 @@ actual class RenderBundleEncoder(val handler: WGPURenderBundleEncoder) : GPURend
         indirectBuffer: GPUBuffer,
         indirectOffset: GPUSize64
     ) {
-        TODO("Not yet implemented")
+        wgpuRenderBundleEncoderDrawIndirect(handler, (indirectBuffer as Buffer).handler, indirectOffset)
     }
 
     actual override fun drawIndexedIndirect(
         indirectBuffer: GPUBuffer,
         indirectOffset: GPUSize64
     ) {
-        TODO("Not yet implemented")
+        wgpuRenderBundleEncoderDrawIndexedIndirect(handler, (indirectBuffer as Buffer).handler, indirectOffset)
     }
 
     actual override fun draw(
