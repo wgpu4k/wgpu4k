@@ -4,16 +4,14 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinHierarchyTemplate
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
     alias(libs.plugins.kotest)
-    id("publish")
-    if (isAndroidConfigured) id("android")
+    publish
+    if (isAndroidConfigured) android
 }
-
-val resourcesDirectory = project.file("src")
-    .resolve("jvmMain").resolve("resources")
 
 private val hierarchyTemplate = KotlinHierarchyTemplate {
     /* natural hierarchy is only applied to default 'main'/'test' compilations (by default) */
@@ -168,7 +166,13 @@ kotlin {
     }
 
     compilerOptions {
+        // Workaround for https://github.com/kotest/kotest/issues/4521 (fixed but not released)
         //allWarningsAsErrors = true
+        tasks.withType<KotlinCompilationTask<*>>().configureEach {
+            compilerOptions {
+                allWarningsAsErrors = !name.contains("test", ignoreCase = true)
+            }
+        }
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 }

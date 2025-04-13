@@ -18,7 +18,7 @@ plugins {
 dependencyResolutionManagement {
 	repositories {
 		mavenLocal()
-		//wgpu4k snapshot & preview repository
+		//wgpu4k snapshot repository
 		maven("https://gitlab.com/api/v4/projects/25805863/packages/maven")
 		google()
 		mavenCentral()
