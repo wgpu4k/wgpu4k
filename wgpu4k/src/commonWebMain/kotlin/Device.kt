@@ -5,14 +5,16 @@ import io.ygdrasil.webgpu.mapper.map
 actual class Device(val handler: WGPUDevice) : GPUDevice {
     actual override var label: String
         get() = handler.label
-        set(value) { handler.label = value }
+        set(value) {
+            handler.label = value
+        }
 
     actual override val queue: GPUQueue by lazy { Queue(handler.queue) }
 
     actual override val features: Set<GPUFeatureName> by lazy {
-       GPUFeatureName.entries
-           .filter { handler.features.has(it.value.asJsString().castAs()) }
-           .toSet()
+        GPUFeatureName.entries
+            .filter { handler.features.has(it.value.asJsString().castAs()) }
+            .toSet()
     }
 
     actual override val limits: GPUSupportedLimits by lazy { map(handler.limits) }
@@ -38,9 +40,10 @@ actual class Device(val handler: WGPUDevice) : GPUDevice {
         .createPipelineLayout(map(descriptor))
         .let(::PipelineLayout)
 
-    actual override fun createRenderPipeline(descriptor: GPURenderPipelineDescriptor): GPURenderPipeline = map(descriptor)
-        .let { handler.createRenderPipeline(it) }
-        .let(::RenderPipeline)
+    actual override fun createRenderPipeline(descriptor: GPURenderPipelineDescriptor): GPURenderPipeline =
+        map(descriptor)
+            .let { handler.createRenderPipeline(it) }
+            .let(::RenderPipeline)
 
     actual override suspend fun createComputePipelineAsync(descriptor: GPUComputePipelineDescriptor): Result<GPUComputePipeline> {
         TODO("createComputePipelineAsync not yet implemented")
@@ -95,13 +98,36 @@ actual class Device(val handler: WGPUDevice) : GPUDevice {
 
     actual override suspend fun popErrorScope(): Result<GPUError?> = runCatching {
         handler.popErrorScope()
-            .wait<GPUError>()
+            .wait<WGPUError>()
+            .toGPUError()
     }
 
     actual override fun close() {
         handler.destroy()
     }
 
+}
+
+private fun WGPUError.toGPUError(): GPUError = when (this) {
+    is WGPUValidationError -> object : GPUValidationError {
+        override val message: String
+            get() = this@toGPUError.message
+    }
+
+    is WGPUOutOfMemoryError -> object : GPUOutOfMemoryError {
+        override val message: String
+            get() = this@toGPUError.message
+    }
+
+    is WGPUInternalError -> object : GPUInternalError {
+        override val message: String
+            get() = this@toGPUError.message
+    }
+
+    else -> object : GPUError {
+        override val message: String
+            get() = this@toGPUError.message
+    }
 }
 
 
