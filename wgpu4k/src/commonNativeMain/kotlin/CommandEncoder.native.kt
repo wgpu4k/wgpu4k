@@ -7,6 +7,7 @@ import io.ygdrasil.wgpu.WGPUCommandEncoder
 import io.ygdrasil.wgpu.WGPUStringView
 import io.ygdrasil.wgpu.wgpuCommandEncoderBeginComputePass
 import io.ygdrasil.wgpu.wgpuCommandEncoderBeginRenderPass
+import io.ygdrasil.wgpu.wgpuCommandEncoderClearBuffer
 import io.ygdrasil.wgpu.wgpuCommandEncoderCopyBufferToTexture
 import io.ygdrasil.wgpu.wgpuCommandEncoderCopyTextureToBuffer
 import io.ygdrasil.wgpu.wgpuCommandEncoderCopyTextureToTexture
@@ -59,7 +60,8 @@ actual class CommandEncoder(val handler: WGPUCommandEncoder) : GPUCommandEncoder
         offset: GPUSize64,
         size: GPUSize64?
     ) {
-        TODO("Not yet implemented")
+        val size = size ?: (buffer.size - offset)
+        wgpuCommandEncoderClearBuffer(handler, (buffer as Buffer).handler, offset, size)
     }
 
     actual override fun resolveQuerySet(
