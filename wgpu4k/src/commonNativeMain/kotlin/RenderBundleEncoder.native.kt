@@ -3,12 +3,14 @@ package io.ygdrasil.webgpu
 import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPURenderBundleEncoder
+import io.ygdrasil.wgpu.WGPUStringView
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderDraw
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderDrawIndexed
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderFinish
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderRelease
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetBindGroup
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetIndexBuffer
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetLabel
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetPipeline
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetVertexBuffer
 
@@ -16,7 +18,11 @@ actual class RenderBundleEncoder(val handler: WGPURenderBundleEncoder) : GPURend
 
     actual override var label: String
         get() = TODO("Not yet implemented")
-        set(value) {}
+        set(value) = memoryScope { scope ->
+            val newLabel = WGPUStringView.allocate(scope)
+                .also { scope.map(value, it) }
+            wgpuRenderBundleEncoderSetLabel(handler, newLabel)
+        }
 
     actual override fun finish(descriptor: GPURenderBundleDescriptor?): GPURenderBundle = memoryScope { scope ->
         descriptor?.let {scope.map(descriptor) }

@@ -3,8 +3,11 @@ package io.ygdrasil.webgpu
 import ffi.ArrayHolder
 import ffi.NativeAddress
 import ffi.memoryScope
+import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPUCommandBuffer
 import io.ygdrasil.wgpu.WGPUQueue
+import io.ygdrasil.wgpu.WGPUStringView
+import io.ygdrasil.wgpu.wgpuQueueSetLabel
 import io.ygdrasil.wgpu.wgpuQueueSubmit
 import io.ygdrasil.wgpu.wgpuQueueWriteBuffer
 
@@ -12,7 +15,11 @@ actual class Queue(val handler: WGPUQueue) : GPUQueue {
 
     actual override var label: String
         get() = TODO("Not yet implemented")
-        set(value) {}
+        set(value) = memoryScope { scope ->
+            val newLabel = WGPUStringView.allocate(scope)
+                .also { scope.map(value, it) }
+            wgpuQueueSetLabel(handler, newLabel)
+        }
 
     actual override fun submit(commandBuffers: List<GPUCommandBuffer>)= memoryScope { scope ->
         if (commandBuffers.isNotEmpty()) {

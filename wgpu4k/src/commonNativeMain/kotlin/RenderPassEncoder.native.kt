@@ -4,6 +4,7 @@ import ffi.ArrayHolder
 import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPURenderPassEncoder
+import io.ygdrasil.wgpu.WGPUStringView
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderBeginOcclusionQuery
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderDraw
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderDrawIndexed
@@ -15,6 +16,7 @@ import io.ygdrasil.wgpu.wgpuRenderPassEncoderRelease
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetBindGroup
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetBlendConstant
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetIndexBuffer
+import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetLabel
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetPipeline
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetScissorRect
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetStencilReference
@@ -25,7 +27,11 @@ actual class RenderPassEncoder(val handler: WGPURenderPassEncoder) : GPURenderPa
 
     actual override var label: String
         get() = TODO("Not yet implemented")
-        set(value) {}
+        set(value) = memoryScope { scope ->
+            val newLabel = WGPUStringView.allocate(scope)
+                .also { scope.map(value, it) }
+            wgpuRenderPassEncoderSetLabel(handler, newLabel)
+        }
 
     actual override fun end() {
         wgpuRenderPassEncoderEnd(handler)
