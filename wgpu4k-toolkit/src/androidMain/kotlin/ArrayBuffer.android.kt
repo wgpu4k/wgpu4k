@@ -51,4 +51,5 @@ actual fun UIntArray.writeInto(target: ArrayBuffer) {
     segment.write(0, this.toIntArray(), 0, size)
 }
 
-private fun Pointer.asArrayBuffer(): ArrayBuffer = ArrayBuffer(Pointer.nativeValue(this).toULong())
+@PublishedApi
+internal fun Pointer.asArrayBuffer(): ArrayBuffer = ArrayBuffer(Pointer.nativeValue(this).toULong())
