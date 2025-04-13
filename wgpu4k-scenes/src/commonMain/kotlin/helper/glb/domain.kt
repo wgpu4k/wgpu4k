@@ -39,7 +39,6 @@ import io.ygdrasil.webgpu.TextureBindingLayout
 import io.ygdrasil.webgpu.VertexAttribute
 import io.ygdrasil.webgpu.VertexBufferLayout
 import io.ygdrasil.webgpu.VertexState
-import io.ygdrasil.webgpu.mapFrom
 import io.ygdrasil.webgpu.writeInto
 import korlibs.memory.getS8Array
 import kotlin.math.max
@@ -337,7 +336,8 @@ class GLTFBufferView(bufferView: GLTF2.BufferView, buffer: GLTF2.Buffer) {
                 mappedAtCreation = true
             )
         )
-        buf.mapFrom(buffer)
+        buffer
+            .writeInto(buf.getMappedRange())
         buf.unmap()
         gpuBuffer = buf
         needsUpload = false
