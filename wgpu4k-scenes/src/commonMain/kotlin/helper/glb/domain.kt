@@ -238,9 +238,9 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
             )
         )
         baseColorFactor
-            .writeInto(buffer.getMappedRange())
+            .writeInto(buffer.getMappedRange(0uL, (baseColorFactor.size * Float.SIZE_BYTES).toULong()))
         emissiveFactor
-            .writeInto(buffer.getMappedRange(4uL * Float.SIZE_BYTES.toULong()))
+            .writeInto(buffer.getMappedRange(4uL * Float.SIZE_BYTES.toULong(), (emissiveFactor.size * Float.SIZE_BYTES).toULong()))
         floatArrayOf(metallicFactor, roughnessFactor)
             .writeInto(buffer.getMappedRange(8uL * Float.SIZE_BYTES.toULong()))
 

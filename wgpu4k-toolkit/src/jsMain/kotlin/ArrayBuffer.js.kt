@@ -10,41 +10,41 @@ import org.khronos.webgl.Uint32Array
 import org.khronos.webgl.Uint8Array
 
 actual fun FloatArray.writeInto(target: ArrayBuffer) {
-    target.unsafeCast<Float32Array>()
+    Float32Array(target)
         .set(this.unsafeCast<Float32Array>(), 0)
 }
 
 actual fun DoubleArray.writeInto(target: ArrayBuffer) {
-    target.unsafeCast<Float64Array>()
+    Float64Array(target)
         .set(this.unsafeCast<Float64Array>(), 0)
 }
 
 actual fun ByteArray.writeInto(target: ArrayBuffer) {
-    target.unsafeCast<Int8Array>()
+    Int8Array(target)
         .set(this.unsafeCast<Int8Array>(), 0)
 }
 
 actual fun UByteArray.writeInto(target: ArrayBuffer) {
-    target.unsafeCast<Uint8Array>()
+    Uint8Array(target)
         .set(this.unsafeCast<Uint8Array>(), 0)
 }
 
 actual fun ShortArray.writeInto(target: ArrayBuffer) {
-    target.unsafeCast<Int16Array>()
+    Int16Array(target)
         .set(this.unsafeCast<Int16Array>(), 0)
 }
 
 actual fun UShortArray.writeInto(target: ArrayBuffer) {
-    target.unsafeCast<Uint16Array>()
+    Uint16Array(target)
         .set(this.unsafeCast<Uint16Array>(), 0)
 }
 
 actual fun IntArray.writeInto(target: ArrayBuffer) {
-    target.unsafeCast<Int32Array>()
+    Int32Array(target)
         .set(this.unsafeCast<Int32Array>(), 0)
 }
 
 actual fun UIntArray.writeInto(target: ArrayBuffer) {
-    target.unsafeCast<Uint32Array>()
+    Uint32Array(target)
         .set(this.unsafeCast<Uint32Array>(), 0)
 }
