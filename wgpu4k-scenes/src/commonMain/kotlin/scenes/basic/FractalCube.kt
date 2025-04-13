@@ -38,6 +38,7 @@ import io.ygdrasil.webgpu.VertexAttribute
 import io.ygdrasil.webgpu.VertexBufferLayout
 import io.ygdrasil.webgpu.VertexState
 import io.ygdrasil.webgpu.WGPUContext
+import io.ygdrasil.webgpu.asArraybuffer
 import io.ygdrasil.webgpu.beginRenderPass
 import io.ygdrasil.webgpu.examples.Scene
 import io.ygdrasil.webgpu.examples.scenes.mesh.Cube.cubePositionOffset
@@ -47,8 +48,7 @@ import io.ygdrasil.webgpu.examples.scenes.mesh.Cube.cubeVertexCount
 import io.ygdrasil.webgpu.examples.scenes.mesh.Cube.cubeVertexSize
 import io.ygdrasil.webgpu.examples.scenes.shader.fragment.sampleSelfShader
 import io.ygdrasil.webgpu.examples.scenes.shader.vertex.basicVertexShader
-import io.ygdrasil.webgpu.mapFrom
-import io.ygdrasil.webgpu.writeBuffer
+import io.ygdrasil.webgpu.writeInto
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
@@ -75,8 +75,8 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			)
 		)
 
-		// Util method to use getMappedRange
-		verticesBuffer.mapFrom(cubeVertexArray)
+		cubeVertexArray
+			.writeInto(verticesBuffer.getMappedRange())
 		verticesBuffer.unmap()
 
 		renderPipeline = device.createRenderPipeline(
@@ -217,13 +217,14 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			frame / 100.0,
 			projectionMatrix
 		)
-		device.queue.writeBuffer(
-			uniformBuffer,
-			0u,
-			transformationMatrix,
-			0u,
-			transformationMatrix.size.toULong()
-		)
+
+		transformationMatrix.asArraybuffer {
+			device.queue.writeBuffer(
+				uniformBuffer,
+				0u,
+				it,
+			)
+		}
 
 		val swapChainTexture = renderingContext.getCurrentTexture()
 

@@ -73,8 +73,8 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			)
 		).bind()
 
-		// Util method to use getMappedRange
-		cubeVertexArray.writeInto(verticesBuffer.getMappedRange())
+		cubeVertexArray
+			.writeInto(verticesBuffer.getMappedRange())
 		verticesBuffer.unmap()
 
 		renderPipeline = device.createRenderPipeline(

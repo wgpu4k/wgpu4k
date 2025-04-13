@@ -40,6 +40,7 @@ import io.ygdrasil.webgpu.VertexAttribute
 import io.ygdrasil.webgpu.VertexBufferLayout
 import io.ygdrasil.webgpu.VertexState
 import io.ygdrasil.webgpu.mapFrom
+import io.ygdrasil.webgpu.writeInto
 import korlibs.memory.getS8Array
 import kotlin.math.max
 
@@ -237,9 +238,13 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
                 mappedAtCreation = true
             )
         )
-        buffer.mapFrom(baseColorFactor)
-        buffer.mapFrom(emissiveFactor, 4uL * Float.SIZE_BYTES.toULong())
-        buffer.mapFrom(floatArrayOf(metallicFactor, roughnessFactor), 8uL * Float.SIZE_BYTES.toULong())
+        baseColorFactor
+            .writeInto(buffer.getMappedRange())
+        emissiveFactor
+            .writeInto(buffer.getMappedRange(4uL * Float.SIZE_BYTES.toULong()))
+        floatArrayOf(metallicFactor, roughnessFactor)
+            .writeInto(buffer.getMappedRange(8uL * Float.SIZE_BYTES.toULong()))
+
         buffer.unmap()
 
         val layoutEntries = mutableListOf(
@@ -397,7 +402,9 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
                 mappedAtCreation = true
             )
         )
-        gpuUniforms.mapFrom(transform)
+
+        transform
+            .writeInto(gpuUniforms.getMappedRange())
         gpuUniforms.unmap()
     }
 

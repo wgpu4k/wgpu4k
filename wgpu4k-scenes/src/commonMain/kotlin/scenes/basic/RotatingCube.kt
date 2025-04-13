@@ -45,7 +45,7 @@ import io.ygdrasil.webgpu.examples.scenes.mesh.Cube.cubeVertexCount
 import io.ygdrasil.webgpu.examples.scenes.mesh.Cube.cubeVertexSize
 import io.ygdrasil.webgpu.examples.scenes.shader.fragment.vertexPositionColorShader
 import io.ygdrasil.webgpu.examples.scenes.shader.vertex.basicVertexShader
-import io.ygdrasil.webgpu.mapFrom
+import io.ygdrasil.webgpu.writeInto
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
@@ -70,9 +70,8 @@ class RotatingCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			)
 		).bind()
 
-		// Util method to use getMappedRange
-		verticesBuffer.getMappedRange()
-		verticesBuffer.mapFrom(cubeVertexArray)
+		cubeVertexArray
+			.writeInto(verticesBuffer.getMappedRange())
 		verticesBuffer.unmap()
 
 		renderPipeline = device.createRenderPipeline(

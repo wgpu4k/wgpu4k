@@ -47,8 +47,8 @@ import io.ygdrasil.webgpu.examples.Scene
 import io.ygdrasil.webgpu.examples.scenes.mesh.Cube
 import io.ygdrasil.webgpu.examples.scenes.shader.fragment.sampleTextureMixColorShader
 import io.ygdrasil.webgpu.examples.scenes.shader.vertex.basicVertexShader
-import io.ygdrasil.webgpu.mapFrom
 import io.ygdrasil.webgpu.writeBuffer
+import io.ygdrasil.webgpu.writeInto
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
@@ -73,8 +73,8 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
             )
         )
 
-        // Util method to use getMappedRange
-        verticesBuffer.mapFrom(Cube.cubeVertexArray)
+        Cube.cubeVertexArray
+            .writeInto(verticesBuffer.getMappedRange())
         verticesBuffer.unmap()
 
         renderPipeline = device.createRenderPipeline(

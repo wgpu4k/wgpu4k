@@ -55,8 +55,8 @@ import io.ygdrasil.webgpu.examples.scenes.mesh.Cube.cubeVertexCount
 import io.ygdrasil.webgpu.examples.scenes.mesh.Cube.cubeVertexSize
 import io.ygdrasil.webgpu.examples.scenes.shader.fragment.sampleCubemapShader
 import io.ygdrasil.webgpu.examples.scenes.shader.vertex.basicVertexShader
-import io.ygdrasil.webgpu.mapFrom
 import io.ygdrasil.webgpu.writeBuffer
+import io.ygdrasil.webgpu.writeInto
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
@@ -88,8 +88,8 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
             )
         )
 
-        // Util method to use getMappedRange
-        verticesBuffer.mapFrom(cubeVertexArray)
+        cubeVertexArray
+            .writeInto(verticesBuffer.getMappedRange())
         verticesBuffer.unmap()
 
         renderPipeline = device.createRenderPipeline(
