@@ -11,7 +11,7 @@ actual class ShaderModule(val handler: WGPUShaderModule) : GPUShaderModule {
 
     actual override var label: String
         get() = TODO("Not yet implemented")
-        set(value)  = memoryScope { scope ->
+        set(value) = memoryScope { scope ->
             val newLabel = WGPUStringView.allocate(scope)
                 .also { scope.map(value, it) }
             wgpuShaderModuleSetLabel(handler, newLabel)

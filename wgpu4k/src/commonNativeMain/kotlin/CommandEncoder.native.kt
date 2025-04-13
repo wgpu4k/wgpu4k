@@ -4,6 +4,7 @@ import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPUCommandBufferDescriptor
 import io.ygdrasil.wgpu.WGPUCommandEncoder
+import io.ygdrasil.wgpu.WGPUStringView
 import io.ygdrasil.wgpu.wgpuCommandEncoderBeginComputePass
 import io.ygdrasil.wgpu.wgpuCommandEncoderBeginRenderPass
 import io.ygdrasil.wgpu.wgpuCommandEncoderCopyBufferToTexture
@@ -11,12 +12,17 @@ import io.ygdrasil.wgpu.wgpuCommandEncoderCopyTextureToBuffer
 import io.ygdrasil.wgpu.wgpuCommandEncoderCopyTextureToTexture
 import io.ygdrasil.wgpu.wgpuCommandEncoderFinish
 import io.ygdrasil.wgpu.wgpuCommandEncoderRelease
+import io.ygdrasil.wgpu.wgpuCommandEncoderSetLabel
 
 actual class CommandEncoder(val handler: WGPUCommandEncoder) : GPUCommandEncoder {
 
     actual override var label: String
         get() = TODO("Not yet implemented")
-        set(value) {}
+        set(value) = memoryScope { scope ->
+            val newLabel = WGPUStringView.allocate(scope)
+                .also { scope.map(value, it) }
+            wgpuCommandEncoderSetLabel(handler, newLabel)
+        }
 
     actual override fun beginRenderPass(descriptor: GPURenderPassDescriptor): GPURenderPassEncoder = memoryScope { arena ->
         arena.map(descriptor)

@@ -1,22 +1,34 @@
 package io.ygdrasil.webgpu
 
+import ffi.memoryScope
+import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPUComputePassEncoder
+import io.ygdrasil.wgpu.WGPUStringView
 import io.ygdrasil.wgpu.wgpuComputePassEncoderDispatchWorkgroups
 import io.ygdrasil.wgpu.wgpuComputePassEncoderDispatchWorkgroupsIndirect
 import io.ygdrasil.wgpu.wgpuComputePassEncoderEnd
+import io.ygdrasil.wgpu.wgpuComputePassEncoderSetLabel
 import io.ygdrasil.wgpu.wgpuComputePassEncoderSetPipeline
 
 actual class ComputePassEncoder(val handler: WGPUComputePassEncoder) : GPUComputePassEncoder {
 
     actual override var label: String
         get() = TODO("Not yet implemented")
-        set(value) {}
+        set(value) = memoryScope { scope ->
+            val newLabel = WGPUStringView.allocate(scope)
+                .also { scope.map(value, it) }
+            wgpuComputePassEncoderSetLabel(handler, newLabel)
+        }
 
     actual override fun setPipeline(pipeline: GPUComputePipeline) {
         wgpuComputePassEncoderSetPipeline(handler, (pipeline as ComputePipeline).handler)
     }
 
-    actual override fun dispatchWorkgroups(workgroupCountX: GPUSize32, workgroupCountY: GPUSize32, workgroupCountZ: GPUSize32) {
+    actual override fun dispatchWorkgroups(
+        workgroupCountX: GPUSize32,
+        workgroupCountY: GPUSize32,
+        workgroupCountZ: GPUSize32
+    ) {
         wgpuComputePassEncoderDispatchWorkgroups(
             handler,
             workgroupCountX,
