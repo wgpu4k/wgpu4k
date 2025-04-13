@@ -1,10 +1,12 @@
 package io.ygdrasil.webgpu
 
 import ffi.ArrayHolder
+import ffi.NativeAddress
 import ffi.memoryScope
 import io.ygdrasil.wgpu.WGPUCommandBuffer
 import io.ygdrasil.wgpu.WGPUQueue
 import io.ygdrasil.wgpu.wgpuQueueSubmit
+import io.ygdrasil.wgpu.wgpuQueueWriteBuffer
 
 actual class Queue(val handler: WGPUQueue) : GPUQueue {
 
@@ -45,7 +47,9 @@ actual class Queue(val handler: WGPUQueue) : GPUQueue {
         dataOffset: GPUSize64,
         size: GPUSize64?
     ) {
-        TODO("Not yet implemented")
+        val size = size ?: (buffer.size - bufferOffset)
+        val data = (data.rawPointer + dataOffset).toNativeAddress()
+        wgpuQueueWriteBuffer(handler, (buffer as Buffer).handler, bufferOffset, data, size)
     }
 
     actual override fun writeTexture(
@@ -58,3 +62,5 @@ actual class Queue(val handler: WGPUQueue) : GPUQueue {
     }
 
 }
+
+internal expect fun ULong.toNativeAddress(): NativeAddress?

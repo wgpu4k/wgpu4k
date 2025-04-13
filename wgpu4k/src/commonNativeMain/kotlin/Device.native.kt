@@ -31,7 +31,7 @@ actual class Device(val handler: WGPUDevice) : GPUDevice {
     actual override val queue: GPUQueue by lazy { Queue(wgpuDeviceGetQueue(handler) ?: error("fail to get device queue")) }
 
     actual override val features: Set<GPUFeatureName> by lazy {
-        FeatureName.entries
+        GPUFeatureName.entries
             .mapNotNull { feature ->
                 feature.takeIf { wgpuDeviceHasFeature(handler, feature.value) }
             }

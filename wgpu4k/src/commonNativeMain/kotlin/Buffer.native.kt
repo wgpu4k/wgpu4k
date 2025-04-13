@@ -3,6 +3,7 @@ package io.ygdrasil.webgpu
 import ffi.NativeAddress
 import ffi.memoryScope
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.webgpu.mapper.toArrayBuffer
 import io.ygdrasil.wgpu.WGPUBuffer
 import io.ygdrasil.wgpu.WGPUBufferMapCallback
@@ -16,6 +17,7 @@ import io.ygdrasil.wgpu.wgpuBufferGetSize
 import io.ygdrasil.wgpu.wgpuBufferGetUsage
 import io.ygdrasil.wgpu.wgpuBufferMapAsync
 import io.ygdrasil.wgpu.wgpuBufferRelease
+import io.ygdrasil.wgpu.wgpuBufferSetLabel
 import io.ygdrasil.wgpu.wgpuBufferUnmap
 import io.ygdrasil.wgpu.wgpuDevicePoll
 import kotlin.coroutines.resume
@@ -27,7 +29,11 @@ actual class Buffer(val handler: WGPUBuffer, private val device: Device) : GPUBu
 
     actual override var label: String
         get() = TODO("Not yet implemented")
-        set(value) {}
+        set(value) = memoryScope { scope ->
+            val newLabel = WGPUStringView.allocate(scope)
+                .also { scope.map(value, it) }
+            wgpuBufferSetLabel(handler, newLabel)
+        }
     actual override val size: GPUSize64
         get() = wgpuBufferGetSize(handler)
     actual override val usage: GPUBufferUsageFlags

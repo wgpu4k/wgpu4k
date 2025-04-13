@@ -20,11 +20,11 @@ import io.ygdrasil.webgpu.RenderPipelineDescriptor
 import io.ygdrasil.webgpu.ShaderModuleDescriptor
 import io.ygdrasil.webgpu.VertexState
 import io.ygdrasil.webgpu.WGPUContext
+import io.ygdrasil.webgpu.asArraybuffer
 import io.ygdrasil.webgpu.beginRenderPass
 import io.ygdrasil.webgpu.examples.Scene
 import io.ygdrasil.webgpu.examples.scenes.shader.fragment.redFragmentShader
 import io.ygdrasil.webgpu.examples.scenes.shader.vertex.basicVertexPositionShader
-import io.ygdrasil.webgpu.writeBuffer
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 
@@ -91,11 +91,14 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
             .rotation(Angle.fromDegrees(frame), .0, .0, 1.0)
             .copyToColumns()
 
-        device.queue.writeBuffer(
-            uniformBuffer,
-            0u,
-            transformationMatrix
-        )
+        transformationMatrix.asArraybuffer {
+            device.queue.writeBuffer(
+                uniformBuffer,
+                0u,
+                it
+            )
+
+        }
 
         val encoder = device.createCommandEncoder()
             .bind()

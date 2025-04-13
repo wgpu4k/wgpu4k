@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package io.ygdrasil.webgpu.examples.headless
 
 import io.github.oshai.kotlinlogging.KotlinLogging

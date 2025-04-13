@@ -4,22 +4,9 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
-    if (isAndroidConfigured) id("android")
-    id("publish")
+    if (isAndroidConfigured) android
+    publish
 }
-
-val commonResourcesFile = getCommonProject()
-    .projectDir
-    .resolve("src")
-    .resolve("commonMain")
-    .resolve("resources")
-
-assert(commonResourcesFile.isDirectory) { "$commonResourcesFile is not a directory" }
-assert(commonResourcesFile.isNotEmpty) { "$commonResourcesFile is empty" }
-
-val resourcesDirectory = project.file("src").resolve("jvmMain").resolve("resources")
-
-val buildNativeResourcesDirectory = project.file("build").resolve("native")
 
 java {
     toolchain {
@@ -64,24 +51,27 @@ kotlin {
                 /* All compilations shall be added to the common group by default */
                 withCompilations { true }
 
-                group("ios") {
-                    withIos()
-                }
 
-                group("desktopNative") {
-
-                    group("macos") {
-                        withMacos()
+                group("native") {
+                    group("ios") {
+                        withIos()
                     }
 
-                    group("linux") {
-                        withLinux()
-                    }
+                    group("desktopNative") {
 
-                    group("mingw") {
-                        withMingw()
-                    }
+                        group("macos") {
+                            withMacos()
+                        }
 
+                        group("linux") {
+                            withLinux()
+                        }
+
+                        group("mingw") {
+                            withMingw()
+                        }
+
+                    }
                 }
 
                 group("commonWeb") {

@@ -16,6 +16,7 @@ expect class Texture : GPUTexture {
 }
 
 // Todo double check this
+@Suppress("REDUNDANT_ELSE_IN_WHEN")
 fun GPUTextureFormat.getBytesPerPixel(): GPUSize32 {
     return when (this) {
         // Formats with 1 byte per pixel

@@ -15,8 +15,8 @@ actual class ImageBitmapHolder(
 actual sealed interface DrawableHolder
 
 actual fun GPUQueue.copyExternalImageToTexture(
-    source: ImageCopyExternalImage,
-    destination: ImageCopyTextureTagged,
+    source: @Suppress("DEPRECATION") ImageCopyExternalImage,
+    destination: @Suppress("DEPRECATION") ImageCopyTextureTagged,
     copySize: GPUExtent3D
 ) {
     val handler = (this as Queue).handler

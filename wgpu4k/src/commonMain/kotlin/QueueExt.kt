@@ -4,7 +4,7 @@ package io.ygdrasil.webgpu
 expect sealed interface DrawableHolder
 
 @Deprecated("Will be removed in the next version and replace later when supported officially on native platform")
-expect class ImageBitmapHolder : DrawableHolder, AutoCloseable {
+expect class ImageBitmapHolder : @Suppress("DEPRECATION") DrawableHolder, AutoCloseable {
     val width: UInt
     val height: UInt
 
@@ -13,7 +13,7 @@ expect class ImageBitmapHolder : DrawableHolder, AutoCloseable {
 
 @Deprecated("Will be removed in the next version and replace later when supported officially on native platform")
 data class ImageCopyExternalImage(
-    val source: DrawableHolder,
+    val source: @Suppress("DEPRECATION") DrawableHolder,
     /* ImageBitmap | ImageData | HTMLImageElement | HTMLVideoElement | VideoFrame | HTMLCanvasElement | OffscreenCanvas */
     val origin: GPUOrigin2D? = null,
     /* Iterable<GPUIntegerCoordinate>? | GPUOrigin2DDictStrict? */
@@ -32,8 +32,8 @@ data class ImageCopyTextureTagged(
 
 @Deprecated("Will be removed in the next version and replace later when supported officially on native platform")
 expect fun GPUQueue.copyExternalImageToTexture(
-    source: ImageCopyExternalImage,
-    destination: ImageCopyTextureTagged,
+    @Suppress("DEPRECATION") source: ImageCopyExternalImage,
+    @Suppress("DEPRECATION") destination: ImageCopyTextureTagged,
     copySize: GPUExtent3D
 )
 
