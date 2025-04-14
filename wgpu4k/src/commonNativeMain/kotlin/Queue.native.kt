@@ -10,6 +10,7 @@ import io.ygdrasil.wgpu.WGPUStringView
 import io.ygdrasil.wgpu.wgpuQueueSetLabel
 import io.ygdrasil.wgpu.wgpuQueueSubmit
 import io.ygdrasil.wgpu.wgpuQueueWriteBuffer
+import io.ygdrasil.wgpu.wgpuQueueWriteTexture
 
 actual class Queue(val handler: WGPUQueue) : GPUQueue {
 
@@ -64,8 +65,9 @@ actual class Queue(val handler: WGPUQueue) : GPUQueue {
         data: ArrayBuffer,
         dataLayout: GPUTexelCopyBufferLayout,
         size: GPUExtent3D
-    ) {
-        TODO("Not yet implemented")
+    ) = memoryScope { scope ->
+        val dataSize = TODO("missing size on ArrayBuffer")
+        wgpuQueueWriteTexture(handler, scope.map(destination), data.rawPointer.toNativeAddress(), 0uL, scope.map(dataLayout), scope.map(size))
     }
 
 }
