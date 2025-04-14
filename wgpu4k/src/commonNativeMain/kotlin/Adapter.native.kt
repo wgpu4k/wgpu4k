@@ -40,7 +40,7 @@ actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
                 continuation.resume(when(status) {
                     WGPURequestDeviceStatus_Success -> when (device) {
                         null -> Result.failure(IllegalStateException("Device is null"))
-                        else -> Result.success(Device(device))
+                        else -> Result.success(Device(device, descriptor?.label ?: ""))
                     }
                     else -> Result.failure(IllegalStateException("request Device fail with status: $status and message: ${message?.data?.toKString(message.length)}"))
                 })

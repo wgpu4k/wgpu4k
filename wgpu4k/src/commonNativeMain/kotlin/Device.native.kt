@@ -39,14 +39,14 @@ import io.ygdrasil.wgpu.wgpuDeviceSetLabel
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-actual class Device(val handler: WGPUDevice) : GPUDevice {
+actual class Device(val handler: WGPUDevice, label: String) : GPUDevice {
 
-    actual override var label: String
-        get() = TODO("Not yet implemented")
+    actual override var label: String = label
         set(value) = memoryScope { scope ->
             val newLabel = WGPUStringView.allocate(scope)
                 .also { scope.map(value, it) }
             wgpuDeviceSetLabel(handler, newLabel)
+            field = value
         }
 
     actual override val queue: GPUQueue by lazy { Queue(wgpuDeviceGetQueue(handler) ?: error("fail to get device queue")) }
@@ -99,7 +99,7 @@ actual class Device(val handler: WGPUDevice) : GPUDevice {
                 continuation.resume(when(status) {
                     WGPUCreatePipelineAsyncStatus_Success -> when (pipeline) {
                         null -> Result.failure(IllegalStateException("ComputePipeline is null"))
-                        else -> Result.success(ComputePipeline(pipeline))
+                        else -> Result.success(ComputePipeline(pipeline, descriptor.label))
                     }
                     else -> Result.failure(IllegalStateException("request ComputePipeline fail with status: $status and message: ${message?.data?.toKString(message.length)}"))
                 })
@@ -146,13 +146,13 @@ actual class Device(val handler: WGPUDevice) : GPUDevice {
     actual override fun createBindGroup(descriptor: GPUBindGroupDescriptor): GPUBindGroup = memoryScope { scope ->
         scope.map(descriptor)
             .let { wgpuDeviceCreateBindGroup(handler, it) }
-            ?.let(::BindGroup) ?: error("fail to create bind group")
+            ?.let { BindGroup(it, descriptor.label)} ?: error("fail to create bind group")
     }
 
     actual override fun createTexture(descriptor: GPUTextureDescriptor): GPUTexture = memoryScope { scope ->
         scope.map(descriptor)
             .let { wgpuDeviceCreateTexture(handler, it) }
-            ?.let(::Texture) ?: error("fail to create texture")
+            ?.let { Texture(it, descriptor.label) } ?: error("fail to create texture")
     }
 
     actual override fun createSampler(descriptor: GPUSamplerDescriptor?): GPUSampler = memoryScope { scope ->
@@ -164,7 +164,7 @@ actual class Device(val handler: WGPUDevice) : GPUDevice {
     actual override fun createComputePipeline(descriptor: GPUComputePipelineDescriptor): GPUComputePipeline = memoryScope { scope ->
         scope.map(descriptor)
             .let { wgpuDeviceCreateComputePipeline(handler, it) }
-            ?.let(::ComputePipeline) ?: error("fail to create compute pipeline")
+            ?.let { ComputePipeline(it, descriptor.label) } ?: error("fail to create compute pipeline")
     }
 
     actual override fun createBindGroupLayout(descriptor: GPUBindGroupLayoutDescriptor): GPUBindGroupLayout = memoryScope { scope ->
