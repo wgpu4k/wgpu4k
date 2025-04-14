@@ -6,11 +6,17 @@ import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPUCommandBuffer
 import io.ygdrasil.wgpu.WGPUQueue
+import io.ygdrasil.wgpu.WGPUQueueWorkDoneCallback
+import io.ygdrasil.wgpu.WGPUQueueWorkDoneCallbackInfo
+import io.ygdrasil.wgpu.WGPUQueueWorkDoneStatus_Success
 import io.ygdrasil.wgpu.WGPUStringView
+import io.ygdrasil.wgpu.wgpuQueueOnSubmittedWorkDone
 import io.ygdrasil.wgpu.wgpuQueueSetLabel
 import io.ygdrasil.wgpu.wgpuQueueSubmit
 import io.ygdrasil.wgpu.wgpuQueueWriteBuffer
 import io.ygdrasil.wgpu.wgpuQueueWriteTexture
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 actual class Queue(val handler: WGPUQueue) : GPUQueue {
 
@@ -44,8 +50,23 @@ actual class Queue(val handler: WGPUQueue) : GPUQueue {
         }
     }
 
-    actual override suspend fun onSubmittedWorkDone(): Result<Unit> {
-        TODO("Not yet implemented")
+    actual override suspend fun onSubmittedWorkDone(): Result<Unit> = suspendCoroutine { continuation ->
+        memoryScope { scope ->
+
+            val callback = WGPUQueueWorkDoneCallback.allocate(scope) { status, userdata1, userdata2 ->
+                continuation.resume(when(status) {
+                    WGPUQueueWorkDoneStatus_Success -> Result.success(Unit)
+                    else -> Result.failure(IllegalStateException("request onSubmittedWorkDone fail with status: $status}"))
+                })
+            }
+
+            val callbackInfo = WGPUQueueWorkDoneCallbackInfo.allocate(scope).apply {
+                this.callback = callback
+                this.userdata2 = scope.bufferOfAddress(callback.handler).handler
+            }
+
+            wgpuQueueOnSubmittedWorkDone(handler, callbackInfo)
+        }
     }
 
     actual override fun writeBuffer(
