@@ -40,8 +40,6 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(projects.wgpu4kScenes)
-                // Sometimes dependencies are not transferred from another subproject, so we add this to make sure we have the logging lib
-                runtimeOnly(libs.kotlin.logging)
             }
         }
 
