@@ -26,7 +26,7 @@ actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
     actual override val limits: GPUSupportedLimits by lazy { map(handler.limits) }
 
     actual override val info: GPUAdapterInfo
-        get() = TODO("Not yet implemented")
+        get() = map(handler.info)
 
     actual override suspend fun requestDevice(descriptor: GPUDeviceDescriptor?): Result<GPUDevice> {
         return runCatching {
