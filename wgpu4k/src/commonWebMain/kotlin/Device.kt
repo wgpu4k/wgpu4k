@@ -45,19 +45,21 @@ actual class Device(val handler: WGPUDevice) : GPUDevice {
             .let { handler.createRenderPipeline(it) }
             .let(::RenderPipeline)
 
-    actual override suspend fun createComputePipelineAsync(descriptor: GPUComputePipelineDescriptor): Result<GPUComputePipeline> = runCatching {
-        map(descriptor)
-            .let { handler.createComputePipelineAsync(it) }
-            .wait<WGPUComputePipeline>()
-            .let { ComputePipeline(it) }
-    }
+    actual override suspend fun createComputePipelineAsync(descriptor: GPUComputePipelineDescriptor): Result<GPUComputePipeline> =
+        runCatching {
+            map(descriptor)
+                .let { handler.createComputePipelineAsync(it) }
+                .wait<WGPUComputePipeline>()
+                .let { ComputePipeline(it) }
+        }
 
-    actual override suspend fun createRenderPipelineAsync(descriptor: GPURenderPipelineDescriptor): Result<GPURenderPipeline> = runCatching {
-        map(descriptor)
-            .let { handler.createRenderPipelineAsync(it) }
-            .wait<WGPURenderPipeline>()
-            .let { RenderPipeline(it) }
-    }
+    actual override suspend fun createRenderPipelineAsync(descriptor: GPURenderPipelineDescriptor): Result<GPURenderPipeline> =
+        runCatching {
+            map(descriptor)
+                .let { handler.createRenderPipelineAsync(it) }
+                .wait<WGPURenderPipeline>()
+                .let { RenderPipeline(it) }
+        }
 
     actual override fun createBuffer(descriptor: GPUBufferDescriptor): GPUBuffer = map(descriptor)
         .let { handler.createBuffer(it) }
@@ -114,26 +116,9 @@ actual class Device(val handler: WGPUDevice) : GPUDevice {
 
 }
 
-private fun WGPUError.toGPUError(): GPUError = when (this) {
-    is WGPUValidationError -> object : GPUValidationError {
-        override val message: String
-            get() = this@toGPUError.message
-    }
-
-    is WGPUOutOfMemoryError -> object : GPUOutOfMemoryError {
-        override val message: String
-            get() = this@toGPUError.message
-    }
-
-    is WGPUInternalError -> object : GPUInternalError {
-        override val message: String
-            get() = this@toGPUError.message
-    }
-
-    else -> object : GPUError {
-        override val message: String
-            get() = this@toGPUError.message
-    }
+private fun WGPUError.toGPUError(): GPUError = object : GPUError {
+    override val message: String
+        get() = this@toGPUError.message
 }
 
 
