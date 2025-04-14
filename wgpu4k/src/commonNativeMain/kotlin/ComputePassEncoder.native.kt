@@ -9,6 +9,7 @@ import io.ygdrasil.wgpu.wgpuComputePassEncoderDispatchWorkgroupsIndirect
 import io.ygdrasil.wgpu.wgpuComputePassEncoderEnd
 import io.ygdrasil.wgpu.wgpuComputePassEncoderPopDebugGroup
 import io.ygdrasil.wgpu.wgpuComputePassEncoderPushDebugGroup
+import io.ygdrasil.wgpu.wgpuComputePassEncoderSetBindGroup
 import io.ygdrasil.wgpu.wgpuComputePassEncoderSetLabel
 import io.ygdrasil.wgpu.wgpuComputePassEncoderSetPipeline
 
@@ -71,8 +72,8 @@ actual class ComputePassEncoder(val handler: WGPUComputePassEncoder) : GPUComput
         index: GPUIndex32,
         bindGroup: GPUBindGroup?,
         dynamicOffsetsData: List<UInt>
-    ) {
-        TODO("Not yet implemented")
+    ) = memoryScope { scope ->
+        wgpuComputePassEncoderSetBindGroup(handler, index, (bindGroup as BindGroup?)?.handler, dynamicOffsetsData.size.toULong(), scope.map(dynamicOffsetsData))
     }
 
 }

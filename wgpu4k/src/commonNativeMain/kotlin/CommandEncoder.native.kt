@@ -8,6 +8,7 @@ import io.ygdrasil.wgpu.WGPUStringView
 import io.ygdrasil.wgpu.wgpuCommandEncoderBeginComputePass
 import io.ygdrasil.wgpu.wgpuCommandEncoderBeginRenderPass
 import io.ygdrasil.wgpu.wgpuCommandEncoderClearBuffer
+import io.ygdrasil.wgpu.wgpuCommandEncoderCopyBufferToBuffer
 import io.ygdrasil.wgpu.wgpuCommandEncoderCopyBufferToTexture
 import io.ygdrasil.wgpu.wgpuCommandEncoderCopyTextureToBuffer
 import io.ygdrasil.wgpu.wgpuCommandEncoderCopyTextureToTexture
@@ -89,7 +90,8 @@ actual class CommandEncoder(val handler: WGPUCommandEncoder) : GPUCommandEncoder
         destinationOffset: GPUSize64,
         size: GPUSize64?
     ) {
-        TODO("Not yet implemented")
+        val size = size ?: (source.size - sourceOffset)
+        wgpuCommandEncoderCopyBufferToBuffer(handler, (source as Buffer).handler, sourceOffset, (destination as Buffer).handler, destinationOffset, size)
     }
 
     actual override fun copyTextureToBuffer(
