@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu
 
-@WGPULowLevel
+@WGPULowLevelApi
 expect class ComputePassEncoder : GPUComputePassEncoder {
 
     override var label: String
