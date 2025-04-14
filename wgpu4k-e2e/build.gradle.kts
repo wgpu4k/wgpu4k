@@ -23,7 +23,6 @@ val wasmPagePath = project.projectDir.resolve("build")
 kotlin {
 
     jvm {
-        withJava()
     }
 
     js {
@@ -87,17 +86,17 @@ val jvmTasks = scenes.flatMap { (sceneName, frames) ->
                     "-DscreenshotPath=${project.projectDir}",
                 )
             )
-            classpath = sourceSets["main"].runtimeClasspath
+            classpath = sourceSets["jvmMain"].runtimeClasspath
         }
     }
 }
 
-val jvmTest = tasks.create("e2eJvmTest") {
+val jvmTest = tasks.register("e2eJvmTest") {
     group = "e2eTest"
     jvmTasks.forEach { tasks -> dependsOn(tasks) }
 }
 
-val e2eJsBrowserTest = tasks.create("e2eJsBrowserTest") {
+val e2eJsBrowserTest = tasks.register("e2eJsBrowserTest") {
     group = "e2eTest"
     doLast {
         val prefixPath = "js"
@@ -109,7 +108,7 @@ val e2eJsBrowserTest = tasks.create("e2eJsBrowserTest") {
     }
 }
 
-val e2eWasmBrowserTest = tasks.create("e2eWasmBrowserTest") {
+val e2eWasmBrowserTest = tasks.register("e2eWasmBrowserTest") {
     group = "e2eTest"
     doLast {
         val prefixPath = "wasm"
@@ -121,7 +120,7 @@ val e2eWasmBrowserTest = tasks.create("e2eWasmBrowserTest") {
     }
 }
 
-val e2eCompareImages = tasks.create("e2eCompareImages") {
+val e2eCompareImages = tasks.register("e2eCompareImages") {
     group = "e2eTest"
     doLast {
         project.projectDir.resolve("jvm").mkdir()
@@ -131,7 +130,7 @@ val e2eCompareImages = tasks.create("e2eCompareImages") {
     }
 }
 
-tasks.create("e2eTest") {
+tasks.register("e2eTest") {
     group = "e2eTest"
     if(isInCI().not()) dependsOn(e2eJsBrowserTest)
     // uncomment when wasm is stable
