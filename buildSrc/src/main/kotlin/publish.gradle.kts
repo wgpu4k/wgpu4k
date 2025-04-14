@@ -29,7 +29,7 @@ project.centralPortalPublish {
 
 val javadocJar by tasks.registering(Jar::class) {
     archiveClassifier.set("javadoc")
-    from(tasks.findByName("dokkaHtml"))
+    from(tasks.findByName("dokkaGeneratePublicationHtml"))
 }
 
 publishing {
