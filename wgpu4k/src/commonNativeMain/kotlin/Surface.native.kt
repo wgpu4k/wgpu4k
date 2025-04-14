@@ -36,7 +36,7 @@ class NativeSurface(
             wgpuSurfaceGetCurrentTexture(handler, surfaceTexture)
             surfaceTexture.status
             SurfaceTexture(
-                Texture(surfaceTexture.texture ?: error("fail to get texture from surface")),
+                Texture(surfaceTexture.texture ?: error("fail to get texture from surface"), ""),
                 SurfaceTextureStatus.of(surfaceTexture.status) ?: error("fail to get status"),
             )
         }
