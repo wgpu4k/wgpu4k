@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu
 
-@WGPULowLevel
+@WGPULowLevelApi
 expect class QuerySet : GPUQuerySet {
 
     override val count: GPUSize32Out

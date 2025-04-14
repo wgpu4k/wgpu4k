@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu
 
-@WGPULowLevel
+@WGPULowLevelApi
 expect class RenderBundle : GPURenderBundle {
     override var label: String
 }
