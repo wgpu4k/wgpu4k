@@ -16,6 +16,7 @@ import io.ygdrasil.wgpu.wgpuCommandEncoderInsertDebugMarker
 import io.ygdrasil.wgpu.wgpuCommandEncoderPopDebugGroup
 import io.ygdrasil.wgpu.wgpuCommandEncoderPushDebugGroup
 import io.ygdrasil.wgpu.wgpuCommandEncoderRelease
+import io.ygdrasil.wgpu.wgpuCommandEncoderResolveQuerySet
 import io.ygdrasil.wgpu.wgpuCommandEncoderSetLabel
 
 actual class CommandEncoder(val handler: WGPUCommandEncoder) : GPUCommandEncoder {
@@ -71,7 +72,7 @@ actual class CommandEncoder(val handler: WGPUCommandEncoder) : GPUCommandEncoder
         destination: GPUBuffer,
         destinationOffset: GPUSize64
     ) {
-        TODO("Not yet implemented")
+        wgpuCommandEncoderResolveQuerySet(handler, (querySet as QuerySet).handler, firstQuery, queryCount, (destination as Buffer).handler, destinationOffset)
     }
 
     actual override fun beginComputePass(descriptor: GPUComputePassDescriptor?): GPUComputePassEncoder = memoryScope { scope ->
