@@ -45,12 +45,18 @@ actual class Device(val handler: WGPUDevice) : GPUDevice {
             .let { handler.createRenderPipeline(it) }
             .let(::RenderPipeline)
 
-    actual override suspend fun createComputePipelineAsync(descriptor: GPUComputePipelineDescriptor): Result<GPUComputePipeline> {
-        TODO("createComputePipelineAsync not yet implemented")
+    actual override suspend fun createComputePipelineAsync(descriptor: GPUComputePipelineDescriptor): Result<GPUComputePipeline> = runCatching {
+        map(descriptor)
+            .let { handler.createComputePipelineAsync(it) }
+            .wait<WGPUComputePipeline>()
+            .let { ComputePipeline(it) }
     }
 
-    actual override suspend fun createRenderPipelineAsync(descriptor: GPURenderPipelineDescriptor): Result<GPURenderPipeline> {
-        TODO("createRenderPipelineAsync not yet implemented")
+    actual override suspend fun createRenderPipelineAsync(descriptor: GPURenderPipelineDescriptor): Result<GPURenderPipeline> = runCatching {
+        map(descriptor)
+            .let { handler.createRenderPipelineAsync(it) }
+            .wait<WGPURenderPipeline>()
+            .let { RenderPipeline(it) }
     }
 
     actual override fun createBuffer(descriptor: GPUBufferDescriptor): GPUBuffer = map(descriptor)
