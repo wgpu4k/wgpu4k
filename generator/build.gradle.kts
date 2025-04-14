@@ -1,6 +1,7 @@
 plugins {
 	`kotlin-dsl`
-	kotlin("plugin.serialization") version "2.1.0"
+	// Gradle 8.12 uses kotlin 2.0.21
+	kotlin("plugin.serialization") version "2.0.21"
 }
 
 
