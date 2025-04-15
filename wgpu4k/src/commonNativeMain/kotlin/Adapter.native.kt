@@ -3,10 +3,12 @@ package io.ygdrasil.webgpu
 import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPUAdapter
+import io.ygdrasil.wgpu.WGPUAdapterInfo
 import io.ygdrasil.wgpu.WGPULimits
 import io.ygdrasil.wgpu.WGPURequestDeviceCallback
 import io.ygdrasil.wgpu.WGPURequestDeviceCallbackInfo
 import io.ygdrasil.wgpu.WGPURequestDeviceStatus_Success
+import io.ygdrasil.wgpu.wgpuAdapterGetInfo
 import io.ygdrasil.wgpu.wgpuAdapterGetLimits
 import io.ygdrasil.wgpu.wgpuAdapterHasFeature
 import io.ygdrasil.wgpu.wgpuAdapterRelease
@@ -17,7 +19,11 @@ import kotlin.coroutines.suspendCoroutine
 actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
 
     actual override val info: GPUAdapterInfo
-        get() = TODO("Not yet implemented")
+        get() = memoryScope{ scope ->
+            val info = WGPUAdapterInfo.allocate(scope)
+            wgpuAdapterGetInfo(handler, info)
+            map(info)
+        }
 
     actual override val features: GPUSupportedFeatures by lazy {
         GPUFeatureName.entries

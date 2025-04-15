@@ -13,14 +13,14 @@ import io.ygdrasil.wgpu.wgpuComputePassEncoderSetBindGroup
 import io.ygdrasil.wgpu.wgpuComputePassEncoderSetLabel
 import io.ygdrasil.wgpu.wgpuComputePassEncoderSetPipeline
 
-actual class ComputePassEncoder(val handler: WGPUComputePassEncoder) : GPUComputePassEncoder {
+actual class ComputePassEncoder(val handler: WGPUComputePassEncoder, label: String) : GPUComputePassEncoder {
 
-    actual override var label: String
-        get() = TODO("Not yet implemented")
+    actual override var label: String = label
         set(value) = memoryScope { scope ->
             val newLabel = WGPUStringView.allocate(scope)
                 .also { scope.map(value, it) }
             wgpuComputePassEncoderSetLabel(handler, newLabel)
+            field = value
         }
 
     actual override fun setPipeline(pipeline: GPUComputePipeline) {
