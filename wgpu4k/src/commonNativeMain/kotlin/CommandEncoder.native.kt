@@ -79,7 +79,7 @@ actual class CommandEncoder(val handler: WGPUCommandEncoder) : GPUCommandEncoder
     actual override fun beginComputePass(descriptor: GPUComputePassDescriptor?): GPUComputePassEncoder = memoryScope { scope ->
         descriptor?.let { scope.map(descriptor) }
             .let { wgpuCommandEncoderBeginComputePass(handler, it) }
-            ?.let { ComputePassEncoder(it) }
+            ?.let { ComputePassEncoder(it, descriptor?.label ?: "") }
             ?: error("fail to get ComputePassEncoder")
     }
 
