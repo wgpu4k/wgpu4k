@@ -7,7 +7,7 @@ actual inline fun arrayBufferOf(input: FloatArray, action: (ArrayBuffer) -> Unit
     val byteSizeToCopy = (input.size * Float.SIZE_BYTES).toLong()
     val segment = arena.allocate(byteSizeToCopy)
     MemorySegment.copy(MemorySegment.ofArray(input), 0, segment, 0, byteSizeToCopy)
-    segment.asArrayBuffer()
+    segment.asArrayBuffer(byteSizeToCopy)
         .let(action)
 }
 
@@ -83,6 +83,6 @@ actual fun UIntArray.writeInto(target: ArrayBuffer): Unit = Arena.ofConfined().u
     )
 }
 
-fun MemorySegment.asArrayBuffer(): ArrayBuffer = ArrayBuffer(address().toULong())
+fun MemorySegment.asArrayBuffer(size: Long): ArrayBuffer = ArrayBuffer(address().toULong(), size.toULong())
 fun ArrayBuffer.asMemorySegment(sizeInBytes: Long): MemorySegment = MemorySegment.ofAddress(rawPointer.toLong())
     .reinterpret(sizeInBytes)

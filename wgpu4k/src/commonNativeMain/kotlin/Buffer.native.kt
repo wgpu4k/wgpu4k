@@ -48,8 +48,9 @@ actual class Buffer(val handler: WGPUBuffer, private val device: Device, label: 
     }
 
     actual override fun getMappedRange(offset: GPUSize64, size: GPUSize64?): ArrayBuffer {
-        return wgpuBufferGetMappedRange(handler, offset, size ?: (this.size - offset))
-            ?.toArrayBuffer() ?: error("Can't get mapped range")
+        val size = size ?: (this.size - offset)
+        return wgpuBufferGetMappedRange(handler, offset, size)
+            ?.toArrayBuffer(size) ?: error("Can't get mapped range")
     }
 
     actual override suspend fun mapAsync(mode: GPUMapModeFlags, offset: GPUSize64, size: GPUSize64?): Result<Unit> =

@@ -7,7 +7,7 @@ actual inline fun arrayBufferOf(input: FloatArray, action: (ArrayBuffer) -> Unit
     val byteSizeToCopy = (input.size * Float.SIZE_BYTES).toLong()
     val segment = Memory(byteSizeToCopy)
     segment.write(0, input, 0, input.size)
-    segment.asArrayBuffer()
+    segment.asArrayBuffer(byteSizeToCopy)
         .let(action)
 }
 
@@ -52,4 +52,4 @@ actual fun UIntArray.writeInto(target: ArrayBuffer) {
 }
 
 @PublishedApi
-internal fun Pointer.asArrayBuffer(): ArrayBuffer = ArrayBuffer(Pointer.nativeValue(this).toULong())
+internal fun Pointer.asArrayBuffer(size: Long): ArrayBuffer = ArrayBuffer(Pointer.nativeValue(this).toULong(), size.toULong())
