@@ -15,14 +15,14 @@ import io.ygdrasil.wgpu.wgpuShaderModuleSetLabel
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-actual class ShaderModule(val handler: WGPUShaderModule) : GPUShaderModule {
+actual class ShaderModule(val handler: WGPUShaderModule, label: String) : GPUShaderModule {
 
-    actual override var label: String
-        get() = TODO("Not yet implemented")
+    actual override var label: String = label
         set(value) = memoryScope { scope ->
             val newLabel = WGPUStringView.allocate(scope)
                 .also { scope.map(value, it) }
             wgpuShaderModuleSetLabel(handler, newLabel)
+            field = value
         }
 
     actual override fun close() {

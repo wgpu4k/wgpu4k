@@ -20,27 +20,27 @@ import io.ygdrasil.wgpu.wgpuCommandEncoderRelease
 import io.ygdrasil.wgpu.wgpuCommandEncoderResolveQuerySet
 import io.ygdrasil.wgpu.wgpuCommandEncoderSetLabel
 
-actual class CommandEncoder(val handler: WGPUCommandEncoder) : GPUCommandEncoder {
+actual class CommandEncoder(val handler: WGPUCommandEncoder, label: String) : GPUCommandEncoder {
 
-    actual override var label: String
-        get() = TODO("Not yet implemented")
+    actual override var label: String = label
         set(value) = memoryScope { scope ->
             val newLabel = WGPUStringView.allocate(scope)
                 .also { scope.map(value, it) }
             wgpuCommandEncoderSetLabel(handler, newLabel)
+            field = value
         }
 
     actual override fun beginRenderPass(descriptor: GPURenderPassDescriptor): GPURenderPassEncoder = memoryScope { arena ->
         arena.map(descriptor)
             .let { wgpuCommandEncoderBeginRenderPass(handler, it) }
-            ?.let { RenderPassEncoder(it) }
+            ?.let { RenderPassEncoder(it, descriptor.label) }
             ?: error("fail to get RenderPassEncoder")
     }
 
     actual override fun finish(descriptor: GPUCommandBufferDescriptor?): GPUCommandBuffer = memoryScope { scope ->
         WGPUCommandBufferDescriptor.allocate(scope)
             .let { wgpuCommandEncoderFinish(handler, it) }
-            ?.let { CommandBuffer(it) }
+            ?.let { CommandBuffer(it, descriptor?.label ?: "") }
             ?: error("fail to get CommandBuffer")
     }
 
