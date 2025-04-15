@@ -18,14 +18,14 @@ import io.ygdrasil.wgpu.wgpuQueueWriteTexture
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-actual class Queue(val handler: WGPUQueue) : GPUQueue {
+actual class Queue(val handler: WGPUQueue, label: String) : GPUQueue {
 
-    actual override var label: String
-        get() = TODO("Not yet implemented")
+    actual override var label: String = label
         set(value) = memoryScope { scope ->
             val newLabel = WGPUStringView.allocate(scope)
                 .also { scope.map(value, it) }
             wgpuQueueSetLabel(handler, newLabel)
+            field = value
         }
 
     actual override fun submit(commandBuffers: List<GPUCommandBuffer>)= memoryScope { scope ->

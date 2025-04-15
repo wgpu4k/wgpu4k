@@ -25,14 +25,14 @@ import kotlin.coroutines.suspendCoroutine
 
 private val logger = KotlinLogging.logger {}
 
-actual class Buffer(val handler: WGPUBuffer, private val device: Device) : GPUBuffer {
+actual class Buffer(val handler: WGPUBuffer, private val device: Device, label: String) : GPUBuffer {
 
-    actual override var label: String
-        get() = TODO("Not yet implemented")
+    actual override var label: String = label
         set(value) = memoryScope { scope ->
             val newLabel = WGPUStringView.allocate(scope)
                 .also { scope.map(value, it) }
             wgpuBufferSetLabel(handler, newLabel)
+            field = value
         }
     actual override val size: GPUSize64
         get() = wgpuBufferGetSize(handler)

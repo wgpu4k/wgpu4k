@@ -26,14 +26,14 @@ import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetStencilReference
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetVertexBuffer
 import io.ygdrasil.wgpu.wgpuRenderPassEncoderSetViewport
 
-actual class RenderPassEncoder(val handler: WGPURenderPassEncoder) : GPURenderPassEncoder {
+actual class RenderPassEncoder(val handler: WGPURenderPassEncoder, label: String) : GPURenderPassEncoder {
 
-    actual override var label: String
-        get() = TODO("Not yet implemented")
+    actual override var label: String = label
         set(value) = memoryScope { scope ->
             val newLabel = WGPUStringView.allocate(scope)
                 .also { scope.map(value, it) }
             wgpuRenderPassEncoderSetLabel(handler, newLabel)
+            field = value
         }
 
     actual override fun end() {

@@ -29,6 +29,7 @@ import io.ygdrasil.wgpu.wgpuDeviceCreateRenderPipelineAsync
 import io.ygdrasil.wgpu.wgpuDeviceCreateSampler
 import io.ygdrasil.wgpu.wgpuDeviceCreateShaderModule
 import io.ygdrasil.wgpu.wgpuDeviceCreateTexture
+import io.ygdrasil.wgpu.wgpuDeviceGetAdapterInfo
 import io.ygdrasil.wgpu.wgpuDeviceGetLimits
 import io.ygdrasil.wgpu.wgpuDeviceGetQueue
 import io.ygdrasil.wgpu.wgpuDeviceHasFeature
@@ -49,7 +50,7 @@ actual class Device(val handler: WGPUDevice, label: String) : GPUDevice {
             field = value
         }
 
-    actual override val queue: GPUQueue by lazy { Queue(wgpuDeviceGetQueue(handler) ?: error("fail to get device queue")) }
+    actual override val queue: GPUQueue by lazy { Queue(wgpuDeviceGetQueue(handler) ?: error("fail to get device queue"), "") }
 
     actual override val features: Set<GPUFeatureName> by lazy {
         GPUFeatureName.entries
@@ -59,37 +60,38 @@ actual class Device(val handler: WGPUDevice, label: String) : GPUDevice {
             .toSet()
     }
 
-    actual override val limits: GPUSupportedLimits = memoryScope { scope ->
-        val supportedLimits = WGPULimits.allocate(scope)
-        wgpuDeviceGetLimits(handler, supportedLimits)
-        map(supportedLimits)
-    }
+    actual override val limits: GPUSupportedLimits
+        get() = memoryScope { scope ->
+            val supportedLimits = WGPULimits.allocate(scope)
+            wgpuDeviceGetLimits(handler, supportedLimits)
+            map(supportedLimits)
+        }
 
     actual override val adapterInfo: GPUAdapterInfo
-        get() = TODO("Not yet implemented")
+        get() = map(wgpuDeviceGetAdapterInfo(handler))
 
     actual override fun createCommandEncoder(descriptor: GPUCommandEncoderDescriptor?): GPUCommandEncoder = memoryScope { scope ->
         WGPUCommandEncoderDescriptor.allocate(scope)
             .let { wgpuDeviceCreateCommandEncoder(handler, it) }
-            ?.let(::CommandEncoder) ?: error("fail to create command encoder")
+            ?.let {CommandEncoder(it, descriptor?.label ?: "")} ?: error("fail to create command encoder")
     }
 
     actual override fun createShaderModule(descriptor: GPUShaderModuleDescriptor): GPUShaderModule = memoryScope { scope ->
         scope.map(descriptor)
             .let { wgpuDeviceCreateShaderModule(handler, it) }
-            ?.let(::ShaderModule) ?: error("fail to create shader module")
+            ?.let { ShaderModule(it, descriptor.label)} ?: error("fail to create shader module")
     }
 
     actual override fun createPipelineLayout(descriptor: GPUPipelineLayoutDescriptor): GPUPipelineLayout = memoryScope { scope ->
         scope.map(descriptor)
             .let { wgpuDeviceCreatePipelineLayout(handler, it) }
-            ?.let(::PipelineLayout) ?: error("fail to create pipeline layout")
+            ?.let { PipelineLayout(it, descriptor.label)} ?: error("fail to create pipeline layout")
     }
 
     actual override fun createRenderPipeline(descriptor: GPURenderPipelineDescriptor): GPURenderPipeline = memoryScope { scope ->
         scope.map(descriptor)
             .let { wgpuDeviceCreateRenderPipeline(handler, it) }
-            ?.let(::RenderPipeline) ?: error("fail to create render pipeline")
+            ?.let { RenderPipeline(it, descriptor.label)} ?: error("fail to create render pipeline")
     }
 
     actual override suspend fun createComputePipelineAsync(descriptor: GPUComputePipelineDescriptor): Result<GPUComputePipeline> = suspendCoroutine { continuation ->
@@ -122,7 +124,7 @@ actual class Device(val handler: WGPUDevice, label: String) : GPUDevice {
                 continuation.resume(when(status) {
                     WGPUCreatePipelineAsyncStatus_Success -> when (pipeline) {
                         null -> Result.failure(IllegalStateException("RenderPipeline is null"))
-                        else -> Result.success(RenderPipeline(pipeline))
+                        else -> Result.success(RenderPipeline(pipeline, descriptor.label))
                     }
                     else -> Result.failure(IllegalStateException("request RenderPipeline fail with status: $status and message: ${message?.data?.toKString(message.length)}"))
                 })
@@ -140,7 +142,7 @@ actual class Device(val handler: WGPUDevice, label: String) : GPUDevice {
     actual override fun createBuffer(descriptor: GPUBufferDescriptor): GPUBuffer = memoryScope { scope ->
         scope.map(descriptor)
             .let { wgpuDeviceCreateBuffer(handler, it) }
-            ?.let { Buffer(it, this)} ?: error("fail to create buffer")
+            ?.let { Buffer(it, this, descriptor.label)} ?: error("fail to create buffer")
     }
 
     actual override fun createBindGroup(descriptor: GPUBindGroupDescriptor): GPUBindGroup = memoryScope { scope ->
@@ -158,7 +160,7 @@ actual class Device(val handler: WGPUDevice, label: String) : GPUDevice {
     actual override fun createSampler(descriptor: GPUSamplerDescriptor?): GPUSampler = memoryScope { scope ->
         descriptor?.let { scope.map(descriptor) }
             .let { wgpuDeviceCreateSampler(handler, it) }
-            ?.let(::Sampler) ?: error("fail to create sampler")
+            ?.let { Sampler(it, descriptor?.label ?: "")} ?: error("fail to create sampler")
     }
 
     actual override fun createComputePipeline(descriptor: GPUComputePipelineDescriptor): GPUComputePipeline = memoryScope { scope ->
@@ -170,20 +172,20 @@ actual class Device(val handler: WGPUDevice, label: String) : GPUDevice {
     actual override fun createBindGroupLayout(descriptor: GPUBindGroupLayoutDescriptor): GPUBindGroupLayout = memoryScope { scope ->
         scope.map(descriptor)
             .let { wgpuDeviceCreateBindGroupLayout(handler, it) }
-            ?.let(::BindGroupLayout) ?: error("fail to create bind group layout")
+            ?.let { BindGroupLayout(it, descriptor.label)} ?: error("fail to create bind group layout")
     }
 
     actual override fun createRenderBundleEncoder(descriptor: GPURenderBundleEncoderDescriptor): GPURenderBundleEncoder =
         memoryScope { scope ->
             scope.map(descriptor)
                 .let { wgpuDeviceCreateRenderBundleEncoder(handler, it) }
-                ?.let(::RenderBundleEncoder) ?: error("fail to create bind group layout")
+                ?.let { RenderBundleEncoder(it, descriptor.label)} ?: error("fail to create bind group layout")
         }
 
     actual override fun createQuerySet(descriptor: GPUQuerySetDescriptor): GPUQuerySet = memoryScope { scope ->
         scope.map(descriptor)
             .let { wgpuDeviceCreateQuerySet(handler, it) }
-            ?.let(::QuerySet) ?: error("fail to create bind group layout")
+            ?.let { QuerySet(it, descriptor.label)} ?: error("fail to create bind group layout")
     }
 
     actual override fun pushErrorScope(filter: GPUErrorFilter) {

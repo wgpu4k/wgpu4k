@@ -20,7 +20,7 @@ actual class ComputePipeline(val handler: WGPUComputePipeline, label: String) : 
 
     actual override fun getBindGroupLayout(index: UInt): GPUBindGroupLayout =
         (wgpuComputePipelineGetBindGroupLayout(handler, index) ?: error("fail to get bind group layout"))
-            .let(::BindGroupLayout)
+            .let { BindGroupLayout(it, "") }
 
     actual override fun close() {
         wgpuComputePipelineRelease(handler)

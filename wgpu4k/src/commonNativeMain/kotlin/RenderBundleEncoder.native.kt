@@ -19,20 +19,20 @@ import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetLabel
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetPipeline
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetVertexBuffer
 
-actual class RenderBundleEncoder(val handler: WGPURenderBundleEncoder) : GPURenderBundleEncoder {
+actual class RenderBundleEncoder(val handler: WGPURenderBundleEncoder, label: String) : GPURenderBundleEncoder {
 
-    actual override var label: String
-        get() = TODO("Not yet implemented")
+    actual override var label: String = label
         set(value) = memoryScope { scope ->
             val newLabel = WGPUStringView.allocate(scope)
                 .also { scope.map(value, it) }
             wgpuRenderBundleEncoderSetLabel(handler, newLabel)
+            field = value
         }
 
     actual override fun finish(descriptor: GPURenderBundleDescriptor?): GPURenderBundle = memoryScope { scope ->
         descriptor?.let {scope.map(descriptor) }
             .let { wgpuRenderBundleEncoderFinish(handler, it) }
-            ?.let(::RenderBundle) ?: error("fail to create render bundle")
+            ?.let { RenderBundle(it, descriptor?.label ?: "")} ?: error("fail to create render bundle")
     }
 
     actual override fun setBindGroup(
