@@ -87,8 +87,7 @@ actual class Queue(val handler: WGPUQueue, label: String) : GPUQueue {
         dataLayout: GPUTexelCopyBufferLayout,
         size: GPUExtent3D
     ) = memoryScope { scope ->
-        val dataSize = TODO("missing size on ArrayBuffer")
-        wgpuQueueWriteTexture(handler, scope.map(destination), data.rawPointer.toNativeAddress(), 0uL, scope.map(dataLayout), scope.map(size))
+        wgpuQueueWriteTexture(handler, scope.map(destination), data.rawPointer.toNativeAddress(), data.size, scope.map(dataLayout), scope.map(size))
     }
 
 }
