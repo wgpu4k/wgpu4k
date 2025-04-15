@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu
 
-@WGPULowLevel
+@WGPULowLevelApi
 expect class BindGroupLayout : GPUBindGroupLayout {
 
     override var label: String

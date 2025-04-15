@@ -25,14 +25,14 @@ import kotlin.coroutines.suspendCoroutine
 
 private val logger = KotlinLogging.logger {}
 
-actual class Buffer(val handler: WGPUBuffer, private val device: Device) : GPUBuffer {
+actual class Buffer(val handler: WGPUBuffer, private val device: Device, label: String) : GPUBuffer {
 
-    actual override var label: String
-        get() = TODO("Not yet implemented")
+    actual override var label: String = label
         set(value) = memoryScope { scope ->
             val newLabel = WGPUStringView.allocate(scope)
                 .also { scope.map(value, it) }
             wgpuBufferSetLabel(handler, newLabel)
+            field = value
         }
     actual override val size: GPUSize64
         get() = wgpuBufferGetSize(handler)
@@ -48,8 +48,9 @@ actual class Buffer(val handler: WGPUBuffer, private val device: Device) : GPUBu
     }
 
     actual override fun getMappedRange(offset: GPUSize64, size: GPUSize64?): ArrayBuffer {
-        return wgpuBufferGetMappedRange(handler, offset, size ?: (this.size - offset))
-            ?.toArrayBuffer() ?: error("Can't get mapped range")
+        val size = size ?: (this.size - offset)
+        return wgpuBufferGetMappedRange(handler, offset, size)
+            ?.toArrayBuffer(size) ?: error("Can't get mapped range")
     }
 
     actual override suspend fun mapAsync(mode: GPUMapModeFlags, offset: GPUSize64, size: GPUSize64?): Result<Unit> =

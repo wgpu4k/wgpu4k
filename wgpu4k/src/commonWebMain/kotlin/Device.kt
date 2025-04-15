@@ -1,18 +1,21 @@
 package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.map
+import io.ygdrasil.webgpu.mapper.toGPUError
 
 actual class Device(val handler: WGPUDevice) : GPUDevice {
     actual override var label: String
         get() = handler.label
-        set(value) { handler.label = value }
+        set(value) {
+            handler.label = value
+        }
 
     actual override val queue: GPUQueue by lazy { Queue(handler.queue) }
 
     actual override val features: Set<GPUFeatureName> by lazy {
-       GPUFeatureName.entries
-           .filter { handler.features.has(it.value.asJsString().castAs()) }
-           .toSet()
+        GPUFeatureName.entries
+            .filter { handler.features.has(it.value.asJsString().castAs()) }
+            .toSet()
     }
 
     actual override val limits: GPUSupportedLimits by lazy { map(handler.limits) }
@@ -38,17 +41,26 @@ actual class Device(val handler: WGPUDevice) : GPUDevice {
         .createPipelineLayout(map(descriptor))
         .let(::PipelineLayout)
 
-    actual override fun createRenderPipeline(descriptor: GPURenderPipelineDescriptor): GPURenderPipeline = map(descriptor)
-        .let { handler.createRenderPipeline(it) }
-        .let(::RenderPipeline)
+    actual override fun createRenderPipeline(descriptor: GPURenderPipelineDescriptor): GPURenderPipeline =
+        map(descriptor)
+            .let { handler.createRenderPipeline(it) }
+            .let(::RenderPipeline)
 
-    actual override suspend fun createComputePipelineAsync(descriptor: GPUComputePipelineDescriptor): Result<GPUComputePipeline> {
-        TODO("createComputePipelineAsync not yet implemented")
-    }
+    actual override suspend fun createComputePipelineAsync(descriptor: GPUComputePipelineDescriptor): Result<GPUComputePipeline> =
+        runCatching {
+            map(descriptor)
+                .let { handler.createComputePipelineAsync(it) }
+                .wait<WGPUComputePipeline>()
+                .let { ComputePipeline(it) }
+        }
 
-    actual override suspend fun createRenderPipelineAsync(descriptor: GPURenderPipelineDescriptor): Result<GPURenderPipeline> {
-        TODO("createRenderPipelineAsync not yet implemented")
-    }
+    actual override suspend fun createRenderPipelineAsync(descriptor: GPURenderPipelineDescriptor): Result<GPURenderPipeline> =
+        runCatching {
+            map(descriptor)
+                .let { handler.createRenderPipelineAsync(it) }
+                .wait<WGPURenderPipeline>()
+                .let { RenderPipeline(it) }
+        }
 
     actual override fun createBuffer(descriptor: GPUBufferDescriptor): GPUBuffer = map(descriptor)
         .let { handler.createBuffer(it) }
@@ -95,7 +107,8 @@ actual class Device(val handler: WGPUDevice) : GPUDevice {
 
     actual override suspend fun popErrorScope(): Result<GPUError?> = runCatching {
         handler.popErrorScope()
-            .wait<GPUError>()
+            .wait<WGPUError>()
+            .toGPUError()
     }
 
     actual override fun close() {
@@ -103,6 +116,7 @@ actual class Device(val handler: WGPUDevice) : GPUDevice {
     }
 
 }
+
 
 
 

@@ -3,25 +3,36 @@ package io.ygdrasil.webgpu
 import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPURenderBundleEncoder
+import io.ygdrasil.wgpu.WGPUStringView
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderDraw
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderDrawIndexed
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderDrawIndexedIndirect
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderDrawIndirect
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderFinish
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderInsertDebugMarker
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderPopDebugGroup
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderPushDebugGroup
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderRelease
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetBindGroup
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetIndexBuffer
+import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetLabel
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetPipeline
 import io.ygdrasil.wgpu.wgpuRenderBundleEncoderSetVertexBuffer
 
-actual class RenderBundleEncoder(val handler: WGPURenderBundleEncoder) : GPURenderBundleEncoder {
+actual class RenderBundleEncoder(val handler: WGPURenderBundleEncoder, label: String) : GPURenderBundleEncoder {
 
-    actual override var label: String
-        get() = TODO("Not yet implemented")
-        set(value) {}
+    actual override var label: String = label
+        set(value) = memoryScope { scope ->
+            val newLabel = WGPUStringView.allocate(scope)
+                .also { scope.map(value, it) }
+            wgpuRenderBundleEncoderSetLabel(handler, newLabel)
+            field = value
+        }
 
     actual override fun finish(descriptor: GPURenderBundleDescriptor?): GPURenderBundle = memoryScope { scope ->
         descriptor?.let {scope.map(descriptor) }
             .let { wgpuRenderBundleEncoderFinish(handler, it) }
-            ?.let(::RenderBundle) ?: error("fail to create render bundle")
+            ?.let { RenderBundle(it, descriptor?.label ?: "")} ?: error("fail to create render bundle")
     }
 
     actual override fun setBindGroup(
@@ -66,14 +77,14 @@ actual class RenderBundleEncoder(val handler: WGPURenderBundleEncoder) : GPURend
         indirectBuffer: GPUBuffer,
         indirectOffset: GPUSize64
     ) {
-        TODO("Not yet implemented")
+        wgpuRenderBundleEncoderDrawIndirect(handler, (indirectBuffer as Buffer).handler, indirectOffset)
     }
 
     actual override fun drawIndexedIndirect(
         indirectBuffer: GPUBuffer,
         indirectOffset: GPUSize64
     ) {
-        TODO("Not yet implemented")
+        wgpuRenderBundleEncoderDrawIndexedIndirect(handler, (indirectBuffer as Buffer).handler, indirectOffset)
     }
 
     actual override fun draw(
@@ -89,15 +100,19 @@ actual class RenderBundleEncoder(val handler: WGPURenderBundleEncoder) : GPURend
         wgpuRenderBundleEncoderRelease(handler)
     }
 
-    actual override fun pushDebugGroup(groupLabel: String) {
-        TODO("Not yet implemented")
+    actual override fun pushDebugGroup(groupLabel: String) = memoryScope { scope ->
+        val groupLabelWGPUStringView = WGPUStringView.allocate(scope)
+        scope.map(groupLabel, groupLabelWGPUStringView)
+        wgpuRenderBundleEncoderPushDebugGroup(handler, groupLabelWGPUStringView)
     }
 
     actual override fun popDebugGroup() {
-        TODO("Not yet implemented")
+        wgpuRenderBundleEncoderPopDebugGroup(handler)
     }
 
-    actual override fun insertDebugMarker(markerLabel: String) {
-        TODO("Not yet implemented")
+    actual override fun insertDebugMarker(markerLabel: String) = memoryScope { scope ->
+        val markerLabelWGPUStringView = WGPUStringView.allocate(scope)
+        scope.map(markerLabel, markerLabelWGPUStringView)
+        wgpuRenderBundleEncoderInsertDebugMarker(handler, markerLabelWGPUStringView)
     }
 }

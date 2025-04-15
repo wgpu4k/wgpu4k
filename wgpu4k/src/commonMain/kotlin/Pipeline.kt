@@ -1,12 +1,12 @@
 package io.ygdrasil.webgpu
 
-@WGPULowLevel
+@WGPULowLevelApi
 expect class PipelineLayout : GPUPipelineLayout {
     override var label: String
     override fun close()
 }
 
-@WGPULowLevel
+@WGPULowLevelApi
 expect class RenderPipeline : GPURenderPipeline {
     override var label: String
     override fun getBindGroupLayout(index: UInt): GPUBindGroupLayout

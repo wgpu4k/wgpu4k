@@ -2,6 +2,7 @@ package io.ygdrasil.webgpu
 
 import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
+import io.ygdrasil.wgpu.WGPUStringView
 import io.ygdrasil.wgpu.WGPUTexture
 import io.ygdrasil.wgpu.wgpuTextureCreateView
 import io.ygdrasil.wgpu.wgpuTextureGetDepthOrArrayLayers
@@ -13,12 +14,17 @@ import io.ygdrasil.wgpu.wgpuTextureGetSampleCount
 import io.ygdrasil.wgpu.wgpuTextureGetUsage
 import io.ygdrasil.wgpu.wgpuTextureGetWidth
 import io.ygdrasil.wgpu.wgpuTextureRelease
+import io.ygdrasil.wgpu.wgpuTextureSetLabel
 
-actual class Texture(val handler: WGPUTexture) : GPUTexture {
+actual class Texture(val handler: WGPUTexture, label: String) : GPUTexture {
 
-    actual override var label: String
-        get() = TODO("Not yet implemented")
-        set(value) {}
+    actual override var label: String = label
+        set(value)  = memoryScope { scope ->
+            val newLabel = WGPUStringView.allocate(scope)
+                .also { scope.map(value, it) }
+            wgpuTextureSetLabel(handler, newLabel)
+            field = value
+        }
     actual override val width: GPUIntegerCoordinateOut
         get() = wgpuTextureGetWidth(handler)
     actual override val height: GPUIntegerCoordinateOut
@@ -42,7 +48,7 @@ actual class Texture(val handler: WGPUTexture) : GPUTexture {
     actual override fun createView(descriptor: GPUTextureViewDescriptor?): GPUTextureView = memoryScope { scope ->
         descriptor?.let { scope.map(descriptor) }
             .let { wgpuTextureCreateView(handler, it) }
-            ?.let { TextureView(it) }
+            ?.let { TextureView(it, descriptor?.label ?: "") }
             ?: error("fail to create texture view")
     }
 

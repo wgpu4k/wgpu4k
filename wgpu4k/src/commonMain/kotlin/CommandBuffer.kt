@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu
 
-@WGPULowLevel
+@WGPULowLevelApi
 expect class CommandBuffer : GPUCommandBuffer {
 
     override var label: String
