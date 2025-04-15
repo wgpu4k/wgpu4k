@@ -9,11 +9,11 @@ import io.ygdrasil.webgpu.asUInt
 import io.ygdrasil.webgpu.castAs
 import io.ygdrasil.webgpu.map
 
-fun map(input: WGPUCompilationInfo): GPUCompilationInfo = object : GPUCompilationInfo {
+internal fun map(input: WGPUCompilationInfo): GPUCompilationInfo = object : GPUCompilationInfo {
     override val messages: List<GPUCompilationMessage> = input.messages.map { map(it.castAs<WGPUCompilationMessage>()) }
 }
 
-fun map(input: WGPUCompilationMessage): GPUCompilationMessage = object : GPUCompilationMessage {
+internal fun map(input: WGPUCompilationMessage): GPUCompilationMessage = object : GPUCompilationMessage {
     override val message: String = input.message
     override val type: GPUCompilationMessageType = GPUCompilationMessageType.of(input.type) ?: error("Unknown compilation message type: ${input.type}")
     override val lineNum: ULong = input.lineNum.asUInt().toULong()

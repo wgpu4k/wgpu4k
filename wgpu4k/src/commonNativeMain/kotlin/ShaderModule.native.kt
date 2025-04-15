@@ -2,11 +2,9 @@ package io.ygdrasil.webgpu
 
 import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
-import io.ygdrasil.wgpu.WGPUCompilationInfo
 import io.ygdrasil.wgpu.WGPUCompilationInfoCallback
 import io.ygdrasil.wgpu.WGPUCompilationInfoCallbackInfo
 import io.ygdrasil.wgpu.WGPUCompilationInfoRequestStatus_Success
-import io.ygdrasil.wgpu.WGPUCompilationMessage
 import io.ygdrasil.wgpu.WGPUShaderModule
 import io.ygdrasil.wgpu.WGPUStringView
 import io.ygdrasil.wgpu.wgpuShaderModuleGetCompilationInfo
@@ -53,20 +51,4 @@ actual class ShaderModule(val handler: WGPUShaderModule, label: String) : GPUSha
             wgpuShaderModuleGetCompilationInfo(handler, callbackInfo)
         }
     }
-}
-
-fun map(input: WGPUCompilationInfo): GPUCompilationInfo = object : GPUCompilationInfo {
-    override val messages: List<GPUCompilationMessage> = (0 until input.messageCount.toLong())
-        // TODO right now, this only mapping the first element, this need to be rework
-        .map { map(WGPUCompilationMessage(input.messages?.handler ?: error("message is null"))) }
-}
-
-fun map(input: WGPUCompilationMessage): GPUCompilationMessage = object : GPUCompilationMessage {
-    override val message: String = input.message.data?.toKString(input.message.length) ?: error("message data is null")
-    override val type: GPUCompilationMessageType =
-        GPUCompilationMessageType.of(input.type) ?: error("unknown type: ${input.type}")
-    override val lineNum: ULong = input.lineNum
-    override val linePos: ULong = input.linePos
-    override val offset: ULong = input.offset
-    override val length: ULong = input.length
 }

@@ -1,6 +1,7 @@
 package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.map
+import io.ygdrasil.webgpu.mapper.toGPUError
 
 actual class Device(val handler: WGPUDevice) : GPUDevice {
     actual override var label: String
@@ -116,10 +117,6 @@ actual class Device(val handler: WGPUDevice) : GPUDevice {
 
 }
 
-private fun WGPUError.toGPUError(): GPUError = object : GPUError {
-    override val message: String
-        get() = this@toGPUError.message
-}
 
 
 
