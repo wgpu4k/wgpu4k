@@ -2,7 +2,7 @@ package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.map
 
-actual class Texture(val handler: WGPUTexture) : GPUTexture {
+actual class Texture(val handler: WGPUTexture, val canBeDestroy: Boolean = true) : GPUTexture {
 
     actual override var label: String
         get() = handler.label
@@ -34,6 +34,7 @@ actual class Texture(val handler: WGPUTexture) : GPUTexture {
     }
 
     actual override fun close() {
-        handler.destroy()
+        // On firefox, canvas textures throw an exception when calling destroy
+        if (canBeDestroy) handler.destroy()
     }
 }

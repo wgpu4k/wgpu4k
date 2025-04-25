@@ -15,7 +15,7 @@ class CanvasSurface(val handler: WGPUCanvasContext) {
 
     fun getCurrentTexture(): SurfaceTexture {
         return handler.getCurrentTexture()
-            .let { Texture(it) }
+            .let { Texture(it, canBeDestroy = false) }
             .let { SurfaceTexture(it, SurfaceTextureStatus.success) }
     }
 
