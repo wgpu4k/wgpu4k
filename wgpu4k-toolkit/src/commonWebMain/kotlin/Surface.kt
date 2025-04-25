@@ -14,7 +14,7 @@ actual class Surface(private val handler: WGPUCanvasContext) : AutoCloseable {
 
     actual fun getCurrentTexture(): SurfaceTexture {
         return handler.getCurrentTexture()
-            .let(::Texture)
+            .let { Texture(it, canBeDestroy = false)}
             .let { SurfaceTexture(it, SurfaceTextureStatus.success) }
     }
 
