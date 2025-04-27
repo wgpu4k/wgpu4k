@@ -31,13 +31,15 @@ internal fun MemoryAllocator.map(input: GPURenderPassDescriptor): WGPURenderPass
         // check WGPURenderPassDescriptorMaxDrawCount
     }
 
-internal fun MemoryAllocator.map(input: GPURenderPassColorAttachment, output: WGPURenderPassColorAttachment) {
+const val WGPU_DEPTH_SLICE_UNDEFINED = 4294967295u
+
+internal fun map(input: GPURenderPassColorAttachment, output: WGPURenderPassColorAttachment) {
     println("color attachment $output")
     output.view = (input.view as TextureView).handler
     output.loadOp = input.loadOp.value
     output.storeOp = input.storeOp.value
-    // TODO find how to map this
-    //if (input.depthSlice != null) WGPURenderPassColorAttachment.depthSlice = input.depthSlice)
+    // see https://github.com/wgpu4k/wgpu4k/issues/127
+    output.depthSlice = input.depthSlice ?: WGPU_DEPTH_SLICE_UNDEFINED
     if (input.resolveTarget != null) output.resolveTarget = (input.resolveTarget as TextureView).handler
     input.clearValue?.let { map(it, output.clearValue) }
 }
