@@ -3,10 +3,10 @@ kotest = "6.0.0.M3"
 jna = "5.17.0"
 kotlin = "2.1.20"
 kotlinx-browser = "0.3"
-kotlinx-serialization-json = "1.8.0"
+kotlinx-serialization-json = "1.8.1"
 ktor = "2.3.12"
 playwright = "1.46.0"
-coroutines = "1.10.1"
+coroutines = "1.10.2"
 korge = "6.0.0"
 agp = "8.5.2"
 rococoa = "0.0.1"
@@ -15,7 +15,7 @@ android-native-helper = "0.0.1"
 glfw-native = "0.0.1"
 
 # WebGPU
-wgpu4k-native = "v24.0.2"
+wgpu4k-native = "v24.0.3"
 webgpu-ktypes = "0.0.6"
 
 # Logging
