@@ -38,8 +38,8 @@ cd wgpu4k
 ```
 
 - **Desktop JVM**: `./gradlew examples:glfw:run`
-- **Web JS**: `./gradlew examples:web-js:jsBrowserRun`
-- **Web Wasm**: `./gradlew examples:web-js:wasmJsBrowserRun`
+- **Web JS**: `./gradlew examples:web-js:jsBrowserProductionRun`
+- **Web Wasm**: `./gradlew examples:web-js:wasmJsBrowserProductionRun`
 - **Mac Native (Experimental)**: `./gradlew examples:native:runDebugExecutableNative`
 - **Android (Experimental)**:  Execute the `android` subproject via Android Studio.
 - **iOS (Experimental)**:
