@@ -21,7 +21,8 @@ suspend fun glfwContextRenderer(
     width: Int = 1,
     height: Int = 1,
     title: String = "",
-    deferredRendering: Boolean = false
+    deferredRendering: Boolean = false,
+    onUncapturedError: GPUUncapturedErrorCallback? = null
 ): GLFWContext {
 
     glfwInit()
@@ -39,8 +40,9 @@ suspend fun glfwContextRenderer(
     val adapter = wgpu.requestAdapter(nativeSurface)
         ?: error("fail to get adapter")
 
-    val device = adapter.requestDevice()
-        .getOrThrow()
+    val device = adapter.requestDevice(DeviceDescriptor(
+        onUncapturedError = onUncapturedError
+    )).getOrThrow()
 
     nativeSurface.computeSurfaceCapabilities(adapter)
 
