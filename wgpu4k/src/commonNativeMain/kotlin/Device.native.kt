@@ -196,11 +196,12 @@ actual class Device(val handler: WGPUDevice, label: String) : GPUDevice {
         memoryScope { scope ->
 
             val callback = WGPUPopErrorScopeCallback.allocate(scope) { status, error, message, userdata1, userdata2 ->
-                    continuation.resume(when(status) {
+                val message = message?.data?.toKString(message.length)
+                continuation.resume(when(status) {
                         WGPUPopErrorScopeStatus_Success -> when (error) {
-                            else -> Result.success(errorOf(error))
+                            else -> Result.success(errorOf(error, message))
                         }
-                        else -> Result.failure(IllegalStateException("request GPUError fail with status: $status and message: ${message?.data?.toKString(message.length)}"))
+                        else -> Result.failure(IllegalStateException("request GPUError fail with status: $status and message: $message"))
                     })
                 }
 

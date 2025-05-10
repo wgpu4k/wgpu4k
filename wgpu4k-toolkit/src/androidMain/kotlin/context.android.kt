@@ -4,13 +4,20 @@ import android.view.SurfaceHolder
 import ffi.NativeAddress
 import io.ygdrasil.nativeHelper.Helper
 
-suspend fun androidContextRenderer(surfaceHolder: SurfaceHolder, width: Int, height: Int, deferredRendering: Boolean = false): AndroidContext {
+suspend fun androidContextRenderer(
+    surfaceHolder: SurfaceHolder,
+    width: Int, height: Int,
+    deferredRendering: Boolean = false,
+    onUncapturedError: GPUUncapturedErrorCallback? = null
+): AndroidContext {
     val wgpu = WGPU.createInstance(WGPUInstanceBackend.Vulkan) ?: error("Can't create WGPU instance")
     val window = Helper.nativeWindowFromSurface(surfaceHolder.surface)
         .let { NativeAddress(it) }
     val nativeSurface = wgpu.getSurfaceFromAndroidWindow(window) ?: error("Can't create Surface")
     val adapter = wgpu.requestAdapter(nativeSurface) ?: error("Can't create Adapter")
-    val device = adapter.requestDevice().getOrThrow()
+    val device = adapter.requestDevice(DeviceDescriptor(
+        onUncapturedError = onUncapturedError
+    )).getOrThrow()
     val surface = Surface(nativeSurface, width.toUInt(), height.toUInt())
     nativeSurface.computeSurfaceCapabilities(adapter)
 
