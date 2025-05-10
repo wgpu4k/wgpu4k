@@ -33,28 +33,25 @@ fun jsApplication(canvas: HTMLCanvasElement) {
 }
 
 private fun registerKeyToChangeScene(application: Application) {
-    fun extracted() {
-        window.onkeydown = { event ->
-            if (event.keyCode == 33 || event.keyCode == 34) {
-                val currentIndex = application.availableScenes.indexOf(application.currentScene)
-                val index = if (event.keyCode == 33) {
-                    currentIndex - 1
-                } else {
-                    currentIndex + 1
-                }.let {
-                    when (it) {
-                        application.availableScenes.size -> 0
-                        -1 -> application.availableScenes.size - 1
-                        else -> it
-                    }
+    window.onkeydown = { event ->
+        if (event.keyCode == 33 || event.keyCode == 34) {
+            val currentIndex = application.availableScenes.indexOf(application.currentScene)
+            val index = if (event.keyCode == 33) {
+                currentIndex - 1
+            } else {
+                currentIndex + 1
+            }.let {
+                when (it) {
+                    application.availableScenes.size -> 0
+                    -1 -> application.availableScenes.size - 1
+                    else -> it
                 }
+            }
 
-                MainScope().launch {
-                    application.changeScene(application.availableScenes[index])
-                }
+            MainScope().launch {
+                application.changeScene(application.availableScenes[index])
             }
         }
     }
 
-    extracted()
 }
