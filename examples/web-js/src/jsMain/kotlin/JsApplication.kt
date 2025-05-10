@@ -20,6 +20,20 @@ fun jsApplication(canvas: HTMLCanvasElement) {
             canvasContext.wgpuContext
         )
 
+        registerKeyToChangeScene(application)
+        // Schedule main loop to run repeatedly
+        setInterval({
+            MainScope().launch {
+                application.renderFrame()
+            }
+        }, UPDATE_INTERVAL)
+
+    }
+
+}
+
+private fun registerKeyToChangeScene(application: Application) {
+    fun extracted() {
         window.onkeydown = { event ->
             if (event.keyCode == 33 || event.keyCode == 34) {
                 val currentIndex = application.availableScenes.indexOf(application.currentScene)
@@ -39,16 +53,8 @@ fun jsApplication(canvas: HTMLCanvasElement) {
                     application.changeScene(application.availableScenes[index])
                 }
             }
-
-
         }
-        // Schedule main loop to run repeatedly
-        setInterval({
-            MainScope().launch {
-                application.renderFrame()
-            }
-        }, UPDATE_INTERVAL)
-
     }
 
+    extracted()
 }

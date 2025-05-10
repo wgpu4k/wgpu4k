@@ -34,7 +34,7 @@ actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
                 null -> handler.requestDevice()
                 else -> handler.requestDevice(map(descriptor))
             }.wait<WGPUDevice?>()
-                ?.let(::Device) ?: error("Failed to create a GPU device")
+                ?.let { Device(it, descriptor?.onUncapturedError)} ?: error("Failed to create a GPU device")
         }
     }
 

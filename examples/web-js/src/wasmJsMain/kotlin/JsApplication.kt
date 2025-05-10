@@ -1,5 +1,6 @@
 import io.ygdrasil.webgpu.HTMLCanvasElement
 import io.ygdrasil.webgpu.canvasContextRenderer
+import io.ygdrasil.webgpu.examples.Application
 import io.ygdrasil.webgpu.examples.createApplication
 import kotlinx.browser.window
 import kotlinx.coroutines.MainScope
@@ -19,28 +20,8 @@ fun jsApplication(canvas: HTMLCanvasElement) {
             canvasContext.wgpuContext
         )
 
-        window.onkeydown = { event ->
-            if (event.keyCode == 33 || event.keyCode == 34) {
-                val currentIndex = application.availableScenes.indexOf(application.currentScene)
-                val index = if (event.keyCode == 33) {
-                    currentIndex - 1
-                } else {
-                    currentIndex + 1
-                }.let {
-                    when (it) {
-                        application.availableScenes.size -> 0
-                        -1 -> application.availableScenes.size - 1
-                        else -> it
-                    }
-                }
+        registerKeyToChangeScene(application)
 
-                MainScope().launch {
-                    application.changeScene(application.availableScenes[index])
-                }
-            }
-
-
-        }
         // Schedule main loop to run repeatedly
         setInterval({
             MainScope().launch {
@@ -50,4 +31,29 @@ fun jsApplication(canvas: HTMLCanvasElement) {
 
     }
 
+}
+
+private fun registerKeyToChangeScene(application: Application) {
+    window.onkeydown = { event ->
+        if (event.keyCode == 33 || event.keyCode == 34) {
+            val currentIndex = application.availableScenes.indexOf(application.currentScene)
+            val index = if (event.keyCode == 33) {
+                currentIndex - 1
+            } else {
+                currentIndex + 1
+            }.let {
+                when (it) {
+                    application.availableScenes.size -> 0
+                    -1 -> application.availableScenes.size - 1
+                    else -> it
+                }
+            }
+
+            MainScope().launch {
+                application.changeScene(application.availableScenes[index])
+            }
+        }
+
+
+    }
 }

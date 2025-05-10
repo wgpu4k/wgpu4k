@@ -1,9 +1,16 @@
 package io.ygdrasil.webgpu
 
+import io.ygdrasil.webgpu.mapper.errorOf
 import io.ygdrasil.webgpu.mapper.map
-import io.ygdrasil.webgpu.mapper.toGPUError
 
-actual class Device(val handler: WGPUDevice) : GPUDevice {
+actual class Device(val handler: WGPUDevice, onUncapturedError: GPUUncapturedErrorCallback?) : GPUDevice {
+
+    init {
+        onUncapturedError?.let { callback ->
+            configureUncapturedError(handler, callback)
+        }
+    }
+
     actual override var label: String
         get() = handler.label
         set(value) {
@@ -108,7 +115,7 @@ actual class Device(val handler: WGPUDevice) : GPUDevice {
     actual override suspend fun popErrorScope(): Result<GPUError?> = runCatching {
         handler.popErrorScope()
             .wait<WGPUError>()
-            .toGPUError()
+            .let { errorOf(it) }
     }
 
     actual override fun close() {
@@ -116,6 +123,8 @@ actual class Device(val handler: WGPUDevice) : GPUDevice {
     }
 
 }
+
+internal expect fun configureUncapturedError(handler: WGPUDevice, callback: GPUUncapturedErrorCallback)
 
 
 

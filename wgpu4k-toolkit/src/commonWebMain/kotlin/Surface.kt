@@ -27,7 +27,12 @@ actual class Surface(private val handler: WGPUCanvasContext) : AutoCloseable {
     actual override fun close() { /* does not exists on Web */ }
 }
 
-suspend fun canvasContextRenderer(htmlCanvas: HTMLCanvasElement? = null, deferredRendering: Boolean = false, width: Int? = null, height: Int? = null): CanvasContext {
+suspend fun canvasContextRenderer(
+    htmlCanvas: HTMLCanvasElement? = null,
+    deferredRendering: Boolean = false,
+    width: Int? = null, height: Int? = null,
+    onUncapturedError: GPUUncapturedErrorCallback? = null
+): CanvasContext {
 
     val canvas = htmlCanvas ?: createcCanvas("canvas", deferredRendering)
 
@@ -35,8 +40,11 @@ suspend fun canvasContextRenderer(htmlCanvas: HTMLCanvasElement? = null, deferre
     if (width != null) canvas.width = width.asJsNumber() else canvas.width = (canvas.clientWidth.asInt() * devicePixelRatio).asJsNumber()
     if (height != null) canvas.height = height.asJsNumber() else canvas.height = (canvas.clientHeight.asInt() * devicePixelRatio).asJsNumber()
 
-    val adapter = requestAdapter().getOrThrow()
-    val device = adapter.requestDevice().getOrThrow()
+    val adapter = requestAdapter()
+        .getOrThrow()
+    val device = adapter.requestDevice(DeviceDescriptor(
+        onUncapturedError = onUncapturedError
+    )).getOrThrow()
     val canvasSurface = canvas.getCanvasSurface()
     val surface = Surface(canvasSurface)
 
