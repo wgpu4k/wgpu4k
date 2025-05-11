@@ -11,7 +11,6 @@ import io.ygdrasil.wgpu.WGPURenderPassDescriptor
 
 internal fun MemoryAllocator.map(input: GPURenderPassDescriptor): WGPURenderPassDescriptor =
     WGPURenderPassDescriptor.allocate(this).also { output ->
-        println("render pass descriptor $output")
         map(input.label, output.label)
 
         if (input.colorAttachments.isNotEmpty()) {
@@ -34,7 +33,6 @@ internal fun MemoryAllocator.map(input: GPURenderPassDescriptor): WGPURenderPass
 const val WGPU_DEPTH_SLICE_UNDEFINED = 4294967295u
 
 internal fun map(input: GPURenderPassColorAttachment, output: WGPURenderPassColorAttachment) {
-    println("color attachment $output")
     output.view = (input.view as TextureView).handler
     output.loadOp = input.loadOp.value
     output.storeOp = input.storeOp.value
