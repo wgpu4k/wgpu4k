@@ -19,7 +19,7 @@ wgpu4k-native = "v24.0.3"
 webgpu-ktypes = "0.0.6"
 
 # Logging
-kotlin-logging = "7.0.3"
+kotlin-logging = "7.0.7"
 logback = "1.5.16"
 
 [libraries]
