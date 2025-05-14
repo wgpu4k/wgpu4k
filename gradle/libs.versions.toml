@@ -55,7 +55,7 @@ kotlin-logging = { module = "io.github.oshai:kotlin-logging", version.ref = "kot
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 
 # Generator & Release
-commons-io = { module = "commons-io:commons-io", version = "2.18.0" }
+commons-io = { module = "commons-io:commons-io", version = "2.19.0" }
 gson = { module = "com.google.code.gson:gson", version = "2.12.1" }
 zip4j = { module = "net.lingala.zip4j:zip4j", version = "2.11.5" }
 kaml = { module = "com.charleskorn.kaml:kaml", version = "0.71.0" }
