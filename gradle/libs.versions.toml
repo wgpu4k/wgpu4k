@@ -10,7 +10,7 @@ coroutines = "1.10.2"
 korge = "6.0.0"
 agp = "8.5.2"
 rococoa = "0.0.1"
-slf4j-simple = "2.0.16"
+slf4j-simple = "2.0.17"
 android-native-helper = "0.0.1"
 glfw-native = "0.0.1"
 
