@@ -1,5 +1,5 @@
 [versions]
-kotest = "6.0.0.M3"
+kotest = "6.0.0.M4"
 jna = "5.17.0"
 kotlin = "2.1.20"
 kotlinx-browser = "0.3"
