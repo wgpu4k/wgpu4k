@@ -1,7 +1,7 @@
 [versions]
 kotest = "6.0.0.M3"
 jna = "5.17.0"
-kotlin = "2.1.20"
+kotlin = "2.1.21"
 kotlinx-browser = "0.3"
 kotlinx-serialization-json = "1.8.1"
 ktor = "2.3.12"
