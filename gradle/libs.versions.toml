@@ -15,7 +15,7 @@ android-native-helper = "0.0.1"
 glfw-native = "0.0.1"
 
 # WebGPU
-wgpu4k-native = "v24.0.3"
+wgpu4k-native = "v25.0.2"
 webgpu-ktypes = "0.0.7"
 
 # Logging
