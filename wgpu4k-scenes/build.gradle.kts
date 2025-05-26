@@ -1,7 +1,7 @@
 
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
-    kotlin("plugin.serialization") version "2.1.0"
+    kotlin("plugin.serialization") version "2.1.21"
     if (isAndroidConfigured) id("android")
     id("publish")
 }
