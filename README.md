@@ -113,7 +113,7 @@ The native backend uses [Firefox WebGPU][backend-info]. For more details, visit 
 
 [status-badge]: https://img.shields.io/badge/Status-Beta-orange?style=plastic
 
-[version-badge]: https://img.shields.io/badge/Latest%20version-0.0.3-orange?style=plastic
+[version-badge]: https://img.shields.io/badge/Latest%20version-0.1.1-orange?style=plastic
 
 [license-badge]: https://img.shields.io/badge/Licence-MIT-blue?style=plastic
 
