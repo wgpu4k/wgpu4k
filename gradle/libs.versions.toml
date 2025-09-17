@@ -1,8 +1,8 @@
 [versions]
-kotest = "6.0.0.M3"
+kotest = "6.0.3"
 jna = "5.17.0"
-kotlin = "2.1.21"
-kotlinx-browser = "0.3"
+kotlin = "2.2.20"
+kotlinx-browser = "0.5.0"
 kotlinx-serialization-json = "1.8.1"
 ktor = "2.3.12"
 playwright = "1.46.0"
@@ -64,7 +64,7 @@ dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "2.0.0" 
 
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-kotest = { id = "io.kotest.multiplatform", version.ref = "kotest" }
+kotest = { id = "io.kotest", version.ref = "kotest" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 
 [bundles]

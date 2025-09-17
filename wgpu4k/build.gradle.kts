@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
     alias(libs.plugins.kotest)
+    id("com.google.devtools.ksp") version "2.2.20-2.0.3"
     publish
     if (isAndroidConfigured) android
 }
