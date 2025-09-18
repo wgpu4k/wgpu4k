@@ -63,8 +63,10 @@ kotlin {
     }
 }
 
-fun getCommonProject() = projects.wgpu4kScenes.identityPath.path
-    ?.let(::project) ?: error("Could not find project path")
+fun getCommonProject() = projects
+    .wgpu4kScenes
+    .path
+    .let(::project)
 
 val File.isNotEmpty: Boolean
     get() = this.listFiles()?.isNotEmpty() ?: false
