@@ -1,12 +1,11 @@
 package io.ygdrasil.webgpu.mapper
 
-import io.ygdrasil.webgpu.JsArray
-import io.ygdrasil.webgpu.JsObject
 import io.ygdrasil.webgpu.asJsNumber
-import io.ygdrasil.webgpu.jsArray
 import io.ygdrasil.webgpu.set
+import kotlin.js.JsAny
+import kotlin.js.JsArray
 
-fun map(input: List<UInt>): JsArray<JsObject> = jsArray<JsObject>().also { array ->
+fun map(input: List<UInt>): JsArray<JsAny> = JsArray<JsAny>().also { array ->
     input.mapIndexed { index, value ->
         set(array, index, value.asJsNumber())
     }

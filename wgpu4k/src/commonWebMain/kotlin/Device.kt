@@ -2,6 +2,8 @@ package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.errorOf
 import io.ygdrasil.webgpu.mapper.map
+import js.promise.await
+import kotlin.js.unsafeCast
 
 actual class Device(val handler: WGPUDevice, onUncapturedError: GPUUncapturedErrorCallback?) : GPUDevice {
 
@@ -21,7 +23,7 @@ actual class Device(val handler: WGPUDevice, onUncapturedError: GPUUncapturedErr
 
     actual override val features: Set<GPUFeatureName> by lazy {
         GPUFeatureName.entries
-            .filter { handler.features.has(it.value.asJsString().castAs()) }
+            .filter { handler.features.has(it.value.asJsString()) }
             .toSet()
     }
 
@@ -57,7 +59,8 @@ actual class Device(val handler: WGPUDevice, onUncapturedError: GPUUncapturedErr
         runCatching {
             map(descriptor)
                 .let { handler.createComputePipelineAsync(it) }
-                .wait<WGPUComputePipeline>()
+                .await()
+                .unsafeCast<WGPUComputePipeline>()
                 .let { ComputePipeline(it) }
         }
 
@@ -65,7 +68,8 @@ actual class Device(val handler: WGPUDevice, onUncapturedError: GPUUncapturedErr
         runCatching {
             map(descriptor)
                 .let { handler.createRenderPipelineAsync(it) }
-                .wait<WGPURenderPipeline>()
+                .await()
+                .unsafeCast<WGPURenderPipeline>()
                 .let { RenderPipeline(it) }
         }
 
@@ -114,7 +118,8 @@ actual class Device(val handler: WGPUDevice, onUncapturedError: GPUUncapturedErr
 
     actual override suspend fun popErrorScope(): Result<GPUError?> = runCatching {
         handler.popErrorScope()
-            .wait<WGPUError>()
+            .await()
+            .unsafeCast<WGPUError>()
             .let { errorOf(it) }
     }
 

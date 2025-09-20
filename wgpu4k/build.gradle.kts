@@ -175,6 +175,7 @@ kotlin {
             }
         }
         freeCompilerArgs.add("-Xexpect-actual-classes")
+        freeCompilerArgs.add("-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi")
     }
 }
 

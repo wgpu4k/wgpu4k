@@ -1,6 +1,10 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import js.promise.await
+import kotlin.js.ExperimentalWasmJsInterop
 
 actual class Buffer(val handler: WGPUBuffer) : GPUBuffer {
 
@@ -31,7 +35,8 @@ actual class Buffer(val handler: WGPUBuffer) : GPUBuffer {
     ): Result<Unit> = when (size) {
         null -> handler.mapAsync(mode.toFlagInt().asJsNumber(), offset.asJsNumber())
         else -> handler.mapAsync(mode.toFlagInt().asJsNumber(), offset.asJsNumber(), size.asJsNumber())
-    }.wait<Unit>().let { Result.success(Unit) }
+    }.await()
+        ?.let { Result.success(Unit) } ?: Result.failure(Exception("mapAsync failed"))
 
     actual override fun unmap() {
         handler.unmap()

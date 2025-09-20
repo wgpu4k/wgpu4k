@@ -1,7 +1,12 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.mapper.map
+import js.promise.await
+import kotlin.js.ExperimentalWasmJsInterop
+import kotlin.js.unsafeCast
 
 private val logger = KotlinLogging.logger {}
 
@@ -11,7 +16,7 @@ suspend fun requestAdapter(options: GPURequestAdapterOptions? = null): Result<Ad
     when (options) {
         null -> gpu.requestAdapter()
         else -> gpu.requestAdapter(map(options))
-    }.wait<WGPUAdapter>()
+    }.await().unsafeCast<WGPUAdapter>()
         .let { Adapter(it) }
 }
 
@@ -19,7 +24,7 @@ actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
 
     actual override val features: Set<GPUFeatureName> by lazy {
         GPUFeatureName.entries
-            .filter { handler.features.has(it.value.asJsString().castAs()) }
+            .filter { handler.features.has(it.value.asJsString()) }
             .toSet()
     }
 
@@ -33,7 +38,8 @@ actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
             when (descriptor) {
                 null -> handler.requestDevice()
                 else -> handler.requestDevice(map(descriptor))
-            }.wait<WGPUDevice?>()
+            }.await()
+                ?.unsafeCast<WGPUDevice>()
                 ?.let { Device(it, descriptor?.onUncapturedError)} ?: error("Failed to create a GPU device")
         }
     }

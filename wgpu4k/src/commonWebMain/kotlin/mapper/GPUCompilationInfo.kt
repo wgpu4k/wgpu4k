@@ -6,11 +6,11 @@ import io.ygdrasil.webgpu.GPUCompilationMessageType
 import io.ygdrasil.webgpu.WGPUCompilationInfo
 import io.ygdrasil.webgpu.WGPUCompilationMessage
 import io.ygdrasil.webgpu.asUInt
-import io.ygdrasil.webgpu.castAs
 import io.ygdrasil.webgpu.map
+import kotlin.js.unsafeCast
 
 internal fun map(input: WGPUCompilationInfo): GPUCompilationInfo = object : GPUCompilationInfo {
-    override val messages: List<GPUCompilationMessage> = input.messages.map { map(it.castAs<WGPUCompilationMessage>()) }
+    override val messages: List<GPUCompilationMessage> = input.messages.map { map(it.unsafeCast<WGPUCompilationMessage>()) }
 }
 
 internal fun map(input: WGPUCompilationMessage): GPUCompilationMessage = object : GPUCompilationMessage {

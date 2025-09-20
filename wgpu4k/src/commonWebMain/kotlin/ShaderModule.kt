@@ -1,6 +1,8 @@
 package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.map
+import js.promise.await
+import kotlin.js.unsafeCast
 
 actual class ShaderModule(val handler: WGPUShaderModule) : GPUShaderModule {
     actual override var label: String
@@ -12,7 +14,8 @@ actual class ShaderModule(val handler: WGPUShaderModule) : GPUShaderModule {
     actual override suspend fun getCompilationInfo(): Result<GPUCompilationInfo> = runCatching {
         handler
             .getCompilationInfo()
-            .wait<WGPUCompilationInfo>()
+            .await()
+            .unsafeCast<WGPUCompilationInfo>()
             .let { map(it) }
     }
 

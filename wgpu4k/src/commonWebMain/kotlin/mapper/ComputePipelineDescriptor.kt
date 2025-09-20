@@ -7,14 +7,13 @@ import io.ygdrasil.webgpu.ShaderModule
 import io.ygdrasil.webgpu.WGPUComputePipelineDescriptor
 import io.ygdrasil.webgpu.WGPUProgrammableStage
 import io.ygdrasil.webgpu.asJsString
-import io.ygdrasil.webgpu.castAs
 import io.ygdrasil.webgpu.createJsObject
 
 internal fun map(input: GPUComputePipelineDescriptor): WGPUComputePipelineDescriptor =
     createJsObject<WGPUComputePipelineDescriptor>().apply {
         label = input.label
         compute = map(input.compute)
-        layout = (input.layout as PipelineLayout)?.handler ?: "auto".asJsString().castAs()
+        layout = (input.layout as PipelineLayout)?.handler ?: "auto".asJsString()
     }
 
 private fun map(input: GPUProgrammableStage): WGPUProgrammableStage =

@@ -1,6 +1,7 @@
 package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.map
+import js.promise.await
 
 actual class Queue(val handler: WGPUQueue) : GPUQueue {
 
@@ -10,7 +11,7 @@ actual class Queue(val handler: WGPUQueue) : GPUQueue {
 
     actual override suspend fun onSubmittedWorkDone(): Result<Unit> = runCatching {
         handler.onSubmittedWorkDone()
-            .wait<Unit>()
+            .await()
     }
 
     actual override fun submit(commandBuffers: List<GPUCommandBuffer>) {
