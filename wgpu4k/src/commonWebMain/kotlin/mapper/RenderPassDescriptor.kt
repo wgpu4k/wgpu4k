@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu.mapper
 
 import io.ygdrasil.webgpu.GPURenderPassColorAttachment
@@ -10,6 +12,7 @@ import io.ygdrasil.webgpu.WGPURenderPassDescriptor
 import io.ygdrasil.webgpu.asJsNumber
 import io.ygdrasil.webgpu.createJsObject
 import io.ygdrasil.webgpu.mapJsArray
+import kotlin.js.ExperimentalWasmJsInterop
 
 internal fun map(input: GPURenderPassDescriptor): WGPURenderPassDescriptor =
     createJsObject<WGPURenderPassDescriptor>().apply {

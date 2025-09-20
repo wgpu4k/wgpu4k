@@ -1,7 +1,10 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu.mapper
 
 import io.ygdrasil.webgpu.asJsNumber
 import io.ygdrasil.webgpu.set
+import kotlin.js.ExperimentalWasmJsInterop
 import kotlin.js.JsAny
 import kotlin.js.JsArray
 

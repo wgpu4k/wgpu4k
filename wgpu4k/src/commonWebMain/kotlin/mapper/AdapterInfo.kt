@@ -1,9 +1,12 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu.mapper
 
 import io.ygdrasil.webgpu.AdapterInfo
 import io.ygdrasil.webgpu.GPUAdapterInfo
 import io.ygdrasil.webgpu.WGPUAdapterInfo
 import io.ygdrasil.webgpu.asUInt
+import kotlin.js.ExperimentalWasmJsInterop
 
 internal fun map(input: WGPUAdapterInfo): GPUAdapterInfo = AdapterInfo(
     architecture = input.architecture,

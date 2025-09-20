@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu.mapper
 
 import io.ygdrasil.webgpu.GPURenderBundleEncoderDescriptor
@@ -6,6 +8,7 @@ import io.ygdrasil.webgpu.asJsNumber
 import io.ygdrasil.webgpu.asJsString
 import io.ygdrasil.webgpu.createJsObject
 import io.ygdrasil.webgpu.mapJsArray
+import kotlin.js.ExperimentalWasmJsInterop
 
 internal fun map(input: GPURenderBundleEncoderDescriptor): WGPURenderBundleEncoderDescriptor =
     createJsObject<WGPURenderBundleEncoderDescriptor>().apply {

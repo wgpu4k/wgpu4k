@@ -1,5 +1,8 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu
 
+import kotlin.js.ExperimentalWasmJsInterop
 import kotlin.js.unsafeCast
 
 fun HTMLCanvasElement.getCanvasSurface() = getContext("webgpu").unsafeCast<WGPUCanvasContext>()

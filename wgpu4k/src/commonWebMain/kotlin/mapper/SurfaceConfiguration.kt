@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu.mapper
 
 import io.ygdrasil.webgpu.Device
@@ -8,6 +10,7 @@ import io.ygdrasil.webgpu.asJsString
 import io.ygdrasil.webgpu.createJsObject
 import io.ygdrasil.webgpu.mapJsArray
 import io.ygdrasil.webgpu.toFlagInt
+import kotlin.js.ExperimentalWasmJsInterop
 
 fun map(input: SurfaceConfiguration) : WGPUCanvasConfiguration = createJsObject<WGPUCanvasConfiguration>().apply {
     device = (input.device as Device).handler

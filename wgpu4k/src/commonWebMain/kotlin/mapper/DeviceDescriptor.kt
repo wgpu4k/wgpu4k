@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu.mapper
 
 import io.ygdrasil.webgpu.GPUDeviceDescriptor
@@ -7,6 +9,7 @@ import io.ygdrasil.webgpu.WGPUQueueDescriptor
 import io.ygdrasil.webgpu.asJsString
 import io.ygdrasil.webgpu.createJsObject
 import io.ygdrasil.webgpu.mapJsArray
+import kotlin.js.ExperimentalWasmJsInterop
 
 // TODO: add unit test
 internal fun map(input: GPUDeviceDescriptor) = createJsObject<WGPUDeviceDescriptor>().apply {

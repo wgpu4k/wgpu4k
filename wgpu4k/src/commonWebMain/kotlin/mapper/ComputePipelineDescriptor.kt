@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu.mapper
 
 import io.ygdrasil.webgpu.GPUComputePipelineDescriptor
@@ -8,6 +10,7 @@ import io.ygdrasil.webgpu.WGPUComputePipelineDescriptor
 import io.ygdrasil.webgpu.WGPUProgrammableStage
 import io.ygdrasil.webgpu.asJsString
 import io.ygdrasil.webgpu.createJsObject
+import kotlin.js.ExperimentalWasmJsInterop
 
 internal fun map(input: GPUComputePipelineDescriptor): WGPUComputePipelineDescriptor =
     createJsObject<WGPUComputePipelineDescriptor>().apply {

@@ -1,6 +1,9 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.map
+import kotlin.js.ExperimentalWasmJsInterop
 
 actual class ComputePassEncoder(val handler: WGPUComputePassEncoder) : GPUComputePassEncoder {
     actual override var label: String

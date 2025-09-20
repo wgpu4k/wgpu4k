@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu.mapper
 
 import io.ygdrasil.webgpu.GPUShaderModuleCompilationHint
@@ -6,6 +8,7 @@ import io.ygdrasil.webgpu.WGPUShaderModuleCompilationHint
 import io.ygdrasil.webgpu.WGPUShaderModuleDescriptor
 import io.ygdrasil.webgpu.createJsObject
 import io.ygdrasil.webgpu.mapJsArray
+import kotlin.js.ExperimentalWasmJsInterop
 
 fun map(input: GPUShaderModuleDescriptor): WGPUShaderModuleDescriptor = createJsObject<WGPUShaderModuleDescriptor>().apply {
     code = input.code

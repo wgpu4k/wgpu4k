@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu.mapper
 
 import io.ygdrasil.webgpu.GPUCompilationInfo
@@ -7,6 +9,7 @@ import io.ygdrasil.webgpu.WGPUCompilationInfo
 import io.ygdrasil.webgpu.WGPUCompilationMessage
 import io.ygdrasil.webgpu.asUInt
 import io.ygdrasil.webgpu.map
+import kotlin.js.ExperimentalWasmJsInterop
 import kotlin.js.unsafeCast
 
 internal fun map(input: WGPUCompilationInfo): GPUCompilationInfo = object : GPUCompilationInfo {

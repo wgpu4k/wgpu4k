@@ -1,8 +1,11 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.errorOf
 import io.ygdrasil.webgpu.mapper.map
 import js.promise.await
+import kotlin.js.ExperimentalWasmJsInterop
 import kotlin.js.unsafeCast
 
 actual class Device(val handler: WGPUDevice, onUncapturedError: GPUUncapturedErrorCallback?) : GPUDevice {

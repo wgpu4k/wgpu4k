@@ -1,10 +1,15 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu
+
+import kotlin.js.ExperimentalWasmJsInterop
+import kotlin.js.unsafeCast
 
 actual class Surface(private val handler: WGPUCanvasContext) : AutoCloseable {
     actual val width: UInt
-        get() = handler.canvas.castAs<HTMLCanvasElement>().width.asUInt()
+        get() = handler.canvas.unsafeCast<HTMLCanvasElement>().width.asUInt()
     actual val height: UInt
-        get() = handler.canvas.castAs<HTMLCanvasElement>().height.asUInt()
+        get() = handler.canvas.unsafeCast<HTMLCanvasElement>().height.asUInt()
 
     // @see https://gpuweb.github.io/gpuweb/#canvas-configuration
     actual val supportedFormats: Set<GPUTextureFormat> =
@@ -78,14 +83,14 @@ fun map(input: SurfaceConfiguration) = createJsObject<WGPUCanvasConfiguration>()
     device = (input.device as Device).handler
     format = input.format.value
     usage = input.usage.toFlagInt().asJsNumber()
-    viewFormats = input.viewFormats.mapJsArray { it.value.asJsString().castAs() }
-    colorSpace = input.colorSpace.value.asJsString().castAs()
+    viewFormats = input.viewFormats.mapJsArray { it.value.asJsString() }
+    colorSpace = input.colorSpace.value.asJsString()
     toneMapping = createJsObject<WGPUCanvasToneMapping>().apply {
         // TODO add the capability to change this value
         // GPUCanvasToneMappingMode.Standard is the default value on specification
-        mode = GPUCanvasToneMappingMode.Standard.value.asJsString().castAs()
+        mode = GPUCanvasToneMappingMode.Standard.value.asJsString()
     }
-    alphaMode = input.alphaMode.value.asJsString().castAs()
+    alphaMode = input.alphaMode.value.asJsString()
 }
 
 

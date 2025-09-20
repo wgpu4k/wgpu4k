@@ -1,14 +1,16 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu.mapper
 
 import io.ygdrasil.webgpu.GPUSupportedLimits
-import io.ygdrasil.webgpu.JsMap
 import io.ygdrasil.webgpu.Limits
 import io.ygdrasil.webgpu.WGPUSupportedLimits
 import io.ygdrasil.webgpu.asJsNumber
 import io.ygdrasil.webgpu.asJsString
 import io.ygdrasil.webgpu.asUInt
 import io.ygdrasil.webgpu.asULong
-import io.ygdrasil.webgpu.toJsMap
+import js.collections.JsMap
+import kotlin.js.ExperimentalWasmJsInterop
 import kotlin.js.JsAny
 
 internal fun map(input: GPUSupportedLimits): JsMap<JsAny, JsAny> = mapOf(
@@ -44,7 +46,7 @@ internal fun map(input: GPUSupportedLimits): JsMap<JsAny, JsAny> = mapOf(
     "maxComputeWorkgroupSizeZ" to input.maxComputeWorkgroupSizeZ.asJsNumber(),
     "maxComputeWorkgroupsPerDimension" to input.maxComputeWorkgroupsPerDimension.asJsNumber(),
 ).mapKeys { it.key.asJsString() }
-    .toJsMap<JsAny, JsAny>()
+    .let { JsMap()}
 
 internal fun map(input: WGPUSupportedLimits): GPUSupportedLimits = Limits(
     maxTextureDimension1D = input.maxTextureDimension1D.asUInt(),

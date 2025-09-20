@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu.mapper
 
 import io.ygdrasil.webgpu.BindGroupLayout
@@ -15,6 +17,7 @@ import io.ygdrasil.webgpu.WGPUBufferBinding
 import io.ygdrasil.webgpu.asJsNumber
 import io.ygdrasil.webgpu.createJsObject
 import io.ygdrasil.webgpu.mapJsArray
+import kotlin.js.ExperimentalWasmJsInterop
 
 internal fun map(input: GPUBindGroupDescriptor): WGPUBindGroupDescriptor = createJsObject<WGPUBindGroupDescriptor>().apply {
     label = input.label

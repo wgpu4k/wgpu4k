@@ -1,4 +1,8 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu
+
+import kotlin.js.ExperimentalWasmJsInterop
 
 actual class RenderPipeline(internal var handler: WGPURenderPipeline) : GPURenderPipeline {
 

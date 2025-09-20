@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu.mapper
 
 import io.ygdrasil.webgpu.GPUBindGroupLayoutDescriptor
@@ -12,6 +14,7 @@ import io.ygdrasil.webgpu.asJsNumber
 import io.ygdrasil.webgpu.createJsObject
 import io.ygdrasil.webgpu.mapJsArray
 import io.ygdrasil.webgpu.toFlagInt
+import kotlin.js.ExperimentalWasmJsInterop
 
 // TODO: add unit test
 internal fun map(input: GPUBindGroupLayoutDescriptor): WGPUBindGroupLayoutDescriptor =

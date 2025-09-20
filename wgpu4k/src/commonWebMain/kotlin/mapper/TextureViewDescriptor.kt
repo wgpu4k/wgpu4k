@@ -1,9 +1,12 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu.mapper
 
 import io.ygdrasil.webgpu.GPUTextureViewDescriptor
 import io.ygdrasil.webgpu.WGPUTextureViewDescriptor
 import io.ygdrasil.webgpu.asJsNumber
 import io.ygdrasil.webgpu.createJsObject
+import kotlin.js.ExperimentalWasmJsInterop
 
 internal fun map(input: GPUTextureViewDescriptor): WGPUTextureViewDescriptor =
     createJsObject<WGPUTextureViewDescriptor>().apply {

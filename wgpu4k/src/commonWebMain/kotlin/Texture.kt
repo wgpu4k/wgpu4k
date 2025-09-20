@@ -1,7 +1,9 @@
 package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.map
+import kotlin.js.ExperimentalWasmJsInterop
 
+@OptIn(ExperimentalWasmJsInterop::class)
 actual class Texture(val handler: WGPUTexture, val canBeDestroy: Boolean = true) : GPUTexture {
 
     actual override var label: String

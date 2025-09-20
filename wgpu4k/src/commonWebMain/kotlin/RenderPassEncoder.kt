@@ -1,6 +1,9 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.map
+import kotlin.js.ExperimentalWasmJsInterop
 
 actual class RenderPassEncoder(val handler: WGPURenderPassEncoder): GPURenderPassEncoder {
 

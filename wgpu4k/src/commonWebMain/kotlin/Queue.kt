@@ -1,7 +1,10 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.map
 import js.promise.await
+import kotlin.js.ExperimentalWasmJsInterop
 
 actual class Queue(val handler: WGPUQueue) : GPUQueue {
 
