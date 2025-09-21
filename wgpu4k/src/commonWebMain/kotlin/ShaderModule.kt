@@ -1,7 +1,10 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.map
 import js.promise.await
+import kotlin.js.ExperimentalWasmJsInterop
 import kotlin.js.unsafeCast
 
 actual class ShaderModule(val handler: WGPUShaderModule) : GPUShaderModule {
