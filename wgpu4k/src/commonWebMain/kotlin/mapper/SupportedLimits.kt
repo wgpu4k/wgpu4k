@@ -6,14 +6,15 @@ import io.ygdrasil.webgpu.GPUSupportedLimits
 import io.ygdrasil.webgpu.Limits
 import io.ygdrasil.webgpu.WGPUSupportedLimits
 import io.ygdrasil.webgpu.asJsNumber
-import io.ygdrasil.webgpu.asJsString
 import io.ygdrasil.webgpu.asUInt
 import io.ygdrasil.webgpu.asULong
 import js.collections.JsMap
+import kotlin.collections.forEach
 import kotlin.js.ExperimentalWasmJsInterop
 import kotlin.js.JsAny
+import kotlin.js.toJsString
 
-internal fun map(input: GPUSupportedLimits): JsMap<JsAny, JsAny> = mapOf(
+internal fun map(input: GPUSupportedLimits): JsMap<JsAny, JsAny> = listOf(
     "maxTextureDimension1D" to input.maxTextureDimension1D.asJsNumber(),
     "maxTextureDimension2D" to input.maxTextureDimension2D.asJsNumber(),
     "maxTextureDimension3D" to input.maxTextureDimension3D.asJsNumber(),
@@ -45,8 +46,11 @@ internal fun map(input: GPUSupportedLimits): JsMap<JsAny, JsAny> = mapOf(
     "maxComputeWorkgroupSizeY" to input.maxComputeWorkgroupSizeY.asJsNumber(),
     "maxComputeWorkgroupSizeZ" to input.maxComputeWorkgroupSizeZ.asJsNumber(),
     "maxComputeWorkgroupsPerDimension" to input.maxComputeWorkgroupsPerDimension.asJsNumber(),
-).mapKeys { it.key.asJsString() }
-    .let { JsMap()}
+).map { (key, value) -> key.toJsString() to value }
+    .let {
+        JsMap<JsAny, JsAny>()
+            .also { map -> it.forEach { (key, value) -> map.set(key, value)} }
+    }
 
 internal fun map(input: WGPUSupportedLimits): GPUSupportedLimits = Limits(
     maxTextureDimension1D = input.maxTextureDimension1D.asUInt(),
