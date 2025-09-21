@@ -11,13 +11,9 @@ import korlibs.image.color.BGRA
 import korlibs.image.color.ColorFormat
 import korlibs.image.color.RGBA
 import korlibs.image.format.readBitmap
-import korlibs.io.file.Vfs
-import korlibs.io.file.std.resourcesVfs
-import korlibs.io.file.std.rootLocalVfs
+import korlibs.io.file.VfsFile
 
 private val logger = KotlinLogging.logger {}
-
-expect var customVfs: Vfs
 
 interface AssetManager {
 
@@ -35,15 +31,22 @@ interface AssetManager {
     val boxMesh: GLTF2
 }
 
-suspend fun bitmapFrom(textureFormat: GPUTextureFormat, path: String): ImageBitmapHolder = (resourcesVfs[path]
-    .takeIfExists() ?: rootLocalVfs[path].takeIfExists() ?: customVfs[path])
-    .readBitmap()
-    .toBMP32()
-    .toBitmapHolder(textureFormat)
+suspend fun bitmapFrom(textureFormat: GPUTextureFormat, path: String): ImageBitmapHolder = path
+            .asVsfFile()
+            .readBitmap()
+            .toBMP32()
+            .toBitmapHolder(textureFormat)
 
-suspend fun glt2From(path: String): GLTF2 = (resourcesVfs[path]
-    .takeIfExists() ?: rootLocalVfs[path].takeIfExists() ?: customVfs[path])
+
+expect suspend fun String.asVsfFile(): VfsFile
+
+suspend fun glt2From(path: String): GLTF2 = path.asVsfFile()
     .readGLB()
+
+
+/*suspend fun glt2From(path: String): GLTF2 = (resourcesVfs[path]
+    .takeIfExists() ?: rootLocalVfs[path].takeIfExists() ?: customVfs[path])
+    .readGLB()*/
 
 fun Bitmap32.toBitmapHolder(textureFormat: GPUTextureFormat): ImageBitmapHolder {
     val format = when  {

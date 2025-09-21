@@ -35,6 +35,8 @@ kotlin {
         publishLibraryVariants("release", "debug")
     }
 
+    applyDefaultHierarchyTemplate()
+
     sourceSets {
 
         all {
@@ -57,6 +59,21 @@ kotlin {
                 implementation(libs.wgpu4k.native)
             }
         }
+
+        webMain {
+
+            dependencies {
+                implementation (kotlinWrappers.web)
+            }
+        }
+
+        val commonNativeMain by creating {
+            dependsOn(commonMain.get())
+        }
+
+        nativeMain.get().dependsOn(commonNativeMain)
+        jvmMain.get().dependsOn(commonNativeMain)
+        androidMain.get().dependsOn(commonNativeMain)
     }
 
     compilerOptions {
