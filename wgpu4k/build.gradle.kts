@@ -2,8 +2,6 @@
 
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.plugin.KotlinHierarchyTemplate
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
@@ -12,63 +10,6 @@ plugins {
     id("com.google.devtools.ksp") version "2.2.20-2.0.3"
     publish
     if (isAndroidConfigured) android
-}
-
-private val hierarchyTemplate = KotlinHierarchyTemplate {
-    /* natural hierarchy is only applied to default 'main'/'test' compilations (by default) */
-    withSourceSetTree(KotlinSourceSetTree.main, KotlinSourceSetTree.test)
-
-    common {
-        /* All compilations shall be added to the common group by default */
-        withCompilations { true }
-
-        group("commonNative") {
-            group("native") {
-                withNative()
-
-                group("apple") {
-                    withApple()
-
-                    group("ios") {
-                        withIos()
-                    }
-
-                    group("tvos") {
-                        withTvos()
-                    }
-
-                    group("watchos") {
-                        withWatchos()
-                    }
-
-                    group("macos") {
-                        withMacos()
-                    }
-                }
-
-                group("linux") {
-                    withLinux()
-                }
-
-                group("mingw") {
-                    withMingw()
-                }
-
-                /*group("androidNative") {
-                    withAndroidNative()
-                }*/
-            }
-
-            withJvm()
-            withAndroidTarget()
-        }
-
-
-        group("commonWeb") {
-            withJs()
-            withWasmJs()
-        }
-    }
 }
 
 kotlin {
@@ -83,7 +24,6 @@ kotlin {
             jvmTarget = JvmTarget.JVM_22
         }
     }
-
 
     iosX64()
     iosArm64()
@@ -109,7 +49,7 @@ kotlin {
         nodejs()
     }
 
-    applyHierarchyTemplate(hierarchyTemplate)
+    applyDefaultHierarchyTemplate()
 
     sourceSets {
 
@@ -137,11 +77,18 @@ kotlin {
             }
         }
 
-        val commonNativeMain by getting {
+
+        val commonNativeMain by creating {
+            dependsOn(commonMain.get())
             dependencies { api(libs.wgpu4k.native) }
         }
 
-        val commonWebMain by getting {
+        nativeMain.get().dependsOn(commonNativeMain)
+        jvmMain.get().dependsOn(commonNativeMain)
+        androidMain.get().dependsOn(commonNativeMain)
+
+
+        webMain {
             dependencies { api(libs.webgpu.web) }
         }
 
