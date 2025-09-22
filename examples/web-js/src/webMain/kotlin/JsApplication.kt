@@ -1,7 +1,6 @@
+package io.ygdrasil.webgpu.examples
 
 import io.ygdrasil.webgpu.canvasContextRenderer
-import io.ygdrasil.webgpu.examples.Application
-import io.ygdrasil.webgpu.examples.createApplication
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import web.events.EventHandler
@@ -27,7 +26,6 @@ fun jsApplication(canvas: HTMLCanvasElement) {
         )
 
         registerKeyToChangeScene(application)
-
         // Schedule main loop to run repeatedly
         setInterval({
             MainScope().launch {
@@ -43,7 +41,7 @@ private fun registerKeyToChangeScene(application: Application) {
     window.onkeydown = EventHandler { event: KeyboardEvent ->
         if (event.code == KeyCode.PageUp || event.code == KeyCode.PageDown) {
             val currentIndex = application.availableScenes.indexOf(application.currentScene)
-            val index = if (event.code == KeyCode.PageDown) {
+            val index = if (event.code == KeyCode.PageUp) {
                 currentIndex - 1
             } else {
                 currentIndex + 1
@@ -59,7 +57,6 @@ private fun registerKeyToChangeScene(application: Application) {
                 application.changeScene(application.availableScenes[index])
             }
         }
-
-
     }
+
 }

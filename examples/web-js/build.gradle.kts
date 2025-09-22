@@ -33,14 +33,16 @@ kotlin {
         }
     }
 
+    applyDefaultHierarchyTemplate()
+
     sourceSets {
-        val commonMain by getting {
+        webMain {
             dependencies {
                 implementation(projects.wgpu4kScenes)
             }
         }
 
-        val jsMain by getting {
+        jsMain {
             resources.setSrcDirs(
                 resources.srcDirs + setOf(
                     commonResourcesFile
@@ -48,7 +50,7 @@ kotlin {
             )
         }
 
-        val wasmJsMain by getting {
+        wasmJsMain {
             resources.setSrcDirs(
                 resources.srcDirs + setOf(
                     commonResourcesFile
