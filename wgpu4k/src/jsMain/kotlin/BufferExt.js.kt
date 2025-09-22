@@ -2,15 +2,15 @@
 
 package io.ygdrasil.webgpu
 
-import org.khronos.webgl.Float32Array
-import org.khronos.webgl.Int16Array
-import org.khronos.webgl.Int8Array
+import js.typedarrays.Float32Array
+import js.typedarrays.Int16Array
+import js.typedarrays.Int8Array
 
 @Deprecated(message = "use getMappedRange instead")
 actual fun GPUBuffer.mapFrom(buffer: ShortArray, offset: GPUSize64) {
     val handler = (this as Buffer).handler
     handler.getMappedRange(offset.asJsNumber(), (buffer.size * Short.SIZE_BYTES).asJsNumber())
-        .let(::Int16Array)
+        .let { Int16Array(it) }
         .set(buffer.toTypedArray(), 0)
 }
 

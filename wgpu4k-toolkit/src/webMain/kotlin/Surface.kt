@@ -2,14 +2,17 @@
 
 package io.ygdrasil.webgpu
 
+import web.dom.document
+import web.html.HTMLCanvasElement
 import kotlin.js.ExperimentalWasmJsInterop
+import kotlin.js.toJsString
 import kotlin.js.unsafeCast
 
 actual class Surface(private val handler: WGPUCanvasContext) : AutoCloseable {
     actual val width: UInt
-        get() = handler.canvas.unsafeCast<HTMLCanvasElement>().width.asUInt()
+        get() = handler.canvas.unsafeCast<HTMLCanvasElement>().width.toUInt()
     actual val height: UInt
-        get() = handler.canvas.unsafeCast<HTMLCanvasElement>().height.asUInt()
+        get() = handler.canvas.unsafeCast<HTMLCanvasElement>().height.toUInt()
 
     // @see https://gpuweb.github.io/gpuweb/#canvas-configuration
     actual val supportedFormats: Set<GPUTextureFormat> =
@@ -39,11 +42,11 @@ suspend fun canvasContextRenderer(
     onUncapturedError: GPUUncapturedErrorCallback? = null
 ): CanvasContext {
 
-    val canvas = htmlCanvas ?: createcCanvas("canvas", deferredRendering)
+    val canvas = htmlCanvas ?: createCanvas("canvas", deferredRendering)
 
     val devicePixelRatio = window.devicePixelRatio.asInt()
-    if (width != null) canvas.width = width.asJsNumber() else canvas.width = (canvas.clientWidth.asInt() * devicePixelRatio).asJsNumber()
-    if (height != null) canvas.height = height.asJsNumber() else canvas.height = (canvas.clientHeight.asInt() * devicePixelRatio).asJsNumber()
+    if (width != null) canvas.width = width else canvas.width = canvas.clientWidth * devicePixelRatio
+    if (height != null) canvas.height = height else canvas.height = canvas.clientHeight * devicePixelRatio
 
     val adapter = requestAdapter()
         .getOrThrow()
@@ -83,15 +86,19 @@ fun map(input: SurfaceConfiguration) = createJsObject<WGPUCanvasConfiguration>()
     device = (input.device as Device).handler
     format = input.format.value
     usage = input.usage.toFlagInt().asJsNumber()
-    viewFormats = input.viewFormats.mapJsArray { it.value.asJsString() }
-    colorSpace = input.colorSpace.value.asJsString()
+    viewFormats = input.viewFormats.mapJsArray { it.value.toJsString() }
+    colorSpace = input.colorSpace.value.toJsString()
     toneMapping = createJsObject<WGPUCanvasToneMapping>().apply {
         // TODO add the capability to change this value
         // GPUCanvasToneMappingMode.Standard is the default value on specification
-        mode = GPUCanvasToneMappingMode.Standard.value.asJsString()
+        mode = GPUCanvasToneMappingMode.Standard.value.toJsString()
     }
-    alphaMode = input.alphaMode.value.asJsString()
+    alphaMode = input.alphaMode.value.toJsString()
 }
 
 
-internal expect fun createcCanvas(name: String, isHidden: Boolean): HTMLCanvasElement
+internal fun createCanvas(name: String, isHidden: Boolean): HTMLCanvasElement =
+    (document.createElement("canvas") as HTMLCanvasElement).also {
+        document.body?.appendChild(it)
+        it.hidden = isHidden
+    }.unsafeCast<HTMLCanvasElement>()

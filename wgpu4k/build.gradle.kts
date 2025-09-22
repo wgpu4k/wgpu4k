@@ -89,12 +89,10 @@ kotlin {
 
 
         webMain {
-            dependencies { api(libs.webgpu.web) }
-        }
-
-        wasmJsMain {
             dependencies {
-                api(libs.kotlinx.browser)
+                api(libs.webgpu.web)
+                api(kotlinWrappers.browser)
+                api(kotlinWrappers.web)
             }
         }
 

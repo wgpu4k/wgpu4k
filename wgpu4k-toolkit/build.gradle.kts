@@ -1,7 +1,3 @@
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.plugin.KotlinHierarchyTemplate
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
-
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
     if (isAndroidConfigured) android
@@ -41,46 +37,7 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
 
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
-    applyHierarchyTemplate(
-        KotlinHierarchyTemplate {
-            /* natural hierarchy is only applied to default 'main'/'test' compilations (by default) */
-            withSourceSetTree(KotlinSourceSetTree.main, KotlinSourceSetTree.test)
-
-            common {
-                /* All compilations shall be added to the common group by default */
-                withCompilations { true }
-
-
-                group("native") {
-                    group("ios") {
-                        withIos()
-                    }
-
-                    group("desktopNative") {
-
-                        group("macos") {
-                            withMacos()
-                        }
-
-                        group("linux") {
-                            withLinux()
-                        }
-
-                        group("mingw") {
-                            withMingw()
-                        }
-
-                    }
-                }
-
-                group("commonWeb") {
-                    withJs()
-                    withWasmJs()
-                }
-            }
-        }
-    )
+    applyDefaultHierarchyTemplate()
 
     sourceSets {
 
@@ -97,11 +54,16 @@ kotlin {
             }
         }
 
-        val desktopNativeMain by getting {
+        val desktopNativeMain by creating {
+            dependsOn(commonMain.get())
             dependencies {
                 api(libs.glfw.native)
             }
         }
+
+        macosMain.get().dependsOn(desktopNativeMain)
+        linuxMain.get().dependsOn(desktopNativeMain)
+        mingwMain.get().dependsOn(desktopNativeMain)
 
 
         commonTest {

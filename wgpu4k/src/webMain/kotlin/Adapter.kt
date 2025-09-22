@@ -6,6 +6,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ygdrasil.webgpu.mapper.map
 import js.promise.await
 import kotlin.js.ExperimentalWasmJsInterop
+import kotlin.js.toJsString
 import kotlin.js.unsafeCast
 
 private val logger = KotlinLogging.logger {}
@@ -24,7 +25,7 @@ actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
 
     actual override val features: Set<GPUFeatureName> by lazy {
         GPUFeatureName.entries
-            .filter { handler.features.has(it.value.asJsString()) }
+            .filter { handler.features.has(it.value.toJsString()) }
             .toSet()
     }
 

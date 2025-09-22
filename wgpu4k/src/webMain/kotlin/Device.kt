@@ -6,6 +6,7 @@ import io.ygdrasil.webgpu.mapper.errorOf
 import io.ygdrasil.webgpu.mapper.map
 import js.promise.await
 import kotlin.js.ExperimentalWasmJsInterop
+import kotlin.js.toJsString
 import kotlin.js.unsafeCast
 
 actual class Device(val handler: WGPUDevice, onUncapturedError: GPUUncapturedErrorCallback?) : GPUDevice {
@@ -26,7 +27,7 @@ actual class Device(val handler: WGPUDevice, onUncapturedError: GPUUncapturedErr
 
     actual override val features: Set<GPUFeatureName> by lazy {
         GPUFeatureName.entries
-            .filter { handler.features.has(it.value.asJsString()) }
+            .filter { handler.features.has(it.value.toJsString()) }
             .toSet()
     }
 

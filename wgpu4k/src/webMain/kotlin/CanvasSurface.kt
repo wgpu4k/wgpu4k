@@ -3,14 +3,19 @@
 package io.ygdrasil.webgpu
 
 import io.ygdrasil.webgpu.mapper.map
+import web.html.HTMLCanvasElement
+import kotlin.OptIn
+import kotlin.UInt
 import kotlin.js.ExperimentalWasmJsInterop
 import kotlin.js.unsafeCast
+import kotlin.let
+import kotlin.toUInt
 
 class CanvasSurface(val handler: WGPUCanvasContext) {
     val width: UInt
-        get() = handler.canvas.unsafeCast<HTMLCanvasElement>().width.asUInt()
+        get() = handler.canvas.unsafeCast<HTMLCanvasElement>().width.toUInt()
     val height: UInt
-        get() = handler.canvas.unsafeCast<HTMLCanvasElement>().height.asUInt()
+        get() = handler.canvas.unsafeCast<HTMLCanvasElement>().height.toUInt()
 
     val preferredCanvasFormat: GPUTextureFormat?
         get() = navigator.gpu

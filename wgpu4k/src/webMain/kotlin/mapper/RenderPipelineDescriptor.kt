@@ -29,17 +29,17 @@ import io.ygdrasil.webgpu.WGPUVertexAttribute
 import io.ygdrasil.webgpu.WGPUVertexBufferLayout
 import io.ygdrasil.webgpu.WGPUVertexState
 import io.ygdrasil.webgpu.asJsNumber
-import io.ygdrasil.webgpu.asJsString
 import io.ygdrasil.webgpu.createJsObject
 import io.ygdrasil.webgpu.mapJsArray
 import io.ygdrasil.webgpu.toFlagInt
 import kotlin.js.ExperimentalWasmJsInterop
+import kotlin.js.toJsString
 
 internal fun map(input: GPURenderPipelineDescriptor): WGPURenderPipelineDescriptor =
     createJsObject<WGPURenderPipelineDescriptor>().apply {
         label = input.label
         vertex = map(input.vertex)
-        layout = (input.layout as PipelineLayout?)?.handler ?: "auto".asJsString()
+        layout = (input.layout as PipelineLayout?)?.handler ?: "auto".toJsString()
         primitive = map(input.primitive)
         input.depthStencil?.let { depthStencil = map(it) }
         input.fragment?.let { fragment = map(it) }

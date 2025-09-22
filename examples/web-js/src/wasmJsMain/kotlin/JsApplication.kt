@@ -1,10 +1,16 @@
-import io.ygdrasil.webgpu.HTMLCanvasElement
+
 import io.ygdrasil.webgpu.canvasContextRenderer
 import io.ygdrasil.webgpu.examples.Application
 import io.ygdrasil.webgpu.examples.createApplication
-import kotlinx.browser.window
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import web.events.EventHandler
+import web.html.HTMLCanvasElement
+import web.keyboard.KeyCode
+import web.keyboard.KeyboardEvent
+import web.keyboard.PageDown
+import web.keyboard.PageUp
+import web.window.window
 
 external fun setInterval(render: () -> Unit, updateInterval: Int)
 
@@ -34,10 +40,10 @@ fun jsApplication(canvas: HTMLCanvasElement) {
 }
 
 private fun registerKeyToChangeScene(application: Application) {
-    window.onkeydown = { event ->
-        if (event.keyCode == 33 || event.keyCode == 34) {
+    window.onkeydown = EventHandler { event: KeyboardEvent ->
+        if (event.code == KeyCode.PageUp || event.code == KeyCode.PageDown) {
             val currentIndex = application.availableScenes.indexOf(application.currentScene)
-            val index = if (event.keyCode == 33) {
+            val index = if (event.code == KeyCode.PageDown) {
                 currentIndex - 1
             } else {
                 currentIndex + 1

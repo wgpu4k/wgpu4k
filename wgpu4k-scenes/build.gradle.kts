@@ -64,6 +64,7 @@ kotlin {
 
             dependencies {
                 implementation (kotlinWrappers.web)
+                implementation (kotlinWrappers.browser)
             }
         }
 
