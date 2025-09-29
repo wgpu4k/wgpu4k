@@ -69,16 +69,16 @@ android {
 dependencies {
     implementation(projects.wgpu4kScenes)
     implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.compose.ui:ui:1.2.0")
+    implementation("androidx.compose.ui:ui:1.9.2")
     implementation("androidx.compose.material:material:1.2.0")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.2.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.9.2")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
     implementation("androidx.activity:activity-compose:1.3.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.8.1")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.2.0")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.9.2")
 }
 
 fun getCommonProject() = projects.wgpu4kScenes.identityPath.path
