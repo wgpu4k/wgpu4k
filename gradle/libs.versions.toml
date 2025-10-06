@@ -21,7 +21,11 @@ webgpu-ktypes = "0.0.8-SNAPSHOT"
 kotlin-logging = "7.0.7"
 logback = "1.5.16"
 
+kotlinx-browser = "0.5.0"
+
 [libraries]
+kotlinx-browser = { module = "org.jetbrains.kotlinx:kotlinx-browser", version.ref = "kotlinx-browser" }
+
 kotest-core = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
 kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 jna = { module = "net.java.dev.jna:jna", version.ref = "jna" }

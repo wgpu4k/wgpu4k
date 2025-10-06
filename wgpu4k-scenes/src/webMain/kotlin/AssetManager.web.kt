@@ -1,3 +1,4 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
 
 package io.ygdrasil.webgpu.examples
 
@@ -18,6 +19,7 @@ import web.http.RequestMethod
 import web.http.arrayBuffer
 import web.http.default
 import web.http.fetch
+import kotlin.js.ExperimentalWasmJsInterop
 
 /**
  * Loads a file from the given URL and returns it as a ByteArray

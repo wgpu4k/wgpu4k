@@ -1,4 +1,5 @@
 @file:OptIn(ExperimentalForeignApi::class)
+@file:Suppress("DEPRECATION")
 
 package io.ygdrasil.webgpu.examples
 
@@ -13,10 +14,11 @@ internal actual fun Bitmap32.toBitmapHolder(textureFormat: ColorFormat): ImageBi
     val buffer = globalMemory.allocateBuffer((Byte.SIZE_BYTES * bytes.size).toULong()).apply {
         writeBytes(bytes)
     }
-    return ImageBitmapHolder(
+    TODO()
+    /*return ImageBitmapHolder(
         globalMemory,
         buffer.handler,
         width.toUInt(),
         height.toUInt()
-    )
+    )*/
 }

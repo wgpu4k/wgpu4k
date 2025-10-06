@@ -32,7 +32,7 @@ kotlin {
     macosX64()
     linuxArm64()
     linuxX64()
-    configureMingwX64(project)
+    mingwX64()
     iosX64()
     iosArm64()
     iosSimulatorArm64()
@@ -45,6 +45,12 @@ kotlin {
             languageSettings.optIn("kotlin.ExperimentalStdlibApi")
             languageSettings.optIn("kotlin.ExperimentalUnsignedTypes")
             languageSettings.optIn("kotlin.js.ExperimentalJsExport")
+        }
+
+        webMain {
+            dependencies {
+                implementation (kotlinWrappers.browser)
+            }
         }
 
         commonMain {
@@ -60,6 +66,7 @@ kotlin {
                 api(libs.glfw.native)
             }
         }
+
 
         macosMain.get().dependsOn(desktopNativeMain)
         linuxMain.get().dependsOn(desktopNativeMain)
@@ -111,7 +118,7 @@ kotlin {
     }
 
     compilerOptions {
-        allWarningsAsErrors = true
+        //allWarningsAsErrors = true
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 }

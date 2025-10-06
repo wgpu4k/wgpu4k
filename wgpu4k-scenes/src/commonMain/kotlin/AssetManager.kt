@@ -32,21 +32,15 @@ interface AssetManager {
 }
 
 suspend fun bitmapFrom(textureFormat: GPUTextureFormat, path: String): ImageBitmapHolder = path
-            .asVsfFile()
-            .readBitmap()
-            .toBMP32()
-            .toBitmapHolder(textureFormat)
-
+    .asVsfFile()
+    .readBitmap()
+    .toBMP32()
+    .toBitmapHolder(textureFormat)
 
 expect suspend fun String.asVsfFile(): VfsFile
 
 suspend fun glt2From(path: String): GLTF2 = path.asVsfFile()
     .readGLB()
-
-
-/*suspend fun glt2From(path: String): GLTF2 = (resourcesVfs[path]
-    .takeIfExists() ?: rootLocalVfs[path].takeIfExists() ?: customVfs[path])
-    .readGLB()*/
 
 fun Bitmap32.toBitmapHolder(textureFormat: GPUTextureFormat): ImageBitmapHolder {
     val format = when  {
