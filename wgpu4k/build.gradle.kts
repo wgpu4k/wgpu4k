@@ -129,11 +129,14 @@ java {
     }
 }
 
+tasks.withType<Test>().configureEach {
+    filter {
+        failOnNoDiscoveredTests = false
+    }
+}
+
 tasks.named<Test>("jvmTest") {
     useJUnitPlatform()
-    filter {
-        isFailOnNoMatchingTests = false
-    }
     testLogging {
         showExceptions = true
         showStandardStreams = true
@@ -147,8 +150,8 @@ tasks.named<Test>("jvmTest") {
 
 
 if (Platform.os == Os.MacOs) {
-    tasks.findByName("linkDebugTestMingwX64")?.apply { enabled = false }
-    tasks.findByName("mingwX64Test")?.apply { enabled = false }
+    //tasks.findByName("linkDebugTestMingwX64")?.apply { enabled = false }
+    //tasks.findByName("mingwX64Test")?.apply { enabled = false }
 }
 
 tasks.findByName("checkKotlinGradlePluginConfigurationErrors")?.enabled = isAndroidConfigured
