@@ -15,7 +15,6 @@ dependencies {
 	implementation(libs.playwright)
     implementation(libs.bundles.korlibs)
 	implementation(libs.coroutines)
-	implementation(libs.kotlin.multiplatform)
 
 	implementation(libs.okhttp)
 	implementation(libs.zip4j)

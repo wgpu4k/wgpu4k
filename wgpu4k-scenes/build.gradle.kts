@@ -26,7 +26,7 @@ kotlin {
     macosX64()
     linuxArm64()
     linuxX64()
-    configureMingwX64(project)
+    mingwX64()
     iosX64()
     iosArm64()
     iosSimulatorArm64()
