@@ -6,13 +6,18 @@ import io.ygdrasil.webgpu.GPUSupportedLimits
 import io.ygdrasil.webgpu.Limits
 import io.ygdrasil.webgpu.WGPUSupportedLimits
 import io.ygdrasil.webgpu.asJsNumber
-import io.ygdrasil.webgpu.asUInt
-import io.ygdrasil.webgpu.asULong
+import io.ygdrasil.webgpu.toULong
 import js.collections.JsMap
+import kotlin.OptIn
+import kotlin.also
 import kotlin.collections.forEach
 import kotlin.js.ExperimentalWasmJsInterop
 import kotlin.js.JsAny
+import kotlin.js.toInt
 import kotlin.js.toJsString
+import kotlin.let
+import kotlin.to
+import kotlin.toUInt
 
 internal fun map(input: GPUSupportedLimits): JsMap<JsAny, JsAny> = listOf(
     "maxTextureDimension1D" to input.maxTextureDimension1D.asJsNumber(),
@@ -53,35 +58,35 @@ internal fun map(input: GPUSupportedLimits): JsMap<JsAny, JsAny> = listOf(
     }
 
 internal fun map(input: WGPUSupportedLimits): GPUSupportedLimits = Limits(
-    maxTextureDimension1D = input.maxTextureDimension1D.asUInt(),
-    maxTextureDimension2D = input.maxTextureDimension2D.asUInt(),
-    maxTextureDimension3D = input.maxTextureDimension3D.asUInt(),
-    maxTextureArrayLayers = input.maxTextureArrayLayers.asUInt(),
-    maxBindGroups = input.maxBindGroups.asUInt(),
-    maxBindGroupsPlusVertexBuffers = input.maxBindGroupsPlusVertexBuffers.asUInt(),
-    maxBindingsPerBindGroup = input.maxBindingsPerBindGroup.asUInt(),
-    maxDynamicUniformBuffersPerPipelineLayout = input.maxDynamicUniformBuffersPerPipelineLayout.asUInt(),
-    maxDynamicStorageBuffersPerPipelineLayout = input.maxDynamicStorageBuffersPerPipelineLayout.asUInt(),
-    maxSampledTexturesPerShaderStage = input.maxSampledTexturesPerShaderStage.asUInt(),
-    maxSamplersPerShaderStage = input.maxSamplersPerShaderStage.asUInt(),
-    maxStorageBuffersPerShaderStage = input.maxStorageBuffersPerShaderStage.asUInt(),
-    maxStorageTexturesPerShaderStage = input.maxStorageTexturesPerShaderStage.asUInt(),
-    maxUniformBuffersPerShaderStage = input.maxUniformBuffersPerShaderStage.asUInt(),
-    maxUniformBufferBindingSize = input.maxUniformBufferBindingSize.asULong(),
-    maxStorageBufferBindingSize = input.maxStorageBufferBindingSize.asULong(),
-    minUniformBufferOffsetAlignment = input.minUniformBufferOffsetAlignment.asUInt(),
-    minStorageBufferOffsetAlignment = input.minStorageBufferOffsetAlignment.asUInt(),
-    maxVertexBuffers = input.maxVertexBuffers.asUInt(),
-    maxBufferSize = input.maxBufferSize.asULong(),
-    maxVertexAttributes = input.maxVertexAttributes.asUInt(),
-    maxVertexBufferArrayStride = input.maxVertexBufferArrayStride.asUInt(),
-    maxInterStageShaderVariables = input.maxInterStageShaderVariables.asUInt(),
-    maxColorAttachments = input.maxColorAttachments.asUInt(),
-    maxColorAttachmentBytesPerSample = input.maxColorAttachmentBytesPerSample.asUInt(),
-    maxComputeWorkgroupStorageSize = input.maxComputeWorkgroupStorageSize.asUInt(),
-    maxComputeInvocationsPerWorkgroup = input.maxComputeInvocationsPerWorkgroup.asUInt(),
-    maxComputeWorkgroupSizeX = input.maxComputeWorkgroupSizeX.asUInt(),
-    maxComputeWorkgroupSizeY = input.maxComputeWorkgroupSizeY.asUInt(),
-    maxComputeWorkgroupSizeZ = input.maxComputeWorkgroupSizeZ.asUInt(),
-    maxComputeWorkgroupsPerDimension = input.maxComputeWorkgroupsPerDimension.asUInt(),
+    maxTextureDimension1D = input.maxTextureDimension1D.toInt().toUInt(),
+    maxTextureDimension2D = input.maxTextureDimension2D.toInt().toUInt(),
+    maxTextureDimension3D = input.maxTextureDimension3D.toInt().toUInt(),
+    maxTextureArrayLayers = input.maxTextureArrayLayers.toInt().toUInt(),
+    maxBindGroups = input.maxBindGroups.toInt().toUInt(),
+    maxBindGroupsPlusVertexBuffers = input.maxBindGroupsPlusVertexBuffers.toInt().toUInt(),
+    maxBindingsPerBindGroup = input.maxBindingsPerBindGroup.toInt().toUInt(),
+    maxDynamicUniformBuffersPerPipelineLayout = input.maxDynamicUniformBuffersPerPipelineLayout.toInt().toUInt(),
+    maxDynamicStorageBuffersPerPipelineLayout = input.maxDynamicStorageBuffersPerPipelineLayout.toInt().toUInt(),
+    maxSampledTexturesPerShaderStage = input.maxSampledTexturesPerShaderStage.toInt().toUInt(),
+    maxSamplersPerShaderStage = input.maxSamplersPerShaderStage.toInt().toUInt(),
+    maxStorageBuffersPerShaderStage = input.maxStorageBuffersPerShaderStage.toInt().toUInt(),
+    maxStorageTexturesPerShaderStage = input.maxStorageTexturesPerShaderStage.toInt().toUInt(),
+    maxUniformBuffersPerShaderStage = input.maxUniformBuffersPerShaderStage.toInt().toUInt(),
+    maxUniformBufferBindingSize = input.maxUniformBufferBindingSize.toULong(),
+    maxStorageBufferBindingSize = input.maxStorageBufferBindingSize.toULong(),
+    minUniformBufferOffsetAlignment = input.minUniformBufferOffsetAlignment.toInt().toUInt(),
+    minStorageBufferOffsetAlignment = input.minStorageBufferOffsetAlignment.toInt().toUInt(),
+    maxVertexBuffers = input.maxVertexBuffers.toInt().toUInt(),
+    maxBufferSize = input.maxBufferSize.toULong(),
+    maxVertexAttributes = input.maxVertexAttributes.toInt().toUInt(),
+    maxVertexBufferArrayStride = input.maxVertexBufferArrayStride.toInt().toUInt(),
+    maxInterStageShaderVariables = input.maxInterStageShaderVariables.toInt().toUInt(),
+    maxColorAttachments = input.maxColorAttachments.toInt().toUInt(),
+    maxColorAttachmentBytesPerSample = input.maxColorAttachmentBytesPerSample.toInt().toUInt(),
+    maxComputeWorkgroupStorageSize = input.maxComputeWorkgroupStorageSize.toInt().toUInt(),
+    maxComputeInvocationsPerWorkgroup = input.maxComputeInvocationsPerWorkgroup.toInt().toUInt(),
+    maxComputeWorkgroupSizeX = input.maxComputeWorkgroupSizeX.toInt().toUInt(),
+    maxComputeWorkgroupSizeY = input.maxComputeWorkgroupSizeY.toInt().toUInt(),
+    maxComputeWorkgroupSizeZ = input.maxComputeWorkgroupSizeZ.toInt().toUInt(),
+    maxComputeWorkgroupsPerDimension = input.maxComputeWorkgroupsPerDimension.toInt().toUInt(),
 )
