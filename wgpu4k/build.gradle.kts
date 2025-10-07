@@ -6,10 +6,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotest)
     id("com.google.devtools.ksp") version "2.2.20-2.0.3"
     publish
-    android
 }
 
 kotlin {
@@ -39,7 +39,16 @@ kotlin {
             jvmTarget = JvmTarget.JVM_22
         }
 
-        publishLibraryVariants("release", "debug")
+        android {
+            namespace = "io.ygdrasil.wgpu4k"
+            compileSdk = 36
+
+            defaultConfig {
+                minSdk = 28
+            }
+
+        }
+        //publishLibraryVariants("release", "debug")
     }
 
 

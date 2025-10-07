@@ -85,7 +85,7 @@ kotlin {
                 api(libs.jnaPlatform)
                 api(libs.jna)
                 implementation(libs.wgpu4k.native)
-
+                val lwjglVersion = "3.3.3"
                 api("org.lwjgl:lwjgl:$lwjglVersion")
                 api("org.lwjgl:lwjgl-glfw:$lwjglVersion")
                 listOf(

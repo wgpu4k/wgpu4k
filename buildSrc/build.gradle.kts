@@ -21,5 +21,4 @@ dependencies {
 	implementation(libs.commons.io)
 	implementation(libs.dokka)
 
-	implementation(libs.android.library)
 }

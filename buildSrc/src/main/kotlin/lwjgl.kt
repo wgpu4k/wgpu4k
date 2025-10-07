@@ -1,1 +1,0 @@
-val lwjglVersion = "3.3.3"

@@ -2,7 +2,7 @@ rootProject.name = "wgpu4k-root"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
-	includeBuild("generator")
+	//includeBuild("generator")
 	repositories {
 		gradlePluginPortal()
 		google()
@@ -11,8 +11,9 @@ pluginManagement {
 		maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
 	}
 }
+
 plugins {
-	id("org.gradle.toolchains.foojay-resolver-convention") version "0.10.0"
+	id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
 dependencyResolutionManagement {
@@ -36,8 +37,8 @@ dependencyResolutionManagement {
 val hostOs = System.getProperty("os.name")
 
 include("wgpu4k")
-include("wgpu4k-toolkit")
-/*include("wgpu4k-scenes")
+/*include("wgpu4k-toolkit")
+include("wgpu4k-scenes")
 include("wgpu4k-e2e")
 if (isInCI().not()) {
 	include("examples:glfw")
