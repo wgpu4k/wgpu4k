@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.kotest)
     id("com.google.devtools.ksp") version "2.2.20-2.0.3"
     publish
-    if (isAndroidConfigured) android
+    android
 }
 
 kotlin {
@@ -34,7 +34,7 @@ kotlin {
     linuxX64()
     mingwX64()
 
-    if (isAndroidConfigured) androidTarget {
+    androidTarget {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_22
         }
@@ -71,7 +71,7 @@ kotlin {
             }
         }
 
-        if (isAndroidConfigured) androidMain {
+        androidMain {
             dependencies {
                 implementation(libs.slf4j.simple)
             }
@@ -147,11 +147,3 @@ tasks.named<Test>("jvmTest") {
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
     }
 }
-
-
-if (Platform.os == Os.MacOs) {
-    //tasks.findByName("linkDebugTestMingwX64")?.apply { enabled = false }
-    //tasks.findByName("mingwX64Test")?.apply { enabled = false }
-}
-
-tasks.findByName("checkKotlinGradlePluginConfigurationErrors")?.enabled = isAndroidConfigured

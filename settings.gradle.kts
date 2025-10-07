@@ -44,11 +44,10 @@ if (isInCI().not()) {
 	include("examples:web-js")
 	include("examples:glfw")
 	if (hostOs == "Mac OS X") include("examples:iOS")
-	if (isAndroidConfigured()) include("examples:android")
+	include("examples:android")
 	// right now only running on OSX and may be linux x64
 	include("examples:native")
 }
 
 
-fun isAndroidConfigured(): Boolean = System.getenv("ANDROID_HOME") != null
 fun isInCI(): Boolean = System.getenv("CI") != null

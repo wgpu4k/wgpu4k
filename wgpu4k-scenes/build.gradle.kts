@@ -2,7 +2,7 @@
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
     kotlin("plugin.serialization") version "2.1.21"
-    if (isAndroidConfigured) id("android")
+    id("android")
     id("publish")
 }
 
@@ -31,7 +31,7 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
 
-    if (isAndroidConfigured) androidTarget{
+    androidTarget{
         publishLibraryVariants("release", "debug")
     }
 

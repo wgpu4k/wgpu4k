@@ -1,6 +1,6 @@
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
-    if (isAndroidConfigured) android
+    android
     publish
 }
 
@@ -18,7 +18,7 @@ kotlin {
         nodejs()
     }
     jvm()
-    if (isAndroidConfigured) androidTarget {
+    androidTarget {
         publishLibraryVariants("release", "debug")
     }
 
@@ -49,7 +49,7 @@ kotlin {
 
         webMain {
             dependencies {
-                implementation (kotlinWrappers.browser)
+                implementation(kotlinWrappers.browser)
             }
         }
 
@@ -108,11 +108,10 @@ kotlin {
 
         }
 
-        if (isAndroidConfigured) {
-            androidMain {
-                dependencies {
-                    implementation(libs.android.native.helper)
-                }
+
+        androidMain {
+            dependencies {
+                implementation(libs.android.native.helper)
             }
         }
     }
