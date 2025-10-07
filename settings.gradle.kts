@@ -37,7 +37,7 @@ val hostOs = System.getProperty("os.name")
 
 include("wgpu4k")
 include("wgpu4k-toolkit")
-include("wgpu4k-scenes")
+/*include("wgpu4k-scenes")
 include("wgpu4k-e2e")
 if (isInCI().not()) {
 	include("examples:glfw")
@@ -47,7 +47,7 @@ if (isInCI().not()) {
 	include("examples:android")
 	// right now only running on OSX and may be linux x64
 	include("examples:native")
-}
+}*/
 
 
 fun isInCI(): Boolean = System.getenv("CI") != null

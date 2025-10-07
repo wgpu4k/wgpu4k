@@ -1,6 +1,6 @@
 
 plugins {
-    id(libs.plugins.kotlin.multiplatform.get().pluginId)
+    alias(libs.plugins.kotlin.multiplatform)
     kotlin("plugin.serialization") version "2.1.21"
     id("android")
     id("publish")
