@@ -122,11 +122,5 @@ kotlin {
     }
 }
 
-
-fun getCommonProject() = projects
-    .wgpu4kScenes
-    .path
-    .let(::project)
-
 val File.isNotEmpty: Boolean
     get() = this.listFiles()?.isNotEmpty() ?: false
