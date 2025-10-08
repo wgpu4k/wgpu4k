@@ -2,14 +2,13 @@
 
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotest)
     id("com.google.devtools.ksp") version "2.2.20-2.0.3"
-    publish
+    //publish
 }
 
 kotlin {
@@ -121,13 +120,7 @@ kotlin {
     }
 
     compilerOptions {
-        // Workaround for https://github.com/kotest/kotest/issues/4521 (fixed but not released)
-        //allWarningsAsErrors = true
-        tasks.withType<KotlinCompilationTask<*>>().configureEach {
-            compilerOptions {
-                allWarningsAsErrors = !name.contains("test", ignoreCase = true)
-            }
-        }
+        allWarningsAsErrors = true
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 }
