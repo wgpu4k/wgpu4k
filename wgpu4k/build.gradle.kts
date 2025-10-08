@@ -124,7 +124,7 @@ kotlin {
 
     compilerOptions {
         // Generated kotest code uses experimental features that create warnings.
-        allWarningsAsErrors = false
+        allWarningsAsErrors = true
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 }
