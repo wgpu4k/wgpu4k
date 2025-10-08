@@ -28,12 +28,6 @@ jobs:
       - name: install dependencies
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt install -y libglfw3-dev
-      - name: set llvm Path On macos
-        if: matrix.os == 'macos-14'
-        run: echo "LIBCLANG_PATH=/Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr" >> $GITHUB_ENV
-      - name: set llvm Path On windows
-        if: matrix.os == 'windows-latest'
-        run: echo "LIBCLANG_PATH=\"C:\Program Files\LLVM\"" >> $GITHUB_ENV
       - name: print architecture
         run: uname -m
       - uses: actions/checkout@v4
