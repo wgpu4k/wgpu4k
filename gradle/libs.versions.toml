@@ -7,7 +7,7 @@ ktor = "2.3.12"
 playwright = "1.46.0"
 coroutines = "1.10.2"
 korge = "6.0.0"
-agp = "8.13.0"
+agp = "8.12.0"
 rococoa = "0.0.1"
 slf4j-simple = "2.0.17"
 android-native-helper = "0.0.1"
@@ -32,7 +32,6 @@ jna = { module = "net.java.dev.jna:jna", version.ref = "jna" }
 jnaPlatform = { module = "net.java.dev.jna:jna-platform", version.ref = "jna" }
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
-android-library = { module = "com.android.library:com.android.library.gradle.plugin", version.ref = "agp" }
 korlibs-image = { module = "com.soywiz:korlibs-image", version.ref = "korge" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
