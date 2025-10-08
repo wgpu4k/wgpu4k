@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotest)
     id("com.google.devtools.ksp") version "2.2.20-2.0.3"
-    //publish
+    publish
 }
 
 kotlin {
@@ -41,12 +41,13 @@ kotlin {
         publishLibraryVariants("release", "debug")
     }
 
-    /*
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-    macosArm64()
-    macosX64()*/
+    if (Platform.os == Os.MacOs) {
+        iosX64()
+        iosArm64()
+        iosSimulatorArm64()
+        macosArm64()
+        macosX64()
+    }
     linuxArm64()
     linuxX64()
     mingwX64()
