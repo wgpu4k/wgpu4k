@@ -55,6 +55,9 @@ kotlin {
     wasmJs {
         browser()
         nodejs()
+        compilerOptions {
+            optIn.add("kotlin.js.ExperimentalWasmJsInterop")
+        }
     }
 
     applyDefaultHierarchyTemplate()
