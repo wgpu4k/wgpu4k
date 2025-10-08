@@ -95,7 +95,7 @@ kotlin {
             dependencies { api(libs.wgpu4k.native) }
         }
 
-        //nativeMain.get().dependsOn(commonNativeMain)
+        nativeMain.get().dependsOn(commonNativeMain)
         jvmMain.get().dependsOn(commonNativeMain)
         androidMain.get().dependsOn(commonNativeMain)
 
