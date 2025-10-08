@@ -24,15 +24,6 @@ kotlin {
         }
     }
 
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-    macosArm64()
-    macosX64()
-    linuxArm64()
-    linuxX64()
-    mingwX64()
-
     androidTarget {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_22
@@ -49,6 +40,15 @@ kotlin {
         }
         //publishLibraryVariants("release", "debug")
     }
+
+    /*iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+    macosArm64()
+    macosX64()
+    linuxArm64()
+    linuxX64()
+    mingwX64()*/
 
 
     @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
@@ -91,7 +91,7 @@ kotlin {
             dependencies { api(libs.wgpu4k.native) }
         }
 
-        nativeMain.get().dependsOn(commonNativeMain)
+        //nativeMain.get().dependsOn(commonNativeMain)
         jvmMain.get().dependsOn(commonNativeMain)
         androidMain.get().dependsOn(commonNativeMain)
 
