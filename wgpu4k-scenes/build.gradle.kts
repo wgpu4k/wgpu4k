@@ -1,8 +1,8 @@
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
-    kotlin("plugin.serialization") version "2.1.21"
-    id("android")
+    alias(libs.plugins.android.library)
+    kotlin("plugin.serialization") version "2.2.20"
     id("publish")
 }
 
@@ -21,17 +21,28 @@ kotlin {
         browser()
     }
 
-
-    macosArm64()
-    macosX64()
+    if (Platform.os == Os.MacOs) {
+        iosX64()
+        iosArm64()
+        iosSimulatorArm64()
+        macosArm64()
+        macosX64()
+    }
     linuxArm64()
     linuxX64()
     mingwX64()
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
 
     androidTarget{
+        android {
+            namespace = "io.ygdrasil.wgpu4k"
+            compileSdk = 36
+
+            defaultConfig {
+                minSdk = 28
+            }
+
+        }
+
         publishLibraryVariants("release", "debug")
     }
 

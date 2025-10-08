@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
-    android
+    alias(libs.plugins.android.library)
     publish
 }
 
@@ -19,6 +19,16 @@ kotlin {
     }
     jvm()
     androidTarget {
+        android {
+            namespace = "io.ygdrasil.wgpu4k"
+            compileSdk = 36
+
+            defaultConfig {
+                minSdk = 28
+            }
+
+        }
+
         publishLibraryVariants("release", "debug")
     }
 
@@ -28,14 +38,16 @@ kotlin {
         browser()
     }
 
-    macosArm64()
-    macosX64()
+    if (Platform.os == Os.MacOs) {
+        iosX64()
+        iosArm64()
+        iosSimulatorArm64()
+        macosArm64()
+        macosX64()
+    }
     linuxArm64()
     linuxX64()
     mingwX64()
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
 
     applyDefaultHierarchyTemplate()
 
