@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotest)
-    id("com.google.devtools.ksp") version "2.2.20-2.0.3"
+    alias(libs.plugins.ksp)
     publish
 }
 

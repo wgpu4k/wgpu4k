@@ -1,5 +1,4 @@
 [versions]
-kotest = "6.0.3"
 jna = "5.18.1"
 kotlin = "2.2.20"
 kotlinx-serialization-json = "1.9.0"
@@ -22,6 +21,10 @@ kotlin-logging = "7.0.7"
 logback = "1.5.16"
 
 kotlinx-browser = "0.5.0"
+
+# Tests
+kotest = "6.0.3"
+ksp = "2.2.20-2.0.3"
 
 [libraries]
 kotlinx-browser = { module = "org.jetbrains.kotlinx:kotlinx-browser", version.ref = "kotlinx-browser" }
@@ -64,10 +67,13 @@ dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "2.0.0" 
 
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-kotest = { id = "io.kotest", version.ref = "kotest" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+
+# Tests
+kotest = { id = "io.kotest", version.ref = "kotest" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 [bundles]
 kotest = ["kotest-core", "kotest-assertions"]
