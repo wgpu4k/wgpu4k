@@ -1,3 +1,5 @@
+rootProject.name = "wgpu4k-buildsrc"
+
 dependencyResolutionManagement {
 	versionCatalogs {
 		create("libs") {
