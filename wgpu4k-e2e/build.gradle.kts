@@ -96,12 +96,13 @@ val jvmTest = tasks.register("e2eJvmTest") {
 }
 
 val e2eJsBrowserTest = tasks.register("e2eJsBrowserTest") {
+    val projectDir = project.projectDir
     group = "e2eTest"
     doLast {
         val prefixPath = "js"
-        project.projectDir.resolve("$prefixPath-chromium").mkdir()
+        projectDir.resolve("$prefixPath-chromium").mkdir()
         val server = endToEndWebserver(jsPagePath, logger)
-        browser(project.projectDir, logger, prefixPath)
+        browser(projectDir, logger, prefixPath)
         server.stop()
 
     }
@@ -120,10 +121,11 @@ val e2eWasmBrowserTest = tasks.register("e2eWasmBrowserTest") {
 }
 
 val e2eCompareImages = tasks.register("e2eCompareImages") {
+    val projectDir = project.projectDir
     group = "e2eTest"
     doLast {
-        project.projectDir.resolve("jvm").mkdir()
-        val result = compareImages(project.projectDir, logger)
+        projectDir.resolve("jvm").mkdir()
+        val result = compareImages(projectDir, logger)
             .filter { !it.similar }
         if (result.isNotEmpty()) error("Not similar tests found: ${result.joinToString()}")
     }
