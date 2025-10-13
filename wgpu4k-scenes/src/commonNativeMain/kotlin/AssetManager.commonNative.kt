@@ -2,7 +2,7 @@ package io.ygdrasil.webgpu.examples
 
 import korlibs.io.file.VfsFile
 import korlibs.io.file.std.resourcesVfs
-import korlibs.io.file.std.standardVfs
+import korlibs.io.file.std.rootLocalVfs
 
 actual suspend fun String.asVsfFile(): VfsFile = resourcesVfs[this].takeIf { it.exists() }
-    ?: standardVfs[this]
+    ?: rootLocalVfs[this].takeIf { it.exists() } ?: error("fail to get file from file system")

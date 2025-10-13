@@ -14,11 +14,10 @@ internal actual fun Bitmap32.toBitmapHolder(textureFormat: ColorFormat): ImageBi
     val buffer = globalMemory.allocateBuffer((Byte.SIZE_BYTES * bytes.size).toULong()).apply {
         writeBytes(bytes)
     }
-    TODO()
-    /*return ImageBitmapHolder(
+    return ImageBitmapHolder(
         globalMemory,
         buffer.handler,
         width.toUInt(),
         height.toUInt()
-    )*/
+    )
 }
