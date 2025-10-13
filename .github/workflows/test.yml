@@ -47,8 +47,6 @@ jobs:
         run: ./gradlew assemble --stacktrace
       - name: build
         run: ./gradlew build --stacktrace
-      - name: check
-        run: ./gradlew check --stacktrace
 
       - name: Run e2e tests
         if: matrix.os != 'ubuntu-latest'

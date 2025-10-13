@@ -6,6 +6,7 @@ plugins {
 
 val commonResourcesFile = getCommonProject()
     .projectDir
+    .resolve("src")
     .resolve("commonMain")
     .resolve("resources")
 
