@@ -49,7 +49,7 @@ fun runBrowserAndCaptureScreenshot(projectDir: File, prefixPath: String, port: I
             //playwright.firefox()
         )
         for ((browserType, options) in browserTypes) {
-            browserType.launch().use { browser ->
+            browserType.launch(options).use { browser ->
                 var renderEnded: Boolean
                 val context: BrowserContext = browser.newContext()
                 val page: Page = context.newPage()
