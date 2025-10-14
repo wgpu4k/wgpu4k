@@ -57,7 +57,16 @@ jobs:
       #  if: matrix.os == 'ubuntu-latest'
       #  run: xvfb-run ./gradlew :wgpu4k-e2e:e2eTest --stacktrace --info
 
-      - name: Bundle chromium screenshot
+      - name: Bundle wasm chromium screenshot
+        if: always()
+        uses: vimtor/action-zip@v1.2
+        with:
+          files: ./wgpu4k-e2e/wasm-chromium/
+          recursive: false
+          dest: wasm-chromium-${{ runner.os }}-screenshots.zip
+
+      - name: Bundle js chromium screenshot
+        if: always()
         uses: vimtor/action-zip@v1.2
         with:
           files: ./wgpu4k-e2e/js-chromium/
@@ -65,6 +74,7 @@ jobs:
           dest: js-chromium-${{ runner.os }}-screenshots.zip
 
       - name: Bundle jvm screenshot
+        if: always()
         uses: vimtor/action-zip@v1.2
         with:
           files: ./wgpu4k-e2e/jvm/
@@ -79,3 +89,4 @@ jobs:
           path: |
             jvm-${{ runner.os }}-screenshots.zip
             js-chromium-${{ runner.os }}-screenshots.zip
+            wasm-chromium-${{ runner.os }}-screenshots.zip
