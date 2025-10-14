@@ -1,5 +1,4 @@
 import com.microsoft.playwright.BrowserContext
-import com.microsoft.playwright.BrowserType
 import com.microsoft.playwright.Page
 import com.microsoft.playwright.Playwright
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -41,15 +40,14 @@ fun runBrowserAndCaptureScreenshot(projectDir: File, prefixPath: String, port: I
 
     Playwright.create().use { playwright ->
         val browserTypes = listOf(
-            playwright.chromium() to BrowserType.LaunchOptions()
-                .also { it.args = listOf("--enable-unsafe-webgpu") },
+            playwright.chromium(),
             // Not yet suported
             // playwright.webkit(),
             // Not yet suported
             //playwright.firefox()
         )
-        for ((browserType, options) in browserTypes) {
-            browserType.launch(options).use { browser ->
+        for (browserType in browserTypes) {
+            browserType.launch().use { browser ->
                 var renderEnded: Boolean
                 val context: BrowserContext = browser.newContext()
                 val page: Page = context.newPage()
