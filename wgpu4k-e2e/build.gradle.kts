@@ -134,9 +134,9 @@ val e2eWasmBrowserTest = tasks.register<JavaExec>("e2eWasmBrowserTest") {
 
 val e2eCompareImages = tasks.register("e2eCompareImages") {
     val projectDir = project.projectDir
+    projectDir.resolve("jvm").mkdir()
     group = "e2eTest"
     doLast {
-        projectDir.resolve("jvm").mkdir()
         val result = compareImages(projectDir, logger)
             .filter { !it.similar }
         if (result.isNotEmpty()) error("Not similar tests found: ${result.joinToString()}")

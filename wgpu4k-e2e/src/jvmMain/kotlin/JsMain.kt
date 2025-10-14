@@ -1,3 +1,4 @@
+import kotlinx.coroutines.runBlocking
 import java.io.File
 
 
@@ -11,6 +12,9 @@ fun main() {
 
     projectDir.resolve("$prefixPath-chromium").mkdir()
     val server = runWebserverWithFilesAt(jsPagePath)
-    runBrowserAndCaptureScreenshot(projectDir, prefixPath)
+
+    val port = runBlocking { server.resolvedConnectors().first().port }
+
+    runBrowserAndCaptureScreenshot(projectDir, prefixPath, port)
     server.stop()
 }

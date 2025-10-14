@@ -7,6 +7,12 @@ import kotlinx.coroutines.runBlocking
 import org.gradle.api.logging.Logger
 import java.io.File
 
+private val compatibleDirectoryName = listOf(
+    "jvm",
+    "js-chromium",
+    "wasm-chromium"
+)
+
 data class ComparisonResult(
     val actual: File,
     val expected: File,
@@ -27,7 +33,7 @@ fun compareImages(basePath: File, logger: Logger): List<ComparisonResult> {
             .filter { it.extension == "png" }
         (basePath.listFiles()?: error("fail to list files in ${expectedDirectory.absolutePath}"))
             // Remove non directory, build, src and expected directory images
-            .filter { it.isDirectory && it != expectedDirectory && it.name.startsWith("build").not() && it.name.startsWith("src").not()}
+            .filter { it.isDirectory && it != expectedDirectory && it.name in compatibleDirectoryName}
             .flatMap { directory ->
                 logger.info("will compare image on  ${directory.absolutePath}")
                 expectedImages.map { expectedFile -> directory.resolve(expectedFile.name) to expectedFile }

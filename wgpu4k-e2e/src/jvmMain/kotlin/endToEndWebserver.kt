@@ -25,7 +25,7 @@ val scenes = listOf(
 
 fun runWebserverWithFilesAt(pagePath: File): NettyApplicationEngine {
     logger.info { "serve page from ${pagePath.absolutePath}" }
-    return embeddedServer(Netty, port = 9000) {
+    return embeddedServer(Netty, port = 0) {
 
         routing {
             staticFiles(
@@ -37,7 +37,7 @@ fun runWebserverWithFilesAt(pagePath: File): NettyApplicationEngine {
 }
 
 
-fun runBrowserAndCaptureScreenshot(projectDir: File, prefixPath: String) {
+fun runBrowserAndCaptureScreenshot(projectDir: File, prefixPath: String, port: Int) {
     logger.info { "start to browser" }
 
     Playwright.create().use { playwright ->
@@ -75,7 +75,7 @@ fun runBrowserAndCaptureScreenshot(projectDir: File, prefixPath: String) {
                     scenes.forEach { (sceneName, frames) ->
                         frames.forEach { frame ->
                             renderEnded = false
-                            page.navigate("http://localhost:9000/index.html?scene=$sceneName&frame=$frame")
+                            page.navigate("http://localhost:$port/index.html?scene=$sceneName&frame=$frame")
                             context.waitForCondition { renderEnded }
                             page.screenshot(
                                 Page.ScreenshotOptions()
