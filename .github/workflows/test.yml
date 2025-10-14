@@ -72,6 +72,7 @@ jobs:
           dest: jvm-${{ runner.os }}-screenshots.zip
 
       - name: Upload the build reports
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }}-artifacts
