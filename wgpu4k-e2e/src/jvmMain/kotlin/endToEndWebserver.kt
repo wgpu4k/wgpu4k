@@ -8,7 +8,6 @@ import io.ktor.server.http.content.*
 import io.ktor.server.netty.*
 import io.ktor.server.routing.*
 import java.io.File
-import java.util.*
 
 private val logger = KotlinLogging.logger {}
 
@@ -41,14 +40,15 @@ fun runBrowserAndCaptureScreenshot(projectDir: File, prefixPath: String, port: I
     logger.info { "start to browser" }
 
     Playwright.create().use { playwright ->
-        val browserTypes: List<BrowserType> = Arrays.asList(
-            playwright.chromium(),
+        val browserTypes = listOf(
+            playwright.chromium() to BrowserType.LaunchOptions()
+                .also { it.args = listOf("--enable-unsafe-webgpu") },
             // Not yet suported
             // playwright.webkit(),
             // Not yet suported
             //playwright.firefox()
         )
-        for (browserType in browserTypes) {
+        for ((browserType, options) in browserTypes) {
             browserType.launch().use { browser ->
                 var renderEnded: Boolean
                 val context: BrowserContext = browser.newContext()

@@ -136,7 +136,7 @@ val e2eWasmBrowserTest = tasks.register<JavaExec>("e2eWasmBrowserTest") {
     jvmArgs(
         listOf(
             "-DprojectDir=${projectDir.absolutePath}",
-            "-DjsPagePath=${jsPagePath.absolutePath}",
+            "-DjsPagePath=${wasmPagePath.absolutePath}",
             "-DprefixPath=wasm"
         )
     )
@@ -156,10 +156,10 @@ val e2eCompareImages = tasks.register("e2eCompareImages") {
 
 tasks.register("e2eTest") {
     group = "e2eTest"
-    if(isInCI().not()) dependsOn(e2eJsBrowserTest)
-    // uncomment when wasm is stable
-    // if(isInCI().not())
-    dependsOn(e2eWasmBrowserTest)
+    //if(isInCI().not())
+        dependsOn(e2eJsBrowserTest)
+    //if(isInCI().not())
+        dependsOn(e2eWasmBrowserTest)
     dependsOn(jvmTest)
     finalizedBy(e2eCompareImages)
 }
