@@ -4,6 +4,17 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform)
 }
 
+val scenes = listOf(
+    "HelloTriangleScene" to listOf(0),
+    "HelloTriangleMSAAScene" to listOf(0),
+    "HelloTriangleRotatingScene" to listOf(0, 10, 50, 100),
+    "RotatingCubeScene" to listOf(0, 10, 50, 100),
+    "TwoCubesScene" to listOf(0, 10, 50, 100),
+    "CubemapScene" to listOf(0, 10, 50, 100),
+    "InstancedCubeScene" to listOf(0, 10, 50, 100),
+    "TexturedCubeScene" to listOf(0, 10, 50, 100),
+)
+
 val commonResourcesFile = getCommonProject()
     .projectDir
     .resolve("src")
