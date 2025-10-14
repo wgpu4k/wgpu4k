@@ -22,8 +22,7 @@ val wasmPagePath = project.projectDir.resolve("build")
 
 kotlin {
 
-    jvm {
-    }
+    jvm()
 
     js {
         binaries.executable()
@@ -58,6 +57,14 @@ kotlin {
                 )
             )
         }
+
+        jvmMain {
+            dependencies {
+                implementation(libs.ktor.server.netty.jvm)
+                implementation(libs.playwright)
+                implementation(libs.ktor.server.core.jvm)
+            }
+        }
     }
 }
 
@@ -67,7 +74,7 @@ val jvmTasks = scenes.flatMap { (sceneName, frames) ->
             group = "e2eTest"
             // TODO: find why the app is crashing sometimes
             isIgnoreExitValue = true
-            mainClass = "MainKt"
+            mainClass = "JvmMainKt"
             jvmArgs(
                 if (Platform.os == Os.MacOs) {
                     listOf(
@@ -96,29 +103,33 @@ val jvmTest = tasks.register("e2eJvmTest") {
     jvmTasks.forEach { tasks -> dependsOn(tasks) }
 }
 
-val e2eJsBrowserTest = tasks.register("e2eJsBrowserTest") {
+val e2eJsBrowserTest = tasks.register<JavaExec>("e2eJsBrowserTest") {
     val projectDir = project.projectDir
     group = "e2eTest"
-    doLast {
-        val prefixPath = "js"
-        projectDir.resolve("$prefixPath-chromium").mkdir()
-        val server = endToEndWebserver(jsPagePath, logger)
-        browser(projectDir, logger, prefixPath)
-        server.stop()
-
-    }
+    mainClass = "JsMainKt"
+    jvmArgs(
+        listOf(
+            "-DprojectDir=${projectDir.absolutePath}",
+            "-DjsPagePath=${jsPagePath.absolutePath}",
+            "-DprefixPath=js"
+        )
+    )
+    classpath = sourceSets["jvmMain"].runtimeClasspath
 }
 
-val e2eWasmBrowserTest = tasks.register("e2eWasmBrowserTest") {
-    group = "e2eTest"
-    doLast {
-        val prefixPath = "wasm"
-        project.projectDir.resolve("$prefixPath-chromium").mkdir()
-        val server = endToEndWebserver(wasmPagePath, logger)
-        browser(project.projectDir, logger, prefixPath)
-        server.stop()
 
-    }
+val e2eWasmBrowserTest = tasks.register<JavaExec>("e2eWasmBrowserTest") {
+    val projectDir = project.projectDir
+    group = "e2eTest"
+    mainClass = "JsMainKt"
+    jvmArgs(
+        listOf(
+            "-DprojectDir=${projectDir.absolutePath}",
+            "-DjsPagePath=${jsPagePath.absolutePath}",
+            "-DprefixPath=wasm"
+        )
+    )
+    classpath = sourceSets["jvmMain"].runtimeClasspath
 }
 
 val e2eCompareImages = tasks.register("e2eCompareImages") {
@@ -136,7 +147,8 @@ tasks.register("e2eTest") {
     group = "e2eTest"
     if(isInCI().not()) dependsOn(e2eJsBrowserTest)
     // uncomment when wasm is stable
-    // if(isInCI().not()) dependsOn(e2eWasmBrowserTest)
+    // if(isInCI().not())
+    dependsOn(e2eWasmBrowserTest)
     dependsOn(jvmTest)
     finalizedBy(e2eCompareImages)
 }
