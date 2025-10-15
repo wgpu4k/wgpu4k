@@ -4,17 +4,6 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform)
 }
 
-val scenes = listOf(
-    "HelloTriangleScene" to listOf(0),
-    "HelloTriangleMSAAScene" to listOf(0),
-    "HelloTriangleRotatingScene" to listOf(0, 10, 50, 100),
-    "RotatingCubeScene" to listOf(0, 10, 50, 100),
-    "TwoCubesScene" to listOf(0, 10, 50, 100),
-    "CubemapScene" to listOf(0, 10, 50, 100),
-    "InstancedCubeScene" to listOf(0, 10, 50, 100),
-    "TexturedCubeScene" to listOf(0, 10, 50, 100),
-)
-
 val commonResourcesFile = getCommonProject()
     .projectDir
     .resolve("src")
@@ -79,39 +68,26 @@ kotlin {
     }
 }
 
-val jvmTasks = scenes.flatMap { (sceneName, frames) ->
-    frames.map { frame ->
-        tasks.register<JavaExec>("e2eJvmTest-$sceneName-$frame") {
-            group = "e2eTest"
-            // TODO: find why the app is crashing sometimes
-            isIgnoreExitValue = true
-            mainClass = "JvmMainKt"
-            jvmArgs(
-                if (Platform.os == Os.MacOs) {
-                    listOf(
-                        "-XstartOnFirstThread",
-                        "--add-opens=java.base/java.lang=ALL-UNNAMED",
-                        "--enable-native-access=ALL-UNNAMED"
-                    )
-                } else {
-                    listOf(
-                        "--add-opens=java.base/java.lang=ALL-UNNAMED",
-                        "--enable-native-access=ALL-UNNAMED"
-                    )
-                } + listOf(
-                    "-Dscene=$sceneName",
-                    "-Dframe=$frame",
-                    "-DscreenshotPath=${project.projectDir}",
-                )
-            )
-            classpath = sourceSets["jvmMain"].runtimeClasspath
-        }
-    }
-}
-
-val jvmTest = tasks.register("e2eJvmTest") {
+val jvmTest = tasks.register<JavaExec>("e2eJvmTest") {
     group = "e2eTest"
-    jvmTasks.forEach { tasks -> dependsOn(tasks) }
+    mainClass = "JvmMainKt"
+    jvmArgs(
+        if (Platform.os == Os.MacOs) {
+            listOf(
+                "-XstartOnFirstThread",
+                "--add-opens=java.base/java.lang=ALL-UNNAMED",
+                "--enable-native-access=ALL-UNNAMED"
+            )
+        } else {
+            listOf(
+                "--add-opens=java.base/java.lang=ALL-UNNAMED",
+                "--enable-native-access=ALL-UNNAMED"
+            )
+        } + listOf(
+            "-DscreenshotPath=${project.projectDir}",
+        )
+    )
+    classpath = sourceSets["jvmMain"].runtimeClasspath
 }
 
 val e2eJsBrowserTest = tasks.register<JavaExec>("e2eJsBrowserTest") {

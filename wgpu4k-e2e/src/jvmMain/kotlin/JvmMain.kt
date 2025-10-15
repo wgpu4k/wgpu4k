@@ -7,10 +7,17 @@ private val logger = KotlinLogging.logger {}
 
 fun main() {
     runBlocking {
-        try {
-            captureScene()
-        } catch (error: Throwable) {
-            logger.error(error) { "Failed to capture scene" }
+        scenes.forEach { (name, frames) ->
+            frames.forEach { frame ->
+                System.setProperty("scene", name)
+                System.setProperty("frame", "$frame")
+
+                try {
+                    captureScene()
+                } catch (error: Throwable) {
+                    logger.error(error) { "Failed to capture scene" }
+                }
+            }
         }
     }
 }
