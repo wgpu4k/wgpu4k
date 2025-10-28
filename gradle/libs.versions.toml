@@ -1,6 +1,6 @@
 [versions]
 jna = "5.18.1"
-kotlin = "2.2.20"
+kotlin = "2.2.21"
 kotlinx-serialization-json = "1.9.0"
 ktor = "2.3.12"
 playwright = "1.46.0"
