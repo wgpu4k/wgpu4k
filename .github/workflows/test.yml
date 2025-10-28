@@ -25,6 +25,11 @@ jobs:
     env:
       CI: "true"
     steps:
+      - name: Create empty yarn.lock (Windows only)
+        if: matrix.os == 'windows-latest'
+        run: |
+          mkdir -p D:\a\wgpu4k\wgpu4k\build\wasm
+          New-Item -Path D:\a\wgpu4k\wgpu4k\build\wasm\yarn.lock -ItemType File -Force
       - name: install dependencies
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt install -y libglfw3-dev
