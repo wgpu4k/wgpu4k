@@ -43,6 +43,8 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
           restore-keys: ${{ runner.os }}-gradle
+      - name: upgrade yarn lock
+        run: ./gradlew kotlinUpgradeYarnLock kotlinWasmUpgradeYarnLock --stacktrace
       - name: assemble
         run: ./gradlew assemble --stacktrace
       - name: build
