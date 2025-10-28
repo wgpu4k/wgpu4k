@@ -57,7 +57,6 @@ class HelloTriangleScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
             .bind()
 
         val texture = renderingContext.getCurrentTexture()
-            .bind()
 
         encoder.beginRenderPass(
             RenderPassDescriptor(

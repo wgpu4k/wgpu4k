@@ -227,8 +227,8 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			colorAttachments = listOf(
 				(renderPassDescriptor.colorAttachments[0] as RenderPassColorAttachment).copy(
 					view = renderingContext.getCurrentTexture()
-						.bind()
 						.createView()
+                        .bind()
 				)
 			)
 		)

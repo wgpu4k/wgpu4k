@@ -51,7 +51,6 @@ val numInstances = (xCount * yCount).toULong()
 
 class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
-
 	lateinit var renderPipeline: GPURenderPipeline
 	lateinit var projectionMatrix: Matrix4
 	lateinit var renderPassDescriptor: GPURenderPassDescriptor
@@ -208,8 +207,8 @@ class InstancedCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			colorAttachments = listOf(
 				(renderPassDescriptor.colorAttachments[0] as RenderPassColorAttachment).copy(
 					view = renderingContext.getCurrentTexture()
-						.bind()
 						.createView()
+                        .bind()
 				)
 			)
 		)

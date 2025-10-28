@@ -267,8 +267,8 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
             colorAttachments = listOf(
                 (renderPassDescriptor.colorAttachments[0] as RenderPassColorAttachment).copy(
                     view = renderingContext.getCurrentTexture()
-                        .bind()
                         .createView()
+                        .bind()
                 )
             )
         )
