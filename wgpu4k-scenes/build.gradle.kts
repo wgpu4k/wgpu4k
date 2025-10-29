@@ -1,8 +1,8 @@
 
 plugins {
-    id(libs.plugins.kotlin.multiplatform.get().pluginId)
-    kotlin("plugin.serialization") version "2.1.21"
-    if (isAndroidConfigured) id("android")
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.android.library)
+    kotlin("plugin.serialization") version "2.2.20"
     id("publish")
 }
 
@@ -21,19 +21,32 @@ kotlin {
         browser()
     }
 
-
-    macosArm64()
-    macosX64()
+    if (Platform.os == Os.MacOs) {
+        iosX64()
+        iosArm64()
+        iosSimulatorArm64()
+        macosArm64()
+        macosX64()
+    }
     linuxArm64()
     linuxX64()
-    configureMingwX64(project)
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+    mingwX64()
 
-    if (isAndroidConfigured) androidTarget{
+    androidTarget{
+        android {
+            namespace = "io.ygdrasil.wgpu4k"
+            compileSdk = 36
+
+            defaultConfig {
+                minSdk = 28
+            }
+
+        }
+
         publishLibraryVariants("release", "debug")
     }
+
+    applyDefaultHierarchyTemplate()
 
     sourceSets {
 
@@ -57,6 +70,23 @@ kotlin {
                 implementation(libs.wgpu4k.native)
             }
         }
+
+        webMain {
+
+            dependencies {
+                implementation (kotlinWrappers.web)
+                implementation (kotlinWrappers.browser)
+                implementation(libs.kotlinx.browser)
+            }
+        }
+
+        val commonNativeMain by creating {
+            dependsOn(commonMain.get())
+        }
+
+        nativeMain.get().dependsOn(commonNativeMain)
+        jvmMain.get().dependsOn(commonNativeMain)
+        androidMain.get().dependsOn(commonNativeMain)
     }
 
     compilerOptions {

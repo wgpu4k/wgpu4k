@@ -28,12 +28,6 @@ jobs:
       - name: install dependencies
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt install -y libglfw3-dev
-      - name: set llvm Path On macos
-        if: matrix.os == 'macos-14'
-        run: echo "LIBCLANG_PATH=/Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr" >> $GITHUB_ENV
-      - name: set llvm Path On windows
-        if: matrix.os == 'windows-latest'
-        run: echo "LIBCLANG_PATH=\"C:\Program Files\LLVM\"" >> $GITHUB_ENV
       - name: print architecture
         run: uname -m
       - uses: actions/checkout@v4
@@ -49,23 +43,32 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
           restore-keys: ${{ runner.os }}-gradle
+      - name: upgrade yarn lock
+        run: ./gradlew kotlinUpgradeYarnLock kotlinWasmUpgradeYarnLock --stacktrace
       - name: assemble
         run: ./gradlew assemble --stacktrace
       - name: build
         run: ./gradlew build --stacktrace
-      - name: check
-        run: ./gradlew check --stacktrace
 
       - name: Run e2e tests
         if: matrix.os != 'ubuntu-latest'
-        run: ./gradlew :wgpu4k-e2e:e2eTest --stacktrace --info
+        run: ./gradlew :wgpu4k-e2e:e2eTest --stacktrace --info --no-build-cache
 
       # disable test on ubuntu, xvfb-run not working as it on latest ubuntu
       #- name: Run e2e tests
       #  if: matrix.os == 'ubuntu-latest'
       #  run: xvfb-run ./gradlew :wgpu4k-e2e:e2eTest --stacktrace --info
 
-      - name: Bundle chromium screenshot
+      - name: Bundle wasm chromium screenshot
+        if: always()
+        uses: vimtor/action-zip@v1.2
+        with:
+          files: ./wgpu4k-e2e/wasm-chromium/
+          recursive: false
+          dest: wasm-chromium-${{ runner.os }}-screenshots.zip
+
+      - name: Bundle js chromium screenshot
+        if: always()
         uses: vimtor/action-zip@v1.2
         with:
           files: ./wgpu4k-e2e/js-chromium/
@@ -73,6 +76,7 @@ jobs:
           dest: js-chromium-${{ runner.os }}-screenshots.zip
 
       - name: Bundle jvm screenshot
+        if: always()
         uses: vimtor/action-zip@v1.2
         with:
           files: ./wgpu4k-e2e/jvm/
@@ -80,9 +84,11 @@ jobs:
           dest: jvm-${{ runner.os }}-screenshots.zip
 
       - name: Upload the build reports
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }}-artifacts
           path: |
             jvm-${{ runner.os }}-screenshots.zip
             js-chromium-${{ runner.os }}-screenshots.zip
+            wasm-chromium-${{ runner.os }}-screenshots.zip

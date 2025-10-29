@@ -2,6 +2,7 @@
 
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
 
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
@@ -28,18 +29,20 @@ kotlin {
         compilerOptions {
             // Enable only when need tp debug, this required special activation on browser
             // Use chrome://flags/#enable-experimental-webassembly-features on chrome
-            freeCompilerArgs.add("-Xwasm-use-new-exception-proposal")
+            //freeCompilerArgs.add("-Xwasm-use-new-exception-proposal")
         }
     }
 
+    applyDefaultHierarchyTemplate()
+
     sourceSets {
-        val commonMain by getting {
+        webMain {
             dependencies {
                 implementation(projects.wgpu4kScenes)
             }
         }
 
-        val jsMain by getting {
+        jsMain {
             resources.setSrcDirs(
                 resources.srcDirs + setOf(
                     commonResourcesFile
@@ -47,7 +50,7 @@ kotlin {
             )
         }
 
-        val wasmJsMain by getting {
+        wasmJsMain {
             resources.setSrcDirs(
                 resources.srcDirs + setOf(
                     commonResourcesFile
@@ -63,8 +66,17 @@ kotlin {
     }
 }
 
-fun getCommonProject() = projects.wgpu4kScenes.identityPath.path
-    ?.let(::project) ?: error("Could not find project path")
+fun getCommonProject() = projects
+    .wgpu4kScenes
+    .path
+    .let(::project)
 
 val File.isNotEmpty: Boolean
     get() = this.listFiles()?.isNotEmpty() ?: false
+
+
+tasks.withType<KotlinJsCompile>().configureEach {
+    compilerOptions {
+        target = "es2015"
+    }
+}

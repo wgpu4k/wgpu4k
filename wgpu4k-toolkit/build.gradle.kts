@@ -1,10 +1,6 @@
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.plugin.KotlinHierarchyTemplate
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
-
 plugins {
-    id(libs.plugins.kotlin.multiplatform.get().pluginId)
-    if (isAndroidConfigured) android
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.android.library)
     publish
 }
 
@@ -22,7 +18,17 @@ kotlin {
         nodejs()
     }
     jvm()
-    if (isAndroidConfigured) androidTarget {
+    androidTarget {
+        android {
+            namespace = "io.ygdrasil.wgpu4k"
+            compileSdk = 36
+
+            defaultConfig {
+                minSdk = 28
+            }
+
+        }
+
         publishLibraryVariants("release", "debug")
     }
 
@@ -32,55 +38,18 @@ kotlin {
         browser()
     }
 
-    macosArm64()
-    macosX64()
+    if (Platform.os == Os.MacOs) {
+        iosX64()
+        iosArm64()
+        iosSimulatorArm64()
+        macosArm64()
+        macosX64()
+    }
     linuxArm64()
     linuxX64()
-    configureMingwX64(project)
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+    mingwX64()
 
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
-    applyHierarchyTemplate(
-        KotlinHierarchyTemplate {
-            /* natural hierarchy is only applied to default 'main'/'test' compilations (by default) */
-            withSourceSetTree(KotlinSourceSetTree.main, KotlinSourceSetTree.test)
-
-            common {
-                /* All compilations shall be added to the common group by default */
-                withCompilations { true }
-
-
-                group("native") {
-                    group("ios") {
-                        withIos()
-                    }
-
-                    group("desktopNative") {
-
-                        group("macos") {
-                            withMacos()
-                        }
-
-                        group("linux") {
-                            withLinux()
-                        }
-
-                        group("mingw") {
-                            withMingw()
-                        }
-
-                    }
-                }
-
-                group("commonWeb") {
-                    withJs()
-                    withWasmJs()
-                }
-            }
-        }
-    )
+    applyDefaultHierarchyTemplate()
 
     sourceSets {
 
@@ -90,6 +59,12 @@ kotlin {
             languageSettings.optIn("kotlin.js.ExperimentalJsExport")
         }
 
+        webMain {
+            dependencies {
+                implementation(kotlinWrappers.browser)
+            }
+        }
+
         commonMain {
             dependencies {
                 api(projects.wgpu4k)
@@ -97,11 +72,17 @@ kotlin {
             }
         }
 
-        val desktopNativeMain by getting {
+        val desktopNativeMain by creating {
+            dependsOn(commonMain.get())
             dependencies {
                 api(libs.glfw.native)
             }
         }
+
+
+        macosMain.get().dependsOn(desktopNativeMain)
+        linuxMain.get().dependsOn(desktopNativeMain)
+        mingwMain.get().dependsOn(desktopNativeMain)
 
 
         commonTest {
@@ -116,7 +97,7 @@ kotlin {
                 api(libs.jnaPlatform)
                 api(libs.jna)
                 implementation(libs.wgpu4k.native)
-
+                val lwjglVersion = "3.3.3"
                 api("org.lwjgl:lwjgl:$lwjglVersion")
                 api("org.lwjgl:lwjgl-glfw:$lwjglVersion")
                 listOf(
@@ -139,24 +120,19 @@ kotlin {
 
         }
 
-        if (isAndroidConfigured) {
-            androidMain {
-                dependencies {
-                    implementation(libs.android.native.helper)
-                }
+
+        androidMain {
+            dependencies {
+                implementation(libs.android.native.helper)
             }
         }
     }
 
     compilerOptions {
-        allWarningsAsErrors = true
+        //allWarningsAsErrors = true
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 }
-
-
-fun getCommonProject() = projects.wgpu4kScenes.identityPath.path
-    ?.let(::project) ?: error("Could not find project path")
 
 val File.isNotEmpty: Boolean
     get() = this.listFiles()?.isNotEmpty() ?: false

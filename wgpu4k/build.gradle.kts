@@ -2,72 +2,13 @@
 
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.plugin.KotlinHierarchyTemplate
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
-    id(libs.plugins.kotlin.multiplatform.get().pluginId)
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotest)
+    alias(libs.plugins.ksp)
     publish
-    if (isAndroidConfigured) android
-}
-
-private val hierarchyTemplate = KotlinHierarchyTemplate {
-    /* natural hierarchy is only applied to default 'main'/'test' compilations (by default) */
-    withSourceSetTree(KotlinSourceSetTree.main, KotlinSourceSetTree.test)
-
-    common {
-        /* All compilations shall be added to the common group by default */
-        withCompilations { true }
-
-        group("commonNative") {
-            group("native") {
-                withNative()
-
-                group("apple") {
-                    withApple()
-
-                    group("ios") {
-                        withIos()
-                    }
-
-                    group("tvos") {
-                        withTvos()
-                    }
-
-                    group("watchos") {
-                        withWatchos()
-                    }
-
-                    group("macos") {
-                        withMacos()
-                    }
-                }
-
-                group("linux") {
-                    withLinux()
-                }
-
-                group("mingw") {
-                    withMingw()
-                }
-
-                /*group("androidNative") {
-                    withAndroidNative()
-                }*/
-            }
-
-            withJvm()
-            withAndroidTarget()
-        }
-
-
-        group("commonWeb") {
-            withJs()
-            withWasmJs()
-        }
-    }
 }
 
 kotlin {
@@ -83,32 +24,44 @@ kotlin {
         }
     }
 
-
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-    macosArm64()
-    macosX64()
-    linuxArm64()
-    linuxX64()
-    mingwX64()
-
-    if (isAndroidConfigured) androidTarget {
+    androidTarget {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_22
         }
 
+        android {
+            namespace = "io.ygdrasil.wgpu4k"
+            compileSdk = 36
+
+            defaultConfig {
+                minSdk = 28
+            }
+
+        }
         publishLibraryVariants("release", "debug")
     }
 
+    if (Platform.os == Os.MacOs) {
+        iosX64()
+        iosArm64()
+        iosSimulatorArm64()
+        macosArm64()
+        macosX64()
+    }
+    linuxArm64()
+    linuxX64()
+    mingwX64()
 
     @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
     wasmJs {
         browser()
         nodejs()
+        compilerOptions {
+            optIn.add("kotlin.js.ExperimentalWasmJsInterop")
+        }
     }
 
-    applyHierarchyTemplate(hierarchyTemplate)
+    applyDefaultHierarchyTemplate()
 
     sourceSets {
 
@@ -130,23 +83,28 @@ kotlin {
             }
         }
 
-        if (isAndroidConfigured) androidMain {
+        androidMain {
             dependencies {
                 implementation(libs.slf4j.simple)
             }
         }
 
-        val commonNativeMain by getting {
+
+        val commonNativeMain by creating {
+            dependsOn(commonMain.get())
             dependencies { api(libs.wgpu4k.native) }
         }
 
-        val commonWebMain by getting {
-            dependencies { api(libs.webgpu.web) }
-        }
+        nativeMain.get().dependsOn(commonNativeMain)
+        jvmMain.get().dependsOn(commonNativeMain)
+        androidMain.get().dependsOn(commonNativeMain)
 
-        wasmJsMain {
+
+        webMain {
             dependencies {
-                api(libs.kotlinx.browser)
+                api(libs.webgpu.web)
+                api(kotlinWrappers.browser)
+                api(kotlinWrappers.web)
             }
         }
 
@@ -166,13 +124,8 @@ kotlin {
     }
 
     compilerOptions {
-        // Workaround for https://github.com/kotest/kotest/issues/4521 (fixed but not released)
-        //allWarningsAsErrors = true
-        tasks.withType<KotlinCompilationTask<*>>().configureEach {
-            compilerOptions {
-                allWarningsAsErrors = !name.contains("test", ignoreCase = true)
-            }
-        }
+        // Generated kotest code uses experimental features that create warnings.
+        allWarningsAsErrors = true
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 }
@@ -183,11 +136,14 @@ java {
     }
 }
 
+tasks.withType<Test>().configureEach {
+    filter {
+        failOnNoDiscoveredTests = false
+    }
+}
+
 tasks.named<Test>("jvmTest") {
     useJUnitPlatform()
-    filter {
-        isFailOnNoMatchingTests = false
-    }
     testLogging {
         showExceptions = true
         showStandardStreams = true
@@ -198,11 +154,3 @@ tasks.named<Test>("jvmTest") {
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
     }
 }
-
-
-if (Platform.os == Os.MacOs) {
-    tasks.findByName("linkDebugTestMingwX64")?.apply { enabled = false }
-    tasks.findByName("mingwX64Test")?.apply { enabled = false }
-}
-
-tasks.findByName("checkKotlinGradlePluginConfigurationErrors")?.enabled = isAndroidConfigured

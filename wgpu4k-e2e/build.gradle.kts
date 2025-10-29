@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
-    id(libs.plugins.kotlin.multiplatform.get().pluginId)
+    alias(libs.plugins.kotlin.multiplatform)
 }
 
 val commonResourcesFile = getCommonProject()
@@ -22,8 +22,7 @@ val wasmPagePath = project.projectDir.resolve("build")
 
 kotlin {
 
-    jvm {
-    }
+    jvm()
 
     js {
         binaries.executable()
@@ -58,73 +57,74 @@ kotlin {
                 )
             )
         }
-    }
-}
 
-val jvmTasks = scenes.flatMap { (sceneName, frames) ->
-    frames.map { frame ->
-        tasks.register<JavaExec>("e2eJvmTest-$sceneName-$frame") {
-            group = "e2eTest"
-            // TODO: find why the app is crashing sometimes
-            isIgnoreExitValue = true
-            mainClass = "MainKt"
-            jvmArgs(
-                if (Platform.os == Os.MacOs) {
-                    listOf(
-                        "-XstartOnFirstThread",
-                        "--add-opens=java.base/java.lang=ALL-UNNAMED",
-                        "--enable-native-access=ALL-UNNAMED"
-                    )
-                } else {
-                    listOf(
-                        "--add-opens=java.base/java.lang=ALL-UNNAMED",
-                        "--enable-native-access=ALL-UNNAMED"
-                    )
-                } + listOf(
-                    "-Dscene=$sceneName",
-                    "-Dframe=$frame",
-                    "-DscreenshotPath=${project.projectDir}",
-                )
-            )
-            classpath = sourceSets["jvmMain"].runtimeClasspath
+        jvmMain {
+            dependencies {
+                implementation(libs.ktor.server.netty.jvm)
+                implementation(libs.playwright)
+                implementation(libs.ktor.server.core.jvm)
+            }
         }
     }
 }
 
-val jvmTest = tasks.register("e2eJvmTest") {
+val jvmTest = tasks.register<JavaExec>("e2eJvmTest") {
     group = "e2eTest"
-    jvmTasks.forEach { tasks -> dependsOn(tasks) }
+    mainClass = "JvmMainKt"
+    jvmArgs(
+        if (Platform.os == Os.MacOs) {
+            listOf(
+                "-XstartOnFirstThread",
+                "--add-opens=java.base/java.lang=ALL-UNNAMED",
+                "--enable-native-access=ALL-UNNAMED"
+            )
+        } else {
+            listOf(
+                "--add-opens=java.base/java.lang=ALL-UNNAMED",
+                "--enable-native-access=ALL-UNNAMED"
+            )
+        } + listOf(
+            "-DscreenshotPath=${project.projectDir}",
+        )
+    )
+    classpath = sourceSets["jvmMain"].runtimeClasspath
 }
 
-val e2eJsBrowserTest = tasks.register("e2eJsBrowserTest") {
+val e2eJsBrowserTest = tasks.register<JavaExec>("e2eJsBrowserTest") {
+    val projectDir = project.projectDir
     group = "e2eTest"
-    doLast {
-        val prefixPath = "js"
-        project.projectDir.resolve("$prefixPath-chromium").mkdir()
-        val server = endToEndWebserver(jsPagePath, logger)
-        browser(project.projectDir, logger, prefixPath)
-        server.stop()
-
-    }
+    mainClass = "JsMainKt"
+    jvmArgs(
+        listOf(
+            "-DprojectDir=${projectDir.absolutePath}",
+            "-DjsPagePath=${jsPagePath.absolutePath}",
+            "-DprefixPath=js"
+        )
+    )
+    classpath = sourceSets["jvmMain"].runtimeClasspath
 }
 
-val e2eWasmBrowserTest = tasks.register("e2eWasmBrowserTest") {
-    group = "e2eTest"
-    doLast {
-        val prefixPath = "wasm"
-        project.projectDir.resolve("$prefixPath-chromium").mkdir()
-        val server = endToEndWebserver(wasmPagePath, logger)
-        browser(project.projectDir, logger, prefixPath)
-        server.stop()
 
-    }
+val e2eWasmBrowserTest = tasks.register<JavaExec>("e2eWasmBrowserTest") {
+    val projectDir = project.projectDir
+    group = "e2eTest"
+    mainClass = "JsMainKt"
+    jvmArgs(
+        listOf(
+            "-DprojectDir=${projectDir.absolutePath}",
+            "-DjsPagePath=${wasmPagePath.absolutePath}",
+            "-DprefixPath=wasm"
+        )
+    )
+    classpath = sourceSets["jvmMain"].runtimeClasspath
 }
 
 val e2eCompareImages = tasks.register("e2eCompareImages") {
+    val projectDir = project.projectDir
+    projectDir.resolve("jvm").mkdir()
     group = "e2eTest"
     doLast {
-        project.projectDir.resolve("jvm").mkdir()
-        val result = compareImages(project.projectDir, logger)
+        val result = compareImages(projectDir, logger)
             .filter { !it.similar }
         if (result.isNotEmpty()) error("Not similar tests found: ${result.joinToString()}")
     }
@@ -133,8 +133,7 @@ val e2eCompareImages = tasks.register("e2eCompareImages") {
 tasks.register("e2eTest") {
     group = "e2eTest"
     if(isInCI().not()) dependsOn(e2eJsBrowserTest)
-    // uncomment when wasm is stable
-    // if(isInCI().not()) dependsOn(e2eWasmBrowserTest)
+    if(isInCI().not()) dependsOn(e2eWasmBrowserTest)
     dependsOn(jvmTest)
     finalizedBy(e2eCompareImages)
 }
@@ -145,7 +144,9 @@ java {
     }
 }
 
-fun getCommonProject() = projects.wgpu4kScenes.identityPath.path
-    ?.let(::project) ?: error("Could not find project path")
+fun getCommonProject() = projects
+    .wgpu4kScenes
+    .path
+    .let(::project)
 
 fun isInCI(): Boolean = System.getenv("CI") != null

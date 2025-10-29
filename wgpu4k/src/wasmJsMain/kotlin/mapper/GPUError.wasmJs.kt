@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.ygdrasil.webgpu.mapper
 
 import io.ygdrasil.webgpu.WGPUError

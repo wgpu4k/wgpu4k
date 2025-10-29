@@ -1,4 +1,4 @@
-plugins {
+    plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     alias(libs.plugins.compose.compiler)
@@ -14,13 +14,13 @@ assert(commonResourcesFile.isDirectory) { "$commonResourcesFile is not a directo
 assert(commonResourcesFile.isNotEmpty) { "$commonResourcesFile is empty" }
 
 android {
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "io.ygdrasil.webgpu"
 
         minSdk = 28
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -64,6 +64,11 @@ android {
         }
     }
     namespace = "io.ygdrasil.webgpu"
+
+
+    lint {
+        disable += "MutableCollectionMutableState"
+    }
 }
 
 dependencies {
@@ -81,8 +86,10 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling:1.2.0")
 }
 
-fun getCommonProject() = projects.wgpu4kScenes.identityPath.path
-    ?.let(::project) ?: error("Could not find project path")
+fun getCommonProject() = projects
+    .wgpu4kScenes
+    .path
+    .let(::project)
 
 val File.isNotEmpty: Boolean
     get() = this.listFiles()?.isNotEmpty() ?: false

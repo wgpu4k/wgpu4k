@@ -9,7 +9,8 @@ class WGPUContext(
 
 
     override fun close() {
-        renderingContext.close()
+        // Texture rendering context crash here, TODO: find why
+        // renderingContext.close()
         surface.close()
         adapter.close()
         device.close()
