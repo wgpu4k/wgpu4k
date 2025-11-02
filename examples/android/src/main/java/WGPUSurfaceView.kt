@@ -3,6 +3,8 @@ package io.ygdrasil.webgpu
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -11,10 +13,12 @@ import io.ygdrasil.webgpu.examples.createApplication
 import korlibs.io.android.withAndroidContext
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     private var application: Application? = null
     private val logger = KotlinLogging.logger {}
+    private val gestureDetector: GestureDetector
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
@@ -26,6 +30,21 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
         // https://groups.google.com/g/android-developers/c/jYjvm7ItpXQ?pli=1
         //this.setZOrderOnTop(true)
         //holder.setFormat(PixelFormat.TRANSPARENT)
+
+        gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onDoubleTap(e: MotionEvent): Boolean {
+                logger.info { "Double tap detected - switching to next scene" }
+                runBlocking {
+                    changeScene()
+                }
+                return true
+            }
+        })
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        gestureDetector.onTouchEvent(event)
+        return true
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
@@ -69,11 +88,21 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
         }
     }
 
-    fun changeExample(index: Int) {
-        logger.info { "changeExample with index $index" }
-        // TODO
+    suspend fun changeScene() {
+        logger.info { "changeScene" }
+        val application = application ?: return
+        val currentIndex = application.availableScenes.indexOf(application.currentScene)
+
+        val nextIndex = (currentIndex + 1).let {
+            when (it) {
+                application.availableScenes.size -> 0
+                -1 -> application.availableScenes.size - 1
+                else -> it
+            }
+        }
+        application.changeScene(application.availableScenes[nextIndex])
     }
 
-    override fun surfaceRedrawNeeded(holder: SurfaceHolder) { }
+    override fun surfaceRedrawNeeded(holder: SurfaceHolder) {}
 
 }
