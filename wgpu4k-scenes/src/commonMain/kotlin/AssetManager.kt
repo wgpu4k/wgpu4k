@@ -54,7 +54,7 @@ fun Bitmap32.toBitmapHolder(textureFormat: GPUTextureFormat): ImageBitmapHolder 
 
 internal expect fun Bitmap32.toBitmapHolder(textureFormat: ColorFormat): ImageBitmapHolder
 
-suspend fun genericAssetManager(textureFormat: GPUTextureFormat, resourceBasePath: String = "") = GenericAssetManager(
+suspend fun genericAssetManager(textureFormat: GPUTextureFormat, resourceBasePath: String) = GenericAssetManager(
     bitmapFrom(textureFormat, "${resourceBasePath}assets/img/Di-3d.png"),
     bitmapFrom(textureFormat, "${resourceBasePath}assets/img/cubemap/posx.png"),
     bitmapFrom(textureFormat, "${resourceBasePath}assets/img/cubemap/negx.png"),
