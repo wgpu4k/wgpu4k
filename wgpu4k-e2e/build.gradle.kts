@@ -140,7 +140,7 @@ tasks.register("e2eTest") {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(22))
+        languageVersion.set(JavaLanguageVersion.of(24))
     }
 }
 

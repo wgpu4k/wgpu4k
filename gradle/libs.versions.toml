@@ -10,11 +10,11 @@ korge = "6.0.0"
 agp = "8.12.3"
 rococoa = "0.0.1"
 slf4j-simple = "2.0.17"
-android-native-helper = "0.0.1"
-glfw-native = "0.0.1"
+android-native-helper = "0.0.2"
+glfw-native = "0.0.2"
 
 # WebGPU
-wgpu4k-native = "v25.0.2"
+wgpu4k-native = "v27.0.4"
 webgpu-ktypes = "0.0.8"
 
 # Logging
