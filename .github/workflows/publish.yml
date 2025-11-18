@@ -13,7 +13,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: 22
+          java-version: 24
           cache: 'gradle'
       - name: Build and publish with Gradle
         run: |
