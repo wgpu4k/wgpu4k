@@ -9,7 +9,7 @@ import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.reinterpret
 
 
-suspend fun androidContextRenderer(window: COpaquePointer, width: Int, height: Int, deferredRendering: Boolean = false): IosContext {
+suspend fun androidContextRenderer(window: COpaquePointer, width: Int, height: Int, deferredRendering: Boolean = false): AndroidContext {
     val windowPtr = window.toNativeAddress()
     val instance = WGPU.createInstance() ?: error("Can't create WGPU instance")
     val nativeSurface = instance.getSurfaceFromAndroidWindow(windowPtr) ?: error("Can't create Surface")
@@ -24,14 +24,14 @@ suspend fun androidContextRenderer(window: COpaquePointer, width: Int, height: I
         false -> SurfaceRenderingContext(surface, surface.supportedFormats.first())
     }
 
-    return IosContext(
+    return AndroidContext(
         windowPtr,
         WGPUContext(surface, adapter, device, renderingContext)
     )
 }
 
 
-class IosContext(
+class AndroidContext(
     val window: NativeAddress,
     val wgpuContext: WGPUContext,
 ) : AutoCloseable {
