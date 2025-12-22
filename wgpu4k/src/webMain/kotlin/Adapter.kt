@@ -40,8 +40,8 @@ actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
                 null -> handler.requestDevice()
                 else -> handler.requestDevice(map(descriptor))
             }.await()
-                ?.unsafeCast<WGPUDevice>()
-                ?.let { Device(it, descriptor?.onUncapturedError)} ?: error("Failed to create a GPU device")
+                .unsafeCast<WGPUDevice>()
+                .let { Device(it, descriptor?.onUncapturedError)}
         }
     }
 

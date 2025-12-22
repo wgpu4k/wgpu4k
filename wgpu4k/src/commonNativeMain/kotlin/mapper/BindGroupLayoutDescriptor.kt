@@ -41,7 +41,7 @@ fun MemoryAllocator.map(input: GPUBindGroupLayoutEntry, output: WGPUBindGroupLay
 
     input.sampler?.let { bindingType ->
         val sampler = output.sampler
-        sampler.type = bindingType.type.value.toUInt()
+        sampler.type = bindingType.type.value
 
         val chain = WGPUChainedStruct.allocate(this)
         chain.sType = WGPUNativeSType_BindGroupEntryExtras

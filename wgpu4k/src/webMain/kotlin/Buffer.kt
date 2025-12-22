@@ -36,7 +36,7 @@ actual class Buffer(val handler: WGPUBuffer) : GPUBuffer {
         null -> handler.mapAsync(mode.toFlagInt().asJsNumber(), offset.asJsNumber())
         else -> handler.mapAsync(mode.toFlagInt().asJsNumber(), offset.asJsNumber(), size.asJsNumber())
     }.await()
-        ?.let { Result.success(Unit) } ?: Result.failure(Exception("mapAsync failed"))
+        .let { Result.success(Unit) }
 
     actual override fun unmap() {
         handler.unmap()

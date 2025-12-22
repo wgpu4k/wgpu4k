@@ -1,5 +1,6 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class)
 
+import com.android.build.api.dsl.androidLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -20,25 +21,21 @@ kotlin {
 
     jvm {
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_24
+            jvmTarget = JvmTarget.JVM_25
         }
     }
 
-    androidTarget {
+    androidLibrary {
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_24
+            jvmTarget = JvmTarget.JVM_17
         }
 
-        android {
-            namespace = "io.ygdrasil.wgpu4k"
-            compileSdk = 36
 
-            defaultConfig {
-                minSdk = 28
-            }
-
-        }
-        publishLibraryVariants("release", "debug")
+        namespace = "io.ygdrasil.wgpu4k"
+        compileSdk = 36
+        minSdk = 28
+        /*
+        publishLibraryVariants("release", "debug")*/
     }
 
     if (Platform.os == Os.MacOs) {
@@ -134,7 +131,7 @@ kotlin {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(24))
+        languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
 
