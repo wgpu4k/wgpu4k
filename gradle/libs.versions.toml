@@ -18,14 +18,14 @@ wgpu4k-native = "v27.0.4"
 webgpu-ktypes = "0.0.8"
 
 # Logging
-kotlin-logging = "7.0.7"
-logback = "1.5.16"
+kotlin-logging = "7.0.13"
+logback = "1.5.23"
 
 kotlinx-browser = "0.5.0"
 
 # Tests
-kotest = "6.0.4"
-ksp = "2.2.20-2.0.3"
+kotest = "6.0.7"
+ksp = "2.3.4"
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
