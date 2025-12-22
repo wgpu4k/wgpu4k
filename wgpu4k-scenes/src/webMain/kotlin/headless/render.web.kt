@@ -16,7 +16,7 @@ actual fun getSceneParameter(): SceneParameter {
     return sceneParameter(scene, frame, screenshotPath)
 }
 
-expect fun sceneParameter(scene: JsString, frame: JsString, screenshotPath: JsString?): SceneParameter
+internal expect fun sceneParameter(scene: JsString, frame: JsString, screenshotPath: JsString?): SceneParameter
 
 actual fun initLog() {
 }

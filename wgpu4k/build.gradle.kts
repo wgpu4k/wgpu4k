@@ -30,7 +30,6 @@ kotlin {
             jvmTarget = JvmTarget.JVM_17
         }
 
-
         namespace = "io.ygdrasil.wgpu4k"
         compileSdk = 36
         minSdk = 28

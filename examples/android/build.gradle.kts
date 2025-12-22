@@ -45,6 +45,7 @@ android {
             isDebuggable = true
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -63,6 +64,8 @@ android {
     }
 }
 
+
+
 dependencies {
     implementation(projects.wgpu4kScenes)
     implementation(libs.activity.compose)
@@ -78,6 +81,6 @@ val File.isNotEmpty: Boolean
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(25))
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }

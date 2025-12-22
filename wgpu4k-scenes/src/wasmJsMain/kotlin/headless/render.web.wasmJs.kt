@@ -2,7 +2,7 @@
 
 package io.ygdrasil.webgpu.examples.headless
 
-actual fun sceneParameter(
+internal actual fun sceneParameter(
     scene: JsString,
     frame: JsString,
     screenshotPath: JsString?
