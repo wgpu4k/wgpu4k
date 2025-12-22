@@ -75,3 +75,9 @@ fun getCommonProject() = projects
 
 val File.isNotEmpty: Boolean
     get() = this.listFiles()?.isNotEmpty() ?: false
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(25))
+    }
+}
