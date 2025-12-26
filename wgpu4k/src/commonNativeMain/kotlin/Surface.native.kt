@@ -110,7 +110,7 @@ class NativeSurface(
     private fun MemoryAllocator.map(input: SurfaceConfiguration, width: UInt, height: UInt): WGPUSurfaceConfiguration =
         WGPUSurfaceConfiguration.allocate(this).also { output ->
             output.device = (input.device as Device).handler
-            output.usage = input.usage.toFlagULong()
+            output.usage = input.usage.value
             output.format = input.format.value
             output.presentMode = input.presentMode.value
             output.alphaMode = input.alphaMode.value

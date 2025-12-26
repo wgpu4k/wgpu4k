@@ -1,5 +1,6 @@
 package io.ygdrasil.webgpu.examples.scenes.basic
 
+import io.ygdrasil.webgpu.ArrayBuffer
 import io.ygdrasil.webgpu.AutoClosableContext
 import io.ygdrasil.webgpu.BindGroupDescriptor
 import io.ygdrasil.webgpu.BindGroupEntry
@@ -38,7 +39,6 @@ import io.ygdrasil.webgpu.VertexAttribute
 import io.ygdrasil.webgpu.VertexBufferLayout
 import io.ygdrasil.webgpu.VertexState
 import io.ygdrasil.webgpu.WGPUContext
-import io.ygdrasil.webgpu.asArraybuffer
 import io.ygdrasil.webgpu.beginRenderPass
 import io.ygdrasil.webgpu.examples.Scene
 import io.ygdrasil.webgpu.examples.scenes.mesh.Cube.cubePositionOffset
@@ -55,226 +55,224 @@ import kotlin.math.PI
 
 class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 
-	lateinit var renderPipeline: GPURenderPipeline
-	lateinit var projectionMatrix: Matrix4
-	lateinit var renderPassDescriptor: GPURenderPassDescriptor
-	lateinit var uniformBuffer: GPUBuffer
-	lateinit var uniformBindGroup: GPUBindGroup
-	lateinit var verticesBuffer: GPUBuffer
-	lateinit var cubeTexture: GPUTexture
+    lateinit var renderPipeline: GPURenderPipeline
+    lateinit var projectionMatrix: Matrix4
+    lateinit var renderPassDescriptor: GPURenderPassDescriptor
+    lateinit var uniformBuffer: GPUBuffer
+    lateinit var uniformBindGroup: GPUBindGroup
+    lateinit var verticesBuffer: GPUBuffer
+    lateinit var cubeTexture: GPUTexture
 
-	override suspend fun initialize() = with(autoClosableContext) {
-
-
-		// Create a vertex buffer from the cube data.
-		verticesBuffer = device.createBuffer(
-			BufferDescriptor(
-				size = (cubeVertexArray.size * Float.SIZE_BYTES).toULong(),
-				usage = setOf(GPUBufferUsage.Vertex),
-				mappedAtCreation = true
-			)
-		)
-
-		cubeVertexArray
-			.writeInto(verticesBuffer.getMappedRange())
-		verticesBuffer.unmap()
-
-		renderPipeline = device.createRenderPipeline(
-			RenderPipelineDescriptor(
-				vertex = VertexState(
-					entryPoint = "main",
-					module = device.createShaderModule(
-						ShaderModuleDescriptor(
-							code = basicVertexShader
-						)
-					).bind(), // bind to autoClosableContext to release it later
-					buffers = listOf(
-						VertexBufferLayout(
-							arrayStride = cubeVertexSize,
-							attributes = listOf(
-								VertexAttribute(
-									shaderLocation = 0u,
-									offset = cubePositionOffset,
-									format = GPUVertexFormat.Float32x4
-								),
-								VertexAttribute(
-									shaderLocation = 1u,
-									offset = cubeUVOffset,
-									format = GPUVertexFormat.Float32x2
-								)
-							)
-						)
-					)
-				),
-				fragment = FragmentState(
-					entryPoint = "main",
-					module = device.createShaderModule(
-						ShaderModuleDescriptor(
-							code = sampleSelfShader
-						)
-					).bind(), // bind to autoClosableContext to release it later
-					targets = listOf(
-						ColorTargetState(
-							format = renderingContext.textureFormat
-						)
-					)
-				),
-				primitive = PrimitiveState(
-					topology = GPUPrimitiveTopology.TriangleList,
-					cullMode = GPUCullMode.Back
-				),
-				depthStencil = DepthStencilState(
-					depthWriteEnabled = true,
-					depthCompare = GPUCompareFunction.Less,
-					format = GPUTextureFormat.Depth24Plus
-				)
-			)
-		).bind()
-
-		val depthTexture = device.createTexture(
-			TextureDescriptor(
-				size = Extent3D(renderingContext.width, renderingContext.height),
-				format = GPUTextureFormat.Depth24Plus,
-				usage = setOf(GPUTextureUsage.RenderAttachment),
-			)
-		).bind()
-
-		val uniformBufferSize = 4uL * 16uL // 4x4 matrix
-		uniformBuffer = device.createBuffer(
-			BufferDescriptor(
-				size = uniformBufferSize,
-				usage = setOf(GPUBufferUsage.Uniform, GPUBufferUsage.CopyDst)
-			)
-		).bind()
-
-		// We will copy the frame's rendering results into this texture and
-		// sample it on the next frame.
-		cubeTexture = device.createTexture(
-			TextureDescriptor(
-				size = Extent3D(renderingContext.width, renderingContext.height),
-				format = renderingContext.textureFormat,
-				usage = setOf(GPUTextureUsage.TextureBinding, GPUTextureUsage.CopyDst),
-			)
-		)
-
-		// Create a sampler with linear filtering for smooth interpolation.
-		val sampler = device.createSampler(
-			SamplerDescriptor(
-				magFilter = GPUFilterMode.Linear,
-				minFilter = GPUFilterMode.Linear,
-			)
-		)
+    override suspend fun initialize() = with(autoClosableContext) {
 
 
-		uniformBindGroup = device.createBindGroup(
-			BindGroupDescriptor(
-				layout = renderPipeline.getBindGroupLayout(0u),
-				entries = listOf(
-					BindGroupEntry(
-						binding = 0u,
-						resource = BufferBinding(
-							buffer = uniformBuffer
-						)
-					),
-					BindGroupEntry(
-						binding = 1u,
-						resource = sampler
-					),
-					BindGroupEntry(
-						binding = 2u,
-						resource = cubeTexture.createView().bind()
-					)
-				)
-			)
-		)
+        // Create a vertex buffer from the cube data.
+        verticesBuffer = device.createBuffer(
+            BufferDescriptor(
+                size = (cubeVertexArray.size * Float.SIZE_BYTES).toULong(),
+                usage = GPUBufferUsage.Vertex,
+                mappedAtCreation = true
+            )
+        )
 
-		renderPassDescriptor = RenderPassDescriptor(
-			colorAttachments = listOf(
-				RenderPassColorAttachment(
-					view = dummyTexture.createView().bind(), // Assigned later
-					loadOp = GPULoadOp.Clear,
-					clearValue = Color(0.5, 0.5, 0.5, 1.0),
-					storeOp = GPUStoreOp.Store,
-				)
-			),
-			depthStencilAttachment = RenderPassDepthStencilAttachment(
-				view = depthTexture.createView(),
-				depthClearValue = 1.0f,
-				depthLoadOp = GPULoadOp.Clear,
-				depthStoreOp = GPUStoreOp.Store
-			)
-		)
+        cubeVertexArray
+            .writeInto(verticesBuffer.getMappedRange())
+        verticesBuffer.unmap()
+
+        renderPipeline = device.createRenderPipeline(
+            RenderPipelineDescriptor(
+                vertex = VertexState(
+                    entryPoint = "main",
+                    module = device.createShaderModule(
+                        ShaderModuleDescriptor(
+                            code = basicVertexShader
+                        )
+                    ).bind(), // bind to autoClosableContext to release it later
+                    buffers = listOf(
+                        VertexBufferLayout(
+                            arrayStride = cubeVertexSize,
+                            attributes = listOf(
+                                VertexAttribute(
+                                    shaderLocation = 0u,
+                                    offset = cubePositionOffset,
+                                    format = GPUVertexFormat.Float32x4
+                                ),
+                                VertexAttribute(
+                                    shaderLocation = 1u,
+                                    offset = cubeUVOffset,
+                                    format = GPUVertexFormat.Float32x2
+                                )
+                            )
+                        )
+                    )
+                ),
+                fragment = FragmentState(
+                    entryPoint = "main",
+                    module = device.createShaderModule(
+                        ShaderModuleDescriptor(
+                            code = sampleSelfShader
+                        )
+                    ).bind(), // bind to autoClosableContext to release it later
+                    targets = listOf(
+                        ColorTargetState(
+                            format = renderingContext.textureFormat
+                        )
+                    )
+                ),
+                primitive = PrimitiveState(
+                    topology = GPUPrimitiveTopology.TriangleList,
+                    cullMode = GPUCullMode.Back
+                ),
+                depthStencil = DepthStencilState(
+                    depthWriteEnabled = true,
+                    depthCompare = GPUCompareFunction.Less,
+                    format = GPUTextureFormat.Depth24Plus
+                )
+            )
+        ).bind()
+
+        val depthTexture = device.createTexture(
+            TextureDescriptor(
+                size = Extent3D(renderingContext.width, renderingContext.height),
+                format = GPUTextureFormat.Depth24Plus,
+                usage = GPUTextureUsage.RenderAttachment,
+            )
+        ).bind()
+
+        val uniformBufferSize = 4uL * 16uL // 4x4 matrix
+        uniformBuffer = device.createBuffer(
+            BufferDescriptor(
+                size = uniformBufferSize,
+                usage = GPUBufferUsage.Uniform or GPUBufferUsage.CopyDst
+            )
+        ).bind()
+
+        // We will copy the frame's rendering results into this texture and
+        // sample it on the next frame.
+        cubeTexture = device.createTexture(
+            TextureDescriptor(
+                size = Extent3D(renderingContext.width, renderingContext.height),
+                format = renderingContext.textureFormat,
+                usage = GPUTextureUsage.TextureBinding or GPUTextureUsage.CopyDst,
+            )
+        )
+
+        // Create a sampler with linear filtering for smooth interpolation.
+        val sampler = device.createSampler(
+            SamplerDescriptor(
+                magFilter = GPUFilterMode.Linear,
+                minFilter = GPUFilterMode.Linear,
+            )
+        )
 
 
-		val aspect = renderingContext.width.toDouble() / renderingContext.height.toDouble()
-		val fox = Angle.fromRadians((2 * PI) / 5)
-		projectionMatrix = Matrix4.perspective(fox, aspect, 1.0, 100.0)
-	}
+        uniformBindGroup = device.createBindGroup(
+            BindGroupDescriptor(
+                layout = renderPipeline.getBindGroupLayout(0u),
+                entries = listOf(
+                    BindGroupEntry(
+                        binding = 0u,
+                        resource = BufferBinding(
+                            buffer = uniformBuffer
+                        )
+                    ),
+                    BindGroupEntry(
+                        binding = 1u,
+                        resource = sampler
+                    ),
+                    BindGroupEntry(
+                        binding = 2u,
+                        resource = cubeTexture.createView().bind()
+                    )
+                )
+            )
+        )
 
-	override suspend fun AutoClosableContext.render() {
-
-		val transformationMatrix = getTransformationMatrix(
-			frame / 100.0,
-			projectionMatrix
-		)
-
-		transformationMatrix.asArraybuffer {
-			device.queue.writeBuffer(
-				uniformBuffer,
-				0u,
-				it,
-			)
-		}
-
-		val swapChainTexture = renderingContext.getCurrentTexture()
-
-		renderPassDescriptor = (renderPassDescriptor as RenderPassDescriptor).copy(
-			colorAttachments = listOf(
-				(renderPassDescriptor.colorAttachments[0] as RenderPassColorAttachment).copy(
-					view = swapChainTexture
-						.bind()
-						.createView()
-				)
-			)
-		)
-
-		val encoder = device.createCommandEncoder()
-			.bind()
-
-		encoder.beginRenderPass(renderPassDescriptor) {
-			setPipeline(renderPipeline)
-			setBindGroup(0u, uniformBindGroup)
-			setVertexBuffer(0u, verticesBuffer)
-			draw(cubeVertexCount)
-			end()
-		}
+        renderPassDescriptor = RenderPassDescriptor(
+            colorAttachments = listOf(
+                RenderPassColorAttachment(
+                    view = dummyTexture.createView().bind(), // Assigned later
+                    loadOp = GPULoadOp.Clear,
+                    clearValue = Color(0.5, 0.5, 0.5, 1.0),
+                    storeOp = GPUStoreOp.Store,
+                )
+            ),
+            depthStencilAttachment = RenderPassDepthStencilAttachment(
+                view = depthTexture.createView(),
+                depthClearValue = 1.0f,
+                depthLoadOp = GPULoadOp.Clear,
+                depthStoreOp = GPUStoreOp.Store
+            )
+        )
 
 
-		encoder.copyTextureToTexture(
-			source = TexelCopyTextureInfo(texture = swapChainTexture),
-			destination = TexelCopyTextureInfo(texture = cubeTexture),
-			copySize = Extent3D(renderingContext.width, renderingContext.height)
-		)
+        val aspect = renderingContext.width.toDouble() / renderingContext.height.toDouble()
+        val fox = Angle.fromRadians((2 * PI) / 5)
+        projectionMatrix = Matrix4.perspective(fox, aspect, 1.0, 100.0)
+    }
 
-		val commandBuffer = encoder.finish()
-			.bind()
+    override suspend fun AutoClosableContext.render() {
 
-		device.queue.submit(listOf(commandBuffer))
+        val transformationMatrix = getTransformationMatrix(
+            frame / 100.0,
+            projectionMatrix
+        )
 
-	}
+        device.queue.writeBuffer(
+            uniformBuffer,
+            0u,
+            ArrayBuffer.from(transformationMatrix),
+        )
+
+        val swapChainTexture = renderingContext.getCurrentTexture()
+
+        renderPassDescriptor = (renderPassDescriptor as RenderPassDescriptor).copy(
+            colorAttachments = listOf(
+                (renderPassDescriptor.colorAttachments[0] as RenderPassColorAttachment).copy(
+                    view = swapChainTexture
+                        .bind()
+                        .createView()
+                )
+            )
+        )
+
+        val encoder = device.createCommandEncoder()
+            .bind()
+
+        encoder.beginRenderPass(renderPassDescriptor) {
+            setPipeline(renderPipeline)
+            setBindGroup(0u, uniformBindGroup)
+            setVertexBuffer(0u, verticesBuffer)
+            draw(cubeVertexCount)
+            end()
+        }
+
+
+        encoder.copyTextureToTexture(
+            source = TexelCopyTextureInfo(texture = swapChainTexture),
+            destination = TexelCopyTextureInfo(texture = cubeTexture),
+            copySize = Extent3D(renderingContext.width, renderingContext.height)
+        )
+
+        val commandBuffer = encoder.finish()
+            .bind()
+
+        device.queue.submit(listOf(commandBuffer))
+
+    }
 
 }
 
 
 private fun getTransformationMatrix(angle: Double, projectionMatrix: Matrix4): FloatArray {
-	var viewMatrix = Matrix4.IDENTITY
-	viewMatrix = viewMatrix.translated(0, 0, -4)
+    var viewMatrix = Matrix4.IDENTITY
+    viewMatrix = viewMatrix.translated(0, 0, -4)
 
-	viewMatrix = viewMatrix.rotated(
-		Angle.fromRadians(Angle.fromRadians(angle).sine),
-		Angle.fromRadians(Angle.fromRadians(angle).cosine),
-		Angle.fromRadians(0)
-	)
+    viewMatrix = viewMatrix.rotated(
+        Angle.fromRadians(Angle.fromRadians(angle).sine),
+        Angle.fromRadians(Angle.fromRadians(angle).cosine),
+        Angle.fromRadians(0)
+    )
 
-	return (projectionMatrix * viewMatrix).copyToColumns()
+    return (projectionMatrix * viewMatrix).copyToColumns()
 }

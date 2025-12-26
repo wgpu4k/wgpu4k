@@ -1,5 +1,6 @@
 package io.ygdrasil.webgpu.examples.scenes.basic
 
+import io.ygdrasil.webgpu.ArrayBuffer
 import io.ygdrasil.webgpu.AutoClosableContext
 import io.ygdrasil.webgpu.BindGroupDescriptor
 import io.ygdrasil.webgpu.BindGroupEntry
@@ -34,7 +35,6 @@ import io.ygdrasil.webgpu.VertexAttribute
 import io.ygdrasil.webgpu.VertexBufferLayout
 import io.ygdrasil.webgpu.VertexState
 import io.ygdrasil.webgpu.WGPUContext
-import io.ygdrasil.webgpu.asArraybuffer
 import io.ygdrasil.webgpu.beginRenderPass
 import io.ygdrasil.webgpu.examples.Scene
 import io.ygdrasil.webgpu.examples.scenes.mesh.Cube.cubePositionOffset
@@ -68,7 +68,7 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		verticesBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = (cubeVertexArray.size * Float.SIZE_BYTES).toULong(),
-				usage = setOf(GPUBufferUsage.Vertex),
+				usage = GPUBufferUsage.Vertex,
 				mappedAtCreation = true
 			)
 		).bind()
@@ -133,7 +133,7 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			TextureDescriptor(
 				size = Extent3D(renderingContext.width, renderingContext.height),
 				format = GPUTextureFormat.Depth24Plus,
-				usage = setOf(GPUTextureUsage.RenderAttachment),
+				usage = GPUTextureUsage.RenderAttachment,
 			)
 		).bind()
 
@@ -142,7 +142,7 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		uniformBuffer = device.createBuffer(
 			BufferDescriptor(
 				size = uniformBufferSize,
-				usage = setOf(GPUBufferUsage.Uniform, GPUBufferUsage.CopyDst)
+				usage = GPUBufferUsage.Uniform or GPUBufferUsage.CopyDst
 			)
 		).bind()
 
@@ -215,13 +215,17 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			projectionMatrix2
 		)
 
-		transformationMatrix1.asArraybuffer {
-			device.queue.writeBuffer(uniformBuffer, 0u, it)
-		}
+		device.queue.writeBuffer(
+			uniformBuffer,
+			0u,
+			ArrayBuffer.from(transformationMatrix1)
+		)
 
-		transformationMatrix2.asArraybuffer {
-			device.queue.writeBuffer(uniformBuffer, offset, it)
-		}
+		device.queue.writeBuffer(
+			uniformBuffer,
+			offset,
+			ArrayBuffer.from(transformationMatrix2)
+		)
 
 		renderPassDescriptor = (renderPassDescriptor as RenderPassDescriptor).copy(
 			colorAttachments = listOf(

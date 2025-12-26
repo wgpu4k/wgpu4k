@@ -1,5 +1,6 @@
 package io.ygdrasil.webgpu.examples.scenes.basic
 
+import io.ygdrasil.webgpu.ArrayBuffer
 import io.ygdrasil.webgpu.AutoClosableContext
 import io.ygdrasil.webgpu.BindGroupDescriptor
 import io.ygdrasil.webgpu.BindGroupEntry
@@ -20,7 +21,6 @@ import io.ygdrasil.webgpu.RenderPipelineDescriptor
 import io.ygdrasil.webgpu.ShaderModuleDescriptor
 import io.ygdrasil.webgpu.VertexState
 import io.ygdrasil.webgpu.WGPUContext
-import io.ygdrasil.webgpu.asArraybuffer
 import io.ygdrasil.webgpu.beginRenderPass
 import io.ygdrasil.webgpu.examples.Scene
 import io.ygdrasil.webgpu.examples.scenes.shader.fragment.redFragmentShader
@@ -34,7 +34,7 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
     lateinit var uniformBuffer: GPUBuffer
     lateinit var uniformBindGroup: GPUBindGroup
 
-    override suspend  fun initialize() = with(autoClosableContext) {
+    override suspend fun initialize() = with(autoClosableContext) {
         renderPipeline = device.createRenderPipeline(
             RenderPipelineDescriptor(
                 vertex = VertexState(
@@ -66,7 +66,7 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
             BufferDescriptor(
                 label = "Uniform Buffer",
                 size = uniformBufferSize,
-                usage = setOf(GPUBufferUsage.Uniform, GPUBufferUsage.CopyDst)
+                usage = GPUBufferUsage.Uniform or GPUBufferUsage.CopyDst
             )
         ).bind()
 
@@ -91,14 +91,11 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
             .rotation(Angle.fromDegrees(frame), .0, .0, 1.0)
             .copyToColumns()
 
-        transformationMatrix.asArraybuffer {
-            device.queue.writeBuffer(
-                uniformBuffer,
-                0u,
-                it
-            )
-
-        }
+        device.queue.writeBuffer(
+            uniformBuffer,
+            0u,
+            ArrayBuffer.from(transformationMatrix)
+        )
 
         val encoder = device.createCommandEncoder()
             .bind()
@@ -109,7 +106,7 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
             RenderPassDescriptor(
                 colorAttachments = listOf(
                     RenderPassColorAttachment(
-                        view =  texture.createView().bind(),
+                        view = texture.createView().bind(),
                         loadOp = GPULoadOp.Clear,
                         clearValue = Color(.0, .0, .0, 1.0),
                         storeOp = GPUStoreOp.Store

@@ -18,18 +18,6 @@ import kotlinx.cinterop.toCPointer
 import kotlinx.cinterop.usePinned
 import platform.posix.memcpy
 
-
-actual inline fun arrayBufferOf(input: FloatArray, action: (ArrayBuffer) -> Unit) {
-    input.usePinned { pinnedArray ->
-        action(
-            ArrayBuffer(
-                pinnedArray.addressOf(0).rawValue.toLong().toULong(),
-                (input.size * sizeOf<FloatVar>()).toULong()
-            )
-        )
-    }
-}
-
 actual fun FloatArray.writeInto(target: ArrayBuffer): Unit = usePinned { pinnedArray ->
     memcpy(
         target.asPointer(),

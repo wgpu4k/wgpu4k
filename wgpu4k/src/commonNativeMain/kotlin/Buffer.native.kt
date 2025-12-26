@@ -36,7 +36,7 @@ actual class Buffer(val handler: WGPUBuffer, private val device: Device, label: 
         }
     actual override val size: GPUSize64
         get() = wgpuBufferGetSize(handler)
-    actual override val usage: GPUBufferUsageFlags
+    actual override val usage: Set<GPUBufferUsage>
         get() = wgpuBufferGetUsage(handler)
             .let { usage -> GPUBufferUsage.entries.filter { it.value and usage != 0uL }.toSet() }
     actual override val mapState: GPUBufferMapState
@@ -53,7 +53,7 @@ actual class Buffer(val handler: WGPUBuffer, private val device: Device, label: 
             ?.toArrayBuffer(size) ?: error("Can't get mapped range")
     }
 
-    actual override suspend fun mapAsync(mode: GPUMapModeFlags, offset: GPUSize64, size: GPUSize64?): Result<Unit> =
+    actual override suspend fun mapAsync(mode: GPUMapMode, offset: GPUSize64, size: GPUSize64?): Result<Unit> =
         suspendCoroutine { continuation ->
             val size = size ?: (this.size - offset)
             memoryScope { scope ->
@@ -86,7 +86,7 @@ actual class Buffer(val handler: WGPUBuffer, private val device: Device, label: 
                     it.callback = callback
                     it.userdata2 = callback.handler
                 }
-                wgpuBufferMapAsync(handler, mode.toFlagULong(), offset, size, bufferCallbackInfo)
+                wgpuBufferMapAsync(handler, mode.value, offset, size, bufferCallbackInfo)
                 wgpuDevicePoll(device.handler, true, null)
             }
         }

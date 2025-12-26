@@ -88,7 +88,7 @@ private fun WGPUContext.configureRenderingContext() {
         SurfaceConfiguration(
             device = device,
             format = format,
-            usage = setOf(GPUTextureUsage.RenderAttachment, GPUTextureUsage.CopySrc),
+            usage = GPUTextureUsage.RenderAttachment or GPUTextureUsage.CopySrc,
             alphaMode = alphaMode
         )
     )

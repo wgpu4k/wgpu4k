@@ -276,13 +276,10 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
                 size = Extent3D(imageBitmap.width, imageBitmap.height),
                 mipLevelCount = numMipLevels,
                 format = GPUTextureFormat.RGBA8Unorm,
-                usage =
-                    setOf(
-                        GPUTextureUsage.TextureBinding,
-                        GPUTextureUsage.StorageBinding,
-                        GPUTextureUsage.CopyDst,
-                        GPUTextureUsage.RenderAttachment
-                    ),
+                usage = GPUTextureUsage.TextureBinding or
+                        GPUTextureUsage.StorageBinding or
+                        GPUTextureUsage.CopyDst or
+                        GPUTextureUsage.RenderAttachment,
             )
         )
         @Suppress("DEPRECATION")
@@ -325,19 +322,19 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         val probabilityMapUBOBuffer = device.createBuffer(
             BufferDescriptor(
                 size = probabilityMapUBOBufferSize.toULong(),
-                usage = setOf(GPUBufferUsage.Uniform, GPUBufferUsage.CopyDst),
+                usage = GPUBufferUsage.Uniform or GPUBufferUsage.CopyDst,
             )
         )
         val buffer_a = device.createBuffer(
             BufferDescriptor(
                 size = textureWidth * textureHeight * 4uL,
-                usage = setOf(GPUBufferUsage.Storage),
+                usage = GPUBufferUsage.Storage,
             )
         )
         val buffer_b = device.createBuffer(
             BufferDescriptor(
                 size = textureWidth * textureHeight * 4uL,
-                usage = setOf(GPUBufferUsage.Storage),
+                usage = GPUBufferUsage.Storage,
             )
         )
         device.queue.writeBuffer(
@@ -414,7 +411,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         simulationUBOBuffer = device.createBuffer(
             BufferDescriptor(
                 size = simulationUBOBufferSize.toULong(),
-                usage = setOf(GPUBufferUsage.Uniform, GPUBufferUsage.CopyDst),
+                usage = GPUBufferUsage.Uniform or GPUBufferUsage.CopyDst,
             )
         )
 

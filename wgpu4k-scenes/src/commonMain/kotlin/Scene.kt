@@ -48,7 +48,7 @@ suspend fun loadScenes(wgpuContext: WGPUContext, resourceBasePath: String = ""):
             TextureDescriptor(
                 size = Extent3D(1u, 1u),
                 format = GPUTextureFormat.Depth24Plus,
-                usage = setOf(GPUTextureUsage.RenderAttachment),
+                usage = GPUTextureUsage.RenderAttachment,
             )
         ).also { with(autoClosableContext) { it.bind() } }
     }

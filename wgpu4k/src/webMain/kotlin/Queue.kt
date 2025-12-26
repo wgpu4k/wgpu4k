@@ -31,13 +31,13 @@ actual class Queue(val handler: WGPUQueue) : GPUQueue {
         null -> handler.writeBuffer(
             (buffer as Buffer).handler,
             bufferOffset.asJsNumber(),
-            data,
+            (data as WebArrayBuffer).buffer,
             dataOffset.asJsNumber()
         )
         else -> handler.writeBuffer(
             (buffer as Buffer).handler,
             bufferOffset.asJsNumber(),
-            data,
+            (data as WebArrayBuffer).buffer,
             dataOffset.asJsNumber(),
             size.asJsNumber()
         )
@@ -51,7 +51,7 @@ actual class Queue(val handler: WGPUQueue) : GPUQueue {
     ) {
         handler.writeTexture(
             map(destination),
-            data,
+            (data as WebArrayBuffer).buffer,
             map(dataLayout),
             map(size)
         )

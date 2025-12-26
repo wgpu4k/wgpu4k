@@ -86,7 +86,7 @@ class CanvasContext(
 fun map(input: SurfaceConfiguration) = createJsObject<WGPUCanvasConfiguration>().apply {
     device = (input.device as Device).handler
     format = input.format.value
-    usage = input.usage.toFlagInt().asJsNumber()
+    usage = input.usage.value.asJsNumber()
     viewFormats = input.viewFormats.mapJsArray { it.value.toJsString() }
     colorSpace = input.colorSpace.value.toJsString()
     toneMapping = createJsObject<WGPUCanvasToneMapping>().apply {

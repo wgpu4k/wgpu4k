@@ -3,6 +3,7 @@
 package io.ygdrasil.webgpu.examples.scenes.basic
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.ygdrasil.webgpu.ArrayBuffer
 import io.ygdrasil.webgpu.AutoClosableContext
 import io.ygdrasil.webgpu.BindGroupDescriptor
 import io.ygdrasil.webgpu.BindGroupEntry
@@ -55,7 +56,6 @@ import io.ygdrasil.webgpu.examples.scenes.mesh.Cube.cubeVertexCount
 import io.ygdrasil.webgpu.examples.scenes.mesh.Cube.cubeVertexSize
 import io.ygdrasil.webgpu.examples.scenes.shader.fragment.sampleCubemapShader
 import io.ygdrasil.webgpu.examples.scenes.shader.vertex.basicVertexShader
-import io.ygdrasil.webgpu.writeBuffer
 import io.ygdrasil.webgpu.writeInto
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
@@ -83,7 +83,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
         verticesBuffer = device.createBuffer(
             BufferDescriptor(
                 size = (cubeVertexArray.size * Float.SIZE_BYTES).toULong(),
-                usage = setOf(GPUBufferUsage.Vertex),
+                usage = GPUBufferUsage.Vertex,
                 mappedAtCreation = true
             )
         )
@@ -148,7 +148,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
             TextureDescriptor(
                 size = Extent3D(renderingContext.width, renderingContext.height),
                 format = GPUTextureFormat.Depth24Plus,
-                usage = setOf(GPUTextureUsage.RenderAttachment),
+                usage = GPUTextureUsage.RenderAttachment,
             )
         ).bind()
 
@@ -167,7 +167,9 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
                 // Assume each image has the same size.
                 size = Extent3D(imageBitmaps[0].width, imageBitmaps[0].height, depthLayer),
                 format = renderingContext.textureFormat,
-                usage = setOf(GPUTextureUsage.TextureBinding, GPUTextureUsage.CopyDst, GPUTextureUsage.RenderAttachment),
+                usage = GPUTextureUsage.TextureBinding
+                        or GPUTextureUsage.CopyDst
+                        or GPUTextureUsage.RenderAttachment,
             )
         ).bind()
 
@@ -184,7 +186,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
         uniformBuffer = device.createBuffer(
             BufferDescriptor(
                 size = uniformBufferSize,
-                usage = setOf(GPUBufferUsage.Uniform, GPUBufferUsage.CopyDst)
+                usage = GPUBufferUsage.Uniform or GPUBufferUsage.CopyDst
             )
         ).bind()
 
@@ -258,9 +260,7 @@ class CubemapScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene
         device.queue.writeBuffer(
             uniformBuffer,
             0u,
-            transformationMatrix,
-            0u,
-            transformationMatrix.size.toULong()
+            ArrayBuffer.from(transformationMatrix)
         )
 
         renderPassDescriptor = (renderPassDescriptor as RenderPassDescriptor).copy(

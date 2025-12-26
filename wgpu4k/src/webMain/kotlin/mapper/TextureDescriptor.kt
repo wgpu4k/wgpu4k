@@ -7,7 +7,6 @@ import io.ygdrasil.webgpu.WGPUTextureDescriptor
 import io.ygdrasil.webgpu.asJsNumber
 import io.ygdrasil.webgpu.createJsObject
 import io.ygdrasil.webgpu.mapJsArray
-import io.ygdrasil.webgpu.toFlagInt
 import kotlin.js.ExperimentalWasmJsInterop
 import kotlin.js.toJsString
 
@@ -18,6 +17,6 @@ internal fun map(input: GPUTextureDescriptor): WGPUTextureDescriptor = createJsO
     sampleCount = input.sampleCount.asJsNumber()
     dimension = input.dimension.value
     format = input.format.value
-    usage = input.usage.toFlagInt().asJsNumber()
+    usage = input.usage.value.asJsNumber()
     viewFormats = input.viewFormats.mapJsArray { it.value.toJsString() }
 }

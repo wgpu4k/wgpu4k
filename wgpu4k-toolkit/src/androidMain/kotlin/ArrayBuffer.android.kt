@@ -1,15 +1,7 @@
 package io.ygdrasil.webgpu
 
-import com.sun.jna.Memory
 import com.sun.jna.Pointer
 
-actual inline fun arrayBufferOf(input: FloatArray, action: (ArrayBuffer) -> Unit) {
-    val byteSizeToCopy = (input.size * Float.SIZE_BYTES).toLong()
-    val segment = Memory(byteSizeToCopy)
-    segment.write(0, input, 0, input.size)
-    segment.asArrayBuffer(byteSizeToCopy)
-        .let(action)
-}
 
 actual fun FloatArray.writeInto(target: ArrayBuffer) {
     val segment = Pointer(target.rawPointer.toLong())

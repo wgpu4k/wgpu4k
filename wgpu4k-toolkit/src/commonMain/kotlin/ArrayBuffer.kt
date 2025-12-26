@@ -1,10 +1,8 @@
 package io.ygdrasil.webgpu
 
-inline fun FloatArray.asArraybuffer(action: (ArrayBuffer) -> Unit) = arrayBufferOf(this, action)
-
-expect inline fun arrayBufferOf(input: FloatArray, action: (ArrayBuffer) -> Unit)
-
-expect fun FloatArray.writeInto(target: ArrayBuffer)
+fun FloatArray.writeInto(target: ArrayBuffer) = forEachIndexed { index, value ->
+    target.setFloat(index * Float.SIZE_BYTES, value)
+}
 
 expect fun DoubleArray.writeInto(target: ArrayBuffer)
 

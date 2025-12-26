@@ -3,6 +3,7 @@
 package io.ygdrasil.webgpu.examples.scenes.graphics.techniques
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.ygdrasil.webgpu.ArrayBuffer
 import io.ygdrasil.webgpu.AutoClosableContext
 import io.ygdrasil.webgpu.BindGroupDescriptor
 import io.ygdrasil.webgpu.BindGroupEntry
@@ -28,7 +29,6 @@ import io.ygdrasil.webgpu.RenderPassDepthStencilAttachment
 import io.ygdrasil.webgpu.RenderPassDescriptor
 import io.ygdrasil.webgpu.TextureDescriptor
 import io.ygdrasil.webgpu.WGPUContext
-import io.ygdrasil.webgpu.asArraybuffer
 import io.ygdrasil.webgpu.beginRenderPass
 import io.ygdrasil.webgpu.examples.AssetManager
 import io.ygdrasil.webgpu.examples.Scene
@@ -40,7 +40,8 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlin.math.PI
 
 
-class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene(wgpuContext), AssetManager by assetManager {
+class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Scene(wgpuContext),
+    AssetManager by assetManager {
 
     private val logger = KotlinLogging.logger {}
 
@@ -62,7 +63,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
                     depthOrArrayLayers = 1u
                 ),
                 format = GPUTextureFormat.Depth24PlusStencil8,
-                usage = setOf(GPUTextureUsage.RenderAttachment)
+                usage = GPUTextureUsage.RenderAttachment
             )
         ).bind()
 
@@ -91,7 +92,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
                 entries = listOf(
                     BindGroupLayoutEntry(
                         binding = 0u,
-                        visibility = setOf(GPUShaderStage.Vertex),
+                        visibility = GPUShaderStage.Vertex,
                         buffer = BufferBindingLayout(type = GPUBufferBindingType.Uniform)
                     )
                 )
@@ -100,7 +101,8 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
 
         viewParamBuf = device.createBuffer(
             BufferDescriptor(
-                size = 4uL * 4uL * 4uL, usage = setOf(GPUBufferUsage.Uniform, GPUBufferUsage.CopyDst)
+                size = 4uL * 4uL * 4uL,
+                usage = GPUBufferUsage.Uniform or GPUBufferUsage.CopyDst
             )
         ).bind()
 
@@ -147,9 +149,11 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
             projectionMatrix
         )
 
-        transformationMatrix.asArraybuffer {
-            device.queue.writeBuffer(viewParamBuf, 0uL, it)
-        }
+        device.queue.writeBuffer(
+            viewParamBuf,
+            0uL,
+            ArrayBuffer.from(transformationMatrix)
+        )
 
         val commandEncoder = device.createCommandEncoder().bind()
 
