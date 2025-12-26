@@ -63,5 +63,5 @@ actual suspend fun String.asVsfFile(): VfsFile = loadFileAsByteArray(this)
     .asMemoryVfsFile()
 
 internal actual fun Bitmap32.toBitmapHolder(textureFormat: ColorFormat): ImageBitmapHolder {
-    return ImageBitmapHolder(width.toUInt(), height.toUInt(), ArrayBuffer.from(extractBytes(textureFormat)))
+    return ImageBitmapHolder(width.toUInt(), height.toUInt(), ArrayBuffer.of(extractBytes(textureFormat)))
 }

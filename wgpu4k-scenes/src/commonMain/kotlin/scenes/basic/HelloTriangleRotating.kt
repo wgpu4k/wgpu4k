@@ -94,7 +94,7 @@ class HelloTriangleRotatingScene(wgpuContext: WGPUContext) : Scene(wgpuContext) 
         device.queue.writeBuffer(
             uniformBuffer,
             0u,
-            ArrayBuffer.from(transformationMatrix)
+            ArrayBuffer.of(transformationMatrix)
         )
 
         val encoder = device.createCommandEncoder()

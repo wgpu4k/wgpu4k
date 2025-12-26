@@ -152,7 +152,7 @@ class SkinnedMeshScene(wgpuContext: WGPUContext, assetManager: AssetManager) : S
         device.queue.writeBuffer(
             viewParamBuf,
             0uL,
-            ArrayBuffer.from(transformationMatrix)
+            ArrayBuffer.of(transformationMatrix)
         )
 
         val commandEncoder = device.createCommandEncoder().bind()

@@ -48,7 +48,6 @@ import io.ygdrasil.webgpu.examples.scenes.mesh.Cube.cubeVertexCount
 import io.ygdrasil.webgpu.examples.scenes.mesh.Cube.cubeVertexSize
 import io.ygdrasil.webgpu.examples.scenes.shader.fragment.sampleSelfShader
 import io.ygdrasil.webgpu.examples.scenes.shader.vertex.basicVertexShader
-import io.ygdrasil.webgpu.writeInto
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
@@ -75,8 +74,8 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
             )
         )
 
-        cubeVertexArray
-            .writeInto(verticesBuffer.getMappedRange())
+        verticesBuffer.getMappedRange()
+            .setFloats(0uL, cubeVertexArray)
         verticesBuffer.unmap()
 
         renderPipeline = device.createRenderPipeline(
@@ -221,7 +220,7 @@ class FractalCubeScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
         device.queue.writeBuffer(
             uniformBuffer,
             0u,
-            ArrayBuffer.from(transformationMatrix),
+            ArrayBuffer.of(transformationMatrix),
         )
 
         val swapChainTexture = renderingContext.getCurrentTexture()

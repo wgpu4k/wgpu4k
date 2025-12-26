@@ -61,7 +61,7 @@ actual fun GPUQueue.writeBuffer(
     handler.writeBuffer(
         (buffer as Buffer).handler,
         bufferOffset.asJsNumber(),
-        (ArrayBuffer.from(data) as WebArrayBuffer).buffer,
+        (ArrayBuffer.of(data) as WebArrayBuffer).buffer,
         dataOffset.asJsNumber(),
         (Short.SIZE_BYTES.toULong() * size).asJsNumber()
     )
@@ -78,7 +78,7 @@ actual fun GPUQueue.writeBuffer(
     handler.writeBuffer(
         (buffer as Buffer).handler,
         bufferOffset.asJsNumber(),
-        (ArrayBuffer.from(data) as WebArrayBuffer).buffer,
+        (ArrayBuffer.of(data) as WebArrayBuffer).buffer,
         dataOffset.asJsNumber(),
         (Float.SIZE_BYTES.toULong() * size).asJsNumber()
     )
@@ -95,7 +95,7 @@ actual fun GPUQueue.writeBuffer(
     handler.writeBuffer(
         (buffer as Buffer).handler,
         bufferOffset.asJsNumber(),
-        (ArrayBuffer.from(data) as WebArrayBuffer).buffer,
+        (ArrayBuffer.of(data) as WebArrayBuffer).buffer,
         dataOffset.asJsNumber(),
         (Int.SIZE_BYTES.toULong() * size).asJsNumber()
     )

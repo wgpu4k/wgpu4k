@@ -44,7 +44,6 @@ import io.ygdrasil.webgpu.examples.scenes.mesh.Cube.cubeVertexCount
 import io.ygdrasil.webgpu.examples.scenes.mesh.Cube.cubeVertexSize
 import io.ygdrasil.webgpu.examples.scenes.shader.fragment.vertexPositionColorShader
 import io.ygdrasil.webgpu.examples.scenes.shader.vertex.basicVertexShader
-import io.ygdrasil.webgpu.writeInto
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
@@ -73,8 +72,8 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 			)
 		).bind()
 
-		cubeVertexArray
-			.writeInto(verticesBuffer.getMappedRange())
+		verticesBuffer.getMappedRange()
+			.setFloats(0uL, cubeVertexArray)
 		verticesBuffer.unmap()
 
 		renderPipeline = device.createRenderPipeline(
@@ -218,13 +217,13 @@ class TwoCubesScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
 		device.queue.writeBuffer(
 			uniformBuffer,
 			0u,
-			ArrayBuffer.from(transformationMatrix1)
+			ArrayBuffer.of(transformationMatrix1)
 		)
 
 		device.queue.writeBuffer(
 			uniformBuffer,
 			offset,
-			ArrayBuffer.from(transformationMatrix2)
+			ArrayBuffer.of(transformationMatrix2)
 		)
 
 		renderPassDescriptor = (renderPassDescriptor as RenderPassDescriptor).copy(

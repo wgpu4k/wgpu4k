@@ -251,7 +251,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         )
         quadVertexBuffer
             .getMappedRange()
-            .setFloats(0, vertexData)
+            .setFloats(0uL, vertexData)
         quadVertexBuffer.unmap()
 
         //////////////////////////////////////////////////////////////////////////////

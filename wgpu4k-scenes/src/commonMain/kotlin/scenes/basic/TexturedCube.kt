@@ -48,7 +48,6 @@ import io.ygdrasil.webgpu.examples.scenes.mesh.Cube
 import io.ygdrasil.webgpu.examples.scenes.shader.fragment.sampleTextureMixColorShader
 import io.ygdrasil.webgpu.examples.scenes.shader.vertex.basicVertexShader
 import io.ygdrasil.webgpu.writeBuffer
-import io.ygdrasil.webgpu.writeInto
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
 import kotlin.math.PI
@@ -73,8 +72,8 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
             )
         )
 
-        Cube.cubeVertexArray
-            .writeInto(verticesBuffer.getMappedRange())
+        verticesBuffer.getMappedRange()
+            .setFloats(0uL, Cube.cubeVertexArray)
         verticesBuffer.unmap()
 
         renderPipeline = device.createRenderPipeline(

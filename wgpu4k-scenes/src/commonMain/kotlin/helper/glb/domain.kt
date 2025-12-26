@@ -39,7 +39,6 @@ import io.ygdrasil.webgpu.TextureBindingLayout
 import io.ygdrasil.webgpu.VertexAttribute
 import io.ygdrasil.webgpu.VertexBufferLayout
 import io.ygdrasil.webgpu.VertexState
-import io.ygdrasil.webgpu.writeInto
 import korlibs.memory.getS8Array
 import kotlin.math.max
 
@@ -237,13 +236,12 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
                 mappedAtCreation = true
             )
         )
-        baseColorFactor
-            .writeInto(buffer.getMappedRange(0uL, (baseColorFactor.size * Float.SIZE_BYTES).toULong()))
-        emissiveFactor
-            .writeInto(buffer.getMappedRange(4uL * Float.SIZE_BYTES.toULong(), (emissiveFactor.size * Float.SIZE_BYTES).toULong()))
-        floatArrayOf(metallicFactor, roughnessFactor)
-            .writeInto(buffer.getMappedRange(8uL * Float.SIZE_BYTES.toULong()))
-
+        buffer.getMappedRange(0uL, (baseColorFactor.size * Float.SIZE_BYTES).toULong())
+            .setFloats(0uL, baseColorFactor)
+        buffer.getMappedRange(4uL * Float.SIZE_BYTES.toULong(), (emissiveFactor.size * Float.SIZE_BYTES).toULong())
+            .setFloats(0uL, emissiveFactor)
+        buffer.getMappedRange(8uL * Float.SIZE_BYTES.toULong())
+            .setFloats(0uL, floatArrayOf(metallicFactor, roughnessFactor))
         buffer.unmap()
 
         val layoutEntries = mutableListOf(
@@ -336,8 +334,8 @@ class GLTFBufferView(bufferView: GLTF2.BufferView, buffer: GLTF2.Buffer) {
                 mappedAtCreation = true
             )
         )
-        buffer
-            .writeInto(buf.getMappedRange())
+        buf.getMappedRange()
+            .setBytes(0uL, buffer)
         buf.unmap()
         gpuBuffer = buf
         needsUpload = false
@@ -402,9 +400,8 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
                 mappedAtCreation = true
             )
         )
-
-        transform
-            .writeInto(gpuUniforms.getMappedRange())
+        gpuUniforms.getMappedRange()
+            .setFloats(0uL, transform)
         gpuUniforms.unmap()
     }
 
