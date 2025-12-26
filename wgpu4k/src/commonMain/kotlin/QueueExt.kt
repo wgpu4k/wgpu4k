@@ -37,54 +37,6 @@ expect fun GPUQueue.copyExternalImageToTexture(
     copySize: GPUExtent3D
 )
 
-@Deprecated("Use writeTexture with ArrayBuffer instead")
-expect fun GPUQueue.writeTexture(
-    destination: GPUTexelCopyTextureInfo,
-    data: FloatArray,
-    dataLayout: GPUTexelCopyBufferLayout,
-    size: GPUExtent3D,
-)
-
-@Deprecated("Use writeTexture with ArrayBuffer instead")
-expect fun GPUQueue.writeTexture(
-    destination: GPUTexelCopyTextureInfo,
-    data: DoubleArray,
-    dataLayout: GPUTexelCopyBufferLayout,
-    size: GPUExtent3D,
-)
-
-@Deprecated("Use writeTexture with ArrayBuffer instead")
-expect fun GPUQueue.writeTexture(
-    destination: GPUTexelCopyTextureInfo,
-    data: ByteArray,
-    dataLayout: GPUTexelCopyBufferLayout,
-    size: GPUExtent3D,
-)
-
-@Deprecated("Use writeTexture with ArrayBuffer instead")
-expect fun GPUQueue.writeTexture(
-    destination: GPUTexelCopyTextureInfo,
-    data: ShortArray,
-    dataLayout: GPUTexelCopyBufferLayout,
-    size: GPUExtent3D,
-)
-
-@Deprecated("Use writeTexture with ArrayBuffer instead")
-expect fun GPUQueue.writeTexture(
-    destination: GPUTexelCopyTextureInfo,
-    data: IntArray,
-    dataLayout: GPUTexelCopyBufferLayout,
-    size: GPUExtent3D,
-)
-
-@Deprecated("Use writeTexture with ArrayBuffer instead")
-expect fun GPUQueue.writeTexture(
-    destination: GPUTexelCopyTextureInfo,
-    data: LongArray,
-    dataLayout: GPUTexelCopyBufferLayout,
-    size: GPUExtent3D,
-)
-
 @Deprecated("Use writeBuffer with ArrayBuffer instead")
 expect fun GPUQueue.writeBuffer(
     buffer: GPUBuffer,
@@ -108,33 +60,6 @@ expect fun GPUQueue.writeBuffer(
     buffer: GPUBuffer,
     bufferOffset: GPUSize64,
     data: IntArray,
-    dataOffset: GPUSize64 = 0u,
-    size: GPUSize64 = data.size.toULong(),
-)
-
-@Deprecated("Use writeBuffer with ArrayBuffer instead")
-expect fun GPUQueue.writeBuffer(
-    buffer: GPUBuffer,
-    bufferOffset: GPUSize64,
-    data: ByteArray,
-    dataOffset: GPUSize64 = 0u,
-    size: GPUSize64 = data.size.toULong(),
-)
-
-@Deprecated("Use writeBuffer with ArrayBuffer instead")
-expect fun GPUQueue.writeBuffer(
-    buffer: GPUBuffer,
-    bufferOffset: GPUSize64,
-    data: DoubleArray,
-    dataOffset: GPUSize64 = 0u,
-    size: GPUSize64 = data.size.toULong(),
-)
-
-@Deprecated("Use writeBuffer with ArrayBuffer instead")
-expect fun GPUQueue.writeBuffer(
-    buffer: GPUBuffer,
-    bufferOffset: GPUSize64,
-    data: LongArray,
     dataOffset: GPUSize64 = 0u,
     size: GPUSize64 = data.size.toULong(),
 )

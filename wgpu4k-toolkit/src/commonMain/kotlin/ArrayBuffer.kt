@@ -4,16 +4,30 @@ fun FloatArray.writeInto(target: ArrayBuffer) = forEachIndexed { index, value ->
     target.setFloat(index * Float.SIZE_BYTES, value)
 }
 
-expect fun DoubleArray.writeInto(target: ArrayBuffer)
+fun DoubleArray.writeInto(target: ArrayBuffer) = forEachIndexed { index, value ->
+    target.setDouble(index * Double.SIZE_BYTES, value)
+}
 
-expect fun ByteArray.writeInto(target: ArrayBuffer)
+fun ByteArray.writeInto(target: ArrayBuffer) = forEachIndexed { index, value ->
+    target.setByte(index * Byte.SIZE_BYTES, value)
+}
 
-expect fun UByteArray.writeInto(target: ArrayBuffer)
+fun UByteArray.writeInto(target: ArrayBuffer) = forEachIndexed { index, value ->
+    target.setUByte(index * UByte.SIZE_BYTES, value)
+}
 
-expect fun ShortArray.writeInto(target: ArrayBuffer)
+fun ShortArray.writeInto(target: ArrayBuffer) = forEachIndexed { index, value ->
+    target.setShort(index * Short.SIZE_BYTES, value)
+}
 
-expect fun UShortArray.writeInto(target: ArrayBuffer)
+fun UShortArray.writeInto(target: ArrayBuffer) = forEachIndexed { index, value ->
+    target.setUShort(index * UShort.SIZE_BYTES, value)
+}
 
-expect fun IntArray.writeInto(target: ArrayBuffer)
+fun IntArray.writeInto(target: ArrayBuffer) = forEachIndexed { index, value ->
+    target.setInt(index * Int.SIZE_BYTES, value)
+}
 
-expect fun UIntArray.writeInto(target: ArrayBuffer)
+fun UIntArray.writeInto(target: ArrayBuffer) = forEachIndexed { index, value ->
+    target.setUInt(index * UInt.SIZE_BYTES, value)
+}

@@ -233,7 +233,7 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
         val buffer = device.createBuffer(
             BufferDescriptor(
                 size = (2uL * 4uL * 4uL) * Float.SIZE_BYTES.toULong(),
-                setOf(GPUBufferUsage.Uniform),
+                GPUBufferUsage.Uniform,
                 mappedAtCreation = true
             )
         )
@@ -249,7 +249,7 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
         val layoutEntries = mutableListOf(
             BindGroupLayoutEntry(
                 binding = 0u,
-                visibility = setOf(GPUShaderStage.Fragment),
+                visibility = GPUShaderStage.Fragment,
                 buffer = BufferBindingLayout(
                     type = GPUBufferBindingType.Uniform
                 ),
@@ -268,14 +268,14 @@ class GLTFMaterial(material: GLTF2.Material? = null, textures: List<GLTFTexture>
             layoutEntries.add(
                 BindGroupLayoutEntry(
                     binding = 1u,
-                    visibility = setOf(GPUShaderStage.Fragment),
+                    visibility = GPUShaderStage.Fragment,
                     sampler = SamplerBindingLayout(),
                 )
             )
             layoutEntries.add(
                 BindGroupLayoutEntry(
                     binding = 2u,
-                    visibility = setOf(GPUShaderStage.Fragment),
+                    visibility = GPUShaderStage.Fragment,
                     texture = TextureBindingLayout(),
                 )
             )
@@ -317,14 +317,14 @@ class GLTFBufferView(bufferView: GLTF2.BufferView, buffer: GLTF2.Buffer) {
     var buffer: ByteArray
     var needsUpload = false
     var gpuBuffer: GPUBuffer? = null
-    private val usage = mutableSetOf<GPUBufferUsage>()
+    private var usage = GPUBufferUsage.None
 
     init {
         this.buffer = buffer.buffer.getS8Array(byteOffset, length)
     }
 
     internal fun addUsage(usage: GPUBufferUsage) {
-        this.usage.add(usage)
+        this.usage = this.usage or usage
     }
 
     fun upload(device: GPUDevice) {
@@ -398,7 +398,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
         gpuUniforms = device.createBuffer(
             BufferDescriptor(
                 size = 4uL * 4uL * 4uL,
-                usage = setOf(GPUBufferUsage.Uniform),
+                usage = GPUBufferUsage.Uniform,
                 mappedAtCreation = true
             )
         )
@@ -421,7 +421,7 @@ class GLTFNode(val name: String, val mesh: GLTFMesh, val transform: FloatArray) 
                 entries = listOf(
                     BindGroupLayoutEntry(
                         binding = 0u,
-                        visibility = setOf(GPUShaderStage.Vertex),
+                        visibility = GPUShaderStage.Vertex,
                         buffer = BufferBindingLayout(type = GPUBufferBindingType.Uniform)
                     )
                 )
