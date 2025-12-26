@@ -2,10 +2,9 @@
 
 package io.ygdrasil.webgpu.examples
 
+import io.ygdrasil.webgpu.ArrayBuffer
 import io.ygdrasil.webgpu.ImageBitmapHolder
-import io.ygdrasil.webgpu.asArrayBuffer
 import io.ygdrasil.webgpu.createJsObject
-import js.buffer.ArrayBuffer
 import js.typedarrays.Int8Array
 import js.typedarrays.toByteArray
 import korlibs.image.bitmap.Bitmap32
@@ -55,7 +54,7 @@ suspend fun loadFileAsByteArray(
 /**
  * Converts an ArrayBuffer to a ByteArray
  */
-private fun arrayBufferToByteArray(arrayBuffer: ArrayBuffer): ByteArray {
+private fun arrayBufferToByteArray(arrayBuffer: js.buffer.ArrayBuffer): ByteArray {
     return Int8Array(arrayBuffer)
         .toByteArray()
 }
@@ -64,5 +63,5 @@ actual suspend fun String.asVsfFile(): VfsFile = loadFileAsByteArray(this)
     .asMemoryVfsFile()
 
 internal actual fun Bitmap32.toBitmapHolder(textureFormat: ColorFormat): ImageBitmapHolder {
-    return ImageBitmapHolder(width.toUInt(), height.toUInt(), extractBytes(textureFormat).asArrayBuffer())
+    return ImageBitmapHolder(width.toUInt(), height.toUInt(), ArrayBuffer.from(extractBytes(textureFormat)))
 }

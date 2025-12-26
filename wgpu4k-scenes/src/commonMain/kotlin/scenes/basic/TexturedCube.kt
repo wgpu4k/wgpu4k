@@ -68,7 +68,7 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
         verticesBuffer = device.createBuffer(
             BufferDescriptor(
                 size = (Cube.cubeVertexArray.size * Float.SIZE_BYTES).toULong(),
-                usage = setOf(GPUBufferUsage.Vertex),
+                usage = GPUBufferUsage.Vertex,
                 mappedAtCreation = true
             )
         )
@@ -133,7 +133,7 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
             TextureDescriptor(
                 size = Extent3D(renderingContext.width, renderingContext.height),
                 format = GPUTextureFormat.Depth24Plus,
-                usage = setOf(GPUTextureUsage.RenderAttachment),
+                usage = GPUTextureUsage.RenderAttachment,
             )
         ).bind()
 
@@ -141,7 +141,7 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
         uniformBuffer = device.createBuffer(
             BufferDescriptor(
                 size = uniformBufferSize,
-                usage = setOf(GPUBufferUsage.Uniform, GPUBufferUsage.CopyDst)
+                usage = GPUBufferUsage.Uniform or GPUBufferUsage.CopyDst
             )
         ).bind()
 
@@ -153,7 +153,9 @@ class TexturedCubeScene(wgpuContext: WGPUContext, assetManager: AssetManager) : 
             TextureDescriptor(
                 size = Extent3D(imageBitmapWidth, imageBitmapHeight),
                 format = renderingContext.textureFormat,
-                usage = setOf(GPUTextureUsage.TextureBinding, GPUTextureUsage.CopyDst, GPUTextureUsage.RenderAttachment),
+                usage = GPUTextureUsage.TextureBinding
+                        or GPUTextureUsage.CopyDst
+                        or GPUTextureUsage.RenderAttachment,
             )
         )
 

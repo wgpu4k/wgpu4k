@@ -20,21 +20,11 @@ internal actual inline fun Queue.queueWriteBuffer(
     dataOffset: GPUSize64,
     size: GPUSize64?
 ) {
+    val data = (data as OpaquePointerArrayBuffer)
+        .pointer.rawValue.withOffset(dataOffset)
+        .let { Pointer(it) }
     val size = size ?: (buffer.size - bufferOffset)
-    when (data) {
-        is NativeArrayBuffer -> data.useOpaquePinned(0) { pinned ->
-            val data = pinned.rawValue.withOffset(dataOffset)
-                .let { Pointer(it) }
-            wgpuQueueWriteBuffer(handler, (buffer as Buffer).handler, bufferOffset, data, size)
-        }
-
-        is OpaquePointerArrayBuffer -> {
-            val data = data.pointer.rawValue.withOffset(dataOffset)
-                .let { Pointer(it) }
-            wgpuQueueWriteBuffer(handler, (buffer as Buffer).handler, bufferOffset, data, size)
-        }
-    }
-
+    wgpuQueueWriteBuffer(handler, (buffer as Buffer).handler, bufferOffset, data, size)
 }
 
 @Suppress("NOTHING_TO_INLINE")
@@ -44,28 +34,16 @@ internal actual inline fun Queue.queueWriteTexture(
     data: ArrayBuffer,
     dataLayout: GPUTexelCopyBufferLayout,
     size: GPUExtent3D
-) = when (data) {
-    is NativeArrayBuffer -> data.useOpaquePinned(0) { pinned ->
-        wgpuQueueWriteTexture(
-            handler,
-            scope.map(destination),
-            Pointer(pinned),
-            data.size,
-            scope.map(dataLayout),
-            scope.map(size)
-        )
-    }
-
-    is OpaquePointerArrayBuffer -> {
-        wgpuQueueWriteTexture(
-            handler,
-            scope.map(destination),
-            Pointer(data.pointer),
-            data.size,
-            scope.map(dataLayout),
-            scope.map(size)
-        )
-    }
+) {
+    val data = data as OpaquePointerArrayBuffer
+    wgpuQueueWriteTexture(
+        handler,
+        scope.map(destination),
+        Pointer(data.pointer),
+        data.size,
+        scope.map(dataLayout),
+        scope.map(size)
+    )
 }
 
 private fun NativePtr.withOffset(offset: ULong) = interpretCPointer<CPointed>(this + offset.toLong())!!

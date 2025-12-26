@@ -52,7 +52,6 @@ import io.ygdrasil.webgpu.examples.AssetManager
 import io.ygdrasil.webgpu.examples.Scene
 import io.ygdrasil.webgpu.examples.scenes.shader.compute.probabilityMap
 import io.ygdrasil.webgpu.examples.scenes.shader.vertex.particlesShaderFixed
-import io.ygdrasil.webgpu.mapFrom
 import io.ygdrasil.webgpu.writeBuffer
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Matrix4
@@ -97,7 +96,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         particlesBuffer = device.createBuffer(
             BufferDescriptor(
                 size = (numParticles * particleInstanceByteSize).toULong(),
-                usage = setOf(GPUBufferUsage.Vertex, GPUBufferUsage.Storage),
+                usage = GPUBufferUsage.Vertex or GPUBufferUsage.Storage,
             )
         ).bind()
 
@@ -187,7 +186,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
             TextureDescriptor(
                 size = Extent3D(renderingContext.width, renderingContext.height),
                 format = GPUTextureFormat.Depth24Plus,
-                usage = setOf(GPUTextureUsage.RenderAttachment),
+                usage = GPUTextureUsage.RenderAttachment,
             )
         )
 
@@ -200,7 +199,7 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         uniformBuffer = device.createBuffer(
             BufferDescriptor(
                 size = uniformBufferSize.toULong(),
-                usage = setOf(GPUBufferUsage.Uniform, GPUBufferUsage.CopyDst),
+                usage = GPUBufferUsage.Uniform or GPUBufferUsage.CopyDst,
             )
         ).bind()
 
@@ -242,15 +241,17 @@ class ParticlesScene(wgpuContext: WGPUContext, assetManager: AssetManager) : Sce
         quadVertexBuffer = device.createBuffer(
             BufferDescriptor(
                 size = 6uL * 2uL * 4uL, // 6x vec2f
-                usage = setOf(GPUBufferUsage.Vertex),
+                usage = GPUBufferUsage.Vertex,
                 mappedAtCreation = true,
             )
         )
 
-        val vertexData = arrayOf(
-            -1.0, -1.0, +1.0, -1.0, -1.0, +1.0, -1.0, +1.0, +1.0, -1.0, +1.0, +1.0,
-        ).let { FloatArray(it.size) { index -> it[index].toFloat() } }
-        quadVertexBuffer.mapFrom(vertexData)
+        val vertexData = floatArrayOf(
+            -1.0f, -1.0f, +1.0f, -1.0f, -1.0f, +1.0f, -1.0f, +1.0f, +1.0f, -1.0f, +1.0f, +1.0f,
+        )
+        quadVertexBuffer
+            .getMappedRange()
+            .setFloats(0, vertexData)
         quadVertexBuffer.unmap()
 
         //////////////////////////////////////////////////////////////////////////////
