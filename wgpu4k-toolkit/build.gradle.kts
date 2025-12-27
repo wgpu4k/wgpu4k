@@ -29,9 +29,6 @@ kotlin {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_17
         }
-        /*
-
-        publishLibraryVariants("release", "debug")*/
     }
 
     @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)

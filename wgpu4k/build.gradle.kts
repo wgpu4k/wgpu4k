@@ -33,8 +33,6 @@ kotlin {
         namespace = "io.ygdrasil.wgpu4k"
         compileSdk = 36
         minSdk = 28
-        /*
-        publishLibraryVariants("release", "debug")*/
     }
 
     if (Platform.os == Os.MacOs) {
