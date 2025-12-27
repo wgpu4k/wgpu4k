@@ -4,12 +4,12 @@ package io.ygdrasil.webgpu
 expect class Buffer : GPUBuffer {
 
     override val size: GPUSize64Out
-    override val usage: GPUBufferUsageFlags
+    override val usage: Set<GPUBufferUsage>
     override val mapState: GPUBufferMapState
     override var label: String
 
     override suspend fun mapAsync(
-        mode: GPUMapModeFlags,
+        mode: GPUMapMode,
         offset: GPUSize64,
         size: GPUSize64?
     ) : Result<Unit>

@@ -15,7 +15,6 @@ import io.ygdrasil.webgpu.GPUVertexBufferLayout
 import io.ygdrasil.webgpu.GPUVertexState
 import io.ygdrasil.webgpu.PipelineLayout
 import io.ygdrasil.webgpu.ShaderModule
-import io.ygdrasil.webgpu.toFlagULong
 import io.ygdrasil.wgpu.WGPUBlendComponent
 import io.ygdrasil.wgpu.WGPUBlendState
 import io.ygdrasil.wgpu.WGPUColorTargetState
@@ -43,7 +42,7 @@ internal fun MemoryAllocator.map(input: GPURenderPipelineDescriptor) =
 
 fun MemoryAllocator.map(input: GPUColorTargetState, output: WGPUColorTargetState) {
     output.format = input.format.value
-    output.writeMask = input.writeMask.toFlagULong()
+    output.writeMask = input.writeMask.value
     input.blend?.let { output.blend = map(it) }
 
 }

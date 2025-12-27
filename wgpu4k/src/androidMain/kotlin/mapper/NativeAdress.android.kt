@@ -1,6 +1,8 @@
 package io.ygdrasil.webgpu.mapper
 
-import com.sun.jna.Pointer
 import ffi.NativeAddress
+import io.ygdrasil.webgpu.ArrayBuffer
+import io.ygdrasil.webgpu.GPUSize64
 
-internal actual fun NativeAddress.toULong(): ULong = Pointer.nativeValue(this).toULong()
+internal actual fun NativeAddress.toArrayBuffer(size: GPUSize64): ArrayBuffer =
+    ArrayBuffer.wrap(this.getByteBuffer(0, size.toLong()))

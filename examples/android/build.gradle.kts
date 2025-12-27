@@ -45,9 +45,10 @@ android {
             isDebuggable = true
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_22
-        targetCompatibility = JavaVersion.VERSION_22
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     packaging {
@@ -63,6 +64,8 @@ android {
     }
 }
 
+
+
 dependencies {
     implementation(projects.wgpu4kScenes)
     implementation(libs.activity.compose)
@@ -75,3 +78,9 @@ fun getCommonProject() = projects
 
 val File.isNotEmpty: Boolean
     get() = this.listFiles()?.isNotEmpty() ?: false
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}

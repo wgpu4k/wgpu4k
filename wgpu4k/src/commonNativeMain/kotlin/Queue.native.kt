@@ -1,7 +1,7 @@
 package io.ygdrasil.webgpu
 
 import ffi.ArrayHolder
-import ffi.NativeAddress
+import ffi.MemoryAllocator
 import ffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPUCommandBuffer
@@ -13,8 +13,6 @@ import io.ygdrasil.wgpu.WGPUStringView
 import io.ygdrasil.wgpu.wgpuQueueOnSubmittedWorkDone
 import io.ygdrasil.wgpu.wgpuQueueSetLabel
 import io.ygdrasil.wgpu.wgpuQueueSubmit
-import io.ygdrasil.wgpu.wgpuQueueWriteBuffer
-import io.ygdrasil.wgpu.wgpuQueueWriteTexture
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -76,9 +74,7 @@ actual class Queue(val handler: WGPUQueue, label: String) : GPUQueue {
         dataOffset: GPUSize64,
         size: GPUSize64?
     ) {
-        val size = size ?: (buffer.size - bufferOffset)
-        val data = (data.rawPointer + dataOffset).toNativeAddress()
-        wgpuQueueWriteBuffer(handler, (buffer as Buffer).handler, bufferOffset, data, size)
+        queueWriteBuffer(buffer, bufferOffset, data, dataOffset, size)
     }
 
     actual override fun writeTexture(
@@ -87,9 +83,23 @@ actual class Queue(val handler: WGPUQueue, label: String) : GPUQueue {
         dataLayout: GPUTexelCopyBufferLayout,
         size: GPUExtent3D
     ) = memoryScope { scope ->
-        wgpuQueueWriteTexture(handler, scope.map(destination), data.rawPointer.toNativeAddress(), data.size, scope.map(dataLayout), scope.map(size))
+        queueWriteTexture(scope, destination, data, dataLayout, size)
     }
 
 }
 
-internal expect fun ULong.toNativeAddress(): NativeAddress?
+internal expect inline fun Queue.queueWriteTexture(
+    scope: MemoryAllocator,
+    destination: GPUTexelCopyTextureInfo,
+    data: ArrayBuffer,
+    dataLayout: GPUTexelCopyBufferLayout,
+    size: GPUExtent3D
+)
+
+internal expect inline fun Queue.queueWriteBuffer(
+    buffer: GPUBuffer,
+    bufferOffset: GPUSize64,
+    data: ArrayBuffer,
+    dataOffset: GPUSize64,
+    size: GPUSize64?
+)

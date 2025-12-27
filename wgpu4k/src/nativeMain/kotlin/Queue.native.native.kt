@@ -1,12 +1,16 @@
+@file:OptIn(ExperimentalForeignApi::class)
+
 package io.ygdrasil.webgpu
 
-import com.sun.jna.Pointer
 import ffi.MemoryAllocator
-import ffi.NativeAddress
+import ffi.Pointer
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.wgpuQueueWriteBuffer
 import io.ygdrasil.wgpu.wgpuQueueWriteTexture
-import java.nio.ByteBuffer
+import kotlinx.cinterop.CPointed
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.NativePtr
+import kotlinx.cinterop.interpretCPointer
 
 @Suppress("NOTHING_TO_INLINE")
 internal actual inline fun Queue.queueWriteBuffer(
@@ -16,8 +20,10 @@ internal actual inline fun Queue.queueWriteBuffer(
     dataOffset: GPUSize64,
     size: GPUSize64?
 ) {
+    val data = (data as OpaquePointerArrayBuffer)
+        .pointer.rawValue.withOffset(dataOffset)
+        .let { Pointer(it) }
     val size = size ?: (buffer.size - bufferOffset)
-    val data = ((data as AndroidArrayBuffer).buffer.getAddress() + dataOffset).toNativeAddress()
     wgpuQueueWriteBuffer(handler, (buffer as Buffer).handler, bufferOffset, data, size)
 }
 
@@ -29,24 +35,15 @@ internal actual inline fun Queue.queueWriteTexture(
     dataLayout: GPUTexelCopyBufferLayout,
     size: GPUExtent3D
 ) {
+    val data = data as OpaquePointerArrayBuffer
     wgpuQueueWriteTexture(
         handler,
         scope.map(destination),
-        (data as AndroidArrayBuffer).buffer.getAddress().toNativeAddress(),
+        Pointer(data.pointer),
         data.size,
         scope.map(dataLayout),
         scope.map(size)
     )
 }
 
-private fun ByteBuffer.getAddress() = try {
-    val addressMethod = ByteBuffer::class.java.getDeclaredMethod("address")
-    addressMethod.isAccessible = true
-    (addressMethod.invoke(this) as Long?)!!
-} catch (e: Exception) {
-    throw RuntimeException("Failed to get ByteBuffer address", e)
-}.toULong()
-
-
-private fun ULong.toNativeAddress(): NativeAddress? = takeIf { it != 0uL }
-    ?.let { Pointer(it.toLong()) }
+private fun NativePtr.withOffset(offset: ULong) = interpretCPointer<CPointed>(this + offset.toLong())!!

@@ -31,7 +31,6 @@ import io.ygdrasil.webgpu.WGPUVertexState
 import io.ygdrasil.webgpu.asJsNumber
 import io.ygdrasil.webgpu.createJsObject
 import io.ygdrasil.webgpu.mapJsArray
-import io.ygdrasil.webgpu.toFlagInt
 import kotlin.js.ExperimentalWasmJsInterop
 import kotlin.js.toJsString
 
@@ -121,7 +120,7 @@ private fun map(input: GPUColorTargetState): WGPUColorTargetState =
     createJsObject<WGPUColorTargetState>().apply {
         format = input.format.value
         input.blend?.let { blend = map(it) }
-        writeMask = input.writeMask.toFlagInt().asJsNumber()
+        writeMask = input.writeMask.value.asJsNumber()
     }
 
 private fun map(input: GPUBlendState): WGPUBlendState =

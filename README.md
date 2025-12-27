@@ -24,8 +24,8 @@ For a low-level library that supports Mobile and Desktop, check out [wgpu4k-nati
 
 ## Prerequisites
 
-- **Gradle**: 8.11+
-- **JDK**: 22+
+- **Gradle**: 9.10+
+- **JDK**: 25+
 - **Web Browsers**: A recent version of Chrome or Firefox Nightly (check [compatibility here][chart]).
 
 ---

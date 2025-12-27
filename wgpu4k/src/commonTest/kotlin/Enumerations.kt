@@ -7,10 +7,10 @@ class EnumerationsTest : FreeSpec({
 
     "test flag to int without flag" {
         // Given
-        val noflag = setOf<GPUBufferUsage>()
+        val noflag = GPUBufferUsage.None
 
         // When
-        val intFlag = noflag.toFlagULong()
+        val intFlag = noflag.value
 
         // Then
 
@@ -19,10 +19,10 @@ class EnumerationsTest : FreeSpec({
 
     "test flag to int with one flag" {
         // Given
-        val withFlags = setOf(GPUBufferUsage.Vertex)
+        val withFlags = GPUBufferUsage.Vertex
 
         // When
-        val intFlag = withFlags.toFlagULong()
+        val intFlag = withFlags.value
 
         // Then
 
@@ -31,13 +31,12 @@ class EnumerationsTest : FreeSpec({
 
     "test flag to int with multiple flags" {
         // Given
-        val withFlags = setOf(GPUBufferUsage.Vertex, GPUBufferUsage.CopyDst, GPUBufferUsage.Uniform)
+        val withFlags = GPUBufferUsage.Vertex or GPUBufferUsage.CopyDst or GPUBufferUsage.Uniform
 
         // When
-        val intFlag = withFlags.toFlagULong()
+        val intFlag = withFlags.value
 
         // Then
-
         intFlag shouldBe (GPUBufferUsage.Vertex.value or GPUBufferUsage.CopyDst.value or GPUBufferUsage.Uniform.value)
     }
 })

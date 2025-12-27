@@ -69,7 +69,7 @@ class HelloTriangleMSAAScene(wgpuContext: WGPUContext) : Scene(wgpuContext) {
                 size = Extent3D(renderingContext.width, renderingContext.height),
                 sampleCount = sampleCount,
                 format = renderingContext.textureFormat,
-                usage = setOf(GPUTextureUsage.RenderAttachment),
+                usage = GPUTextureUsage.RenderAttachment,
             )
         ).bind()
         textureView = texture.createView().bind()

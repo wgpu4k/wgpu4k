@@ -10,13 +10,12 @@ import io.ygdrasil.webgpu.WGPUComputePipelineDescriptor
 import io.ygdrasil.webgpu.WGPUProgrammableStage
 import io.ygdrasil.webgpu.createJsObject
 import kotlin.js.ExperimentalWasmJsInterop
-import kotlin.js.toJsString
 
 internal fun map(input: GPUComputePipelineDescriptor): WGPUComputePipelineDescriptor =
     createJsObject<WGPUComputePipelineDescriptor>().apply {
         label = input.label
         compute = map(input.compute)
-        layout = (input.layout as PipelineLayout)?.handler ?: "auto".toJsString()
+        layout = (input.layout as PipelineLayout).handler
     }
 
 private fun map(input: GPUProgrammableStage): WGPUProgrammableStage =

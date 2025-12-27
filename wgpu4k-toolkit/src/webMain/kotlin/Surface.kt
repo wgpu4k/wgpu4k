@@ -4,22 +4,10 @@ package io.ygdrasil.webgpu
 
 import web.dom.document
 import web.html.HTMLCanvasElement
-import kotlin.AutoCloseable
-import kotlin.Boolean
-import kotlin.Int
-import kotlin.OptIn
-import kotlin.String
-import kotlin.UInt
-import kotlin.also
-import kotlin.apply
-import kotlin.error
-import kotlin.getOrThrow
 import kotlin.js.ExperimentalWasmJsInterop
 import kotlin.js.toInt
 import kotlin.js.toJsString
 import kotlin.js.unsafeCast
-import kotlin.let
-import kotlin.toUInt
 
 actual class Surface(private val handler: WGPUCanvasContext) : AutoCloseable {
     actual val width: UInt
@@ -98,7 +86,7 @@ class CanvasContext(
 fun map(input: SurfaceConfiguration) = createJsObject<WGPUCanvasConfiguration>().apply {
     device = (input.device as Device).handler
     format = input.format.value
-    usage = input.usage.toFlagInt().asJsNumber()
+    usage = input.usage.value.asJsNumber()
     viewFormats = input.viewFormats.mapJsArray { it.value.toJsString() }
     colorSpace = input.colorSpace.value.toJsString()
     toneMapping = createJsObject<WGPUCanvasToneMapping>().apply {
@@ -112,6 +100,6 @@ fun map(input: SurfaceConfiguration) = createJsObject<WGPUCanvasConfiguration>()
 
 internal fun createCanvas(name: String, isHidden: Boolean): HTMLCanvasElement =
     (document.createElement("canvas") as HTMLCanvasElement).also {
-        document.body?.appendChild(it)
+        document.body.appendChild(it)
         it.hidden = isHidden
     }.unsafeCast<HTMLCanvasElement>()

@@ -3,7 +3,7 @@ package io.ygdrasil.webgpu
 data class SurfaceConfiguration(
     val device: GPUDevice,
     val format: GPUTextureFormat,
-    val usage: Set<GPUTextureUsage> = setOf(GPUTextureUsage.RenderAttachment),
+    val usage: GPUTextureUsage = GPUTextureUsage.RenderAttachment,
     val viewFormats: Set<GPUTextureFormat> = setOf(),
     val colorSpace: PredefinedColorSpace = PredefinedColorSpace.srgb,
     val alphaMode: CompositeAlphaMode = CompositeAlphaMode.Opaque,

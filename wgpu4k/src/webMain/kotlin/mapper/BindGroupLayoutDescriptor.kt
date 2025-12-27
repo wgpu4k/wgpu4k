@@ -13,7 +13,6 @@ import io.ygdrasil.webgpu.WGPUTextureBindingLayout
 import io.ygdrasil.webgpu.asJsNumber
 import io.ygdrasil.webgpu.createJsObject
 import io.ygdrasil.webgpu.mapJsArray
-import io.ygdrasil.webgpu.toFlagInt
 import kotlin.js.ExperimentalWasmJsInterop
 
 // TODO: add unit test
@@ -29,7 +28,7 @@ internal fun map(input: GPUBindGroupLayoutDescriptor): WGPUBindGroupLayoutDescri
 private fun map(input: GPUBindGroupLayoutEntry): WGPUBindGroupLayoutEntry =
     createJsObject<WGPUBindGroupLayoutEntry>().apply {
         binding = input.binding.asJsNumber()
-        visibility = input.visibility.toFlagInt().asJsNumber()
+        visibility = input.visibility.value.asJsNumber()
         input.buffer?.let { input ->
             buffer = createJsObject<WGPUBufferBindingLayout>().apply {
                 type = input.type.value

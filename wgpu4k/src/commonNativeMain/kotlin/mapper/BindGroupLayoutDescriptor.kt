@@ -3,7 +3,6 @@ package io.ygdrasil.webgpu.mapper
 import ffi.MemoryAllocator
 import io.ygdrasil.webgpu.GPUBindGroupLayoutDescriptor
 import io.ygdrasil.webgpu.GPUBindGroupLayoutEntry
-import io.ygdrasil.webgpu.toFlagULong
 import io.ygdrasil.wgpu.WGPUBindGroupLayoutDescriptor
 import io.ygdrasil.wgpu.WGPUBindGroupLayoutEntry
 import io.ygdrasil.wgpu.WGPUChainedStruct
@@ -26,7 +25,7 @@ fun MemoryAllocator.map(input: GPUBindGroupLayoutDescriptor): WGPUBindGroupLayou
 fun MemoryAllocator.map(input: GPUBindGroupLayoutEntry, output: WGPUBindGroupLayoutEntry) {
 
     output.binding = input.binding
-    output.visibility = input.visibility.toFlagULong()
+    output.visibility = input.visibility.value
 
     input.buffer?.let {  bindingType ->
         val buffer = output.buffer
@@ -41,7 +40,7 @@ fun MemoryAllocator.map(input: GPUBindGroupLayoutEntry, output: WGPUBindGroupLay
 
     input.sampler?.let { bindingType ->
         val sampler = output.sampler
-        sampler.type = bindingType.type.value.toUInt()
+        sampler.type = bindingType.type.value
 
         val chain = WGPUChainedStruct.allocate(this)
         chain.sType = WGPUNativeSType_BindGroupEntryExtras

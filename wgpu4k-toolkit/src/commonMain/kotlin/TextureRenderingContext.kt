@@ -15,7 +15,7 @@ class TextureRenderingContext(
                 label = "render texture",
                 size = Extent3D(256u, 256u),
                 format = textureFormat,
-                usage = setOf(GPUTextureUsage.RenderAttachment, GPUTextureUsage.CopySrc, GPUTextureUsage.CopyDst)
+                usage = GPUTextureUsage.RenderAttachment or GPUTextureUsage.CopySrc or GPUTextureUsage.CopyDst
             )
         )
     }

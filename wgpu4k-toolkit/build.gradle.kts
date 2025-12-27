@@ -1,3 +1,6 @@
+import com.android.build.api.dsl.androidLibrary
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
@@ -6,7 +9,7 @@ plugins {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(24))
+        languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
 
@@ -18,18 +21,14 @@ kotlin {
         nodejs()
     }
     jvm()
-    androidTarget {
-        android {
-            namespace = "io.ygdrasil.wgpu4k"
-            compileSdk = 36
+    androidLibrary {
+        namespace = "io.ygdrasil.wgpu4k"
+        compileSdk = 36
+        minSdk = 28
 
-            defaultConfig {
-                minSdk = 28
-            }
-
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_17
         }
-
-        publishLibraryVariants("release", "debug")
     }
 
     @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)

@@ -3,26 +3,52 @@
 package io.ygdrasil.webgpu.examples.helper.glb
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import korlibs.datastructure.*
-import korlibs.encoding.*
-import korlibs.image.bitmap.*
-import korlibs.image.color.*
-import korlibs.image.format.*
-import korlibs.io.file.*
-import korlibs.io.file.std.*
-import korlibs.io.lang.*
-import korlibs.io.net.*
-import korlibs.io.stream.*
-import korlibs.logger.*
-import korlibs.math.*
-import korlibs.math.geom.*
-import korlibs.math.interpolation.*
-import korlibs.memory.*
-import korlibs.time.*
-import kotlinx.serialization.*
-import kotlinx.serialization.descriptors.*
-import kotlinx.serialization.encoding.*
-import kotlinx.serialization.json.*
+import korlibs.datastructure.genericBinarySearchLeft
+import korlibs.encoding.fromBase64
+import korlibs.image.bitmap.Bitmap
+import korlibs.image.bitmap.Bitmaps
+import korlibs.image.bitmap.bmp
+import korlibs.image.format.nativeImageFormatProvider
+import korlibs.io.file.VfsFile
+import korlibs.io.file.extensionLC
+import korlibs.io.file.std.asMemoryVfsFile
+import korlibs.io.lang.Charsets
+import korlibs.io.lang.substr
+import korlibs.io.lang.toString
+import korlibs.io.net.URL
+import korlibs.io.stream.openSync
+import korlibs.io.stream.readS32LE
+import korlibs.io.stream.readStream
+import korlibs.io.stream.readString
+import korlibs.io.stream.readStringz
+import korlibs.io.stream.toByteArray
+import korlibs.math.clamp01
+import korlibs.math.convertRange
+import korlibs.math.geom.AABB3D
+import korlibs.math.geom.Matrix4
+import korlibs.math.geom.Quaternion
+import korlibs.math.geom.Vector3
+import korlibs.math.geom.Vector4
+import korlibs.math.interpolation.interpolate
+import korlibs.math.interpolation.toRatio
+import korlibs.memory.Buffer
+import korlibs.memory.asFloat32
+import korlibs.memory.asInt16
+import korlibs.memory.asInt32
+import korlibs.memory.asInt8
+import korlibs.memory.asUInt16
+import korlibs.memory.sliceBuffer
+import korlibs.memory.sliceWithSize
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 import kotlin.jvm.JvmInline
 import kotlin.time.measureTimedValue
 
@@ -114,7 +140,7 @@ data class GLTF2(
 
     fun resolveUri(file: VfsFile?, uri: String): VfsFile? {
         if (uri.startsWith("data:")) {
-            val dataPart = uri.substringBefore(',', "")
+            uri.substringBefore(',', "")
             val content = uri.substringAfter(',')
             return content.fromBase64().asMemoryVfsFile("buffer.bin")
         }

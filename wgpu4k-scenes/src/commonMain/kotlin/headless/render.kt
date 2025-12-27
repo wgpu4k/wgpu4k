@@ -17,7 +17,6 @@ import io.ygdrasil.webgpu.WGPUContext
 import io.ygdrasil.webgpu.autoClosableContext
 import io.ygdrasil.webgpu.examples.Scene
 import io.ygdrasil.webgpu.examples.loadScenes
-import io.ygdrasil.webgpu.mapInto
 import io.ygdrasil.webgpu.poll
 import korlibs.image.bitmap.Bitmap32
 import korlibs.image.format.PNG
@@ -55,11 +54,11 @@ suspend fun captureScene(
     with(scene) { render() }
 
     if (renderingContext is TextureRenderingContext) {
-        val textureData = IntArray(renderingContext.width.toInt() * renderingContext.height.toInt())
+        val textureDataSize = renderingContext.width.toInt() * renderingContext.height.toInt() * Int.SIZE_BYTES
         val outputStagingBuffer = context.device.createBuffer(
             BufferDescriptor(
-                size = (textureData.size * Int.SIZE_BYTES).toULong(),
-                usage = setOf(GPUBufferUsage.CopyDst, GPUBufferUsage.MapRead),
+                size = textureDataSize.toULong(),
+                usage = GPUBufferUsage.CopyDst or GPUBufferUsage.MapRead,
                 mappedAtCreation = false,
             )
         )
@@ -87,8 +86,10 @@ suspend fun captureScene(
         logger.info { "Copying texture to staging buffer" }
         context.device.queue.submit(listOf(commandEncoder.finish()))
         logger.info { "Mapping ..." }
-        outputStagingBuffer.mapAsync(setOf(GPUMapMode.Read))
-        outputStagingBuffer.mapInto(buffer = textureData)
+        outputStagingBuffer.mapAsync(GPUMapMode.Read)
+        val textureData = outputStagingBuffer
+            .getMappedRange()
+            .toIntArray()
         val image = Bitmap32(
             width = renderingContext.width.toInt(),
             height = renderingContext.height.toInt(),
