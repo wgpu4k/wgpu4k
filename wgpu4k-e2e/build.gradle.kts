@@ -68,9 +68,15 @@ kotlin {
     }
 }
 
+val jvmMainCompilation = kotlin.targets.getByName("jvm").compilations.getByName("main")
+val jvmRuntimeClasspath = (jvmMainCompilation.runtimeDependencyFiles ?: files()) + jvmMainCompilation.output.allOutputs
+val scenesProject = getCommonProject()
+
 val jvmTest = tasks.register<JavaExec>("e2eJvmTest") {
     group = "e2eTest"
     mainClass = "JvmMainKt"
+    dependsOn(jvmMainCompilation.compileTaskProvider)
+    dependsOn(scenesProject.tasks.named("jvmJar"))
     jvmArgs(
         if (Platform.os == Os.MacOs) {
             listOf(
@@ -87,13 +93,15 @@ val jvmTest = tasks.register<JavaExec>("e2eJvmTest") {
             "-DscreenshotPath=${project.projectDir}",
         )
     )
-    classpath = sourceSets["jvmMain"].runtimeClasspath
+    classpath = jvmRuntimeClasspath
 }
 
 val e2eJsBrowserTest = tasks.register<JavaExec>("e2eJsBrowserTest") {
     val projectDir = project.projectDir
     group = "e2eTest"
     mainClass = "JsMainKt"
+    dependsOn(jvmMainCompilation.compileTaskProvider)
+    dependsOn(scenesProject.tasks.named("jvmJar"))
     jvmArgs(
         listOf(
             "-DprojectDir=${projectDir.absolutePath}",
@@ -101,7 +109,7 @@ val e2eJsBrowserTest = tasks.register<JavaExec>("e2eJsBrowserTest") {
             "-DprefixPath=js"
         )
     )
-    classpath = sourceSets["jvmMain"].runtimeClasspath
+    classpath = jvmRuntimeClasspath
 }
 
 
@@ -109,6 +117,8 @@ val e2eWasmBrowserTest = tasks.register<JavaExec>("e2eWasmBrowserTest") {
     val projectDir = project.projectDir
     group = "e2eTest"
     mainClass = "JsMainKt"
+    dependsOn(jvmMainCompilation.compileTaskProvider)
+    dependsOn(scenesProject.tasks.named("jvmJar"))
     jvmArgs(
         listOf(
             "-DprojectDir=${projectDir.absolutePath}",
@@ -116,7 +126,7 @@ val e2eWasmBrowserTest = tasks.register<JavaExec>("e2eWasmBrowserTest") {
             "-DprefixPath=wasm"
         )
     )
-    classpath = sourceSets["jvmMain"].runtimeClasspath
+    classpath = jvmRuntimeClasspath
 }
 
 val e2eCompareImages = tasks.register("e2eCompareImages") {
