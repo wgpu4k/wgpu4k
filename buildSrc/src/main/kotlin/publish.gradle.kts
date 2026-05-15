@@ -68,13 +68,10 @@ publishing {
             if (isSnapshot()) {
                 logger.info("publishing is configure as snapshot")
                 name = "GitLab"
-                url = uri("https://gitlab.com/api/v4/projects/25805863/packages/maven")
-                credentials(HttpHeaderCredentials::class) {
-                    name = "Authorization"
-                    value = "Bearer ${System.getenv("GITLAB_TOKEN")}"
-                }
-                authentication {
-                    create<HttpHeaderAuthentication>("header")
+                url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+                credentials {
+                    username = System.getenv("SONATYPE_LOGIN")
+                    password = System.getenv("SONATYPE_PASSWORD")
                 }
             } else {
                 name = "Local"
