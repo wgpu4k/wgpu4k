@@ -1,5 +1,5 @@
 [versions]
-activity-compose = "1.11.0"
+activity-compose = "1.13.0"
 jna = "5.18.1"
 kotlin = "2.3.0"
 kotlinx-serialization-json = "1.9.0"
