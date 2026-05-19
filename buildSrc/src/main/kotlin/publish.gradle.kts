@@ -67,7 +67,7 @@ publishing {
         maven {
             if (isSnapshot()) {
                 logger.info("publishing is configure as snapshot")
-                name = "GitLab"
+                name = "Sonatype"
                 url = uri("https://gitlab.com/api/v4/projects/25805863/packages/maven")
                 credentials(HttpHeaderCredentials::class) {
                     name = "Authorization"
