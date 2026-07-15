@@ -85,7 +85,11 @@ Une opération différée suit cet ordre :
 6. Au callback, convertir immédiatement les données natives nécessaires, puis tenter la reprise avec `tryResume` et `completeResume`.
 7. Fermer idempotemment la registration et retirer l'opération du pump, quel que soit le chemin de sortie.
 
-L'annulation de la coroutine ferme la registration et retire l'opération. Un callback natif tardif ne trouve plus sa userdata dans le registry de v29 et est ignoré. Une exception Kotlin ne doit jamais traverser le callback FFI.
+Pour un callback qui ne transfère aucun handle natif, l'annulation de la coroutine ferme immédiatement la registration et retire l'opération. Un callback natif tardif ne trouve plus sa userdata dans le registry de v29 et est ignoré.
+
+Un callback marqué `PassedWithOwnership`, comme `requestDevice`, constitue une exception nécessaire : l'annulation termine immédiatement la coroutine, mais la registration reste active jusqu'à la livraison inline ou jusqu'au retour du downcall v29. Si un handle est livré après l'annulation, le callback le libère au lieu de tenter de reprendre la coroutine. Fermer cette registration avant la livraison pourrait perdre le seul chemin capable de libérer le handle transféré. Comme `requestDevice` est inline dans wgpu-native v29, la registration est toujours fermée au plus tard au retour du downcall et ne peut pas rester retenue indéfiniment.
+
+Une exception Kotlin ne doit jamais traverser le callback FFI.
 
 Si un callback fournit une nouvelle resource native, mais que la continuation a déjà été annulée ou fermée, le handle reçu est libéré au lieu d'être abandonné.
 
@@ -132,7 +136,7 @@ Le callback utilisateur est protégé : une exception qu'il déclenche est rappo
 - Un statut natif en erreur produit `Result.failure` avec le statut et le message natif copié avant le retour du callback.
 - Une valeur native obligatoire absente produit `Result.failure(IllegalStateException(...))`.
 - Une fermeture de resource produit `Result.failure(IllegalStateException("<Resource> is closed"))`.
-- L'annulation du `Job` propage `CancellationException` normalement ; elle n'est jamais encapsulée dans `Result.failure`.
+- L'annulation du `Job` propage `CancellationException` normalement ; elle n'est jamais encapsulée dans `Result.failure`. Pour une valeur `PassedWithOwnership`, l'annulation conserve uniquement le chemin de cleanup natif jusqu'au retour du downcall.
 - Les courses callback/annulation/fermeture sont arbitrées par une terminaison atomique et `tryResume`. Un seul chemin peut publier le résultat.
 
 Aucun nouveau type d'exception public n'est ajouté dans ce changement.
