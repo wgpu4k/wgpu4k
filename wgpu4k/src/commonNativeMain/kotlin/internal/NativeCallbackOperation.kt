@@ -7,6 +7,7 @@ package io.ygdrasil.webgpu.internal
 
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.handleCoroutineException
 import kotlin.concurrent.atomics.AtomicBoolean
 import kotlin.concurrent.atomics.AtomicReference
 
@@ -14,6 +15,9 @@ internal class NativeCallbackOperation<T>(
     private val continuation: CancellableContinuation<Result<T>>,
     private val closeRegistration: () -> Unit,
     private val onFinished: () -> Unit = {},
+    private val reportException: (Throwable) -> Unit = {
+        handleCoroutineException(continuation.context, it)
+    },
 ) {
     private val finished = AtomicBoolean(false)
     private val attachment = AtomicReference<AutoCloseable?>(null)
@@ -84,8 +88,16 @@ internal class NativeCallbackOperation<T>(
     private fun runSafely(block: () -> Unit) {
         try {
             block()
+        } catch (error: Throwable) {
+            reportSafely(error)
+        }
+    }
+
+    private fun reportSafely(error: Throwable) {
+        try {
+            reportException(error)
         } catch (_: Throwable) {
-            // Cleanup can run from an FFI callback and must never escape its trampoline.
+            // A reporter is a terminal sink: retrying it would recurse or report twice.
         }
     }
 }

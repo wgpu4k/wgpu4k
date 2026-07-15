@@ -4,6 +4,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -87,7 +88,10 @@ class NativeCallbackOperationTest : FreeSpec({
             var attachmentCloses = 0
             var finishes = 0
             lateinit var operation: NativeCallbackOperation<Int>
-            val result = async(start = CoroutineStart.UNDISPATCHED) {
+            val result = async(
+                context = CoroutineExceptionHandler { _, _ -> },
+                start = CoroutineStart.UNDISPATCHED,
+            ) {
                 suspendCancellableCoroutine<Result<Int>> { continuation ->
                     operation = NativeCallbackOperation(
                         continuation = continuation,
@@ -153,7 +157,10 @@ class NativeCallbackOperationTest : FreeSpec({
             var undelivered = 0
             var attachmentCloses = 0
             lateinit var operation: NativeCallbackOperation<Int>
-            val result = async(start = CoroutineStart.UNDISPATCHED) {
+            val result = async(
+                context = CoroutineExceptionHandler { _, _ -> },
+                start = CoroutineStart.UNDISPATCHED,
+            ) {
                 suspendCancellableCoroutine<Result<Int>> { continuation ->
                     operation = NativeCallbackOperation(
                         continuation = continuation,
@@ -181,6 +188,82 @@ class NativeCallbackOperationTest : FreeSpec({
             }.getOrThrow() shouldBe false
             undelivered shouldBe 1
             attachmentCloses shouldBe 1
+        }
+    }
+
+    "cleanup and disposer failures are reported once without blocking completion" {
+        runTest {
+            val attachmentFailure = IllegalStateException("attachment close failed")
+            val registrationFailure = IllegalStateException("registration close failed")
+            val finishFailure = IllegalStateException("finish hook failed")
+            val disposerFailure = IllegalStateException("late disposer failed")
+            val reported = mutableListOf<Throwable>()
+            val exceptionHandler = CoroutineExceptionHandler { _, error -> reported += error }
+            lateinit var operation: NativeCallbackOperation<Int>
+            val result = async(
+                context = exceptionHandler,
+                start = CoroutineStart.UNDISPATCHED,
+            ) {
+                suspendCancellableCoroutine<Result<Int>> { continuation ->
+                    operation = NativeCallbackOperation(
+                        continuation = continuation,
+                        closeRegistration = { throw registrationFailure },
+                        onFinished = { throw finishFailure },
+                    )
+                    operation.attach(AutoCloseable { throw attachmentFailure })
+                }
+            }
+
+            val completion = runCatching { operation.succeed(7) }
+            if (completion.isFailure) result.cancelAndJoin()
+
+            completion.getOrThrow() shouldBe true
+            result.await().getOrThrow() shouldBe 7
+            runCatching {
+                operation.succeed(8) { throw disposerFailure }
+            }.getOrThrow() shouldBe false
+            reported shouldBe listOf(
+                attachmentFailure,
+                registrationFailure,
+                finishFailure,
+                disposerFailure,
+            )
+        }
+    }
+
+    "a throwing reporter is contained and invoked once" {
+        runTest {
+            val cleanupFailure = IllegalStateException("registration close failed")
+            val reporterFailure = IllegalStateException("reporter failed")
+            var cleanupCalls = 0
+            var reporterCalls = 0
+            var reported: Throwable? = null
+            lateinit var operation: NativeCallbackOperation<Int>
+            val result = async(start = CoroutineStart.UNDISPATCHED) {
+                suspendCancellableCoroutine<Result<Int>> { continuation ->
+                    operation = NativeCallbackOperation(
+                        continuation = continuation,
+                        closeRegistration = {
+                            cleanupCalls++
+                            throw cleanupFailure
+                        },
+                        reportException = {
+                            reporterCalls++
+                            reported = it
+                            throw reporterFailure
+                        },
+                    )
+                }
+            }
+
+            val completion = runCatching { operation.succeed(7) }
+            if (completion.isFailure) result.cancelAndJoin()
+
+            completion.getOrThrow() shouldBe true
+            result.await().getOrThrow() shouldBe 7
+            cleanupCalls shouldBe 1
+            reporterCalls shouldBe 1
+            reported shouldBe cleanupFailure
         }
     }
 
