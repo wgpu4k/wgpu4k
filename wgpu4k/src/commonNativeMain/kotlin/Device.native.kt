@@ -48,7 +48,7 @@ import io.ygdrasil.wgpu.wgpuDeviceSetLabel
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.concurrent.atomics.AtomicBoolean
 
-actual class Device(
+actual class Device internal constructor(
     val handler: WGPUDevice,
     label: String,
     private val uncapturedErrorRegistration: AutoCloseable? = null,

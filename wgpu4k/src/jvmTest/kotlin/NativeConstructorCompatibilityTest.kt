@@ -12,6 +12,8 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.coroutines.intrinsics.COROUTINE_SUSPENDED
 import kotlin.coroutines.intrinsics.startCoroutineUninterceptedOrReturn
+import kotlin.reflect.KClass
+import kotlin.reflect.KVisibility
 
 class NativeConstructorCompatibilityTest : FreeSpec({
     "legacy queue constructor fails work-done immediately without a Device" {
@@ -46,5 +48,13 @@ class NativeConstructorCompatibilityTest : FreeSpec({
 
         Device::class.java.hasLegacyConstructor() shouldBe true
         Queue::class.java.hasLegacyConstructor() shouldBe true
+    }
+
+    "owned three-argument constructors are internal implementation paths" {
+        fun KClass<*>.ownedConstructorVisibility(): KVisibility? =
+            constructors.single { it.parameters.size == 3 }.visibility
+
+        Device::class.ownedConstructorVisibility() shouldBe KVisibility.INTERNAL
+        Queue::class.ownedConstructorVisibility() shouldBe KVisibility.INTERNAL
     }
 })

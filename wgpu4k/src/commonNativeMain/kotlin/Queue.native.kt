@@ -20,7 +20,7 @@ import io.ygdrasil.wgpu.wgpuQueueSetLabel
 import io.ygdrasil.wgpu.wgpuQueueSubmit
 import kotlinx.coroutines.suspendCancellableCoroutine
 
-actual class Queue(
+actual class Queue internal constructor(
     val handler: WGPUQueue,
     private val device: Device?,
     label: String,

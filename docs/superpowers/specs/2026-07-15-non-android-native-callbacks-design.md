@@ -163,7 +163,7 @@ Cette erreur contrôlée remplace un appel natif qui provoquerait un panic.
 
 ## Compatibilité des constructeurs low-level
 
-Les constructeurs publics historiques `Device(WGPUDevice, String)` et `Queue(WGPUQueue, String)` restent disponibles. La Queue legacy ne possède pas de `DeviceEventPump`; son `onSubmittedWorkDone()` retourne donc immédiatement un `Result.failure(IllegalStateException(...))`, sans registration native ni suspension. Les Queues créées depuis `Device.queue` conservent le chemin asynchrone normal avec pump.
+Les constructeurs publics historiques `Device(WGPUDevice, String)` et `Queue(WGPUQueue, String)` restent disponibles. Les constructeurs owned à trois arguments, qui transfèrent une registration répétée ou associent une Queue à son `DeviceEventPump`, sont `internal` et réservés aux call sites sûrs du module. La Queue legacy ne possède pas de `DeviceEventPump`; son `onSubmittedWorkDone()` retourne donc immédiatement un `Result.failure(IllegalStateException(...))`, sans registration native ni suspension. Les Queues créées depuis `Device.queue` conservent le chemin asynchrone normal avec pump.
 
 ## `GPUDevice.poll()`
 
@@ -203,7 +203,7 @@ Le `DeviceEventPump` accepte des fonctions injectées pour poll, retain et relea
 - fermeture ayant réclamé la map avant une tentative de succès du callback ;
 - retain/release exactement une fois pour la référence du pump ;
 - plusieurs notifications `onUncapturedError`, puis aucune après fermeture.
-- présence ABI JVM des constructeurs low-level à deux arguments et échec immédiat de la Queue legacy.
+- présence ABI JVM des constructeurs low-level publics à deux arguments, visibilité interne des chemins owned à trois arguments et échec immédiat de la Queue legacy.
 
 Les helpers de coroutine couvrent également la conservation de `CancellationException` et la libération d'une resource native produite après annulation.
 
