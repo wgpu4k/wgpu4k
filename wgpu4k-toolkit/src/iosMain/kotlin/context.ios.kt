@@ -2,7 +2,7 @@
 
 package io.ygdrasil.webgpu
 
-import ffi.NativeAddress
+import io.ygdrasil.kffi.NativeAddress
 import kotlinx.cinterop.COpaque
 import kotlinx.cinterop.COpaquePointer
 import kotlinx.cinterop.ExperimentalForeignApi

@@ -1,7 +1,8 @@
 package io.ygdrasil.webgpu.examples.headless
 
-import ffi.globalMemory
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.ygdrasil.kffi.CallbackPolicy
+import io.ygdrasil.kffi.CallbackRegistration
 import io.ygdrasil.wgpu.WGPULogCallback
 import io.ygdrasil.wgpu.WGPULogLevel_Debug
 import io.ygdrasil.wgpu.WGPULogLevel_Error
@@ -13,8 +14,8 @@ import io.ygdrasil.wgpu.wgpuSetLogLevel
 
 private val logger = KotlinLogging.logger {}
 
-val callback = WGPULogCallback.allocate(globalMemory) { level, cMessage, userdata ->
-    val message = cMessage?.data?.toKString(cMessage.length) ?: "empty message"
+private val logCallback = WGPULogCallback { level, cMessage ->
+    val message = cMessage.data?.toKString(cMessage.length) ?: "empty message"
     when (level) {
         WGPULogLevel_Error -> logger.error { message }
         WGPULogLevel_Warn -> logger.warn { message }
@@ -25,10 +26,15 @@ val callback = WGPULogCallback.allocate(globalMemory) { level, cMessage, userdat
     }
 }
 
+private var callbackRegistration: CallbackRegistration<WGPULogCallback>? = null
 
 actual fun initLog() {
     wgpuSetLogLevel(WGPULogLevel_Trace)
-    wgpuSetLogCallback(callback, globalMemory.bufferOfAddress(callback.handler).handler)
+    callbackRegistration?.close()
+    callbackRegistration = wgpuSetLogCallback(
+        policy = CallbackPolicy.REPEATING,
+        callback = logCallback,
+    )
 }
 
 actual fun getSceneParameter(): SceneParameter {
