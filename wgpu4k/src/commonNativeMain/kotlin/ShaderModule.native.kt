@@ -21,12 +21,9 @@ actual class ShaderModule(val handler: WGPUShaderModule, label: String) : GPUSha
         wgpuShaderModuleRelease(handler)
     }
 
-    actual override suspend fun getCompilationInfo(): Result<GPUCompilationInfo> =
-        unsupportedCompilationInfo()
-}
-
-internal fun unsupportedCompilationInfo(): Result<GPUCompilationInfo> = Result.failure(
-    UnsupportedOperationException(
-        "Shader compilation info is not supported by wgpu-native 29.0.0.0"
+    actual override suspend fun getCompilationInfo(): Result<GPUCompilationInfo> = Result.failure(
+        UnsupportedOperationException(
+            "Shader compilation info is not supported by wgpu-native 29.0.0.0"
+        )
     )
-)
+}

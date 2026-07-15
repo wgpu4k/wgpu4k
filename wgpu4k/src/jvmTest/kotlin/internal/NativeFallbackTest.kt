@@ -1,14 +1,20 @@
-@file:OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+@file:OptIn(
+    io.ygdrasil.webgpu.WGPULowLevelApi::class,
+    kotlinx.coroutines.ExperimentalCoroutinesApi::class,
+)
 
 package io.ygdrasil.webgpu.internal
 
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
-import io.ygdrasil.webgpu.unsupportedCompilationInfo
+import io.ygdrasil.kffi.NativeAddress
+import io.ygdrasil.webgpu.ShaderModule
+import io.ygdrasil.wgpu.WGPUShaderModule
 import kotlinx.coroutines.async
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import java.lang.foreign.MemorySegment
 
 class NativeFallbackTest : FreeSpec({
     "compute pipeline fallback reports synchronous success and failure" {
@@ -64,10 +70,16 @@ class NativeFallbackTest : FreeSpec({
     }
 
     "compilation info fallback returns a controlled failure" {
-        val failure = unsupportedCompilationInfo().exceptionOrNull()
-
-        failure shouldBe UnsupportedOperationException(
-            "Shader compilation info is not supported by wgpu-native 29.0.0.0"
+        val shaderModule = ShaderModule(
+            WGPUShaderModule(NativeAddress(MemorySegment.NULL)),
+            "test shader",
         )
+        runTest {
+            val failure = shaderModule.getCompilationInfo().exceptionOrNull()
+
+            failure shouldBe UnsupportedOperationException(
+                "Shader compilation info is not supported by wgpu-native 29.0.0.0"
+            )
+        }
     }
 })

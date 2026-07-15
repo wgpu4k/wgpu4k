@@ -65,17 +65,20 @@ actual class Buffer(val handler: WGPUBuffer, private val device: Device, label: 
     ): Result<Unit> {
         return suspendCancellableCoroutine { continuation ->
             lateinit var operation: NativeCallbackOperation<Unit>
+            lateinit var bufferTicket: BufferLifecycle.Ticket
             val registration = WGPUBufferMapCallback.register(
                 policy = CallbackPolicy.ONCE,
                 callback = WGPUBufferMapCallback { status, message, _ ->
-                    if (status == WGPUMapAsyncStatus_Success) {
-                        operation.succeed(Unit)
-                    } else {
-                        operation.fail(
-                            IllegalStateException(
-                                "mapAsync failed with status: $status and message: ${message.data?.toKString(message.length)}"
+                    bufferTicket.complete {
+                        if (status == WGPUMapAsyncStatus_Success) {
+                            operation.succeed(Unit)
+                        } else {
+                            operation.fail(
+                                IllegalStateException(
+                                    "mapAsync failed with status: $status and message: ${message.data?.toKString(message.length)}"
+                                )
                             )
-                        )
+                        }
                     }
                 },
             )
@@ -87,7 +90,7 @@ actual class Buffer(val handler: WGPUBuffer, private val device: Device, label: 
                     deviceTicket.exchange(null)?.close()
                 },
             )
-            val bufferTicket = lifecycle.registerMap { operation.fail(it) }
+            bufferTicket = lifecycle.registerMap { operation.fail(it) }
                 .getOrElse {
                     operation.fail(it)
                     return@suspendCancellableCoroutine

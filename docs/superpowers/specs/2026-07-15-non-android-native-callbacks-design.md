@@ -105,7 +105,7 @@ Si un callback fournit une nouvelle resource native, mais que la continuation a 
 
 Le pump traite sa terminaison, cesse les polls, puis libère sa référence supplémentaire.
 
-`Buffer.close()` devient également idempotent. Un `BufferLifecycle` arbitre dans un unique état atomique `closed`, la map pending, le nombre de downcalls actifs et `released`. Une opération `mapAsync` propre à ce buffer encore en attente est terminée avec `Result.failure(IllegalStateException("Buffer is closed"))`. Aucun nouveau downcall de map n'est admis après la fermeture, et la libération unique du handle est différée jusqu'au retour du dernier downcall déjà admis. La fermeture du device termine aussi cette opération par l'intermédiaire du ticket enregistré auprès du pump.
+`Buffer.close()` devient également idempotent. Un `BufferLifecycle` arbitre dans un unique état atomique `closed`, la map pending, le nombre de downcalls actifs et `released`. Le callback natif doit lui aussi réclamer atomiquement la map pending via son ticket avant de publier son résultat ; si la fermeture l'a déjà réclamée, le callback devient sans effet. Une opération `mapAsync` propre à ce buffer encore en attente est terminée avec `Result.failure(IllegalStateException("Buffer is closed"))`. Aucun nouveau downcall de map n'est admis après la fermeture, et la libération unique du handle est différée jusqu'au retour du dernier downcall déjà admis. La fermeture du device termine aussi cette opération par l'intermédiaire du ticket enregistré auprès du pump.
 
 ## Modes et stratégie par callback
 
@@ -200,6 +200,7 @@ Le `DeviceEventPump` accepte des fonctions injectées pour poll, retain et relea
 - fermeture d'un buffer pendant `mapAsync` ;
 - fermeture entre l'admission atomique d'une map et son downcall, sans downcall après release ;
 - fermeture pendant un downcall de map, avec release différé et unique ;
+- fermeture ayant réclamé la map avant une tentative de succès du callback ;
 - retain/release exactement une fois pour la référence du pump ;
 - plusieurs notifications `onUncapturedError`, puis aucune après fermeture.
 - présence ABI JVM des constructeurs low-level à deux arguments et échec immédiat de la Queue legacy.

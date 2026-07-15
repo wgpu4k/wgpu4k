@@ -66,6 +66,17 @@ internal class BufferLifecycle(
         }
     }
 
+    private fun complete(pending: PendingMap, block: () -> Unit): Boolean {
+        while (true) {
+            val current = state.load()
+            if (current.closed || current.pendingMap !== pending) return false
+            if (state.compareAndSet(current, current.copy(pendingMap = null))) {
+                block()
+                return true
+            }
+        }
+    }
+
     private fun beginNativeCall(pending: PendingMap): Boolean {
         while (true) {
             val current = state.load()
@@ -121,6 +132,8 @@ internal class BufferLifecycle(
                 owner.endNativeCall()
             }
         }
+
+        internal fun complete(block: () -> Unit): Boolean = owner.complete(pending, block)
 
         override fun close() {
             if (closed.compareAndSet(expectedValue = false, newValue = true)) {

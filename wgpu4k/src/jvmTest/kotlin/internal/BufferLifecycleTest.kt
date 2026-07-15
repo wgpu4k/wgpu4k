@@ -54,6 +54,34 @@ class BufferLifecycleTest : FreeSpec({
         releases.get() shouldBe 1
     }
 
+    "a callback cannot complete after close has atomically claimed the pending map" {
+        val closeClaimedMap = CountDownLatch(1)
+        val allowCloseFailure = CountDownLatch(1)
+        val failures = AtomicInteger(0)
+        val successes = AtomicInteger(0)
+        val releases = AtomicInteger(0)
+        val executor = Executors.newSingleThreadExecutor()
+        val lifecycle = BufferLifecycle(release = { releases.incrementAndGet() })
+        val ticket = lifecycle.registerMap {
+            closeClaimedMap.countDown()
+            allowCloseFailure.await(5, TimeUnit.SECONDS)
+            failures.incrementAndGet()
+        }.getOrThrow()
+        val closeFuture = executor.submit { lifecycle.close() }
+        closeClaimedMap.await(5, TimeUnit.SECONDS) shouldBe true
+
+        ticket.complete { successes.incrementAndGet() } shouldBe false
+        successes.get() shouldBe 0
+        failures.get() shouldBe 0
+
+        allowCloseFailure.countDown()
+        closeFuture.get(5, TimeUnit.SECONDS)
+        executor.shutdown()
+        executor.awaitTermination(5, TimeUnit.SECONDS) shouldBe true
+        failures.get() shouldBe 1
+        releases.get() shouldBe 1
+    }
+
     "only one map can be pending and registration after close fails distinctly" {
         val lifecycle = BufferLifecycle(release = {})
         val ticket = lifecycle.registerMap {}.getOrThrow()
