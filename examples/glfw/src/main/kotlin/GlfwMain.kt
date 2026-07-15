@@ -38,30 +38,34 @@ private val logCallback = WGPULogCallback { level, cMessage ->
 }
 
 fun main() = runBlocking {
-    glfwContextRenderer(width = 640, height = 480, title = "GLFW+WebGPU").use { glfwContext ->
-        wgpuSetLogLevel(WGPULogLevel_Trace)
-        wgpuSetLogCallback(
-            policy = CallbackPolicy.REPEATING,
-            callback = logCallback,
-        ).use {
-            logger.info { "Devices features : ${glfwContext.wgpuContext.device.features}" }
-            logger.info{ "Devices limits : ${glfwContext.wgpuContext.device.limits}" }
-
-            logger.info { "Adapter features : ${glfwContext.wgpuContext.adapter.features}" }
-            logger.info { "Adapter limits : ${glfwContext.wgpuContext.adapter.limits}" }
-
-            val application = createApplication(
-                glfwContext.wgpuContext
+    val glfwContext = glfwContextRenderer(width = 640, height = 480, title = "GLFW+WebGPU")
+    withContextAndRegistration(
+        context = glfwContext,
+        installRegistration = {
+            wgpuSetLogLevel(WGPULogLevel_Trace)
+            wgpuSetLogCallback(
+                policy = CallbackPolicy.REPEATING,
+                callback = logCallback,
             )
+        },
+    ) {
+        logger.info { "Devices features : ${glfwContext.wgpuContext.device.features}" }
+        logger.info{ "Devices limits : ${glfwContext.wgpuContext.device.limits}" }
 
-            addKeyBinding(glfwContext, application)
+        logger.info { "Adapter features : ${glfwContext.wgpuContext.adapter.features}" }
+        logger.info { "Adapter limits : ${glfwContext.wgpuContext.adapter.limits}" }
 
-            glfwShowWindow(glfwContext.windowHandler)
+        val application = createApplication(
+            glfwContext.wgpuContext
+        )
 
-            while (!glfwWindowShouldClose(glfwContext.windowHandler)) {
-                glfwPollEvents()
-                application.renderFrame()
-            }
+        addKeyBinding(glfwContext, application)
+
+        glfwShowWindow(glfwContext.windowHandler)
+
+        while (!glfwWindowShouldClose(glfwContext.windowHandler)) {
+            glfwPollEvents()
+            application.renderFrame()
         }
     }
 }
