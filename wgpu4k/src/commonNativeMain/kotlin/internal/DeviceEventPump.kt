@@ -1,4 +1,7 @@
-@file:OptIn(kotlin.concurrent.atomics.ExperimentalAtomicApi::class)
+@file:OptIn(
+    kotlinx.coroutines.InternalCoroutinesApi::class,
+    kotlin.concurrent.atomics.ExperimentalAtomicApi::class,
+)
 
 package io.ygdrasil.webgpu.internal
 
@@ -10,6 +13,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.handleCoroutineException
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -23,6 +27,7 @@ internal class DeviceEventPump(
     retain: () -> Unit,
     private val release: () -> Unit,
     private val pollDelayMillis: Long = 1L,
+    reportException: ((Throwable) -> Unit)? = null,
 ) : AutoCloseable {
     private data class Pending(
         val needsPolling: Boolean,
@@ -41,6 +46,9 @@ internal class DeviceEventPump(
     private val wakeUp = Channel<Unit>(Channel.CONFLATED)
     private val scopeJob = SupervisorJob()
     private val scope = CoroutineScope(scopeJob + dispatcher)
+    private val reportException: (Throwable) -> Unit = reportException ?: {
+        handleCoroutineException(scope.coroutineContext, it)
+    }
 
     init {
         retain()
@@ -104,10 +112,26 @@ internal class DeviceEventPump(
             callbacks = current.pending.values.map(Pending::onTerminated)
             if (state.compareAndSet(current, current.copy(closed = true, pending = emptyMap()))) break
         }
-        callbacks.forEach { it(cause) }
+        callbacks.forEach { callback -> runSafely { callback(cause) } }
         wakeUp.close()
         scope.cancel()
         releaseIfQuiescent()
+    }
+
+    private fun runSafely(block: () -> Unit) {
+        try {
+            block()
+        } catch (error: Throwable) {
+            reportSafely(error)
+        }
+    }
+
+    private fun reportSafely(error: Throwable) {
+        try {
+            reportException(error)
+        } catch (_: Throwable) {
+            // A reporter is a terminal sink: retrying it would recurse or report twice.
+        }
     }
 
     private fun remove(id: Long) {
@@ -145,7 +169,7 @@ internal class DeviceEventPump(
     private fun releaseIfQuiescent() {
         val current = state.load()
         if (current.closed && current.activeNativeCalls == 0 && scopeJob.isCompleted) {
-            if (released.compareAndSet(expectedValue = false, newValue = true)) release()
+            if (released.compareAndSet(expectedValue = false, newValue = true)) runSafely(release)
         }
     }
 

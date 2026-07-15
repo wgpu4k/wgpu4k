@@ -4,6 +4,8 @@ package io.ygdrasil.webgpu.internal
 
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
@@ -13,6 +15,7 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicReference
 
 class DeviceEventPumpTest : FreeSpec({
     "idle pump does not poll and concurrent tickets share one loop" {
@@ -65,6 +68,105 @@ class DeviceEventPumpTest : FreeSpec({
         }
     }
 
+    "a throwing termination callback does not block remaining callbacks or release" {
+        runTest {
+            var delivered: Throwable? = null
+            var releases = 0
+            var reported: Throwable? = null
+            val pump = DeviceEventPump(
+                dispatcher = StandardTestDispatcher(testScheduler),
+                poll = {},
+                retain = {},
+                release = { releases++ },
+                reportException = { reported = it },
+            )
+            pump.tryRegister(false) { error("callback failed") }
+            pump.tryRegister(false) { delivered = it }
+
+            pump.close()
+            runCurrent()
+
+            delivered?.message shouldBe "Device is closed"
+            releases shouldBe 1
+            reported?.message shouldBe "callback failed"
+        }
+    }
+
+    "a release failure on close is reported once and cannot escape" {
+        runTest {
+            val releases = AtomicInteger(0)
+            val reports = AtomicInteger(0)
+            val reported = AtomicReference<Throwable?>(null)
+            val pump = DeviceEventPump(
+                dispatcher = StandardTestDispatcher(testScheduler),
+                poll = {},
+                retain = {},
+                release = {
+                    releases.incrementAndGet()
+                    error("release failed")
+                },
+                reportException = {
+                    reports.incrementAndGet()
+                    reported.set(it)
+                    error("reporter failed")
+                },
+            )
+
+            pump.close()
+            runCurrent()
+            pump.close()
+            runCurrent()
+
+            releases.get() shouldBe 1
+            reports.get() shouldBe 1
+            reported.get()?.message shouldBe "release failed"
+        }
+    }
+
+    "a release failure after the last downcall is reported once and cannot escape" {
+        runTest {
+            val entered = CountDownLatch(1)
+            val leave = CountDownLatch(1)
+            val releases = AtomicInteger(0)
+            val reports = AtomicInteger(0)
+            val reported = AtomicReference<Throwable?>(null)
+            val executor = Executors.newSingleThreadExecutor()
+            val pump = DeviceEventPump(
+                dispatcher = StandardTestDispatcher(testScheduler),
+                poll = {},
+                retain = {},
+                release = {
+                    releases.incrementAndGet()
+                    error("release failed after downcall")
+                },
+                reportException = {
+                    reports.incrementAndGet()
+                    reported.set(it)
+                },
+            )
+            val ticket = pump.tryRegister(false) {}!!
+            val future = executor.submit<Boolean> {
+                ticket.runNativeCall {
+                    entered.countDown()
+                    leave.await(5, TimeUnit.SECONDS)
+                }
+            }
+            entered.await(5, TimeUnit.SECONDS) shouldBe true
+
+            pump.close()
+            runCurrent()
+            releases.get() shouldBe 0
+            leave.countDown()
+
+            future.get(5, TimeUnit.SECONDS) shouldBe true
+            executor.shutdown()
+            executor.awaitTermination(5, TimeUnit.SECONDS) shouldBe true
+            releases.get() shouldBe 1
+            reports.get() shouldBe 1
+            reported.get()?.message shouldBe "release failed after downcall"
+        }
+    }
+
     "a poll failure terminates pending operations instead of hanging" {
         runTest {
             var failure: Throwable? = null
@@ -106,6 +208,57 @@ class DeviceEventPumpTest : FreeSpec({
 
             pump.close()
             runCurrent()
+        }
+    }
+
+    "resource task cancellation propagates and disposes a late value exactly once" {
+        runTest {
+            val entered = CountDownLatch(1)
+            val leave = CountDownLatch(1)
+            val disposed = CountDownLatch(1)
+            val disposals = AtomicInteger(0)
+            val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+            val pump = DeviceEventPump(
+                dispatcher = dispatcher,
+                poll = {},
+                retain = {},
+                release = {},
+            )
+            try {
+                val task = async {
+                    pump.runResourceTask(
+                        create = {
+                            entered.countDown()
+                            leave.await(5, TimeUnit.SECONDS)
+                            "pipeline"
+                        },
+                        dispose = {
+                            disposals.incrementAndGet()
+                            disposed.countDown()
+                        },
+                    )
+                }
+                runCurrent()
+                entered.await(5, TimeUnit.SECONDS) shouldBe true
+
+                task.cancel(CancellationException("resource task cancelled"))
+                task.join()
+                val cancellation = try {
+                    task.await()
+                    null
+                } catch (error: CancellationException) {
+                    error
+                }
+                cancellation?.message shouldBe "resource task cancelled"
+
+                leave.countDown()
+                disposed.await(5, TimeUnit.SECONDS) shouldBe true
+                disposals.get() shouldBe 1
+            } finally {
+                leave.countDown()
+                pump.close()
+                dispatcher.close()
+            }
         }
     }
 
