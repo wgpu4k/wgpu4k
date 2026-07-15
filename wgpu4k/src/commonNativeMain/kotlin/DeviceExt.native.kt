@@ -1,9 +1,7 @@
 package io.ygdrasil.webgpu
 
-import io.ygdrasil.wgpu.wgpuDevicePoll
-
 actual suspend fun GPUDevice.poll(): Result<Unit> {
-    wgpuDevicePoll((this as Device).handler, true, null)
-
-    return Result.success(Unit)
+    val device = this as Device
+    if (device.isClosed) return Result.failure(IllegalStateException("Device is closed"))
+    return device.queue.onSubmittedWorkDone()
 }

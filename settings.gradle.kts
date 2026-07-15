@@ -19,6 +19,7 @@ plugins {
 dependencyResolutionManagement {
 	repositories {
 		mavenLocal()
+		maven("https://central.sonatype.com/repository/maven-snapshots/")
 		//wgpu4k snapshot repository
 		maven("https://gitlab.com/api/v4/projects/25805863/packages/maven")
 		google()

@@ -1,7 +1,6 @@
 package io.ygdrasil.webgpu
 
-import ffi.ArrayHolder
-import ffi.memoryScope
+import io.ygdrasil.kffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPURenderPassEncoder
 import io.ygdrasil.wgpu.WGPUStringView
@@ -82,7 +81,7 @@ actual class RenderPassEncoder(val handler: WGPURenderPassEncoder, label: String
             index,
             (bindGroup as BindGroup).handler,
             dynamicOffsetsData.size.toULong(),
-            scope.map(dynamicOffsetsData)
+            scope.map(dynamicOffsetsData)?.handler
         )
     }
 
@@ -111,9 +110,7 @@ actual class RenderPassEncoder(val handler: WGPURenderPassEncoder, label: String
         wgpuRenderPassEncoderExecuteBundles(
             handler,
             bundles.size.toULong(),
-            scope.bufferOfAddresses(bundles.map { (it as RenderBundle).handler.handler })
-                .handler
-                .let { ArrayHolder(it) }
+            scope.bufferOfAddresses(bundles.map { (it as RenderBundle).handler.handler }).handler,
         )
     }
 

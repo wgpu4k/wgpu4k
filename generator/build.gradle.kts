@@ -10,6 +10,7 @@ repositories {
 	google()
 	mavenCentral()
 	mavenLocal()
+	maven("https://central.sonatype.com/repository/maven-snapshots/")
 	//wgpu4k snapshot & preview repository
 	maven("https://gitlab.com/api/v4/projects/25805863/packages/maven")
 }

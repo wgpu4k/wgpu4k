@@ -1,6 +1,5 @@
 package io.ygdrasil.webgpu
 
-import ffi.LibraryLoader
 import io.kotest.core.spec.style.FreeSpec
 import io.ygdrasil.webgpu.internal.jvm.Os
 import io.ygdrasil.webgpu.internal.jvm.Platform
@@ -13,7 +12,9 @@ class WGPUTest : FreeSpec({
             // Given nothing
 
             // When
-            LibraryLoader.load()
+            val loaderClass = Class.forName("ffi.LibraryLoader")
+            val loader = loaderClass.getField("INSTANCE").get(null)
+            loaderClass.getMethod("load").invoke(loader)
 
             // Then should not crash
             wgpuSetLogLevel(1u)

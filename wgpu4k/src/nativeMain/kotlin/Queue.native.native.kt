@@ -2,8 +2,8 @@
 
 package io.ygdrasil.webgpu
 
-import ffi.MemoryAllocator
-import ffi.Pointer
+import io.ygdrasil.kffi.MemoryAllocator
+import io.ygdrasil.kffi.Pointer
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.wgpuQueueWriteBuffer
 import io.ygdrasil.wgpu.wgpuQueueWriteTexture

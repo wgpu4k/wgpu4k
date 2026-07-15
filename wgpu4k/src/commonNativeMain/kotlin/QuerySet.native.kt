@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu
 
-import ffi.memoryScope
+import io.ygdrasil.kffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPUQuerySet
 import io.ygdrasil.wgpu.WGPUStringView

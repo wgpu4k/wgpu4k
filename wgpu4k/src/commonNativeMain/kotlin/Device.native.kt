@@ -1,31 +1,36 @@
+@file:OptIn(kotlin.concurrent.atomics.ExperimentalAtomicApi::class)
+
 package io.ygdrasil.webgpu
 
-import ffi.memoryScope
+import io.ygdrasil.kffi.CallbackPolicy
+import io.ygdrasil.kffi.memoryScope
+import io.ygdrasil.webgpu.internal.DeviceEventPump
+import io.ygdrasil.webgpu.internal.NativeCallbackOperation
+import io.ygdrasil.webgpu.internal.runResourceTask
 import io.ygdrasil.webgpu.mapper.errorOf
 import io.ygdrasil.webgpu.mapper.map
+import io.ygdrasil.wgpu.WGPUAdapterInfo
+import io.ygdrasil.wgpu.WGPUCallbackMode_AllowSpontaneous
 import io.ygdrasil.wgpu.WGPUCommandEncoderDescriptor
-import io.ygdrasil.wgpu.WGPUCreateComputePipelineAsyncCallback
-import io.ygdrasil.wgpu.WGPUCreateComputePipelineAsyncCallbackInfo
-import io.ygdrasil.wgpu.WGPUCreatePipelineAsyncStatus_Success
-import io.ygdrasil.wgpu.WGPUCreateRenderPipelineAsyncCallback
-import io.ygdrasil.wgpu.WGPUCreateRenderPipelineAsyncCallbackInfo
 import io.ygdrasil.wgpu.WGPUDevice
 import io.ygdrasil.wgpu.WGPULimits
 import io.ygdrasil.wgpu.WGPUPopErrorScopeCallback
 import io.ygdrasil.wgpu.WGPUPopErrorScopeCallbackInfo
 import io.ygdrasil.wgpu.WGPUPopErrorScopeStatus_Success
+import io.ygdrasil.wgpu.WGPUStatus_Success
 import io.ygdrasil.wgpu.WGPUStringView
+import io.ygdrasil.wgpu.allocate
+import io.ygdrasil.wgpu.register
+import io.ygdrasil.wgpu.toBoolean
 import io.ygdrasil.wgpu.wgpuDeviceCreateBindGroup
 import io.ygdrasil.wgpu.wgpuDeviceCreateBindGroupLayout
 import io.ygdrasil.wgpu.wgpuDeviceCreateBuffer
 import io.ygdrasil.wgpu.wgpuDeviceCreateCommandEncoder
 import io.ygdrasil.wgpu.wgpuDeviceCreateComputePipeline
-import io.ygdrasil.wgpu.wgpuDeviceCreateComputePipelineAsync
 import io.ygdrasil.wgpu.wgpuDeviceCreatePipelineLayout
 import io.ygdrasil.wgpu.wgpuDeviceCreateQuerySet
 import io.ygdrasil.wgpu.wgpuDeviceCreateRenderBundleEncoder
 import io.ygdrasil.wgpu.wgpuDeviceCreateRenderPipeline
-import io.ygdrasil.wgpu.wgpuDeviceCreateRenderPipelineAsync
 import io.ygdrasil.wgpu.wgpuDeviceCreateSampler
 import io.ygdrasil.wgpu.wgpuDeviceCreateShaderModule
 import io.ygdrasil.wgpu.wgpuDeviceCreateTexture
@@ -33,14 +38,35 @@ import io.ygdrasil.wgpu.wgpuDeviceGetAdapterInfo
 import io.ygdrasil.wgpu.wgpuDeviceGetLimits
 import io.ygdrasil.wgpu.wgpuDeviceGetQueue
 import io.ygdrasil.wgpu.wgpuDeviceHasFeature
+import io.ygdrasil.wgpu.wgpuDeviceAddRef
+import io.ygdrasil.wgpu.wgpuDevicePoll
 import io.ygdrasil.wgpu.wgpuDevicePopErrorScope
 import io.ygdrasil.wgpu.wgpuDevicePushErrorScope
 import io.ygdrasil.wgpu.wgpuDeviceRelease
 import io.ygdrasil.wgpu.wgpuDeviceSetLabel
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.concurrent.atomics.AtomicBoolean
 
-actual class Device(val handler: WGPUDevice, label: String) : GPUDevice {
+actual class Device(
+    val handler: WGPUDevice,
+    label: String,
+    private val uncapturedErrorRegistration: AutoCloseable? = null,
+) : GPUDevice {
+
+    private val closed = AtomicBoolean(false)
+
+    internal val isClosed: Boolean
+        get() = closed.load()
+
+    internal val eventPump = DeviceEventPump(
+        poll = {
+            check(wgpuDevicePoll(handler, 0u, null) == WGPUStatus_Success) {
+                "wgpuDevicePoll failed"
+            }
+        },
+        retain = { wgpuDeviceAddRef(handler) },
+        release = { wgpuDeviceRelease(handler) },
+    )
 
     actual override var label: String = label
         set(value) = memoryScope { scope ->
@@ -50,12 +76,18 @@ actual class Device(val handler: WGPUDevice, label: String) : GPUDevice {
             field = value
         }
 
-    actual override val queue: GPUQueue by lazy { Queue(wgpuDeviceGetQueue(handler) ?: error("fail to get device queue"), "") }
+    actual override val queue: GPUQueue by lazy {
+        Queue(
+            handler = wgpuDeviceGetQueue(handler) ?: error("fail to get device queue"),
+            device = this,
+            label = "",
+        )
+    }
 
     actual override val features: Set<GPUFeatureName> by lazy {
         GPUFeatureName.entries
             .mapNotNull { feature ->
-                feature.takeIf { wgpuDeviceHasFeature(handler, feature.value) }
+                feature.takeIf { wgpuDeviceHasFeature(handler, feature.value).toBoolean() }
             }
             .toSet()
     }
@@ -68,7 +100,13 @@ actual class Device(val handler: WGPUDevice, label: String) : GPUDevice {
         }
 
     actual override val adapterInfo: GPUAdapterInfo
-        get() = map(wgpuDeviceGetAdapterInfo(handler))
+        get() = memoryScope { scope ->
+            val adapterInfo = WGPUAdapterInfo.allocate(scope)
+            check(wgpuDeviceGetAdapterInfo(handler, adapterInfo) == WGPUStatus_Success) {
+                "wgpuDeviceGetAdapterInfo failed"
+            }
+            map(adapterInfo)
+        }
 
     actual override fun createCommandEncoder(descriptor: GPUCommandEncoderDescriptor?): GPUCommandEncoder = memoryScope { scope ->
         WGPUCommandEncoderDescriptor.allocate(scope)
@@ -94,50 +132,19 @@ actual class Device(val handler: WGPUDevice, label: String) : GPUDevice {
             ?.let { RenderPipeline(it, descriptor.label)} ?: error("fail to create render pipeline")
     }
 
-    actual override suspend fun createComputePipelineAsync(descriptor: GPUComputePipelineDescriptor): Result<GPUComputePipeline> = suspendCoroutine { continuation ->
-        memoryScope { scope ->
+    actual override suspend fun createComputePipelineAsync(
+        descriptor: GPUComputePipelineDescriptor,
+    ): Result<GPUComputePipeline> = eventPump.runResourceTask(
+        create = { createComputePipeline(descriptor) },
+        dispose = GPUComputePipeline::close,
+    )
 
-            val callback = WGPUCreateComputePipelineAsyncCallback.allocate(scope) { status, pipeline, message, userdata1, userdata2 ->
-                continuation.resume(when(status) {
-                    WGPUCreatePipelineAsyncStatus_Success -> when (pipeline) {
-                        null -> Result.failure(IllegalStateException("ComputePipeline is null"))
-                        else -> Result.success(ComputePipeline(pipeline, descriptor.label))
-                    }
-                    else -> Result.failure(IllegalStateException("request ComputePipeline fail with status: $status and message: ${message?.data?.toKString(message.length)}"))
-                })
-            }
-
-            val callbackInfo = WGPUCreateComputePipelineAsyncCallbackInfo.allocate(scope).apply {
-                this.callback = callback
-                this.userdata2 = scope.bufferOfAddress(callback.handler).handler
-            }
-
-            wgpuDeviceCreateComputePipelineAsync(handler, scope.map(descriptor), callbackInfo)
-        }
-    }
-
-    actual override suspend fun createRenderPipelineAsync(descriptor: GPURenderPipelineDescriptor): Result<GPURenderPipeline> = suspendCoroutine { continuation ->
-        memoryScope { scope ->
-
-            val callback =
-                WGPUCreateRenderPipelineAsyncCallback.allocate(scope) { status, pipeline, message, userdata1, userdata2 ->
-                continuation.resume(when(status) {
-                    WGPUCreatePipelineAsyncStatus_Success -> when (pipeline) {
-                        null -> Result.failure(IllegalStateException("RenderPipeline is null"))
-                        else -> Result.success(RenderPipeline(pipeline, descriptor.label))
-                    }
-                    else -> Result.failure(IllegalStateException("request RenderPipeline fail with status: $status and message: ${message?.data?.toKString(message.length)}"))
-                })
-            }
-
-            val callbackInfo = WGPUCreateRenderPipelineAsyncCallbackInfo.allocate(scope).apply {
-                this.callback = callback
-                this.userdata2 = scope.bufferOfAddress(callback.handler).handler
-            }
-
-            wgpuDeviceCreateRenderPipelineAsync(handler, scope.map(descriptor), callbackInfo)
-        }
-    }
+    actual override suspend fun createRenderPipelineAsync(
+        descriptor: GPURenderPipelineDescriptor,
+    ): Result<GPURenderPipeline> = eventPump.runResourceTask(
+        create = { createRenderPipeline(descriptor) },
+        dispose = GPURenderPipeline::close,
+    )
 
     actual override fun createBuffer(descriptor: GPUBufferDescriptor): GPUBuffer = memoryScope { scope ->
         scope.map(descriptor)
@@ -192,29 +199,48 @@ actual class Device(val handler: WGPUDevice, label: String) : GPUDevice {
         wgpuDevicePushErrorScope(handler, filter.value)
     }
 
-    actual override suspend fun popErrorScope(): Result<GPUError?>  = suspendCoroutine { continuation ->
-        memoryScope { scope ->
-
-            val callback = WGPUPopErrorScopeCallback.allocate(scope) { status, error, message, userdata1, userdata2 ->
-                val message = message?.data?.toKString(message.length)
-                continuation.resume(when(status) {
-                        WGPUPopErrorScopeStatus_Success -> when (error) {
-                            else -> Result.success(errorOf(error, message))
-                        }
-                        else -> Result.failure(IllegalStateException("request GPUError fail with status: $status and message: $message"))
-                    })
-                }
-
-            val callbackInfo = WGPUPopErrorScopeCallbackInfo.allocate(scope).apply {
-                this.callback = callback
-                this.userdata2 = scope.bufferOfAddress(callback.handler).handler
+    actual override suspend fun popErrorScope(): Result<GPUError?> =
+        suspendCancellableCoroutine { continuation ->
+            lateinit var operation: NativeCallbackOperation<GPUError?>
+            val registration = WGPUPopErrorScopeCallback.register(
+                policy = CallbackPolicy.ONCE,
+                callback = WGPUPopErrorScopeCallback { status, type, message, _ ->
+                    val text = message.data?.toKString(message.length)
+                    if (status == WGPUPopErrorScopeStatus_Success) {
+                        operation.succeed(errorOf(type, text))
+                    } else {
+                        operation.fail(
+                            IllegalStateException(
+                                "popErrorScope failed with status: $status and message: $text"
+                            )
+                        )
+                    }
+                },
+            )
+            operation = NativeCallbackOperation(continuation, registration::close)
+            val ticket = eventPump.tryRegister(needsPolling = false) { operation.fail(it) }
+            if (ticket == null) {
+                operation.fail(IllegalStateException("Device is closed"))
+                return@suspendCancellableCoroutine
             }
-
-            wgpuDevicePopErrorScope(handler, callbackInfo)
+            operation.attach(ticket)
+            val started = ticket.runNativeCall {
+                memoryScope { scope ->
+                    val callbackInfo = WGPUPopErrorScopeCallbackInfo.allocate(
+                        scope,
+                        WGPUCallbackMode_AllowSpontaneous,
+                        registration,
+                    )
+                    wgpuDevicePopErrorScope(handler, callbackInfo)
+                }
+            }
+            if (!started) operation.fail(IllegalStateException("Device is closed"))
         }
-    }
 
     actual override fun close() {
+        if (!closed.compareAndSet(expectedValue = false, newValue = true)) return
+        uncapturedErrorRegistration?.close()
+        eventPump.close()
         wgpuDeviceRelease(handler)
     }
 }

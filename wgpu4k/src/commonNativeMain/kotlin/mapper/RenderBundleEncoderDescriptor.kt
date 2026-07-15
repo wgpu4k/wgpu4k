@@ -1,9 +1,9 @@
 package io.ygdrasil.webgpu.mapper
 
-import ffi.ArrayHolder
-import ffi.MemoryAllocator
+import io.ygdrasil.kffi.MemoryAllocator
 import io.ygdrasil.webgpu.GPURenderBundleEncoderDescriptor
 import io.ygdrasil.wgpu.WGPURenderBundleEncoderDescriptor
+import io.ygdrasil.wgpu.toUInt
 
 fun MemoryAllocator.map(input: GPURenderBundleEncoderDescriptor): WGPURenderBundleEncoderDescriptor =
     WGPURenderBundleEncoderDescriptor.allocate(this).also { output ->
@@ -14,11 +14,11 @@ fun MemoryAllocator.map(input: GPURenderBundleEncoderDescriptor): WGPURenderBund
 
             output.colorFormats = allocateBuffer(Int.SIZE_BYTES.toULong() * output.colorFormatCount)
                 .also { it.writeUInts(input.colorFormats.map { it.value }.toUIntArray()) }
-                .let { ArrayHolder(it.handler) }
+                .handler
         }
 
         input.depthStencilFormat?.let { output.depthStencilFormat = it.value }
         output.sampleCount = input.sampleCount
-        output.depthReadOnly = input.depthReadOnly
-        output.stencilReadOnly = input.stencilReadOnly
+        output.depthReadOnly = input.depthReadOnly.toUInt()
+        output.stencilReadOnly = input.stencilReadOnly.toUInt()
     }

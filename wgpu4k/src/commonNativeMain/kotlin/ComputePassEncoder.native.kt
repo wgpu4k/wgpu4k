@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu
 
-import ffi.memoryScope
+import io.ygdrasil.kffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPUComputePassEncoder
 import io.ygdrasil.wgpu.WGPUStringView
@@ -73,7 +73,13 @@ actual class ComputePassEncoder(val handler: WGPUComputePassEncoder, label: Stri
         bindGroup: GPUBindGroup?,
         dynamicOffsetsData: List<UInt>
     ) = memoryScope { scope ->
-        wgpuComputePassEncoderSetBindGroup(handler, index, (bindGroup as BindGroup?)?.handler, dynamicOffsetsData.size.toULong(), scope.map(dynamicOffsetsData))
+        wgpuComputePassEncoderSetBindGroup(
+            handler,
+            index,
+            (bindGroup as BindGroup?)?.handler,
+            dynamicOffsetsData.size.toULong(),
+            scope.map(dynamicOffsetsData)?.handler,
+        )
     }
 
 }

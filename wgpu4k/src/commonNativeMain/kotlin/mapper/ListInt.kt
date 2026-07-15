@@ -1,7 +1,7 @@
 package io.ygdrasil.webgpu.mapper
 
-import ffi.ArrayHolder
-import ffi.MemoryAllocator
+import io.ygdrasil.kffi.ArrayHolder
+import io.ygdrasil.kffi.MemoryAllocator
 
 internal fun MemoryAllocator.map(input: List<UInt>): ArrayHolder<UInt>? {
     if (input.isEmpty()) return null

@@ -1,8 +1,8 @@
 package io.ygdrasil.webgpu
 
-import ffi.MemoryAllocator
-import ffi.NativeAddress
-import ffi.memoryScope
+import io.ygdrasil.kffi.MemoryAllocator
+import io.ygdrasil.kffi.NativeAddress
+import io.ygdrasil.kffi.memoryScope
 import io.ygdrasil.wgpu.WGPUExtent3D
 import io.ygdrasil.wgpu.WGPUOrigin3D
 import io.ygdrasil.wgpu.WGPUTexelCopyBufferLayout
