@@ -25,46 +25,45 @@ import org.lwjgl.glfw.GLFW.glfwWindowShouldClose
 
 private val logger = KotlinLogging.logger {}
 
-private val callbackRegistration = wgpuSetLogCallback(
-    policy = CallbackPolicy.REPEATING,
-    callback = WGPULogCallback { level, cMessage ->
-        val message = cMessage.data?.toKString(cMessage.length) ?: "empty message"
-        when (level) {
-            WGPULogLevel_Error -> logger.error { message }
-            WGPULogLevel_Warn -> logger.warn { message }
-            WGPULogLevel_Info -> logger.info { message }
-            WGPULogLevel_Debug -> logger.debug { message }
-            WGPULogLevel_Trace -> logger.trace { message }
-            else -> logger.warn { "Unknown log level $level with message $message" }
-        }
-    },
-)
+private val logCallback = WGPULogCallback { level, cMessage ->
+    val message = cMessage.data?.toKString(cMessage.length) ?: "empty message"
+    when (level) {
+        WGPULogLevel_Error -> logger.error { message }
+        WGPULogLevel_Warn -> logger.warn { message }
+        WGPULogLevel_Info -> logger.info { message }
+        WGPULogLevel_Debug -> logger.debug { message }
+        WGPULogLevel_Trace -> logger.trace { message }
+        else -> logger.warn { "Unknown log level $level with message $message" }
+    }
+}
 
 fun main() = runBlocking {
-    wgpuSetLogLevel(WGPULogLevel_Trace)
+    glfwContextRenderer(width = 640, height = 480, title = "GLFW+WebGPU").use { glfwContext ->
+        wgpuSetLogLevel(WGPULogLevel_Trace)
+        wgpuSetLogCallback(
+            policy = CallbackPolicy.REPEATING,
+            callback = logCallback,
+        ).use {
+            logger.info { "Devices features : ${glfwContext.wgpuContext.device.features}" }
+            logger.info{ "Devices limits : ${glfwContext.wgpuContext.device.limits}" }
 
-    val glfwContext = glfwContextRenderer(width = 640, height = 480, title = "GLFW+WebGPU")
+            logger.info { "Adapter features : ${glfwContext.wgpuContext.adapter.features}" }
+            logger.info { "Adapter limits : ${glfwContext.wgpuContext.adapter.limits}" }
 
-    logger.info { "Devices features : ${glfwContext.wgpuContext.device.features}" }
-    logger.info{ "Devices limits : ${glfwContext.wgpuContext.device.limits}" }
+            val application = createApplication(
+                glfwContext.wgpuContext
+            )
 
-    logger.info { "Adapter features : ${glfwContext.wgpuContext.adapter.features}" }
-    logger.info { "Adapter limits : ${glfwContext.wgpuContext.adapter.limits}" }
+            addKeyBinding(glfwContext, application)
 
-    val application = createApplication(
-        glfwContext.wgpuContext
-    )
+            glfwShowWindow(glfwContext.windowHandler)
 
-    addKeyBinding(glfwContext, application)
-
-    glfwShowWindow(glfwContext.windowHandler)
-
-    while (!glfwWindowShouldClose(glfwContext.windowHandler)) {
-        glfwPollEvents()
-        application.renderFrame()
+            while (!glfwWindowShouldClose(glfwContext.windowHandler)) {
+                glfwPollEvents()
+                application.renderFrame()
+            }
+        }
     }
-
-    glfwContext.close()
 }
 
 fun addKeyBinding(glfwContext: GLFWContext, application: Application) {

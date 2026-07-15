@@ -26,15 +26,16 @@ private val logCallback = WGPULogCallback { level, cMessage ->
     }
 }
 
-private var callbackRegistration: CallbackRegistration<WGPULogCallback>? = null
+private val callbackRegistration = OwnedRegistrationSlot<CallbackRegistration<WGPULogCallback>>()
 
 actual fun initLog() {
-    wgpuSetLogLevel(WGPULogLevel_Trace)
-    callbackRegistration?.close()
-    callbackRegistration = wgpuSetLogCallback(
-        policy = CallbackPolicy.REPEATING,
-        callback = logCallback,
-    )
+    callbackRegistration.replace {
+        wgpuSetLogLevel(WGPULogLevel_Trace)
+        wgpuSetLogCallback(
+            policy = CallbackPolicy.REPEATING,
+            callback = logCallback,
+        )
+    }
 }
 
 actual fun getSceneParameter(): SceneParameter {

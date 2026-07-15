@@ -6,6 +6,8 @@ plugins {
 dependencies {
 	implementation(projects.wgpu4kScenes)
 	implementation(libs.wgpu4k.native)
+	testImplementation(libs.bundles.kotest)
+	testImplementation(libs.kotest.runner.junit5)
 }
 
 application {
@@ -28,4 +30,8 @@ java {
 	toolchain {
 		languageVersion.set(JavaLanguageVersion.of(25))
 	}
+}
+
+tasks.test {
+	useJUnitPlatform()
 }
