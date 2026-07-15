@@ -7,8 +7,8 @@ import io.ygdrasil.webgpu.GPUDeviceDescriptor
 import io.ygdrasil.webgpu.GPUQueueDescriptor
 import io.ygdrasil.webgpu.GPUSupportedLimits
 import io.ygdrasil.webgpu.GPUUncapturedErrorCallback
+import io.ygdrasil.webgpu.internal.OwnedRepeatingCallback
 import io.ygdrasil.wgpu.WGPUDeviceDescriptor
-import io.ygdrasil.wgpu.WGPUErrorType
 import io.ygdrasil.wgpu.WGPULimits
 import io.ygdrasil.wgpu.WGPUQueueDescriptor
 import io.ygdrasil.wgpu.WGPUUncapturedErrorCallback
@@ -18,30 +18,30 @@ import io.ygdrasil.wgpu.register
 
 internal data class MappedDeviceDescriptor(
     val value: WGPUDeviceDescriptor,
-    val uncapturedErrorRegistration: CallbackRegistration<WGPUUncapturedErrorCallback>?,
+    val uncapturedErrorRegistration: RegisteredUncapturedErrorCallback?,
 )
 
-internal fun dispatchUncapturedError(
-    userCallback: GPUUncapturedErrorCallback,
-    type: WGPUErrorType,
-    message: String?,
-) {
-    errorOf(type, message)?.let(userCallback::onUncapturedError)
-}
+internal class RegisteredUncapturedErrorCallback(
+    val registration: CallbackRegistration<WGPUUncapturedErrorCallback>,
+    private val owner: OwnedRepeatingCallback<io.ygdrasil.webgpu.GPUError>,
+) : AutoCloseable by owner
 
 internal fun registerUncapturedError(
     userCallback: GPUUncapturedErrorCallback,
-): CallbackRegistration<WGPUUncapturedErrorCallback> =
-    WGPUUncapturedErrorCallback.register(
+): RegisteredUncapturedErrorCallback {
+    val owner = OwnedRepeatingCallback(userCallback::onUncapturedError)
+    val registration = WGPUUncapturedErrorCallback.register(
         policy = CallbackPolicy.REPEATING,
         callback = WGPUUncapturedErrorCallback { _, type, message, _ ->
-            dispatchUncapturedError(
-                userCallback,
+            errorOf(
                 type,
                 message.data?.toKString(message.length),
-            )
+            )?.let(owner::dispatch)
         },
     )
+    check(owner.attach(registration))
+    return RegisteredUncapturedErrorCallback(registration, owner)
+}
 
 internal fun MemoryAllocator.mapDeviceDescriptor(input: GPUDeviceDescriptor): MappedDeviceDescriptor {
     val output = WGPUDeviceDescriptor.allocate(this)
@@ -54,7 +54,7 @@ internal fun MemoryAllocator.mapDeviceDescriptor(input: GPUDeviceDescriptor): Ma
 
     val registration = input.onUncapturedError?.let(::registerUncapturedError)
     registration?.let {
-        output.uncapturedErrorCallbackInfo = WGPUUncapturedErrorCallbackInfo.allocate(this, it)
+        output.uncapturedErrorCallbackInfo = WGPUUncapturedErrorCallbackInfo.allocate(this, it.registration)
     }
     return MappedDeviceDescriptor(output, registration)
 }

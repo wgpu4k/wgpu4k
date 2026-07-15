@@ -22,9 +22,15 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 
 actual class Queue(
     val handler: WGPUQueue,
-    private val device: Device,
+    private val device: Device?,
     label: String,
 ) : GPUQueue {
+
+    /**
+     * Keeps the legacy low-level constructor source- and binary-compatible.
+     * Operations that need device event processing fail in a controlled way.
+     */
+    constructor(handler: WGPUQueue, label: String) : this(handler, null, label)
 
     actual override var label: String = label
         set(value) = memoryScope { scope ->
@@ -56,8 +62,11 @@ actual class Queue(
         }
     }
 
-    actual override suspend fun onSubmittedWorkDone(): Result<Unit> =
-        suspendCancellableCoroutine { continuation ->
+    actual override suspend fun onSubmittedWorkDone(): Result<Unit> {
+        val device = device ?: return Result.failure(
+            IllegalStateException("onSubmittedWorkDone requires a Queue created with its Device")
+        )
+        return suspendCancellableCoroutine { continuation ->
             lateinit var operation: NativeCallbackOperation<Unit>
             val registration = WGPUQueueWorkDoneCallback.register(
                 policy = CallbackPolicy.ONCE,
@@ -92,6 +101,7 @@ actual class Queue(
             }
             if (!started) operation.fail(IllegalStateException("Device is closed"))
         }
+    }
 
     actual override fun writeBuffer(
         buffer: GPUBuffer,

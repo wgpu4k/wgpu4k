@@ -6,7 +6,8 @@ import io.ygdrasil.kffi.CallbackPolicy
 import io.ygdrasil.kffi.memoryScope
 import io.ygdrasil.webgpu.internal.DeviceEventPump
 import io.ygdrasil.webgpu.internal.NativeCallbackOperation
-import io.ygdrasil.webgpu.internal.runResourceTask
+import io.ygdrasil.webgpu.internal.runComputePipelineFallback
+import io.ygdrasil.webgpu.internal.runRenderPipelineFallback
 import io.ygdrasil.webgpu.mapper.errorOf
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPUAdapterInfo
@@ -52,6 +53,8 @@ actual class Device(
     label: String,
     private val uncapturedErrorRegistration: AutoCloseable? = null,
 ) : GPUDevice {
+
+    constructor(handler: WGPUDevice, label: String) : this(handler, label, null)
 
     private val closed = AtomicBoolean(false)
 
@@ -134,14 +137,14 @@ actual class Device(
 
     actual override suspend fun createComputePipelineAsync(
         descriptor: GPUComputePipelineDescriptor,
-    ): Result<GPUComputePipeline> = eventPump.runResourceTask(
+    ): Result<GPUComputePipeline> = eventPump.runComputePipelineFallback(
         create = { createComputePipeline(descriptor) },
         dispose = GPUComputePipeline::close,
     )
 
     actual override suspend fun createRenderPipelineAsync(
         descriptor: GPURenderPipelineDescriptor,
-    ): Result<GPURenderPipeline> = eventPump.runResourceTask(
+    ): Result<GPURenderPipeline> = eventPump.runRenderPipelineFallback(
         create = { createRenderPipeline(descriptor) },
         dispose = GPURenderPipeline::close,
     )

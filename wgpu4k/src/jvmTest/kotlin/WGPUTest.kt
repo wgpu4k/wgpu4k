@@ -12,6 +12,8 @@ class WGPUTest : FreeSpec({
             // Given nothing
 
             // When
+            // The generated v29 loader is not part of kffi's public API, so keep this
+            // compatibility smoke test reflective and isolated from production code.
             val loaderClass = Class.forName("ffi.LibraryLoader")
             val loader = loaderClass.getField("INSTANCE").get(null)
             loaderClass.getMethod("load").invoke(loader)

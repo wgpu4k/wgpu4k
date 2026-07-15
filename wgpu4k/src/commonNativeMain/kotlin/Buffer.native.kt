@@ -4,6 +4,8 @@ package io.ygdrasil.webgpu
 
 import io.ygdrasil.kffi.CallbackPolicy
 import io.ygdrasil.kffi.memoryScope
+import io.ygdrasil.webgpu.internal.BufferLifecycle
+import io.ygdrasil.webgpu.internal.DeviceEventPump
 import io.ygdrasil.webgpu.internal.NativeCallbackOperation
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.webgpu.mapper.toArrayBuffer
@@ -24,13 +26,11 @@ import io.ygdrasil.wgpu.wgpuBufferRelease
 import io.ygdrasil.wgpu.wgpuBufferSetLabel
 import io.ygdrasil.wgpu.wgpuBufferUnmap
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.concurrent.atomics.AtomicBoolean
 import kotlin.concurrent.atomics.AtomicReference
 
 actual class Buffer(val handler: WGPUBuffer, private val device: Device, label: String) : GPUBuffer {
 
-    private val closed = AtomicBoolean(false)
-    private val pendingMap = AtomicReference<NativeCallbackOperation<Unit>?>(null)
+    private val lifecycle = BufferLifecycle { wgpuBufferRelease(handler) }
 
     actual override var label: String = label
         set(value) = memoryScope { scope ->
@@ -63,8 +63,6 @@ actual class Buffer(val handler: WGPUBuffer, private val device: Device, label: 
         offset: GPUSize64,
         size: GPUSize64?,
     ): Result<Unit> {
-        if (closed.load()) return Result.failure(IllegalStateException("Buffer is closed"))
-        val mappedSize = size ?: (this.size - offset)
         return suspendCancellableCoroutine { continuation ->
             lateinit var operation: NativeCallbackOperation<Unit>
             val registration = WGPUBufferMapCallback.register(
@@ -81,26 +79,20 @@ actual class Buffer(val handler: WGPUBuffer, private val device: Device, label: 
                     }
                 },
             )
-            val operationHolder = AtomicReference<NativeCallbackOperation<Unit>?>(null)
+            val deviceTicket = AtomicReference<DeviceEventPump.Ticket?>(null)
             operation = NativeCallbackOperation(
                 continuation = continuation,
                 closeRegistration = registration::close,
                 onFinished = {
-                    operationHolder.load()?.let { pendingMap.compareAndSet(it, null) }
+                    deviceTicket.exchange(null)?.close()
                 },
             )
-            operationHolder.store(operation)
-
-            if (closed.load()) {
-                operation.fail(IllegalStateException("Buffer is closed"))
-                return@suspendCancellableCoroutine
-            }
-            if (!pendingMap.compareAndSet(expectedValue = null, newValue = operation)) {
-                operation.fail(IllegalStateException("Buffer map is already pending"))
-                return@suspendCancellableCoroutine
-            }
-            if (operation.isFinished) {
-                pendingMap.compareAndSet(operation, null)
+            val bufferTicket = lifecycle.registerMap { operation.fail(it) }
+                .getOrElse {
+                    operation.fail(it)
+                    return@suspendCancellableCoroutine
+                }
+            if (!operation.attach(bufferTicket)) {
                 return@suspendCancellableCoroutine
             }
 
@@ -109,24 +101,30 @@ actual class Buffer(val handler: WGPUBuffer, private val device: Device, label: 
                 operation.fail(IllegalStateException("Device is closed"))
                 return@suspendCancellableCoroutine
             }
-            operation.attach(ticket)
-            val started = ticket.runNativeCall {
-                memoryScope { scope ->
-                    val callbackInfo = WGPUBufferMapCallbackInfo.allocate(
-                        scope,
-                        WGPUCallbackMode_AllowProcessEvents,
-                        registration,
-                    )
-                    wgpuBufferMapAsync(handler, mode.value, offset, mappedSize, callbackInfo)
-                }
+            deviceTicket.store(ticket)
+            if (operation.isFinished) {
+                deviceTicket.exchange(null)?.close()
+                return@suspendCancellableCoroutine
             }
-            if (!started) operation.fail(IllegalStateException("Device is closed"))
+            val bufferStarted = bufferTicket.runNativeCall {
+                val deviceStarted = ticket.runNativeCall {
+                    val mappedSize = size ?: (wgpuBufferGetSize(handler) - offset)
+                    memoryScope { scope ->
+                        val callbackInfo = WGPUBufferMapCallbackInfo.allocate(
+                            scope,
+                            WGPUCallbackMode_AllowProcessEvents,
+                            registration,
+                        )
+                        wgpuBufferMapAsync(handler, mode.value, offset, mappedSize, callbackInfo)
+                    }
+                }
+                if (!deviceStarted) operation.fail(IllegalStateException("Device is closed"))
+            }
+            if (!bufferStarted) operation.fail(IllegalStateException("Buffer is closed"))
         }
     }
 
     actual override fun close() {
-        if (!closed.compareAndSet(expectedValue = false, newValue = true)) return
-        pendingMap.load()?.fail(IllegalStateException("Buffer is closed"))
-        wgpuBufferRelease(handler)
+        lifecycle.close()
     }
 }

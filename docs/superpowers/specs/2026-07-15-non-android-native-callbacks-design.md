@@ -105,7 +105,7 @@ Si un callback fournit une nouvelle resource native, mais que la continuation a 
 
 Le pump traite sa terminaison, cesse les polls, puis libère sa référence supplémentaire.
 
-`Buffer.close()` devient également idempotent. Une opération `mapAsync` propre à ce buffer encore en attente est terminée avec `Result.failure(IllegalStateException("Buffer is closed"))` avant la libération du handle. La fermeture du device termine aussi cette opération par l'intermédiaire du ticket enregistré auprès du pump.
+`Buffer.close()` devient également idempotent. Un `BufferLifecycle` arbitre dans un unique état atomique `closed`, la map pending, le nombre de downcalls actifs et `released`. Une opération `mapAsync` propre à ce buffer encore en attente est terminée avec `Result.failure(IllegalStateException("Buffer is closed"))`. Aucun nouveau downcall de map n'est admis après la fermeture, et la libération unique du handle est différée jusqu'au retour du dernier downcall déjà admis. La fermeture du device termine aussi cette opération par l'intermédiaire du ticket enregistré auprès du pump.
 
 ## Modes et stratégie par callback
 
@@ -127,6 +127,8 @@ Le pump traite sa terminaison, cesse les polls, puis libère sa référence supp
 Le callback d'erreur non capturée ne doit plus utiliser une allocation globale non libérable. Le mapping du `GPUDeviceDescriptor` produit à la fois le descriptor natif temporaire et une registration `REPEATING` optionnelle.
 
 Lors d'un `requestDevice` réussi, l'ownership de cette registration est transféré au nouveau `Device`. En cas d'erreur, d'annulation ou de device natif reçu trop tard, la registration est fermée par l'opération de requête. `Device.close()` la ferme après un succès.
+
+Un owner interne filtre les notifications répétées après sa fermeture et ferme la registration exactement une fois, y compris si fermeture et attachement se croisent.
 
 Le callback utilisateur est protégé : une exception qu'il déclenche est rapportée par le mécanisme de gestion d'exceptions de callback de kffi et ne remonte jamais dans le code natif.
 
@@ -158,6 +160,10 @@ Result.failure(
 ```
 
 Cette erreur contrôlée remplace un appel natif qui provoquerait un panic.
+
+## Compatibilité des constructeurs low-level
+
+Les constructeurs publics historiques `Device(WGPUDevice, String)` et `Queue(WGPUQueue, String)` restent disponibles. La Queue legacy ne possède pas de `DeviceEventPump`; son `onSubmittedWorkDone()` retourne donc immédiatement un `Result.failure(IllegalStateException(...))`, sans registration native ni suspension. Les Queues créées depuis `Device.queue` conservent le chemin asynchrone normal avec pump.
 
 ## `GPUDevice.poll()`
 
@@ -192,8 +198,11 @@ Le `DeviceEventPump` accepte des fonctions injectées pour poll, retain et relea
 - fermeture du device pendant l'attente ;
 - refus d'une nouvelle opération après fermeture ;
 - fermeture d'un buffer pendant `mapAsync` ;
+- fermeture entre l'admission atomique d'une map et son downcall, sans downcall après release ;
+- fermeture pendant un downcall de map, avec release différé et unique ;
 - retain/release exactement une fois pour la référence du pump ;
 - plusieurs notifications `onUncapturedError`, puis aucune après fermeture.
+- présence ABI JVM des constructeurs low-level à deux arguments et échec immédiat de la Queue legacy.
 
 Les helpers de coroutine couvrent également la conservation de `CancellationException` et la libération d'une resource native produite après annulation.
 

@@ -10,6 +10,7 @@ import io.ygdrasil.kffi.CallbackRegistration
 import io.ygdrasil.kffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.webgpu.mapper.mapDeviceDescriptor
+import io.ygdrasil.webgpu.mapper.RegisteredUncapturedErrorCallback
 import io.ygdrasil.wgpu.WGPUAdapter
 import io.ygdrasil.wgpu.WGPUAdapterInfo
 import io.ygdrasil.wgpu.WGPUCallbackMode_AllowSpontaneous
@@ -17,7 +18,6 @@ import io.ygdrasil.wgpu.WGPULimits
 import io.ygdrasil.wgpu.WGPURequestDeviceCallback
 import io.ygdrasil.wgpu.WGPURequestDeviceCallbackInfo
 import io.ygdrasil.wgpu.WGPURequestDeviceStatus_Success
-import io.ygdrasil.wgpu.WGPUUncapturedErrorCallback
 import io.ygdrasil.wgpu.allocate
 import io.ygdrasil.wgpu.register
 import io.ygdrasil.wgpu.toBoolean
@@ -57,7 +57,7 @@ actual class Adapter(val handler: WGPUAdapter) : GPUAdapter {
         descriptor: GPUDeviceDescriptor?,
     ): Result<GPUDevice> = suspendCancellableCoroutine { continuation ->
         val callbackClaimed = AtomicBoolean(false)
-        var uncapturedErrorRegistration: CallbackRegistration<WGPUUncapturedErrorCallback>? = null
+        var uncapturedErrorRegistration: RegisteredUncapturedErrorCallback? = null
         lateinit var requestRegistration: CallbackRegistration<WGPURequestDeviceCallback>
 
         requestRegistration = WGPURequestDeviceCallback.register(
