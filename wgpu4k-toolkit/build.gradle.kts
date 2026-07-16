@@ -2,8 +2,8 @@ import com.android.build.api.dsl.androidLibrary
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.android.library)
+    kmp
+    id("kmp.android")
     publish
 }
 

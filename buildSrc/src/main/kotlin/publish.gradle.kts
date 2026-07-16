@@ -1,94 +1,45 @@
-import publish.PublishingType
-import publish.centralPortalPublish
-
 plugins {
-    `maven-publish`
-    signing
+    id("com.vanniktech.maven.publish")
     id("org.jetbrains.dokka")
 }
 
-
 val libraryDescription = "Webgpu binding to kotlin multiplatform"
 
-val signingKey = System.getenv("GPG_SECRET_KEY")
-val signingPassword = System.getenv("GPG_PASSPHRASE")
+val isPublishing = project.findProperty("signingInMemoryKey")?.toString()?.isNotBlank() == true ||
+    project.findProperty("signing.keyId")?.toString()?.isNotBlank() == true
 
-if (!isSnapshot()) {
-    signing {
-        useInMemoryPgpKeys(signingKey, signingPassword)
-        sign(publishing.publications)
+mavenPublishing {
+    if (isPublishing) {
+        publishToMavenCentral()
+        signAllPublications()
     }
-}
 
-project.centralPortalPublish {
-    username = System.getenv("MAVENCENTRAL_USERNAME")
-    password = System.getenv("MAVENCENTRAL_PASSWORD")
-    publishingType = PublishingType.USER_MANAGED
-    url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
-}
+    coordinates(group.toString(), project.name, version.toString())
 
-val javadocJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("javadoc")
-    from(tasks.findByName("dokkaGenerate"))
-}
+    pom {
+        name.set(project.name)
+        description.set(libraryDescription)
+        url.set("https://github.com/wgpu4k/wgpu4k")
+        inceptionYear.set("2025")
 
-publishing {
-    publications {
-        withType<MavenPublication> {
-            artifact(javadocJar)
-            pom {
-                name.set(project.name)
-                description.set(libraryDescription)
-                url.set("https://github.com/wgpu4k/wgpu4k")
-                inceptionYear.set("2025")
-                licenses {
-                    license {
-                        name.set("MIT")
-                        url.set("https://opensource.org/license/MIT")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("amommers")
-                        name.set("Alexandre Mommers")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:https://github.com/wgpu4k/wgpu4k.git")
-                    developerConnection.set("scm:git:https://github.com/wgpu4k/wgpu4k.git")
-                    url.set("https://github.com/wgpu4k/wgpu4k")
-                }
+        licenses {
+            license {
+                name.set("MIT")
+                url.set("https://opensource.org/license/MIT")
             }
         }
-    }
 
-
-    repositories {
-        maven {
-            if (isSnapshot()) {
-                logger.info("publishing is configure as snapshot")
-                name = "Sonatype"
-                url = uri("https://central.sonatype.com/repository/maven-snapshots/")
-                credentials {
-                    username = System.getenv("SONATYPE_LOGIN")
-                    password = System.getenv("SONATYPE_PASSWORD")
-                }
-                authentication {
-                    create<HttpHeaderAuthentication>("header")
-                }
-            } else {
-                name = "Local"
-                logger.info("publishing is configure as release")
-                url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
-                logger.info("publishing path is ${url.path}")
+        developers {
+            developer {
+                id.set("amommers")
+                name.set("Alexandre Mommers")
             }
         }
-    }
-}
 
-if (!isSnapshot()) {
-    val signingTasks = tasks.withType<Sign>()
-    tasks.withType<AbstractPublishToMaven>().configureEach {
-        dependsOn(signingTasks)
+        scm {
+            connection.set("scm:git:https://github.com/wgpu4k/wgpu4k.git")
+            developerConnection.set("scm:git:https://github.com/wgpu4k/wgpu4k.git")
+            url.set("https://github.com/wgpu4k/wgpu4k")
+        }
     }
 }

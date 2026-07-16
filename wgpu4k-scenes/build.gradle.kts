@@ -3,9 +3,9 @@ import org.gradle.api.tasks.testing.Test
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.android.library)
-    kotlin("plugin.serialization") version "2.2.20"
+    kmp
+    id("kmp.android")
+    alias(libs.plugins.kotlin.serialization)
     id("publish")
 }
 

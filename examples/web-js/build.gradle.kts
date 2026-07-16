@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
 
 plugins {
-    id(libs.plugins.kotlin.multiplatform.get().pluginId)
+    kmp
 }
 
 val commonResourcesFile = getCommonProject()
