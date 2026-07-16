@@ -52,10 +52,8 @@ import kotlin.concurrent.atomics.AtomicBoolean
 actual class Device internal constructor(
     val handler: WGPUDevice,
     label: String,
-    private val uncapturedErrorRegistration: AutoCloseable? = null,
+    private val uncapturedErrorRegistration: AutoCloseable?,
 ) : GPUDevice {
-
-    constructor(handler: WGPUDevice, label: String) : this(handler, label, null)
 
     private val closed = AtomicBoolean(false)
 
