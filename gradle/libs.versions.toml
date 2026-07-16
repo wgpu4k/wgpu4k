@@ -15,7 +15,7 @@ glfw-native = "0.0.2"
 
 # WebGPU
 wgpu4k-native = "v29.0.0-SNAPSHOT"
-webgpu-ktypes = "0.0.9"
+webgpu-ktypes = "0.0.10-SNAPSHOT"
 
 # Logging
 kotlin-logging = "7.0.13"

@@ -63,9 +63,8 @@ actual class Device internal constructor(
 
     internal val eventPump = DeviceEventPump(
         poll = {
-            check(wgpuDevicePoll(handler, 0u, null) == WGPUStatus_Success) {
-                "wgpuDevicePoll failed"
-            }
+            // The return value reports whether the queue is empty, not whether polling succeeded.
+            wgpuDevicePoll(handler, 0u, null)
         },
         retain = { wgpuDeviceAddRef(handler) },
         release = { wgpuDeviceRelease(handler) },

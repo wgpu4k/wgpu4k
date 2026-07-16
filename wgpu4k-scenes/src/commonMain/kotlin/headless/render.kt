@@ -86,7 +86,7 @@ suspend fun captureScene(
         logger.info { "Copying texture to staging buffer" }
         context.device.queue.submit(listOf(commandEncoder.finish()))
         logger.info { "Mapping ..." }
-        outputStagingBuffer.mapAsync(GPUMapMode.Read)
+        outputStagingBuffer.mapAsync(GPUMapMode.Read).getOrThrow()
         val textureData = outputStagingBuffer
             .getMappedRange()
             .toIntArray()
