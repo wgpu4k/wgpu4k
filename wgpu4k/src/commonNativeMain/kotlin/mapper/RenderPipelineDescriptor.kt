@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu.mapper
 
-import ffi.MemoryAllocator
+import io.ygdrasil.kffi.MemoryAllocator
 import io.ygdrasil.webgpu.GPUBlendComponent
 import io.ygdrasil.webgpu.GPUBlendState
 import io.ygdrasil.webgpu.GPUColorTargetState
@@ -77,7 +77,7 @@ private fun MemoryAllocator.map(input: GPUFragmentState): WGPUFragmentState =
                         map(colorTargetState, value)
 
                     })
-                fragmentState.targets = colorTargets
+                fragmentState.targets = WGPUColorTargetState(colorTargets.handler)
             }
         }
 
@@ -106,7 +106,7 @@ fun map(input: GPUStencilFaceState, output: WGPUStencilFaceState) {
 private fun map(input: GPUMultisampleState, output: WGPUMultisampleState) {
     output.count = input.count
     output.mask = input.mask
-    output.alphaToCoverageEnabled = input.alphaToCoverageEnabled
+    output.alphaToCoverageEnabled = input.alphaToCoverageEnabled.toUInt()
 }
 
 private fun map(input: GPUPrimitiveState, output: WGPUPrimitiveState) {
@@ -123,11 +123,12 @@ private fun MemoryAllocator.map(input: GPUVertexState, output: WGPUVertexState) 
     // TODO learn how to map this
     output.constantCount = 0uL
     if (input.buffers.isNotEmpty()) {
-        output.buffers = WGPUVertexBufferLayout.allocateArray(this, input.buffers.size.toUInt(), { index, value ->
+        val buffers = WGPUVertexBufferLayout.allocateArray(this, input.buffers.size.toUInt(), { index, value ->
             val vertexBufferLayout = input.buffers[index.toInt()]
             map(vertexBufferLayout, value)
 
         })
+        output.buffers = WGPUVertexBufferLayout(buffers.handler)
         output.bufferCount = input.buffers.size.toULong()
     }
 }
@@ -147,12 +148,12 @@ private fun MemoryAllocator.map(
 ) {
     output.arrayStride = input.arrayStride
     if (input.attributes.isNotEmpty()) {
-        output.attributes = WGPUVertexAttribute.allocateArray(this, input.attributes.size.toUInt(), { index, value ->
+        val attributes = WGPUVertexAttribute.allocateArray(this, input.attributes.size.toUInt(), { index, value ->
             val vertexAttribute = input.attributes[index.toInt()]
             map(vertexAttribute, value)
         })
+        output.attributes = WGPUVertexAttribute(attributes.handler)
         output.attributeCount = input.attributes.size.toULong()
     }
     output.stepMode = input.stepMode.value
 }
-

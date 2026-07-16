@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu.mapper
 
-import ffi.MemoryAllocator
+import io.ygdrasil.kffi.MemoryAllocator
 import io.ygdrasil.webgpu.GPUTextureViewDescriptor
 import io.ygdrasil.wgpu.WGPUTextureViewDescriptor
 

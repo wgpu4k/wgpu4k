@@ -1,7 +1,7 @@
 package io.ygdrasil.webgpu
 
 import android.view.SurfaceHolder
-import ffi.NativeAddress
+import io.ygdrasil.kffi.NativeAddress
 import io.ygdrasil.nativeHelper.Helper
 
 suspend fun androidContextRenderer(

@@ -4,7 +4,7 @@ import com.sun.jna.Pointer
 import com.sun.jna.platform.win32.Kernel32
 import darwin.CAMetalLayer
 import darwin.NSWindow
-import ffi.NativeAddress
+import io.ygdrasil.kffi.NativeAddress
 import io.ygdrasil.webgpu.WGPU.Companion.createInstance
 import io.ygdrasil.webgpu.internal.Os
 import io.ygdrasil.webgpu.internal.Platform

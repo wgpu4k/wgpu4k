@@ -1,16 +1,14 @@
 package io.ygdrasil.webgpu
 
-import ffi.ArrayHolder
-import ffi.MemoryAllocator
-import ffi.MemoryBuffer
-import ffi.memoryScope
+import io.ygdrasil.kffi.MemoryAllocator
+import io.ygdrasil.kffi.MemoryBuffer
+import io.ygdrasil.kffi.NativeAddress
+import io.ygdrasil.kffi.memoryScope
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.ygdrasil.wgpu.WGPUCompositeAlphaMode
 import io.ygdrasil.wgpu.WGPUSurface
 import io.ygdrasil.wgpu.WGPUSurfaceCapabilities
 import io.ygdrasil.wgpu.WGPUSurfaceConfiguration
 import io.ygdrasil.wgpu.WGPUSurfaceTexture
-import io.ygdrasil.wgpu.WGPUTextureFormat
 import io.ygdrasil.wgpu.wgpuSurfaceConfigure
 import io.ygdrasil.wgpu.wgpuSurfaceGetCapabilities
 import io.ygdrasil.wgpu.wgpuSurfaceGetCurrentTexture
@@ -72,10 +70,10 @@ class NativeSurface(
     }
 
     private fun WGPUSurfaceCapabilities.toTextureFormats(
-        formats: ArrayHolder<WGPUTextureFormat>
+        formats: NativeAddress,
     ) = UIntArray(formatCount.toInt()) { 0u }
         .also {
-            MemoryBuffer(formats.handler, formatCount * Int.SIZE_BYTES.toULong())
+            MemoryBuffer(formats, formatCount * Int.SIZE_BYTES.toULong())
                 .readUInts(it)
         }
         .map {
@@ -86,10 +84,10 @@ class NativeSurface(
         .toSet()
 
     private fun WGPUSurfaceCapabilities.toAlphaMode(
-        alphaModes: ArrayHolder<WGPUCompositeAlphaMode>
-    ) = UIntArray(formatCount.toInt()) { 0u }
+        alphaModes: NativeAddress,
+    ) = UIntArray(alphaModeCount.toInt()) { 0u }
         .also {
-            MemoryBuffer(alphaModes.handler, formatCount * Int.SIZE_BYTES.toULong())
+            MemoryBuffer(alphaModes, alphaModeCount * Int.SIZE_BYTES.toULong())
                 .readUInts(it)
         }
         .map {

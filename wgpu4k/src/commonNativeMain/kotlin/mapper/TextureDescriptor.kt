@@ -1,7 +1,6 @@
 package io.ygdrasil.webgpu.mapper
 
-import ffi.ArrayHolder
-import ffi.MemoryAllocator
+import io.ygdrasil.kffi.MemoryAllocator
 import io.ygdrasil.webgpu.GPUTextureDescriptor
 import io.ygdrasil.wgpu.WGPUTextureDescriptor
 
@@ -17,7 +16,6 @@ internal fun MemoryAllocator.map(input: GPUTextureDescriptor) = WGPUTextureDescr
         output.viewFormatCount = input.viewFormats.size.toULong()
         output.viewFormats = allocateBuffer(output.viewFormatCount * Int.SIZE_BYTES.toULong())
             .also { it.writeUInts(input.viewFormats.map { it.value }.toUIntArray()) }
-            .let { ArrayHolder(it.handler) }
+            .handler
     }
 }
-

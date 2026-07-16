@@ -1,26 +1,86 @@
 package io.ygdrasil.webgpu.mapper
 
-import ffi.ArrayHolder
-import ffi.MemoryAllocator
-import ffi.globalMemory
+import io.ygdrasil.kffi.CallbackPolicy
+import io.ygdrasil.kffi.CallbackRegistration
+import io.ygdrasil.kffi.MemoryAllocator
+import io.ygdrasil.kffi.memoryScope
 import io.ygdrasil.webgpu.GPUDeviceDescriptor
 import io.ygdrasil.webgpu.GPUQueueDescriptor
 import io.ygdrasil.webgpu.GPUSupportedLimits
+import io.ygdrasil.webgpu.GPUUncapturedErrorCallback
+import io.ygdrasil.webgpu.internal.OwnedRepeatingCallback
 import io.ygdrasil.wgpu.WGPUDeviceDescriptor
+import io.ygdrasil.wgpu.WGPUErrorType
 import io.ygdrasil.wgpu.WGPULimits
 import io.ygdrasil.wgpu.WGPUQueueDescriptor
+import io.ygdrasil.wgpu.WGPUStringView
 import io.ygdrasil.wgpu.WGPUUncapturedErrorCallback
+import io.ygdrasil.wgpu.WGPUUncapturedErrorCallbackInfo
+import io.ygdrasil.wgpu.allocate
+import io.ygdrasil.wgpu.register
 
-internal fun MemoryAllocator.map(input: GPUDeviceDescriptor): WGPUDeviceDescriptor =
-    WGPUDeviceDescriptor.allocate(this).also { output ->
-        map(input.label, output.label)
+internal data class MappedDeviceDescriptor(
+    val value: WGPUDeviceDescriptor,
+    val uncapturedErrorRegistration: RegisteredUncapturedErrorCallback?,
+)
 
-        mapRequiredFeatures(input, output)
-        input.requiredLimits?.let { output.requiredLimits = mapRequiredLimits(it) }
-
-        map(input.defaultQueue, output.defaultQueue)
-        mapUncapturedError(input, output)
+internal class UncapturedErrorDispatch(
+    userCallback: GPUUncapturedErrorCallback,
+) : AutoCloseable {
+    private val owner = OwnedRepeatingCallback(userCallback::onUncapturedError)
+    private val callback = WGPUUncapturedErrorCallback { _, type, message, _ ->
+        owner.dispatchWhileActive { deliver ->
+            errorOf(type, message.data?.toKString(message.length))?.let(deliver)
+        }
     }
+
+    internal fun register(): CallbackRegistration<WGPUUncapturedErrorCallback> =
+        WGPUUncapturedErrorCallback.register(
+            policy = CallbackPolicy.REPEATING,
+            callback = callback,
+        ).also { check(owner.attach(it)) }
+
+    internal fun dispatch(type: WGPUErrorType, message: String) = memoryScope { scope ->
+        val nativeMessage = WGPUStringView.allocate(scope).also { scope.map(message, it) }
+        callback.invoke(null, type, nativeMessage, null)
+    }
+
+    internal fun closeWhenQuiescent(onQuiescent: () -> Unit) = owner.closeWhenQuiescent(onQuiescent)
+
+    override fun close() = owner.close()
+}
+
+internal class RegisteredUncapturedErrorCallback(
+    val registration: CallbackRegistration<WGPUUncapturedErrorCallback>,
+    private val dispatcher: UncapturedErrorDispatch,
+) : AutoCloseable by dispatcher {
+    internal fun dispatch(type: WGPUErrorType, message: String) = dispatcher.dispatch(type, message)
+
+    internal fun closeWhenQuiescent(onQuiescent: () -> Unit) = dispatcher.closeWhenQuiescent(onQuiescent)
+}
+
+internal fun registerUncapturedError(
+    userCallback: GPUUncapturedErrorCallback,
+): RegisteredUncapturedErrorCallback {
+    val dispatcher = UncapturedErrorDispatch(userCallback)
+    return RegisteredUncapturedErrorCallback(dispatcher.register(), dispatcher)
+}
+
+internal fun MemoryAllocator.mapDeviceDescriptor(input: GPUDeviceDescriptor): MappedDeviceDescriptor {
+    val output = WGPUDeviceDescriptor.allocate(this)
+    map(input.label, output.label)
+
+    mapRequiredFeatures(input, output)
+    input.requiredLimits?.let { output.requiredLimits = mapRequiredLimits(it) }
+
+    map(input.defaultQueue, output.defaultQueue)
+
+    val registration = input.onUncapturedError?.let(::registerUncapturedError)
+    registration?.let {
+        output.uncapturedErrorCallbackInfo = WGPUUncapturedErrorCallbackInfo.allocate(this, it.registration)
+    }
+    return MappedDeviceDescriptor(output, registration)
+}
 
 private fun MemoryAllocator.mapRequiredLimits(input: GPUSupportedLimits) =  WGPULimits.allocate(this).also { output ->
     output.maxTextureDimension1D = input.maxTextureDimension1D
@@ -65,23 +125,7 @@ private fun MemoryAllocator.mapRequiredFeatures(
         output.requiredFeatureCount = input.requiredFeatures.size.toULong()
         output.requiredFeatures = allocateBuffer(output.requiredFeatureCount * Int.SIZE_BYTES.toULong())
             .also { it.writeUInts(input.requiredFeatures.map { it.value }.toUIntArray()) }
-            .let { ArrayHolder(it.handler) }
-    }
-}
-
-private fun mapUncapturedError(input: GPUDeviceDescriptor, output: WGPUDeviceDescriptor) {
-    input.onUncapturedError?.let { callback ->
-        output.uncapturedErrorCallbackInfo.callback = WGPUUncapturedErrorCallback
-            .allocate(globalMemory) { device, type, message, userdata1, userdata2 ->
-                val message = message?.data?.toKString(message.length)
-                errorOf(type, message)?.let { error ->
-                    callback.onUncapturedError(error)
-                }
-            }.also { callbackHolder ->
-                output.uncapturedErrorCallbackInfo.userdata2 = globalMemory
-                    .bufferOfAddress(callbackHolder.handler)
-                    .handler
-            }
+            .handler
     }
 }
 

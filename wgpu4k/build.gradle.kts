@@ -112,6 +112,7 @@ kotlin {
 
         jvmTest {
             dependencies {
+                implementation(libs.coroutines.test)
                 implementation(libs.kotest.runner.junit5)
                 implementation(libs.kotlin.reflect)
             }

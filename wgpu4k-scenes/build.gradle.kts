@@ -1,4 +1,5 @@
 import com.android.build.api.dsl.androidLibrary
+import org.gradle.api.tasks.testing.Test
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -56,6 +57,7 @@ kotlin {
 
         commonMain {
             dependencies {
+                implementation(libs.kotlinx.serialization.core)
                 implementation(libs.kotlinx.serialization.json)
                 api(projects.wgpu4kToolkit)
                 api(libs.coroutines)
@@ -63,9 +65,21 @@ kotlin {
             }
         }
 
+        commonTest {
+            dependencies {
+                implementation(libs.bundles.kotest)
+            }
+        }
+
         jvmMain {
             dependencies {
                 implementation(libs.wgpu4k.native)
+            }
+        }
+
+        jvmTest {
+            dependencies {
+                implementation(libs.kotest.runner.junit5)
             }
         }
 
@@ -96,4 +110,8 @@ java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(25))
     }
+}
+
+tasks.named<Test>("jvmTest") {
+    useJUnitPlatform()
 }

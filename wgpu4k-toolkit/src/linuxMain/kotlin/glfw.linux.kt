@@ -3,7 +3,7 @@
 package io.ygdrasil.webgpu
 
 import cnames.structs.GLFWwindow
-import ffi.NativeAddress
+import io.ygdrasil.kffi.NativeAddress
 import glfw.glfwGetX11Display
 import glfw.glfwGetX11Window
 import kotlinx.cinterop.COpaquePointer

@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu.mapper
 
-import ffi.NativeAddress
+import io.ygdrasil.kffi.NativeAddress
 import io.ygdrasil.webgpu.ArrayBuffer
 import io.ygdrasil.webgpu.GPUSize64
 

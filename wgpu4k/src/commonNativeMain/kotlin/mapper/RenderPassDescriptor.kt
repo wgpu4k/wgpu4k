@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu.mapper
 
-import ffi.MemoryAllocator
+import io.ygdrasil.kffi.MemoryAllocator
 import io.ygdrasil.webgpu.GPURenderPassColorAttachment
 import io.ygdrasil.webgpu.GPURenderPassDepthStencilAttachment
 import io.ygdrasil.webgpu.GPURenderPassDescriptor
@@ -8,6 +8,7 @@ import io.ygdrasil.webgpu.TextureView
 import io.ygdrasil.wgpu.WGPURenderPassColorAttachment
 import io.ygdrasil.wgpu.WGPURenderPassDepthStencilAttachment
 import io.ygdrasil.wgpu.WGPURenderPassDescriptor
+import io.ygdrasil.wgpu.toUInt
 
 internal fun MemoryAllocator.map(input: GPURenderPassDescriptor): WGPURenderPassDescriptor =
     WGPURenderPassDescriptor.allocate(this).also { output ->
@@ -15,12 +16,13 @@ internal fun MemoryAllocator.map(input: GPURenderPassDescriptor): WGPURenderPass
 
         if (input.colorAttachments.isNotEmpty()) {
             output.colorAttachmentCount = input.colorAttachments.size.toULong()
-            output.colorAttachments = WGPURenderPassColorAttachment.allocateArray(
+            val colorAttachments = WGPURenderPassColorAttachment.allocateArray(
                 this,
                 output.colorAttachmentCount.toUInt()
             ) { index, value ->
                 map(input.colorAttachments[index.toInt()], value)
             }
+            output.colorAttachments = WGPURenderPassColorAttachment(colorAttachments.handler)
         }
 
         input.depthStencilAttachment?.let { output.depthStencilAttachment = map(it) }
@@ -49,9 +51,9 @@ internal fun MemoryAllocator.map(input: GPURenderPassDepthStencilAttachment): WG
 
         input.depthLoadOp?.let { output.depthLoadOp = it.value }
         input.depthStoreOp?.let { output.depthStoreOp = it.value }
-        output.depthReadOnly = input.depthReadOnly
+        output.depthReadOnly = input.depthReadOnly.toUInt()
         output.stencilClearValue = input.stencilClearValue
         input.stencilLoadOp?.let { output.stencilLoadOp = it.value }
         input.stencilStoreOp?.let { output.stencilStoreOp = it.value }
-        output.stencilReadOnly = input.stencilReadOnly
+        output.stencilReadOnly = input.stencilReadOnly.toUInt()
     }

@@ -1,7 +1,6 @@
 package io.ygdrasil.webgpu.mapper
 
-import ffi.ArrayHolder
-import ffi.MemoryAllocator
+import io.ygdrasil.kffi.MemoryAllocator
 import io.ygdrasil.webgpu.BindGroupLayout
 import io.ygdrasil.webgpu.GPUPipelineLayoutDescriptor
 import io.ygdrasil.wgpu.WGPUPipelineLayoutDescriptor
@@ -14,7 +13,6 @@ internal fun MemoryAllocator.map(input: GPUPipelineLayoutDescriptor): WGPUPipeli
             output.bindGroupLayouts = input.bindGroupLayouts
                 .map { (it as BindGroupLayout).handler.handler }
                 .let { bufferOfAddresses(it) }
-                .let { ArrayHolder(it.handler) }
+                .handler
         }
     }
-

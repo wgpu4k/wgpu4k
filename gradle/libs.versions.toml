@@ -14,8 +14,8 @@ android-native-helper = "0.0.2"
 glfw-native = "0.0.2"
 
 # WebGPU
-wgpu4k-native = "v27.0.4"
-webgpu-ktypes = "0.0.9"
+wgpu4k-native = "v29.0.0-SNAPSHOT"
+webgpu-ktypes = "0.0.10-SNAPSHOT"
 
 # Logging
 kotlin-logging = "7.0.13"
@@ -33,7 +33,9 @@ kotlinx-browser = { module = "org.jetbrains.kotlinx:kotlinx-browser", version.re
 jna = { module = "net.java.dev.jna:jna", version.ref = "jna" }
 jnaPlatform = { module = "net.java.dev.jna:jna-platform", version.ref = "jna" }
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 korlibs-image = { module = "com.soywiz:korlibs-image", version.ref = "korge" }
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization-json" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 ktor-server-netty-jvm = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
 ktor-server-core-jvm = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }

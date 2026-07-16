@@ -1,14 +1,14 @@
 package io.ygdrasil.webgpu.mapper
 
-import ffi.MemoryAllocator
+import io.ygdrasil.kffi.MemoryAllocator
 import io.ygdrasil.webgpu.GPUComputePipelineDescriptor
 import io.ygdrasil.webgpu.GPUPipelineConstantValue
 import io.ygdrasil.webgpu.GPUProgrammableStage
 import io.ygdrasil.webgpu.PipelineLayout
 import io.ygdrasil.webgpu.ShaderModule
 import io.ygdrasil.wgpu.WGPUComputePipelineDescriptor
+import io.ygdrasil.wgpu.WGPUComputeState
 import io.ygdrasil.wgpu.WGPUConstantEntry
-import io.ygdrasil.wgpu.WGPUProgrammableStageDescriptor
 
 fun MemoryAllocator.map(input: GPUComputePipelineDescriptor): WGPUComputePipelineDescriptor =
     WGPUComputePipelineDescriptor.allocate(this).also { output ->
@@ -17,15 +17,16 @@ fun MemoryAllocator.map(input: GPUComputePipelineDescriptor): WGPUComputePipelin
         map(input.compute, output.compute)
     }
 
-fun MemoryAllocator.map(input: GPUProgrammableStage, output: WGPUProgrammableStageDescriptor) {
+fun MemoryAllocator.map(input: GPUProgrammableStage, output: WGPUComputeState) {
     output.module = (input.module as ShaderModule).handler
     input.entryPoint?.let { map(it, output.entryPoint) }
     if (input.constants.isNotEmpty()) {
         output.constantCount = input.constants.size.toULong()
         val entries = input.constants.entries.toList()
-        output.constants = WGPUConstantEntry.allocateArray(this, input.constants.size.toUInt()) { index, entry ->
+        val constants = WGPUConstantEntry.allocateArray(this, input.constants.size.toUInt()) { index, entry ->
             map(entries[index.toInt()], entry)
         }
+        output.constants = WGPUConstantEntry(constants.handler)
     }
 }
 

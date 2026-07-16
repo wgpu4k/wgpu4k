@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu.mapper
 
-import ffi.MemoryAllocator
+import io.ygdrasil.kffi.MemoryAllocator
 import io.ygdrasil.webgpu.BindGroupLayout
 import io.ygdrasil.webgpu.Buffer
 import io.ygdrasil.webgpu.GPUBindGroupDescriptor
@@ -19,9 +19,10 @@ internal fun MemoryAllocator.map(input: GPUBindGroupDescriptor): WGPUBindGroupDe
         output.layout = (input.layout as BindGroupLayout).handler
         if (input.entries.isNotEmpty()) {
             output.entryCount = input.entries.size.toULong()
-            output.entries = WGPUBindGroupEntry.allocateArray(this, input.entries.size.toUInt()) { index, entry ->
+            val entries = WGPUBindGroupEntry.allocateArray(this, input.entries.size.toUInt()) { index, entry ->
                 map(input.entries[index.toInt()], entry)
             }
+            output.entries = WGPUBindGroupEntry(entries.handler)
         }
     }
 
@@ -39,4 +40,3 @@ private fun MemoryAllocator.map(input: GPUBindGroupEntry, output: WGPUBindGroupE
         is GPUTextureView -> output.textureView = (resource as TextureView).handler
     }
 }
-

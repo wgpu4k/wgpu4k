@@ -1,6 +1,6 @@
 package io.ygdrasil.webgpu
 
-import ffi.memoryScope
+import io.ygdrasil.kffi.memoryScope
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.WGPURenderBundleEncoder
 import io.ygdrasil.wgpu.WGPUStringView
@@ -45,7 +45,7 @@ actual class RenderBundleEncoder(val handler: WGPURenderBundleEncoder, label: St
             index,
             (bindGroup as BindGroup).handler,
             dynamicOffsetsData.size.toULong(),
-            scope.map(dynamicOffsetsData)
+            scope.map(dynamicOffsetsData)?.handler
         )
     }
 
