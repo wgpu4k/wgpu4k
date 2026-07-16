@@ -48,6 +48,8 @@ internal class NativeCallbackOperation<T>(
     internal fun fail(error: Throwable): Boolean =
         if (error is CancellationException) cancel(error) else complete(Result.failure(error))
 
+    internal fun reportFailure(error: Throwable) = reportSafely(error)
+
     private fun cancel(error: CancellationException): Boolean {
         if (!finished.compareAndSet(expectedValue = false, newValue = true)) return false
         cleanup()

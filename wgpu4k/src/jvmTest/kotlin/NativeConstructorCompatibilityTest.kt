@@ -57,4 +57,8 @@ class NativeConstructorCompatibilityTest : FreeSpec({
         Device::class.ownedConstructorVisibility() shouldBe KVisibility.INTERNAL
         Queue::class.ownedConstructorVisibility() shouldBe KVisibility.INTERNAL
     }
+
+    "device queue acquisition is eager rather than a post-close lazy downcall" {
+        Device::class.java.declaredFields.any { it.name == "queue\$delegate" } shouldBe false
+    }
 })

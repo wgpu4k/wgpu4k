@@ -38,9 +38,7 @@ private val logCallback = WGPULogCallback { level, cMessage ->
 }
 
 fun main() = runBlocking {
-    val glfwContext = glfwContextRenderer(width = 640, height = 480, title = "GLFW+WebGPU")
     withContextAndRegistration(
-        context = glfwContext,
         installRegistration = {
             wgpuSetLogLevel(WGPULogLevel_Trace)
             wgpuSetLogCallback(
@@ -48,7 +46,10 @@ fun main() = runBlocking {
                 callback = logCallback,
             )
         },
-    ) {
+        createContext = {
+            glfwContextRenderer(width = 640, height = 480, title = "GLFW+WebGPU")
+        },
+    ) { glfwContext ->
         logger.info { "Devices features : ${glfwContext.wgpuContext.device.features}" }
         logger.info{ "Devices limits : ${glfwContext.wgpuContext.device.limits}" }
 

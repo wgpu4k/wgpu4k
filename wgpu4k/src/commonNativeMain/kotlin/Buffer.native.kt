@@ -1,11 +1,9 @@
-@file:OptIn(kotlin.concurrent.atomics.ExperimentalAtomicApi::class)
-
 package io.ygdrasil.webgpu
 
 import io.ygdrasil.kffi.CallbackPolicy
 import io.ygdrasil.kffi.memoryScope
 import io.ygdrasil.webgpu.internal.BufferLifecycle
-import io.ygdrasil.webgpu.internal.DeviceEventPump
+import io.ygdrasil.webgpu.internal.BufferMapOperationLifecycle
 import io.ygdrasil.webgpu.internal.NativeCallbackOperation
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.webgpu.mapper.toArrayBuffer
@@ -26,7 +24,6 @@ import io.ygdrasil.wgpu.wgpuBufferRelease
 import io.ygdrasil.wgpu.wgpuBufferSetLabel
 import io.ygdrasil.wgpu.wgpuBufferUnmap
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.concurrent.atomics.AtomicReference
 
 actual class Buffer(val handler: WGPUBuffer, private val device: Device, label: String) : GPUBuffer {
 
@@ -66,59 +63,92 @@ actual class Buffer(val handler: WGPUBuffer, private val device: Device, label: 
         return suspendCancellableCoroutine { continuation ->
             lateinit var operation: NativeCallbackOperation<Unit>
             lateinit var bufferTicket: BufferLifecycle.Ticket
+            lateinit var mapLifecycle: BufferMapOperationLifecycle
             val registration = WGPUBufferMapCallback.register(
                 policy = CallbackPolicy.ONCE,
                 callback = WGPUBufferMapCallback { status, message, _ ->
-                    bufferTicket.complete {
-                        if (status == WGPUMapAsyncStatus_Success) {
-                            operation.succeed(Unit)
-                        } else {
-                            operation.fail(
-                                IllegalStateException(
-                                    "mapAsync failed with status: $status and message: ${message.data?.toKString(message.length)}"
-                                )
-                            )
+                    if (mapLifecycle.callbackStarted()) {
+                        val mapped = status == WGPUMapAsyncStatus_Success
+                        var delivered = false
+                        val completed = bufferTicket.complete {
+                            try {
+                                delivered = if (mapped) {
+                                    operation.succeed(Unit)
+                                } else {
+                                    operation.fail(
+                                        IllegalStateException(
+                                            "mapAsync failed with status: $status and message: ${message.data?.toKString(message.length)}"
+                                        )
+                                    )
+                                }
+                            } finally {
+                                mapLifecycle.callbackFinished(mapped = mapped, delivered = delivered)
+                            }
+                        }
+                        if (!completed) {
+                            mapLifecycle.callbackFinished(mapped = false, delivered = false)
                         }
                     }
                 },
             )
-            val deviceTicket = AtomicReference<DeviceEventPump.Ticket?>(null)
             operation = NativeCallbackOperation(
                 continuation = continuation,
-                closeRegistration = registration::close,
-                onFinished = {
-                    deviceTicket.exchange(null)?.close()
-                },
+                closeRegistration = {},
             )
             bufferTicket = lifecycle.registerMap { operation.fail(it) }
-                .getOrElse {
-                    operation.fail(it)
+                .getOrElse { failure ->
+                    operation.attach(AutoCloseable { registration.close() })
+                    operation.fail(failure)
                     return@suspendCancellableCoroutine
                 }
-            if (!operation.attach(bufferTicket)) {
-                return@suspendCancellableCoroutine
-            }
 
-            val ticket = device.eventPump.tryRegister(needsPolling = true) { operation.fail(it) }
-            if (ticket == null) {
+            val deviceTicket = device.eventPump.tryRegister(needsPolling = true) { operation.fail(it) }
+            if (deviceTicket == null) {
+                operation.attach(
+                    AutoCloseable {
+                        try {
+                            bufferTicket.close()
+                        } finally {
+                            registration.close()
+                        }
+                    }
+                )
                 operation.fail(IllegalStateException("Device is closed"))
                 return@suspendCancellableCoroutine
             }
-            deviceTicket.store(ticket)
-            if (operation.isFinished) {
-                deviceTicket.exchange(null)?.close()
-                return@suspendCancellableCoroutine
-            }
+
+            mapLifecycle = BufferMapOperationLifecycle(
+                closeResources = {
+                    try {
+                        bufferTicket.close()
+                    } finally {
+                        try {
+                            registration.close()
+                        } finally {
+                            deviceTicket.close()
+                        }
+                    }
+                },
+                abortInline = { wgpuBufferUnmap(handler) },
+                abortProtected = {
+                    bufferTicket.runNativeCall { wgpuBufferUnmap(handler) }
+                },
+                reportException = operation::reportFailure,
+            )
+            if (!operation.attach(mapLifecycle)) return@suspendCancellableCoroutine
+
             val bufferStarted = bufferTicket.runNativeCall {
-                val deviceStarted = ticket.runNativeCall {
-                    val mappedSize = size ?: (wgpuBufferGetSize(handler) - offset)
-                    memoryScope { scope ->
-                        val callbackInfo = WGPUBufferMapCallbackInfo.allocate(
-                            scope,
-                            WGPUCallbackMode_AllowProcessEvents,
-                            registration,
-                        )
-                        wgpuBufferMapAsync(handler, mode.value, offset, mappedSize, callbackInfo)
+                val deviceStarted = deviceTicket.runNativeCall {
+                    mapLifecycle.startNativeCall {
+                        val mappedSize = size ?: (wgpuBufferGetSize(handler) - offset)
+                        memoryScope { scope ->
+                            val callbackInfo = WGPUBufferMapCallbackInfo.allocate(
+                                scope,
+                                WGPUCallbackMode_AllowProcessEvents,
+                                registration,
+                            )
+                            wgpuBufferMapAsync(handler, mode.value, offset, mappedSize, callbackInfo)
+                        }
                     }
                 }
                 if (!deviceStarted) operation.fail(IllegalStateException("Device is closed"))

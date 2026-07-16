@@ -82,6 +82,34 @@ class BufferLifecycleTest : FreeSpec({
         releases.get() shouldBe 1
     }
 
+    "close defers native release until an admitted callback returns" {
+        val callbackEntered = CountDownLatch(1)
+        val callbackMayReturn = CountDownLatch(1)
+        val releases = AtomicInteger(0)
+        val executor = Executors.newSingleThreadExecutor()
+        val lifecycle = BufferLifecycle(release = { releases.incrementAndGet() })
+        val ticket = lifecycle.registerMap {}.getOrThrow()
+        val callback = executor.submit<Boolean> {
+            ticket.complete {
+                callbackEntered.countDown()
+                check(callbackMayReturn.await(5, TimeUnit.SECONDS))
+            }
+        }
+
+        try {
+            callbackEntered.await(5, TimeUnit.SECONDS) shouldBe true
+            lifecycle.close()
+            releases.get() shouldBe 0
+        } finally {
+            callbackMayReturn.countDown()
+            callback.get(5, TimeUnit.SECONDS) shouldBe true
+            executor.shutdown()
+            executor.awaitTermination(5, TimeUnit.SECONDS) shouldBe true
+        }
+
+        releases.get() shouldBe 1
+    }
+
     "only one map can be pending and registration after close fails distinctly" {
         val lifecycle = BufferLifecycle(release = {})
         val ticket = lifecycle.registerMap {}.getOrThrow()

@@ -29,7 +29,9 @@ internal class UncapturedErrorDispatch(
 ) : AutoCloseable {
     private val owner = OwnedRepeatingCallback(userCallback::onUncapturedError)
     private val callback = WGPUUncapturedErrorCallback { _, type, message, _ ->
-        deliver(type, message.data?.toKString(message.length))
+        owner.dispatchWhileActive { deliver ->
+            errorOf(type, message.data?.toKString(message.length))?.let(deliver)
+        }
     }
 
     internal fun register(): CallbackRegistration<WGPUUncapturedErrorCallback> =
@@ -43,9 +45,7 @@ internal class UncapturedErrorDispatch(
         callback.invoke(null, type, nativeMessage, null)
     }
 
-    private fun deliver(type: WGPUErrorType, message: String?) {
-        errorOf(type, message)?.let(owner::dispatch)
-    }
+    internal fun closeWhenQuiescent(onQuiescent: () -> Unit) = owner.closeWhenQuiescent(onQuiescent)
 
     override fun close() = owner.close()
 }
@@ -55,6 +55,8 @@ internal class RegisteredUncapturedErrorCallback(
     private val dispatcher: UncapturedErrorDispatch,
 ) : AutoCloseable by dispatcher {
     internal fun dispatch(type: WGPUErrorType, message: String) = dispatcher.dispatch(type, message)
+
+    internal fun closeWhenQuiescent(onQuiescent: () -> Unit) = dispatcher.closeWhenQuiescent(onQuiescent)
 }
 
 internal fun registerUncapturedError(

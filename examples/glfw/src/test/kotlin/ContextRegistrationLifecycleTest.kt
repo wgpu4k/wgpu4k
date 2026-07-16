@@ -5,15 +5,17 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
 class ContextRegistrationLifecycleTest : FreeSpec({
-    "closes the context before the callback registration" {
+    "installs the registration before creating the context and closes them in reverse order" {
         val events = mutableListOf<String>()
-        val context = AutoCloseable { events += "close-context" }
 
         val result = withContextAndRegistration(
-            context = context,
             installRegistration = {
                 events += "install-registration"
                 AutoCloseable { events += "close-registration" }
+            },
+            createContext = {
+                events += "create-context"
+                AutoCloseable { events += "close-context" }
             },
         ) {
             events += "body"
@@ -23,22 +25,48 @@ class ContextRegistrationLifecycleTest : FreeSpec({
         result shouldBe 42
         events shouldBe listOf(
             "install-registration",
+            "create-context",
             "body",
             "close-context",
             "close-registration",
         )
     }
 
-    "closes the context when callback installation fails" {
+    "does not create the context when callback installation fails" {
         val events = mutableListOf<String>()
         val failure = IllegalStateException("install failed")
-        val context = AutoCloseable { events += "close-context" }
 
         val thrown = shouldThrow<IllegalStateException> {
             withContextAndRegistration(
-                context = context,
                 installRegistration = {
                     events += "install-registration"
+                    throw failure
+                },
+                createContext = {
+                    events += "create-context"
+                    AutoCloseable { events += "close-context" }
+                },
+            ) {
+                events += "body"
+            }
+        }
+
+        thrown shouldBe failure
+        events shouldBe listOf("install-registration")
+    }
+
+    "closes the registration when context creation fails" {
+        val events = mutableListOf<String>()
+        val failure = IllegalStateException("context creation failed")
+
+        val thrown = shouldThrow<IllegalStateException> {
+            withContextAndRegistration(
+                installRegistration = {
+                    events += "install-registration"
+                    AutoCloseable { events += "close-registration" }
+                },
+                createContext = {
+                    events += "create-context"
                     throw failure
                 },
             ) {
@@ -47,18 +75,21 @@ class ContextRegistrationLifecycleTest : FreeSpec({
         }
 
         thrown shouldBe failure
-        events shouldBe listOf("install-registration", "close-context")
+        events shouldBe listOf(
+            "install-registration",
+            "create-context",
+            "close-registration",
+        )
     }
 
     "closes both resources in order when the body fails" {
         val events = mutableListOf<String>()
         val failure = IllegalStateException("body failed")
-        val context = AutoCloseable { events += "close-context" }
 
         val thrown = shouldThrow<IllegalStateException> {
             withContextAndRegistration(
-                context = context,
                 installRegistration = { AutoCloseable { events += "close-registration" } },
+                createContext = { AutoCloseable { events += "close-context" } },
             ) {
                 events += "body"
                 throw failure
@@ -72,15 +103,16 @@ class ContextRegistrationLifecycleTest : FreeSpec({
     "closes the registration when closing the context fails" {
         val events = mutableListOf<String>()
         val failure = IllegalStateException("context close failed")
-        val context = AutoCloseable {
-            events += "close-context"
-            throw failure
-        }
 
         val thrown = shouldThrow<IllegalStateException> {
             withContextAndRegistration(
-                context = context,
                 installRegistration = { AutoCloseable { events += "close-registration" } },
+                createContext = {
+                    AutoCloseable {
+                        events += "close-context"
+                        throw failure
+                    }
+                },
             ) {
                 events += "body"
             }

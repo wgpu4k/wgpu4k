@@ -10,6 +10,7 @@ import io.ygdrasil.webgpu.internal.runComputePipelineFallback
 import io.ygdrasil.webgpu.internal.runRenderPipelineFallback
 import io.ygdrasil.webgpu.mapper.errorOf
 import io.ygdrasil.webgpu.mapper.map
+import io.ygdrasil.webgpu.mapper.RegisteredUncapturedErrorCallback
 import io.ygdrasil.wgpu.WGPUAdapterInfo
 import io.ygdrasil.wgpu.WGPUCallbackMode_AllowSpontaneous
 import io.ygdrasil.wgpu.WGPUCommandEncoderDescriptor
@@ -78,13 +79,11 @@ actual class Device internal constructor(
             field = value
         }
 
-    actual override val queue: GPUQueue by lazy {
-        Queue(
-            handler = wgpuDeviceGetQueue(handler) ?: error("fail to get device queue"),
-            device = this,
-            label = "",
-        )
-    }
+    actual override val queue: GPUQueue = Queue(
+        handler = wgpuDeviceGetQueue(handler) ?: error("fail to get device queue"),
+        device = this,
+        label = "",
+    )
 
     actual override val features: Set<GPUFeatureName> by lazy {
         GPUFeatureName.entries
@@ -241,8 +240,19 @@ actual class Device internal constructor(
 
     actual override fun close() {
         if (!closed.compareAndSet(expectedValue = false, newValue = true)) return
-        uncapturedErrorRegistration?.close()
-        eventPump.close()
-        wgpuDeviceRelease(handler)
+        try {
+            eventPump.close()
+        } finally {
+            val registration = uncapturedErrorRegistration
+            if (registration is RegisteredUncapturedErrorCallback) {
+                registration.closeWhenQuiescent { wgpuDeviceRelease(handler) }
+            } else {
+                try {
+                    registration?.close()
+                } finally {
+                    wgpuDeviceRelease(handler)
+                }
+            }
+        }
     }
 }
