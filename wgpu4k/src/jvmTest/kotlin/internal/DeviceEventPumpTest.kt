@@ -5,12 +5,16 @@ package io.ygdrasil.webgpu.internal
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -259,6 +263,61 @@ class DeviceEventPumpTest : FreeSpec({
                 pump.close()
                 dispatcher.close()
             }
+        }
+    }
+
+    "a resource created after device close is disposed" {
+        val entered = CountDownLatch(1)
+        val proceed = CountDownLatch(1)
+        val released = CountDownLatch(1)
+        val disposed = AtomicInteger(0)
+        val releases = AtomicInteger(0)
+        val executor = Executors.newSingleThreadExecutor()
+        val dispatcher = executor.asCoroutineDispatcher()
+        try {
+            withTimeout(5_000) {
+                coroutineScope {
+                    val pump = DeviceEventPump(
+                        dispatcher = dispatcher,
+                        poll = {},
+                        retain = {},
+                        release = {
+                            releases.incrementAndGet()
+                            released.countDown()
+                        },
+                    )
+                    val result = async {
+                        pump.runResourceTask(
+                            create = {
+                                entered.countDown()
+                                check(proceed.await(5, TimeUnit.SECONDS))
+                                Any()
+                            },
+                            dispose = { disposed.incrementAndGet() },
+                        )
+                    }
+
+                    try {
+                        withContext(Dispatchers.IO) {
+                            entered.await(5, TimeUnit.SECONDS)
+                        } shouldBe true
+                        pump.close()
+                        result.await().exceptionOrNull()?.message shouldBe "Device is closed"
+                    } finally {
+                        proceed.countDown()
+                    }
+
+                    withContext(Dispatchers.IO) {
+                        released.await(5, TimeUnit.SECONDS)
+                    } shouldBe true
+                    disposed.get() shouldBe 1
+                    releases.get() shouldBe 1
+                }
+            }
+        } finally {
+            dispatcher.close()
+            executor.shutdownNow()
+            executor.awaitTermination(5, TimeUnit.SECONDS)
         }
     }
 
