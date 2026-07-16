@@ -3,14 +3,17 @@ package io.ygdrasil.webgpu.mapper
 import io.ygdrasil.kffi.CallbackPolicy
 import io.ygdrasil.kffi.CallbackRegistration
 import io.ygdrasil.kffi.MemoryAllocator
+import io.ygdrasil.kffi.memoryScope
 import io.ygdrasil.webgpu.GPUDeviceDescriptor
 import io.ygdrasil.webgpu.GPUQueueDescriptor
 import io.ygdrasil.webgpu.GPUSupportedLimits
 import io.ygdrasil.webgpu.GPUUncapturedErrorCallback
 import io.ygdrasil.webgpu.internal.OwnedRepeatingCallback
 import io.ygdrasil.wgpu.WGPUDeviceDescriptor
+import io.ygdrasil.wgpu.WGPUErrorType
 import io.ygdrasil.wgpu.WGPULimits
 import io.ygdrasil.wgpu.WGPUQueueDescriptor
+import io.ygdrasil.wgpu.WGPUStringView
 import io.ygdrasil.wgpu.WGPUUncapturedErrorCallback
 import io.ygdrasil.wgpu.WGPUUncapturedErrorCallbackInfo
 import io.ygdrasil.wgpu.allocate
@@ -21,26 +24,44 @@ internal data class MappedDeviceDescriptor(
     val uncapturedErrorRegistration: RegisteredUncapturedErrorCallback?,
 )
 
+internal class UncapturedErrorDispatch(
+    userCallback: GPUUncapturedErrorCallback,
+) : AutoCloseable {
+    private val owner = OwnedRepeatingCallback(userCallback::onUncapturedError)
+    private val callback = WGPUUncapturedErrorCallback { _, type, message, _ ->
+        deliver(type, message.data?.toKString(message.length))
+    }
+
+    internal fun register(): CallbackRegistration<WGPUUncapturedErrorCallback> =
+        WGPUUncapturedErrorCallback.register(
+            policy = CallbackPolicy.REPEATING,
+            callback = callback,
+        ).also { check(owner.attach(it)) }
+
+    internal fun dispatch(type: WGPUErrorType, message: String) = memoryScope { scope ->
+        val nativeMessage = WGPUStringView.allocate(scope).also { scope.map(message, it) }
+        callback.invoke(null, type, nativeMessage, null)
+    }
+
+    private fun deliver(type: WGPUErrorType, message: String?) {
+        errorOf(type, message)?.let(owner::dispatch)
+    }
+
+    override fun close() = owner.close()
+}
+
 internal class RegisteredUncapturedErrorCallback(
     val registration: CallbackRegistration<WGPUUncapturedErrorCallback>,
-    private val owner: OwnedRepeatingCallback<io.ygdrasil.webgpu.GPUError>,
-) : AutoCloseable by owner
+    private val dispatcher: UncapturedErrorDispatch,
+) : AutoCloseable by dispatcher {
+    internal fun dispatch(type: WGPUErrorType, message: String) = dispatcher.dispatch(type, message)
+}
 
 internal fun registerUncapturedError(
     userCallback: GPUUncapturedErrorCallback,
 ): RegisteredUncapturedErrorCallback {
-    val owner = OwnedRepeatingCallback(userCallback::onUncapturedError)
-    val registration = WGPUUncapturedErrorCallback.register(
-        policy = CallbackPolicy.REPEATING,
-        callback = WGPUUncapturedErrorCallback { _, type, message, _ ->
-            errorOf(
-                type,
-                message.data?.toKString(message.length),
-            )?.let(owner::dispatch)
-        },
-    )
-    check(owner.attach(registration))
-    return RegisteredUncapturedErrorCallback(registration, owner)
+    val dispatcher = UncapturedErrorDispatch(userCallback)
+    return RegisteredUncapturedErrorCallback(dispatcher.register(), dispatcher)
 }
 
 internal fun MemoryAllocator.mapDeviceDescriptor(input: GPUDeviceDescriptor): MappedDeviceDescriptor {
