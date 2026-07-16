@@ -57,6 +57,7 @@ kotlin {
 
         commonMain {
             dependencies {
+                implementation(libs.kotlinx.serialization.core)
                 implementation(libs.kotlinx.serialization.json)
                 api(projects.wgpu4kToolkit)
                 api(libs.coroutines)
