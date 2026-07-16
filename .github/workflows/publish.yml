@@ -1,28 +1,94 @@
-name: Publish wgpu4k
+name: Publish to Maven Central
 
 on:
-  release:
-    types: [created]
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Override snapshot version. Default: 0.2.0-SNAPSHOT'
+        required: false
 
 jobs:
-  build:
+  snapshot:
+    if: (github.event_name == 'push' && github.ref_name == 'main') || github.event_name == 'workflow_dispatch'
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: 25
+          distribution: 'zulu'
+          java-version: '25'
           cache: 'gradle'
-      - name: Build and publish with Gradle
-        run: |
-          ./gradlew build
-          ./gradlew publish publishToCentralPortal --info
+      - name: Grant execute permission
+        run: chmod +x gradlew
+      - name: Set snapshot version
         env:
-          SNAPSHOT: "false"
-          VERSION: ${{ github.event.release.tag_name }}
-          MAVENCENTRAL_USERNAME: ${{ secrets.SONATYPE_LOGIN }}
-          MAVENCENTRAL_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-          GPG_SECRET_KEY: ${{ secrets.PGP_PRIVATE }}
-          GPG_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+          INPUT_VERSION: ${{ github.event.inputs.version }}
+        run: |
+          VERSION="${INPUT_VERSION:-0.2.0-SNAPSHOT}"
+          if [[ "$VERSION" != *-SNAPSHOT ]]; then
+            printf "Invalid snapshot version '%s': version must end with -SNAPSHOT.\n" "$VERSION" >&2
+            exit 1
+          fi
+          printf 'VERSION=%s\n' "$VERSION" >> "$GITHUB_ENV"
+      - name: Build
+        run: ./gradlew build --no-configuration-cache --no-daemon --stacktrace
+      - name: Publish snapshot
+        run: >-
+          ./gradlew
+          :wgpu4k:publishToMavenCentral
+          :wgpu4k-toolkit:publishToMavenCentral
+          :wgpu4k-scenes:publishToMavenCentral
+          --no-configuration-cache
+          --no-daemon
+          --stacktrace
+          -PreleaseVersion="${VERSION}"
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_LOGIN }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.PGP_PRIVATE }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.PGP_PASSPHRASE }}
+
+  release:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '25'
+          cache: 'gradle'
+      - name: Grant execute permission
+        run: chmod +x gradlew
+      - name: Extract version from tag
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          if [[ -z "$VERSION" ]]; then
+            printf "Invalid release tag '%s': version must not be empty.\n" "$GITHUB_REF_NAME" >&2
+            exit 1
+          fi
+          if [[ "$VERSION" == *-SNAPSHOT ]]; then
+            printf "Invalid release version '%s': version must not end with -SNAPSHOT.\n" "$VERSION" >&2
+            exit 1
+          fi
+          printf 'VERSION=%s\n' "$VERSION" >> "$GITHUB_ENV"
+      - name: Build
+        run: ./gradlew build --no-configuration-cache --no-daemon --stacktrace
+      - name: Publish release
+        run: >-
+          ./gradlew
+          :wgpu4k:publishToMavenCentral
+          :wgpu4k-toolkit:publishToMavenCentral
+          :wgpu4k-scenes:publishToMavenCentral
+          --no-configuration-cache
+          --no-daemon
+          --stacktrace
+          -PreleaseVersion="${VERSION}"
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_LOGIN }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.PGP_PRIVATE }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.PGP_PASSPHRASE }}

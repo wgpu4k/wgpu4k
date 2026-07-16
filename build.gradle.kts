@@ -1,12 +1,8 @@
-plugins {
-    alias(libs.plugins.kotlin.multiplatform) apply false
-    alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.android.library) apply false
-}
-
 allprojects {
 	group = "io.ygdrasil"
-	version = System.getenv("VERSION")?.takeIf { it.isNotBlank() } ?: "0.2.0-SNAPSHOT"
+	version = (findProperty("releaseVersion") as? String)
+		?.takeIf { it.isNotBlank() }
+		?: "0.2.0-SNAPSHOT"
 }
 
 configurations.all {

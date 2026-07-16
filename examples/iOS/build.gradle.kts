@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
-    id(libs.plugins.kotlin.multiplatform.get().pluginId)
+    kmp
 }
 
 val commonResourcesFile = getCommonProject()
