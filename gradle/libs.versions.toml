@@ -18,7 +18,7 @@ wgpu4k-native = "v29.0.0-SNAPSHOT"
 webgpu-ktypes = "0.0.10-SNAPSHOT"
 
 # Logging
-kotlin-logging = "7.0.13"
+kotlin-logging = "8.0.4"
 logback = "1.5.32"
 
 kotlinx-browser = "0.5.0"
