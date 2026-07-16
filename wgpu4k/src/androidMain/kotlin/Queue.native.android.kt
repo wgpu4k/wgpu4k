@@ -1,8 +1,8 @@
 package io.ygdrasil.webgpu
 
 import com.sun.jna.Pointer
-import ffi.MemoryAllocator
-import ffi.NativeAddress
+import io.ygdrasil.kffi.MemoryAllocator
+import io.ygdrasil.kffi.NativeAddress
 import io.ygdrasil.webgpu.mapper.map
 import io.ygdrasil.wgpu.wgpuQueueWriteBuffer
 import io.ygdrasil.wgpu.wgpuQueueWriteTexture
